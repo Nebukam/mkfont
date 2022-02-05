@@ -1,0 +1,50 @@
+/*---------------------------------*/
+/*<!---- @nkmjs/ui-workspace ----!>*/
+/*---------------------------------*/
+
+@import '../_constants';
+@import '../_variables';
+@import '../_mixins';
+@import '../_functions';
+
+$padding: 2px;
+$bg: rgb(70, 70, 70);
+
+:host {
+    
+    @include no-select;
+
+    //width:auto !important;
+
+    --size:var(#{$varname_size_xs}); // Default size
+
+    --w-height: calc(var(--size) - #{$padding * 2});
+    height:var(--w-height);
+    min-height:var(--w-height);
+
+    flex: 0 0 auto !important;
+
+    display:flex;
+    flex-direction: row nowrap;
+    align-items: center;
+    align-content: center;
+
+    padding: $padding;
+    padding-left: $padding*2;
+    padding-right: $padding*2;
+
+    --flavor-color: #{$bg};
+    --flavor-contrast: #{ contrast-color($bg) }; 
+
+    background-color: var(--flavor-color);
+    border-radius: calc(var(--size) / 4);
+
+}
+
+:host .label{
+    flex: 0 0 auto;
+
+    font-size:10px;
+    text-transform: uppercase;    
+    color: var(--flavor-contrast);
+}

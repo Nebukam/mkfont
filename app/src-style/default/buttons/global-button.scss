@@ -1,0 +1,12 @@
+/*----------------------------*/
+/*<!---- @nkmjs/ui-core ----!>*/
+/*----------------------------*/
+
+@import '../_constants';
+@import '../_variables';
+@import '../_mixins';
+
+:host{
+    cursor: pointer;
+    @include no-select;
+}

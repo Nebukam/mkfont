@@ -1,0 +1,136 @@
+/*---------------------------*/
+/*<!---- @nkmjs/dialog ----!>*/
+/*---------------------------*/
+
+@import '../_variables';
+@import '../_constants';
+@import '../_functions';
+@import '../_mixins';
+
+/* Scrollbar mixins */
+
+$br: 5px;
+
+:host {
+    border-radius: $br;
+    background-color: var(--default-level-1-color);
+}
+
+.corner-icon {
+    
+    position: absolute;
+
+    transform:scale(3) rotate(-15deg);
+    opacity:0;
+
+    right: -15px;
+    top: -15px;
+
+    width: 100px;
+    height: 100px;
+
+}
+
+:host(#{$SHOWN}) {
+    
+    & .corner-icon {
+
+        animation: scaleIconIn 200ms ease-in-out forwards;
+
+        @keyframes scaleIconIn {
+            to {
+                transform: scale(1) rotate(15deg);
+                opacity:0.35;
+            }
+        }
+
+    }
+
+}
+
+.group {
+    padding: $br * 4;
+}
+
+.header {
+    //'background-color:`rgba(0,0,0,0.1)`
+    & .title{
+        color:var(--flavor-color);
+    }
+}
+
+.footer {
+
+    padding-top: $br * 2;
+    padding-bottom: $br * 2;
+
+    border-top: 1px solid rgba(var(--flavor-color-rgb), 0.5); /*rgba(127,127,127,0.2);*/
+    background-color: rgba(0,0,0,0.2);
+    //'box-shadow' : inset 0px -50px 50px rgba(0,0,0,0.2);
+    border-bottom-left-radius: $br;
+    border-bottom-right-radius: $br;
+
+}
+
+.toolbar {
+    
+}
+
+.body {
+    //'overflow-y:`overlay;
+    padding: $br * 4;
+    padding-top: 0px;
+    //'box-shadow:`inset 0px 11px ${shadowSize}px -10px ${shadowColor} inset 0px -11px ${shadowSize}px -10px ${shadowColor};
+}
+
+@include scrollbar('.body', 4px, 8px);
+
+.item {
+    margin-top: $br;
+    margin-bottom: $br;
+}
+
+.icon {
+    position: absolute;
+    right: 20px;
+    top: 20px;
+    opacity: 0.5;
+    transform: scale(5) rotate(15);
+}
+
+// ----> VARIANTS
+
+:host(#{$FRAME}){
+
+    border: 1px solid rgba(var(--flavor-color-rgb), 1); /*rgba(127,127,127,0.2);*/
+
+    & .header{
+
+    }
+
+    & .body{
+
+    }
+
+    & .footer{
+        border-top:none;
+        background-color: rgba(var(--flavor-color-rgb), 0.25); /*rgba(127,127,127,0.2);*/
+    }
+}
+
+:host(#{$MINIMAL}){
+
+    & .header{
+
+    }
+
+    & .body{
+
+    }
+
+    & .footer{
+        border-top:none;
+        background-color: none;
+        background: none;
+    }
+}

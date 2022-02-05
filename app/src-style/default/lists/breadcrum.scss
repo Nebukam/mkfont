@@ -1,0 +1,52 @@
+/*---------------------------------*/
+/*<!---- @nkmjs/ui-workspace ----!>*/
+/*---------------------------------*/
+
+@import '../_constants';
+@import '../_variables';
+@import '../_mixins';
+
+:host {
+    padding: 2px;
+}
+
+:host(#{$VERTICAL}) { }
+
+.group{ 
+    border-radius: 6px;
+    background-color: transparent;
+    border: 1px solid rgba(127,127,127,0.5);
+    padding: 2px;
+}
+
+.item::before, .group::before { 
+    position: absolute;
+    content:"";
+    width:0;    
+    height:0;
+    border-bottom:5px solid transparent;
+    border-left:5px solid transparent;
+    border-right:5px solid lightgrey;
+    top: calc(50% - 4px);
+    left: -16px;
+}
+
+:host(#{$HORIZONTAL}) .item { 
+    margin-left:12px;
+    padding-left: 3px;
+}
+
+:host(#{$HORIZONTAL}) .item::before { 
+    transform-origin: center center;
+    transform: rotate(45deg);
+}
+
+:host(#{$HORIZONTAL}) .group:first-of-type::before,
+:host(#{$HORIZONTAL}) .group::after { 
+    content:none;
+}
+
+:host(#{$HORIZONTAL}) .group { 
+    padding-left: 5px;
+    padding-right: 5px;
+}

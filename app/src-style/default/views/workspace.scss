@@ -1,0 +1,10 @@
+/*---------------------------------*/
+/*<!---- @nkmjs/ui-workspace ----!>*/
+/*---------------------------------*/
+
+@import '../_variables';
+@import '../_mixins';
+
+:host{
+    background-color: var(#{$varname_workspace_bg});
+}

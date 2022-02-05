@@ -1,0 +1,16 @@
+/*-------------------------------*/
+/*<!---- @nkmjs/ui-library ----!>*/
+/*-------------------------------*/
+
+@import './_card';
+
+:host{
+
+    & .header{
+        background-image: url('../assets/imgs/placeholder.png');
+        background-repeat: no-repeat;
+        background-size: cover;
+        background-position: center;
+    }
+
+}

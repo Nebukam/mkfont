@@ -1,0 +1,49 @@
+/*-------------------------------*/
+/*<!---- @nkmjs/ui-library ----!>*/
+/*-------------------------------*/
+
+@import '../_constants';
+@import '../_variables';
+@import '../_mixins';
+@import '../_functions';
+
+@import './_button';
+
+:host{
+
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    align-content: center;
+
+    --margin-size:calc( var(--size) / 3 );
+
+    height: var(--size);
+    min-height: var(--size);
+}
+
+.icon {
+    margin-left:var(--margin-size);
+}
+
+.label {
+    margin-right:var(--margin-size);
+}
+
+:host(.no-label) .icon{
+    margin-left:var(--margin-size);
+    margin-right:var(--margin-size);
+}
+
+:host(.no-icon) .label{
+    margin-left:var(--margin-size);
+    margin-right:var(--margin-size);
+}
+
+//////////////////////
+
+$suffix: '_third';
+
+:host(#{$SIZE_XS}) .label{
+    --font-size:var(#{$varname_font_size_xs});
+}

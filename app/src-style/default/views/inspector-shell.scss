@@ -1,0 +1,116 @@
+/*---------------------------------*/
+/*<!---- @nkmjs/ui-workspace ----!>*/
+/*---------------------------------*/
+
+@import '../_constants';
+@import '../_variables';
+@import '../_mixins';
+
+:host{ 
+    box-sizing: border-box;
+    padding: 2px;
+}
+
+.header{
+
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: flex-start;
+    align-items: center;
+
+    box-sizing: border-box;
+    padding: 5px;
+
+    & .icon{
+        
+    }
+
+    & .titles{
+
+        flex: 0 0 auto;
+
+        display: flex;
+        flex-flow: column nowrap;
+        justify-content: flex-start;
+        align-items: flex-start;
+        
+        margin-left: 5px;
+
+        & .title{
+            flex: 0 0 auto;
+        }
+    
+        & .subtitle{
+            flex: 0 0 auto;
+        }
+
+    }
+
+}
+
+.body{
+    //TODO: Add scroll
+    -webkit-box-shadow: inset 0px 15px 15px -20px #000000, inset 0px -15px 15px -20px #000000; 
+    box-shadow: inset 0px 15px 15px -20px #000000, inset 0px -15px 15px -20px #000000;
+}
+
+
+
+
+/*-------------------------------------*/
+/*<!---- @nkmjs/ui-data-controls ----!>*/
+/*-------------------------------------*/
+
+@import '../_constants';
+@import '../_variables';
+@import '../_mixins';
+
+:host{ 
+    box-sizing: border-box;
+    padding: 2px;
+}
+
+.header{
+
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: flex-start;
+    align-items: center;
+
+    box-sizing: border-box;
+    padding: 5px;
+
+    & .icon{
+        
+    }
+
+    & .titles{
+
+        flex: 0 0 auto;
+
+        display: flex;
+        flex-flow: column nowrap;
+        justify-content: flex-start;
+        align-items: flex-start;
+        
+        margin-left: 5px;
+
+        & .title{
+            flex: 0 0 auto;
+        }
+    
+        & .subtitle{
+            flex: 0 0 auto;
+        }
+
+    }
+
+}
+
+.body{
+    //TODO: Add scroll
+    -webkit-box-shadow: inset 0px 15px 15px -20px #000000, inset 0px -15px 15px -20px #000000; 
+    box-shadow: inset 0px 15px 15px -20px #000000, inset 0px -15px 15px -20px #000000;
+}
+
+

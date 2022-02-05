@@ -1,0 +1,44 @@
+/*-------------------------------*/
+/*<!---- @nkmjs/ui-library ----!>*/
+/*-------------------------------*/
+
+@import '../_constants';
+@import '../_variables';
+@import '../_functions';
+@import '../_mixins';
+
+:host {
+    background-color: var(#{$varname_drawer_bg});
+    --size:var(#{$varname_size_m});
+
+    min-width: 350px;
+    min-height: 350px;
+
+    & .icon{
+
+        &.close{
+            cursor: pointer;
+            order:-1;
+            margin-right:20px;
+        }
+
+    }
+
+}
+
+.header{
+
+    display:flex;
+    flex-flow:row nowrap;
+    padding: 20px;
+
+    & .title{
+        flex:1 1 auto;
+    }
+}
+
+.body{
+    padding: 10px 20px;
+    border-top: 1px solid rgba(127,127,127,.2);
+    background-color: rgba(0,0,0,.2);
+}

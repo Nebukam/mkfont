@@ -1,0 +1,33 @@
+/*-------------------------------*/
+/*<!---- @nkmjs/ui-library ----!>*/
+/*-------------------------------*/
+
+@import '../_constants';
+@import '../_variables';
+@import '../_mixins';
+@import '../_functions';
+
+@import './_button';
+
+:host{
+
+    height: var(--size);
+    min-height: var(--size);
+    max-height: var(--size);
+
+    width: var(--size);
+    min-width: var(--size);
+    max-width: var(--size);
+
+    & .icon{
+        opacity: 0.8;
+    }
+
+}
+
+:host(#{$FOCUSED}){
+    & .icon{
+        opacity: 1;
+    }
+}
+

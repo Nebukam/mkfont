@@ -1,0 +1,18 @@
+/*----------------------------*/
+/*<!---- @nkmjs/ui-core ----!>*/
+/*----------------------------*/
+
+@import '../_constants';
+@import '../_variables';
+@import '../_functions';
+@import '../_mixins';
+
+:host{
+    --bg_color: rgba(0,0,0,0);
+    background-color: var(--bg_color);
+    transition: background-color 0.15s linear;
+}
+
+:host(#{$SHOWN}){
+    --bg_color: var(#{$varname_overlay_bg});
+}

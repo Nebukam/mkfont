@@ -1,0 +1,15 @@
+{
+
+    "dependencies": {
+        "@nkmjs/core": "../nkmjs/packages/nkmjs-core"
+    },
+
+    "scripts": {
+        "nkmjs": "nkmjs"
+    },
+    
+    "devDependencies": {
+        "@nkmjs/core-dev": "../nkmjs/packages/nkmjs-core-dev"
+    }
+
+}

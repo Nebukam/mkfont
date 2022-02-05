@@ -1,0 +1,28 @@
+{
+    "name": "my-app",
+    "longName": "undefined Verbose App Name",
+    "shortName": "undefined App",
+    "description": "App description",
+    "homepage": "https://www.undefined.com",
+    "app": {
+        "display": "standalone",
+        "orientation": "portrait",
+        "colorTheme": "#1e1e1e",
+        "theme": "default"
+    },
+    "extension": {
+        "manifest_version": 2,
+        "popup": {
+            "width": 800,
+            "height": 600
+        },
+        "display": "standalone",
+        "permissions": [
+            "storage"
+        ],
+        "hostPermissions": [
+            "%homepage%"
+        ]
+    },
+    "builds": []
+}

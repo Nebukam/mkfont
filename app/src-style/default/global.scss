@@ -1,0 +1,155 @@
+/*--------------------------*/
+/*<!---- @nkmjs/style ----!>*/
+/*--------------------------*/
+
+@import './_mixins';
+@import './_variables';
+@import './_typography';
+
+/*
+
+// smartphones, touchscreens
+@media (hover: none) and (pointer: coarse) { }
+// stylus-based screens
+@media (hover: none) and (pointer: fine) { }
+// Nintendo Wii controller, Microsoft Kinect
+@media (hover: hover) and (pointer: coarse) { }
+// mouse, touch pad
+@media (hover: hover) and (pointer: fine) { }
+
+
+*/
+
+// ----> Remove costly filters on (presumably) mobile
+@media (hover: none) and (pointer: coarse) {
+    *{
+        //filter:none;
+        -webkit-box-shadow: none;
+        -moz-box-shadow: none;
+        box-shadow: none;
+    }
+}
+
+// ----> Global Host Presets
+
+*, :host{
+
+    // Font sizes
+    @for $i from 0 to length($font_size_varnames) { 
+        #{nth($font_size_varnames, $i + 1)}: nth($font_size_values, $i + 1);
+        #{nth($font_size_varnames, $i + 1)+'-title'}: nth($font_size_values, $i + 1) * 1.4;
+    }
+
+    // Sizes
+    --size:var(#{$varname_size_m}); // Default size
+
+    @for $i from 0 to length($size_varnames) { 
+        #{nth($size_varnames, $i + 1)}: nth($size_values, $i + 1); 
+        #{nth($size_varnames_half, $i + 1)}: nth($size_values_half, $i + 1); 
+        #{nth($size_varnames_third, $i + 1)}: nth($size_values_third, $i + 1); 
+    }
+
+    $col: #1e1e1e;
+    --default-level-0-color: #{$col};
+    --default-level-0-color-rgb: red(#{$col}), green(#{$col}), blue(#{$col});
+
+    $col: #3b3b3b;
+    --default-level-1-color: #{$col};
+    --default-level-1-color-rgb: red(#{$col}), green(#{$col}), blue(#{$col});
+
+    $col: #505050;
+    --default-level-2-color: #{$col};
+    --default-level-2-color-rgb: red(#{$col}), green(#{$col}), blue(#{$col});
+
+}
+
+@include prefers_dark{
+    :host{
+        @for $i from 0 to length($col_flavors_ex_varnames) { 
+            $varname:nth($col_flavors_ex_varnames, $i + 1);
+            $col:nth($col_flavors_ex, $i + 1);
+            #{$varname+'-rgb'}: red($col), green($col), blue($col);
+            #{$varname}: $col;
+            #{$varname+'-contrast'}: nth($col_flavors_ex_bw, $i + 1);
+        }
+    }
+}
+
+@include prefers_light{
+    :host{
+        @for $i from 0 to length($col_flavors_ex_varnames) { 
+            #{nth($col_flavors_ex_varnames, $i + 1)}: nth($col_flavors_ex, $i + 1);
+        }
+    }
+}
+
+@include scrollbar("", 4px);
+
+/*----------------------------*/
+/*<!---- @nkmjs/ui-core ----!>*/
+/*----------------------------*/
+
+@import './_mixins';
+@import './_variables';
+
+
+// ----> Extended color schemes (state color variations)
+
+:host{
+
+    // For each flavor color
+
+    @for $i from 0 to length($col_flavors_ex) { 
+        
+        $base_color: nth($col_flavors_ex, $i + 1);
+        $flavor_name: str-replace(nth($col_flavors_ex_varnames, $i + 1), '--col-');
+        $flavor_id: $i+1;
+
+        // Create per-state variants
+
+        $main_color: rgba($base_color, 0.2);
+        $secondary_color: rgba($base_color, 0.5);
+
+        @include state-color-variations( $main_color, $secondary_color, 0.5, 0.8 )
+        using( $index, $st, $p, $s, $c ){
+            $short_state: nth($short_states_ids, $index);
+            #{'--fcol-'+$flavor_id+'-0-'+$short_state}: $p;
+            #{'--fcol-'+$flavor_id+'-1-'+$short_state}: $s;
+            #{'--fcol-'+$flavor_id+'-2-'+$short_state}: $c;
+        }
+
+    }
+
+    #{$varname_drawer_bg}: $drawer_bg_dark;
+    #{$varname_overlay_bg}: $overlay_bg_dark;
+}
+
+/*---------------------------------*/
+/*<!---- @nkmjs/ui-workspace ----!>*/
+/*---------------------------------*/
+
+@import './_mixins';
+@import './_variables';
+
+:host{
+    #{$varname_workspace_bg}: $workspace_bg_dark;
+    #{$varname_workspace_nav_bg}: $workspace_nav_bg_dark;
+
+    #{$varname_tree_indent}: $tree_indent;
+    #{$varname_tree_size}: var(--size-s);
+}
+
+/*-------------------------------------*/
+/*<!---- @nkmjs/ui-data-controls ----!>*/
+/*-------------------------------------*/
+
+@import './_mixins';
+@import './_variables';
+
+:host{
+    #{$varname_workspace_bg}: $workspace_bg_dark;
+    #{$varname_workspace_nav_bg}: $workspace_nav_bg_dark;
+
+    #{$varname_tree_indent}: $tree_indent;
+    #{$varname_tree_size}: var(--size-s);
+}

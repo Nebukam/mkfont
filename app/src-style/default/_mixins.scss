@@ -1,0 +1,322 @@
+/*--------------------------*/
+/*<!---- @nkmjs/style ----!>*/
+/*--------------------------*/
+
+@use 'sass:string';
+
+/* OS Theme mixins */
+
+@mixin prefers_dark() {
+    @media (prefers-color-scheme: dark) {
+        @content;
+    }
+}
+
+@mixin prefers_light() {
+    @media (prefers-color-scheme: light) {
+        @content;
+    }
+}
+
+
+/* Responsive mixins */
+
+// Mobile
+@mixin responsive_mobile() {
+    @media only screen and (max-width: 767px) {
+        @content;
+    }
+}
+
+// Tablet
+@mixin responsive_tab() {
+    @media only screen and (max-width: 767px) and (max-width: 1024px) {
+        @content;
+    }
+}
+
+// Variable
+@mixin responsive($minWidth, $maxWidth) {
+    @media only screen and (min-width: $minWidth) and (max-width: $maxWidth) {
+        @content;
+    }
+}
+
+
+/* Mobile mixins */
+
+
+/*
+@mixin if-not-touch (){
+    #{'@media not (pointer:none), not (pointer:coarse)'} {
+        @content;
+    }
+}
+
+@mixin if-touch (){
+    #{'@media (pointer:none), (pointer:coarse)'} {
+        @content;
+    }
+}
+*/
+
+
+/* Cosmetics */
+
+@mixin box-shadow($top, $left, $blur, $size, $color) {
+    -webkit-box-shadow: $left $top $blur $size $color;
+    -moz-box-shadow: $left $top $blur $size $color;
+    box-shadow: $left $top  $blur $size $color;
+}
+
+@mixin drop-shadow($x, $y, $blur, $color) {
+    filter: drop-shadow($x $y $blur $color);
+}
+
+
+/* Presets */
+
+@mixin no-select {
+    -webkit-touch-callout: none;
+    /* iOS Safari */
+    -webkit-user-select: none;
+    /* Safari */
+    -khtml-user-select: none;
+    /* Konqueror HTML */
+    -moz-user-select: none;
+    /* Old versions of Firefox */
+    -ms-user-select: none;
+    /* Internet Explorer/Edge */
+    user-select: none;
+    /* Non-prefixed version, currently
+                                  supported by Chrome, Edge, Opera and Firefox */
+}
+
+@mixin overlay($padding: null) {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    @if ( $padding==null) {
+        top: 0;
+        left: 0;
+    }
+    @else {
+        top: -$padding;
+        left: -$padding;
+        padding: $padding;
+    }
+}
+
+@mixin click-through-overlay($padding: null) {
+    @include overlay($padding);
+    pointer-events: none;
+}
+
+@mixin ellipsis($left: false) {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    @if $left {
+        direction: rtl;
+        text-align: left;
+    }
+}
+
+
+/* Scrollbar mixins */
+
+@mixin scrollbar($element, $size, $hover_size: null) {
+    #{$element+'::-webkit-scrollbar-track'} {
+        background-color: rgba(127, 127, 127, 0.05);
+    }
+    #{$element+'::-webkit-scrollbar-track-piece'} {
+        background-color: rgba(0, 0, 0, 0);
+    }
+    #{$element+'::-webkit-scrollbar-track-piece::before'} {
+        content: "";
+        position: absolute;
+        width: 1px;
+        height: 100%;
+        top: 0;
+        left: 50%;
+        background-color: rgba(255, 0, 0, 1);
+    }
+    #{$element+'::-webkit-scrollbar'} {
+        width: $size;
+        height: $size;
+        background-color: rgba(127, 127, 127, 0.05);
+    }
+    #{$element+'::-webkit-scrollbar-thumb'} {
+        border-radius: 3px;
+        background-color: rgba(255, 255, 255, 0.05);
+    }
+    #{$element+'::-webkit-scrollbar-corner'} {
+        border: none;
+        display: none;
+        background-color: rgba(255, 255, 255, 0.1);
+    }
+    #{$element+':hover::-webkit-scrollbar-thumb'} {
+        background-color: rgba(255, 255, 255, 0.15);
+    }
+    #{$element+':hover::-webkit-scrollbar-thumb:hover'} {
+        border-radius: 3px;
+        background-color: rgba(255, 255, 255, 0.5);
+    }
+    @if($hover_size !=null) {
+        #{$element+':hover::-webkit-scrollbar'} {
+            width: $hover_size;
+            height: $hover_size;
+        }
+    }
+}
+
+@mixin scrollbar-hidden($element) {
+    #{$element+'::-webkit-scrollbar'} {
+        opacity: 0;
+        height: 0px;
+        width: 0px;
+    }
+}
+
+@mixin scrollbar-host($element, $size) {
+    #{':host('+$element + nth($SIZES, $i + 1)+')'} {
+        @include repeat-value(auto, $selectors...);
+    }
+}
+
+// ----> UTILS
+
+
+/*
+    Repeats the same value for multiple properties
+*/
+
+@mixin repeat-value($value, $properties...) {
+    @for $i from 0 to length($properties) {
+        #{nth($properties, $i + 1)}: $value;
+    }
+}
+
+
+/*
+    Spreads a list of value over multiple properties
+    value length & properties length must be the same
+*/
+
+@mixin spread-values($values, $properties...) {
+    @for $i from 0 to length($properties) {
+        #{nth($properties, $i + 1)}: nth($values, $i + 1);
+    }
+}
+
+@mixin for-each-selector($before, $selectorList, $after: '', $valueList: null, $properties...) {
+    @for $i from 0 to length($selectorList) {
+        $index: $i + 1;
+        $selector: nth($selectorList, $index);
+        @if ($valueList==null) {
+            #{$before+$selector+$after} {
+                @content($index);
+            }
+        }
+        @else {
+            $val: nth($valueList, $index);
+            #{$before+$selector+$after} {
+                @include repeat-value($val, $properties...);
+                @content($index, $val);
+            }
+        }
+    }
+}
+
+@mixin for-each-host-selector($before, $selectorList, $after: '', $element: '', $valueList: null, $properties...) {
+    @for $i from 0 to length($selectorList) {
+        $index: $i + 1;
+        $selector: nth($selectorList, $index);
+        @if ($valueList==null) {
+            #{':host('+$before+$selector+$after+')'+$element} {
+                @content($index);
+            }
+        }
+        @else {
+            $val: nth($valueList, $index);
+            #{':host('+$before+$selector+$after+')'+$element} {
+                @include repeat-value($val, $properties...);
+                @content($index, $val);
+            }
+        }
+    }
+}
+
+@mixin for-each-in($list) {
+    @for $i from 0 to length($list) {
+        $index: $i + 1;
+        @content( $index, nth($list, $index));
+    }
+}
+
+/*----------------------------*/
+/*<!---- @nkmjs/ui-core ----!>*/
+/*----------------------------*/
+
+@import './_variables';
+@import './_constants';
+@import './_functions';
+
+
+@mixin state-color-variations( $main_color, $secondary_color, $prim_alpha: 0.5, $sec_alpha: 0.8) {
+    // Create per-state variants
+    $bases: // base colors
+    $main_color, // idle
+    lighten($main_color, 10%), // focused
+    lighten($main_color, 5%), // selected
+    lighten($main_color, 20%); // focused+selected
+    //
+    $primaries: nth($bases, 1), rgba(nth($bases, 2), $prim_alpha), rgba(nth($bases, 3), $prim_alpha * 0.8), rgba(nth($bases, 4), $prim_alpha * 1.5);
+    $secondaries: $secondary_color, rgba(lighten($secondary_color, 10%), $sec_alpha), rgba(lighten($secondary_color, 5%), $sec_alpha * 0.8), rgba(lighten($secondary_color, 20%), $sec_alpha * 1.5);
+    $contrasties: label-color(nth($bases, 1)), label-color(nth($bases, 2)), label-color(nth($bases, 3)), label-color(nth($bases, 4));
+    @include for-each-in($default_states_ids) using ($index, $state_name) {
+        @content( $index, $state_name, nth($primaries, $index), nth($secondaries, $index), nth($contrasties, $index));
+    }
+}
+
+@mixin state-host( $main_color, $secondary_color, $variant: '', $prim_alpha: 0.5, $sec_alpha: 0.8) {
+    $c: nth($main_color, 1);
+    @if (lightness( $c) < 40) {
+        $c: lighten($c, 40%);
+    }
+     :host(#{$FOCUSED+$variant})::after,
+     :host(#{$TOGGLED+$variant})::after {
+        background-color: rgba($c, 1);
+    }
+    $m_states : $IDLE+$variant,
+    $FOCUSED+$variant,
+    $SELECTED+$variant,
+    $SELECTED+$FOCUSED+$variant;
+    $c:$main_color;
+    $m_colors: // base colors
+    $c, // idle
+    lighten($c, 10%), // focused
+    lighten($c, 5%), // selected
+    lighten($c, 20%); // focused+selected
+    $c:$m_colors;
+    $m_el_colors: // element color 
+    nth($c, 1),
+    rgba(nth($c, 2), $prim_alpha),
+    rgba(nth($c, 3), $prim_alpha * 0.8),
+    rgba(nth($c, 4), $prim_alpha * 1.5);
+    $c:$secondary_color;
+    $m_la_colors: // element color 
+    $c,
+    rgba(lighten($c, 10%), $sec_alpha),
+    rgba(lighten($c, 5%), $sec_alpha * 0.8),
+    rgba(lighten($c, 20%), $sec_alpha * 1.5);
+    @for $i from 0 to length($m_states) {
+        $m_state: nth($m_states, $i + 1);
+        $m_main_color: nth($m_el_colors, $i + 1);
+        $m_secondary_color: nth($m_la_colors, $i + 1);
+        $m_label_color: label-color(nth($m_colors, $i + 1));
+        #{':host('+$m_state+')'} {
+            @content($m_main_color, $m_secondary_color, $m_label_color);
+        }
+    }
+}

@@ -1,0 +1,63 @@
+/*-------------------------------*/
+/*<!---- @nkmjs/ui-library ----!>*/
+/*-------------------------------*/
+
+@import '../_variables';
+@import '../_mixins';
+@import '../_constants';
+
+@include for-each-host-selector('', $SIZES, '', '', $size_values, height);
+
+:host{
+    position: relative;
+    --flavor-color: rgba(0,0,0,0.1);
+}
+
+.field{
+    font-family: Regular, sans-serif;
+
+    border-radius: 3px;
+    padding:5px;
+    margin:0;
+
+    outline: none;
+
+    background-color: rgba(0,0,0,0.2);
+    color: rgba(200,200,200,1);
+    border: 1px solid;
+    border-color: var(--flavor-color);
+
+    resize: vertical;
+
+    -webkit-appearance: none;
+ 
+    &::placeholder{
+        font-style: italic;
+    }
+
+    &:focus {
+        border-color: $col_active;
+    }
+
+    &::-webkit-search-cancel-button {
+        position: relative;
+        right: -5px;
+        -webkit-appearance: none;
+        height: 20px;
+        width: 20px;
+        border-radius: 10px;
+        background: url(img/icons/icon_delete.svg) no-repeat center;
+    }
+
+}
+
+@include scrollbar('.field', 4px, 8px);
+
+.label{
+    //display: inline-flex;
+    align-items: center;
+}
+
+.input-btn{
+    margin-left:5px;
+}

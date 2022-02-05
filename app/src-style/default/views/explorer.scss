@@ -1,0 +1,53 @@
+/*---------------------------------*/
+/*<!---- @nkmjs/ui-workspace ----!>*/
+/*---------------------------------*/
+
+@import '../_constants';
+@import '../_variables';
+@import '../_mixins';
+
+:host{ 
+    box-sizing: border-box;
+    //padding: 2px;    
+    //background-color: rgba(1,1,1,0.1);
+}
+
+.header{
+
+}
+
+.body{
+    -webkit-box-shadow: inset 0px 15px 15px -20px #000000, inset 0px -15px 15px -20px #000000; 
+    box-shadow: inset 0px 15px 15px -20px #000000, inset 0px -15px 15px -20px #000000;
+}
+
+.footer{
+    
+}
+
+/*-------------------------------------*/
+/*<!---- @nkmjs/ui-data-controls ----!>*/
+/*-------------------------------------*/
+
+@import '../_constants';
+@import '../_variables';
+@import '../_mixins';
+
+:host{ 
+    box-sizing: border-box;
+    //padding: 2px;    
+    //background-color: rgba(1,1,1,0.1);
+}
+
+.header{
+
+}
+
+.body{
+    -webkit-box-shadow: inset 0px 15px 15px -20px #000000, inset 0px -15px 15px -20px #000000; 
+    box-shadow: inset 0px 15px 15px -20px #000000, inset 0px -15px 15px -20px #000000;
+}
+
+.footer{
+    
+}

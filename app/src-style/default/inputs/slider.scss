@@ -1,0 +1,114 @@
+/*-------------------------------*/
+/*<!---- @nkmjs/ui-library ----!>*/
+/*-------------------------------*/
+
+@import '../_constants';
+@import '../_variables';
+@import '../_mixins';
+
+:host{
+    --fill-color: rgba(255,127,127,0.5);
+    --line-color: rgba(127,255,127,1);
+
+    @include state-color-variations( rgba(140,140,140,0.65), rgba(50,50,50,0.5), 1, 0.8) 
+    using ( $index, $st, $p, $s, $c){
+        #{'--flavor-primary-'+$st}: $p;
+        #{'--flavor-secondary-'+$st}: $s;
+        #{'--flavor-contrast-'+$st}: $c;
+    }
+
+    --thumbSize:var(--size);
+
+}
+
+.slider{
+    
+    &::-webkit-slider-thumb {
+        width: var(--thumbSize);
+        height: var(--thumbSize);
+        border-radius:100%;
+        background-color: var(--flavor-contrast-idle);
+        margin-top:-4px;
+        margin-left:-2px;
+    }
+
+    &::-moz-range-thumb {
+        width: var(--thumbSize);
+        height: var(--thumbSize);
+        border-radius:100%;
+        background-color: var(--flavor-contrast-idle);
+        margin-top:-4px;
+        margin-left:-2px;
+    }
+
+}
+
+$trh:2px;
+$trfh:4px;
+
+.slider-assets{
+
+    left:calc(var(--thumbSize) * 0.5);
+
+    // Trackline
+    &::before {
+        width: calc(100% - var(--fill));
+        --h: calc(var(--size) * 0.1);    
+        background-color: var(--flavor-primary-idle);
+        border-radius:var(--h);
+        left: var(--fill);
+    }
+
+    &::after {
+        width: var(--fill);
+        --h: calc(var(--size) * 0.5);
+        background-color: var(--flavor-primary-idle);
+    }
+
+    &::before, &::after {
+        position: absolute;
+        content:'';
+        height: var(--h);
+        top:calc(50% - calc(var(--h) * 0.5)); 
+        border-radius:var(--h);
+    }
+
+}
+
+:host(#{$IDLE}){
+    .slider-assets{
+        &::before {
+            background-color: var(--flavor-primary-idle);
+        }
+        &::after {
+            background-color: var(--flavor-primary-idle);
+        }
+    }
+    .slider{
+        &::-webkit-slider-thumb{
+            background: var(--flavor-contrast-idle);
+        }
+        &::-moz-range-thumb {
+            background: var(--flavor-contrast-idle);
+        }     
+    }
+}
+
+:host(#{$FOCUSED}){
+    .slider-assets{
+        &::before {
+            background-color: var(--flavor-primary-focused);
+        }
+        &::after {
+            background-color: var(--flavor-primary-focused);
+        }
+    }
+    .slider{
+        &::-webkit-slider-thumb{
+            background: var(--flavor-contrast-focused);
+        }
+        &::-moz-range-thumb {
+            background: var(--flavor-contrast-focused);
+        }    
+    }
+}

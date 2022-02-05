@@ -1,0 +1,41 @@
+/*-------------------------------*/
+/*<!---- @nkmjs/ui-library ----!>*/
+/*-------------------------------*/
+
+@import '../_constants';
+@import '../_variables';
+@import '../_mixins';
+
+:host{
+
+    box-sizing: border-box;
+
+    //transition: padding-left 0.05s ease;
+
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: flex-start;    
+    align-items: center;
+
+    padding: 2px;
+    padding-right: 4px;
+
+    border-radius: 2px;
+
+    height: var(#{$varname_tree_size});
+    min-height: var(#{$varname_tree_size});
+
+    --indent: calc(var(--depth) * var(#{$varname_tree_indent}));
+
+    padding-left: var(--indent);
+
+}
+
+:host(#{$FOCUSED}) {
+    cursor: pointer;
+    background-color: rgba(127,127,127,0.2);
+}
+
+:host(#{$DRAGGED}) {
+    border: 1px dashed #ff0000;
+}

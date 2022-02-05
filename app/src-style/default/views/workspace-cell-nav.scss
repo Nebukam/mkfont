@@ -1,0 +1,70 @@
+/*---------------------------------*/
+/*<!---- @nkmjs/ui-workspace ----!>*/
+/*---------------------------------*/
+
+@import '../_constants';
+@import '../_variables';
+@import '../_functions';
+@import '../_mixins';
+
+$spacing: 0px;
+
+:host{
+    background-color: var(#{$varname_workspace_nav_bg});
+}
+
+:host(#{$HORIZONTAL}){ 
+    
+    & .group{
+
+        margin-right: $spacing * 2;
+        padding-right: $spacing;
+
+        &::before, &::after{
+            left:-($spacing - 1px);
+        }
+
+    }    
+
+    & .item + .group {
+        margin-left: $spacing;
+        padding-left: $spacing;
+    }
+
+    & .item {
+        margin-right: $spacing;
+    }
+
+    & .group + .item:last-child{
+        margin-left: $spacing - 1px;
+    }
+
+}
+
+:host(#{$VERTICAL}){ 
+    
+    & .group{
+
+        margin-right: $spacing * 2;
+        padding-right: $spacing;
+
+        &::before, &::after{
+            left:-($spacing - 1px);
+        }
+
+    }    
+
+    & .item + .group {
+        margin-left: $spacing;
+        padding-left: $spacing;
+    }
+
+    & .item {
+        margin-bottom: $spacing;
+    }
+
+    & .group + .item:last-child{
+        margin-left: $spacing - 1px;
+    }
+
+}

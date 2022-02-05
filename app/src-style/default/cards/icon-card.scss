@@ -1,0 +1,27 @@
+/*-------------------------------*/
+/*<!---- @nkmjs/ui-library ----!>*/
+/*-------------------------------*/
+
+@import './_card';
+
+:host{
+
+
+    & .header{
+
+        position: relative;
+        background-color: rgba(0,0,0,0.25);
+
+        & .floating-icon{
+            position: absolute;
+            width: calc(100% - 40px);
+            height: calc(100% - 40px);
+
+            background-repeat: no-repeat;
+            background-size: contain;
+            background-position: center;
+        }
+
+    }
+
+}

@@ -1,0 +1,93 @@
+/*--------------------------*/
+/*<!---- @nkmjs/style ----!>*/
+/*--------------------------*/
+
+@import './_variables';
+
+@font-face { 
+    font-family: 'Regular'; 
+    src: url('./assets/fonts/roboto/Roboto-Regular.ttf') format('truetype');
+}
+
+@font-face { 
+    font-family: 'Title'; 
+    src: url('./assets/fonts/d-din/D-DINCondensed.otf') format('opentype');
+}
+
+$family_regular: 'Regular', apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+
+.label, .subtitle, .message{
+
+    @include no-select;
+
+    font-family: $family_regular;
+
+    --font-size: var(#{$varname_font_size_s});
+    font-size: var(--font-size);
+
+    &.font-tag{
+        --font-size: var(#{$varname_font_size_tag});
+        text-transform: uppercase;
+    }
+
+    &.font-small{
+        --font-size: var(#{$varname_font_size_xs});
+    }
+
+    &.font-medium{
+        --font-size: var(#{$varname_font_size_m});
+    }
+
+    &.font-large{
+        --font-size: var(#{$varname_font_size_l});
+    }
+
+    &.font-xlarge{
+        --font-size: var(#{$varname_font_size_xl});
+    }
+
+}
+
+.message{
+    font-size: calc(var(--font-size) * 1);
+}
+
+$family_title: 'Title', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+
+.title{
+
+    @include no-select;
+
+    font-family: $family_title;
+
+    --font-size: var(#{$varname_font_size_s+'-title'});
+    font-size: var(--font-size);
+
+    text-transform: uppercase;
+    line-height: 85%;
+    
+    //text-shadow: 0 1px 0 #535353, 0 2px 0 #535353, 0 2px 2px rgba(0,0,0,0.5);
+
+    &.font-tag{
+        --font-size: var(#{$varname_font_size_tag+'-title'});
+    }
+
+    &.font-small{
+        --font-size: var(#{$varname_font_size_xs+'-title'});
+    }
+
+    &.font-medium{
+        --font-size: var(#{$varname_font_size_m+'-title'});
+    }
+
+    &.font-large{
+        --font-size: var(#{$varname_font_size_l+'-title'});
+        //text-shadow: 0 1px 0 #535353, 0 2px 0 #535353, 0 5px 2px rgba(0,0,0,0.5);
+    }
+
+    &.font-xlarge{
+        --font-size: var(#{$varname_font_size_xl+'-title'});
+        //text-shadow: 0 1px 0 #535353, 0 2px 0 #535353, 0 5px 2px rgba(0,0,0,0.5);
+    }
+
+}

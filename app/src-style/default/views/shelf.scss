@@ -1,0 +1,36 @@
+/*-------------------------------*/
+/*<!---- @nkmjs/ui-library ----!>*/
+/*-------------------------------*/
+
+@import '../_constants';
+@import '../_variables';
+@import '../_functions';
+@import '../_mixins';
+
+:host{
+    background-color: rgba(0,0,0,0.1);
+}
+
+.view{
+
+}
+
+.controls{
+    background-color: rgba(127,127,127,0.1);
+}
+
+:host(#{$VERTICAL}){
+
+    &.controls{
+        width: 50px;
+    }
+
+}
+
+:host(#{$HORIZONTAL}){
+    
+    &.controls{
+        height: 50px;
+    }
+
+}

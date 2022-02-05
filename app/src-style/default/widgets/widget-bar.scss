@@ -1,0 +1,130 @@
+/*----------------------------*/
+/*<!---- @nkmjs/ui-core ----!>*/
+/*----------------------------*/
+
+@import '../_constants';
+@import '../_variables';
+@import '../_mixins';
+
+:host {
+    box-sizing: border-box;
+    //padding: 2px;
+}
+
+.group{
+    display:flex;
+}
+
+// Shared
+
+.item + .group::before,
+.group::after { 
+    content:"";
+    position:absolute;
+    border-radius: 10px;
+    background-color: rgba(127,127,127,0.5);
+}
+
+.group:last-child::after { 
+    content:none;
+}
+
+// HORIZONTAL
+
+$spacing: 4px;
+
+:host(#{$HORIZONTAL}){ 
+    
+    & .group{
+
+        margin-right: $spacing * 2;
+        padding-right: $spacing;
+        margin-left: 0;
+        padding-left: 0;
+
+        flex-flow: row nowrap;
+
+        &::before, &::after{
+            top:25%;
+            left:-($spacing - 1px);
+            width:2px; height:50%;
+        }
+
+        &::after { 
+            left:calc(100% + 1px);    
+        }
+
+        &:last-child { 
+            margin-right: 0;
+            padding-right: 0;
+        }
+
+    }    
+
+    & .item + .group {
+        margin-left: $spacing;
+        padding-left: $spacing;
+    }
+
+    & .item {
+        margin-right: $spacing;
+
+        &:last-child {
+            margin-right: 0;
+        }
+    }
+
+    & .group + .item:last-child{
+        margin-left: $spacing - 1px;
+    }
+
+}
+
+// VERTICAL
+
+:host(#{$VERTICAL}){
+
+    & .group { 
+
+        margin-bottom: $spacing * 2;
+        padding-bottom: $spacing;
+        margin-top: 0;
+        padding-top: 0;
+
+        flex-flow: column nowrap;
+
+        &::before, &::after{
+            left:25%;//calc(50% - 3px);
+            top:-( $spacing - 1px );
+            width:50%; height:2px;
+        }
+
+        &::after { 
+            top:calc(100% + 1px); 
+        }
+    
+        &:last-child { 
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+    }
+
+    & .item + .group {
+        margin-top: $spacing * 2;
+        padding-top: $spacing;
+    }
+    
+    & .item {
+        margin-bottom: $spacing;
+        
+        &:last-child {
+            margin-bottom: 0;
+        }
+    }
+
+    & .group + .item:last-child{
+        margin-top: $spacing - 1px;
+    }
+
+}

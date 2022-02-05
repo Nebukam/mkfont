@@ -1,0 +1,117 @@
+/*---------------------------------*/
+/*<!---- @nkmjs/ui-workspace ----!>*/
+/*---------------------------------*/
+
+@import '../_constants';
+@import '../_variables';
+@import '../_functions';
+@import '../_mixins';
+
+$hint_size: 4px;
+
+:host {
+
+    cursor: pointer;
+    @include no-select;
+
+    padding:5px;
+    padding-left:12px;
+    padding-right:12px;
+
+    max-width: calc(var(--size-xl) * 2);
+
+    & .icon{
+        flex:0 0 auto;
+
+        &.close{
+            margin-left:8px;
+            opacity:0.5;
+
+            &:hover{
+                opacity:1;
+            }
+        }
+
+    }
+
+    & .label{
+        flex:1 1 auto;
+        @include ellipsis();
+    }
+
+    &::before{
+        content:"";
+        position: absolute;
+        box-sizing: border-box;
+        background-color: var(--flavor-primary-idle);
+    }
+
+}
+
+// ----> Horizontal placement
+// [    ][    ][    ]
+
+:host(#{$TOP}), :host(#{$BOTTOM}){
+    border-right: 1px solid var(#{$varname_workspace_bg});
+}
+
+:host::before, :host(#{$TOP})::before, :host(#{$BOTTOM})::before{
+    left: 0;
+    width:100%;
+    height:$hint_size;
+}
+
+:host::before, :host(#{$TOP})::before{
+    top:0; 
+    bottom:auto;   
+}
+
+:host(#{$BOTTOM})::before{
+    top:auto;
+    bottom:0;
+}
+
+// ----> Vertical placement
+// [    ]
+// [    ]
+// [    ]
+
+:host(#{$LEFT}), :host(#{$RIGHT}){
+    border-bottom: 1px solid var(#{$varname_workspace_bg});
+}
+
+:host(#{$LEFT})::before, :host(#{$RIGHT})::before{
+    top:0;
+    width:$hint_size;
+    height:100%;
+}
+
+:host(#{$LEFT})::before{
+    left: 0;  
+    right: auto;  
+}
+
+:host(#{$RIGHT})::before{
+    left: auto;  
+    right: 0;
+}
+
+// ----> States
+
+:host(#{$FOCUSED}){
+    
+    &::before{
+        background-color: var(--flavor-primary-focused);
+    }
+
+}
+
+:host(#{$SELECTED}){
+    background-color: var(#{$varname_workspace_bg});
+
+    &::before{
+        background-color: var(--flavor-primary-selected);
+    }
+
+}
+

@@ -1,0 +1,25 @@
+/*-------------------------------*/
+/*<!---- @nkmjs/ui-library ----!>*/
+/*-------------------------------*/
+
+@import '../_constants';
+@import '../_variables';
+@import '../_mixins';
+
+:host {
+    cursor: pointer;
+    height: var(--size);
+    border-radius: 3px;
+}
+
+.field {
+
+}
+
+.body{
+
+}
+
+.label{
+    
+}

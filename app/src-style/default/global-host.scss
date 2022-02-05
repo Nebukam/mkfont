@@ -1,0 +1,228 @@
+/*--------------------------*/
+/*<!---- @nkmjs/style ----!>*/
+/*--------------------------*/
+
+@import './_mixins';
+@import './_variables';
+@import './_typography';
+
+.row-break {
+    flex-basis: 100%;
+    height: 0;
+    width: 0%;
+}
+
+.column-break {
+    flex-basis: 100%;
+    height: 0%;
+    width: 0;
+}
+
+
+// ----> Host presets
+// Sizes
+@include for-each-host-selector('', $SIZES, '', '', $size_varnames) using ($index, $val) {
+    --size:var(#{$val});
+}
+
+// Flavors
+@include for-each-host-selector('', $FLAVORS_EX, '', '', $col_flavors_ex_varnames) using ($index, $val) {
+    --flavor-color: var(#{$val});
+    --flavor-color-rgb: var(#{$val+"-rgb"});
+    --flavor-contrast:var(#{$val+'-contrast'});
+}
+
+// ----> Remove costly filters on (presumably) mobile
+@media (hover: none) and (pointer: coarse) {
+    * {
+        //filter: none;
+        -webkit-box-shadow: none;
+        -moz-box-shadow: none;
+        box-shadow: none;
+    }
+}
+
+@include scrollbar("", 4px);
+
+// Animations
+
+@-webkit-keyframes rotating{
+    from {
+        -webkit-transform: rotate(0deg);
+        -o-transform: rotate(0deg);
+        transform: rotate(0deg);
+    }
+    to {
+        -webkit-transform: rotate(360deg);
+        -o-transform: rotate(360deg);
+        transform: rotate(360deg);  
+    }
+}
+
+@keyframes rotating {
+    from {
+        -ms-transform: rotate(0deg);
+        -moz-transform: rotate(0deg);
+        -webkit-transform: rotate(0deg);
+        -o-transform: rotate(0deg);
+        transform: rotate(0deg);
+    }
+    to {
+        -ms-transform: rotate(360deg);
+        -moz-transform: rotate(360deg);
+        -webkit-transform: rotate(360deg);
+        -o-transform: rotate(360deg);
+        transform: rotate(360deg);
+    }
+}
+.rotating-slow {
+    -webkit-animation: rotating 2s linear infinite;
+    -moz-animation: rotating 2s linear infinite;
+    -ms-animation: rotating 2s linear infinite;
+    -o-animation: rotating 2s linear infinite;
+    animation: rotating 2s linear infinite;
+}
+
+.rotating-fast {
+    -webkit-animation: rotating 1s linear infinite;
+    -moz-animation: rotating 1s linear infinite;
+    -ms-animation: rotating 1s linear infinite;
+    -o-animation: rotating 1s linear infinite;
+    animation: rotating 1s linear infinite;
+}
+
+/*----------------------------*/
+/*<!---- @nkmjs/ui-core ----!>*/
+/*----------------------------*/
+
+@import './_mixins';
+@import './_variables';
+
+// ----> Extended color schemes (state colors)
+
+:host{
+    order: var(--order);
+    min-height:0;
+    min-width: 0;
+
+    & a{
+        color:var(--flavor-contrast-idle)
+    }
+
+    & a:hover{
+        color:var(--flavor-contrast-focused)
+    }
+    
+}
+
+:host(.unpainted){
+    visibility: hidden !important;
+}
+
+ /* Hide scrollbar for IE, Edge and Firefox */
+:host(.invisible-scrollbar){
+
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+
+    /* Hide scrollbar for Chrome, Safari and Opera */
+    &::-webkit-scrollbar {
+        display: none;
+    }
+
+}
+
+@include for-each-host-selector('', $FLAVORS_EX, '', '', $col_flavors_ex_varnames) 
+using ($index, $val){
+
+    --flavor-color: var(#{$val});
+    --flavor-contrast:var(#{$val+'-contrast'});
+
+    $val: str-replace($val, '--col-');
+    $flavor_id: $index;
+
+    @include for-each-in($default_states_ids) using ($i, $st){
+        $short_state: nth($short_states_ids, $i);
+        #{'--flavor-primary-'+$st}:var(#{'--fcol-'+$flavor_id+'-0-'+$short_state});
+        #{'--flavor-secondary-'+$st}:var(#{'--fcol-'+$flavor_id+'-1-'+$short_state});
+        #{'--flavor-contrast-'+$st}:var(#{'--fcol-'+$flavor_id+'-2-'+$short_state});
+    }
+
+}
+
+:host(#{$WAITING}){ cursor: wait; }
+:host(#{$PROCESSING}){ cursor: progress; }
+
+/* Icon */
+
+.icon {
+    
+    margin:4px;
+    padding: 0;
+    
+    --h-size:calc( var(--size) / 2);
+    --clamped-size: clamp(var(#{$varname_size_xs}), var(--h-size), var(#{$varname_size_l}));
+
+    width: var(--clamped-size);
+    min-width: var(--clamped-size);
+    max-width: var(--clamped-size);
+
+    height: var(--clamped-size);
+    min-height: var(--clamped-size);
+    max-height: var(--clamped-size);
+
+    //border: 3px solid #e5e5e5;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center center;
+
+    opacity: 0.8;
+
+    //border-radius: 1000px;
+
+    box-sizing: border-box;
+
+    &:only-child{
+        margin:0;
+    }
+
+}
+
+div.icon{
+    display: inline-block;
+}
+
+@import './_icons';
+
+/* Extensions */
+
+.ext-overlay{
+    @include click-through-overlay();
+    border-radius: 3px;
+    box-sizing: border-box;
+}
+
+.drag-overlay{
+    border: 1px solid #{$col_active};
+}
+
+.drop-target-overlay{
+    border: 1px solid #{$col_ready};
+}
+
+/*---------------------------------*/
+/*<!---- @nkmjs/ui-workspace ----!>*/
+/*---------------------------------*/
+
+@import './_mixins';
+@import './_variables';
+
+
+
+/*-------------------------------------*/
+/*<!---- @nkmjs/ui-data-controls ----!>*/
+/*-------------------------------------*/
+
+@import './_mixins';
+@import './_variables';
+

@@ -1,0 +1,275 @@
+@import './functions';
+
+////////////
+/* Colors */
+////////////
+
+$primary_dark: #393939;
+$primary_light: #e5e5e5;
+
+$bg_dark: #191919; 
+$bg_light: #f0f0f0;
+
+$col_infos: rgb(102, 175, 204);
+$col_warning: rgb(255, 166, 0);
+$col_error: rgb(226, 53, 0);
+$col_ready: rgb(120, 164, 0);
+$col_dirty: rgb(164, 100, 0);
+$col_loading: rgb(102, 119, 204);
+$col_processing: rgb(102, 119, 204);
+$col_waiting: rgb(102, 119, 204);
+$col_active: rgb(62, 193, 136);
+
+$varname_col_infos: '--col-infos';
+$varname_col_warning: '--col-warning';
+$varname_col_error: '--col-error';
+$varname_col_ready: '--col-ready';
+$varname_col_dirty: '--col-dirty';
+$varname_col_loading: '--col-loading';
+$varname_col_processing: '--col-processing';
+$varname_col_waiting: '--col-waiting';
+$varname_col_active: '--col-active';
+$varname_col_cta: '--col-cta';
+
+///////////
+/* Sizes */
+///////////
+
+$size_xs: 16px;
+$size_s: 24px;
+$size_m: 32px;
+$size_l: 50px;
+$size_xl: 108px;
+
+$varname_size_xs: '--size-xs';
+$varname_size_s: '--size-s';
+$varname_size_m: '--size-m';
+$varname_size_l: '--size-l';
+$varname_size_xl: '--size-xl';
+
+////////////////
+/* Font sizes */
+////////////////
+
+$font_size_xs: 0.75rem;
+$font_size_s: 0.88rem; //0.9375rem;
+$font_size_m: 1.35rem;
+$font_size_l: 1.65rem;
+$font_size_xl: 1.95rem;
+$font_size_tag: $font_size_xs * 0.75;
+
+$varname_font_size_tag: '--font-size-tag';
+$varname_font_size_xs: '--font-size-xs';
+$varname_font_size_s: '--font-size-s';
+$varname_font_size_m: '--font-size-m';
+$varname_font_size_l: '--font-size-l';
+$varname_font_size_xl: '--font-size-xl';
+
+
+/////////////////
+/////////////////
+/* Boilerplate */
+/////////////////
+/////////////////
+
+// ----> Colors Presets
+
+//$FLAVORS: $INFOS, $WARNING, $ERROR;
+$col_flavors: 
+    $col_infos, 
+    $col_warning, 
+    $col_error;
+
+$col_flavors_varnames: 
+    $varname_col_infos, 
+    $varname_col_warning, 
+    $varname_col_error;
+
+//$FLAVORS_EX: $INFOS, $WARNING, $ERROR, $READY, $DIRTY, $LOADING, $PROCESSING, $WAITING, $ACTIVE, $CTA;
+$col_flavors_ex: 
+    $col_infos, 
+    $col_warning, 
+    $col_error, 
+    $col_ready, 
+    $col_dirty, 
+    $col_loading, 
+    $col_processing, 
+    $col_waiting, 
+    $col_active, 
+    $col_active;
+
+$col_flavors_ex_varnames: 
+    $varname_col_infos, 
+    $varname_col_warning, 
+    $varname_col_error, 
+    $varname_col_ready, 
+    $varname_col_dirty, 
+    $varname_col_loading, 
+    $varname_col_processing, 
+    $varname_col_waiting, 
+    $varname_col_active, 
+    $varname_col_cta;
+
+$col_flavors_ex_bw:
+    contrast-color($col_infos), 
+    contrast-color($col_warning), 
+    contrast-color($col_error), 
+    contrast-color($col_ready), 
+    contrast-color($col_dirty), 
+    contrast-color($col_loading), 
+    contrast-color($col_processing), 
+    contrast-color($col_waiting), 
+    contrast-color($col_active), 
+    contrast-color($col_active);
+
+// ----> Font size Presets
+
+$font_size_values:
+    $font_size_tag, 
+    $font_size_xs, 
+    $font_size_s, 
+    $font_size_m, 
+    $font_size_l, 
+    $font_size_xl;
+$font_size_varnames: 
+    $varname_font_size_tag, 
+    $varname_font_size_xs, 
+    $varname_font_size_s, 
+    $varname_font_size_m, 
+    $varname_font_size_l, 
+    $varname_font_size_xl;
+
+// ----> Sizes Presets
+
+$size_values: 
+    $size_xs, 
+    $size_s, 
+    $size_m, 
+    $size_l, 
+    $size_xl;
+$size_varnames: 
+    $varname_size_xs, 
+    $varname_size_s, 
+    $varname_size_m, 
+    $varname_size_l, 
+    $varname_size_xl;
+
+// Halves
+
+$size_xs_half: _round($size_xs*0.5);
+$size_s_half: _round($size_s*0.5);
+$size_m_half: _round($size_m*0.5);
+$size_l_half: _round($size_l*0.5);
+$size_xl_half: _round($size_xl*0.5);
+
+$suffix: '-half';
+$varname_size_xs_half: $varname_size_xs+$suffix;
+$varname_size_s_half: $varname_size_s+$suffix;
+$varname_size_m_half: $varname_size_m+$suffix;
+$varname_size_l_half: $varname_size_l+$suffix;
+$varname_size_xl_half: $varname_size_xl+$suffix;
+
+$size_values_half: 
+    $size_xs_half, 
+    $size_s_half, 
+    $size_m_half, 
+    $size_l_half, 
+    $size_xl_half;
+$size_varnames_half: 
+    $varname_size_xs_half, 
+    $varname_size_s_half, 
+    $varname_size_m_half, 
+    $varname_size_l_half, 
+    $varname_size_xl_half;
+
+// Thirds
+
+$size_xs_third: _round($size_xs*0.333);
+$size_s_third: _round($size_s*0.333);
+$size_m_third: _round($size_m*0.333);
+$size_l_third: _round($size_l*0.333);
+$size_xl_third: _round($size_xl*0.333);
+
+$suffix: '-third';
+$varname_size_xs_third: $varname_size_xs+$suffix;
+$varname_size_s_third: $varname_size_s+$suffix;
+$varname_size_m_third: $varname_size_m+$suffix;
+$varname_size_l_third: $varname_size_l+$suffix;
+$varname_size_xl_third: $varname_size_xl+$suffix;
+
+$size_values_third: 
+    $size_xs_third, 
+    $size_s_third, 
+    $size_m_third, 
+    $size_l_third, 
+    $size_xl_third;
+$size_varnames_third: 
+    $varname_size_xs_third, 
+    $varname_size_s_third, 
+    $varname_size_m_third, 
+    $varname_size_l_third, 
+    $varname_size_xl_third;
+
+
+
+/*----------------------------*/
+/*<!---- @nkmjs/ui-core ----!>*/
+/*----------------------------*/
+
+@import './_constants';
+@import './_functions';
+
+$default_states_ids:
+    str-replace($IDLE, '.'),
+    str-replace($FOCUSED, '.'),
+    str-replace($SELECTED, '.'),
+    #{str-replace($SELECTED, '.')+'_'+str-replace($FOCUSED, '.')};
+
+$short_states_ids:
+    'i',
+    'f',
+    's',
+    'sf';
+
+$tree_indent: 24px;
+
+$varname_tree_indent: '--tree-indent';
+$varname_tree_size: '--tree-size';
+
+$overlay_bg_dark: rgba(#191919, 0.5);
+$overlay_bg_light: rgba(#f0f0f0, 0.5);
+
+$drawer_bg_dark: #3d3d3d;
+$drawer_bg_light: #f0f0f0;
+
+$varname_drawer_bg: '--col-drawer-bg';
+$varname_overlay_bg: '--col-overlay-bg';
+
+/*---------------------------------*/
+/*<!---- @nkmjs/ui-workspace ----!>*/
+/*---------------------------------*/
+
+$workspace_bg_dark: #191919;
+$workspace_nav_bg_dark: rgba(#4d4d4d, 0.2);
+
+$workspace_bg_light: #f0f0f0;
+$workspace_nav_bg_light: rgba(#d8d8d8, 0.2);
+
+$varname_workspace_bg: '--col-workspace-bg';
+$varname_workspace_nav_bg: '--col-workspace-nav-bg';
+
+
+
+/*-------------------------------------*/
+/*<!---- @nkmjs/ui-data-controls ----!>*/
+/*-------------------------------------*/
+
+$workspace_bg_dark: #191919;
+$workspace_nav_bg_dark: rgba(#4d4d4d, 0.2);
+
+$workspace_bg_light: #f0f0f0;
+$workspace_nav_bg_light: rgba(#d8d8d8, 0.2);
+
+$varname_workspace_bg: '--col-workspace-bg';
+$varname_workspace_nav_bg: '--col-workspace-nav-bg';
+

@@ -1,0 +1,65 @@
+/*---------------------------------*/
+/*<!---- @nkmjs/ui-workspace ----!>*/
+/*---------------------------------*/
+
+@import '../_constants';
+@import '../_variables';
+@import '../_mixins';
+
+:host{
+
+    height: var(--size);
+    min-height: var(--size);
+
+    border-radius: 2px;
+    background-color: rgba(0,0,0,0.1);
+    padding-left: 2px;
+    padding-right: 2px;
+    
+    max-width: var(--size-xl);
+
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    align-content: center;
+    
+    cursor: pointer;
+
+    --flavor-primary-disabled:rgba(0,0,0,0.1);
+    --flavor-secondary-disabled:rgba(0,0,0,0.1);
+    --flavor-contrast-disabled:rgba(0,0,0,0.5);
+
+    @include state-color-variations( rgba(50,50,50,0), rgba(140,140,140,0.5), 0.1, 0.1) 
+    using ( $index, $st, $p, $s, $c){
+        #{'--flavor-primary-'+$st}: $p;
+        #{'--flavor-secondary-'+$st}: $s;
+        #{'--flavor-contrast-'+$st}: $c;
+    }
+
+}
+
+.label{
+    @include ellipsis();
+}
+
+:host(#{$IDLE}){
+    background-color: var(--flavor-primary-idle);
+    & .label{
+        color: var(--flavor-contrast-idle);
+    }
+}
+
+:host(#{$FOCUSED}){
+    background-color: var(--flavor-primary-focused);
+    & .label{
+        color: var(--flavor-contrast-focused);
+    }
+}
+
+:host(#{$DISABLED}){
+    background-color: var(--flavor-primary-disabled);
+    & .label{
+        color: var(--flavor-contrast-disabled);
+    }
+}
+
