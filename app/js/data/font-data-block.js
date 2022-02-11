@@ -12,6 +12,8 @@ class FontDataBlock extends nkm.data.DataBlock {
 
         super._Init();
 
+        this._glyphs = new nkm.collections.List();
+
         // Font data : only holds Glyph data.
         // The editor is responsible for making the "connection" between
         // which glyph belong to which group/foldout and distribute UI elements

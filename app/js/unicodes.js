@@ -1,189 +1,84 @@
-// Control codes
-let g_controls = { name: "Controls", title: "Control characters", desc: "" };
-let g_signs = { name: "Basic signs", title: "Basic signs characters", desc: "" };
-let g_digits = { name: "Digits", title: "Digit characters", desc: "" };
-let g_symbols = { name: "Symbols", title: "Punctuation & Symbols", desc: "" };
-let g_alphabet = { name: "Alphabet", title: "Alphabet letters", desc: "" };
-let g_lowercase = { name: "Lowercase", title: "Uppercase letters", desc: "" };
-let g_uppercase = { name: "Uppercase", title: "Lowercase letters", desc: "" };
+'use strict';
 
-let controls = [
-    { uni: "U+0000", decimal: 0, desc: "Null character", groups: [g_controls] },
-    { uni: "U+0001", decimal: 1, desc: "Start of Heading", groups: [g_controls] },
-    { uni: "U+0002", decimal: 2, desc: "Start of Text", groups: [g_controls] },
-    { uni: "U+0003", decimal: 3, desc: "End-of-text character", groups: [g_controls] },
-    { uni: "U+0004", decimal: 4, desc: "End-of-transmission character", groups: [g_controls] },
-    { uni: "U+0005", decimal: 5, desc: "Enquiry character", groups: [g_controls] },
-    { uni: "U+0006", decimal: 6, desc: "Acknowledge character", groups: [g_controls] },
-    { uni: "U+0007", decimal: 7, desc: "Bell character", groups: [g_controls] },
-    { uni: "U+0008", decimal: 8, desc: "Backspace", groups: [g_controls] },
-    { uni: "U+0009", decimal: 9, desc: "Horizontal tab", groups: [g_controls] },
-    { uni: "U+000A", decimal: 10, desc: "Line feed", groups: [g_controls] },
-    { uni: "U+000B", decimal: 11, desc: "Vertical tab", groups: [g_controls] },
-    { uni: "U+000C", decimal: 12, desc: "Form feed", groups: [g_controls] },
-    { uni: "U+000D", decimal: 13, desc: "Carriage return	CR", groups: [g_controls] },
-    { uni: "U+000E", decimal: 14, desc: "Shift Out", groups: [g_controls] },
-    { uni: "U+000F", decimal: 15, desc: "Shift In", groups: [g_controls] },
-    { uni: "U+0010", decimal: 16, desc: "Data Link Escape", groups: [g_controls] },
-    { uni: "U+0011", decimal: 17, desc: "Device Control 1", groups: [g_controls] },
-    { uni: "U+0012", decimal: 18, desc: "Device Control 2", groups: [g_controls] },
-    { uni: "U+0013", decimal: 19, desc: "Device Control 3", groups: [g_controls] },
-    { uni: "U+0014", decimal: 20, desc: "Device Control 4", groups: [g_controls] },
-    { uni: "U+0015", decimal: 21, desc: "Negative-acknowledge character", groups: [g_controls] },
-    { uni: "U+0016", decimal: 22, desc: "Synchronous Idle", groups: [g_controls] },
-    { uni: "U+0017", decimal: 23, desc: "End of Transmission Block", groups: [g_controls] },
-    { uni: "U+0018", decimal: 24, desc: "Cancel character", groups: [g_controls] },
-    { uni: "U+0019", decimal: 25, desc: "End of Medium", groups: [g_controls] },
-    { uni: "U+001A", decimal: 26, desc: "Substitute character", groups: [g_controls] },
-    { uni: "U+001B", decimal: 27, desc: "Escape character", groups: [g_controls] },
-    { uni: "U+001C", decimal: 28, desc: "File Separator", groups: [g_controls] },
-    { uni: "U+001D", decimal: 29, desc: "Group Separator", groups: [g_controls] },
-    { uni: "U+001E", decimal: 30, desc: "Record Separator", groups: [g_controls] },
-    { uni: "U+001F", decimal: 31, desc: "Unit Separator", groups: [g_controls] },
-    { uni: "U+007F", decimal: 127, desc: "Delete", groups: [g_controls] },
-    { uni: "U+0080", decimal: 128, desc: "Padding Character", groups: [g_controls] },
-    { uni: "U+0081", decimal: 129, desc: "High Octet Preset", groups: [g_controls] },
-    { uni: "U+0082", decimal: 130, desc: "Break Permitted Here", groups: [g_controls] },
-    { uni: "U+0083", decimal: 131, desc: "No Break Here", groups: [g_controls] },
-    { uni: "U+0084", decimal: 132, desc: "Index", groups: [g_controls] },
-    { uni: "U+0085", decimal: 133, desc: "Next Line", groups: [g_controls] },
-    { uni: "U+0086", decimal: 134, desc: "Start of Selected Area", groups: [g_controls] },
-    { uni: "U+0087", decimal: 135, desc: "End of Selected Area", groups: [g_controls] },
-    { uni: "U+0088", decimal: 136, desc: "Character Tabulation Set", groups: [g_controls] },
-    { uni: "U+0089", decimal: 137, desc: "Character Tabulation with Justification", groups: [g_controls] },
-    { uni: "U+008A", decimal: 138, desc: "Line Tabulation Set", groups: [g_controls] },
-    { uni: "U+008B", decimal: 139, desc: "Partial Line Forward", groups: [g_controls] },
-    { uni: "U+008C", decimal: 140, desc: "Partial Line Backward", groups: [g_controls] },
-    { uni: "U+008D", decimal: 141, desc: "Reverse Line Feed", groups: [g_controls] },
-    { uni: "U+008E", decimal: 142, desc: "Single-Shift Two", groups: [g_controls] },
-    { uni: "U+008F", decimal: 143, desc: "Single-Shift Three", groups: [g_controls] },
-    { uni: "U+0090", decimal: 144, desc: "Device Control String", groups: [g_controls] },
-    { uni: "U+0091", decimal: 145, desc: "Private Use 1", groups: [g_controls] },
-    { uni: "U+0092", decimal: 146, desc: "Private Use 2", groups: [g_controls] },
-    { uni: "U+0093", decimal: 147, desc: "Set Transmit State", groups: [g_controls] },
-    { uni: "U+0094", decimal: 148, desc: "Cancel character", groups: [g_controls] },
-    { uni: "U+0095", decimal: 149, desc: "Message Waiting", groups: [g_controls] },
-    { uni: "U+0096", decimal: 150, desc: "Start of Protected Area", groups: [g_controls] },
-    { uni: "U+0097", decimal: 151, desc: "End of Protected Area", groups: [g_controls] },
-    { uni: "U+0098", decimal: 152, desc: "Start of String", groups: [g_controls] },
-    { uni: "U+0099", decimal: 153, desc: "Single Graphic Character Introducer", groups: [g_controls] },
-    { uni: "U+009A", decimal: 154, desc: "Single Character Intro Introducer", groups: [g_controls] },
-    { uni: "U+009B", decimal: 155, desc: "Control Sequence Introducer", groups: [g_controls] },
-    { uni: "U+009C", decimal: 156, desc: "String Terminator", groups: [g_controls] },
-    { uni: "U+009D", decimal: 157, desc: "Operating System Command", groups: [g_controls] },
-    { uni: "U+009E", decimal: 158, desc: "Private Message", groups: [g_controls] },
-    { uni: "U+009F", decimal: 159, desc: "Application Program Command", groups: [g_controls] },
-];
+const nkm = require(`@nkmjs/core`);
 
-let basicLatin = [
+class Unicodes extends nkm.com.helpers.Singleton {
+    constructor() { super(); }
 
-    // ASCII Signs
-    { uni: "U+0020", glyph: " ", decimal: 32, desc: "Space", groups: [g_signs] },
-    { uni: "U+0021", glyph: "!", decimal: 33, desc: "Exclamation", groups: [g_signs] },
-    { uni: "U+0022", glyph: "\"", decimal: 34, desc: "Quotation", groups: [g_signs] },
-    { uni: "U+0023", glyph: "#", decimal: 35, desc: "Number", groups: [g_signs] },
-    { uni: "U+0024", glyph: "$", decimal: 36, desc: "Dollar", groups: [g_signs] },
-    { uni: "U+0025", glyph: "%", decimal: 37, desc: "Percent", groups: [g_signs] },
-    { uni: "U+0026", glyph: "&", decimal: 38, desc: "Ampersand", groups: [g_signs] },
-    { uni: "U+0027", glyph: "'", decimal: 39, desc: "Apostrophe", groups: [g_signs] },
-    { uni: "U+0028", glyph: "(", decimal: 40, desc: "Left", groups: [g_signs] },
-    { uni: "U+0029", glyph: ")", decimal: 41, desc: "Right", groups: [g_signs] },
-    { uni: "U+002A", glyph: "*", decimal: 42, desc: "Asterisk", groups: [g_signs] },
-    { uni: "U+002B", glyph: "+", decimal: 43, desc: "Plus", groups: [g_signs] },
-    { uni: "U+002C", glyph: ",", decimal: 44, desc: "Comma", groups: [g_signs] },
-    { uni: "U+002D", glyph: "-", decimal: 45, desc: "Hyphen", groups: [g_signs] },
-    { uni: "U+002E", glyph: ".", decimal: 46, desc: "Full", groups: [g_signs] },
-    { uni: "U+002F", glyph: "/", decimal: 47, desc: "Slash", groups: [g_signs] },
+    _Init() {
+        super._Init();
 
-    // ASCII Digits	
-    { uni: "U+0030", glyph: "0", decimal: 48, desc: "Digit Zero", groups: [g_digits] },
-    { uni: "U+0031", glyph: "1", decimal: 49, desc: "Digit One", groups: [g_digits] },
-    { uni: "U+0032", glyph: "2", decimal: 50, desc: "Digit Two", groups: [g_digits] },
-    { uni: "U+0033", glyph: "3", decimal: 51, desc: "Digit Three", groups: [g_digits] },
-    { uni: "U+0034", glyph: "4", decimal: 52, desc: "Digit Four", groups: [g_digits] },
-    { uni: "U+0035", glyph: "5", decimal: 53, desc: "Digit Five", groups: [g_digits] },
-    { uni: "U+0036", glyph: "6", decimal: 54, desc: "Digit Six", groups: [g_digits] },
-    { uni: "U+0037", glyph: "7", decimal: 55, desc: "Digit Seven", groups: [g_digits] },
-    { uni: "U+0038", glyph: "8", decimal: 56, desc: "Digit Eight", groups: [g_digits] },
-    { uni: "U+0039", glyph: "9", decimal: 57, desc: "Digit Nine", groups: [g_digits] },
 
-    // ASCII Punctuation & Symbols	
-    { uni: "U+003A", glyph: ":", decimal: 58, desc: "Colon", groups: [g_symbols] },
-    { uni: "U+003B", glyph: ";", decimal: 59, desc: "Semicolon", groups: [g_symbols] },
-    { uni: "U+003C", glyph: "<", decimal: 60, desc: "Less-than sign", groups: [g_symbols] },
-    { uni: "U+003D", glyph: "=", decimal: 61, desc: "Equal sign", groups: [g_symbols] },
-    { uni: "U+003E", glyph: ">", decimal: 62, desc: "Greater-than sign", groups: [g_symbols] },
-    { uni: "U+003F", glyph: "?", decimal: 63, desc: "Question mark", groups: [g_symbols] },
-    { uni: "U+0040", glyph: "@", decimal: 64, desc: "At sign", groups: [g_symbols] },
-    { uni: "U+005B", glyph: "[", decimal: 91, desc: "Left Square Bracket", groups: [g_symbols] },
-    { uni: "U+005C", glyph: "\\", decimal: 92, desc: "Backslash", groups: [g_symbols] },
-    { uni: "U+005D", glyph: "]", decimal: 93, desc: "Right Square Bracket", groups: [g_symbols] },
-    { uni: "U+005E", glyph: "^", decimal: 94, desc: "Circumflex accent", groups: [g_symbols] },
-    { uni: "U+005F", glyph: "_", decimal: 95, desc: "Low line", groups: [g_symbols] },
-    { uni: "U+0060", glyph: "`", decimal: 96, desc: "Grave accent", groups: [g_symbols] },
-    { uni: "U+007B", glyph: "{", decimal: 123, desc: "Left Curly Bracket", groups: [g_symbols] },
-    { uni: "U+007C", glyph: "|", decimal: 124, desc: "Vertical bar", groups: [g_symbols] },
-    { uni: "U+007D", glyph: "}", decimal: 125, desc: "Right Curly Bracket", groups: [g_symbols] },
-    { uni: "U+007E", glyph: "~", decimal: 126, desc: "Tilde", groups: [g_symbols] },
+        let ranges = [
+            //this._Range(`ASCII Control characters`, [0, 31, 127, 159]),
+            this._Range(`Basic Latin`, [32, 126]),
+            this._Range(`Latin 1 - Supplement`, [160, 255]),
+            //this._Range(`Latin Extended A`, [256, 383]),
+            //this._Range(`Latin Extended B`, [384, 591]),
+            //this._Range(`Latin Extended Additional`, ['\u1E00'.charCodeAt(0), '\u1EFF'.charCodeAt(0)]),
+        ];
 
-    // Latin Alphabet: Uppercase	
-    { uni: "U+0041", glyph: "A", decimal: 65, desc: "Latin Capital letter A", groups: [g_alphabet, g_uppercase] },
-    { uni: "U+0042", glyph: "B", decimal: 66, desc: "Latin Capital letter B", groups: [g_alphabet, g_uppercase] },
-    { uni: "U+0043", glyph: "C", decimal: 67, desc: "Latin Capital letter C", groups: [g_alphabet, g_uppercase] },
-    { uni: "U+0044", glyph: "D", decimal: 68, desc: "Latin Capital letter D", groups: [g_alphabet, g_uppercase] },
-    { uni: "U+0045", glyph: "E", decimal: 69, desc: "Latin Capital letter E", groups: [g_alphabet, g_uppercase] },
-    { uni: "U+0046", glyph: "F", decimal: 70, desc: "Latin Capital letter F", groups: [g_alphabet, g_uppercase] },
-    { uni: "U+0047", glyph: "G", decimal: 71, desc: "Latin Capital letter G", groups: [g_alphabet, g_uppercase] },
-    { uni: "U+0048", glyph: "H", decimal: 72, desc: "Latin Capital letter H", groups: [g_alphabet, g_uppercase] },
-    { uni: "U+0049", glyph: "I", decimal: 73, desc: "Latin Capital letter I", groups: [g_alphabet, g_uppercase] },
-    { uni: "U+004A", glyph: "J", decimal: 74, desc: "Latin Capital letter J", groups: [g_alphabet, g_uppercase] },
-    { uni: "U+004B", glyph: "K", decimal: 75, desc: "Latin Capital letter K", groups: [g_alphabet, g_uppercase] },
-    { uni: "U+004C", glyph: "L", decimal: 76, desc: "Latin Capital letter L", groups: [g_alphabet, g_uppercase] },
-    { uni: "U+004D", glyph: "M", decimal: 77, desc: "Latin Capital letter M", groups: [g_alphabet, g_uppercase] },
-    { uni: "U+004E", glyph: "N", decimal: 78, desc: "Latin Capital letter N", groups: [g_alphabet, g_uppercase] },
-    { uni: "U+004F", glyph: "O", decimal: 79, desc: "Latin Capital letter O", groups: [g_alphabet, g_uppercase] },
-    { uni: "U+0050", glyph: "P", decimal: 80, desc: "Latin Capital letter P", groups: [g_alphabet, g_uppercase] },
-    { uni: "U+0051", glyph: "Q", decimal: 81, desc: "Latin Capital letter Q", groups: [g_alphabet, g_uppercase] },
-    { uni: "U+0052", glyph: "R", decimal: 82, desc: "Latin Capital letter R", groups: [g_alphabet, g_uppercase] },
-    { uni: "U+0053", glyph: "S", decimal: 83, desc: "Latin Capital letter S", groups: [g_alphabet, g_uppercase] },
-    { uni: "U+0054", glyph: "T", decimal: 84, desc: "Latin Capital letter T", groups: [g_alphabet, g_uppercase] },
-    { uni: "U+0055", glyph: "U", decimal: 85, desc: "Latin Capital letter U", groups: [g_alphabet, g_uppercase] },
-    { uni: "U+0056", glyph: "V", decimal: 86, desc: "Latin Capital letter V", groups: [g_alphabet, g_uppercase] },
-    { uni: "U+0057", glyph: "W", decimal: 87, desc: "Latin Capital letter W", groups: [g_alphabet, g_uppercase] },
-    { uni: "U+0058", glyph: "X", decimal: 88, desc: "Latin Capital letter X", groups: [g_alphabet, g_uppercase] },
-    { uni: "U+0059", glyph: "Y", decimal: 89, desc: "Latin Capital letter Y", groups: [g_alphabet, g_uppercase] },
-    { uni: "U+005A", glyph: "Z", decimal: 90, desc: "Latin Capital letter Z", groups: [g_alphabet, g_uppercase] },
+        this._ranges = nkm.data.catalogs.CreateFrom({ name:`Font references` }, ranges);
 
-    //Latin Alphabet: Lowercase	
-    { uni: "U+0061", glyph: "a", decimal: 97, desc: "Latin Small Letter A", groups: [g_alphabet, g_lowercase] },
-    { uni: "U+0062", glyph: "b", decimal: 98, desc: "Latin Small Letter B", groups: [g_alphabet, g_lowercase] },
-    { uni: "U+0063", glyph: "c", decimal: 99, desc: "Latin Small Letter C", groups: [g_alphabet, g_lowercase] },
-    { uni: "U+0064", glyph: "d", decimal: 100, desc: "Latin Small Letter D", groups: [g_alphabet, g_lowercase] },
-    { uni: "U+0065", glyph: "e", decimal: 101, desc: "Latin Small Letter E", groups: [g_alphabet, g_lowercase] },
-    { uni: "U+0066", glyph: "f", decimal: 102, desc: "Latin Small Letter F", groups: [g_alphabet, g_lowercase] },
-    { uni: "U+0067", glyph: "g", decimal: 103, desc: "Latin Small Letter G", groups: [g_alphabet, g_lowercase] },
-    { uni: "U+0068", glyph: "h", decimal: 104, desc: "Latin Small Letter H", groups: [g_alphabet, g_lowercase] },
-    { uni: "U+0069", glyph: "i", decimal: 105, desc: "Latin Small Letter I", groups: [g_alphabet, g_lowercase] },
-    { uni: "U+006A", glyph: "j", decimal: 106, desc: "Latin Small Letter J", groups: [g_alphabet, g_lowercase] },
-    { uni: "U+006B", glyph: "k", decimal: 107, desc: "Latin Small Letter K", groups: [g_alphabet, g_lowercase] },
-    { uni: "U+006C", glyph: "l", decimal: 108, desc: "Latin Small Letter L", groups: [g_alphabet, g_lowercase] },
-    { uni: "U+006D", glyph: "m", decimal: 109, desc: "Latin Small Letter M", groups: [g_alphabet, g_lowercase] },
-    { uni: "U+006E", glyph: "n", decimal: 110, desc: "Latin Small Letter N", groups: [g_alphabet, g_lowercase] },
-    { uni: "U+006F", glyph: "o", decimal: 111, desc: "Latin Small Letter O", groups: [g_alphabet, g_lowercase] },
-    { uni: "U+0070", glyph: "p", decimal: 112, desc: "Latin Small Letter P", groups: [g_alphabet, g_lowercase] },
-    { uni: "U+0071", glyph: "q", decimal: 113, desc: "Latin Small Letter Q", groups: [g_alphabet, g_lowercase] },
-    { uni: "U+0072", glyph: "r", decimal: 114, desc: "Latin Small Letter R", groups: [g_alphabet, g_lowercase] },
-    { uni: "U+0073", glyph: "s", decimal: 115, desc: "Latin Small Letter S", groups: [g_alphabet, g_lowercase] },
-    { uni: "U+0074", glyph: "t", decimal: 116, desc: "Latin Small Letter T", groups: [g_alphabet, g_lowercase] },
-    { uni: "U+0075", glyph: "u", decimal: 117, desc: "Latin Small Letter U", groups: [g_alphabet, g_lowercase] },
-    { uni: "U+0076", glyph: "v", decimal: 118, desc: "Latin Small Letter V", groups: [g_alphabet, g_lowercase] },
-    { uni: "U+0077", glyph: "w", decimal: 119, desc: "Latin Small Letter W", groups: [g_alphabet, g_lowercase] },
-    { uni: "U+0078", glyph: "x", decimal: 120, desc: "Latin Small Letter X", groups: [g_alphabet, g_lowercase] },
-    { uni: "U+0079", glyph: "y", decimal: 121, desc: "Latin Small Letter Y", groups: [g_alphabet, g_lowercase] },
-    { uni: "U+007A", glyph: "z", decimal: 122, desc: "Latin Small Letter Z", groups: [g_alphabet, g_lowercase] },
+    }
 
-];
+    _Range(p_name, p_ranges, p_customs = null) {
 
-let latin1Supplement = [
+        let
+            content = [],
+            range = { name: p_name, content: content };
 
-];
+        for (let r = 0; r < p_ranges.length; r += 2) {
+            let start = p_ranges[r], end = p_ranges[r + 1];
+            for (let i = start; i < end; i++) {
+                content.push(this._Single(i));
+            }
+        }
+
+        if (p_customs) {
+            for (let i = 0; i < p_customs.length; i++) {
+                content.push(this._Single(p_customs[i]));
+            }
+        }
+
+        return range;
+
+    }
+
+    _Single(p_decimal) {
+
+        let
+            hex = p_decimal.toString(16).padStart(4, '0'),
+            char = String.fromCharCode(p_decimal);
+
+        return {
+            name: char,
+            decimal: p_decimal,
+            hex: `u${hex}`,
+            glyph: char
+        };
+
+    }
+
+    _Ligature(p_string) {
+
+        let hexes = [];
+        for (let i = 0; i < p_string.length; i++) {
+            let
+                decimal = p_string.charCodeAt(i),
+                hex = decimal.toString(16).padStart(4, '0');
+            hexes.push(hex);
+        }
+
+        return {
+            name: p_string,
+            decimal: -1,
+            hex: hexes,
+            glyph: p_string
+        };
+
+    }
+
+}
+
+module.exports = Unicodes;

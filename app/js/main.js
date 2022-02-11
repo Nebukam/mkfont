@@ -9,6 +9,8 @@ const mkfViews = require(`./views`);
 const mkfEditors = require(`./editors`);
 const mkfExplorers = require(`./explorers`);
 
+const Unicodes = require(`./unicodes`);
+
 /**
  * SteamGameFinder allows you to find which multiplayer games are shared within a group of steam users
  */
@@ -72,26 +74,7 @@ class MKFont extends nkm.app.AppBase {
         });
 
         this._editorView.options.view.RequestDisplay();
-        this._editorView.options.view.fontCatalog = this.BuildDebugFontCatalog();
-
-    }
-
-    BuildDebugFontCatalog(){
-
-        let groups = [];
-
-        for(let i = 0; i < 10; i++){
-            let group = { content:[], name:`group_${i}` };
-            for(let j = 0; j < 10; j++){
-                group.content.push({ name:`item_${i}_${j}` });
-            }
-            groups.push(group);
-        }
-        let rootObject = { name:`Font Catalog` };
-
-        let rootCatalog = nkm.data.catalogs.CreateFrom(rootObject, groups);
-        console.log(rootCatalog);
-        return rootCatalog;
+        this._editorView.options.view.fontCatalog = Unicodes.instance._ranges;
 
     }
 
