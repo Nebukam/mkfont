@@ -11,6 +11,8 @@ const mkfExplorers = require(`./explorers`);
 
 const Unicodes = require(`./unicodes`);
 
+com.BINDINGS.Expand(require(`./bindings`)); //!important
+
 /**
  * SteamGameFinder allows you to find which multiplayer games are shared within a group of steam users
  */
@@ -20,6 +22,8 @@ class MKFont extends nkm.app.AppBase {
 
     _Init() {
         super._Init();
+
+
 
         this._layers = [
             { id: `mainLayout`, cl: require(`./main-layout`) }

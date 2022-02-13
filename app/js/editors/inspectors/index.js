@@ -2,6 +2,6 @@
 
 module.exports = {
 
-    Glyph: require(`./inspector-glyph`)
+    Glyph: require(`./glyph-inspector`)
 
 }

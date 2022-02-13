@@ -1,13 +1,13 @@
 'use strict';
 
 const nkm = require(`@nkmjs/core`);
+const mkfData = require(`./data`);
 
 class Unicodes extends nkm.com.helpers.Singleton {
     constructor() { super(); }
 
     _Init() {
         super._Init();
-
 
         let ranges = [
             //this._Range(`ASCII Control characters`, [0, 31, 127, 159]),
@@ -55,7 +55,8 @@ class Unicodes extends nkm.com.helpers.Singleton {
             name: char,
             decimal: p_decimal,
             hex: `u${hex}`,
-            glyph: char
+            glyph: char,
+            data:mkfData.Glyph.NULL
         };
 
     }
@@ -74,9 +75,14 @@ class Unicodes extends nkm.com.helpers.Singleton {
             name: p_string,
             decimal: -1,
             hex: hexes,
-            glyph: p_string
+            glyph: p_string,
+            data:mkfData.Glyph.NULL
         };
 
+    }
+
+    FromFromDataBlock(p_fontDataBlock){
+        
     }
 
 }

@@ -9,10 +9,18 @@ class GlyphSlotItem extends ui.WidgetItem {
 
     _Init() {
 
+        this.default_SelectOnActivation = true;
+
         super._Init();
         
         this._extensions.Remove(this._extDrag);
+        this._notifiesSelectionStack = true;
 
+    }
+
+    _PostInit(){
+        super._PostInit();
+        this.focusArea = this;
     }
 
     _Style() {
@@ -23,7 +31,11 @@ class GlyphSlotItem extends ui.WidgetItem {
                 //'border':'1px solid gray',
                 'display':'flex',
                 'flex-flow':'column nowrap',
-                'margin-bottom':'4px'
+                'margin-bottom':'4px',
+                'box-sizing': 'border-box'
+            },
+            ':host(.selected)': {
+                'border':'1px solid white'
             },
             '.box':{
                 'width':'100px',
@@ -43,9 +55,20 @@ class GlyphSlotItem extends ui.WidgetItem {
             },
             '.placeholder':{
                 'text-align':`center`,
-                'font-size':'50px',
+                'font-size':'100px',
                 'user-select':'none',
-                'opacity':'0.1'
+                'color':'rgba(255,255,255,0.05)',
+                'font-family':'monospace',
+                'line-height': '100%'
+            },
+            '.placeholder::after':{
+                'content':'""',
+                'width':'100%',
+                'height':'1px',
+                'position':'absolute',
+                'background-color':'rgba(255,0,0,0.1)',
+                'bottom':'23px',
+                'left':'0'
             }
         }, super._Style());
     }
@@ -56,6 +79,8 @@ class GlyphSlotItem extends ui.WidgetItem {
         this._svgPlaceholder = new ui.manipulators.Text(ui.dom.El(`div`, {class:`item box placeholder`}, this._host), false, false);
         this._label = new ui.manipulators.Text(ui.dom.El(`div`, {class:`item label`}, this._host), false, false);
     }
+
+    _Activ
 
     _OnPaintChange() {
         super._OnPaintChange();

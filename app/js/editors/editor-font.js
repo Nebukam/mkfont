@@ -31,17 +31,37 @@ class FontEditor extends nkm.uiworkspace.editors.EditorEx {
 
     get fontCatalog(){ return this._fontCatalog; }
 
+    _InitShelfCatalog(p_configList) {
+
+        p_configList.push(
+            {
+                [ui.IDS.NAME]: `Font`,
+                [ui.IDS.ICON]: `view-grid`,
+                [ui.IDS.VIEW_CLASS]: this.constructor.__default_inspectorShellClass,
+                assign: `_fontInspector`
+            }
+        );
+
+        super._InitShelfCatalog(p_configList);
+
+    }
+
     _Style() {
         return nkm.style.Extends({
             ':host': {
 
+            },
+            '.header':{
+                'flex':'0 0 auto',
+                'height':'150px',
+                'background-color': 'rgba(150,150,150,0.1)'
             },
             '.main-view':{
                 'width':'100%',
                 'height':'100%'
             },
             '.inspector':{
-                'min-width':'250px'
+                'min-width':'300px'
             }
         }, super._Style());
     }
@@ -51,7 +71,7 @@ class FontEditor extends nkm.uiworkspace.editors.EditorEx {
         super._Render();
 
         this._editorHeader = this.Add(EditorFontHeader, "editor-header", this._header);
-        this._shelf.visible = false;
+        //this._shelf.visible = false;
 
     }
 

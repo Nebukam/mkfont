@@ -14,7 +14,7 @@ class FontEditorHeader extends ui.Widget {
     _Style() {
         return nkm.style.Extends({
             ':host': {
-
+                'min-height':'100px'
             }
         }, super._Style());
     }
