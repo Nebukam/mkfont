@@ -21,11 +21,13 @@ class FontDataBlock extends nkm.data.DataBlock {
 
     }
 
-    _OnExistingReleased(){
-        this.existingUser = null;
+    AddGlyph(p_glyph){
+
     }
 
-    // Second profile fetch
+    RemoveGlyph(p_glyph){
+        
+    }
 
     _CleanUp() {
         super._CleanUp();

@@ -5,6 +5,7 @@ const nkm = require(`@nkmjs/core`);
 const com = nkm.com;
 const ui = nkm.ui;
 
+const mkfData = require(`./data`);
 const mkfViews = require(`./views`);
 const mkfEditors = require(`./editors`);
 const mkfExplorers = require(`./explorers`);
@@ -77,8 +78,11 @@ class MKFont extends nkm.app.AppBase {
             [ui.IDS.STATIC]: true
         });
 
+        this._tempFontData = new mkfData.Font();
+
         this._editorView.options.view.RequestDisplay();
         this._editorView.options.view.fontCatalog = Unicodes.instance._ranges;
+        this._editorView.options.view.data = this._tempFontData;
 
     }
 

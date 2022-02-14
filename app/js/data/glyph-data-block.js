@@ -4,6 +4,8 @@ const nkm = require(`@nkmjs/core`);
 const u = nkm.utils;
 const io = nkm.io;
 
+const CharDataBlock = require(`./char-data-block`);
+
 class GlyphDataBlock extends nkm.data.DataBlock {
 
     constructor() { super(); }
@@ -15,8 +17,7 @@ class GlyphDataBlock extends nkm.data.DataBlock {
         super._Init();
         
         this._decimal = [];
-
-
+        this._defaultChar = new CharDataBlock();
 
     }
     
@@ -30,6 +31,13 @@ class GlyphDataBlock extends nkm.data.DataBlock {
         }else if(u.isArray(p_decimals)){
             this._decimal = [...p_decimals];
         }
+    }
+
+    get svg(){ return this._defaultChar.svgString; }
+    set svg(p_value){ 
+        this._defaultChar.svgString = p_value; 
+        console.log(`svg string -> `, p_value);
+        this.CommitUpdate();
     }
 
     get unicode(){
