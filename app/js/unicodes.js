@@ -9,6 +9,22 @@ class Unicodes extends nkm.com.helpers.Singleton {
     _Init() {
         super._Init();
 
+        let weights = [
+            { name:`Thin`, weight:100 },
+            { name:`Ultra-light`, weight:200 },
+            { name:`Light`, weight:300 },
+            { name:`Normal`, weight:400 },
+            { name:`Medium`, weight:500 },
+            { name:`Semi-bold`, weight:600 },
+            { name:`Bold`, weight:700 },
+            { name:`Extra-bold`, weight:800 },
+            { name:`Heavy`, weight:900 },
+            { name:`Ultra-black`, weight:950 },
+        ];
+
+        this._weights = nkm.data.catalogs.CreateFrom({ name:`Font weights` }, weights);
+        this._defaultWeight = this._weights._items[3]; // Regular
+
         let ranges = [
             //this._Range(`ASCII Control characters`, [0, 31, 127, 159]),
             this._Range(`Basic Latin`, [32, 126]),
@@ -21,6 +37,9 @@ class Unicodes extends nkm.com.helpers.Singleton {
         this._ranges = nkm.data.catalogs.CreateFrom({ name:`Font references` }, ranges);
 
     }
+
+    get weights(){ return this._weights; }
+    get defaultWeight(){ return this._defaultWeight; }
 
     _Range(p_name, p_ranges, p_customs = null) {
 

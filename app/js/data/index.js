@@ -2,10 +2,14 @@
 
 module.exports = {
 
+    SIGNAL: require(`./signal`),
+
+    FontVariant: require(`./font-variant-data-block`),
     Font: require(`./font-data-block`),
-    Glyph: require(`./glyph-data-block`),
-    Char: require(`./char-data-block`),
     
+    GlyphVariant: require(`./glyph-variant-data-block`),
+    Glyph: require(`./glyph-data-block`),
+        
     Slot: require(`./slot-catalog-item`)
 
 }

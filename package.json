@@ -4,6 +4,10 @@
 
         "@nkmjs/core": "../nkmjs/packages/nkmjs-core",
 
+        "svg2ttf": "^6.0.3",
+
+        "svgicons2svgfont": "^10.0.5",
+
         "svgo": "^2.8.0"
 
     },

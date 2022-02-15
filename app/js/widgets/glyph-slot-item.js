@@ -47,6 +47,7 @@ class GlyphSlotItem extends ui.WidgetItem {
             },
             '.svg-ctnr':{
                 'border':'1px solid gray',
+                'overflow':'hidden'
             },
             '.label':{
                 'margin-top':'110px',
@@ -95,11 +96,12 @@ class GlyphSlotItem extends ui.WidgetItem {
         super._OnDataChanged(p_oldData);
         this._label.Set(`<b>${this._data._options.glyph}</b> <i>${this._data._options.hex}</i>`);
         this._svgPlaceholder.Set(this._data._options.glyph);
+        if(!this._data){ this._svgWrapper.innerHTML = ``; }
     }
 
     _OnDataUpdated(p_data) {
         super._OnDataUpdated(p_data);
-
+        this._svgWrapper.innerHTML = p_data.data.svg;
     }
 
     _ToClipboard(){

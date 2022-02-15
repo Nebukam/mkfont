@@ -8,7 +8,7 @@ const data = require(`../../data`);
 class ActionSetSVG extends actions.Action {
     constructor() { super(); }
 
-    // Expected operation format : { fontContext:FontDataBlock, targetSlot:SlotCatalogItem, svgString:svg }
+    // Expected operation format : { font:FontDataBlock, targetSlot:SlotCatalogItem, svgString:svg }
 
     _InternalDo(p_operation, p_merge = false) {
 
@@ -25,7 +25,7 @@ class ActionSetSVG extends actions.Action {
             //TODO: Grab unicode data etc from slot       
             slotData.data = glyphData;
 
-            let fontData = p_operation.fontContext;
+            let fontData = p_operation.font;
             fontData.AddGlyph(glyphData);
 
         }else{
