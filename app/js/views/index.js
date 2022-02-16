@@ -3,6 +3,7 @@
 module.exports = {
 
     Welcome: require(`./welcome-view`),
-    GlyphGroupViewport: require(`./glyph-group-viewport`)
+    GlyphGroupViewport: require(`./glyph-group-viewport`),
+    Pangram: require(`./pangram-view`)
 
 }

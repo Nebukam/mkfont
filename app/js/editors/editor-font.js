@@ -4,12 +4,12 @@ const ui = nkm.ui;
 
 const mkfViews = require(`../views`);
 
-const EditorFontHeader = require(`./editor-font-header`);
-
 class FontEditor extends nkm.uiworkspace.editors.EditorEx {
     constructor() { super(); }
 
     static __default_viewportClass = mkfViews.GlyphGroupViewport;
+    static __default_headerClass = require(`./editor-font-header`);
+    static __default_footerClass = require(`./editor-font-footer`);
 
     _Init() {
         super._Init();
@@ -49,7 +49,6 @@ class FontEditor extends nkm.uiworkspace.editors.EditorEx {
     _Style() {
         return nkm.style.Extends({
             ':host': {
-
             },
             '.header':{
                 'flex':'0 0 auto',
@@ -65,16 +64,6 @@ class FontEditor extends nkm.uiworkspace.editors.EditorEx {
             }
         }, super._Style());
     }
-
-    _Render(){
-
-        super._Render();
-
-        this._editorHeader = this.Add(EditorFontHeader, "editor-header", this._header);
-        //this._shelf.visible = false;
-
-    }
-
 
 
 }

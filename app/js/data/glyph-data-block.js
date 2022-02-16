@@ -1,6 +1,7 @@
 'use strict';
 
 const nkm = require(`@nkmjs/core`);
+const com = nkm.com;
 const u = nkm.utils;
 const io = nkm.io;
 
@@ -18,83 +19,85 @@ class GlyphDataBlock extends nkm.data.DataBlock {
 
         super._Init();
 
+        this._unicode = null;
+
         this._parentFont = null;
-
         this._arabic_form = null;
-        this._address = [];
-        this._addressID = ``;
 
-        this._decimal = [];
-        this._defaultVariant = new GlyphVariant();
+        this._defaultGlyph = new GlyphVariant();
+        this._variants = new nkm.collections.List();
+        this._variantsMap = new nkm.collections.Dictionary();
 
     }
 
     set parentFont(p_value) { this._parentFont = p_value; }
     get parentFont() { return this._parentFont; }
 
-    get isLigature() { return this._address.length > 1; }
+    get isLigature() { return this._unicode.length > 1; }
 
-    get svg() { return this._defaultVariant.svgString; }
+    get svg() { return this._defaultGlyph.svg; }
     set svg(p_value) {
-        this._defaultVariant.svgString = p_value;
-        //console.log(`svg string -> `, p_value);
+        this._defaultGlyph.svg = p_value;
         this.CommitUpdate();
     }
 
-    get address() { return this._address; }
-    set address(p_value) {
-        let address = [];
-        if (u.isArray(p_value)) {
-            for (let i = 0; i < p_value.length; i++) {
-                let single = p_value[i];
-                if (u.isString(single)) {
-                    if (single.length == 1) {
-                        // Single glyph, get CharCode
-                        address.push(single.charCodeAt(0).toString(16).padStart(4, '0'));
-                    } else {
-                        // Chain, will be custom ligature
-                        for (let s = 0; s < single.length; s++) {
-                            address.push(single.charCodeAt(s).toString(16).padStart(4, '0'));
-                        }
-                    }
-                } else if (u.isNumber(single)) {
-                    // Convert to hex
-                    address.push(single.toString(16).padStart(4, '0'));
-                }
+    get unicode() { return this._unicode; }
+    set unicode(p_value) {
 
-            }
-        } else if (u.isString(p_value)) {
-            if (single.length == 1) {
-                // Single glyph, get CharCode
-                address.push(single.charCodeAt(0).toString(16).padStart(4, '0'));
-            } else {
-                // Chain, will be custom ligature
-                for (let s = 0; s < single.length; s++) {
-                    address.push(single.charCodeAt(s).toString(16).padStart(4, '0'));
-                }
-            }
-        } else if (u.isNumber(p_value)) {
-            address.push(single.toString(16).padStart(4, '0'));
+        let oldUnicode = this._unicode;
+        this._unicode = p_value;
+
+        for (let i = 0, n = this._variants.count; i < n; i++) {
+            let g = this._variants.At(i);
+            g.unicode = p_value;
         }
 
-        let
-            oldAddress = this._address,
-            oldAddressID = this._addressID;
-
-        this._address = address;
-        this._addressID = address.length == 0 ? `` : `u${address.join(`u`)}`;
-
-        this._Broadcast(SIGNAL.ADDRESS_CHANGED, this, oldAddress, oldAddressID);
+        this._Broadcast(SIGNAL.UNICODE_CHANGED, this, oldUnicode);
         this.CommitUpdate();
 
     }
 
-    get addressID() { return this._addressID; }
+    _SetDefaultVariant(p_variant) {
+        if (!this._variants.Add(p_variant)) { return this._defaultGlyph; }
+        this._variantsMap.Set(p_variant, this._defaultGlyph);
+        this._defaultGlyph.variant = p_variant;
+        this._defaultGlyph.unicode = this._unicode;
+        return this._defaultGlyph;
+    }
+
+    AddVariant(p_variant) {
+        if (!this._variants.Add(p_variant)) { return this._variantsMap.Get(p_variant); }
+        // TODO : Retrieve deleted variants
+        let glyph = com.Rent(GlyphVariant);
+        this._variantsMap.Set(p_variant, glyph);
+        glyph.variant = p_variant;
+        glyph.unicode = this._unicode;
+        p_variant.Watch(com.SIGNAL.RELEASED, this._OnVariantReleased, this);
+        return glyph;
+    }
+
+    RemoveVariant(p_variant) {
+        if (!this._variants.Remove(p_variant)) { return null; }
+        let glyph = this._variantsMap.Get(p_variant);
+        glyph.variant = null;
+        return this._variantsMap.Get(p_variant);
+    }
+
+    GetVariant(p_variant) {
+        return this._variantsMap.Get(p_variant);
+    }
+
+    _OnVariantReleased(p_variant) {
+        let glyph = this._variantsMap.Get(p_variant);
+        if (glyph) {
+            this._variantsMap.Remove(p_variant);
+            glyph.Release();
+        }
+    }
 
     _CleanUp() {
         this.parentFont = null;
-        this._address = [];
-        this._addressID = ``;
+        this._unicode = null;
         super._CleanUp();
     }
 

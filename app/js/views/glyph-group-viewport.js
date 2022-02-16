@@ -38,7 +38,8 @@ class GlyphGroupsView extends ui.views.View {
     _Style() {
         return nkm.style.Extends({
             ':host': {
-                'position':'relative'
+                'position':'relative',                
+                '--preview-size':'100px'
                 //'display':'flex',
                 //'flex-flow':'column nowrap'
             },

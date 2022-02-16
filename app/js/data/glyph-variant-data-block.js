@@ -1,8 +1,10 @@
 'use strict';
 
 const nkm = require(`@nkmjs/core`);
+const dom = nkm.ui.dom;
 const u = nkm.utils;
 const io = nkm.io;
+
 
 class GlyphVariantDataBlock extends nkm.data.DataBlock {
 
@@ -15,15 +17,38 @@ class GlyphVariantDataBlock extends nkm.data.DataBlock {
         super._Init();
 
         this._parentGlyph = null;
+        this._xml = document.createElement(`glyph`);
 
-        this._svgString = "";
+        this._svg = null;
         this._originalViewBox = { x: 0, y: 0, width: 0, height: 0 };
         this._viewBox = null;
 
-        this._horiz_adv_x = null; // attribute indicates the horizontal advance after rendering a glyph in horizontal orientation.
-        this._vert_origin_x = null; // attribute indicates the x-coordinate in the font coordinate system of the origin of a glyph to be used when drawing vertically oriented text.
-        this._vert_origin_y = null; // attribute indicates the y-coordinate in the font coordinate system of the origin of a glyph to be used when drawing vertically oriented text.
-        this._vert_adv_y = null; // attribute indicates the y-coordinate in the font coordinate system of the origin of a glyph to be used when drawing vertically oriented text.
+        this._params = {
+            'horiz-origin-x': {
+                value: null,
+                desc: `indicates the x-coordinate in the font coordinate system of the origin of a glyph to be used when drawing horizontally oriented text.`
+            },
+            'horiz-origin-y': {
+                value: null,
+                desc: `indicates the y-coordinate in the font coordinate system of the origin of a glyph to be used when drawing horizontally oriented text.`
+            },
+            'horiz-adv-x': {
+                value: null,
+                desc: `indicates the horizontal advance after rendering a glyph in horizontal orientation.`
+            },
+            'vert-origin-x': {
+                value: null,
+                desc: `indicates the x-coordinate in the font coordinate system of the origin of a glyph to be used when drawing vertically oriented text.`
+            },
+            'vert-origin-x': {
+                value: null,
+                desc: `indicates the y-coordinate in the font coordinate system of the origin of a glyph to be used when drawing vertically oriented text.`
+            },
+            'vert-adv-y': {
+                value: null,
+                desc: `indicates the vertical advance after rendering a glyph in vertical orientation.`
+            }
+        }
 
         // Variant manangement : UI should show a drop-down allowing to assign a variant found in the Font object
         // if a variant is deleted, flag this variant as "unassigned"
@@ -31,30 +56,35 @@ class GlyphVariantDataBlock extends nkm.data.DataBlock {
 
     }
 
+    get xml() { return this._xml; }
+
     set parentGlyph(p_value) { this._parentGlyph = p_value; }
     get parentGlyph() { return this._parentGlyph; }
 
-    get viewBox() {
-        if (this._viewBox) { return this._viewBox; }
-        if (this._parentGlyph) {
-            if (this._parentGlyph.parentFont) {
-                return this._parentGlyph.parentFont.viewBox;
-            }
-        }
-        return null;
+    set variant(p_variant) {
+        if (this._variant == p_variant) { return; }
+        this._variant = p_variant;
+        if (this._variant) { this._variant.xml.appendChild(this._xml); }
+        else { this._xml.remove(); }
     }
-    set viewBox(p_value) {
-        this._viewBox = p_value;
+
+    set unicode(p_value) { this._xml.setAttribute(`unicode`, p_value); }
+
+    get svg() { return this._svg; }
+    set svg(p_svg) {
+        this._svg = p_svg;
         this.CommitUpdate();
     }
 
-    get svgString() { return this._svgString; }
-    set svgString(p_svg) {
-        this._svgString = p_svg;
+    CommitUpdate() {
+        this._xml.innerHTML = this._svg ? this._svg.outerHTML : ``;
+        dom.SAtt(this._xml, this._params, `value`, true);
+        super.CommitUpdate();
     }
 
     _CleanUp() {
         this.parentGlyph = null;
+        this._xml.remove();
         super._CleanUp();
     }
 

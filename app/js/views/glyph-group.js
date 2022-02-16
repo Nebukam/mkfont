@@ -44,7 +44,7 @@ class GlyphGroup extends ui.WidgetItem {
             ':host': {
                 'position': 'relative',
                 'display': 'flex',
-                'flex-flow': 'column nowrap'
+                'flex-flow': 'column nowrap',
             },
             '.header': {
                 'position': 'relative',
@@ -62,7 +62,8 @@ class GlyphGroup extends ui.WidgetItem {
                 'flex': '1 0 auto'
             },
             '.item': {
-                'flex': '0 0 auto'
+                'flex': '0 0 auto',
+                'margin':'3px'
             }
         }, super._Style());
     }

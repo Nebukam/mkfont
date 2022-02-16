@@ -28,7 +28,9 @@ class Unicodes extends nkm.com.helpers.Singleton {
         let ranges = [
             //this._Range(`ASCII Control characters`, [0, 31, 127, 159]),
             this._Range(`Basic Latin`, [32, 126]),
+            this._Range(`???`, [126, 160]),
             this._Range(`Latin 1 - Supplement`, [160, 255]),
+            this._Range(`Plop`, [256, 500]),
             //this._Range(`Latin Extended A`, [256, 383]),
             //this._Range(`Latin Extended B`, [384, 591]),
             //this._Range(`Latin Extended Additional`, ['\u1E00'.charCodeAt(0), '\u1EFF'.charCodeAt(0)]),

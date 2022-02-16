@@ -32,7 +32,7 @@ class CmdClipboardReadSVG extends actions.CommandAction {
         return {
             font: targetFont,
             targetSlot: targetSlot,
-            svgString: svgString
+            svg: svgString
         };
 
     }

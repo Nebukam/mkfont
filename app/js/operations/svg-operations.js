@@ -1,6 +1,9 @@
 // Read svg from clipboard and trigger "action-set-svg"
 const nkm = require(`@nkmjs/core`);
 const { optimize } = require('svgo');
+const svgpath = require('svgpath');
+
+const domparser = new DOMParser();
 
 class SVGOperations {
     constructor() { }
@@ -8,60 +11,114 @@ class SVGOperations {
     static ProcessString(p_value, p_params) {
 
         let
-            svgo = optimize(p_value, {
-                multipass: true
-            }),
-            svgString = svgo.data;
+            col = `eaeaea`,
+            viewBox = { width: 1000, height: 1000 };
 
-        if (!svgString) { return null; }
+        // Quickfixes on string
 
-        //console.log(`raw output : `, svgString);
-
-        let
-            colReplace = `fff`,
-            viewBox = { width: 100, height: 100 };
-
-        // Replace all colors with white
         try {
-            let s = svgString.split(`:#`);
+            // Replace all colors with white
+            let s = p_value.split(`:#`);
             for (let i = 1; i < s.length; i++) {
                 let s2 = s[i], s3 = s2[3], s6 = s2[6];
-                if (s3 == `;` || s3 == `}` || s3 == `"`) { s2 = `${colReplace}${s2.substr(3)}`; }
-                else if (s6 == `;` || s6 == `}` || s6 == `"`) { s2 = `${colReplace}${s2.substr(6)}`; }
+                if (s3 == `;` || s3 == `}` || s3 == `"`) { s2 = `${col}${s2.substr(3)}`; }
+                else if (s6 == `;` || s6 == `}` || s6 == `"`) { s2 = `${col}${s2.substr(6)}`; }
                 s[i] = s2;
             }
-            svgString = s.join(`:#`);
+            p_value = s.join(`:#`);
         } catch (e) { }
 
-        // Remove unwanted properties
-        svgString = this._RemoveProperty(svgString, `viewBox`);
-        svgString = this._RemoveProperty(svgString, `width`);
-        svgString = this._RemoveProperty(svgString, `height`);
+        // Manipulation on SVG element
 
-        // Remove no-fill & swap fill for strokes
-        svgString = svgString.split(`fill:none;`).join(``);
-        svgString = svgString.split(`fill:none`).join(``);
-        svgString = svgString.split(`stroke:#`).join(`fill:#`);
+        let svg = domparser.parseFromString(p_value, `image/svg+xml`)
+            .getElementsByTagName(`svg`)[0];
+
+        if (!svg) { return null; }
+
+        this._rAtts(svg, [`width`, `height`, `viewBox`]);
 
         // Add viewBox
-        let vb = svgString.split(`<svg `);
-        svgString = vb.join(`<svg viewBox="0 0 ${viewBox.width} ${viewBox.height}" `);
+        svg.setAttribute(`viewBox`, `0 0 ${viewBox.width} ${viewBox.height}`);
 
-        return svgString;
+        // Flatten groups
+        let groups = svg.getElementsByTagName(`g`);
+        for (let i = 0; i < groups.length; i++) {
+            let children = groups[i].children;
+            for (let c = 0; c < children.length; c++) {
+                let child = children[c];
+                if (child.tagName == `g`) { child.remove(); }
+                else { svg.appendChild(child); }
+            }
+            //groups[i].remove();
+        }
+
+        // Remove unsupported rounded corners on rect elements
+        this._rAttsOnTag(svg, `rect`, [`rx`, `ry`]);
+
+        svg = domparser.parseFromString(
+            optimize(svg.outerHTML,
+                {
+                    multipass: true,
+                    plugins:
+                        [
+                            `preset-default`,
+                            {
+                                name: `convertShapeToPath`,
+                                params: { convertArcs: true }
+                            }
+                        ]
+
+                }).data, `image/svg+xml`)
+            .getElementsByTagName(`svg`)[0];
+
+        svg.removeAttribute(`style`);
+        let path = svg.getElementsByTagName(`path`)[0];
+
+        if (!path) {
+            console.log(svg);
+            console.warn(`SVG will be ignored : it does not contain a path.`);
+            return null;
+        } else {
+
+            let pathlist = svg.getElementsByTagName(`path`);
+            let str = ``;
+            path = pathlist[0];
+            for(let i = 0; i < pathlist.length; i++){
+                let tp = pathlist[i];
+                str += tp.getAttribute(`d`) + ` `;
+                if(i > 0){ tp.remove(); }
+            }
+
+            path.setAttribute(`d`, str);
+
+            // DEBUG : Try to scale D attribute
+            path.removeAttribute(`style`);
+            path.setAttribute(`fill`, `#${col}`);
+            path.setAttribute(`style`, `fill:#${col}`);
+
+            if (path.hasAttribute(`d`)) {
+                let d = path.getAttribute(`d`);
+                d = svgpath(d)
+                    .scale(10)
+                    //.translate(100,200)
+                    //.rel()
+                    //.round(1)
+                    .toString();
+                path.setAttribute(`d`, d);
+            }
+        }
+
+        return svg;
 
     }
 
-    static _RemoveProperty(p_string, p_property, p_delim = `"`) {
-        let s = p_string.split(`${p_property}=${p_delim}`);
-        if (s.length > 1) {
-            let r = s[1].split(p_delim);
-            if (r.length > 1) {
-                r.shift();
-                s[1] = r.join(p_delim);
-                p_string = s.join(``);
-            }
-        }
-        return p_string;
+    static _rAtts(p_el, p_atts) {
+        for (let i = 0; i < p_atts.length; i++) { p_el.removeAttribute(p_atts[i]); }
+    }
+
+    static _rAttsOnTag(p_el, p_tag, p_atts) {
+        let children = p_el.getElementsByTagName(p_tag);
+        for (let i = 0; i < children.length; i++) { this._rAtts(children[i], p_atts); }
     }
 
 }

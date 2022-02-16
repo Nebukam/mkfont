@@ -8,20 +8,22 @@ const data = require(`../../data`);
 class ActionSetSVG extends actions.Action {
     constructor() { super(); }
 
-    // Expected operation format : { font:FontDataBlock, targetSlot:SlotCatalogItem, svgString:svg }
+    // Expected operation format : { font:FontDataBlock, targetSlot:SlotCatalogItem, svg:svg }
 
     _InternalDo(p_operation, p_merge = false) {
 
         let
             slotData = p_operation.targetSlot,
             glyphData = slotData.GetOption(`data`, null),
-            svgString = p_operation.svgString;
+            svg = p_operation.svg;
 
         if (!glyphData) { return; }
 
         if(glyphData == data.Glyph.NULL ){
             
             glyphData = nkm.com.Rent(data.Glyph);
+            glyphData.unicode = p_operation.unicode ? p_operation.unicode : slotData._options.glyph;
+
             //TODO: Grab unicode data etc from slot       
             slotData.data = glyphData;
 
@@ -29,10 +31,10 @@ class ActionSetSVG extends actions.Action {
             fontData.AddGlyph(glyphData);
 
         }else{
-            p_operation.prevSvgString = glyphData.svg;
+            p_operation.prevSvg = glyphData.svg;
         }
 
-        glyphData.svg = svgString;
+        glyphData.svg = svg;
 
     }
 

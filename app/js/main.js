@@ -16,6 +16,8 @@ const fs = require('fs');
 
 com.BINDINGS.Expand(require(`./bindings`)); //!important
 
+const SET_SVG = new mkfOperations.actions.SetSVG();
+
 /**
  * SteamGameFinder allows you to find which multiplayer games are shared within a group of steam users
  */
@@ -83,10 +85,23 @@ class MKFont extends nkm.app.AppBase {
         this._tempFontData = new mkfData.Font();
 
         //Debug : load a bunch of icon starting at decimal
+        
         this._iconFolder = `D:/GIT/nkmjs/packages/nkmjs-style/src-style/default/assets/icons`;
         this._ReadIconDir(null, fs.readdirSync(this._iconFolder));
+        
+/*
+        let checkerSVG = fs.readFileSync(`./assets/checker.svg`); //D:/GIT/mkfont
+        for (let i = 0; i < 255; i++) {
+            this._PushSVG(this._tempFontData, checkerSVG, i);
+        }
+*/
 
         console.log(this._tempFontData);
+
+        mkfOperations.commands.MakeSVGFont.Enable();
+        mkfOperations.commands.MakeTTFFont.Enable();
+
+        nkm.actions.KeystrokeEx.CreateFromString(`Ctrl E`, { fn:this._Bind(this._WriteTTF) }).Enable();
 
         this._editorView.options.view.RequestDisplay();
         this._editorView.options.view.fontCatalog = Unicodes.instance._ranges;
@@ -94,25 +109,34 @@ class MKFont extends nkm.app.AppBase {
 
     }
 
+    _WriteTTF() {
+        mkfOperations.commands.MakeSVGFont.Execute(this._tempFontData);
+        mkfOperations.commands.MakeTTFFont.Execute(this._tempFontData);
+    }
+
     _ReadIconDir(err, files) {
         console.log(files);
 
-        let action = new mkfOperations.actions.SetSVG();
-        let offset = 32;
+        let offset = 48;
         for (let i = 0; i < files.length; i++) {
             let filepath = files[i];
             if (!filepath.includes(`.svg`)) { continue; }
-            let filecontent = fs.readFileSync(`${this._iconFolder}/${filepath}`, `utf8`);
-            filecontent = mkfOperations.SVG.ProcessString(filecontent);
-//            console.log(filepath, filecontent);
-            let slot = Unicodes.instance._ranges.FindFirstByOptionValue(`decimal`, offset+i, true);
-
-            action.Do({
-                font: this._tempFontData,
-                targetSlot: slot,
-                svgString: filecontent
-            }, false);
+            let svg = fs.readFileSync(`${this._iconFolder}/${filepath}`, `utf8`);
+            this._PushSVG(this._tempFontData, svg, offset + i);
         }
+    }
+
+    _PushSVG(p_font, p_svgString, i) {
+        let svg = mkfOperations.SVG.ProcessString(p_svgString);
+        //            console.log(filepath, filecontent);
+        let slot = Unicodes.instance._ranges.FindFirstByOptionValue(`glyph`, String.fromCharCode(i), true);
+        if (!slot) { return; }
+        SET_SVG.Do({
+            font: p_font,
+            targetSlot: slot,
+            svg: svg,
+            unicode: String.fromCharCode(i)
+        }, false);
     }
 
 }

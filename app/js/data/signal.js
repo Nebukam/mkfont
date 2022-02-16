@@ -14,7 +14,7 @@ class SIGNAL{
      * @type {symbol}
      * @customtag read-only
      */
-    static ADDRESS_CHANGED = Symbol(`addressChanged`);
+    static UNICODE_CHANGED = Symbol(`addressChanged`);
 
     /**
      * @description TODO
