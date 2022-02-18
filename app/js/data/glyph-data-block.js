@@ -20,18 +20,20 @@ class GlyphDataBlock extends nkm.data.DataBlock {
         super._Init();
 
         this._unicode = null;
+        this._decimal = -1;
 
-        this._parentFont = null;
+        this._family = null;
         this._arabic_form = null;
 
         this._defaultGlyph = new GlyphVariant();
+        this._defaultGlyph._isDefault = true;
         this._variants = new nkm.collections.List();
-        this._variantsMap = new nkm.collections.Dictionary();
+        this._subFamiliesMap = new nkm.collections.Dictionary();
 
     }
 
-    set parentFont(p_value) { this._parentFont = p_value; }
-    get parentFont() { return this._parentFont; }
+    set family(p_value) { this._family = p_value; }
+    get family() { return this._family; }
 
     get isLigature() { return this._unicode.length > 1; }
 
@@ -57,46 +59,51 @@ class GlyphDataBlock extends nkm.data.DataBlock {
 
     }
 
-    _SetDefaultVariant(p_variant) {
-        if (!this._variants.Add(p_variant)) { return this._defaultGlyph; }
-        this._variantsMap.Set(p_variant, this._defaultGlyph);
-        this._defaultGlyph.variant = p_variant;
+    get decimal() { return this._decimal; }
+    set decimal(p_value) { this._decimal = p_value; }
+
+    _SetDefaultVariant(p_subFamily) {
+        if (!this._variants.Add(p_subFamily)) { return this._defaultGlyph; }
+        this._subFamiliesMap.Set(p_subFamily, this._defaultGlyph);
+        this._defaultGlyph.glyph = this;
+        this._defaultGlyph.variant = p_subFamily;
         this._defaultGlyph.unicode = this._unicode;
         return this._defaultGlyph;
     }
 
-    AddVariant(p_variant) {
-        if (!this._variants.Add(p_variant)) { return this._variantsMap.Get(p_variant); }
+    AddVariant(p_subFamily) {
+        if (!this._variants.Add(p_subFamily)) { return this._subFamiliesMap.Get(p_subFamily); }
         // TODO : Retrieve deleted variants
         let glyph = com.Rent(GlyphVariant);
-        this._variantsMap.Set(p_variant, glyph);
-        glyph.variant = p_variant;
+        this._subFamiliesMap.Set(p_subFamily, glyph);
+        glyph.glyph = this;
+        glyph.variant = p_subFamily;
         glyph.unicode = this._unicode;
-        p_variant.Watch(com.SIGNAL.RELEASED, this._OnVariantReleased, this);
+        p_subFamily.Watch(com.SIGNAL.RELEASED, this._OnSubFamilyReleased, this);
         return glyph;
     }
 
     RemoveVariant(p_variant) {
         if (!this._variants.Remove(p_variant)) { return null; }
-        let glyph = this._variantsMap.Get(p_variant);
+        let glyph = this._subFamiliesMap.Get(p_variant);
         glyph.variant = null;
-        return this._variantsMap.Get(p_variant);
+        return this._subFamiliesMap.Get(p_variant);
     }
 
     GetVariant(p_variant) {
-        return this._variantsMap.Get(p_variant);
+        return this._subFamiliesMap.Get(p_variant);
     }
 
-    _OnVariantReleased(p_variant) {
-        let glyph = this._variantsMap.Get(p_variant);
+    _OnSubFamilyReleased(p_subFamily) {
+        let glyph = this._subFamiliesMap.Get(p_subFamily);
         if (glyph) {
-            this._variantsMap.Remove(p_variant);
+            this._subFamiliesMap.Remove(p_subFamily);
             glyph.Release();
         }
     }
 
     _CleanUp() {
-        this.parentFont = null;
+        this.family = null;
         this._unicode = null;
         super._CleanUp();
     }

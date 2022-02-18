@@ -5,8 +5,10 @@ const dom = nkm.ui.dom;
 const u = nkm.utils;
 const io = nkm.io;
 
+const IDS = require(`./ids`);
 
-class GlyphVariantDataBlock extends nkm.data.DataBlock {
+
+class GlyphVariantDataBlock extends nkm.data.SimpleDataBlock {
 
     constructor() { super(); }
 
@@ -16,41 +18,24 @@ class GlyphVariantDataBlock extends nkm.data.DataBlock {
 
         super._Init();
 
-        this._parentGlyph = null;
+        this._glyph = null;
+        this._isDefault = false;
         this._xml = document.createElement(`glyph`);
 
         this._svg = null;
-        this._originalViewBox = { x: 0, y: 0, width: 0, height: 0 };
         this._viewBox = null;
 
-        this._params = {
-            'horiz-origin-x': {
-                value: null,
-                desc: `indicates the x-coordinate in the font coordinate system of the origin of a glyph to be used when drawing horizontally oriented text.`
-            },
-            'horiz-origin-y': {
-                value: null,
-                desc: `indicates the y-coordinate in the font coordinate system of the origin of a glyph to be used when drawing horizontally oriented text.`
-            },
-            'horiz-adv-x': {
-                value: null,
-                desc: `indicates the horizontal advance after rendering a glyph in horizontal orientation.`
-            },
-            'vert-origin-x': {
-                value: null,
-                desc: `indicates the x-coordinate in the font coordinate system of the origin of a glyph to be used when drawing vertically oriented text.`
-            },
-            'vert-origin-x': {
-                value: null,
-                desc: `indicates the y-coordinate in the font coordinate system of the origin of a glyph to be used when drawing vertically oriented text.`
-            },
-            'vert-adv-y': {
-                value: null,
-                desc: `indicates the vertical advance after rendering a glyph in vertical orientation.`
-            }
+        this._values = {
+            [IDS.H_ORIGIN_X]: { value: null },
+            [IDS.H_ORIGIN_Y]: { value: null },
+            [IDS.H_ADV_X]: { value: null },
+            [IDS.V_ORIGIN_X]: { value: null },
+            [IDS.V_ORIGIN_Y]: { value: null },
+            [IDS.V_ADV_Y]: { value: null },
+            [IDS.PATH]: { value: '' }
         }
 
-        // Variant manangement : UI should show a drop-down allowing to assign a variant found in the Font object
+        // Variant manangement : UI should show a drop-down allowing to assign a variant found in the Family object
         // if a variant is deleted, flag this variant as "unassigned"
         // if a variant is added whille glyph have unassigned variants : 
 
@@ -58,8 +43,8 @@ class GlyphVariantDataBlock extends nkm.data.DataBlock {
 
     get xml() { return this._xml; }
 
-    set parentGlyph(p_value) { this._parentGlyph = p_value; }
-    get parentGlyph() { return this._parentGlyph; }
+    set glyph(p_value) { this._glyph = p_value; }
+    get glyph() { return this._glyph; }
 
     set variant(p_variant) {
         if (this._variant == p_variant) { return; }
@@ -83,7 +68,7 @@ class GlyphVariantDataBlock extends nkm.data.DataBlock {
     }
 
     _CleanUp() {
-        this.parentGlyph = null;
+        this.glyph = null;
         this._xml.remove();
         super._CleanUp();
     }

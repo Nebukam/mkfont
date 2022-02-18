@@ -22,7 +22,7 @@ class CmdGenerateSVGFont extends actions.Command {
 
     _FetchContext() {
 
-        if (nkm.utils.isInstanceOf(this._emitter.data, mkfData.Font)) {
+        if (nkm.utils.isInstanceOf(this._emitter.data, mkfData.Family)) {
             return this._emitter.data;
         }
 
@@ -32,10 +32,8 @@ class CmdGenerateSVGFont extends actions.Command {
 
     _InternalExecute() {
 
-        let font = this._context,
-            svgFont = font._svgText = font._svgText,
-            ttf = svg2ttf(svgFont, {});
-
+        let family = this._context,
+            ttf = svg2ttf(family.defaultSubFamily.xml.outerHTML, {});
         fs.writeFileSync('./assets/myfont.ttf', Buffer.from(ttf.buffer));
 
         //console.log(svgFont);

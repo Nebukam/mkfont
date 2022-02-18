@@ -20,18 +20,18 @@ class CmdClipboardReadSVG extends actions.CommandAction {
     _FetchContext() {
 
         let
-            targetSlot = this._emitter.data,
-            targetFont = this._emitter.context;
+            slot = this._emitter.data,
+            family = this._emitter.context;
 
-        if (!targetSlot || !targetFont) { return null; }
+        if (!slot || !family) { return null; }
 
         let svgString = SVG.ProcessString(clipboard.readText());
 
         if (!svgString) { return null; }
 
         return {
-            font: targetFont,
-            targetSlot: targetSlot,
+            family: family,
+            slot: slot,
             svg: svgString
         };
 

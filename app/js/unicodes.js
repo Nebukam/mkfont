@@ -22,7 +22,7 @@ class Unicodes extends nkm.com.helpers.Singleton {
             { name:`Ultra-black`, weight:950 },
         ];
 
-        this._weights = nkm.data.catalogs.CreateFrom({ name:`Font weights` }, weights);
+        this._weights = nkm.data.catalogs.CreateFrom({ name:`Family weights` }, weights);
         this._defaultWeight = this._weights._items[3]; // Regular
 
         let ranges = [
@@ -36,7 +36,7 @@ class Unicodes extends nkm.com.helpers.Singleton {
             //this._Range(`Latin Extended Additional`, ['\u1E00'.charCodeAt(0), '\u1EFF'.charCodeAt(0)]),
         ];
 
-        this._ranges = nkm.data.catalogs.CreateFrom({ name:`Font references` }, ranges);
+        this._ranges = nkm.data.catalogs.CreateFrom({ name:`Family references` }, ranges);
 
     }
 
@@ -102,7 +102,7 @@ class Unicodes extends nkm.com.helpers.Singleton {
 
     }
 
-    FromFromDataBlock(p_fontDataBlock){
+    FromFromDataBlock(p_FamilyDataBlock){
         
     }
 

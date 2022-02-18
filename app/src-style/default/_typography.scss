@@ -30,6 +30,10 @@ $family_regular: 'Regular', apple-system, BlinkMacSystemFont, "Segoe UI", Roboto
         text-transform: uppercase;
     }
 
+    &.font-xsmall{
+        --font-size: var(#{$varname_font_size_xxs});
+    }
+
     &.font-small{
         --font-size: var(#{$varname_font_size_xs});
     }
@@ -70,6 +74,10 @@ $family_title: 'Title', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "
 
     &.font-tag{
         --font-size: var(#{$varname_font_size_tag+'-title'});
+    }
+
+    &.font-xsmall{
+        --font-size: var(#{$varname_font_size_xxs+'-title'});
     }
 
     &.font-small{

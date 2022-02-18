@@ -3,9 +3,10 @@
 module.exports = {
 
     SIGNAL: require(`./signal`),
+    IDS: require(`./ids`),
 
-    FontVariant: require(`./font-variant-data-block`),
-    Font: require(`./font-data-block`),
+    SubFamily: require(`./sub-family-data-block`),
+    Family: require(`./family-data-block`),
     
     GlyphVariant: require(`./glyph-variant-data-block`),
     Glyph: require(`./glyph-data-block`),

@@ -13,6 +13,8 @@ const mkfOperations = require(`./operations`);
 
 const Unicodes = require(`./unicodes`);
 const fs = require('fs');
+const svgpath = require('svgpath');
+const ttf2svg = require('ttf2svg');
 
 com.BINDINGS.Expand(require(`./bindings`)); //!important
 
@@ -55,6 +57,8 @@ class MKFont extends nkm.app.AppBase {
         mainShelf.catalog = this._mainCatalog;
         mainShelf.RequestView(0);
 
+        mainShelf.visible = false;
+
         /*
         mainShelf.nav.toolbar.CreateHandle({
             [com.IDS.NAME]: `Options`,
@@ -77,40 +81,44 @@ class MKFont extends nkm.app.AppBase {
 
         this._editorView = this.mainLayout.workspace.Host({
             [ui.IDS.VIEW_CLASS]: mkfEditors.FontEditor,
-            [ui.IDS.NAME]: `Font Editor`,
+            [ui.IDS.NAME]: `Family Editor`,
             [ui.IDS.ICON]: `visible`,
             [ui.IDS.STATIC]: true
         });
 
-        this._tempFontData = new mkfData.Font();
+        this._tempFontData = new mkfData.Family();
 
         //Debug : load a bunch of icon starting at decimal
-        
+
         this._iconFolder = `D:/GIT/nkmjs/packages/nkmjs-style/src-style/default/assets/icons`;
-        this._ReadIconDir(null, fs.readdirSync(this._iconFolder));
-        
-/*
-        let checkerSVG = fs.readFileSync(`./assets/checker.svg`); //D:/GIT/mkfont
-        for (let i = 0; i < 255; i++) {
-            this._PushSVG(this._tempFontData, checkerSVG, i);
-        }
-*/
+        //this._ReadIconDir(null, fs.readdirSync(this._iconFolder));
 
-        console.log(this._tempFontData);
+        //this._ReadTTF();
 
-        mkfOperations.commands.MakeSVGFont.Enable();
+
+        /*
+                let checkerSVG = fs.readFileSync(`./assets/checker.svg`); //D:/GIT/mkfont
+                for (let i = 0; i < 255; i++) {
+                    this._PushSVG(this._tempFontData, checkerSVG, i);
+                }
+        */
+
+        //        console.log(this._tempFontData);
+
+        let fName = `Inter-Regular`;// `Basement-Medium`;// `Meticula`; //`Inter-Regular`;
+        this._tempFontData = mkfOperations.SVG.FamilyFromSVGFont(ttf2svg(fs.readFileSync(`./assets/${fName}.ttf`)));
+
         mkfOperations.commands.MakeTTFFont.Enable();
 
-        nkm.actions.KeystrokeEx.CreateFromString(`Ctrl E`, { fn:this._Bind(this._WriteTTF) }).Enable();
+        nkm.actions.KeystrokeEx.CreateFromString(`Ctrl E`, { fn: this._Bind(this._WriteTTF) }).Enable();
 
         this._editorView.options.view.RequestDisplay();
-        this._editorView.options.view.fontCatalog = Unicodes.instance._ranges;
+        this._editorView.options.view.fontCatalog = this._tempFontData.catalog; //Unicodes.instance._ranges;
         this._editorView.options.view.data = this._tempFontData;
 
     }
 
     _WriteTTF() {
-        mkfOperations.commands.MakeSVGFont.Execute(this._tempFontData);
         mkfOperations.commands.MakeTTFFont.Execute(this._tempFontData);
     }
 
@@ -126,17 +134,38 @@ class MKFont extends nkm.app.AppBase {
         }
     }
 
-    _PushSVG(p_font, p_svgString, i) {
+    _PushSVG(p_family, p_svgString, i) {
         let svg = mkfOperations.SVG.ProcessString(p_svgString);
         //            console.log(filepath, filecontent);
         let slot = Unicodes.instance._ranges.FindFirstByOptionValue(`glyph`, String.fromCharCode(i), true);
         if (!slot) { return; }
         SET_SVG.Do({
-            font: p_font,
-            targetSlot: slot,
+            family: p_family,
+            slot: slot,
             svg: svg,
             unicode: String.fromCharCode(i)
         }, false);
+    }
+
+    _ReadTTF() {
+        let ttf = fs.readFileSync('./assets/Inter-Regular.ttf');
+
+        var svgContent = ttf2svg(ttf);
+        console.log(svgContent);
+        var D = new DOMParser();
+        var svg = D.parseFromString(svgContent, `image/svg+xml`);
+
+        // Read size of font
+
+        var glyphs = svg.getElementsByTagName(`glyph`);
+        console.log(`There's, like, ${glyphs.length} glyphs.`);
+        for (let i = 0; i < glyphs.length; i++) {
+            let g = glyphs[i],
+                uni = g.getAttribute(`unicode`),
+                path = g.getAttribute(`d`);
+            this._PushSVG(this._tempFontData, `<svg xmlns="http://www.w3.org/2000/svg"><path d="${path}"></path></svg>`, i);
+        }
+
     }
 
 }

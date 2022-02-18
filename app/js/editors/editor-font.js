@@ -2,6 +2,8 @@ const nkm = require(`@nkmjs/core`);
 const u = nkm.utils;
 const ui = nkm.ui;
 
+const mkfExplorers = require(`../explorers`);
+
 const mkfViews = require(`../views`);
 
 class FontEditor extends nkm.uiworkspace.editors.EditorEx {
@@ -9,7 +11,7 @@ class FontEditor extends nkm.uiworkspace.editors.EditorEx {
 
     static __default_viewportClass = mkfViews.GlyphGroupViewport;
     static __default_headerClass = require(`./editor-font-header`);
-    static __default_footerClass = require(`./editor-font-footer`);
+    //static __default_footerClass = require(`./editor-font-footer`);
 
     _Init() {
         super._Init();
@@ -24,18 +26,17 @@ class FontEditor extends nkm.uiworkspace.editors.EditorEx {
 
     }
 
-    set fontCatalog(p_catalog){
-        this._fontCatalog = p_catalog;
-        this._viewport.catalog = p_catalog;
-    }
-
-    get fontCatalog(){ return this._fontCatalog; }
-
     _InitShelfCatalog(p_configList) {
 
         p_configList.push(
             {
-                [ui.IDS.NAME]: `Font`,
+                [ui.IDS.NAME]: `View`,
+                [ui.IDS.ICON]: `visible`,
+                [ui.IDS.VIEW_CLASS]: mkfExplorers.GlyphExplorer,
+                assign: `_glyphExplorer`
+            },
+            {
+                [ui.IDS.NAME]: `Family`,
                 [ui.IDS.ICON]: `view-grid`,
                 [ui.IDS.VIEW_CLASS]: this.constructor.__default_inspectorShellClass,
                 assign: `_fontInspector`
@@ -46,21 +47,35 @@ class FontEditor extends nkm.uiworkspace.editors.EditorEx {
 
     }
 
+    set fontCatalog(p_catalog){
+        this._fontCatalog = p_catalog;
+        this._viewport.catalog = p_catalog;
+    }
+
+    get fontCatalog(){ return this._fontCatalog; }
+
+    _PostInit(){
+        super._PostInit();
+        this._glyphExplorer.editor = this;
+
+        this._shelf.order = -1;
+        //this._shelf.orientation = ui.FLAGS.VERTICAL;
+        //this._shelf.navPlacement = ui.FLAGS.LEFT;
+    }
+
     _Style() {
         return nkm.style.Extends({
             ':host': {
-            },
-            '.header':{
-                'flex':'0 0 auto',
-                'height':'150px',
-                'background-color': 'rgba(150,150,150,0.1)'
+                '--glyph-color':'#f5f5f5',
+                '--glyph-stroke-color':'red',
+                '--preview-ratio':'1/1'
             },
             '.main-view':{
                 'width':'100%',
                 'height':'100%'
             },
             '.inspector':{
-                'min-width':'300px'
+                'min-width':'250px'
             }
         }, super._Style());
     }

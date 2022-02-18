@@ -4,12 +4,16 @@ const com = nkm.com;
 const u = nkm.utils;
 const ui = nkm.ui;
 
+const mkfData = require(`../data`);
+
 class PangramView extends ui.views.View {
     constructor() { super(); }
 
     _Init() {
 
         super._Init();
+
+        this._dataObserver.Hook(mkfData.SIGNAL.TTF_UPDATED, this._Refresh);
 
         this._previewText = `By Jove, my quick study of lexicography won a prize!`;
 
@@ -45,12 +49,6 @@ class PangramView extends ui.views.View {
 
     _Render() {
         super._Render();
-        this._tpl = ui.DOMTemplate.Render(uilib.dom.BodyExpand, this);
-    }
-
-    _OnItemDataChanged(p_oldItemData) {
-        super._OnItemDataChanged(p_oldItemData);
-        console.log(this._itemData);
     }
 
     //#region Catalog Management

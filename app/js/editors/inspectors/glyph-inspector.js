@@ -19,8 +19,8 @@ class GlyphInspector extends nkm.datacontrols.ControlView {
             ':host': {
             },
             '.svgBox':{
-                'width':'100px',
-                'height':'100px'
+                'width':'100%',
+                'aspect-ratio':'1/1'
             }
         }, super._Style());
     }
@@ -28,12 +28,14 @@ class GlyphInspector extends nkm.datacontrols.ControlView {
     _Render() {
         super._Render();
         this._img = ui.dom.El(`div`, { class: 'svgBox' }, this);
+        this._unicode = new ui.manipulators.Text(ui.dom.El(`div`, {class:`label size-l`}, this));
     }
 
     _OnDataUpdated(p_data){
         super._OnDataUpdated(p_data);
         //console.log(p_data.data.svg);
-        this._img.innerHTML = p_data.data.svg;
+        this._img.innerHTML = p_data.data.svg ? p_data.data.svg.outerHTML : ``;
+        this._unicode.Set(p_data._options.glyph);
     }
 
     _OnDisplayGain() {

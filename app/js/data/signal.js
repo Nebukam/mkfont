@@ -6,8 +6,8 @@
  * @hideconstructor
  * @memberof data.core
  */
-class SIGNAL{
-    constructor() {}
+class SIGNAL {
+    constructor() { }
 
     /**
      * @description TODO
@@ -21,8 +21,14 @@ class SIGNAL{
      * @type {symbol}
      * @customtag read-only
      */
-     static VIEWBOX_CHANGED = Symbol(`viewBoxChanged`);
+    static VIEWBOX_CHANGED = Symbol(`viewBoxChanged`);
 
+    /**
+     * @description TODO
+     * @type {symbol}
+     * @customtag read-only
+     */
+    static TTF_UPDATED = Symbol(`ttfUpdated`);
 
 }
 
