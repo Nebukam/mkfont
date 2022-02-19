@@ -46,15 +46,17 @@ class GlyphGroupsView extends ui.views.View {
                 'display': 'flex',
                 'flex-flow': 'row wrap',
                 'flex': '1 1 auto',
-                'overflow': 'auto'
+                'overflow': 'auto',
+                'align-items': 'flex-start',
+                'align-content': 'flex-start'
             },
             '.group': {
                 'flex': '1 0 auto',
                 'min-height': 0,
             },
             '.item': {
-                'flex': '0 0 auto',
-                'margin':'3px'
+                'flex': '1 0 auto',
+                'margin':'3px',
             }
         }, super._Style());
     }

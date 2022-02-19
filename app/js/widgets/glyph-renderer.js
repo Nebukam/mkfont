@@ -31,6 +31,7 @@ class GlyphRenderer extends ui.DisplayObject {
 
     _Init() {
         super._Init();
+        this._zoom = 1;
     }
 
     _PostInit() {
@@ -45,6 +46,7 @@ class GlyphRenderer extends ui.DisplayObject {
             'svg': {
                 'height': '100%',
                 'aspect-ratio': 'var(--preview-ratio)',
+                'overflow':'visible'
             },
             '.line': {
                 'stroke': 'white',
@@ -52,7 +54,8 @@ class GlyphRenderer extends ui.DisplayObject {
             },
             '.baseline': {
                 'stroke': 'var(--col-cta)',
-                'stroke-width': `1`
+                'stroke-width': `1`,
+                'stroke-dasharray': '1,2'
             },
             '.ascent': {
                 'stroke': 'rgba(127,127,127,0.5)',
@@ -66,6 +69,11 @@ class GlyphRenderer extends ui.DisplayObject {
                 'stroke': 'rgba(127,127,127,0.25)',
             },
         }, super._Style());
+    }
+
+    set zoom(p_value){
+        this._zoom = p_value;
+        this.Render();
     }
 
     _Render() {
@@ -83,36 +91,76 @@ class GlyphRenderer extends ui.DisplayObject {
 
         let paths = this._svgGrid.getElementsByTagName(`path`);
         this._glyphPath = paths[0];
+
     }
 
-    Set(p_glyph) {
+    Set(p_glyphVariant) {
 
-        if (!p_glyph) {
+        if (!p_glyphVariant) {
             this._glyphPath.setAttribute(`d`, ``);
             this._svgGrid.setAttribute(`viewBox`, `0 0 0 0`);
             return;
         }
 
         let
-            subFamily = p_glyph.family.defaultSubFamily,
+            subFamily = p_glyphVariant.subFamily,
             o = subFamily.Get(IDS.DISPLAY_OFFSET),
             s = subFamily.Get(IDS.DISPLAY_SIZE),
-            w = p_glyph._defaultGlyph.Get(IDS.H_ADV_X, 0, true),
-            ox = o;
+            w = p_glyphVariant.Get(IDS.H_ADV_X, 0, true),
+            ox = o,//-((s-w) * 0.5),
+            asc = subFamily.Get(IDS.ASCENT),
+            desc = subFamily.Get(IDS.ASCENT) - subFamily.Get(IDS.DESCENT);
 
-        this._Line(this._baseline, `y`, subFamily.Get(IDS.ASCENT));
-        this._Line(this._descentline, `y`, subFamily.Get(IDS.ASCENT) - subFamily.Get(IDS.DESCENT));
+        this._infos = {
+            o:o,
+            s:s,
+            w:w,
+            ox:ox,
+            asc:asc,
+            desc:desc
+        };
+
+        this._Line(this._baseline, `y`, asc);
+        this._Line(this._descentline, `y`, desc);
         this._Line(this._endline, `x`, w);
 
+        //this._Top(o);
+        //this._Bottom(s);
+
+        this.Render();
+
+        this._glyphPath.setAttribute(`d`, p_glyphVariant.Get(IDS.PATH));
+
+        // see for in-renderer editing http://phrogz.net/svg/rotate-to-point-at-cursor.svg
+
+    }
+
+    Render(){
+
+        if(!this._infos){ return; }
+
+        let zoom = this._zoom;
+        let i = this._infos,
+            o = i.o * zoom,
+            s = i.s * zoom,
+            ox = i.ox * zoom;
+
         this._svgGrid.setAttribute(`viewBox`, `${ox} ${o} ${s} ${s}`);
-
-        this._glyphPath.setAttribute(`d`, p_glyph._defaultGlyph.Get(IDS.PATH));
-
     }
 
     _Line(p_el, p_coord, p_value) {
         p_el.setAttribute(`${p_coord}1`, p_value);
         p_el.setAttribute(`${p_coord}2`, p_value);
+    }
+
+    _Top(p_value) {
+        this._beginline.setAttribute(`y1`, p_value);
+        this._endline.setAttribute(`y1`, p_value);
+    }
+
+    _Bottom(p_value) {
+        this._beginline.setAttribute(`y2`, p_value);
+        this._endline.setAttribute(`y2`, p_value);
     }
 
     _Cleanup() {

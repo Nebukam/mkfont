@@ -105,7 +105,7 @@ class MKFont extends nkm.app.AppBase {
 
         //        console.log(this._tempFontData);
 
-        let fName = `Inter-Regular`;// `Basement-Medium`;// `Meticula`; //`Inter-Regular`;
+        let fName = `Meticula`;// `Basement-Medium`;// `Meticula`; //`Inter-Regular`;
         this._tempFontData = mkfOperations.SVG.FamilyFromSVGFont(ttf2svg(fs.readFileSync(`./assets/${fName}.ttf`)));
 
         mkfOperations.commands.MakeTTFFont.Enable();

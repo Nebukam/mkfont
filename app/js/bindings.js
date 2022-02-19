@@ -21,6 +21,7 @@ class Bindings extends nkm.com.helpers.BindingKit {
                 kvps: [
                     { key: mkfData.Glyph, binding: mkfInspectors.Glyph },
                     { key: mkfData.Slot, binding: mkfInspectors.Glyph },
+                    { key: mkfData.SubFamily, binding: mkfInspectors.SubFamily },
                 ]
             });
 

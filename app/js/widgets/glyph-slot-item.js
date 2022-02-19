@@ -2,6 +2,7 @@ const nkm = require(`@nkmjs/core`);
 const ui = nkm.ui;
 const uilib = nkm.uilib;
 
+const mkfData = require(`../data`);
 const GlyphRenderer = require(`./glyph-renderer`);
 
 class GlyphSlotItem extends ui.WidgetItem {
@@ -25,51 +26,56 @@ class GlyphSlotItem extends ui.WidgetItem {
         this.focusArea = this;
     }
 
+    get editor() { return nkm.datacontrols.FindEditor(this); }
+
     _Style() {
         return nkm.style.Extends({
             ':host': {
                 'position': 'relative',
-                'min-height': 'var(--preview-size)',
+                //'min-height': 'var(--preview-size)',
                 //'border':'1px solid gray',
                 'display': 'flex',
                 'flex-flow': 'column nowrap',
                 'margin-bottom': '4px',
                 'box-sizing': 'border-box',
-                'padding':'10px',
-                'border-radius':'5px',
+                'padding': '10px',
+                'border-radius': '5px',
                 'background-color': 'rgba(0,0,0,0.25)',
-                '--preview-size-x':'var(--preview-size)'
+                '--preview-size-x': 'var(--preview-size)',
+                'align-items': 'center',                
+                'overflow': 'hidden',
             },
             ':host(.selected)': {
                 'background-color': 'rgba(127,127,127,0.25)'
             },
-            ':host(.unpainted) .box':{ 'display':'none' },
-            '.preview':{
-                'position':'relative',
-                'aspect-ratio':'var(--preview-ratio)',
+            ':host(.unpainted) .box': { 'display': 'none' },
+            '.preview': {
+                'position': 'relative',
+                'aspect-ratio': 'var(--preview-ratio)',
                 'flex': '1 1 auto',
-                'height': 'var(--preview-size)',
+                //'height': 'var(--preview-size)',
                 'min-height': 'var(--preview-size)',
-                'max-height': 'var(--preview-size)',
-                'overflow': 'hidden'
+                //'max-height': 'var(--preview-size)',
+                'min-width': 'var(--preview-size)',
+                'display': 'flex',
+                'flex-flow': 'row nowrap',
+                'justify-content': 'center',                
+                'max-height':'calc( var(--preview-size) * 1.8 )'
             },
-            '.box, svg': {
+            '.box': {
                 'height': '100%',
-                'aspect-ratio':'var(--preview-ratio)',
+                //'aspect-ratio': 'var(--preview-ratio)',
                 'position': 'absolute',
-            },
-            '.svg-ctnr': {
-                //'border': '1px solid gray',
             },
             '.label': {
                 'margin-top': '10px',
                 'text-align': `center`,
                 'padding': '5px'
             },
-            'pre':{
-                'margin':'0',
-                'font-size':'large',
-                'user-select':'text'
+            'pre': {
+                'margin': '0',
+                'font-size': 'large',
+                'user-select': 'text'
             },
             '.placeholder': {
                 'text-align': `center`,
@@ -84,18 +90,13 @@ class GlyphSlotItem extends ui.WidgetItem {
 
     _Render() {
         super._Render();
-        
-        this._previewBox = ui.dom.El(`div`, { class: `preview` }, this._host);
-        
-        this._glyphRender = this.Add(GlyphRenderer, `box renderer`, this._previewBox);
-        this._svgBox = ui.dom.El(`div`, { class: `box svg-ctnr` }, this._previewBox);        
-        this._glyphBox = new ui.manipulators.Text(ui.dom.El(`div`, { class: `box placeholder` }, this._previewBox), false, false);
-        //this._linesBox = ui.dom.El(`div`, { class: `box lines` }, this._previewWrapper);
 
-        this._svgNode = null;
+        this._previewBox = ui.dom.El(`div`, { class: `preview` }, this._host);
+
+        this._glyphPlaceholder = new ui.manipulators.Text(ui.dom.El(`div`, { class: `box placeholder` }, this._previewBox), false, false);
+        this._glyphRender = this.Add(GlyphRenderer, `box renderer`, this._previewBox);
 
         this._label = new ui.manipulators.Text(ui.dom.El(`div`, { class: `item label` }, this._host), false, false);
-
 
     }
 
@@ -108,38 +109,28 @@ class GlyphSlotItem extends ui.WidgetItem {
         }
     }
 
-    _OnDataChanged(p_oldData) {
-        super._OnDataChanged(p_oldData);
-        let glyph = this._data._options.unicode;
-        this._glyphBox.Set(glyph);
-        this._label.Set(`<pre>${glyph}</pre>`); //this._data._options.hex
-
-        this._UpdateSVGNode(this._data ? this._data.data.svg : null);
-    }
-
     _OnDataUpdated(p_data) {
+
         super._OnDataUpdated(p_data);
-        this._UpdateSVGNode(p_data.data.svg);
-        this._glyphRender.Set(p_data.data);
+        let glyphData = p_data.data;
+        let unicode = glyphData.Get(mkfData.IDS.UNICODE);
+        this._glyphPlaceholder.Set(unicode);
+        this._label.Set(`<pre>${unicode}</pre>`);
+
+        if (glyphData.Get(mkfData.IDS.PATH)) {
+            this._glyphPlaceholder._element.style.display = `none`;
+        } else {
+            delete this._glyphPlaceholder._element.style.display;
+        }
+
+        this._UpdateGlyphPreview();
+
     }
 
-    _UpdateSVGNode(p_svg = null) {
-
-        if (this._svgNode) {
-            this._svgNode.remove();
-            this._svgNode = null;
-        }
-
-        if (!p_svg) { 
-            delete this._glyphBox._element.style.display;
-            return; 
-        }else{
-            this._glyphBox._element.style.display = `none`;
-        }
-
-        this._svgNode = p_svg.cloneNode(true);
-        this._svgBox.appendChild(this._svgNode);
-
+    _UpdateGlyphPreview(p_variant) {
+        let glyphData = this._data ? this._data.data : null;
+        if (!glyphData) { this._glyphRender.Set(null); }
+        this._glyphRender.Set(glyphData.GetVariant(glyphData.family.selectedSubFamily));
     }
 
     _ToClipboard() {

@@ -7,6 +7,10 @@ const io = nkm.io;
 
 const IDS = require(`./ids`);
 
+const domparser = new DOMParser();
+const svgString = `<glyph glyph-name="" unicode="" d=""></glyph>`;
+
+const svgGlyphRef = domparser.parseFromString(svgString, `image/svg+xml`).getElementsByTagName(`glyph`)[0];
 
 class GlyphVariantDataBlock extends nkm.data.SimpleDataBlock {
 
@@ -18,13 +22,6 @@ class GlyphVariantDataBlock extends nkm.data.SimpleDataBlock {
 
         super._Init();
 
-        this._glyph = null;
-        this._isDefault = false;
-        this._xml = document.createElement(`glyph`);
-
-        this._svg = null;
-        this._viewBox = null;
-
         this._values = {
             [IDS.H_ORIGIN_X]: { value: null },
             [IDS.H_ORIGIN_Y]: { value: null },
@@ -32,8 +29,15 @@ class GlyphVariantDataBlock extends nkm.data.SimpleDataBlock {
             [IDS.V_ORIGIN_X]: { value: null },
             [IDS.V_ORIGIN_Y]: { value: null },
             [IDS.V_ADV_Y]: { value: null },
-            [IDS.PATH]: { value: '' }
+            [IDS.PATH]: { value: '', setter:IDS.PATH }
         }
+
+        this._glyph = null;
+        this._isDefault = false;
+
+        this._svg = null;
+        this._svgGlyph = svgGlyphRef.cloneNode(true);
+        this._viewBox = null;
 
         // Variant manangement : UI should show a drop-down allowing to assign a variant found in the Family object
         // if a variant is deleted, flag this variant as "unassigned"
@@ -41,35 +45,24 @@ class GlyphVariantDataBlock extends nkm.data.SimpleDataBlock {
 
     }
 
-    get xml() { return this._xml; }
-
     set glyph(p_value) { this._glyph = p_value; }
     get glyph() { return this._glyph; }
 
-    set variant(p_variant) {
-        if (this._variant == p_variant) { return; }
-        this._variant = p_variant;
-        if (this._variant) { this._variant.xml.appendChild(this._xml); }
-        else { this._xml.remove(); }
+    get subFamily(){ return this._subFamily; }
+    set subFamily(p_variant) {
+        if (this._subFamily == p_variant) { return; }
+        this._subFamily = p_variant;
+        if (this._subFamily) { this._subFamily.xml.appendChild(this._svgGlyph); }
+        else { this._svgGlyph.remove(); }
     }
 
-    set unicode(p_value) { this._xml.setAttribute(`unicode`, p_value); }
+    get svgGlyph() { return this._svgGlyph; }
 
-    get svg() { return this._svg; }
-    set svg(p_svg) {
-        this._svg = p_svg;
-        this.CommitUpdate();
-    }
-
-    CommitUpdate() {
-        this._xml.innerHTML = this._svg ? this._svg.outerHTML : ``;
-        dom.SAtt(this._xml, this._params, `value`, true);
-        super.CommitUpdate();
-    }
+    set path(p_value){ this._svgGlyph.setAttribute(`d`, p_value); }
 
     _CleanUp() {
         this.glyph = null;
-        this._xml.remove();
+        this._svgGlyph.remove();
         super._CleanUp();
     }
 

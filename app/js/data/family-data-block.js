@@ -19,12 +19,12 @@ class FamilyDataBlock extends nkm.data.SimpleDataBlock {
         super._Init();
 
         this._values = {
-            [IDS.FAMILY_NAME]: { value: `MKFamily` },
+            [IDS.FAMILY]: { value: `MKFamily` },
             [IDS.METADATA]: { value: `...` },
             [IDS.COPYRIGHT]: { value: null },
-            [IDS.DESCRIPTION]: { value: `bold` },
-            [IDS.URL]: { value: `...` },
-            [IDS.VERSION]: { value: 1 }
+            [IDS.DESCRIPTION]: { value: `` },
+            [IDS.URL]: { value: `` },
+            [IDS.VERSION]: { value: `0.0.1` }
         };
 
         this._glyphs = new nkm.collections.List();
@@ -37,6 +37,7 @@ class FamilyDataBlock extends nkm.data.SimpleDataBlock {
 
         this._viewBox = { x: 0, y: 0, width: 100, height: 100 };
 
+        this._selectedSubFamily = this._defaultSubFamily;
 
         // Family data : only holds Glyph data.
         // The editor is responsible for making the "connection" between
@@ -53,6 +54,13 @@ class FamilyDataBlock extends nkm.data.SimpleDataBlock {
     get catalog() { return this._catalog; }
 
     get defaultSubFamily() { return this._defaultSubFamily; }
+
+    get selectedSubFamily() { return this._selectedSubFamily; }
+    set selectedSubFamily(p_value) {
+        if (!p_value) { p_value = this._defaultSubFamily; }
+        this._selectedSubFamily = p_value;
+        this._Broadcast(SIGNAL.SUBFAMILY_CHANGED, this._selectedSubFamily);
+    }
 
     get viewBox() { return this._viewBox; }
     set viewBox(p_value) {
@@ -91,7 +99,9 @@ class FamilyDataBlock extends nkm.data.SimpleDataBlock {
             slot.data = p_glyph;
         }
 
-        p_glyph.Watch(SIGNAL.UNICODE_CHANGED, this._OnGlyphUnicodeChanged);
+        p_glyph
+            .Watch(SIGNAL.UNICODE_CHANGED, this._OnGlyphUnicodeChanged)
+            .Watch(SIGNAL.VARIANT_UPDATED, this._OnGlyphVariantUpdated);
 
         for (let i = 0, n = this._subFamilies.count; i < n; i++) {
             let subFamily = this._subFamilies.At(i);
@@ -110,13 +120,19 @@ class FamilyDataBlock extends nkm.data.SimpleDataBlock {
         slot.data = null;
         //TODO : If custom slot, release it.
 
-        p_glyph.Unwatch(SIGNAL.UNICODE_CHANGED, this._OnGlyphUnicodeChanged);
+        p_glyph
+            .Unwatch(SIGNAL.UNICODE_CHANGED, this._OnGlyphUnicodeChanged)
+            .Unwatch(SIGNAL.VARIANT_UPDATED, this._OnGlyphVariantUpdated);
+
         this._Broadcast(nkm.com.SIGNAL.ITEM_REMOVED, this, g);
     }
 
-
     _OnGlyphUnicodeChanged() {
         // TODO : Move from old slot to the new one
+    }
+
+    _OnGlyphVariantUpdated(p_glyph, p_glyphVariant) {
+
     }
 
     _GetSlot(p_unicode) {

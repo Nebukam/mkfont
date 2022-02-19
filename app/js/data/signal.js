@@ -28,7 +28,21 @@ class SIGNAL {
      * @type {symbol}
      * @customtag read-only
      */
+     static VARIANT_UPDATED = Symbol(`variantUpdated`);
+
+    /**
+     * @description TODO
+     * @type {symbol}
+     * @customtag read-only
+     */
     static TTF_UPDATED = Symbol(`ttfUpdated`);
+
+    /**
+     * @description TODO
+     * @type {symbol}
+     * @customtag read-only
+     */
+     static SUBFAMILY_CHANGED = Symbol(`subfamily-changed`);
 
 }
 

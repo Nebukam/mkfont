@@ -129,7 +129,7 @@ class SVGOperations {
 
     static FamilyFromSVGFont(p_svgString) {
 
-        //console.log(p_svgString);
+        console.log(p_svgString);
 
         let
             svgFont = domparser.parseFromString(p_svgString, `image/svg+xml`),
@@ -184,11 +184,13 @@ class SVGOperations {
                 .translate(0, ascent)
                 .toString();
 
-            let gStr = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="${displayOffset} ${displayOffset} ${displaySize} ${displaySize}"><path d="${glyphPath}" style="${glyphStyle}"></path></svg>`;
+            newGlyph.BatchSet({
+                [IDS.UNICODE]:glyphUnicode,
+                [IDS.DECIMAL]:glyphUnicode.length == 1 ? glyphUnicode.charCodeAt(0) : -1,
+                [IDS.PATH]:glyphPath
+            });
 
-            newGlyph.unicode = glyphUnicode;
-            newGlyph.decimal = glyphUnicode.length == 1 ? glyphUnicode.charCodeAt(0) : -1;
-            newGlyph.svg = domparser.parseFromString(gStr, `image/svg+xml`).getElementsByTagName(`svg`)[0];
+            //newGlyph.svg = domparser.parseFromString(gStr, `image/svg+xml`).getElementsByTagName(`svg`)[0];
 
             family.AddGlyph(newGlyph);
 

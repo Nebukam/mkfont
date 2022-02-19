@@ -2,9 +2,9 @@ const nkm = require(`@nkmjs/core`);
 const u = nkm.utils;
 const ui = nkm.ui;
 
-const mkfExplorers = require(`../explorers`);
-
+const mkfInspectors = require(`./inspectors`);
 const mkfViews = require(`../views`);
+const mkfData = require(`../data`);
 
 class FontEditor extends nkm.uiworkspace.editors.EditorEx {
     constructor() { super(); }
@@ -24,6 +24,8 @@ class FontEditor extends nkm.uiworkspace.editors.EditorEx {
         // However, Helper functions to do the search & match should reside
         // somewhere else
 
+        this._selectedSubFamily = null;
+
     }
 
     _InitShelfCatalog(p_configList) {
@@ -32,14 +34,14 @@ class FontEditor extends nkm.uiworkspace.editors.EditorEx {
             {
                 [ui.IDS.NAME]: `View`,
                 [ui.IDS.ICON]: `visible`,
-                [ui.IDS.VIEW_CLASS]: mkfExplorers.GlyphExplorer,
+                [ui.IDS.VIEW_CLASS]: mkfInspectors.Family,
                 assign: `_glyphExplorer`
             },
             {
                 [ui.IDS.NAME]: `Family`,
                 [ui.IDS.ICON]: `view-grid`,
-                [ui.IDS.VIEW_CLASS]: this.constructor.__default_inspectorShellClass,
-                assign: `_fontInspector`
+                [ui.IDS.VIEW_CLASS]: mkfInspectors.SubFamily,
+                assign: `_familyInspector`
             }
         );
 
@@ -47,18 +49,18 @@ class FontEditor extends nkm.uiworkspace.editors.EditorEx {
 
     }
 
-    set fontCatalog(p_catalog){
+    set fontCatalog(p_catalog) {
         this._fontCatalog = p_catalog;
         this._viewport.catalog = p_catalog;
     }
 
-    get fontCatalog(){ return this._fontCatalog; }
+    get fontCatalog() { return this._fontCatalog; }
 
-    _PostInit(){
+    _PostInit() {
         super._PostInit();
         this._glyphExplorer.editor = this;
 
-        this._shelf.order = -1;
+        //this._shelf.order = -1;
         //this._shelf.orientation = ui.FLAGS.VERTICAL;
         //this._shelf.navPlacement = ui.FLAGS.LEFT;
     }
@@ -66,20 +68,26 @@ class FontEditor extends nkm.uiworkspace.editors.EditorEx {
     _Style() {
         return nkm.style.Extends({
             ':host': {
-                '--glyph-color':'#f5f5f5',
-                '--glyph-stroke-color':'red',
-                '--preview-ratio':'1/1'
+                '--glyph-color': '#f5f5f5',
+                '--glyph-stroke-color': 'red',
+                '--preview-ratio': '2/1'
             },
-            '.main-view':{
-                'width':'100%',
-                'height':'100%'
+            '.main-view': {
+                'width': '100%',
+                'height': '100%'
             },
-            '.inspector':{
-                'min-width':'250px'
+            '.inspector': {
+                'min-width': '250px'
             }
         }, super._Style());
     }
-
+    
+    _OnDataChanged(p_oldData){
+        super._OnDataChanged(p_oldData);
+        this.selectedSubFamily = this._data ? this._data.defaultSubFamily : null; // will self-update
+        this._glyphExplorer.data = this._data;
+        this._familyInspector.data = this._data;
+    }
 
 }
 

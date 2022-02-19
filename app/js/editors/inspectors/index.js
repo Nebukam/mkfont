@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports = {
-
-    Glyph: require(`./glyph-inspector`)
-
+    Family: require(`./family-inspector`),
+    SubFamily: require(`./subfamily-inspector`),
+    Glyph: require(`./glyph-inspector`),
 }

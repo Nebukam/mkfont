@@ -39,8 +39,6 @@ class SubFamilyDataBlock extends nkm.data.SimpleDataBlock {
             [IDS.FONT_WEIGHT]: { value: `bold` },
             [IDS.FONT_STYLE]: { value: `normal` },
             [IDS.EM_UNITS]: { value: defaultEm },
-            [IDS.EM_RATIO_X]: { value: null },
-            [IDS.EM_RATIO_Y]: { value: null },
             [IDS.CAP_HEIGHT]: { value: defaultEm * 0.8 },
             [IDS.X_HEIGHT]: { value: defaultEm * 0.5 },
             [IDS.ASCENT]: { value: defaultEm * 0.8 },
@@ -102,10 +100,29 @@ class SubFamilyDataBlock extends nkm.data.SimpleDataBlock {
         dom.SAtt(this._xml, IDS.V_ADV_Y, this._value(IDS.EM_UNITS), true);
         dom.SAtt(this._xmlFontFaceSrcName, `name`, `${this._value(IDS.FAMILY)} ${this._value(IDS.VARIANT)}`, true);
 
-        //TODO : Update vadv + hadv with emunits 
-
         dom.SAtt(this._xmlFontFace, this._values, `value`, true);
 
+    }
+
+    _UpdateDisplayValues(){
+
+        let
+            em = this.Get(IDS.EM_UNITS) * 0.8,
+            h = this.Get(IDS.ASCENT) - this.Get(IDS.DESCENT),
+            size = h,//Math.max(em, h),
+            displaySize = size * 1.25,
+            displayOffset = (displaySize - size) * -0.5;
+
+        this.Set(IDS.SIZE, size, true);
+        this.Set(IDS.DISPLAY_SIZE, displaySize, true);
+        this.Set(IDS.DISPLAY_OFFSET, displayOffset, true);
+
+    }
+
+    CommitUpdate(){
+        this._UpdateFontObject();
+        this._UpdateDisplayValues();
+        super.CommitUpdate();
     }
 
     _CleanUp() {
