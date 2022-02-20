@@ -19,7 +19,7 @@ class FamilyDataBlock extends nkm.data.SimpleDataBlock {
         super._Init();
 
         this._values = {
-            [IDS.FAMILY]: { value: `MKFamily` },
+            [IDS.FAMILY]: { value: `fontello` },
             [IDS.METADATA]: { value: `...` },
             [IDS.COPYRIGHT]: { value: null },
             [IDS.DESCRIPTION]: { value: `` },

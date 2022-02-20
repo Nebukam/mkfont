@@ -29,7 +29,7 @@ class GlyphVariantDataBlock extends nkm.data.SimpleDataBlock {
             [IDS.V_ORIGIN_X]: { value: null },
             [IDS.V_ORIGIN_Y]: { value: null },
             [IDS.V_ADV_Y]: { value: null },
-            [IDS.PATH]: { value: '', setter:IDS.PATH }
+            [IDS.PATH]: { value: '', setter: IDS.PATH }
         }
 
         this._glyph = null;
@@ -48,7 +48,7 @@ class GlyphVariantDataBlock extends nkm.data.SimpleDataBlock {
     set glyph(p_value) { this._glyph = p_value; }
     get glyph() { return this._glyph; }
 
-    get subFamily(){ return this._subFamily; }
+    get subFamily() { return this._subFamily; }
     set subFamily(p_variant) {
         if (this._subFamily == p_variant) { return; }
         this._subFamily = p_variant;
@@ -58,7 +58,21 @@ class GlyphVariantDataBlock extends nkm.data.SimpleDataBlock {
 
     get svgGlyph() { return this._svgGlyph; }
 
-    set path(p_value){ this._svgGlyph.setAttribute(`d`, p_value); }
+    set path(p_value) { this._svgGlyph.setAttribute(`d`, p_value); }
+
+
+    _UpdateFontObject() {
+        if (!this._glyph) { return; }
+        dom.SAtt(this._svgGlyph, IDS.H_ADV_X, this.Get(IDS.H_ADV_X), true);
+        dom.SAtt(this._svgGlyph, IDS.V_ADV_Y, this.Get(IDS.V_ADV_Y), true);
+        dom.SAtt(this._svgGlyph, IDS.GLYPH_NAME, this._glyph.Get(IDS.DECIMAL).toString(16).padStart(6, '0'));
+        dom.SAtt(this._svgGlyph, IDS.UNICODE, this._glyph.Get(IDS.UNICODE));
+    }
+
+    CommitUpdate() {
+        this._UpdateFontObject();
+        super.CommitUpdate();
+    }
 
     _CleanUp() {
         this.glyph = null;

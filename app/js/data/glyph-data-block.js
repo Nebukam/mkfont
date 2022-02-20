@@ -21,7 +21,7 @@ class GlyphDataBlock extends nkm.data.SimpleDataBlock {
         super._Init();
 
         this._values = {
-            [IDS.ID]: { value: '' },
+            [IDS.GLYPH_NAME]: { value: '' },
             [IDS.DECIMAL]: { value: null },
             [IDS.UNICODE]: { value: null, setter: IDS.UNICODE },
             [IDS.PATH]: { value: '', setter: IDS.PATH }

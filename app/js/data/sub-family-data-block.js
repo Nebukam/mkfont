@@ -33,9 +33,9 @@ class SubFamilyDataBlock extends nkm.data.SimpleDataBlock {
         let defaultEm = 1000;
 
         this._values = {
-            [IDS.ID]: { value: `font_id` },
+            [IDS.ID]: { value: `fontello` },
             [IDS.VARIANT]: { value: `Bold` },
-            [IDS.FAMILY]: { value: null },
+            [IDS.FAMILY]: { value: 'fontello' },
             [IDS.FONT_WEIGHT]: { value: `bold` },
             [IDS.FONT_STYLE]: { value: `normal` },
             [IDS.EM_UNITS]: { value: defaultEm },

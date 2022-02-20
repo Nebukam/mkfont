@@ -15,7 +15,7 @@ class IDS {
     static ID = 'id';
 
     static VARIANT = 'variant-name';
-    static FAMILY = 'family';
+    static FAMILY = 'font-family';
     static FONT_WEIGHT = 'font-weight';
     static FONT_STYLE = 'font-style';
     static EM_UNITS = 'units-per-em';
@@ -46,6 +46,7 @@ class IDS {
     static URL = 'url';
     static VERSION = 'version';
 
+    static GLYPH_NAME = 'glyph-name';
     static UNICODE = 'unicode';
     static DECIMAL = 'decimal';
 
@@ -174,6 +175,11 @@ class IDS {
             inputType:inputs.Color,
             label:`Preview color`,
             inputOptions:{ changeOnInput:true },
+            desc: `Define the color of the glyphs in the editor.`
+        },
+        [this.GLYPH_NAME]: {
+            inputType:inputs.Text,
+            label:`Glyph name`,
             desc: `Define the color of the glyphs in the editor.`
         },
         

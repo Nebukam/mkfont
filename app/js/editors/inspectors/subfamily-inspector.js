@@ -54,6 +54,9 @@ class GlyphInspector extends nkm.datacontrols.ControlView {
             '.control': {
                 'flex': '0 1 auto',
                 'margin-bottom': '5px'
+            },
+            '.pangram': {
+                'flex': '1 1 auto',
             }
         }, super._Style());
     }
@@ -73,6 +76,8 @@ class GlyphInspector extends nkm.datacontrols.ControlView {
             this._subFamilyCtrls.push(ctrl);
         }
 
+        this._pangramRenderer = this.Add(mkfWidgets.PangramRenderer, 'pangram');
+
     }
 
     _PreprocessData(p_data) {
@@ -81,11 +86,14 @@ class GlyphInspector extends nkm.datacontrols.ControlView {
     }
 
     _OnDataChanged(p_oldData) {
+
         super._OnDataChanged(p_oldData);
+
         if (this._data) {
             this._subFamily = this._data.selectedSubFamily;
             this._OnSubFamilyChanged(this._subFamily);
         }
+
     }
 
     _OnDataUpdated(p_data) {
@@ -96,6 +104,8 @@ class GlyphInspector extends nkm.datacontrols.ControlView {
         this._subFamily = p_selectedSubFamily;
 
         if (!p_selectedSubFamily) { return; }
+        
+        this._pangramRenderer.data = this._subFamily;
 
         let def = this._data.defaultSubFamily;
         for (let i = 0; i < this._subFamilyCtrls.length; i++) {

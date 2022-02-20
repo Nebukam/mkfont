@@ -18,7 +18,7 @@ class GlyphInspector extends nkm.datacontrols.ControlView {
         this._svgPaste = operations.commands.ClipboardReadSVG;
         this._ctrls = [];
         this._idList = [
-            mkfData.IDS.ID,
+            mkfData.IDS.GLYPH_NAME,
             mkfData.IDS.H_ADV_X,
             mkfData.IDS.V_ADV_Y
         ];
