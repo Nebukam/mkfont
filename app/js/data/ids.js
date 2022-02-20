@@ -37,6 +37,7 @@ class IDS {
     static SIZE = 'size';
     static DISPLAY_SIZE = 'display-size';
     static DISPLAY_OFFSET = 'display-offset';
+    static COLOR_PREVIEW = 'color-preview';
 
     static SUB_FAMILY_NAME = 'subfamilyName';
     static METADATA = 'metadata';
@@ -169,6 +170,13 @@ class IDS {
             inputType:inputs.Text,
             desc: ``
         },
+        [this.COLOR_PREVIEW]: {
+            inputType:inputs.Color,
+            label:`Preview color`,
+            inputOptions:{ changeOnInput:true },
+            desc: `Define the color of the glyphs in the editor.`
+        },
+        
     }
 
     static GetInfos(p_id) {

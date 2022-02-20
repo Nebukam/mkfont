@@ -129,7 +129,7 @@ class SVGOperations {
 
     static FamilyFromSVGFont(p_svgString) {
 
-        console.log(p_svgString);
+        //console.log(p_svgString);
 
         let
             svgFont = domparser.parseFromString(p_svgString, `image/svg+xml`),

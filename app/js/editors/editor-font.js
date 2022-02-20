@@ -81,12 +81,23 @@ class FontEditor extends nkm.uiworkspace.editors.EditorEx {
             }
         }, super._Style());
     }
+
+    _PreprocessData(p_data) {
+        if (!nkm.utils.isInstanceOf(p_data, mkfData.Family)) { return null; }
+        return p_data;
+    }
     
     _OnDataChanged(p_oldData){
         super._OnDataChanged(p_oldData);
         this.selectedSubFamily = this._data ? this._data.defaultSubFamily : null; // will self-update
         this._glyphExplorer.data = this._data;
         this._familyInspector.data = this._data;
+    }
+
+    _OnDataUpdated(p_data){
+        super._OnDataUpdated(p_data);
+        console.log(p_data);
+        this.style.setProperty(`--glyph-color`, p_data.Get(mkfData.IDS.COLOR_PREVIEW));
     }
 
 }

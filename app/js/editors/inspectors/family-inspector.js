@@ -18,6 +18,7 @@ class FamilyInspector extends nkm.datacontrols.ControlView {
             mkfData.IDS.METADATA,
             mkfData.IDS.COPYRIGHT,
             mkfData.IDS.DESCRIPTION,
+            mkfData.IDS.COLOR_PREVIEW,
             //mkfData.IDS.H_ADV_X, // use EM_UNITS
             //mkfData.IDS.V_ADV_Y // use EM_UNITS
         ];

@@ -24,7 +24,8 @@ class FamilyDataBlock extends nkm.data.SimpleDataBlock {
             [IDS.COPYRIGHT]: { value: null },
             [IDS.DESCRIPTION]: { value: `` },
             [IDS.URL]: { value: `` },
-            [IDS.VERSION]: { value: `0.0.1` }
+            [IDS.VERSION]: { value: `0.0.1` },
+            [IDS.COLOR_PREVIEW]: { value: `#f5f5f5` },
         };
 
         this._glyphs = new nkm.collections.List();

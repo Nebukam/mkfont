@@ -43,7 +43,7 @@ class GlyphSlotItem extends ui.WidgetItem {
                 'background-color': 'rgba(0,0,0,0.25)',
                 '--preview-size-x': 'var(--preview-size)',
                 'align-items': 'center',                
-                'overflow': 'hidden',
+                'overflow': 'clip',
             },
             ':host(.selected)': {
                 'background-color': 'rgba(127,127,127,0.25)'
@@ -60,7 +60,8 @@ class GlyphSlotItem extends ui.WidgetItem {
                 'display': 'flex',
                 'flex-flow': 'row nowrap',
                 'justify-content': 'center',                
-                'max-height':'calc( var(--preview-size) * 1.8 )'
+                'max-height':'calc( var(--preview-size) * 1.8 )',
+                'overflow-y': 'clip'
             },
             '.box': {
                 'height': '100%',
