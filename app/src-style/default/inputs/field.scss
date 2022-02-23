@@ -32,6 +32,8 @@
     resize: vertical;
 
     -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;  
  
     &::placeholder{
         font-style: italic;

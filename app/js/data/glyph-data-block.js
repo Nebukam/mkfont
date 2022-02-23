@@ -5,12 +5,13 @@ const com = nkm.com;
 const u = nkm.utils;
 const io = nkm.io;
 
+const SimpleDataEx = require(`./simple-data-ex`);
 const SIGNAL = require(`./signal`);
 const IDS = require(`./ids`);
 
 const GlyphVariant = require(`./glyph-variant-data-block`);
 
-class GlyphDataBlock extends nkm.data.SimpleDataBlock {
+class GlyphDataBlock extends SimpleDataEx {
 
     constructor() { super(); }
 
@@ -23,8 +24,8 @@ class GlyphDataBlock extends nkm.data.SimpleDataBlock {
         this._values = {
             [IDS.GLYPH_NAME]: { value: '' },
             [IDS.DECIMAL]: { value: null },
-            [IDS.UNICODE]: { value: null, setter: IDS.UNICODE },
-            [IDS.PATH]: { value: '', setter: IDS.PATH }
+            [IDS.UNICODE]: { value: null },
+            [IDS.PATH]: { value: '' }
         }
 
         this._family = null;
@@ -32,39 +33,30 @@ class GlyphDataBlock extends nkm.data.SimpleDataBlock {
 
         this._defaultGlyph = new GlyphVariant();
         this._defaultGlyph._isDefault = true;
+
         this._glyphVariants = new nkm.collections.List();
         this._subFamiliesMap = new nkm.collections.Dictionary();
 
     }
 
-    set family(p_value) { this._family = p_value; }
-    get family() { return this._family; }
+    get resolutionFallbacks() { return [this._family]; }
 
-    get isLigature() { return this._unicode.length > 1; }
-
-    get path() { return this._defaultGlyph.Get(IDS.PATH); }
-    set path(p_value) {
-        this._defaultGlyph.Set(IDS.PATH, p_value);
-        this.CommitUpdate();
-    }
-
-    get unicode() { return this.Get(IDS.UNICODE, -1, true); }
-    set unicode(p_value) {
-        for (let i = 0, n = this._glyphVariants.count; i < n; i++) {
-            let g = this._glyphVariants.At(i);
-            g.svgGlyph.setAttribute(IDS.UNICODE, p_value);
-        }
-    }
+    get defaultGlyph() { return this._defaultGlyph; }
 
     get decimal() { return this.Get(IDS.DECIMAL, -1, true); }
 
-    get defaultGlyph(){ return this._defaultGlyph; }
+    get isLigature() { return this._unicode.length > 1; }
+
+    set family(p_value) { this._family = p_value; }
+    get family() { return this._family; }
 
     _SetDefaultVariant(p_subFamily) {
         if (!this._glyphVariants.Add(p_subFamily)) { return this._defaultGlyph; }
         this._OnGlyphVariantAdded(this._defaultGlyph, p_subFamily);
         return this._defaultGlyph;
     }
+
+    // Variant management
 
     AddVariant(p_subFamily) {
         if (!this._glyphVariants.Add(p_subFamily)) { return this._subFamiliesMap.Get(p_subFamily); }
@@ -80,7 +72,6 @@ class GlyphDataBlock extends nkm.data.SimpleDataBlock {
 
         p_glyphVariant.glyph = this;
         p_glyphVariant.subFamily = p_subFamily;
-        p_glyphVariant.svgGlyph.setAttribute(IDS.UNICODE, this.Get(IDS.UNICODE));
 
         p_glyphVariant.Watch(com.SIGNAL.UPDATED, this._OnGlyphVariantUpdated, this);
         p_subFamily.Watch(com.SIGNAL.RELEASED, this._OnSubFamilyReleased, this);
@@ -102,18 +93,41 @@ class GlyphDataBlock extends nkm.data.SimpleDataBlock {
 
     _OnGlyphVariantUpdated(p_glyphVariant) {
         this._Broadcast(SIGNAL.VARIANT_UPDATED, this, p_glyphVariant);
-        this.CommitUpdate();
     }
 
     GetVariant(p_subFamily) {
         return this._subFamiliesMap.Get(p_subFamily);
     }
 
+    //
+
+    CommitValueUpdate(p_id, p_valueObj, p_silent = false) {
+        super.CommitValueUpdate(p_id, p_valueObj, p_silent);
+        // Propagate update to variants
+    }
+
+    //
+
     _OnSubFamilyReleased(p_subFamily) {
         let glyphVariant = this._subFamiliesMap.Get(p_subFamily);
         if (glyphVariant) {
             this._subFamiliesMap.Remove(p_subFamily);
             glyphVariant.Release();
+        }
+    }
+
+    _OnSubFamilyValueUpdated(p_subFamily, p_valueObj) {
+        let glyphVariant;
+        if (p_subFamily._isDefault) {
+            // Forward update to all
+            for (let i = 0, n = this._glyphVariants.count; i < n; i++) {
+                glyphVariant = this.GetVariant(this._glyphVariants.At(i));
+                glyphVariant._OnSubFamilyValueUpdated(p_subFamily, p_valueObj);
+            }
+        } else {
+            // Forward update only to mapped glyphVariant
+            glyphVariant = this.GetVariant(p_subFamily);
+            glyphVariant._OnSubFamilyValueUpdated(p_subFamily, p_valueObj);
         }
     }
 

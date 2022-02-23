@@ -8,28 +8,27 @@ const mkfWidgets = require(`../../widgets`);
 class FamilyInspector extends nkm.datacontrols.ControlView {
     constructor() { super(); }
 
+    static __controls = [
+        { options: { propertyId: mkfData.IDS.FAMILY } },
+        { options: { propertyId: mkfData.IDS.COPYRIGHT } },
+        { options: { propertyId: mkfData.IDS.METADATA } },
+        { options: { propertyId: mkfData.IDS.DESCRIPTION } },
+        { options: { propertyId: mkfData.IDS.URL } },
+        { options: { propertyId: mkfData.IDS.VERSION } },
+        //{ options: { propertyId: mkfData.IDS.COLOR_PREVIEW } },
+    ];
+
     _Init() {
-
         super._Init();
-
-        this._familyCtrls = [];
-        this._familyidList = [
-            mkfData.IDS.FAMILY,
-            mkfData.IDS.METADATA,
-            mkfData.IDS.COPYRIGHT,
-            mkfData.IDS.DESCRIPTION,
-            mkfData.IDS.COLOR_PREVIEW,
-            //mkfData.IDS.H_ADV_X, // use EM_UNITS
-            //mkfData.IDS.V_ADV_Y // use EM_UNITS
-        ];
-
+        this._builder.defaultControlClass = mkfWidgets.PropertyControl;
+        this._builder.defaultCSS = `control`;
     }
 
     _Style() {
         return nkm.style.Extends({
             ':host': {
                 'flex': '0 0 auto',
-                'min-width': '250px'
+                'min-width': '300px'
             },
             '.list': {
                 'display': 'flex',
@@ -48,62 +47,17 @@ class FamilyInspector extends nkm.datacontrols.ControlView {
 
     _Render() {
 
-        super._Render();
+
 
         this._body = ui.dom.El(`div`, { class: `list` }, this._host);
+        this._builder.host = this._body;
 
-
-        for (let i = 0; i < this._familyidList.length; i++) {
-            let ctrl = this.Add(mkfWidgets.PropertyControl, `control`, this._body);
-            ctrl.Setup(this._familyidList[i]);
-            this._familyCtrls.push(ctrl);
-        }
-
-
-        this._controls = ui.dom.El("div", { class: 'controls' }, this._body);
-
-        this._sizeSlider = this.Add(uilib.inputs.SliderOnly, `control slider`, this._controls);
-        this._sizeSlider.options = {
-            label: `Preview size`,
-            min: 50, max: 250, step: 1, currentValue: 100,
-            size: ui.FLAGS.SIZE_XXS,
-            onSubmit: { fn: this._Bind(this._OnPreviewSizeChanged) }
-        };
-
-        this._LRatioSlider = this.Add(uilib.inputs.SliderOnly, `control slider`, this._controls);
-        this._LRatioSlider.options = {
-            label: `L Ratio`,
-            min: 1, max: 3, step: 1, currentValue: 2,
-            size: ui.FLAGS.SIZE_XXS,
-            onSubmit: { fn: this._Bind(this._OnRatioSizeChanged) }
-        };
-        this._RRatioSlider = this.Add(uilib.inputs.SliderOnly, `control slider`, this._controls);
-        this._RRatioSlider.options = {
-            label: `R Ratio`,
-            min: 1, max: 3, step: 1, currentValue: 1,
-            size: ui.FLAGS.SIZE_XXS,
-            onSubmit: { fn: this._Bind(this._OnRatioSizeChanged) }
-        };
+        super._Render();
 
         // Preview align mode (left/center/right)
 
         // ...
 
-    }
-
-    set editor(p_editor) {
-        this._editor = p_editor;
-        if (!p_editor) { return; }
-        this._OnPreviewSizeChanged();
-        this._OnRatioSizeChanged();
-    }
-
-    _OnPreviewSizeChanged() {
-        this._editor.style.setProperty(`--preview-size`, `${this._sizeSlider._handler.currentValue}px`);
-    }
-
-    _OnRatioSizeChanged() {
-        this._editor.style.setProperty(`--preview-ratio`, `${this._LRatioSlider._handler.currentValue}/${this._RRatioSlider._handler.currentValue}`);
     }
 
     //#region Family properties
@@ -113,19 +67,10 @@ class FamilyInspector extends nkm.datacontrols.ControlView {
         return p_data;
     }
 
-    _OnDataChanged(p_oldData) {
-        super._OnDataChanged(p_oldData);
-        if (this._data) {
-            for (let i = 0; i < this._familyCtrls.length; i++) {
-                this._familyCtrls[i].Set(this._data);
-            }
-        }
-    }
-
     //#endregion
 
 
 }
 
 module.exports = FamilyInspector;
-ui.Register(`mkf-glyph-explorer`, FamilyInspector);
+ui.Register(`mkf-family-explorer`, FamilyInspector);

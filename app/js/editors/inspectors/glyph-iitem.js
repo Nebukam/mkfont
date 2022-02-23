@@ -8,21 +8,23 @@ const operations = require(`../../operations/index`);
 const mkfData = require(`../../data`);
 const mkfWidgets = require(`../../widgets`);
 
-class GlyphVariantInspectorItem extends nkm.ui.Widget {
+class GlyphVariantInspectorItem extends nkm.datacontrols.ControlWidget {
     constructor() { super(); }
+
+    static __controls = [
+        { options:{ propertyId:mkfData.IDS.ID } },
+        { options:{ propertyId:mkfData.IDS.WIDTH } },
+        { options:{ propertyId:mkfData.IDS.HEIGHT } }
+    ];
 
     _Init() {
         super._Init();
         this._svgPaste = operations.commands.ClipboardReadSVG;
-        this._ctrls = [];
-        this._idList = [
-            mkfData.IDS.ID,
-            mkfData.IDS.H_ADV_X,
-            mkfData.IDS.V_ADV_Y
-        ];
-    }
+        
+        this._builder.defaultControlClass = mkfWidgets.PropertyControl;
+        this._builder.defaultCSS = `control`;
 
-    get editor() { return nkm.datacontrols.FindEditor(this); }
+    }
 
     _Style() {
         return nkm.style.Extends({
@@ -38,7 +40,7 @@ class GlyphVariantInspectorItem extends nkm.ui.Widget {
                 'padding': '10px',
                 'background-color': 'rgba(0,0,0,0.5)',
                 'border-radius': '5px',
-                'margin-bottom':'10px'
+                'margin-bottom': '10px'
             },
             '.renderer': {
                 'position': 'relative',
@@ -53,25 +55,9 @@ class GlyphVariantInspectorItem extends nkm.ui.Widget {
     }
 
     _Render() {
-        super._Render();
         this._previewBox = ui.dom.El(`div`, { class: `preview` }, this._host);
         this._svgRenderer = this.Add(mkfWidgets.GlyphRenderer, `renderer`, this._previewBox);
-
-        for (let i = 0; i < this._idList.length; i++) {
-            let ctrl = this.Add(mkfWidgets.PropertyControl, `control`);
-            ctrl.Setup(this._idList[i]);
-            this._ctrls.push(ctrl);
-        }
-
-    }
-
-    _OnDataChanged(p_oldData) {
-        super._OnDataChanged(p_oldData);
-        if (!this._data) { return; }
-        let subFamily = this._data.subFamily;
-        for (let i = 0; i < this._ctrls.length; i++) {
-            this._ctrls[i].Set(this._data, subFamily);
-        }
+        super._Render();
     }
 
     _OnDataUpdated(p_data) {

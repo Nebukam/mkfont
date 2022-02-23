@@ -11,29 +11,42 @@ const mkfOperations = require(`../../operations`);
 
 const GlyphVariantInspector = require(`./glyph-iitem`);
 
-class GlyphInspector extends nkm.datacontrols.ControlView {
+class SubFamilyInspector extends nkm.datacontrols.ControlView {
     constructor() { super(); }
+
+    static __controls = [
+        { options:{ propertyId:mkfData.IDS.FONT_STYLE } },
+        { options:{ propertyId:mkfData.IDS.WEIGHT_CLASS } },
+        { options:{ propertyId:mkfData.IDS.EM_UNITS } },
+        { options:{ propertyId:mkfData.IDS.ASCENT } },
+        { options:{ propertyId:mkfData.IDS.DESCENT } },
+        //{ options:{ propertyId:mkfData.IDS.CAP_HEIGHT } },
+        //{ options:{ propertyId:mkfData.IDS.X_HEIGHT } },
+        { options:{ propertyId:mkfData.IDS.WIDTH } },
+        { options:{ propertyId:mkfData.IDS.HEIGHT } },
+        //{ options:{ propertyId:mkfData.IDS.UNDERLINE_POSITION } },
+        //{ options:{ propertyId:mkfData.IDS.UNDERLINE_THICKNESS } },
+        //{ options:{ propertyId:mkfData.IDS.H_ORIGIN_X } },
+        //{ options:{ propertyId:mkfData.IDS.H_ORIGIN_Y } },
+        //{ options:{ propertyId:mkfData.IDS.V_ORIGIN_X } },
+        //{ options:{ propertyId:mkfData.IDS.V_ORIGIN_Y } },
+    ];
 
     _Init() {
         super._Init();
-        this._svgPaste = operations.commands.ClipboardReadSVG;
 
-        this._subFamilyCtrls = [];
-        this._subFamilyidList = [
-            { id: mkfData.IDS.ID },
-            { id: mkfData.IDS.EM_UNITS },
-            //{ id: mkfData.IDS.H_ADV_X },
-            //{ id: mkfData.IDS.V_ADV_Y },
-            { id: mkfData.IDS.ASCENT, fn: this._Bind(this._SetAscent) },
-            { id: mkfData.IDS.DESCENT },
-            { id: mkfData.IDS.CAP_HEIGHT },
-            { id: mkfData.IDS.X_HEIGHT },
-        ];
+        this._svgPaste = operations.commands.ClipboardReadSVG;
+        //this._builder.preProcessDataFn = this._Bind(this._PreprocessControlData);
+        //TODO ::: IDS.ASCENT => this._Bind(this._SetAscent)
 
         this._dataObserver
             .Hook(mkfData.SIGNAL.SUBFAMILY_CHANGED, this._OnSubFamilyChanged, this);
 
         this._subFamily = null;
+
+        this._builder.defaultControlClass = mkfWidgets.PropertyControl;
+        this._builder.defaultCSS = `control`;
+
 
     }
 
@@ -42,6 +55,7 @@ class GlyphInspector extends nkm.datacontrols.ControlView {
             ':host': {
                 'display': 'flex',
                 'flex-flow': 'column nowrap',
+                'min-width': '300px'
             },
             '.body': {
                 'display': 'flex',
@@ -62,22 +76,9 @@ class GlyphInspector extends nkm.datacontrols.ControlView {
     }
 
     _Render() {
-        super._Render();
-
         this._body = ui.dom.El(`div`, { class: `body` }, this._host);
-
-        let ctrl;
-
-        for (let i = 0; i < this._subFamilyidList.length; i++) {
-            ctrl = this.Add(mkfWidgets.PropertyControl, `control`, this._body);
-            let infos = this._subFamilyidList[i];
-            ctrl.Setup(infos.id);
-            ctrl._onSubmitFn = infos.fn;
-            this._subFamilyCtrls.push(ctrl);
-        }
-
-        this._pangramRenderer = this.Add(mkfWidgets.PangramRenderer, 'pangram');
-
+        this._builder.host = this._body;
+        super._Render();
     }
 
     _PreprocessData(p_data) {
@@ -96,21 +97,14 @@ class GlyphInspector extends nkm.datacontrols.ControlView {
 
     }
 
-    _OnDataUpdated(p_data) {
-        super._OnDataUpdated(p_data);
-    }
-
     _OnSubFamilyChanged(p_selectedSubFamily) {
+
         this._subFamily = p_selectedSubFamily;
 
         if (!p_selectedSubFamily) { return; }
-        
-        this._pangramRenderer.data = this._subFamily;
 
-        let def = this._data.defaultSubFamily;
-        for (let i = 0; i < this._subFamilyCtrls.length; i++) {
-            this._subFamilyCtrls[i].Set(p_selectedSubFamily, def);
-        }
+        this._builder.data = p_selectedSubFamily;
+
     }
 
 
@@ -136,4 +130,4 @@ class GlyphInspector extends nkm.datacontrols.ControlView {
 
 }
 
-module.exports = GlyphInspector;
+module.exports = SubFamilyInspector;

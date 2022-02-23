@@ -5,6 +5,7 @@ const dom = nkm.ui.dom;
 const u = nkm.utils;
 const io = nkm.io;
 
+const SimpleDataEx = require(`./simple-data-ex`);
 const SIGNAL = require(`./signal`);
 const IDS = require(`./ids`);
 
@@ -20,7 +21,7 @@ const svgFontString =
 const svgFontRef = domparser.parseFromString(svgFontString, `image/svg+xml`).getElementsByTagName(`font`)[0];
 
 
-class SubFamilyDataBlock extends nkm.data.SimpleDataBlock {
+class SubFamilyDataBlock extends SimpleDataEx {
 
     constructor() { super(); }
 
@@ -33,78 +34,104 @@ class SubFamilyDataBlock extends nkm.data.SimpleDataBlock {
         let defaultEm = 1000;
 
         this._values = {
-            [IDS.ID]: { value: `fontello` },
-            [IDS.VARIANT]: { value: `Bold` },
-            [IDS.FAMILY]: { value: 'fontello' },
-            [IDS.FONT_WEIGHT]: { value: `bold` },
-            [IDS.FONT_STYLE]: { value: `normal` },
             [IDS.EM_UNITS]: { value: defaultEm },
-            [IDS.CAP_HEIGHT]: { value: defaultEm * 0.8 },
-            [IDS.X_HEIGHT]: { value: defaultEm * 0.5 },
+            [IDS.WEIGHT_CLASS]: { value: IDS.weightList.At(3) },
+            [IDS.FONT_STYLE]: { value: null },
+            [IDS.CAP_HEIGHT]: { value: null },
+            [IDS.X_HEIGHT]: { value: null },
             [IDS.ASCENT]: { value: defaultEm * 0.8 },
             [IDS.DESCENT]: { value: defaultEm * -0.25 },
-            [IDS.H_ORIGIN_X]: { value: null },
-            [IDS.H_ORIGIN_Y]: { value: null },
-            [IDS.H_ADV_X]: { value: null }, // use EM_UNITS at export time
-            [IDS.V_ORIGIN_X]: { value: null },
-            [IDS.V_ORIGIN_Y]: { value: null },
-            [IDS.V_ADV_Y]: { value: null },
-            [IDS.ALPHABETIC]: { value: 0 },
-            [IDS.MATHEMATICAL]: { value: 350 },
-            [IDS.IDEOGRAPHIC]: { value: 400 },
-            [IDS.HANGING]: { value: 500 },
+            //[IDS.H_ORIGIN_X]: { value: 0 },
+            //[IDS.H_ORIGIN_Y]: { value: 0 },
+            [IDS.WIDTH]: { value: null },
+            //[IDS.V_ORIGIN_X]: { value: 0 },
+            //[IDS.V_ORIGIN_Y]: { value: 0 },
+            [IDS.HEIGHT]: { value: null },
+            [IDS.UNDERLINE_POSITION]: { value: null },
+            [IDS.UNDERLINE_THICKNESS]: { value: null },
+            //[IDS.HANGING]: { value: 500 },
+
             [IDS.SIZE]: { value: null },
             [IDS.DISPLAY_SIZE]: { value: null },
             [IDS.DISPLAY_OFFSET]: { value: null }
         };
 
         this._family = null;
-        this._isDefault = false;
         this._ttfBytes = null;
 
-        this._svgString = ``;
-        this._svgURI = null;
-        
-        this._xml = svgFontRef.cloneNode(true);
-        this._xmlFontFace = this._xml.getElementsByTagName(`font-face`)[0];
-        this._xmlFontFaceSrc = this._xml.getElementsByTagName(`font-face-src`)[0];
-        this._xmlFontFaceSrcName = this._xml.getElementsByTagName(`font-face-src-name`)[0];
-        this._xmlMissingGlyph = this._xml.getElementsByTagName(`missing-glyph`)[0];
+        this._catalogItem = null;
 
     }
+
+    _BuildFontObject() { return svgFontRef.cloneNode(true); }
+
+    get resolutionFallbacks() { return [this._family.defaultSubFamily, this._family]; }
 
     get family() { return this._family; }
     set family(p_value) {
+
+        if (this._family == p_value) { return; }
+
+        let oldFamily = this._family;
         this._family = p_value;
-        this._UpdateFontObject();
+
+        if (oldFamily) { oldFamily.Unwatch(nkm.data.SIGNAL.VALUE_CHANGED, this._OnFamilyValueChanged, this); }
+        if (this._family) { this._family.Watch(nkm.data.SIGNAL.VALUE_CHANGED, this._OnFamilyValueChanged, this); }
+
     }
 
-    get ttfBytes() { return this._ttfBytes; }
-    set ttfBytes(p_value) {
-        this._ttfBytes = p_value;
-        this._Broadcast(SIGNAL.TTF_UPDATED, this, this._ttfBytes);
+    _OnFamilyValueChanged(p_data, p_id, p_valueObj) {
+        //this._scheduledUpdate.Schedule();
     }
 
-    get xml() { return this._xml; }
+    Resolve(p_id) {
 
-    _value(p_id) {
-        let result = this.Get(p_id);
-        if (!result) { result = this._isDefault ? null : this._family.defaultSubFamily.Get(p_id); }
-        return result;
+        let localValue = this.Get(p_id);
+
+        if (localValue == null) {
+
+            switch (p_id) {
+                case IDS.CAP_HEIGHT: return this.Get(IDS.ASCENT); break;
+                case IDS.X_HEIGHT: return this.Get(IDS.ASCENT) * 0.75; break;
+                case IDS.UNDERLINE_POSITION: return this.Get(IDS.DESCENT) * 1.2; break;
+                case IDS.UNDERLINE_THICKNESS: return this.Get(IDS.EM_UNITS) * 0.1; break;
+                case IDS.WIDTH: return this.Get(IDS.EM_UNITS); break;
+                case IDS.HEIGHT: return this.Get(IDS.EM_UNITS); break;
+                default: return super.Resolve(p_id); break;
+            }
+
+        }
+
+        return super.Resolve(p_id);
     }
 
     _UpdateFontObject() {
 
-        dom.SAtt(this._xml, IDS.ID, this._value(IDS.ID), true);
-        dom.SAtt(this._xml, IDS.H_ADV_X, this._value(IDS.EM_UNITS), true);
-        dom.SAtt(this._xml, IDS.V_ADV_Y, this._value(IDS.EM_UNITS), true);
-        dom.SAtt(this._xmlFontFaceSrcName, `name`, `${this._value(IDS.FAMILY)} ${this._value(IDS.VARIANT)}`, true);
+        let
+            font = this._fontObject,
 
-        dom.SAtt(this._xmlFontFace, this._values, `value`, true);
+            fontFace = font.getElementsByTagName(`font-face`)[0],
+            fontFaceSrc = font.getElementsByTagName(`font-face-src`)[0],
+            fontFaceSrcName = font.getElementsByTagName(`font-face-src-name`)[0],
+            missingGlyph = font.getElementsByTagName(`missing-glyph`)[0],
+
+            fullName = `${this.Resolve(IDS.FAMILY)}-${this.Resolve(IDS.FONT_STYLE)}`;
+
+        dom.SAtt(font, IDS.ID, fullName, true);
+        dom.SAtt(font, IDS.WIDTH, this.Resolve(IDS.WIDTH), true);
+        dom.SAtt(font, IDS.HEIGHT, this.Resolve(IDS.HEIGHT), true);
+
+        dom.SAtt(fontFaceSrcName, `name`, fullName, true);
+
+        dom.SAtt(fontFace, this._values, `value`, true);
+
+        dom.SAtt(fontFace, IDS.WEIGHT_CLASS, this.Get(IDS.WEIGHT_CLASS).GetOption(`value`), true);
+
+        if(this._catalogItem){ this._catalogItem.name = fullName; }
 
     }
 
-    _UpdateDisplayValues(){
+    _UpdateDisplayValues() {
 
         let
             em = this.Get(IDS.EM_UNITS) * 0.8,
@@ -119,17 +146,10 @@ class SubFamilyDataBlock extends nkm.data.SimpleDataBlock {
 
     }
 
-    CommitUpdate(){
-        this._UpdateFontObject();
+    CommitUpdate() {
         this._UpdateDisplayValues();
         super.CommitUpdate();
     }
-
-    _CleanUp() {
-        this.parentGlyph = null;
-        super._CleanUp();
-    }
-
 
 }
 

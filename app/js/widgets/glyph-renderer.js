@@ -99,17 +99,17 @@ class GlyphRenderer extends ui.DisplayObject {
         if (!p_glyphVariant) {
             this._glyphPath.setAttribute(`d`, ``);
             this._svgGrid.setAttribute(`viewBox`, `0 0 0 0`);
-            return;
+            return false;
         }
 
         let
             subFamily = p_glyphVariant.subFamily,
-            o = subFamily.Get(IDS.DISPLAY_OFFSET),
-            s = subFamily.Get(IDS.DISPLAY_SIZE),
-            w = p_glyphVariant.Get(IDS.H_ADV_X, 0, true),
+            o = subFamily.Resolve(IDS.DISPLAY_OFFSET),
+            s = subFamily.Resolve(IDS.DISPLAY_SIZE),
+            w = p_glyphVariant.Resolve(IDS.WIDTH, 0, true),
             ox = o,//-((s-w) * 0.5),
-            asc = subFamily.Get(IDS.ASCENT),
-            desc = subFamily.Get(IDS.ASCENT) - subFamily.Get(IDS.DESCENT);
+            asc = subFamily.Resolve(IDS.ASCENT),
+            desc = subFamily.Resolve(IDS.ASCENT) - subFamily.Resolve(IDS.DESCENT);
 
         this._infos = {
             o:o,
@@ -129,9 +129,13 @@ class GlyphRenderer extends ui.DisplayObject {
 
         this.Render();
 
-        this._glyphPath.setAttribute(`d`, p_glyphVariant.Get(IDS.PATH));
+        let path = p_glyphVariant.Get(IDS.PATH);
+
+        this._glyphPath.setAttribute(`d`, path);
 
         // see for in-renderer editing http://phrogz.net/svg/rotate-to-point-at-cursor.svg
+
+        return path ? true : false;
 
     }
 

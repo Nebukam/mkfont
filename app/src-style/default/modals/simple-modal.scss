@@ -1,0 +1,15 @@
+/*-------------------------------*/
+/*<!---- @nkmjs/ui-library ----!>*/
+/*-------------------------------*/
+
+@import '../_variables';
+@import '../_mixins';
+@import '../_functions';
+@import '../_constants';
+
+$br: 5px;
+
+:host {
+    border-radius: $br;
+    background-color: var(--default-level-1-color);
+}

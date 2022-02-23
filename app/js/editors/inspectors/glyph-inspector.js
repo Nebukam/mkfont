@@ -8,6 +8,8 @@ const operations = require(`../../operations/index`);
 const mkfData = require(`../../data`);
 const mkfWidgets = require(`../../widgets`);
 
+const Unicodes = require(`../../unicodes`);
+
 const GlyphVariantInspector = require(`./glyph-iitem`);
 
 class GlyphInspector extends nkm.datacontrols.ControlView {
@@ -19,8 +21,8 @@ class GlyphInspector extends nkm.datacontrols.ControlView {
         this._ctrls = [];
         this._idList = [
             mkfData.IDS.GLYPH_NAME,
-            mkfData.IDS.H_ADV_X,
-            mkfData.IDS.V_ADV_Y
+            mkfData.IDS.WIDTH,
+            mkfData.IDS.HEIGHT
         ];
         this._variantCtrls = new nkm.collections.List();
         this._variantMap = new nkm.collections.Dictionary();
@@ -42,8 +44,8 @@ class GlyphInspector extends nkm.datacontrols.ControlView {
             },
             '.unicode-preview': {
                 'text-align': 'center',
-                'margin': '0',
-                'font-size': 'large',
+                //'margin': '0',
+                //'font-size': 'large',
                 'user-select': 'text'
             }
         }, super._Style());
@@ -70,8 +72,13 @@ class GlyphInspector extends nkm.datacontrols.ControlView {
 
     _OnDataUpdated(p_data) {
         super._OnDataUpdated(p_data);
-        let glyphData = p_data.data;
-        this._unicode.Set(glyphData.Get(mkfData.IDS.UNICODE));
+        let glyphData = p_data.data,
+            unc = glyphData.Get(mkfData.IDS.UNICODE),
+            uncDesc = unc in Unicodes.instance._labels
+                ? Unicodes.instance._labels[unc]
+                : unc;
+
+        this._unicode.Set(uncDesc);
     }
 
     _OnVariantAdded(p_glyph, p_glyphVariant) {

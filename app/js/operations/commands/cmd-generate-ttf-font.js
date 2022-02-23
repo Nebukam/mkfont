@@ -12,7 +12,7 @@ const mkfData = require(`../../data`);
 const ActionSetSVG = require(`../actions/action-set-svg`);
 const SVG = require(`../svg-operations`);
 
-class CmdGenerateSVGFont extends actions.Command {
+class CmdGenerateTTFFont extends actions.Command {
     constructor() { super(); }
 
     _Init() {
@@ -32,14 +32,22 @@ class CmdGenerateSVGFont extends actions.Command {
 
     _InternalExecute() {
 
-        let family = this._context,
-            ttf = svg2ttf(family.defaultSubFamily.xml.outerHTML, {});
-        fs.writeFileSync('./assets/myfont.ttf', Buffer.from(ttf.buffer));
+        let
+            family = this._context,
+            bytes = SVG.TTFFontFromSubFamily(family.defaultSubFamily);
+            
+        try{
+        fs.writeFileSync('./assets/myfont.ttf', Buffer.from(bytes));
+        }catch(e){
+            console.log(e);
+        }
 
         //console.log(svgFont);
+
+        this._Success();
 
     }
 
 }
 
-module.exports = CmdGenerateSVGFont;
+module.exports = CmdGenerateTTFFont;

@@ -26,7 +26,11 @@ class GlyphSlotItem extends ui.WidgetItem {
         this.focusArea = this;
     }
 
-    get editor() { return nkm.datacontrols.FindEditor(this); }
+    get editor() {
+        if (this._editor) { return this._editor; }
+        return nkm.datacontrols.FindEditor(this);
+    }
+    set editor(p_value) { this._editor = p_value; }
 
     _Style() {
         return nkm.style.Extends({
@@ -42,7 +46,7 @@ class GlyphSlotItem extends ui.WidgetItem {
                 'border-radius': '5px',
                 'background-color': 'rgba(0,0,0,0.25)',
                 '--preview-size-x': 'var(--preview-size)',
-                'align-items': 'center',                
+                'align-items': 'center',
                 'overflow': 'clip',
             },
             ':host(.selected)': {
@@ -59,8 +63,8 @@ class GlyphSlotItem extends ui.WidgetItem {
                 'min-width': 'var(--preview-size)',
                 'display': 'flex',
                 'flex-flow': 'row nowrap',
-                'justify-content': 'center',                
-                'max-height':'calc( var(--preview-size) * 1.8 )',
+                'justify-content': 'center',
+                'max-height': 'calc( var(--preview-size) * 1.8 )',
                 'overflow-y': 'clip'
             },
             '.box': {
@@ -118,20 +122,25 @@ class GlyphSlotItem extends ui.WidgetItem {
         this._glyphPlaceholder.Set(unicode);
         this._label.Set(`<pre>${unicode}</pre>`);
 
-        if (glyphData.Get(mkfData.IDS.PATH)) {
-            this._glyphPlaceholder._element.style.display = `none`;
-        } else {
-            delete this._glyphPlaceholder._element.style.display;
-        }
-
         this._UpdateGlyphPreview();
 
     }
 
     _UpdateGlyphPreview(p_variant) {
         let glyphData = this._data ? this._data.data : null;
-        if (!glyphData) { this._glyphRender.Set(null); }
-        this._glyphRender.Set(glyphData.GetVariant(glyphData.family.selectedSubFamily));
+
+        if (!glyphData) {
+            this._glyphRender.Set(null);
+            return;
+        }
+
+        let glyphVariant = glyphData.GetVariant(glyphData.family.selectedSubFamily);
+
+        if (this._glyphRender.Set(glyphVariant)) {
+            this._glyphPlaceholder._element.style.display = `none`;
+        } else {
+            delete this._glyphPlaceholder._element.style.display;
+        }
     }
 
     _ToClipboard() {

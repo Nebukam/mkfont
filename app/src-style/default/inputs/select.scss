@@ -1,0 +1,66 @@
+/*-------------------------------*/
+/*<!---- @nkmjs/ui-library ----!>*/
+/*-------------------------------*/
+
+@import '../_variables';
+@import '../_mixins';
+@import '../_constants';
+
+:host::after{
+
+    content:"";
+    position: absolute;
+    width: var(--size);
+    height: 100%;
+    right: 0;
+
+    background: url(../assets/icons/icon_down-short.svg) no-repeat;
+    background-size: 50% 50%;
+    background-position: center;
+
+    pointer-events: none;
+
+}
+
+.field{
+    padding-right: var(--size);
+    height:calc(100% - 10px);
+}
+
+select {
+    height: 100%;
+}
+
+.field-option {
+
+    font-family: Regular, sans-serif;
+    border-radius: 3px;
+    //padding:5px;
+    margin:0;
+
+    outline: none;
+
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none; 
+
+    background-color: var(--col-active-contrast);
+    color: rgba(200,200,200,1);
+ 
+    &:checked{
+        //font-weight: bolder;
+        background-color: var(--col-active-contrast);
+        color: var(--col-active);
+    }
+
+    &:hover {
+        background-color: var(--col-active);
+        color: var(--col-active-contrast);
+    }
+
+    &:active{
+        background-color: var(--col-active);
+        color: var(--col-active-contrast);
+    }
+
+}

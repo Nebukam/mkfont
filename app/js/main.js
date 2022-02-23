@@ -13,8 +13,6 @@ const mkfOperations = require(`./operations`);
 
 const Unicodes = require(`./unicodes`);
 const fs = require('fs');
-const svgpath = require('svgpath');
-const ttf2svg = require('ttf2svg');
 
 com.BINDINGS.Expand(require(`./bindings`)); //!important
 
@@ -95,7 +93,7 @@ class MKFont extends nkm.app.AppBase {
 
         //this._ReadTTF();
 
-
+        let test = Unicodes.instance._ranges;
         /*
                 let checkerSVG = fs.readFileSync(`./assets/checker.svg`); //D:/GIT/mkfont
                 for (let i = 0; i < 255; i++) {
@@ -105,8 +103,8 @@ class MKFont extends nkm.app.AppBase {
 
         //        console.log(this._tempFontData);
 
-        let fName = `Basement-Medium`;// `Basement-Medium`;// `Meticula`; //`Inter-Regular`;
-        this._tempFontData = mkfOperations.SVG.FamilyFromSVGFont(ttf2svg(fs.readFileSync(`./assets/${fName}.ttf`)));
+        let fName = `Meticula`;// `Basement-Medium`;// `Meticula`; //`Inter-Regular`;
+        this._tempFontData = mkfOperations.SVG.FamilyFromTTF(fs.readFileSync(`./assets/${fName}.ttf`));
 
         mkfOperations.commands.MakeTTFFont.Enable();
 
@@ -148,6 +146,7 @@ class MKFont extends nkm.app.AppBase {
     }
 
     _ReadTTF() {
+        
         let ttf = fs.readFileSync('./assets/Inter-Regular.ttf');
 
         var svgContent = ttf2svg(ttf);

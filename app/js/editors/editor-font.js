@@ -11,7 +11,7 @@ class FontEditor extends nkm.uiworkspace.editors.EditorEx {
 
     static __default_viewportClass = mkfViews.GlyphGroupViewport;
     static __default_headerClass = require(`./editor-font-header`);
-    //static __default_footerClass = require(`./editor-font-footer`);
+    static __default_footerClass = require(`./editor-font-footer`);
 
     _Init() {
         super._Init();
@@ -28,42 +28,13 @@ class FontEditor extends nkm.uiworkspace.editors.EditorEx {
 
     }
 
-    _InitShelfCatalog(p_configList) {
-
-        p_configList.push(
-            {
-                [ui.IDS.NAME]: `View`,
-                [ui.IDS.ICON]: `visible`,
-                [ui.IDS.VIEW_CLASS]: mkfInspectors.Family,
-                assign: `_glyphExplorer`
-            },
-            {
-                [ui.IDS.NAME]: `Family`,
-                [ui.IDS.ICON]: `view-grid`,
-                [ui.IDS.VIEW_CLASS]: mkfInspectors.SubFamily,
-                assign: `_familyInspector`
-            }
-        );
-
-        super._InitShelfCatalog(p_configList);
-
-    }
-
     set fontCatalog(p_catalog) {
         this._fontCatalog = p_catalog;
         this._viewport.catalog = p_catalog;
     }
-
     get fontCatalog() { return this._fontCatalog; }
 
-    _PostInit() {
-        super._PostInit();
-        this._glyphExplorer.editor = this;
-
-        //this._shelf.order = -1;
-        //this._shelf.orientation = ui.FLAGS.VERTICAL;
-        //this._shelf.navPlacement = ui.FLAGS.LEFT;
-    }
+    
 
     _Style() {
         return nkm.style.Extends({
@@ -89,14 +60,11 @@ class FontEditor extends nkm.uiworkspace.editors.EditorEx {
     
     _OnDataChanged(p_oldData){
         super._OnDataChanged(p_oldData);
-        this.selectedSubFamily = this._data ? this._data.defaultSubFamily : null; // will self-update
-        this._glyphExplorer.data = this._data;
-        this._familyInspector.data = this._data;
+        this._selectedSubFamily = this._data ? this._data.defaultSubFamily : null; // will self-update
     }
 
     _OnDataUpdated(p_data){
         super._OnDataUpdated(p_data);
-        console.log(p_data);
         this.style.setProperty(`--glyph-color`, p_data.Get(mkfData.IDS.COLOR_PREVIEW));
     }
 

@@ -19,6 +19,9 @@ class PangramRenderer extends ui.Widget {
         this._previewText = defaultPangram;
         this._tempFont = null;
 
+        this._Bind(this.Draw);
+        this._scheduledDraw = nkm.com.DelayedCall(this.Draw, 0.5);
+
     }
 
     _Style() {
@@ -26,10 +29,11 @@ class PangramRenderer extends ui.Widget {
             ':host': {
                 'position': 'relative',
                 'display': 'flex',
-                'flex-flow': 'column nowrap'
+                'flex-flow': 'column nowrap',
+                'overflow':'clip'
             },
             '.pangram': {
-                'font-family': `'fontello'`,
+                'font-family': `'tempFont'`,
                 'text-align': 'center',
                 'font-size': '3em'
             }
@@ -39,9 +43,8 @@ class PangramRenderer extends ui.Widget {
     _Render() {
         super._Render();
         this._fontEmbed = ui.dom.El(`style`, {}, this._host);
-        this._pangramText = new ui.manipulators.Text(ui.dom.El(`span`, { class: `pangram` }, this._host));
+        this._pangramText = new ui.manipulators.Text(ui.dom.El(`div`, { class: `pangram` }, this._host));
         this.text = null;
-
     }
 
     set text(p_value) {
@@ -51,17 +54,21 @@ class PangramRenderer extends ui.Widget {
     }
 
     _OnDataUpdated(p_data) {
-        
         super._OnDataUpdated(p_data);
+        this._scheduledDraw.Schedule();
+    }
 
-        // Bake font
-        console.log(p_data.xml);
-        let ttf = svg2ttf(p_data.xml.outerHTML, {});
+    Draw() {
 
-        let base64 =  u.tils.BytesToBase64(ttf.buffer);
+        let subFamily = this._data;
+        let ttf = svg2ttf(subFamily.fontObject.outerHTML, {});
 
-        if(this._tempFont){document.fonts.delete(this._tempFont);}
-        this._tempFont = new FontFace('fontello', `url(data:application/octet-stream;charset=utf-8;base64,${base64}) format('truetype')`);
+        //console.log(subFamily.fontObject.outerHTML);
+
+        let base64 = u.tils.BytesToBase64(ttf.buffer);
+
+        if (this._tempFont) { document.fonts.delete(this._tempFont); }
+        this._tempFont = new FontFace('tempFont', `url(data:application/octet-stream;charset=utf-8;base64,${base64}) format('truetype')`);
         document.fonts.add(this._tempFont);
 
     }
@@ -74,4 +81,4 @@ class PangramRenderer extends ui.Widget {
 }
 
 module.exports = PangramRenderer;
-ui.Register(`mkfont-font-group`, PangramRenderer);
+ui.Register(`mkfont-pangram`, PangramRenderer);

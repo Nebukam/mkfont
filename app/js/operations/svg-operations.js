@@ -1,17 +1,27 @@
-// Read svg from clipboard and trigger "action-set-svg"
 const nkm = require(`@nkmjs/core`);
+const mkfData = require(`../data`);
+const IDS = mkfData.IDS;
+
 const { optimize } = require('svgo');
+const ttf2svg = require('ttf2svg');
+const svg2ttf = require('svg2ttf');
 const svgpath = require('svgpath');
 
 const domparser = new DOMParser();
 
-const mkfData = require(`../data`);
-const IDS = mkfData.IDS;
-
 const glyphStyle = `fill:var(--glyph-color); stroke:none;`;
+const svgFontString =
+    `<font>` +
+    `   <font-face>` +
+    `       <font-face-src><font-face-src-name></font-face-src-name></font-face-src>` +
+    `   </font-face>` +
+    `   <missing-glyph></missing-glyph>` +
+    `</font>`;
 
 class SVGOperations {
     constructor() { }
+
+    //#region raw svg string processing
 
     static ProcessString(p_value, p_params) {
 
@@ -127,14 +137,34 @@ class SVGOperations {
         for (let i = 0; i < children.length; i++) { this._rAtts(children[i], p_atts); }
     }
 
-    static FamilyFromSVGFont(p_svgString) {
+    //#endregion
 
-        //console.log(p_svgString);
+    //#region SVG Font processing
+
+    static SVGFontFromSubFamily(p_subFamily) {
+
+        let XML = svgFontRef.cloneNode(true),
+            FontFace = XML.getElementsByTagName(`font-face`)[0],
+            FontFaceSrc = XML.getElementsByTagName(`font-face-src`)[0],
+            FontFaceSrcName = XML.getElementsByTagName(`font-face-src-name`)[0],
+            MissingGlyph = XML.getElementsByTagName(`missing-glyph`)[0];
+
+        // Font ID = complete font name. Family + SubFamily Name
+
+    }
+
+    //#endregion
+
+    //#region TTF processing
+
+    static FamilyFromTTF(p_ttfBytes) {
 
         let
-            svgFont = domparser.parseFromString(p_svgString, `image/svg+xml`),
+            svgFont = domparser.parseFromString(ttf2svg(p_ttfBytes), `image/svg+xml`),
             fontFace = svgFont.getElementsByTagName(`font-face`)[0],
             glyphs = svgFont.getElementsByTagName(`glyph`);
+
+        //console.log(svgFont);
 
         let
             family = new mkfData.Family(),
@@ -152,8 +182,8 @@ class SVGOperations {
             em_units = this._sXMLAttNum(fontFace, IDS.EM_UNITS, subFamily, em_units);
         }
 
-        fontAdvx = subFamily.Set(IDS.H_ADV_X, em_units);
-        fontAdvy = subFamily.Set(IDS.V_ADV_Y, em_units);
+        fontAdvx = subFamily.Set(IDS.WIDTH, em_units);
+        fontAdvy = subFamily.Set(IDS.HEIGHT, em_units);
 
         let
             size = Math.max(em_units, ascent - descent),
@@ -169,14 +199,14 @@ class SVGOperations {
             let g = glyphs[i],
                 glyphUnicode = g.getAttribute(`unicode`),
                 glyphPath = g.getAttribute(`d`),
-                glyphAdvX = Number(g.getAttribute(IDS.H_ADV_X) || fontAdvx),
-                glyphAdvY = Number(g.getAttribute(IDS.V_ADV_Y) || fontAdvy);
+                glyphAdvX = Number(g.getAttribute(IDS.WIDTH) || fontAdvx),
+                glyphAdvY = Number(g.getAttribute(IDS.HEIGHT) || fontAdvy);
 
             let newGlyph = new mkfData.Glyph(),
                 defg = newGlyph._defaultGlyph;
 
-            if (glyphAdvX != fontAdvx) { defg.Set(IDS.H_ADV_X, glyphAdvX); }
-            //if (glyphAdvY != fontAdvy) { defg.Set(IDS.V_ADV_Y, glyphAdvY); }
+            if (glyphAdvX != fontAdvx) { defg.Set(IDS.WIDTH, glyphAdvX); }
+            //if (glyphAdvY != fontAdvy) { defg.Set(IDS.HEIGHT, glyphAdvY); }
 
             // Flip & translate glyph
             glyphPath = svgpath(glyphPath)
@@ -184,15 +214,15 @@ class SVGOperations {
                 .translate(0, ascent)
                 .toString();
 
-            newGlyph.BatchSet({
-                [IDS.UNICODE]:glyphUnicode,
-                [IDS.DECIMAL]:glyphUnicode.length == 1 ? glyphUnicode.charCodeAt(0) : -1,
-                [IDS.PATH]:glyphPath
-            });
-
-            //newGlyph.svg = domparser.parseFromString(gStr, `image/svg+xml`).getElementsByTagName(`svg`)[0];
 
             family.AddGlyph(newGlyph);
+
+            newGlyph.BatchSet({
+                [IDS.UNICODE]: glyphUnicode,
+                [IDS.DECIMAL]: glyphUnicode.length == 1 ? glyphUnicode.charCodeAt(0) : -1
+            });
+
+            defg.Set(IDS.PATH, glyphPath);
 
         }
 
@@ -224,6 +254,26 @@ class SVGOperations {
         return value;
     }
 
+    static TTFFontFromSubFamily(p_subFamily) {
+
+        var VERSION_RE = /^(Version )?(\d+[.]\d+)$/i;
+
+        let options = {
+            familyname: p_subFamily.Resolve(IDS.FAMILY),
+            subfamilyname: p_subFamily.Resolve(IDS.FONT_STYLE),
+            copyright: p_subFamily.Resolve(IDS.COPYRIGHT) || ``,
+            description: p_subFamily.Resolve(IDS.DESCRIPTION) || ``,
+            url: p_subFamily.Resolve(IDS.URL) || ``,
+            version: `Version ${p_subFamily.Resolve(IDS.VERSION) || '1.0' }`
+        }
+
+        console.log(options);
+
+        let ttf = svg2ttf(p_subFamily.fontObject.outerHTML, options);
+        return ttf.buffer; // For file writing, do Buffer.from(ttf.buffer)
+    }
+
+    //#endregion
 
 
 }

@@ -7,7 +7,7 @@ const mkfData = require(`../data`);
 
 const __flag_inherited = `inherited`;
 
-class PropertyControl extends ui.Widget {
+class PropertyControl extends nkm.datacontrols.ControlWidget {
     constructor() { super(); }
 
     static __usePaintCallback = true;
@@ -24,6 +24,10 @@ class PropertyControl extends ui.Widget {
         this._flags.Add(this, __flag_inherited);
 
         this._onSubmitFn = null;
+        this._inherited = false;
+
+        this._optionsHandler
+            .Hook(`propertyId`);
 
     }
 
@@ -54,11 +58,15 @@ class PropertyControl extends ui.Widget {
                 'display': 'flex',
                 'flex-flow': 'row nowrap',
                 'align-items': 'center',
-
+                'max-width': '50%',
                 'flex': '1 1 50%'
             },
             '.label': {
-                'margin-left': '10px'
+                'margin-left': '10px',
+                
+                'text-overflow': 'ellipsis',
+                'white-space': 'nowrap',
+                'overflow': 'hidden',
             },
             '.label::after': {
                 'content': '"🛈"',
@@ -70,6 +78,9 @@ class PropertyControl extends ui.Widget {
             },
             '.input-field': {
                 'flex': '1 0 50%'
+            },
+            '.toggle':{
+                'margin-left':'-3px'
             }
         }, super._Style());
     }
@@ -78,8 +89,11 @@ class PropertyControl extends ui.Widget {
         super._Render();
         let labelCtnr = ui.dom.El(`div`, { class: `label-area` }, this._host);
         this._toggle = this.Add(inputs.Boolean, `toggle`, labelCtnr);
-        this._toggle.size = nkm.ui.FLAGS.SIZE_XS;
-        this._toggle.preventTabIndexing = true;
+        this._toggle.options = {
+            size: nkm.ui.FLAGS.SIZE_XS,
+            preventTabIndexing: true,
+            onSubmit: { fn: this._Bind(this._OnToggleSubmit) }
+        }
         this._label = new ui.manipulators.Text(ui.dom.El(`div`, { class: `label` }, labelCtnr), false, false);
     }
 
@@ -92,7 +106,7 @@ class PropertyControl extends ui.Widget {
         }
     }
 
-    Setup(p_id) {
+    set propertyId(p_id) {
 
         this._valueID = p_id;
         this._valueInfos = mkfData.IDS.GetInfos(p_id);
@@ -112,16 +126,11 @@ class PropertyControl extends ui.Widget {
 
         this._input = this.Add(this._valueInfos.inputType, `input-field`);
         this._input.options = {
-            size: nkm.ui.FLAGS.SIZE_XS,
+            size: nkm.ui.FLAGS.SIZE_S,
             onSubmit: { fn: this._OnValueSubmit },
             ...this._valueInfos.inputOptions
         }
 
-    }
-
-    Set(p_data, p_fallback = null) {
-        this._fallbackData = p_fallback;
-        this.data = p_data;
     }
 
     get localValue() {
@@ -129,15 +138,22 @@ class PropertyControl extends ui.Widget {
         return this._data.Get(this._valueID);
     }
 
-    get currentValue() {
+    get exportedValue() {
         if (!this._data) { return null; }
-        let localValue = this.localValue;
-        if (localValue == null) {
-            if (this._fallbackData) {
-                return this._fallbackData.Get(this._valueID);
-            }
+        return this._data.Resolve(this._valueID);
+    }
+
+    _OnDataUpdated(p_data) {
+        super._OnDataUpdated(p_data);
+
+        if (this._input) {
+            this._input.currentValue = this.exportedValue;
         }
-        return localValue;
+
+        this._inherited = this.localValue == null;
+
+        this._flags.Set(__flag_inherited, this._inherited);
+        this._toggle.currentValue = !this._inherited;
     }
 
     _OnValueSubmit(p_input, p_value) {
@@ -145,24 +161,14 @@ class PropertyControl extends ui.Widget {
         else { this._data.Set(this._valueID, p_value); }
     }
 
-    _OnDataUpdated(p_data) {
-        super._OnDataUpdated(p_data);
-        if (this._input) {
-            this._input.currentValue = this.currentValue;
+    _OnToggleSubmit(p_input, p_value) {
+        if (this._inherited != p_value) { return; } //Same?
+        if (p_value) {
+            console.log(`this.exportedValue = ${this.exportedValue}`);
+            this._data.Set(this._valueID, this.exportedValue);
+        } else {
+            this._data.Set(this._valueID, null);
         }
-
-        let inherited = false;
-
-        let localValue = this.localValue;
-        if (localValue == null) {
-            if (this._fallbackData) {
-                let inherited = this._fallbackData.Get(this._valueID);
-                if (inherited != null) { inherited = true; }
-            }
-        }
-
-        this._flags.Set(__flag_inherited, inherited);
-        this._toggle.currentValue = !inherited;
     }
 
     _ToClipboard() {

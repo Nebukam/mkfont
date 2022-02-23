@@ -13,6 +13,7 @@ class ActionSetAscent extends actions.Action {
 
     _InternalDo(p_operation, p_merge = false) {
 
+
         let
             subFamily = p_operation.subFamily,
             glyphs = subFamily.family._glyphs,

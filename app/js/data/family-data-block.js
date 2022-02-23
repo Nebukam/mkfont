@@ -7,10 +7,11 @@ const io = nkm.io;
 const SIGNAL = require(`./signal`);
 const IDS = require(`./ids`);
 
+const SimpleDataEx = require(`./simple-data-ex`);
 const Slot = require(`./slot-catalog-item`);
 const SubFamily = require(`./sub-family-data-block`);
 
-class FamilyDataBlock extends nkm.data.SimpleDataBlock {
+class FamilyDataBlock extends SimpleDataEx {
 
     constructor() { super(); }
 
@@ -18,32 +19,35 @@ class FamilyDataBlock extends nkm.data.SimpleDataBlock {
 
         super._Init();
 
+        this._Bind(this._OnGlyphUnicodeChanged);
+        this._Bind(this._OnGlyphVariantUpdated);
+        this._Bind(this._OnGlyphUpdated);
+
+
         this._values = {
-            [IDS.FAMILY]: { value: `fontello` },
-            [IDS.METADATA]: { value: `...` },
-            [IDS.COPYRIGHT]: { value: null },
+            [IDS.FAMILY]: { value: `Family Name` },
+            [IDS.COPYRIGHT]: { value: `` },
             [IDS.DESCRIPTION]: { value: `` },
             [IDS.URL]: { value: `` },
-            [IDS.VERSION]: { value: `0.0.1` },
+            [IDS.VERSION]: { value: `1.0` },
             [IDS.COLOR_PREVIEW]: { value: `#f5f5f5` },
+
+            [IDS.ALPHABETIC]: { value: 0 },
+            [IDS.MATHEMATICAL]: { value: 350 },
+            [IDS.IDEOGRAPHIC]: { value: 400 },
         };
 
         this._glyphs = new nkm.collections.List();
 
-        this._catalog = nkm.data.catalogs.CreateFrom({ name: `glyphs` });
+        this._catalog = nkm.data.catalogs.CreateFrom({ name: `Glyphs` });
+        this._subFamiliesCatalog = nkm.data.catalogs.CreateFrom({ name:'Sub Families' });
 
         this._subFamilies = new nkm.collections.List();
         this._defaultSubFamily = new SubFamily();
         this._defaultSubFamily._isDefault = true;
 
-        this._viewBox = { x: 0, y: 0, width: 100, height: 100 };
-
         this._selectedSubFamily = this._defaultSubFamily;
-
-        // Family data : only holds Glyph data.
-        // The editor is responsible for making the "connection" between
-        // which glyph belong to which group/foldout and distribute UI elements
-        // accordingly.
+        
 
     }
 
@@ -56,6 +60,8 @@ class FamilyDataBlock extends nkm.data.SimpleDataBlock {
 
     get defaultSubFamily() { return this._defaultSubFamily; }
 
+    // Subfamily management
+
     get selectedSubFamily() { return this._selectedSubFamily; }
     set selectedSubFamily(p_value) {
         if (!p_value) { p_value = this._defaultSubFamily; }
@@ -63,35 +69,43 @@ class FamilyDataBlock extends nkm.data.SimpleDataBlock {
         this._Broadcast(SIGNAL.SUBFAMILY_CHANGED, this._selectedSubFamily);
     }
 
-    get viewBox() { return this._viewBox; }
-    set viewBox(p_value) {
-        this._viewBox = p_value;
-        // Dispatch viewBox update evt
-    }
-
     AddSubFamily(p_subFamily) {
         if (!this._subFamilies.Add(p_subFamily)) { return; }
+
         p_subFamily.family = this;
+        p_subFamily.Watch(nkm.data.SIGNAL.VALUE_CHANGED, this._OnSubFamilyValueUpdated, this);
+
         for (let i = 0, n = this._glyphs.count; i < n; i++) {
             let g = this._glyphs.At(i);
             g.AddVariant(p_subFamily);
         }
+
+        let catalogItem = this._subFamiliesCatalog.Register({ name:`default`, data:p_subFamily });
+        p_subFamily._catalogItem = catalogItem;
     }
 
     RemoveSubFamily(p_subFamily) {
         if (!this._subFamilies.Remove(p_subFamily)) { return; }
+
+        p_subFamily.Unwatch(nkm.data.SIGNAL.VALUE_CHANGED, this._OnSubFamilyValueUpdated, this);
+
         for (let i = 0, n = this._glyphs.count; i < n; i++) {
             let g = this._glyphs.At(i);
             g.RemoveVariant(p_subFamily);
         }
+
+        let item = this._subFamiliesCatalog.FindFirstDataHolder(p_subFamily, false);
+        item.Release();
     }
+
+    // Glyph management
 
     AddGlyph(p_glyph) {
         p_glyph.family = this;
         if (!this._glyphs.Add(p_glyph)) { return; }
 
-        let unicode = p_glyph.unicode,
-            slot = this._GetSlot(unicode),
+        let
+            slot = this._GetSlot(p_glyph.Get(IDS.UNICODE)),
             slotData = slot.data;
 
         if (slotData && slotData != p_glyph) {
@@ -102,11 +116,12 @@ class FamilyDataBlock extends nkm.data.SimpleDataBlock {
 
         p_glyph
             .Watch(SIGNAL.UNICODE_CHANGED, this._OnGlyphUnicodeChanged)
-            .Watch(SIGNAL.VARIANT_UPDATED, this._OnGlyphVariantUpdated);
+            .Watch(SIGNAL.VARIANT_UPDATED, this._OnGlyphVariantUpdated)
+            .Watch(nkm.com.SIGNAL.UPDATED, this._OnGlyphUpdated);
 
         for (let i = 0, n = this._subFamilies.count; i < n; i++) {
             let subFamily = this._subFamilies.At(i);
-            if (subFamily == this._defaultSubFamily) { p_glyph._SetDefaultVariant(subFamily); }
+            if (subFamily._isDefault) { p_glyph._SetDefaultVariant(subFamily); }
             else { p_glyph.AddVariant(subFamily); }
         }
 
@@ -123,16 +138,10 @@ class FamilyDataBlock extends nkm.data.SimpleDataBlock {
 
         p_glyph
             .Unwatch(SIGNAL.UNICODE_CHANGED, this._OnGlyphUnicodeChanged)
-            .Unwatch(SIGNAL.VARIANT_UPDATED, this._OnGlyphVariantUpdated);
+            .Unwatch(SIGNAL.VARIANT_UPDATED, this._OnGlyphVariantUpdated)
+            .Unwatch(nkm.com.SIGNAL.UPDATED, this._OnGlyphUpdated);
 
         this._Broadcast(nkm.com.SIGNAL.ITEM_REMOVED, this, g);
-    }
-
-    _OnGlyphUnicodeChanged() {
-        // TODO : Move from old slot to the new one
-    }
-
-    _OnGlyphVariantUpdated(p_glyph, p_glyphVariant) {
 
     }
 
@@ -145,8 +154,26 @@ class FamilyDataBlock extends nkm.data.SimpleDataBlock {
         return slot;
     }
 
-    _CleanUp() {
-        super._CleanUp();
+    // Watch
+
+    _OnGlyphUnicodeChanged() {
+        // TODO : Move from old slot to the new one
+    }
+
+    _OnGlyphUpdated() {
+        this._scheduledUpdate.Schedule();
+    }
+
+    _OnGlyphVariantUpdated(p_glyph, p_glyphVariant) {
+        this._scheduledUpdate.Schedule();
+    }
+
+    _OnSubFamilyValueUpdated(p_subFamily, p_valueObj) {
+        for (let i = 0, n = this._glyphs.count; i < n; i++) {
+            let g = this._glyphs.At(i);
+            g._OnSubFamilyValueUpdated(p_subFamily, p_valueObj);
+        }
+        this._scheduledUpdate.Schedule();
     }
 
 
