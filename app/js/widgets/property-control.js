@@ -27,7 +27,8 @@ class PropertyControl extends nkm.datacontrols.ControlWidget {
         this._inherited = false;
 
         this._optionsHandler
-            .Hook(`propertyId`);
+            .Hook(`propertyId`)
+            .Hook(`allowOverride`, null, false);
 
     }
 
@@ -62,8 +63,6 @@ class PropertyControl extends nkm.datacontrols.ControlWidget {
                 'flex': '1 1 50%'
             },
             '.label': {
-                'margin-left': '10px',
-                
                 'text-overflow': 'ellipsis',
                 'white-space': 'nowrap',
                 'overflow': 'hidden',
@@ -79,8 +78,10 @@ class PropertyControl extends nkm.datacontrols.ControlWidget {
             '.input-field': {
                 'flex': '1 0 50%'
             },
-            '.toggle':{
-                'margin-left':'-3px'
+            '.toggle': {              
+                'width':'32px',  
+                'margin-right': '10px',
+                'margin-left': '-10px'
             }
         }, super._Style());
     }
@@ -133,6 +134,11 @@ class PropertyControl extends nkm.datacontrols.ControlWidget {
 
     }
 
+    set allowOverride(p_value) {
+        this._allowOverride = p_value;
+        this._toggle.visible = p_value;
+    }
+
     get localValue() {
         if (!this._data) { return null; }
         return this._data.Get(this._valueID);
@@ -152,7 +158,9 @@ class PropertyControl extends nkm.datacontrols.ControlWidget {
 
         this._inherited = this.localValue == null;
 
-        this._flags.Set(__flag_inherited, this._inherited);
+        if (this._allowOverride) {
+            this._flags.Set(__flag_inherited, this._inherited);
+        }
         this._toggle.currentValue = !this._inherited;
     }
 

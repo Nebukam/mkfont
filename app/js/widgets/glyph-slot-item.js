@@ -4,6 +4,7 @@ const uilib = nkm.uilib;
 
 const mkfData = require(`../data`);
 const GlyphRenderer = require(`./glyph-renderer`);
+const GlyphCanvasRenderer = require(`./glyph-canvas-renderer`);
 
 class GlyphSlotItem extends ui.WidgetItem {
     constructor() { super(); }
@@ -45,7 +46,6 @@ class GlyphSlotItem extends ui.WidgetItem {
                 'padding': '10px',
                 'border-radius': '5px',
                 'background-color': 'rgba(0,0,0,0.25)',
-                '--preview-size-x': 'var(--preview-size)',
                 'align-items': 'center',
                 'overflow': 'clip',
             },
@@ -57,14 +57,11 @@ class GlyphSlotItem extends ui.WidgetItem {
                 'position': 'relative',
                 'aspect-ratio': 'var(--preview-ratio)',
                 'flex': '1 1 auto',
-                //'height': 'var(--preview-size)',
-                'min-height': 'var(--preview-size)',
-                //'max-height': 'var(--preview-size)',
-                'min-width': 'var(--preview-size)',
+                'height': 'var(--preview-height)',
+                'width': 'var(--preview-width)',
                 'display': 'flex',
                 'flex-flow': 'row nowrap',
                 'justify-content': 'center',
-                'max-height': 'calc( var(--preview-size) * 1.8 )',
                 'overflow-y': 'clip'
             },
             '.box': {
@@ -77,7 +74,7 @@ class GlyphSlotItem extends ui.WidgetItem {
                 'text-align': `center`,
                 'padding': '5px'
             },
-            'pre': {
+            'code': {
                 'margin': '0',
                 'font-size': 'large',
                 'user-select': 'text'
@@ -94,24 +91,18 @@ class GlyphSlotItem extends ui.WidgetItem {
     }
 
     _Render() {
+
         super._Render();
 
         this._previewBox = ui.dom.El(`div`, { class: `preview` }, this._host);
 
         this._glyphPlaceholder = new ui.manipulators.Text(ui.dom.El(`div`, { class: `box placeholder` }, this._previewBox), false, false);
-        this._glyphRender = this.Add(GlyphRenderer, `box renderer`, this._previewBox);
+        //this._glyphRender = this.Add(GlyphRenderer, `box renderer`, this._previewBox);
+        //this._glyphRender.visible = false;
+        this._glyphRender = this.Add(GlyphCanvasRenderer, `box renderer`, this._previewBox);
 
         this._label = new ui.manipulators.Text(ui.dom.El(`div`, { class: `item label` }, this._host), false, false);
 
-    }
-
-    _OnPaintChange() {
-        super._OnPaintChange();
-        if (this._isPainted) {
-            //this.style.opacity = 1;
-        } else {
-            //this.style.opacity = 0;
-        }
     }
 
     _OnDataUpdated(p_data) {
@@ -120,7 +111,7 @@ class GlyphSlotItem extends ui.WidgetItem {
         let glyphData = p_data.data;
         let unicode = glyphData.Get(mkfData.IDS.UNICODE);
         this._glyphPlaceholder.Set(unicode);
-        this._label.Set(`<pre>${unicode}</pre>`);
+        this._label.Set(`<code>${unicode}</code>`);
 
         this._UpdateGlyphPreview();
 

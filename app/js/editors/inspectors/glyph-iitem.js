@@ -12,9 +12,9 @@ class GlyphVariantInspectorItem extends nkm.datacontrols.ControlWidget {
     constructor() { super(); }
 
     static __controls = [
-        { options:{ propertyId:mkfData.IDS.ID } },
-        { options:{ propertyId:mkfData.IDS.WIDTH } },
-        { options:{ propertyId:mkfData.IDS.HEIGHT } }
+        { options:{ propertyId:mkfData.IDS.GLYPH_NAME } },
+        { options:{ propertyId:mkfData.IDS.WIDTH, allowOverride:true } },
+        { options:{ propertyId:mkfData.IDS.HEIGHT, allowOverride:true } }
     ];
 
     _Init() {

@@ -46,14 +46,19 @@ class GlyphInspector extends nkm.datacontrols.ControlView {
                 'text-align': 'center',
                 //'margin': '0',
                 //'font-size': 'large',
-                'user-select': 'text'
+                'user-select': 'text',
+                'padding': '10px',
+                'text-transform': 'lowercase',
+            },
+            '.unicode-preview:first-letter': {
+                'text-transform': 'uppercase',
             }
         }, super._Style());
     }
 
     _Render() {
         super._Render();
-        this._unicode = new ui.manipulators.Text(ui.dom.El(`pre`, { class: `unicode-preview` }, this));
+        this._unicode = new ui.manipulators.Text(ui.dom.El(`code`, { class: `unicode-preview` }, this));
     }
 
     _OnDataChanged(p_oldData) {

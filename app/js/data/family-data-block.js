@@ -25,7 +25,7 @@ class FamilyDataBlock extends SimpleDataEx {
 
 
         this._values = {
-            [IDS.FAMILY]: { value: `Family Name` },
+            [IDS.FAMILY]: { value: `Font Family Name` },
             [IDS.COPYRIGHT]: { value: `` },
             [IDS.DESCRIPTION]: { value: `` },
             [IDS.URL]: { value: `` },
@@ -35,6 +35,10 @@ class FamilyDataBlock extends SimpleDataEx {
             [IDS.ALPHABETIC]: { value: 0 },
             [IDS.MATHEMATICAL]: { value: 350 },
             [IDS.IDEOGRAPHIC]: { value: 400 },
+
+            [IDS.RATIO_H]: { value: 1 },
+            [IDS.RATIO_V]: { value: 1 },
+            [IDS.PREVIEW_SIZE]: { value: 50 },
         };
 
         this._glyphs = new nkm.collections.List();
@@ -165,6 +169,7 @@ class FamilyDataBlock extends SimpleDataEx {
     }
 
     _OnGlyphVariantUpdated(p_glyph, p_glyphVariant) {
+        p_glyphVariant.subFamily._scheduledUpdate.Schedule();
         this._scheduledUpdate.Schedule();
     }
 

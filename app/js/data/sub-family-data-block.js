@@ -31,6 +31,19 @@ class SubFamilyDataBlock extends SimpleDataEx {
 
         super._Init();
 
+
+        this._previewInfos = {
+            raw: 1,
+            rah: 1,
+            w: 1000,
+            h: 1000,
+            rh: 1000,
+            asc: 1000,
+            dsc: 0,
+            ref: 1000,
+            em: 1000,
+        }
+
         let defaultEm = 1000;
 
         this._values = {
@@ -127,22 +140,50 @@ class SubFamilyDataBlock extends SimpleDataEx {
 
         dom.SAtt(fontFace, IDS.WEIGHT_CLASS, this.Get(IDS.WEIGHT_CLASS).GetOption(`value`), true);
 
-        if(this._catalogItem){ this._catalogItem.name = fullName; }
+        if (this._catalogItem) { this._catalogItem.name = fullName; }
 
     }
 
     _UpdateDisplayValues() {
 
         let
-            em = this.Get(IDS.EM_UNITS) * 0.8,
-            h = this.Get(IDS.ASCENT) - this.Get(IDS.DESCENT),
-            size = h,//Math.max(em, h),
-            displaySize = size * 1.25,
-            displayOffset = (displaySize - size) * -0.5;
+            fw = this.Resolve(IDS.WIDTH),
+            fh = this.Resolve(IDS.HEIGHT),
+            asc = this.Resolve(IDS.ASCENT),
+            dsc = this.Resolve(IDS.DESCENT),
+            em = this.Resolve(IDS.EM_UNITS),
+            h = asc - dsc,
+            rh = Math.max(fh, h),
+            sc = 1,
+            ratio_w = 1,
+            ratio_h = 1,
+            ref = 0;
 
-        this.Set(IDS.SIZE, size, true);
-        this.Set(IDS.DISPLAY_SIZE, displaySize, true);
-        this.Set(IDS.DISPLAY_OFFSET, displayOffset, true);
+        if (fw > rh) {
+            //font wider than taller
+            ref = fw;
+            ratio_w = ref / rh;
+        } else {
+            //font taller than wider
+            ref = rh;
+            ratio_h = ref / fw;
+        }
+
+        this._previewInfos.raw = ratio_w;
+        this._previewInfos.rah = ratio_h;
+        this._previewInfos.w = fw;
+        this._previewInfos.h = fh;
+        this._previewInfos.rh = rh;
+        this._previewInfos.asc = asc;
+        this._previewInfos.dsc = dsc;
+        this._previewInfos.ref = ref;
+        this._previewInfos.em = em;
+
+        this.Set(IDS.SIZE, rh, true);
+        this.Set(IDS.DISPLAY_SIZE, ref, true);
+        this.Set(IDS.DISPLAY_OFFSET, 0, true);
+
+        console.log(this._previewInfos);
 
     }
 

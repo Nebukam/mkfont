@@ -5,20 +5,11 @@ const uilib = nkm.uilib;
 const mkfData = require(`../../data`);
 const mkfWidgets = require(`../../widgets`);
 
-class DisplayInspector extends nkm.datacontrols.ControlView {
+class FamilyCatalogInspector extends nkm.datacontrols.ControlView {
     constructor() { super(); }
-
-    static __controls = [
-        { options: { propertyId: mkfData.IDS.COLOR_PREVIEW } },
-        { options: { propertyId: mkfData.IDS.PREVIEW_SIZE } },
-        { options: { propertyId: mkfData.IDS.RATIO_H } },
-        { options: { propertyId: mkfData.IDS.RATIO_V } },
-    ];
 
     _Init() {
         super._Init();
-        this._builder.defaultControlClass = mkfWidgets.PropertyControl;
-        this._builder.defaultCSS = `control`;
     }
 
     _Style() {
@@ -44,17 +35,7 @@ class DisplayInspector extends nkm.datacontrols.ControlView {
 
     _Render() {
 
-        this._body = ui.dom.El(`div`, { class: `list` }, this._host);
-        this._builder.host = this._body;
-
         super._Render();
-
-        this._controls = ui.dom.El("div", { class: 'controls' }, this._body);
-
-
-        // Preview align mode (left/center/right)
-
-        // ...
 
     }
 
@@ -67,8 +48,7 @@ class DisplayInspector extends nkm.datacontrols.ControlView {
 
     //#endregion
 
-
 }
 
-module.exports = DisplayInspector;
-ui.Register(`mkf-display-inspector`, DisplayInspector);
+module.exports = FamilyCatalogInspector;
+ui.Register(`mkf-family-catalog-inspector`, FamilyCatalogInspector);

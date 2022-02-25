@@ -1,6 +1,7 @@
 'use strict';
 
 const nkm = require(`@nkmjs/core`);
+const ui = nkm.ui;
 const inputs = nkm.uilib.inputs;
 
 /**
@@ -65,7 +66,11 @@ class IDS {
     static SIZE = 'size';
     static DISPLAY_SIZE = 'display-size';
     static DISPLAY_OFFSET = 'display-offset';
+
     static COLOR_PREVIEW = 'color-preview';
+    static RATIO_H = 'ratio-h';
+    static RATIO_V = 'ratio-v';
+    static PREVIEW_SIZE = 'preview-size';
 
     static infos = {
 
@@ -80,24 +85,25 @@ class IDS {
         [this.FAMILY]: {
             inputType: inputs.Text,
             label: `Family name`,
-            inputOptions: { placeholder:`...` },
+            inputOptions: { placeholder:`MkFamily`, maxlength:32 },
             desc: ``
         },
         [this.METADATA]: {
             inputType: inputs.Textarea,
             label: `Metadata`,
-            inputOptions: { placeholder:`...` },
+            inputOptions: { placeholder:`metadata` },
             desc: ``
         },
         [this.COPYRIGHT]: {
             inputType: inputs.Text,
             label: `Copyright`,
-            inputOptions: { placeholder:`...` },
+            inputOptions: { placeholder:`copyright` },
             desc: ``
         },
         [this.DESCRIPTION]: {
             inputType: inputs.Textarea,
             label: `Description`,
+            inputOptions: { placeholder:`Short description` },
             desc: ``
         },
         [this.URL]: {
@@ -109,7 +115,7 @@ class IDS {
         [this.VERSION]: {
             inputType: inputs.Text,
             label: `Version`,
-            inputOptions: { placeholder:`1.0` },
+            inputOptions: { placeholder:`1.0`, maxlength:12 },
             desc: ``
         },
         [this.ALPHABETIC]: {
@@ -136,7 +142,7 @@ class IDS {
         [this.FONT_STYLE]: {
             inputType: inputs.Text,
             label: `Sub Family`,
-            inputOptions: { placeholder:`Regular` },
+            inputOptions: { placeholder:`Regular`, maxlength:32 },
             desc: `Regular, Italic, Condensed...`
         },
         [this.EM_UNITS]: {
@@ -229,6 +235,24 @@ class IDS {
             label: `Preview color`,
             inputOptions: { changeOnInput: true },
             desc: `Define the color of the glyphs in the editor.`
+        },
+        [this.RATIO_H]: {
+            inputType: inputs.SliderOnly,
+            label: `H Ratio`,
+            inputOptions: { changeOnInput: true, step: 1, min: 1, max: 3, size:ui.FLAGS.SIZE_XXS },
+            desc: `Horizontal preview ratio`
+        },
+        [this.RATIO_V]: {
+            inputType: inputs.SliderOnly,
+            label: `V Ratio`,
+            inputOptions: { changeOnInput: true, step: 1, min: 1, max: 3, size:ui.FLAGS.SIZE_XXS },
+            desc: `Vertical preview ratio`
+        },
+        [this.PREVIEW_SIZE]: {
+            inputType: inputs.SliderOnly,
+            label: `Preview size`,
+            inputOptions: { changeOnInput: true, step: 1, min: 50, max: 250, size:ui.FLAGS.SIZE_XXS },
+            desc: `Preview size`
         },
 
     }

@@ -16,7 +16,7 @@ class FontEditorHeader extends nkm.datacontrols.ControlView {
 
 
         this._displayInspector = ui.UI.Rent(mkfInspectors.Display);
-        this._modalDisplayOpts = this._commands.Create(ui.commands.Modal, 'Display', 'visible');
+        this._modalDisplayOpts = this._commands.Create(ui.commands.Modal, 'Display', 'layout');
         this._modalDisplayOpts.options = {
             modalClass: nkm.uilib.modals.Simple,
             content: this._displayInspector,
@@ -25,7 +25,7 @@ class FontEditorHeader extends nkm.datacontrols.ControlView {
             contentOptionsGetter: { fn: fn, thisArg: this }
         };
 
-        this._modalFamilyOpts = this._commands.Create(ui.commands.Modal, 'Infos', 'gear');
+        this._modalFamilyOpts = this._commands.Create(ui.commands.Modal, 'Infos', 'font');
         this._modalFamilyOpts.options = {
             modalClass: nkm.uilib.modals.Simple,
             content: mkfInspectors.Family,
@@ -75,12 +75,7 @@ class FontEditorHeader extends nkm.datacontrols.ControlView {
             {
                 label:`Save`, icon:`save`,
                 size: ui.FLAGS.SIZE_S,
-                group:`actions`
-            },
-            {
-                label:`Load`, icon:`load`,
-                size: ui.FLAGS.SIZE_S,
-                group:`actions`
+                group:`file-actions`
             },
             {
                 command: this._modalDisplayOpts,
@@ -102,7 +97,14 @@ class FontEditorHeader extends nkm.datacontrols.ControlView {
                 command: this._modalSubFamilyOpts,
                 size: ui.FLAGS.SIZE_S,
                 group:`family`
+            },
+            {
+                label:`Load`, icon:`directory-download`,
+                size: ui.FLAGS.SIZE_S,
+                group:`external`
             });
+
+        this._btnSelectSubFamily.visible = false;
 
     }
 

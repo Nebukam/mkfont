@@ -198,6 +198,7 @@ class SVGOperations {
 
             let g = glyphs[i],
                 glyphUnicode = g.getAttribute(`unicode`),
+                glyphId = g.getAttribute(`glyph-name`),
                 glyphPath = g.getAttribute(`d`),
                 glyphAdvX = Number(g.getAttribute(IDS.WIDTH) || fontAdvx),
                 glyphAdvY = Number(g.getAttribute(IDS.HEIGHT) || fontAdvy);
@@ -218,6 +219,7 @@ class SVGOperations {
             family.AddGlyph(newGlyph);
 
             newGlyph.BatchSet({
+                [IDS.GLYPH_NAME]: glyphId,
                 [IDS.UNICODE]: glyphUnicode,
                 [IDS.DECIMAL]: glyphUnicode.length == 1 ? glyphUnicode.charCodeAt(0) : -1
             });
@@ -264,7 +266,7 @@ class SVGOperations {
             copyright: p_subFamily.Resolve(IDS.COPYRIGHT) || ``,
             description: p_subFamily.Resolve(IDS.DESCRIPTION) || ``,
             url: p_subFamily.Resolve(IDS.URL) || ``,
-            version: `Version ${p_subFamily.Resolve(IDS.VERSION) || '1.0' }`
+            version: `Version ${p_subFamily.Resolve(IDS.VERSION) || '1.0'}`
         }
 
         console.log(options);

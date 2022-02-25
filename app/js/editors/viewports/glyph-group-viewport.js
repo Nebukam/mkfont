@@ -4,16 +4,14 @@ const com = nkm.com;
 const u = nkm.utils;
 const ui = nkm.ui;
 
-const mkfWidgets = require(`../widgets`);
+const mkfWidgets = require(`../../widgets`);
+const GlyphGroup = require(`./glyph-group`);
 
-class GlyphGroup extends ui.WidgetItem {
+class GlyphGroupsView extends ui.views.View {
     constructor() { super(); }
 
     _Init() {
-
         super._Init();
-
-        this._extensions.Remove(this._extDrag);
 
         this._builder = new ui.helpers.CatalogBuilder();
         this._builder
@@ -24,58 +22,50 @@ class GlyphGroup extends ui.WidgetItem {
         this._builder._defaultItemClass = mkfWidgets.GlyphSlot;
         this._builder._defaultGroupClass = GlyphGroup;
 
-        /*
-                this._extExpand = this._extensions.Add(ui.extensions.Expand);
-                this._extExpand
-                .Watch(ui.SIGNAL.COLLAPSED, this._builder.Disable, this._builder)
-                .Watch(ui.SIGNAL.EXPANDED, this._builder.Enable, this._builder);
-        */
+        this._extExpand = this._extensions.Add(ui.extensions.Expand);
+        this._extExpand
+            .Watch(ui.SIGNAL.COLLAPSED, this._builder.Disable, this._builder)
+            .Watch(ui.SIGNAL.EXPANDED, this._builder.Enable, this._builder);
 
     }
 
     _PostInit() {
         super._PostInit();
-        this._builder.host = this._tpl.body;
+        this._builder.host = this._groupWrapper;
     }
-
 
     _Style() {
         return nkm.style.Extends({
             ':host': {
                 'position': 'relative',
                 'display': 'flex',
-                'flex-flow': 'column nowrap',
+                'flex-flow': 'row nowrap'
             },
-            '.header': {
-                'position': 'relative',
-                'display': 'flex',
-                'flex-flow': 'row nowrap',
-                'align-items': 'center'
-            },
-            '.body': {
+            '.group-wrapper': {
                 'position': 'relative',
                 'display': 'flex',
                 'flex-flow': 'row wrap',
-                //'justify-content': 'space-evenly'
+                'flex': '1 1 auto',
+                'overflow': 'auto',
+                'align-items': 'flex-start',
+                'align-content': 'flex-start'
             },
             '.group': {
-                'flex': '1 0 auto'
+                'flex': '1 0 auto',
+                'min-height': 0,
             },
             '.item': {
-                'flex': '0 0 auto',
-                'margin':'3px'
+                'flex': '1 0 auto',
+                'margin':'3px',
             }
         }, super._Style());
     }
 
     _Render() {
         super._Render();
-        this._tpl = ui.DOMTemplate.Render(uilib.dom.BodyExpand, this);
-    }
 
-    _OnItemDataChanged(p_oldItemData) {
-        super._OnItemDataChanged(p_oldItemData);
-        console.log(this._itemData);
+        this._controls = ui.dom.El("div", { class: 'controls' }, this._host);
+        this._groupWrapper = ui.dom.El("div", { class: 'group-wrapper' }, this._host);
     }
 
     //#region Catalog Management
@@ -85,12 +75,7 @@ class GlyphGroup extends ui.WidgetItem {
      * @type {data.core.Catalog}
      */
     get catalog() { return this._builder.catalog; }
-    set catalog(p_value) { 
-        this._builder.catalog = p_value; 
-        if(p_value){
-            this._tpl[ui.IDS.LABEL].Set(p_value.name);
-        }
-    }
+    set catalog(p_value) { this._builder.catalog = p_value; }
 
     /**
      * @description Create a view & a nav item from a catalogItem
@@ -98,7 +83,7 @@ class GlyphGroup extends ui.WidgetItem {
      * @param {data.core.catalogs.CatalogItem} p_item 
      */
     _OnCatalogItemAdded(p_builder, p_item, p_mappedWidget) {
-
+        p_mappedWidget.catalog = p_item;
     }
 
     /**
@@ -114,12 +99,13 @@ class GlyphGroup extends ui.WidgetItem {
 
     //#endregion
 
-    _CleanUp() {
-        this.catalog = null;
-        super._CleanUp();
-    }
+    //#region Preview tweaks
+
+
+
+    //#endregion
 
 }
 
-module.exports = GlyphGroup;
-ui.Register(`mkfont-glyph-group`, GlyphGroup);
+module.exports = GlyphGroupsView;
+ui.Register(`mkfont-glyph-group-viewport`, GlyphGroupsView);

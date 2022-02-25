@@ -20,7 +20,7 @@ class PangramRenderer extends ui.Widget {
         this._tempFont = null;
 
         this._Bind(this.Draw);
-        this._scheduledDraw = nkm.com.DelayedCall(this.Draw, 0.5);
+        this._scheduledDraw = nkm.com.DelayedCall(this.Draw, 500);
 
     }
 
@@ -30,12 +30,13 @@ class PangramRenderer extends ui.Widget {
                 'position': 'relative',
                 'display': 'flex',
                 'flex-flow': 'column nowrap',
-                'overflow':'clip'
+                //'overflow':'clip',
+                '--font-size':'40px'
             },
             '.pangram': {
                 'font-family': `'tempFont'`,
                 'text-align': 'center',
-                'font-size': '3em'
+                'font-size': 'var(--font-size)'
             }
         }, super._Style());
     }
@@ -51,6 +52,10 @@ class PangramRenderer extends ui.Widget {
         if (!p_value) { p_value = defaultPangram; }
         this._previewText = p_value;
         this._pangramText.Set(p_value);
+    }
+
+    set fontSize(p_value){
+        this.style.setProperty(`--font-size`, `${p_value}px`);
     }
 
     _OnDataUpdated(p_data) {
