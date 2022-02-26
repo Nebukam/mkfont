@@ -51,18 +51,39 @@ class GlyphCanvasRenderer extends ui.helpers.Canvas {
         let
             z = this._zoom,
             f = this._infos,
-            ref = Math.max(this.width, this.height),
-            scale = (ref / f.ref) * z;
+            ref = Math.min(this.width, this.height),
+            scale = (ref / f.ref) * z,
+            iscale = 1 / scale;
 
         ctx.setTransform(scale, 0, 0, scale, 0, 0);
         ctx.translate(f * 0.5, 0);
 
+        // Draw glyph
         let col = nkm.style.Get(`--glyph-color`);
-
         ctx.fillStyle = col;
         ctx.fill(this._path2D);
 
-        //this._svgGrid.setAttribute(`viewBox`, `${ox} ${o} ${s} ${s}`);
+
+        // Baseline
+        ctx.strokeStyle = nkm.style.Get(`--col-active`);
+        ctx.lineWidth = iscale;
+        ctx.setLineDash([iscale, iscale]);
+        ctx.beginPath();
+        ctx.moveTo(0, f.asc);
+        ctx.lineTo(this.width * iscale, f.asc);
+        ctx.stroke();
+
+        // Baseline
+        ctx.strokeStyle = `#fff`;// nkm.style.Get(`--col-error`);
+        ctx.lineWidth = iscale;
+        //ctx.setLineDash([iscale, iscale]);
+        ctx.beginPath();
+        ctx.moveTo(0, 0);
+        ctx.lineTo(this.width * iscale, 0);
+        ctx.moveTo(0, f.em);
+        ctx.lineTo(this.width * iscale, f.em);
+        ctx.stroke();
+
 
     }
 

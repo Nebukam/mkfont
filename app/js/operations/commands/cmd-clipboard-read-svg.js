@@ -25,6 +25,8 @@ class CmdClipboardReadSVG extends actions.CommandAction {
 
         if (!slot || !family) { return null; }
 
+        console.log(clipboard.readText());
+
         let svgString = SVG.ProcessString(clipboard.readText());
 
         if (!svgString) { return null; }

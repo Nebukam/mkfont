@@ -4,7 +4,8 @@
 const nkm = require(`@nkmjs/core`);
 const actions = nkm.actions;
 const data = require(`../../data`);
-const svgpath = require('svgpath');
+
+const SVG = require(`../svg-operations`);
 
 class ActionSetAscent extends actions.Action {
     constructor() { super(); }
@@ -14,18 +15,20 @@ class ActionSetAscent extends actions.Action {
     _InternalDo(p_operation, p_merge = false) {
 
 
-        let
+        var
             subFamily = p_operation.subFamily,
-            glyphs = subFamily.family._glyphs,
-            ascent = p_operation.ascent,
-            currentAscent = subFamily.Get(data.IDS.ASCENT),
-            offset = ascent - currentAscent;
+            newAsc = p_operation.ascent,
+            oldAsc = subFamily.Get(data.IDS.ASCENT),
+            offset = newAsc - oldAsc;
 
-        p_operation.prevAscent = currentAscent;
-        
+        p_operation.prevAscent = oldAsc;
+
         // Update subFamily first so display values will be computed prior to glyph update
-        subFamily.Set(data.IDS.ASCENT, ascent);
+        subFamily.Set(data.IDS.ASCENT, newAsc);
 
+        SVG.TransformAll(subFamily, (svg) => { return svg.translate(0, offset); });
+
+        /*
         for (let i = 0, n = glyphs.count; i < n; i++) {
             let
                 glyphVariant = glyphs.At(i).GetVariant(subFamily),
@@ -35,8 +38,8 @@ class ActionSetAscent extends actions.Action {
                     .toString();
 
             glyphVariant.Set(data.IDS.PATH, transformedPath);
-
         }
+        */
 
 
     }

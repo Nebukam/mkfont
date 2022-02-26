@@ -9,6 +9,7 @@ class FamilyInspector extends nkm.datacontrols.ControlView {
     constructor() { super(); }
 
     static __controls = [
+        { cl:mkfWidgets.ControlHeader, options:{ label:`Infos` } },
         { options: { propertyId: mkfData.IDS.FAMILY } },
         { options: { propertyId: mkfData.IDS.COPYRIGHT } },
         { options: { propertyId: mkfData.IDS.METADATA } },

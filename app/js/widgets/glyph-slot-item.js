@@ -65,6 +65,7 @@ class GlyphSlotItem extends ui.WidgetItem {
                 'overflow-y': 'clip'
             },
             '.box': {
+                'width': '100%',
                 'height': '100%',
                 //'aspect-ratio': 'var(--preview-ratio)',
                 'position': 'absolute',
@@ -117,7 +118,7 @@ class GlyphSlotItem extends ui.WidgetItem {
 
     }
 
-    _UpdateGlyphPreview(p_variant) {
+    _UpdateGlyphPreview() {
         let glyphData = this._data ? this._data.data : null;
 
         if (!glyphData) {

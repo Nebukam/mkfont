@@ -9,10 +9,9 @@ class DisplayInspector extends nkm.datacontrols.ControlView {
     constructor() { super(); }
 
     static __controls = [
+        { cl:mkfWidgets.ControlHeader, options:{ label:`Customize interface` } },
         { options: { propertyId: mkfData.IDS.COLOR_PREVIEW } },
         { options: { propertyId: mkfData.IDS.PREVIEW_SIZE } },
-        { options: { propertyId: mkfData.IDS.RATIO_H } },
-        { options: { propertyId: mkfData.IDS.RATIO_V } },
     ];
 
     _Init() {

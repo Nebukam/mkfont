@@ -35,9 +35,7 @@ class FamilyDataBlock extends SimpleDataEx {
             [IDS.ALPHABETIC]: { value: 0 },
             [IDS.MATHEMATICAL]: { value: 350 },
             [IDS.IDEOGRAPHIC]: { value: 400 },
-
-            [IDS.RATIO_H]: { value: 1 },
-            [IDS.RATIO_V]: { value: 1 },
+            
             [IDS.PREVIEW_SIZE]: { value: 50 },
         };
 

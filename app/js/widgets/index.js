@@ -6,5 +6,6 @@ module.exports = {
     GlyphRenderer : require(`./glyph-renderer`),
     PropertyControl: require(`./property-control`),
     PangramRenderer: require(`./pangram-renderer`),
+    ControlHeader: require(`./control-header`),
 
 }

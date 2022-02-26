@@ -277,6 +277,28 @@ class SVGOperations {
 
     //#endregion
 
+    //#region transforms
+
+    /**
+     * 
+     * @param {*} p_subFamily 
+     * @param {*} p_fn ( svgpath ) => { return svgpath.op().op(); }
+     */
+    static TransformAll(p_subFamily, p_fn) {
+
+        let arr = p_subFamily.family._glyphs.internalArray;
+        for (let i = 0, n = arr.length; i < n; i++) {
+
+            let
+                g = arr[i].GetVariant(p_subFamily),
+                d = p_fn(svgpath(g.Get(IDS.PATH))).toString();
+
+            g.Set(IDS.PATH, d);
+
+        }
+    }
+
+    //#endregion
 
 }
 

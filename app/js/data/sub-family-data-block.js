@@ -47,11 +47,14 @@ class SubFamilyDataBlock extends SimpleDataEx {
         let defaultEm = 1000;
 
         this._values = {
-            [IDS.EM_UNITS]: { value: defaultEm },
             [IDS.WEIGHT_CLASS]: { value: IDS.weightList.At(3) },
             [IDS.FONT_STYLE]: { value: null },
+            
             [IDS.CAP_HEIGHT]: { value: null },
             [IDS.X_HEIGHT]: { value: null },
+            
+            [IDS.EM_UNITS]: { value: defaultEm },
+            [IDS.EM_RESAMPLE]: { value: true },
             [IDS.ASCENT]: { value: defaultEm * 0.8 },
             [IDS.DESCENT]: { value: defaultEm * -0.25 },
             //[IDS.H_ORIGIN_X]: { value: 0 },
@@ -60,6 +63,7 @@ class SubFamilyDataBlock extends SimpleDataEx {
             //[IDS.V_ORIGIN_X]: { value: 0 },
             //[IDS.V_ORIGIN_Y]: { value: 0 },
             [IDS.HEIGHT]: { value: null },
+            [IDS.MONOSPACE]: { value: false },
             [IDS.UNDERLINE_POSITION]: { value: null },
             [IDS.UNDERLINE_THICKNESS]: { value: null },
             //[IDS.HANGING]: { value: 500 },
@@ -67,6 +71,8 @@ class SubFamilyDataBlock extends SimpleDataEx {
             [IDS.SIZE]: { value: null },
             [IDS.DISPLAY_SIZE]: { value: null },
             [IDS.DISPLAY_OFFSET]: { value: null }
+
+            
         };
 
         this._family = null;
@@ -108,8 +114,8 @@ class SubFamilyDataBlock extends SimpleDataEx {
                 case IDS.X_HEIGHT: return this.Get(IDS.ASCENT) * 0.75; break;
                 case IDS.UNDERLINE_POSITION: return this.Get(IDS.DESCENT) * 1.2; break;
                 case IDS.UNDERLINE_THICKNESS: return this.Get(IDS.EM_UNITS) * 0.1; break;
-                case IDS.WIDTH: return this.Get(IDS.EM_UNITS); break;
-                case IDS.HEIGHT: return this.Get(IDS.EM_UNITS); break;
+                //case IDS.WIDTH: return this.Get(IDS.MONOSPACE) ? this.Get(IDS.EM_UNITS); break;
+                case IDS.HEIGHT: return this.Get(IDS.ASCENT) - this.Get(IDS.DESCENT); break;
                 default: return super.Resolve(p_id); break;
             }
 
@@ -179,11 +185,9 @@ class SubFamilyDataBlock extends SimpleDataEx {
         this._previewInfos.ref = ref;
         this._previewInfos.em = em;
 
-        this.Set(IDS.SIZE, rh, true);
-        this.Set(IDS.DISPLAY_SIZE, ref, true);
-        this.Set(IDS.DISPLAY_OFFSET, 0, true);
-
-        console.log(this._previewInfos);
+        //this.Set(IDS.SIZE, rh, true);
+        //this.Set(IDS.DISPLAY_SIZE, ref, true);
+        //this.Set(IDS.DISPLAY_OFFSET, 0, true);
 
     }
 

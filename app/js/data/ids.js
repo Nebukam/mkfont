@@ -48,6 +48,8 @@ class IDS {
     static HANGING = 'hanging';
     static UNDERLINE_THICKNESS = 'underline-thickness';
     static UNDERLINE_POSITION = 'underline-position';
+    static EM_RESAMPLE = 'do-em-scale';
+    static MONOSPACE = 'monospace';
 
     // Glyph properties
     static H_ORIGIN_X = 'horiz-origin-x';
@@ -68,8 +70,6 @@ class IDS {
     static DISPLAY_OFFSET = 'display-offset';
 
     static COLOR_PREVIEW = 'color-preview';
-    static RATIO_H = 'ratio-h';
-    static RATIO_V = 'ratio-v';
     static PREVIEW_SIZE = 'preview-size';
 
     static infos = {
@@ -146,28 +146,33 @@ class IDS {
             desc: `Regular, Italic, Condensed...`
         },
         [this.EM_UNITS]: {
+            recompute:true,
             inputType: inputs.Number,
             label: `EM Size`,
-            inputOptions: { step: 10, min: 2, max: 32000 },
-            desc: `specifies the number of coordinate units on the "em square", an abstract square whose height is the intended distance between lines of type in the same type size. This is the size of the design grid on which glyphs are laid out.`
+            inputOptions: { step: 10, min: 20, max: 32000 },
+            desc: `specifies the number of coordinate units on the "em square", an abstract square whose height is the intended distance between lines of type in the same type size. This is the size of the design grid on which glyphs are laid out.`,
         },
         [this.CAP_HEIGHT]: {
+            recompute:true,
             inputType: inputs.Number,
             label: `Capital height`,
             desc: `defines the height of uppercase glyphs of the font within the font coordinate system.`
         },
         [this.X_HEIGHT]: {
+            recompute:true,
             inputType: inputs.Number,
             label: `X height`,
             desc: `indicates the height of lowercase glyphs in the font within the font coordinate.`
         },
         [this.ASCENT]: {
+            recompute:true,
             inputType: inputs.Number,
             label: `Ascender`,
             inputOptions: { step: 1, min: 0, max: 32000 },
             desc: `defines the maximum unaccented height of the font within the font coordinate system.`
         },
         [this.DESCENT]: {
+            recompute:true,
             inputType: inputs.Number,
             label: `Descender`,
             inputOptions: { step: 1, min: -32000, max: 0 },
@@ -189,7 +194,20 @@ class IDS {
             inputType: inputs.Number,
             desc: ``
         },
-
+        [this.EM_RESAMPLE]: {
+            inputType: inputs.Boolean,
+            inputOptions: { size:ui.FLAGS.SIZE_XS },
+            label: `EM Resample`,
+            desc: `If enabled, changing the EM Size will scale other metrics & glyphs. Disable this if you want to affect rendering size only.`
+        },
+        [this.MONOSPACE]: {
+            recompute:true,
+            inputType: inputs.Boolean,
+            inputOptions: { size:ui.FLAGS.SIZE_XS },
+            label: `Monospace`,
+            desc: `If enabled, glyphs width will be overriden by the default font width value. Override happen at export time and does not affect custom data.`
+        },
+        
         // Glyph properties
 
         [this.H_ORIGIN_X]: {
@@ -201,6 +219,7 @@ class IDS {
             desc: `indicates the y-coordinate in the font coordinate system of the origin of a glyph to be used when drawing horizontally oriented text.`
         },
         [this.WIDTH]: {
+            recompute:true,
             inputType: inputs.Number,
             label: `Width`,
             desc: `indicates the horizontal advance after rendering a glyph in horizontal orientation.`
@@ -214,6 +233,7 @@ class IDS {
             desc: `indicates the y-coordinate in the font coordinate system of the origin of a glyph to be used when drawing vertically oriented text.`
         },
         [this.HEIGHT]: {
+            recompute:true,
             inputType: inputs.Number,
             label: `Height`,
             desc: `indicates the vertical advance after rendering a glyph in vertical orientation.`
@@ -224,6 +244,7 @@ class IDS {
             desc: `Define the color of the glyphs in the editor.`
         },
         [this.UNICODE]: {
+            recompute:true,
             inputType: inputs.Text,
             desc: ``
         },
@@ -231,24 +252,14 @@ class IDS {
         // Misc
 
         [this.COLOR_PREVIEW]: {
+            recompute:true,
             inputType: inputs.Color,
             label: `Preview color`,
             inputOptions: { changeOnInput: true },
             desc: `Define the color of the glyphs in the editor.`
         },
-        [this.RATIO_H]: {
-            inputType: inputs.SliderOnly,
-            label: `H Ratio`,
-            inputOptions: { changeOnInput: true, step: 1, min: 1, max: 3, size:ui.FLAGS.SIZE_XXS },
-            desc: `Horizontal preview ratio`
-        },
-        [this.RATIO_V]: {
-            inputType: inputs.SliderOnly,
-            label: `V Ratio`,
-            inputOptions: { changeOnInput: true, step: 1, min: 1, max: 3, size:ui.FLAGS.SIZE_XXS },
-            desc: `Vertical preview ratio`
-        },
         [this.PREVIEW_SIZE]: {
+            recompute:true,
             inputType: inputs.SliderOnly,
             label: `Preview size`,
             inputOptions: { changeOnInput: true, step: 1, min: 50, max: 250, size:ui.FLAGS.SIZE_XXS },

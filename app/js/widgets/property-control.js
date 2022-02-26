@@ -28,7 +28,8 @@ class PropertyControl extends nkm.datacontrols.ControlWidget {
 
         this._optionsHandler
             .Hook(`propertyId`)
-            .Hook(`allowOverride`, null, false);
+            .Hook(`allowOverride`, null, false)
+            .Hook(`command`);
 
     }
 
@@ -78,8 +79,8 @@ class PropertyControl extends nkm.datacontrols.ControlWidget {
             '.input-field': {
                 'flex': '1 0 50%'
             },
-            '.toggle': {              
-                'width':'32px',  
+            '.toggle': {
+                'width': '32px',
                 'margin-right': '10px',
                 'margin-left': '-10px'
             }
@@ -149,6 +150,10 @@ class PropertyControl extends nkm.datacontrols.ControlWidget {
         return this._data.Resolve(this._valueID);
     }
 
+    set command(p_value) {
+        this._cmd = p_value;
+    }
+
     _OnDataUpdated(p_data) {
         super._OnDataUpdated(p_data);
 
@@ -165,8 +170,15 @@ class PropertyControl extends nkm.datacontrols.ControlWidget {
     }
 
     _OnValueSubmit(p_input, p_value) {
-        if (this._onSubmitFn) { this._onSubmitFn(this._valueID, p_value); }
-        else { this._data.Set(this._valueID, p_value); }
+        if (this._cmd) {
+            this._cmd.emitter = this;
+            this._cmd.inputValue = p_value;
+            this._cmd.Execute();
+        } else if (this._onSubmitFn) {
+            this._onSubmitFn(this._valueID, p_value);
+        } else {
+            this._data.Set(this._valueID, p_value);
+        }
     }
 
     _OnToggleSubmit(p_input, p_value) {
@@ -184,6 +196,7 @@ class PropertyControl extends nkm.datacontrols.ControlWidget {
     }
 
     _Cleanup() {
+        this._cmd = null;
         super._Cleanup();
     }
 

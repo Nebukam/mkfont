@@ -49,6 +49,14 @@ class FontEditor extends nkm.uiworkspace.editors.EditorEx {
     }
     get fontCatalog() { return this._fontCatalog; }
 
+    set selectedSubFamily(p_value){
+        if(this._selectedSubFamily == p_value){return;}
+        let old = this._selectedSubFamily;
+        this._selectedSubFamily = p_value;
+        if(old){ old.Unwatch(nkm.data.SIGNAL.VALUE_CHANGED, this._OnValueChanged, this); }
+        if(p_value){ p_value.Watch(nkm.data.SIGNAL.VALUE_CHANGED, this._OnValueChanged, this); }
+    }
+
     _Style() {
         return nkm.style.Extends({
             ':host': {
@@ -78,36 +86,47 @@ class FontEditor extends nkm.uiworkspace.editors.EditorEx {
 
     _OnDataChanged(p_oldData) {
         super._OnDataChanged(p_oldData);
-        this._selectedSubFamily = this._data ? this._data.defaultSubFamily : null; // will self-update
+
         if (this._data) {
+            this.selectedSubFamily = this._data.defaultSubFamily;
+            this.fontCatalog = this._data.catalog;
             this._OnValueChanged(this._data, mkfData.IDS.PREVIEW_SIZE, null);
+        } else {
+            this.selectedSubFamily = null;
+            this.fontCatalog = null;
         }
     }
 
     _OnValueChanged(p_data, p_id, p_valueObj) {
 
-        if (p_id == mkfData.IDS.COLOR_PREVIEW ||
-            p_id == mkfData.IDS.PREVIEW_SIZE ||
-            p_id == mkfData.IDS.RATIO_H ||
-            p_id == mkfData.IDS.RATIO_V) {
-                
-            let s = p_data.Get(mkfData.IDS.PREVIEW_SIZE),
-                rH = p_data.Get(mkfData.IDS.RATIO_H),
-                rV = p_data.Get(mkfData.IDS.RATIO_V),
+        let infos = mkfData.IDS.infos[p_id];
+        if (!infos) { return; }
+
+        if (infos.recompute) {
+
+            let subFam = this._selectedSubFamily;
+
+            subFam._UpdateDisplayValues();
+
+            let s = subFam.Resolve(mkfData.IDS.PREVIEW_SIZE),
+                rW = subFam._previewInfos.raw,
+                rH = subFam._previewInfos.rah,
                 pH = `auto`,
                 pW = `auto`;
 
-            if (rH > rV) {
+            if (rW > rH) {
+                //Wider than taller
                 pH = `${s}px`;
             } else {
+                //Taller than wider
                 pW = `${s}px`;
             }
 
-            nkm.style.Set(`--glyph-color`, p_data.Get(mkfData.IDS.COLOR_PREVIEW));
+            nkm.style.Set(`--glyph-color`, p_data.Resolve(mkfData.IDS.COLOR_PREVIEW));
             nkm.style.Set(`--preview-size`, `${s}px`);
             nkm.style.Set(`--preview-height`, `${pH}`);
             nkm.style.Set(`--preview-width`, `${pW}`);
-            nkm.style.Set(`--preview-ratio`, `${rH}/${rV}`);
+            nkm.style.Set(`--preview-ratio`, `${rW}/${rH}`);
 
         }
     }

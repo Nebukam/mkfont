@@ -15,15 +15,22 @@ class SubFamilyInspector extends nkm.datacontrols.ControlView {
     constructor() { super(); }
 
     static __controls = [
+        { cl:mkfWidgets.ControlHeader, options:{ label:`Definition` } },
         { options:{ propertyId:mkfData.IDS.FONT_STYLE } },
         { options:{ propertyId:mkfData.IDS.WEIGHT_CLASS } },
-        { options:{ propertyId:mkfData.IDS.EM_UNITS } },
-        { options:{ propertyId:mkfData.IDS.ASCENT } },
+
+        { cl:mkfWidgets.ControlHeader, options:{ label:`Resolution` } },
+        { options:{ propertyId:mkfData.IDS.EM_UNITS, command:mkfOperations.commands.SetEMUnits } },
+        { options:{ propertyId:mkfData.IDS.EM_RESAMPLE } },
+        
+        { cl:mkfWidgets.ControlHeader, options:{ label:`Metrics` } },
+        { options:{ propertyId:mkfData.IDS.ASCENT, command:mkfOperations.commands.SetAscent } },
         { options:{ propertyId:mkfData.IDS.DESCENT } },
         //{ options:{ propertyId:mkfData.IDS.CAP_HEIGHT } },
         //{ options:{ propertyId:mkfData.IDS.X_HEIGHT } },
         { options:{ propertyId:mkfData.IDS.WIDTH } },
-        { options:{ propertyId:mkfData.IDS.HEIGHT } },
+        { options:{ propertyId:mkfData.IDS.MONOSPACE } },
+        //{ options:{ propertyId:mkfData.IDS.HEIGHT } },
         //{ options:{ propertyId:mkfData.IDS.UNDERLINE_POSITION } },
         //{ options:{ propertyId:mkfData.IDS.UNDERLINE_THICKNESS } },
         //{ options:{ propertyId:mkfData.IDS.H_ORIGIN_X } },

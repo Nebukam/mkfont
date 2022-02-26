@@ -97,6 +97,19 @@ class GlyphGroupsView extends ui.views.View {
 
     }
 
+    _OnDataUpdated(p_data){
+        super._OnDataUpdated(p_data);
+        this._RefreshItems();
+    }
+
+
+    _RefreshItems(){
+        for(let i = 0; i < this._displayList.count; i++){
+            let item = this._displayList.At(i);
+            item._UpdateGlyphPreview();
+        }
+    }
+
     //#endregion
 
     //#region Preview tweaks

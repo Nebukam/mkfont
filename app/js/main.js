@@ -109,10 +109,15 @@ class MKFont extends nkm.app.AppBase {
         mkfOperations.commands.MakeTTFFont.Enable();
 
         nkm.actions.KeystrokeEx.CreateFromString(`Ctrl E`, { fn: this._Bind(this._WriteTTF) }).Enable();
-
+        
+        let t0 = performance.now();
+        
         this._editorView.options.view.RequestDisplay();
-        this._editorView.options.view.fontCatalog = this._tempFontData.catalog; //Unicodes.instance._ranges;
         this._editorView.options.view.data = this._tempFontData;
+
+        let t1 = performance.now();
+
+        console.log(`took ${t1 - t0}ms`);
 
     }
 

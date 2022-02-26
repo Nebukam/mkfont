@@ -59,19 +59,19 @@ class GlyphVariantDataBlock extends SimpleDataEx {
     _UpdateFontObject() {
 
         if (!this._glyph) { return; }
-        
+
         let glyph = this._fontObject;
 
-        dom.SAtt(glyph, IDS.WIDTH, this.Resolve(IDS.WIDTH), true);
+        dom.SAtt(glyph, IDS.WIDTH, this._subFamily.Get(IDS.MONOSPACE) ? this._subFamily.Get(IDS.WIDTH) : this.Resolve(IDS.WIDTH), true);
         dom.SAtt(glyph, IDS.HEIGHT, this.Resolve(IDS.HEIGHT), true);
         dom.SAtt(glyph, IDS.GLYPH_NAME, this.Resolve(IDS.DECIMAL).toString(16).padStart(6, '0'));
         dom.SAtt(glyph, IDS.UNICODE, this.Resolve(IDS.UNICODE));
 
         // Flip
         let glyphPath = svgpath(this.Get(IDS.PATH))
-                .scale(1, -1)
-                .translate(0, this._subFamily.Get(IDS.ASCENT))
-                .toString();
+            .scale(1, -1)
+            .translate(0, this._subFamily.Get(IDS.ASCENT))
+            .toString();
 
         glyph.setAttribute(`d`, glyphPath);
 
