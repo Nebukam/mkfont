@@ -7,5 +7,5 @@ module.exports = {
     PropertyControl: require(`./property-control`),
     PangramRenderer: require(`./pangram-renderer`),
     ControlHeader: require(`./control-header`),
-
+    TestWidget: require(`./test-stream-widget`),
 }

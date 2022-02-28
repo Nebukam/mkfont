@@ -15,7 +15,14 @@ class GlyphDataBlock extends SimpleDataEx {
 
     constructor() { super(); }
 
+    static __GetSignalValueMap() {
+        return {
+            [IDS.UNICODE]: SIGNAL.UNICODE_CHANGED
+        };
+    }
+
     static NULL = new GlyphDataBlock();
+
 
     _Init() {
 
@@ -26,7 +33,7 @@ class GlyphDataBlock extends SimpleDataEx {
             [IDS.DECIMAL]: { value: null },
             [IDS.UNICODE]: { value: null },
             [IDS.PATH]: { value: '' }
-        }
+        };
 
         this._family = null;
         this._arabic_form = null;
@@ -100,11 +107,6 @@ class GlyphDataBlock extends SimpleDataEx {
     }
 
     //
-
-    CommitValueUpdate(p_id, p_valueObj, p_silent = false) {
-        super.CommitValueUpdate(p_id, p_valueObj, p_silent);
-        // Propagate update to variants
-    }
 
     //
 

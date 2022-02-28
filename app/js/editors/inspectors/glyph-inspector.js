@@ -8,7 +8,7 @@ const operations = require(`../../operations/index`);
 const mkfData = require(`../../data`);
 const mkfWidgets = require(`../../widgets`);
 
-const Unicodes = require(`../../unicodes`);
+const UNICODE = require(`../../unicode`);
 
 const GlyphVariantInspector = require(`./glyph-iitem`);
 
@@ -79,8 +79,9 @@ class GlyphInspector extends nkm.datacontrols.ControlView {
         super._OnDataUpdated(p_data);
         let glyphData = p_data.data,
             unc = glyphData.Get(mkfData.IDS.UNICODE),
-            uncDesc = unc in Unicodes.instance._labels
-                ? Unicodes.instance._labels[unc]
+            obj = UNICODE.GetSingle(unc),
+            uncDesc = obj
+                ? `(${obj.block.name}) ${obj.name}`
                 : unc;
 
         this._unicode.Set(uncDesc);

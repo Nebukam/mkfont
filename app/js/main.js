@@ -11,7 +11,7 @@ const mkfEditors = require(`./editors`);
 const mkfExplorers = require(`./explorers`);
 const mkfOperations = require(`./operations`);
 
-const Unicodes = require(`./unicodes`);
+//const UNICODE = require(`./unicode`);
 const fs = require('fs');
 
 com.BINDINGS.Expand(require(`./bindings`)); //!important
@@ -89,11 +89,7 @@ class MKFont extends nkm.app.AppBase {
         //Debug : load a bunch of icon starting at decimal
 
         this._iconFolder = `D:/GIT/nkmjs/packages/nkmjs-style/src-style/default/assets/icons`;
-        //this._ReadIconDir(null, fs.readdirSync(this._iconFolder));
-
-        //this._ReadTTF();
-
-        let test = Unicodes.instance._ranges;
+        
         /*
                 let checkerSVG = fs.readFileSync(`./assets/checker.svg`); //D:/GIT/mkfont
                 for (let i = 0; i < 255; i++) {
@@ -109,15 +105,27 @@ class MKFont extends nkm.app.AppBase {
         mkfOperations.commands.MakeTTFFont.Enable();
 
         nkm.actions.KeystrokeEx.CreateFromString(`Ctrl E`, { fn: this._Bind(this._WriteTTF) }).Enable();
-        
-        let t0 = performance.now();
-        
+
         this._editorView.options.view.RequestDisplay();
         this._editorView.options.view.data = this._tempFontData;
 
+
+        let t0 = performance.now();
+        /*
+                let content = [];
+                for(let i = 0; i < 120000; i++){
+                    content.push({name:`char #${i}`, decimal:i});
+                }
+        
+                let catalog = nkm.data.catalogs.CreateFrom({name:'test'}, content);
+          */
+
+                //let GU = require(`./unicode`);
+        //console.log(GU.instance._charMap);
         let t1 = performance.now();
 
         console.log(`took ${t1 - t0}ms`);
+
 
     }
 
@@ -140,7 +148,7 @@ class MKFont extends nkm.app.AppBase {
     _PushSVG(p_family, p_svgString, i) {
         let svg = mkfOperations.SVG.ProcessString(p_svgString);
         //            console.log(filepath, filecontent);
-        let slot = Unicodes.instance._ranges.FindFirstByOptionValue(`glyph`, String.fromCharCode(i), true);
+        let slot = UNICODE.instance._ranges.FindFirstByOptionValue(`glyph`, String.fromCharCode(i), true);
         if (!slot) { return; }
         SET_SVG.Do({
             family: p_family,
@@ -151,7 +159,7 @@ class MKFont extends nkm.app.AppBase {
     }
 
     _ReadTTF() {
-        
+
         let ttf = fs.readFileSync('./assets/Inter-Regular.ttf');
 
         var svgContent = ttf2svg(ttf);

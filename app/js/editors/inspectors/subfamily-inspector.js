@@ -15,9 +15,9 @@ class SubFamilyInspector extends nkm.datacontrols.ControlView {
     constructor() { super(); }
 
     static __controls = [
-        { cl:mkfWidgets.ControlHeader, options:{ label:`Definition` } },
-        { options:{ propertyId:mkfData.IDS.FONT_STYLE } },
-        { options:{ propertyId:mkfData.IDS.WEIGHT_CLASS } },
+        //{ cl:mkfWidgets.ControlHeader, options:{ label:`Definition` } },
+        //{ options:{ propertyId:mkfData.IDS.FONT_STYLE } },
+        //{ options:{ propertyId:mkfData.IDS.WEIGHT_CLASS } },
 
         { cl:mkfWidgets.ControlHeader, options:{ label:`Resolution` } },
         { options:{ propertyId:mkfData.IDS.EM_UNITS, command:mkfOperations.commands.SetEMUnits } },

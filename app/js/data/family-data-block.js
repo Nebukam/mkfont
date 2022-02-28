@@ -40,6 +40,7 @@ class FamilyDataBlock extends SimpleDataEx {
         };
 
         this._glyphs = new nkm.collections.List();
+        this._glyphsMap = {};
 
         this._catalog = nkm.data.catalogs.CreateFrom({ name: `Glyphs` });
         this._subFamiliesCatalog = nkm.data.catalogs.CreateFrom({ name:'Sub Families' });
@@ -48,8 +49,7 @@ class FamilyDataBlock extends SimpleDataEx {
         this._defaultSubFamily = new SubFamily();
         this._defaultSubFamily._isDefault = true;
 
-        this._selectedSubFamily = this._defaultSubFamily;
-        
+        this._selectedSubFamily = this._defaultSubFamily;        
 
     }
 
@@ -158,8 +158,10 @@ class FamilyDataBlock extends SimpleDataEx {
 
     // Watch
 
-    _OnGlyphUnicodeChanged() {
+    _OnGlyphUnicodeChanged(p_glyph, p_valueObj, p_oldValue) {
         // TODO : Move from old slot to the new one
+        delete this._glyphsMap[p_oldValue];
+        this._glyphsMap[p_valueObj.value] = p_glyph;
     }
 
     _OnGlyphUpdated() {

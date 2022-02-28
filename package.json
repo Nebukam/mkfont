@@ -16,7 +16,8 @@
 
     "scripts": {
 
-        "nkmjs": "nkmjs"
+        "nkmjs": "nkmjs",
+        "processor": "node app/js-unicode/unicode-processor.js"
 
     },
 

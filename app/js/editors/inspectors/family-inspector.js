@@ -9,8 +9,11 @@ class FamilyInspector extends nkm.datacontrols.ControlView {
     constructor() { super(); }
 
     static __controls = [
-        { cl:mkfWidgets.ControlHeader, options:{ label:`Infos` } },
+        { cl:mkfWidgets.ControlHeader, options:{ label:`Definition` } },
         { options: { propertyId: mkfData.IDS.FAMILY } },
+        { options:{ propertyId:mkfData.IDS.FONT_STYLE, subData:`selectedSubFamily` } },
+        { options:{ propertyId:mkfData.IDS.WEIGHT_CLASS, subData:`selectedSubFamily` } },
+        { cl:mkfWidgets.ControlHeader, options:{ label:`Infos` } },
         { options: { propertyId: mkfData.IDS.COPYRIGHT } },
         { options: { propertyId: mkfData.IDS.METADATA } },
         { options: { propertyId: mkfData.IDS.DESCRIPTION } },
@@ -48,10 +51,9 @@ class FamilyInspector extends nkm.datacontrols.ControlView {
 
     _Render() {
 
-
-
         this._body = ui.dom.El(`div`, { class: `list` }, this._host);
         this._builder.host = this._body;
+
 
         super._Render();
 

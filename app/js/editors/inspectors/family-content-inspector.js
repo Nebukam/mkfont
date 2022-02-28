@@ -5,7 +5,9 @@ const uilib = nkm.uilib;
 const mkfData = require(`../../data`);
 const mkfWidgets = require(`../../widgets`);
 
-class FamilyCatalogInspector extends nkm.datacontrols.ControlView {
+// Manages what is shown & selectable in the viewport.
+
+class FamilyContentInspector extends nkm.datacontrols.ControlView {
     constructor() { super(); }
 
     _Init() {
@@ -50,5 +52,5 @@ class FamilyCatalogInspector extends nkm.datacontrols.ControlView {
 
 }
 
-module.exports = FamilyCatalogInspector;
-ui.Register(`mkf-family-catalog-inspector`, FamilyCatalogInspector);
+module.exports = FamilyContentInspector;
+ui.Register(`mkf-family-content-inspector`, FamilyContentInspector);

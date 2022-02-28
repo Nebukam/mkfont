@@ -56,9 +56,10 @@ class GlyphSlotItem extends ui.WidgetItem {
             '.preview': {
                 'position': 'relative',
                 'aspect-ratio': 'var(--preview-ratio)',
-                'flex': '1 1 auto',
-                'height': 'var(--preview-height)',
-                'width': 'var(--preview-width)',
+                'flex': '1 0 auto',
+                'min-height': 'var(--preview-height)',
+                'min-width': 'var(--preview-width)',
+                'width':'100%',
                 'display': 'flex',
                 'flex-flow': 'row nowrap',
                 'justify-content': 'center',

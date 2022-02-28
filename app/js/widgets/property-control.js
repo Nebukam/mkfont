@@ -29,6 +29,7 @@ class PropertyControl extends nkm.datacontrols.ControlWidget {
         this._optionsHandler
             .Hook(`propertyId`)
             .Hook(`allowOverride`, null, false)
+            .Hook(`subData`, null, null)
             .Hook(`command`);
 
     }
@@ -108,6 +109,10 @@ class PropertyControl extends nkm.datacontrols.ControlWidget {
         }
     }
 
+    set subData(p_value) {
+        this._subData = p_value;
+    }
+
     set propertyId(p_id) {
 
         this._valueID = p_id;
@@ -152,6 +157,12 @@ class PropertyControl extends nkm.datacontrols.ControlWidget {
 
     set command(p_value) {
         this._cmd = p_value;
+    }
+
+    _PreprocessData(p_data) {
+        if (!p_data) { return null; }
+        if (this._subData) { return p_data[this._subData]; }
+        return p_data;
     }
 
     _OnDataUpdated(p_data) {

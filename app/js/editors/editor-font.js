@@ -33,14 +33,28 @@ class FontEditor extends nkm.uiworkspace.editors.EditorEx {
     }
 
     _InitShelfCatalog(p_configList) {
+
         p_configList.push(
             {
                 [ui.IDS.NAME]: `Inspector`,
-                [ui.IDS.ICON]: `icon`,
+                [ui.IDS.ICON]: `three-lines`,
+                [ui.IDS.VIEW_CLASS]: mkfInspectors.FamilyContent,
+                assign: `_contentInspector`
+            },
+            {
+                [ui.IDS.NAME]: `Inspector`,
+                [ui.IDS.ICON]: `text`,
                 [ui.IDS.VIEW_CLASS]: this.constructor.__default_inspectorShellClass,
                 assign: `_inspectorShell`
-            }
+            },
+
         );
+
+    }
+
+    _PostInit(){
+        super._PostInit();
+        this._contentInspector.RequestDisplay();
     }
 
     set fontCatalog(p_catalog) {
@@ -49,12 +63,12 @@ class FontEditor extends nkm.uiworkspace.editors.EditorEx {
     }
     get fontCatalog() { return this._fontCatalog; }
 
-    set selectedSubFamily(p_value){
-        if(this._selectedSubFamily == p_value){return;}
+    set selectedSubFamily(p_value) {
+        if (this._selectedSubFamily == p_value) { return; }
         let old = this._selectedSubFamily;
         this._selectedSubFamily = p_value;
-        if(old){ old.Unwatch(nkm.data.SIGNAL.VALUE_CHANGED, this._OnValueChanged, this); }
-        if(p_value){ p_value.Watch(nkm.data.SIGNAL.VALUE_CHANGED, this._OnValueChanged, this); }
+        if (old) { old.Unwatch(nkm.data.SIGNAL.VALUE_CHANGED, this._OnValueChanged, this); }
+        if (p_value) { p_value.Watch(nkm.data.SIGNAL.VALUE_CHANGED, this._OnValueChanged, this); }
     }
 
     _Style() {
@@ -76,6 +90,7 @@ class FontEditor extends nkm.uiworkspace.editors.EditorEx {
     _Render() {
         super._Render();
         this._pangramInspector = this.Add(mkfInspectors.Pangram, `pangram`, this._body);
+        ui.dom.AttachFirst(this._pangramInspector, this._body, false);
         this._dataControllers.Add(this._pangramInspector);
     }
 

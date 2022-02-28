@@ -6,4 +6,5 @@ module.exports = {
     SubFamily: require(`./subfamily-inspector`),
     Glyph: require(`./glyph-inspector`),
     Pangram: require(`./pangram-inspector`),
+    FamilyContent:require(`./family-content-inspector`),
 }

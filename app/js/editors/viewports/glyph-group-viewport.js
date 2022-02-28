@@ -55,8 +55,11 @@ class GlyphGroupsView extends ui.views.View {
                 'min-height': 0,
             },
             '.item': {
-                'flex': '1 0 auto',
-                'margin':'3px',
+                'flex': '0 0 auto',
+                //'margin': '3px',
+            },
+            '.dom-stream':{
+
             }
         }, super._Style());
     }
@@ -65,7 +68,25 @@ class GlyphGroupsView extends ui.views.View {
         super._Render();
 
         this._controls = ui.dom.El("div", { class: 'controls' }, this._host);
-        this._groupWrapper = ui.dom.El("div", { class: 'group-wrapper' }, this._host);
+        this._groupWrapper = ui.dom.El("div", { class: 'group-wrapper' }, null); //this._host
+
+        this._domStreamer = this.Add(ui.helpers.DOMStreamer, 'dom-stream group-wrapper', this._host);
+        this._domStreamer.Watch(ui.SIGNAL.ITEM_REQUESTED, this._OnItemRequest, this);
+        this._domStreamer.options = {
+            layout: {
+                itemWidth: 200,
+                itemHeight: 200,
+                itemCount: 5000
+            }
+        };
+
+    }
+
+    _OnItemRequest(p_streamer, p_index, p_fragment) {
+        console.log(`Streamer request @${p_index}`);
+        let w = this.Add(mkfWidgets.TestWidget, 'testu', p_fragment);
+        w.vIndex = p_index;
+        p_streamer.ItemRequestHandled(p_index, w);
     }
 
     //#region Catalog Management
@@ -97,16 +118,16 @@ class GlyphGroupsView extends ui.views.View {
 
     }
 
-    _OnDataUpdated(p_data){
+    _OnDataUpdated(p_data) {
         super._OnDataUpdated(p_data);
         this._RefreshItems();
     }
 
 
-    _RefreshItems(){
-        for(let i = 0; i < this._displayList.count; i++){
+    _RefreshItems() {
+        for (let i = 0; i < this._displayList.count; i++) {
             let item = this._displayList.At(i);
-            item._UpdateGlyphPreview();
+            if (`_UpdateGlyphPreview` in item) { item._UpdateGlyphPreview(); }
         }
     }
 
