@@ -36,6 +36,8 @@ class TestWidget extends ui.WidgetItem {
 
     set vIndex(p_value) {
         this._label.Set(`${p_value}`);
+        let s = (Math.abs(Math.round(Math.sin(p_value) * 255))).toString(16);
+        this._label._element.style.setProperty('color', `#${s}${s}${s}`);
     }
 
 

@@ -59,7 +59,9 @@ class GlyphGroupsView extends ui.views.View {
                 //'margin': '3px',
             },
             '.dom-stream':{
-
+                'position': 'relative',
+                'flex': '1 1 auto',
+                'overflow': 'auto',
             }
         }, super._Style());
     }
@@ -70,7 +72,7 @@ class GlyphGroupsView extends ui.views.View {
         this._controls = ui.dom.El("div", { class: 'controls' }, this._host);
         this._groupWrapper = ui.dom.El("div", { class: 'group-wrapper' }, null); //this._host
 
-        this._domStreamer = this.Add(ui.helpers.DOMStreamer, 'dom-stream group-wrapper', this._host);
+        this._domStreamer = this.Add(ui.helpers.DOMStreamer, 'dom-stream', this._host);
         this._domStreamer.Watch(ui.SIGNAL.ITEM_REQUESTED, this._OnItemRequest, this);
         this._domStreamer.options = {
             layout: {
@@ -83,10 +85,10 @@ class GlyphGroupsView extends ui.views.View {
     }
 
     _OnItemRequest(p_streamer, p_index, p_fragment) {
-        console.log(`Streamer request @${p_index}`);
+        //console.log(`Streamer request @${p_index}`);
         let w = this.Add(mkfWidgets.TestWidget, 'testu', p_fragment);
         w.vIndex = p_index;
-        p_streamer.ItemRequestHandled(p_index, w);
+        p_streamer.ItemRequestAnswer(p_index, w);
     }
 
     //#region Catalog Management
