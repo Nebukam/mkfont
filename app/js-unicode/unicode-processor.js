@@ -7,7 +7,6 @@ let blockLines = blockFile.split(`\r\n`);
 //#region Blocks
 let tabs = `\n\t\t\t`;
 let blocks = [];
-let UNI_BLOCKS = `[\n`;
 for (let i = 0; i < blockLines.length; i++) {
 
     let
@@ -19,9 +18,7 @@ for (let i = 0; i < blockLines.length; i++) {
         end = parseInt(range[1], 16);
 
     blocks.push({ name: name, start: start, end: end, i: i, glyphs: [] });
-    UNI_BLOCKS += `${tabs}{ name:'${name}', count:${end - start} }${i == blockLines.length - 1 ? '' : ','}`;
 }
-UNI_BLOCKS += `${tabs}]`;
 
 function FindBlock(index) {
     for (let i = 0; i < blocks.length; i++) {
@@ -75,6 +72,8 @@ let categories = {
     Sk: { name: `Symbol, Modifier` },
     So: { name: `Symbol, Other` },
 
+    Liga: { name: `Custom, Ligatures` },
+
 };
 
 let generalCategories = {};
@@ -95,7 +94,9 @@ for (let p in categories) {
         generalCategories[general] = gCat;
     }
 
+    obj.id = p;
     obj.count = 0;
+    obj.glyphs = [];
 }
 
 //#endregion
@@ -167,7 +168,10 @@ for (let p in decompositions) {
 
 //#endregion
 
+//#region Glyphs
+
 let charMap = {};
+let charList = [];
 for (let i = 0; i < characterLines.length; i++) {
     let
         entry = characterLines[i].split(`;`),
@@ -179,13 +183,14 @@ for (let i = 0; i < characterLines.length; i++) {
         decomposition = entry[5],
         index = parseInt(charCode, 16),
         block = FindBlock(index),
-        charData = {};
+        charData = { i: i };
 
     if (charName == `<control>`) { charName = entry[10]; }
     charData.name = charName;
 
     let cat = categories[generalCategory];
     cat.count++;
+    cat.glyphs.push(charData);
     charData.category = cat;
 
     let canon = canonicalClasses[canonical];
@@ -216,6 +221,7 @@ for (let i = 0; i < characterLines.length; i++) {
 
     charMap[`${charCode}`] = charData;
     blocks[block].glyphs.push(charData);
+    charList.push(charData);
 
 }
 
@@ -309,10 +315,93 @@ for (let b = 0; b < blocks.length; b++) {
 
 //#endregion
 
+//#endregion
+
+//#region Range computing
+
+function getRanges(p_glyphList) {
+    p_glyphList.sort((a, b) => { return a.i - b.i; });
+    let ranges = [];
+    let currentRange = null;
+    let last_i = -1;
+    let cats = [];
+    let min = 9999999999;
+    let max = -1;
+
+    for (let i = 0; i < p_glyphList.length; i++) {
+        let glyph = p_glyphList[i];
+        let current_i = glyph.i;
+
+        if (last_i == -1 ||
+            current_i == last_i + 1) {
+            if (!currentRange) {
+                currentRange = [];
+                ranges.push(currentRange);
+            }
+        } else {
+            console.log(`${current_i} / ${last_i + 1} / ${last_i} `);
+            currentRange = [];
+            ranges.push(currentRange);
+        }
+
+
+        if (!cats.includes(glyph.category.id)) { cats.push(glyph.category.id); }
+
+        if (current_i < min) { min = current_i; }
+        if (current_i > max) { max = current_i; }
+
+        currentRange.push(current_i);
+        last_i = current_i;
+    }
+
+    let rstr = ``;
+    for (let i = 0; i < ranges.length; i++) {
+
+        let sr = ranges[i];
+        if (sr.length == 1) {
+            rstr += sr[0];
+        } else {
+            rstr += `[${sr[0]},${sr[sr.length - 1]}]`;
+        }
+
+        if (i != ranges.length - 1) { rstr += `,`; }
+    }
+
+    for (let i = 0; i < cats.length; i++) { cats[i] = `c.${cats[i]}`; }
+
+    return { r: rstr, c: cats, rmin: min, rmax: max };
+
+}
+
+for (let i = 0; i < blocks.length; i++) {
+    let bl = blocks[i];
+    let glyphList = [];
+    for (let bi = 0; bi < bl.glyphs.length; bi++) {
+        glyphList.push(bl.glyphs[bi]);
+    }
+    let rinfos = getRanges(glyphList);
+    bl.ranges = rinfos;
+}
+
+//#endregion
+
+//#region Code generation
+
+let UNI_BLOCKS = `[\n`;
+for (let i = 0; i < blocks.length; i++) {
+    let b = blocks[i];
+    //TODO : cross reference which categories are included within the ranges
+    let rinfos = b.ranges;
+    let cstr = rinfos.c ? `cats:[${rinfos.c.join(',')}], ` : ``;
+    UNI_BLOCKS += `${tabs}{ name:'${b.name}', count:${b.end - b.start}, ${cstr}range:[${b.start},${b.end}]}${i == blockLines.length - 1 ? '' : ','}`;
+}
+UNI_BLOCKS += `${tabs}]`;
+
+
 let UNI_CHAR_MAP = `{\n`;
 for (var p in charMap) {
     let c = charMap[p];
-    UNI_CHAR_MAP += `${tabs}'${p}':{ name:'${c.name}', canon:k.${c.canonical}, block:b[${c.block}]`;
+    UNI_CHAR_MAP += `${tabs}'${p}':{ i:${c.i}, name:'${c.name}', canon:k.${c.canonical}, block:b[${c.block}]`;
     UNI_CHAR_MAP += `},`;
 }
 UNI_CHAR_MAP += `${tabs}}`;
@@ -320,7 +409,8 @@ UNI_CHAR_MAP += `${tabs}}`;
 let UNI_CATEGORIES = `{\n`;
 for (let p in categories) {
     let obj = categories[p];
-    UNI_CATEGORIES += `${tabs}'${p}':{ name:'${obj.name}', count:${obj.count} },`;
+    let rinfos = getRanges(obj.glyphs);
+    UNI_CATEGORIES += `${tabs}'${p}':{ name:'${obj.name}', count:${obj.count}, imin:${rinfos.rmin}, imax:${rinfos.rmax}, includes:[${rinfos.r}] },`;
 }
 UNI_CATEGORIES += `${tabs}}`;
 
@@ -349,12 +439,16 @@ for (let p in canonicalClasses) {
 }
 UNI_CANON += `${tabs}}`;
 
+//#endregion
+
 console.log(generalCategories);
 console.log(categories);
 console.log(canonicalClasses);
 console.log(decompositions);
 console.log(characterLines.length);
 //console.log(charMap);
+
+
 
 let js = fs.readFileSync(`./assets/unicode-singleton-template.js`, `utf8`);
 js = js.split(`UNI_BLOCKS`).join(UNI_BLOCKS);

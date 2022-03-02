@@ -58,7 +58,7 @@ class GlyphGroupsView extends ui.views.View {
                 'flex': '0 0 auto',
                 //'margin': '3px',
             },
-            '.dom-stream':{
+            '.dom-stream': {
                 'position': 'relative',
                 'flex': '1 1 auto',
                 'overflow': 'auto',
@@ -73,15 +73,24 @@ class GlyphGroupsView extends ui.views.View {
         this._groupWrapper = ui.dom.El("div", { class: 'group-wrapper' }, null); //this._host
 
         this._domStreamer = this.Add(ui.helpers.DOMStreamer, 'dom-stream', this._host);
-        this._domStreamer.Watch(ui.SIGNAL.ITEM_REQUESTED, this._OnItemRequest, this);
+        this._domStreamer
+            .Watch(ui.SIGNAL.ITEM_REQUESTED, this._OnItemRequest, this)
+            .Watch(ui.SIGNAL.ITEM_REQUEST_RANGE_UPDATE, this._OnItemRequestRangeUpdate, this);
+
         this._domStreamer.options = {
             layout: {
                 itemWidth: 200,
                 itemHeight: 200,
-                itemCount: 5000
+                itemCount: 0
             }
         };
 
+    }
+
+
+    _OnItemRequestRangeUpdate(p_streamer, p_infos){
+        //TODO : Pre-compute the UNICODE range we'll fetch data from
+        // if that hasn't been done previously
     }
 
     _OnItemRequest(p_streamer, p_index, p_fragment) {

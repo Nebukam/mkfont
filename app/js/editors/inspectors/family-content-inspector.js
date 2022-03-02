@@ -36,9 +36,13 @@ class FamilyContentInspector extends nkm.datacontrols.ControlView {
     }
 
     _Render() {
-
         super._Render();
-
+        // Categories
+        // Blocks
+        // - blocks need to be searchable, there is too much of them.
+        this._body = ui.dom.El(`div`, {class:`body`});
+        this._categories = this.Add(mkfWidgets.lists.FilterRoot);
+        this._blocks = this.Add(mkfWidgets.lists.);
     }
 
     //#region Family properties

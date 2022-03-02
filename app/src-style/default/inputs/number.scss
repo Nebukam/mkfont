@@ -6,10 +6,41 @@
 @import '../_variables';
 @import '../_mixins';
 
-:host{
-    
+:host(:hover){
+
+    &::before, &::after{ 
+        content:"";
+        position: absolute;
+        width: 10px;
+        height:50%;
+        right: 8px;
+        pointer-events: none;
+    }
+
+    &::before{ 
+        background: url(../assets/icons/icon_down-short.svg) no-repeat;
+        background-size: contain;
+        background-position: top;
+        bottom:0;
+    }
+
+    &::after { 
+        background: url(../assets/icons/icon_up-short.svg) no-repeat;
+        background-size: contain;
+        background-position: bottom;
+        top:0;
+    }
+
 }
 
 .field{
     
+    &::-webkit-inner-spin-button,
+    &::-webkit-outer-spin-button{ 
+        //-webkit-appearance: none;
+        opacity:0;
+        cursor: pointer;
+    }
+    
 }
+

@@ -120,8 +120,8 @@ class MKFont extends nkm.app.AppBase {
                 let catalog = nkm.data.catalogs.CreateFrom({name:'test'}, content);
           */
 
-                //let GU = require(`./unicode`);
-        //console.log(GU.instance._charMap);
+                let GU = require(`./unicode`);
+        let tttttt = GU.instance._charMap;
         let t1 = performance.now();
 
         console.log(`took ${t1 - t0}ms`);
