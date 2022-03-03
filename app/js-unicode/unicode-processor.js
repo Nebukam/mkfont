@@ -34,45 +34,45 @@ function FindBlock(index) {
 
 let categories = {
     // Normative Categories
-    Lu: { name: `Letter, Uppercase` },
-    Ll: { name: `Letter, Lowercase` },
-    Lt: { name: `Letter, Titlecase` },
+    Lu: { name: `Letter, Uppercase`, icon:`directory` },
+    Ll: { name: `Letter, Lowercase`, icon:`directory` },
+    Lt: { name: `Letter, Titlecase`, icon:`directory` },
 
-    Mn: { name: `Mark, Non-Spacing` },
-    Mc: { name: `Mark, Spacing Combining` },
-    Me: { name: `Mark, Enclosing` },
+    Mn: { name: `Mark, Non-Spacing`, icon:`directory` },
+    Mc: { name: `Mark, Spacing Combining`, icon:`directory` },
+    Me: { name: `Mark, Enclosing`, icon:`directory` },
 
-    Nd: { name: `Number, Decimal Digit` },
-    Nl: { name: `Number, Letter` },
-    No: { name: `Number, Other` },
+    Nd: { name: `Number, Decimal Digit`, icon:`directory` },
+    Nl: { name: `Number, Letter`, icon:`directory` },
+    No: { name: `Number, Other`, icon:`directory` },
 
-    Zs: { name: `Separator, Space` },
-    Zl: { name: `Separator, Line` },
-    Zp: { name: `Separator, Paragraph` },
+    Zs: { name: `Separator, Space`, icon:`directory` },
+    Zl: { name: `Separator, Line`, icon:`directory` },
+    Zp: { name: `Separator, Paragraph`, icon:`directory` },
 
-    Cc: { name: `Other, Control` },
-    Cf: { name: `Other, Format` },
-    Cs: { name: `Other, Surrogate` },
-    Co: { name: `Other, Private Use` },
+    Cc: { name: `Other, Control`, icon:`directory` },
+    Cf: { name: `Other, Format`, icon:`directory` },
+    Cs: { name: `Other, Surrogate`, icon:`directory` },
+    Co: { name: `Other, Private Use`, icon:`directory` },
 
     //Informative Categories
-    Lm: { name: `Letter, Modifier` },
-    Lo: { name: `Letter, Other` },
+    Lm: { name: `Letter, Modifier`, icon:`directory` },
+    Lo: { name: `Letter, Other`, icon:`directory` },
 
-    Pc: { name: `Punctuation, Connector` },
-    Pd: { name: `Punctuation, Dash` },
-    Ps: { name: `Punctuation, Open` },
-    Pe: { name: `Punctuation, Close` },
-    Pi: { name: `Punctuation, Initial quote` },
-    Pf: { name: `Punctuation, Final quote` },
-    Po: { name: `Punctuation, Other` },
+    Pc: { name: `Punctuation, Connector`, icon:`directory` },
+    Pd: { name: `Punctuation, Dash`, icon:`directory` },
+    Ps: { name: `Punctuation, Open`, icon:`directory` },
+    Pe: { name: `Punctuation, Close`, icon:`directory` },
+    Pi: { name: `Punctuation, Initial quote`, icon:`directory` },
+    Pf: { name: `Punctuation, Final quote`, icon:`directory` },
+    Po: { name: `Punctuation, Other`, icon:`directory` },
 
-    Sm: { name: `Symbol, Math` },
-    Sc: { name: `Symbol, Currency` },
-    Sk: { name: `Symbol, Modifier` },
-    So: { name: `Symbol, Other` },
+    Sm: { name: `Symbol, Math`, icon:`directory` },
+    Sc: { name: `Symbol, Currency`, icon:`directory` },
+    Sk: { name: `Symbol, Modifier`, icon:`directory` },
+    So: { name: `Symbol, Other`, icon:`directory` },
 
-    Liga: { name: `Custom, Ligatures` },
+    Liga: { name: `Custom, Ligatures`, icon:`directory` },
 
 };
 
@@ -393,7 +393,7 @@ for (let i = 0; i < blocks.length; i++) {
     //TODO : cross reference which categories are included within the ranges
     let rinfos = b.ranges;
     let cstr = rinfos.c ? `cats:[${rinfos.c.join(',')}], ` : ``;
-    UNI_BLOCKS += `${tabs}{ name:'${b.name}', count:${b.end - b.start}, ${cstr}range:[${b.start},${b.end}]}${i == blockLines.length - 1 ? '' : ','}`;
+    UNI_BLOCKS += `${tabs}{ name:'${b.name}', count:${b.end - b.start}, icon:'view-grid', ${cstr}range:[${b.start},${b.end}]}${i == blockLines.length - 1 ? '' : ','}`;
 }
 UNI_BLOCKS += `${tabs}]`;
 
@@ -410,7 +410,7 @@ let UNI_CATEGORIES = `{\n`;
 for (let p in categories) {
     let obj = categories[p];
     let rinfos = getRanges(obj.glyphs);
-    UNI_CATEGORIES += `${tabs}'${p}':{ name:'${obj.name}', count:${obj.count}, imin:${rinfos.rmin}, imax:${rinfos.rmax}, includes:[${rinfos.r}] },`;
+    UNI_CATEGORIES += `${tabs}'${p}':{ name:'${obj.name}', count:${obj.count}, imin:${rinfos.rmin}, imax:${rinfos.rmax}, icon:'${obj.icon}', includes:[${rinfos.r}] },`;
 }
 UNI_CATEGORIES += `${tabs}}`;
 

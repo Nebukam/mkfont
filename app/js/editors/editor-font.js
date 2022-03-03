@@ -25,6 +25,9 @@ class FontEditor extends nkm.uiworkspace.editors.EditorEx {
         // However, Helper functions to do the search & match should reside
         // somewhere else
 
+        this._leftShelfList = [];
+        this._leftShelfCatalog = new nkm.data.catalogs.Catalog(false);
+
         this._selectedSubFamily = null;
         this._pangramInspector = null;
 
@@ -37,12 +40,6 @@ class FontEditor extends nkm.uiworkspace.editors.EditorEx {
         p_configList.push(
             {
                 [ui.IDS.NAME]: `Inspector`,
-                [ui.IDS.ICON]: `three-lines`,
-                [ui.IDS.VIEW_CLASS]: mkfInspectors.FamilyContent,
-                assign: `_contentInspector`
-            },
-            {
-                [ui.IDS.NAME]: `Inspector`,
                 [ui.IDS.ICON]: `text`,
                 [ui.IDS.VIEW_CLASS]: this.constructor.__default_inspectorShellClass,
                 assign: `_inspectorShell`
@@ -50,9 +47,54 @@ class FontEditor extends nkm.uiworkspace.editors.EditorEx {
 
         );
 
+        this._leftShelfList.push(
+            {
+                [ui.IDS.NAME]: `Unicode`,
+                [ui.IDS.ICON]: `icon`,
+                [ui.IDS.VIEW_CLASS]: mkfInspectors.FamilyContent,
+                assign: `_contentInspector`
+            },
+            {
+                [ui.IDS.NAME]: `Pangram`,
+                [ui.IDS.ICON]: `three-lines`,
+                [ui.IDS.VIEW_CLASS]: mkfInspectors.Pangram,
+                assign: `_pangramInspector`
+            }
+        );
+
+        //this._dataControllers.Add(this._pangramInspector);
+
     }
 
-    _PostInit(){
+    _RegisterEditorBits() {
+
+        super._RegisterEditorBits();
+
+        this._leftShelf.catalog = this._leftShelfCatalog;
+
+        let confs = this._leftShelfList;
+
+        for (let i = 0, n = confs.length; i < n; i++) {
+
+            let
+                conf = confs[i],
+                item = this._leftShelfCatalog.Register(conf),
+                view = item.GetOption('view', null),
+                assign = u.tils.Get(conf, `assign`, null);
+
+            //console.log(`${assign} >> ${view}`);
+
+            if (view) {
+                if (conf.isInspector) { this._dataInspectors.Add(view); }
+                else { this._dataControllers.Add(view); }
+                if (assign) { this[assign] = view; }
+            }
+
+        }
+
+    }
+
+    _PostInit() {
         super._PostInit();
         this._contentInspector.RequestDisplay();
     }
@@ -88,10 +130,18 @@ class FontEditor extends nkm.uiworkspace.editors.EditorEx {
     }
 
     _Render() {
+
         super._Render();
-        this._pangramInspector = this.Add(mkfInspectors.Pangram, `pangram`, this._body);
-        ui.dom.AttachFirst(this._pangramInspector, this._body, false);
-        this._dataControllers.Add(this._pangramInspector);
+
+        this._leftShelf = this.Add(this.constructor.__default_shelfClass, `shelf`, this._body);
+        this._leftShelf.orientation = ui.FLAGS.HORIZONTAL;
+        this._leftShelf.navPlacement = ui.FLAGS.TOP;
+
+        this._shelf.orientation = ui.FLAGS.HORIZONTAL;
+        this._shelf.navPlacement = ui.FLAGS.TOP;
+
+        ui.dom.AttachFirst(this._leftShelf, this._body, false);
+
     }
 
     _PreprocessData(p_data) {

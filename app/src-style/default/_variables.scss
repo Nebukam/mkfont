@@ -248,9 +248,13 @@ $short_states_ids:
     'sf';
 
 $tree_indent: 24px;
+$folder_indent: 24px;
 
 $varname_tree_indent: '--tree-indent';
 $varname_tree_size: '--tree-size';
+
+$varname_folder_indent: '--folder-indent';
+$varname_folder_size: '--folder-size';
 
 $overlay_bg_dark: rgba(#191919, 0.5);
 $overlay_bg_light: rgba(#f0f0f0, 0.5);

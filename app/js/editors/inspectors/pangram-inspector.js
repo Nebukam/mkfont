@@ -49,7 +49,7 @@ class SubFamilyInspector extends nkm.datacontrols.ControlView {
             ':host': {
                 'display': 'flex',
                 'flex-flow': 'column nowrap',
-                'max-width': '350px',
+                'min-width': '300px',
                 'background-color': '#646464'
             },
             '.body': {

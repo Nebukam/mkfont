@@ -6,7 +6,7 @@ const lists = nkm.uilib.lists;
 
 const mkfData = require(`../../data`);
 
-class FilterItem extends lists.FolderListItem {
+class FilterList extends lists.FolderList {
     constructor() { super(); }
 
 
@@ -38,5 +38,5 @@ class FilterItem extends lists.FolderListItem {
 
 }
 
-module.exports = FilterItem;
-ui.Register(`mkfont-filter-item`, FilterItem);
+module.exports = FilterList;
+ui.Register(`mkfont-filter-list`, FilterList);

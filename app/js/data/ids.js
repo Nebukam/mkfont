@@ -262,7 +262,7 @@ class IDS {
             recompute:true,
             inputType: inputs.SliderOnly,
             label: `Preview size`,
-            inputOptions: { changeOnInput: true, step: 1, min: 50, max: 250, size:ui.FLAGS.SIZE_XXS },
+            inputOptions: { changeOnInput: true, step: 1, min: 100, max: 250, size:ui.FLAGS.SIZE_XXS },
             desc: `Preview size`
         },
 

@@ -2,6 +2,7 @@ const nkm = require(`@nkmjs/core`);
 const ui = nkm.ui;
 const uilib = nkm.uilib;
 
+const UNICODE = require(`../../unicode`);
 const mkfData = require(`../../data`);
 const mkfWidgets = require(`../../widgets`);
 
@@ -40,9 +41,13 @@ class FamilyContentInspector extends nkm.datacontrols.ControlView {
         // Categories
         // Blocks
         // - blocks need to be searchable, there is too much of them.
-        this._body = ui.dom.El(`div`, {class:`body`});
-        this._categories = this.Add(mkfWidgets.lists.FilterRoot);
-        this._blocks = this.Add(mkfWidgets.lists.);
+        this._body = ui.dom.El(`div`, {class:`body`}, this);
+        
+        this._categories = this.Add(mkfWidgets.lists.FilterRoot, `asd`, this._body);
+        this._categories.data = UNICODE.instance._categoriesCatalog;
+
+        this._blocks = this.Add(mkfWidgets.lists.BlockRoot, `asd`, this._body);
+        this._blocks.data = UNICODE.instance._blockCatalog;
     }
 
     //#region Family properties

@@ -36,7 +36,7 @@ class FamilyDataBlock extends SimpleDataEx {
             [IDS.MATHEMATICAL]: { value: 350 },
             [IDS.IDEOGRAPHIC]: { value: 400 },
             
-            [IDS.PREVIEW_SIZE]: { value: 50 },
+            [IDS.PREVIEW_SIZE]: { value: 100 },
         };
 
         this._glyphs = new nkm.collections.List();

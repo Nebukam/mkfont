@@ -24,6 +24,7 @@ class UNICODE extends nkm.com.helpers.Singleton {
                 let lcgc = childrens[i];
                 cgc.content.push({ name: lcgc.name });
             }
+            mgc.push(cgc);
         }
 
         let b = UNI_BLOCKS;

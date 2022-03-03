@@ -4,9 +4,9 @@ const uilib = nkm.uilib;
 const inputs = nkm.uilib.inputs;
 const lists = nkm.uilib.lists;
 
-const mkfData = require(`../data`);
+const mkfData = require(`../../data`);
 
-class FilterRoot extends lists.TreeRoot {
+class FilterRoot extends lists.FolderListRoot {
     constructor() { super(); }
 
 

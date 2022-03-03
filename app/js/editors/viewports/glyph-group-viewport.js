@@ -27,6 +27,9 @@ class GlyphGroupsView extends ui.views.View {
             .Watch(ui.SIGNAL.COLLAPSED, this._builder.Disable, this._builder)
             .Watch(ui.SIGNAL.EXPANDED, this._builder.Enable, this._builder);
 
+        nkm.style.STYLE.instance.Watch(`--preview-width`, this._OnPreviewSizeUpdate, this);
+        nkm.style.STYLE.instance.Watch(`--preview-height`, this._OnPreviewSizeUpdate, this);
+
     }
 
     _PostInit() {
@@ -39,7 +42,8 @@ class GlyphGroupsView extends ui.views.View {
             ':host': {
                 'position': 'relative',
                 'display': 'flex',
-                'flex-flow': 'row nowrap'
+                'flex-flow': 'row nowrap',
+                '--streamer-gap':'10px'
             },
             '.group-wrapper': {
                 'position': 'relative',
@@ -81,21 +85,40 @@ class GlyphGroupsView extends ui.views.View {
             layout: {
                 itemWidth: 200,
                 itemHeight: 200,
-                itemCount: 0
+                itemCount: 5000,
+                gap:10
             }
         };
 
     }
 
+    _OnPreviewSizeUpdate() {
+        let w = nkm.style.Get(`--preview-width`),
+            h = nkm.style.Get(`--preview-height`),
+            v = w == `auto` ? h == `auto` ? 200 : h.substring(0, h.length - 2) : w.substring(0, w.length - 2);
 
-    _OnItemRequestRangeUpdate(p_streamer, p_infos){
+        v = Number(v);
+
+        this._domStreamer.options = {
+            layout: {
+                itemWidth: v,
+                itemHeight: v*1,
+                itemCount: 5000,
+                gap:5
+            }
+        };
+
+        console.log(this._domStreamer.options);
+    }
+
+    _OnItemRequestRangeUpdate(p_streamer, p_infos) {
         //TODO : Pre-compute the UNICODE range we'll fetch data from
         // if that hasn't been done previously
     }
 
     _OnItemRequest(p_streamer, p_index, p_fragment) {
         //console.log(`Streamer request @${p_index}`);
-        let w = this.Add(mkfWidgets.TestWidget, 'testu', p_fragment);
+        let w = this.Add(mkfWidgets.GlyphSlot, 'glyph', p_fragment);
         w.vIndex = p_index;
         p_streamer.ItemRequestAnswer(p_index, w);
     }

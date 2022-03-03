@@ -1,0 +1,21 @@
+/*-------------------------------*/
+/*<!---- @nkmjs/ui-library ----!>*/
+/*-------------------------------*/
+
+@import '../_constants';
+@import '../_variables';
+@import '../_mixins';
+
+@import './tree-group';
+
+:host{
+    #{$varname_tree_size}: var(--size-s);
+}
+
+.header{
+
+}
+
+.body{
+
+}

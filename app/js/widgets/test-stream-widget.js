@@ -24,7 +24,8 @@ class TestWidget extends ui.WidgetItem {
                 //'min-height': 'var(--preview-size)',
                 //'border':'1px solid gray',
                 //'background-color': 'green',
-                'border': '1px solid red'
+                'border': '1px solid red',
+                //'margin':'10px'
             },
         }, super._Style());
     }

@@ -4,9 +4,9 @@ const uilib = nkm.uilib;
 const inputs = nkm.uilib.inputs;
 const lists = nkm.uilib.lists;
 
-const mkfData = require(`../data`);
+const mkfData = require(`../../data`);
 
-class FolderGroup extends lists.TreeItemGroup {
+class BlockRoot extends lists.FolderListRoot {
     constructor() { super(); }
 
 
@@ -38,5 +38,5 @@ class FolderGroup extends lists.TreeItemGroup {
 
 }
 
-module.exports = FolderGroup;
-ui.Register(`mkfont-folder-group`, FolderGroup);
+module.exports = BlockRoot;
+ui.Register(`mkfont-block-root`, BlockRoot);

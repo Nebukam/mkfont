@@ -153,4 +153,7 @@
 
     #{$varname_tree_indent}: $tree_indent;
     #{$varname_tree_size}: var(--size-s);
+
+    #{$varname_folder_indent}: $folder_indent;
+    #{$varname_folder_size}: var(--size-s);
 }
