@@ -2,6 +2,7 @@ const nkm = require(`@nkmjs/core`);
 const ui = nkm.ui;
 const uilib = nkm.uilib;
 
+const UNICODE = require(`../unicode`);
 const mkfData = require(`../data`);
 const GlyphRenderer = require(`./glyph-renderer`);
 const GlyphCanvasRenderer = require(`./glyph-canvas-renderer`);
@@ -36,11 +37,19 @@ class TestWidget extends ui.WidgetItem {
     }
 
     set vIndex(p_value) {
-        this._label.Set(`${p_value}`);
-        let s = (Math.abs(Math.round(Math.sin(p_value) * 255))).toString(16);
-        this._label._element.style.setProperty('color', `#${s}${s}${s}`);
+        //this._label.Set(`${p_value}`);
+        //let s = (Math.abs(Math.round(Math.sin(p_value) * 255))).toString(16);
+        //this._label._element.style.setProperty('color', `#${s}${s}${s}`);
     }
 
+    set glyphInfos(p_value){
+        if(nkm.utils.isNumber(p_value)){
+            this._label.Set(`${UNICODE.GetUnicodeCharacter(p_value)}`);
+        }else{
+            this._label.Set(`${UNICODE.GetUnicodeCharacter(parseInt(p_value.u, 16))}`);
+        }
+        
+    }
 
     _Cleanup() {
         super._Cleanup();

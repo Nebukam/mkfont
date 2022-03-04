@@ -5,13 +5,16 @@ const inputs = nkm.uilib.inputs;
 const lists = nkm.uilib.lists;
 
 const mkfData = require(`../../data`);
+const BlockItem = require(`./block-item`);
 
 class BlockRoot extends lists.FolderListRoot {
     constructor() { super(); }
 
+    static __defaultItemClass = BlockItem;
 
     _Init() {
         super._Init();
+        //this._builder._defaultDirClass = Folder;
     }
 
     _PostInit() {

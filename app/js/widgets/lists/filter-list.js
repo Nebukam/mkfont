@@ -5,10 +5,12 @@ const inputs = nkm.uilib.inputs;
 const lists = nkm.uilib.lists;
 
 const mkfData = require(`../../data`);
+const FilterItem = require(`./filter-item`);
 
 class FilterList extends lists.FolderList {
     constructor() { super(); }
 
+    static __defaultItemClass = FilterItem;
 
     _Init() {
         super._Init();

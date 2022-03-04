@@ -31,6 +31,16 @@ class FilterItem extends lists.FolderListItem {
         super._Render();
     }
 
+    Activate(p_evt) {
+        if (!super.Activate(p_evt)) { return false; }
+        
+        let editor = nkm.datacontrols.FindEditor(this);
+        //console.log(`Activated : `,editor);
+        if(editor){ editor.SetActiveRange(this._data); }
+
+        return true;
+    }
+
     _Cleanup() {
         this._cmd = null;
         super._Cleanup();

@@ -31,7 +31,7 @@ class FontEditor extends nkm.uiworkspace.editors.EditorEx {
         this._selectedSubFamily = null;
         this._pangramInspector = null;
 
-        this._dataObserver.Hook(nkm.data.SIGNAL.VALUE_CHANGED, this._OnValueChanged, this);
+        this._dataObserver.Hook(nkm.data.SIGNAL.VALUE_CHANGED, this._OnDataValueChanged, this);
 
     }
 
@@ -109,8 +109,8 @@ class FontEditor extends nkm.uiworkspace.editors.EditorEx {
         if (this._selectedSubFamily == p_value) { return; }
         let old = this._selectedSubFamily;
         this._selectedSubFamily = p_value;
-        if (old) { old.Unwatch(nkm.data.SIGNAL.VALUE_CHANGED, this._OnValueChanged, this); }
-        if (p_value) { p_value.Watch(nkm.data.SIGNAL.VALUE_CHANGED, this._OnValueChanged, this); }
+        if (old) { old.Unwatch(nkm.data.SIGNAL.VALUE_CHANGED, this._OnDataValueChanged, this); }
+        if (p_value) { p_value.Watch(nkm.data.SIGNAL.VALUE_CHANGED, this._OnDataValueChanged, this); }
     }
 
     _Style() {
@@ -144,6 +144,11 @@ class FontEditor extends nkm.uiworkspace.editors.EditorEx {
 
     }
 
+    SetActiveRange(p_rangeData){
+        console.log(`Set active range to : `,p_rangeData);
+        this._viewport.displayRange = p_rangeData ? p_rangeData.options : null;
+    }
+
     _PreprocessData(p_data) {
         if (!nkm.utils.isInstanceOf(p_data, mkfData.Family)) { return null; }
         return p_data;
@@ -155,14 +160,14 @@ class FontEditor extends nkm.uiworkspace.editors.EditorEx {
         if (this._data) {
             this.selectedSubFamily = this._data.defaultSubFamily;
             this.fontCatalog = this._data.catalog;
-            this._OnValueChanged(this._data, mkfData.IDS.PREVIEW_SIZE, null);
+            this._OnDataValueChanged(this._data, mkfData.IDS.PREVIEW_SIZE, null);
         } else {
             this.selectedSubFamily = null;
             this.fontCatalog = null;
         }
     }
 
-    _OnValueChanged(p_data, p_id, p_valueObj) {
+    _OnDataValueChanged(p_data, p_id, p_valueObj) {
 
         let infos = mkfData.IDS.infos[p_id];
         if (!infos) { return; }

@@ -6,9 +6,14 @@ const lists = nkm.uilib.lists;
 
 const mkfData = require(`../../data`);
 
+const FilterItem = require(`./filter-item`);
+const FilterList = require(`./filter-list`);
+
 class FilterRoot extends lists.FolderListRoot {
     constructor() { super(); }
 
+    static __defaultItemClass = FilterItem;
+    static __defaultDirClass = FilterList;
 
     _Init() {
         super._Init();

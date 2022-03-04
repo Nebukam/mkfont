@@ -401,7 +401,7 @@ UNI_BLOCKS += `${tabs}]`;
 let UNI_CHAR_MAP = `{\n`;
 for (var p in charMap) {
     let c = charMap[p];
-    UNI_CHAR_MAP += `${tabs}'${p}':{ i:${c.i}, name:'${c.name}', canon:k.${c.canonical}, block:b[${c.block}]`;
+    UNI_CHAR_MAP += `${tabs}'${p}':{ u:'${p}', i:${c.i}, name:'${c.name}', canon:k.${c.canonical}, block:b[${c.block}]`;
     UNI_CHAR_MAP += `},`;
 }
 UNI_CHAR_MAP += `${tabs}}`;

@@ -119,6 +119,10 @@ class GlyphSlotItem extends ui.WidgetItem {
 
     }
 
+    set glyphInfos(p_value){
+        this._label.Set(`<code>${p_value}</code>`);
+    }
+
     _UpdateGlyphPreview() {
         let glyphData = this._data ? this._data.data : null;
 
