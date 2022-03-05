@@ -1,8 +1,8 @@
 {
     "name": "my-app",
-    "longName": "undefined Verbose App Name",
-    "shortName": "undefined App",
-    "description": "App description",
+    "longName": "mkfont",
+    "shortName": "mkfont",
+    "description": "Makes font.",
     "homepage": "https://www.undefined.com",
     "app": {
         "display": "standalone",

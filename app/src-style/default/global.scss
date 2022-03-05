@@ -64,21 +64,29 @@
 }
 
 @include prefers_dark{
-    :host{
+    :root{
         @for $i from 0 to length($col_flavors_ex_varnames) { 
             $varname:nth($col_flavors_ex_varnames, $i + 1);
             $col:nth($col_flavors_ex, $i + 1);
             #{$varname+'-rgb'}: red($col), green($col), blue($col);
             #{$varname}: $col;
             #{$varname+'-contrast'}: nth($col_flavors_ex_bw, $i + 1);
+            #{$varname+'-dark'}: darkened($col);
+            #{$varname+'-bright'}: lightened($col);
         }
     }
 }
 
 @include prefers_light{
-    :host{
+    :root{
         @for $i from 0 to length($col_flavors_ex_varnames) { 
-            #{nth($col_flavors_ex_varnames, $i + 1)}: nth($col_flavors_ex, $i + 1);
+            $varname:nth($col_flavors_ex_varnames, $i + 1);
+            $col:nth($col_flavors_ex, $i + 1);
+            #{$varname+'-rgb'}: red($col), green($col), blue($col);
+            #{$varname}: $col;
+            #{$varname+'-contrast'}: nth($col_flavors_ex_bw, $i + 1);
+            #{$varname+'-dark'}: darkened($col);
+            #{$varname+'-bright'}: lightened($col);
         }
     }
 }

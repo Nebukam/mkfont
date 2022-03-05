@@ -19,6 +19,9 @@ $primary_light: #e5e5e5;
 	@return rgba($color, $alpha);
 }
 
+@function darkened( $color, $alpha: 1) { @return rgba(darken($color, 20%), $alpha); }
+@function lightened( $color, $alpha: 1) { @return rgba(lighten($color, 20%), $alpha); }
+
 /* Min Max Clamp */
 
 @function _clamp( $min, $number, $max ){	@return math.clamp($min, $number, $max); }

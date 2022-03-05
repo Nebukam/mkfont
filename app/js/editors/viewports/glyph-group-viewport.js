@@ -7,16 +7,18 @@ const ui = nkm.ui;
 const UNICODE = require(`../../unicode`);
 const mkfWidgets = require(`../../widgets`);
 const GlyphGroup = require(`./glyph-group`);
+const GlyphGroupHeader = require(`./glyph-group-header`);
 
 class GlyphGroupsView extends ui.views.View {
     constructor() { super(); }
 
     _Init() {
         super._Init();
-
-        nkm.style.STYLE.instance
-            .Watch(`--preview-width`, this._OnPreviewSizeUpdate, this)
-            .Watch(`--preview-height`, this._OnPreviewSizeUpdate, this);
+        /*
+                nkm.style.STYLE.instance
+                    .Watch(`--preview-width`, this._OnPreviewSizeUpdate, this)
+                    .Watch(`--preview-height`, this._OnPreviewSizeUpdate, this);
+                    */
 
         this._Bind(this._OnIndexRequestMixed);
         this._Bind(this._OnIndexRequestRange);
@@ -40,25 +42,11 @@ class GlyphGroupsView extends ui.views.View {
             ':host': {
                 'position': 'relative',
                 'display': 'flex',
-                'flex-flow': 'row nowrap',
+                'flex-flow': 'column nowrap',
                 '--streamer-gap': '10px'
             },
-            '.group-wrapper': {
-                'position': 'relative',
-                'display': 'flex',
-                'flex-flow': 'row wrap',
-                'flex': '1 1 auto',
-                'overflow': 'auto',
-                'align-items': 'flex-start',
-                'align-content': 'flex-start'
-            },
-            '.group': {
-                'flex': '1 0 auto',
-                'min-height': 0,
-            },
-            '.item': {
+            '.header': {
                 'flex': '0 0 auto',
-                //'margin': '3px',
             },
             '.dom-stream': {
                 'position': 'relative',
@@ -71,7 +59,7 @@ class GlyphGroupsView extends ui.views.View {
     _Render() {
         super._Render();
 
-        this._controls = ui.dom.El("div", { class: 'controls' }, this._host);
+        this._header = this.Add(GlyphGroupHeader, `header`);
 
         this._domStreamer = this.Add(ui.helpers.DOMStreamer, 'dom-stream', this._host);
         this._domStreamer
@@ -89,12 +77,26 @@ class GlyphGroupsView extends ui.views.View {
 
     }
 
+
+    SetPreviewSize(p_width, p_height) {
+        this._domStreamer.options = {
+            layout: {
+                itemWidth: p_width,
+                itemHeight: p_height + 50,
+                //itemCount: this._indexCount,
+                gap: 5
+            }
+        };
+    }
+
     set displayRange(p_value) {
         if (this._displayRanges == p_value) {
             //TODO: If not ligatures, can just return.
             //otherwise, range is dynamic and should be refreshed.
             return;
         }
+
+        this._header.displayRange = p_value;
 
         if (this._OnIndexRequestCB) {
             this._domStreamer.Unwatch(ui.SIGNAL.ITEM_REQUESTED, this._OnIndexRequestCB, this);
@@ -153,7 +155,6 @@ class GlyphGroupsView extends ui.views.View {
         //this._domStreamer._ClearItems();
         this._domStreamer.itemCount = this._indexCount;
         this._domStreamer.scroll({ top: 0 });
-        console.log(this._indexCount);
 
     }
 
@@ -206,7 +207,7 @@ class GlyphGroupsView extends ui.views.View {
         let index = p_index + this._indexOffset;
         let data = UNICODE.instance._charList[index];
         if (data) { this._OnItemRequestProcessed(data, p_streamer, p_index, p_fragment); }
-        else{ this._OnItemRequestProcessed(index, p_streamer, p_index, p_fragment); }
+        else { this._OnItemRequestProcessed(index, p_streamer, p_index, p_fragment); }
     }
 
     _OnIndexRequestUnicodes(p_streamer, p_index, p_fragment) {
@@ -220,37 +221,25 @@ class GlyphGroupsView extends ui.views.View {
 
     //#endregion
 
-    _OnPreviewSizeUpdate() {
-        let w = nkm.style.Get(`--preview-width`),
-            h = nkm.style.Get(`--preview-height`),
-            v = w == `auto` ? h == `auto` ? 200 : h.substring(0, h.length - 2) : w.substring(0, w.length - 2);
-
-        v = Number(v);
-
-        this._domStreamer.options = {
-            layout: {
-                itemWidth: v,
-                itemHeight: v * 1,
-                itemCount: this._indexCount,
-                gap: 5
-            }
-        };
-
-        console.log(this._domStreamer.options);
-    }
-
     _OnItemRequestProcessed(p_data, p_streamer, p_index, p_fragment) {
-        //console.log(`Streamer request @${p_index}`);
-        let w = this.Add(mkfWidgets.TestWidget, 'glyph', p_fragment); //GlyphSlot
-        w.vIndex = p_index;
-        w.glyphInfos = p_data;
-        p_streamer.ItemRequestAnswer(p_index, w);
+
+        let widget = this.Add(mkfWidgets.GlyphSlot, 'glyph', p_fragment);
+        widget.subFamily = this._data.selectedSubFamily;
+        widget.glyphInfos = p_data;
+
+        p_streamer.ItemRequestAnswer(p_index, widget);
+
     }
 
     _OnItemRequestRangeUpdate() {
 
     }
     //#region Catalog Management
+
+    _OnDataChanged(p_oldData) {
+        super._OnDataChanged(p_oldData);
+        this._header.data = this._data;
+    }
 
     _OnDataUpdated(p_data) {
         super._OnDataUpdated(p_data);

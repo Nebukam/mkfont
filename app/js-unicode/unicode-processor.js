@@ -410,7 +410,7 @@ let UNI_CATEGORIES = `{\n`;
 for (let p in categories) {
     let obj = categories[p];
     let rinfos = getRanges(obj.glyphs);
-    UNI_CATEGORIES += `${tabs}'${p}':{ name:'${obj.name}', count:${obj.count}, imin:${rinfos.rmin}, imax:${rinfos.rmax}, icon:'${obj.icon}', includes:[${rinfos.r}] },`;
+    UNI_CATEGORIES += `${tabs}'${p}':{ name:'${obj.name}', id:'${obj.id}', count:${obj.count}, imin:${rinfos.rmin}, imax:${rinfos.rmax}, icon:'${obj.icon}', includes:[${rinfos.r}] },`;
 }
 UNI_CATEGORIES += `${tabs}}`;
 

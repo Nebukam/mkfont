@@ -4,7 +4,7 @@ module.exports = {
 
     lists:require(`./lists`),
 
-    GlyphSlot : require(`./glyph-slot-item`),
+    GlyphSlot : require(`./glyph-slot`),
     GlyphRenderer : require(`./glyph-renderer`),
     PropertyControl: require(`./property-control`),
     PangramRenderer: require(`./pangram-renderer`),

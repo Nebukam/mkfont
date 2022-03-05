@@ -144,8 +144,8 @@ class FontEditor extends nkm.uiworkspace.editors.EditorEx {
 
     }
 
-    SetActiveRange(p_rangeData){
-        console.log(`Set active range to : `,p_rangeData);
+    SetActiveRange(p_rangeData) {
+        console.log(`Set active range to : `, p_rangeData);
         this._viewport.displayRange = p_rangeData ? p_rangeData.options : null;
     }
 
@@ -182,21 +182,28 @@ class FontEditor extends nkm.uiworkspace.editors.EditorEx {
                 rW = subFam._previewInfos.raw,
                 rH = subFam._previewInfos.rah,
                 pH = `auto`,
-                pW = `auto`;
+                pW = `auto`,
+                fH = s, fW = s;
 
             if (rW > rH) {
                 //Wider than taller
                 pH = `${s}px`;
+                fH = s;
+                fW = s * rW;
             } else {
                 //Taller than wider
                 pW = `${s}px`;
+                fH = s * rH;
+                fW = s;
             }
 
             nkm.style.Set(`--glyph-color`, p_data.Resolve(mkfData.IDS.COLOR_PREVIEW));
             nkm.style.Set(`--preview-size`, `${s}px`);
-            nkm.style.Set(`--preview-height`, `${pH}`);
-            nkm.style.Set(`--preview-width`, `${pW}`);
+            nkm.style.Set(`--preview-height`, `${fH * 0.8}px`);
+            nkm.style.Set(`--preview-width`, `${fW * 0.8}px`);
             nkm.style.Set(`--preview-ratio`, `${rW}/${rH}`);
+
+            this._viewport.SetPreviewSize(fW, fH);
 
         }
     }

@@ -28,6 +28,8 @@
 // Flavors
 @include for-each-host-selector('', $FLAVORS_EX, '', '', $col_flavors_ex_varnames) using ($index, $val) {
     --flavor-color: var(#{$val});
+    --flavor-color-dark: var(#{$val+'-dark'});
+    --flavor-color-light: var(#{$val+'-bright'});
     --flavor-color-rgb: var(#{$val+"-rgb"});
     --flavor-contrast:var(#{$val+'-contrast'});
 }

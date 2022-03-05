@@ -11,7 +11,7 @@ const mkfEditors = require(`./editors`);
 const mkfExplorers = require(`./explorers`);
 const mkfOperations = require(`./operations`);
 
-//const UNICODE = require(`./unicode`);
+const UNICODE = require(`./unicode`);
 const fs = require('fs');
 
 com.BINDINGS.Expand(require(`./bindings`)); //!important
@@ -86,18 +86,7 @@ class MKFont extends nkm.app.AppBase {
 
         this._tempFontData = new mkfData.Family();
 
-        //Debug : load a bunch of icon starting at decimal
-
         this._iconFolder = `D:/GIT/nkmjs/packages/nkmjs-style/src-style/default/assets/icons`;
-        
-        /*
-                let checkerSVG = fs.readFileSync(`./assets/checker.svg`); //D:/GIT/mkfont
-                for (let i = 0; i < 255; i++) {
-                    this._PushSVG(this._tempFontData, checkerSVG, i);
-                }
-        */
-
-        //        console.log(this._tempFontData);
 
         let fName = `Basement-Medium`;// `Basement-Medium`;// `Meticula`; //`Inter-Regular`;
         this._tempFontData = mkfOperations.SVG.FamilyFromTTF(fs.readFileSync(`./assets/${fName}.ttf`));
@@ -106,26 +95,11 @@ class MKFont extends nkm.app.AppBase {
 
         nkm.actions.KeystrokeEx.CreateFromString(`Ctrl E`, { fn: this._Bind(this._WriteTTF) }).Enable();
 
-        this._editorView.options.view.RequestDisplay();
-        this._editorView.options.view.data = this._tempFontData;
+        let fontEditor = this._editorView.options.view;
 
-
-        let t0 = performance.now();
-        /*
-                let content = [];
-                for(let i = 0; i < 120000; i++){
-                    content.push({name:`char #${i}`, decimal:i});
-                }
-        
-                let catalog = nkm.data.catalogs.CreateFrom({name:'test'}, content);
-          */
-
-                let GU = require(`./unicode`);
-        let tttttt = GU.instance._charMap;
-        let t1 = performance.now();
-
-        console.log(`took ${t1 - t0}ms`);
-
+        fontEditor.RequestDisplay();
+        fontEditor.data = this._tempFontData;
+        fontEditor.SetActiveRange(UNICODE.instance._blockCatalog.At(0));
 
     }
 
@@ -134,7 +108,6 @@ class MKFont extends nkm.app.AppBase {
     }
 
     _ReadIconDir(err, files) {
-        console.log(files);
 
         let offset = 48;
         for (let i = 0; i < files.length; i++) {

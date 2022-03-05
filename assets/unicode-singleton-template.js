@@ -22,6 +22,7 @@ class UNICODE extends nkm.com.helpers.Singleton {
                 cgc = { name: lgc.name, content: [] };
             for (let i = 0; i < childrens.length; i++) {
                 let lcgc = childrens[i];
+                lcgc.parent = lgc;
                 cgc.content.push(lcgc);
             }
             mgc.push(cgc);
@@ -29,11 +30,11 @@ class UNICODE extends nkm.com.helpers.Singleton {
 
         let b = UNI_BLOCKS;
         this._blocks = b;
-        this._blockCatalog = nkm.data.catalogs.CreateFrom(
-            { name: `Unicode blocks` }, b);
+        this._blockCatalog = nkm.data.catalogs.CreateFrom({ name: `Unicode blocks` }, b);
+        this._blockCatalog.expanded = true;
 
-        this._categoriesCatalog = nkm.data.catalogs.CreateFrom(
-            { name: `Categories` }, mgc);
+        this._categoriesCatalog = nkm.data.catalogs.CreateFrom({ name: `Categories` }, mgc);
+        this._categoriesCatalog.expanded = true;
 
         for (var g in gc) {
             let gCat = gc[g], childrens = gCat.childrens;

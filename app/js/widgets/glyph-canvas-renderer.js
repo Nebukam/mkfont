@@ -63,7 +63,6 @@ class GlyphCanvasRenderer extends ui.helpers.Canvas {
         ctx.fillStyle = col;
         ctx.fill(this._path2D);
 
-
         // Baseline
         ctx.strokeStyle = nkm.style.Get(`--col-active`);
         ctx.lineWidth = iscale;
