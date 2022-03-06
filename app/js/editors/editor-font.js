@@ -94,6 +94,29 @@ class FontEditor extends nkm.uiworkspace.editors.EditorEx {
 
     }
 
+    _OnSelectionStackItemAdded(p_widget) {
+        let glyphInfos = p_widget.glyphInfos;
+        if(glyphInfos){
+            let glyph = p_widget.data;
+            if(glyph){
+                // Has an existing glyph!
+                if(glyph == mkfData.Glyph.NULL){
+                    //null glyph
+                }else{
+
+                }
+            }else{
+                // No glyph associated... at all??
+            }
+        }else{
+            this.Inspect(null);
+        }
+    }
+
+    _OnSelectionStackItemRemoved(p_widget) {
+        //if (this._inspectedData == p_widget.data) { this.Inspect(null); }
+    }
+
     _PostInit() {
         super._PostInit();
         this._contentInspector.RequestDisplay();

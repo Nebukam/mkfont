@@ -45,7 +45,7 @@ class GlyphGroupHeader extends nkm.datacontrols.ControlView {
         this._tagBar.size = ui.FLAGS.SIZE_XS;
 
         this._typeTag = this._tagBar.CreateHandle();
-        this._typeTag.bgColor = `var(--col-${ui.FLAGS.CTA}-dark)`;
+        this._typeTag.bgColor = `black`;
 
         this._countTag = this._tagBar.CreateHandle();
 
@@ -72,8 +72,9 @@ class GlyphGroupHeader extends nkm.datacontrols.ControlView {
         this._subTags.Clear();
         if (p_value) {
             if (p_value.parent) {
-                this._title.Set(`${p_value.parent.name} ${p_value.name}`);
-                this._typeTag.label = `Mixed glyphs`;
+                this._title.Set(`${p_value.parent.name} : ${p_value.name}`);
+                this._typeTag.label = `Mixed blocks`;
+                //this._typeTag.bgColor = `var(--col-${p_value.col || `default`})`;
             } else {
                 this._title.Set(p_value.name);
                 this._typeTag.label = `Unicode block`;
@@ -83,6 +84,7 @@ class GlyphGroupHeader extends nkm.datacontrols.ControlView {
                     this._subTags.CreateHandle({ label:cat.id, bgColor:`black` });
                 }
                 */
+                //this._typeTag.bgColor = `var(--col-default)`;
             }
             this._countTag.label = `<b>${p_value.count}</b> Glyphs`;
         } else {

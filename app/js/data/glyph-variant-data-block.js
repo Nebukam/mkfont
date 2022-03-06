@@ -64,7 +64,7 @@ class GlyphVariantDataBlock extends SimpleDataEx {
 
         dom.SAtt(glyph, IDS.WIDTH, this._subFamily.Get(IDS.MONOSPACE) ? this._subFamily.Get(IDS.WIDTH) : this.Resolve(IDS.WIDTH), true);
         dom.SAtt(glyph, IDS.HEIGHT, this.Resolve(IDS.HEIGHT), true);
-        dom.SAtt(glyph, IDS.GLYPH_NAME, this.Resolve(IDS.DECIMAL).toString(16).padStart(6, '0'));
+        dom.SAtt(glyph, IDS.GLYPH_NAME, this.Resolve(IDS.GLYPH_NAME));
         dom.SAtt(glyph, IDS.UNICODE, this.Resolve(IDS.UNICODE));
 
         // Flip

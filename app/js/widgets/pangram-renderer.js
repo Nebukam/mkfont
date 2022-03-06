@@ -18,6 +18,7 @@ class PangramRenderer extends ui.Widget {
 
         this._previewText = defaultPangram;
         this._tempFont = null;
+        this.align = null;
 
         this._Bind(this.Draw);
         this._scheduledDraw = nkm.com.DelayedCall(this.Draw, 500);
@@ -29,14 +30,21 @@ class PangramRenderer extends ui.Widget {
             ':host': {
                 'position': 'relative',
                 'display': 'flex',
+                'box-sizing':'border-box',
                 'flex-flow': 'column nowrap',
-                //'overflow':'clip',
-                '--font-size':'40px'
+                //'align-items':'center',
+                'justify-content':'center',
+                'padding':'20px',
+                'overflow':'clip',
+                '--font-size':'40px',
+                'background-color': '#1e1e1e',
+                'border-radius':'5px'
             },
             '.pangram': {
                 'font-family': `'tempFont'`,
-                'text-align': 'center',
-                'font-size': 'var(--font-size)'
+                'text-align': 'var(--font-align)',
+                'font-size': 'var(--font-size)',
+                'color':'var(--glyph-color)'
             }
         }, super._Style());
     }
@@ -48,10 +56,26 @@ class PangramRenderer extends ui.Widget {
         this.text = null;
     }
 
+    set align(p_value){
+        if(!p_value){ p_value = `center`; }
+        this.style.setProperty(`--font-align`, p_value);
+    }
+
+    set direction(p_value){
+        if(!p_value){
+            this.style.removeProperty(`direction`);
+        }else{
+            this.style.setProperty(`direction`, p_value);
+        }
+        
+    }
+
     set text(p_value) {
         if (!p_value) { p_value = defaultPangram; }
+        
         this._previewText = p_value;
-        this._pangramText.Set(p_value);
+        let val = '<p>' + p_value.replace(/[^\S\n]+\n/g, '\n').replace(/\n\n+/g, '</p><p>').replace(/\n/g, '<br>') + '</p>';
+        this._pangramText.Set(val);
     }
 
     set fontSize(p_value){

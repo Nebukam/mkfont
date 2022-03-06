@@ -62,7 +62,6 @@ class IDS {
     static PATH = 'path';
     static GLYPH_NAME = 'glyph-name';
     static UNICODE = 'unicode';
-    static DECIMAL = 'decimal';
 
     // Misc properties
     static SIZE = 'size';

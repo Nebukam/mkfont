@@ -18,10 +18,10 @@ class UNICODE extends nkm.com.helpers.Singleton {
 
         let mgc = [];
         for (let p in gc) {
-            let lgc = gc[p], childrens = lgc.childrens,
+            let lgc = gc[p], subs = lgc.subs,
                 cgc = { name: lgc.name, content: [] };
-            for (let i = 0; i < childrens.length; i++) {
-                let lcgc = childrens[i];
+            for (let i = 0; i < subs.length; i++) {
+                let lcgc = subs[i];
                 lcgc.parent = lgc;
                 cgc.content.push(lcgc);
             }
@@ -37,8 +37,8 @@ class UNICODE extends nkm.com.helpers.Singleton {
         this._categoriesCatalog.expanded = true;
 
         for (var g in gc) {
-            let gCat = gc[g], childrens = gCat.childrens;
-            for (let i = 0; i < childrens.length; i++) { childrens[i].general = gCat; }
+            let gCat = gc[g], subs = gCat.subs;
+            for (let i = 0; i < subs.length; i++) { subs[i].general = gCat; }
         }
 
         let k = UNI_CANON;
@@ -55,9 +55,12 @@ class UNICODE extends nkm.com.helpers.Singleton {
 
     }
 
-    static GetSingle(p_unicode) {
-        let address = p_unicode.charCodeAt(0).toString(16).padStart(4, '0');
-        return this.instance._charMap[address];
+    static GetSingle(p_character) {
+        return this.instance._charMap[this.GetAdress(p_character)];
+    }
+
+    static GetAddress(p_character){
+        return p_character.codePointAt(0).toString(16).padStart(4, '0');
     }
 
     static GetUnicodeCharacter(p_codePoint) {

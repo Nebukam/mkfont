@@ -113,21 +113,8 @@ class GlyphGroupsView extends ui.views.View {
         if (`includes` in p_value) {
             // Expect an mixed array of indices & [a,b] ranges
             this._indexOffset = p_value.imin;
-            let
-                list = p_value.includes,
-                count = 0;
-
-            for (let i = 0; i < list.length; i++) {
-                let range = list[i];
-                if (u.isArray(range)) {
-                    count += range[1] - range[0];
-                } else if (u.isNumber(range)) {
-                    count++;
-                }
-            }
-
-            this._indexCount = count;
-            this._referenceList = list;
+            this._indexCount = p_value.count;
+            this._referenceList = p_value.includes;
             this._OnIndexRequestCB = this._OnIndexRequestMixed;
 
         } else if (`range` in p_value) {
@@ -168,36 +155,40 @@ class GlyphGroupsView extends ui.views.View {
     }
 
     _GetMixedIndex(p_index) {
-        let index = p_index + this._indexOffset;
-        if (this._referenceList.includes(index)) {
-            //index is included in plain, thus valid
-            return index;
-        } else {
-            let
-                list = this._referenceList,
-                covered = 0;
-            for (let i = 0, n = list.length; i < n; i++) {
-                let range = list[i];
-                if (u.isArray(range)) {
-                    let
-                        start = range[0],
-                        end = range[1],
-                        length = end - start;
 
-                    //TODO : cache this result, so as long as we are within this range there is no need to search again
-                    // probably just store "search index", to start list search from there
+        let
+            list = this._referenceList,
+            advance = this._cachedAdvance;
 
-                    end = covered + length;
+        for (let i = this._cachedLoopStart, n = list.length; i < n; i++) {
+            let range = list[i];
 
-                    if (index > covered && index < end) {
-                        return range[index - covered];
-                    }
-                    covered = end;
-                } else {
-                    if (index == covered) { return range; }
-                    covered++;
+            if (u.isArray(range)) {
+
+                let
+                    start = range[0],
+                    end = range[1],
+                    coverage = end - start + 1,
+                    target = start + (p_index - advance); //+1 as range is inclusive
+
+                if (p_index >= advance &&
+                    target <= end) {
+                    this._cachedLoopStart = i;
+                    this._cachedAdvance = advance;
+                    return target;
                 }
+
+                advance += coverage;
+
+            } else {
+                if (p_index == advance) {
+                    this._cachedLoopStart = i;
+                    this._cachedAdvance = advance;
+                    return range;
+                }
+                advance++;
             }
+
         }
 
         return -1;
@@ -232,7 +223,8 @@ class GlyphGroupsView extends ui.views.View {
     }
 
     _OnItemRequestRangeUpdate() {
-
+        this._cachedLoopStart = 0;
+        this._cachedAdvance = 0;
     }
     //#region Catalog Management
 

@@ -9,6 +9,8 @@
     <circle cx="50" cy="50" r="5.94" fill="#fff"/>
     <circle cx="50" cy="82.08" r="5.94" fill="#fff"/>
     <circle cx="50" cy="17.92" r="5.94" fill="#fff"/>
+  </g>
+  <g id="accent">
     <circle cx="82.08" cy="82.08" r="11.88" fill="#3ec188"/>
   </g>
 </svg>

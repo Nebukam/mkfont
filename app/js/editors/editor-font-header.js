@@ -16,7 +16,7 @@ class FontEditorHeader extends nkm.datacontrols.ControlView {
 
 
         this._displayInspector = ui.UI.Rent(mkfInspectors.Display);
-        this._modalDisplayOpts = this._commands.Create(ui.commands.Modal, 'Display', 'layout');
+        this._modalDisplayOpts = this._commands.Create(ui.commands.Modal, 'Display', 'gear');
         this._modalDisplayOpts.options = {
             modalClass: nkm.uilib.modals.Simple,
             content: this._displayInspector,
@@ -34,7 +34,7 @@ class FontEditorHeader extends nkm.datacontrols.ControlView {
             contentOptionsGetter: { fn: fn, thisArg: this }
         };
 
-        this._modalSubFamilyOpts = this._commands.Create(ui.commands.Modal, 'Metrics', 'view-grid');
+        this._modalSubFamilyOpts = this._commands.Create(ui.commands.Modal, 'Metrics', 'layout');
         this._modalSubFamilyOpts.options = {
             modalClass: nkm.uilib.modals.Simple,
             content: mkfInspectors.SubFamily,

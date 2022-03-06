@@ -6,9 +6,14 @@ const lists = nkm.uilib.lists;
 
 const mkfData = require(`../../data`);
 
-class FilterItem extends lists.FolderListItem {
+const CatItem = require(`./cat-item`);
+const CatList = require(`./cat-list`);
+
+class CatRoot extends lists.FolderListRoot {
     constructor() { super(); }
 
+    static __defaultItemClass = CatItem;
+    static __defaultDirClass = CatList;
 
     _Init() {
         super._Init();
@@ -31,16 +36,6 @@ class FilterItem extends lists.FolderListItem {
         super._Render();
     }
 
-    Activate(p_evt) {
-        if (!super.Activate(p_evt)) { return false; }
-        
-        let editor = nkm.datacontrols.FindEditor(this);
-        //console.log(`Activated : `,editor);
-        if(editor){ editor.SetActiveRange(this._data); }
-
-        return true;
-    }
-
     _Cleanup() {
         this._cmd = null;
         super._Cleanup();
@@ -48,5 +43,5 @@ class FilterItem extends lists.FolderListItem {
 
 }
 
-module.exports = FilterItem;
-ui.Register(`mkfont-filter-item`, FilterItem);
+module.exports = CatRoot;
+ui.Register(`mkfont-filter-root`, CatRoot);

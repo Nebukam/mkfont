@@ -30,7 +30,6 @@ class GlyphDataBlock extends SimpleDataEx {
 
         this._values = {
             [IDS.GLYPH_NAME]: { value: '' },
-            [IDS.DECIMAL]: { value: null },
             [IDS.UNICODE]: { value: null },
             [IDS.PATH]: { value: '' }
         };
@@ -49,8 +48,6 @@ class GlyphDataBlock extends SimpleDataEx {
     get resolutionFallbacks() { return [this._family]; }
 
     get defaultGlyph() { return this._defaultGlyph; }
-
-    get decimal() { return this.Get(IDS.DECIMAL, -1, true); }
 
     get isLigature() { return this._unicode.length > 1; }
 

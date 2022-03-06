@@ -50,7 +50,6 @@ class SubFamilyInspector extends nkm.datacontrols.ControlView {
                 'display': 'flex',
                 'flex-flow': 'column nowrap',
                 'min-width': '300px',
-                'background-color': '#646464'
             },
             '.body': {
                 'display': 'flex',
@@ -64,11 +63,16 @@ class SubFamilyInspector extends nkm.datacontrols.ControlView {
             '.footer': {
                 'flex': '0 0 auto',
                 'width': 'auto',
-                'padding':'5px'
+                'padding': '10px',
+                'display': 'flex',
+                'flex-flow': 'column nowrap'
             },
             '.pangram': {
-                'flex': '0 0 auto',
+                'flex': '1 1 auto',
                 'width': '100%',
+            },
+            '.slider': {
+                'margin': '10px 0px 10px 0px'
             }
         }, super._Style());
     }
@@ -79,11 +83,45 @@ class SubFamilyInspector extends nkm.datacontrols.ControlView {
         //this._builder.host = this._body;
         super._Render();
         this._pangramRenderer = this.Add(mkfWidgets.PangramRenderer, 'pangram', this._body);
+
+        this._toolbar = this.Add(ui.WidgetBar, `toolbar`, this._footer);
+        this._toolbar._defaultWidgetClass = nkm.uilib.buttons.Tool;
+        this._toolbar.size = ui.FLAGS.SIZE_S;
+        this._toolbar.CreateHandles(
+            {
+                icon: `text-direction-ltr`, group: 'direction',
+                trigger: { fn: () => { this._pangramRenderer.direction = 'ltr'; } },
+            },
+            {
+                icon: `text-direction-rtl`, group: 'direction',
+                trigger: { fn: () => { this._pangramRenderer.direction = 'rtl'; } }
+            },
+            {
+                icon: `text-align-left`, group: 'align',
+                trigger: { fn: () => { this._pangramRenderer.align = `left` } }
+            },
+            {
+                icon: `text-align-center`, group: 'align',
+                trigger: { fn: () => { this._pangramRenderer.align = `center` } }
+            },
+            {
+                icon: `text-align-right`, group: 'align',
+                trigger: { fn: () => { this._pangramRenderer.align = `right` } },
+            },
+        );
+
         this._slider = this.Add(nkm.uilib.inputs.SliderOnly, `slider`, this._footer);
         this._slider.options = {
             min: 8, max: 72, currentValue: 20,
-            size:ui.FLAGS.SIZE_XXS,
+            size: ui.FLAGS.SIZE_XXS,
             onSubmit: { fn: this._Bind(this._UpdateFontSize) }
+        }
+
+        this._text = this.Add(nkm.uilib.inputs.Textarea, `text`, this._footer);
+        this._text.options = {
+            currentValue: `By Jove, my quick study of lexicography won a prize!`,
+            //size: ui.FLAGS.SIZE_XXS,
+            onSubmit: { fn: (p_i, p_t) => { this._pangramRenderer.text = p_t; } }
         }
 
         this._pangramRenderer.fontSize = 20;

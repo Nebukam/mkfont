@@ -1,6 +1,7 @@
 const nkm = require(`@nkmjs/core`);
 const mkfData = require(`../data`);
 const IDS = mkfData.IDS;
+const UNICODE = require(`../unicode`);
 
 const { optimize } = require('svgo');
 const ttf2svg = require('ttf2svg');
@@ -215,21 +216,23 @@ class SVGOperations {
                 .translate(0, ascent)
                 .toString();
 
-
-            family.AddGlyph(newGlyph);
+            if(glyphUnicode.length != 1){
+                //assume ligature
+            }else{
+                console.log(glyphUnicode);
+                glyphUnicode = UNICODE.GetAddress(glyphUnicode);
+            }
 
             newGlyph.BatchSet({
                 [IDS.GLYPH_NAME]: glyphId,
-                [IDS.UNICODE]: glyphUnicode,
-                [IDS.DECIMAL]: glyphUnicode.length == 1 ? glyphUnicode.charCodeAt(0) : -1
+                [IDS.UNICODE]: glyphUnicode
             });
 
             defg.Set(IDS.PATH, glyphPath);
 
-        }
+            family.AddGlyph(newGlyph);
 
-        // Sort according to decimal value
-        family.catalog.Sort({ fn: (a, b) => { return a.data.decimal - b.data.decimal; } });
+        }
 
         return family;
 

@@ -5,12 +5,12 @@ const inputs = nkm.uilib.inputs;
 const lists = nkm.uilib.lists;
 
 const mkfData = require(`../../data`);
-const FilterItem = require(`./filter-item`);
+const CatItem = require(`./cat-item`);
 
-class FilterList extends lists.FolderList {
+class CatList extends lists.FolderList {
     constructor() { super(); }
 
-    static __defaultItemClass = FilterItem;
+    static __defaultItemClass = CatItem;
 
     _Init() {
         super._Init();
@@ -40,5 +40,5 @@ class FilterList extends lists.FolderList {
 
 }
 
-module.exports = FilterList;
-ui.Register(`mkfont-filter-list`, FilterList);
+module.exports = CatList;
+ui.Register(`mkfont-filter-list`, CatList);

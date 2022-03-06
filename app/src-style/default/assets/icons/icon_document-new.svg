@@ -4,6 +4,8 @@
       <path d="M50.06,82.9H19.13V19H53.29l16,16v8.77" fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-width="5"/>
       <polygon points="51.98 19 51.98 36.24 69.29 36.24 51.98 19" fill="#fff"/>
     </g>
+  </g>
+  <g id="accent">
     <g>
       <line x1="65.96" y1="83.65" x2="61.51" y2="89.87" fill="none" stroke="#3ec188" stroke-linecap="round" stroke-linejoin="round" stroke-width="10"/>
       <line x1="54.6" y1="69.06" x2="61.93" y2="71.44" fill="none" stroke="#3ec188" stroke-linecap="round" stroke-linejoin="round" stroke-width="10"/>

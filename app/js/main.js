@@ -40,6 +40,18 @@ class MKFont extends nkm.app.AppBase {
 
         super.AppReady();
 
+        nkm.style.Set(`--col-default`, `#000`);
+        nkm.style.Set(`--col-letter`, `#00ff96`);
+        nkm.style.Set(`--col-mark`, `#ffea00`);
+        nkm.style.Set(`--col-number`, `#00a2ff`);
+        nkm.style.Set(`--col-separator`, `#ba00ff`);
+        nkm.style.Set(`--col-control`, `#ff0000`);
+        nkm.style.Set(`--col-other`, `#c5c5c5`);
+        nkm.style.Set(`--col-modifier`, `#7259a6`);
+        nkm.style.Set(`--col-punctuation`, `#a6932d`);
+        nkm.style.Set(`--col-symbol`, `#4d638e`);
+        nkm.style.Set(`--col-ligature`, `#72d300`);
+
         this._mainCatalog = nkm.data.catalogs.CreateFrom({
             [com.IDS.NAME]: `MKF`
         }, [

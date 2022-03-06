@@ -8,8 +8,8 @@ const SIGNAL = require(`./signal`);
 const IDS = require(`./ids`);
 
 const SimpleDataEx = require(`./simple-data-ex`);
-const Slot = require(`./slot-catalog-item`);
 const SubFamily = require(`./sub-family-data-block`);
+const Glyph = require(`./glyph-data-block`);
 
 class FamilyDataBlock extends SimpleDataEx {
 
@@ -35,21 +35,20 @@ class FamilyDataBlock extends SimpleDataEx {
             [IDS.ALPHABETIC]: { value: 0 },
             [IDS.MATHEMATICAL]: { value: 350 },
             [IDS.IDEOGRAPHIC]: { value: 400 },
-            
+
             [IDS.PREVIEW_SIZE]: { value: 100 },
         };
 
         this._glyphs = new nkm.collections.List();
         this._glyphsMap = {};
 
-        this._catalog = nkm.data.catalogs.CreateFrom({ name: `Glyphs` });
-        this._subFamiliesCatalog = nkm.data.catalogs.CreateFrom({ name:'Sub Families' });
+        this._subFamiliesCatalog = nkm.data.catalogs.CreateFrom({ name: 'Sub Families' });
 
         this._subFamilies = new nkm.collections.List();
         this._defaultSubFamily = new SubFamily();
         this._defaultSubFamily._isDefault = true;
 
-        this._selectedSubFamily = this._defaultSubFamily;        
+        this._selectedSubFamily = this._defaultSubFamily;
 
     }
 
@@ -57,8 +56,6 @@ class FamilyDataBlock extends SimpleDataEx {
         super._PostInit();
         this.AddSubFamily(this._defaultSubFamily);
     }
-
-    get catalog() { return this._catalog; }
 
     get defaultSubFamily() { return this._defaultSubFamily; }
 
@@ -82,7 +79,7 @@ class FamilyDataBlock extends SimpleDataEx {
             g.AddVariant(p_subFamily);
         }
 
-        let catalogItem = this._subFamiliesCatalog.Register({ name:`default`, data:p_subFamily });
+        let catalogItem = this._subFamiliesCatalog.Register({ name: `default`, data: p_subFamily });
         p_subFamily._catalogItem = catalogItem;
     }
 
@@ -106,15 +103,12 @@ class FamilyDataBlock extends SimpleDataEx {
         p_glyph.family = this;
         if (!this._glyphs.Add(p_glyph)) { return; }
 
-        let
-            slot = this._GetSlot(p_glyph.Get(IDS.UNICODE)),
-            slotData = slot.data;
-
-        if (slotData && slotData != p_glyph) {
-            // Glyph data conflicts with existing glyph :o
-        } else {
-            slot.data = p_glyph;
+        let unicode = p_glyph.Get(IDS.UNICODE);
+        if (unicode in this._glyphsMap) {
+            throw new Error(`Glyph already registered with unicode @${unicode}`);
         }
+
+        if (unicode) { this._glyphsMap[unicode] = p_glyph; }
 
         p_glyph
             .Watch(SIGNAL.UNICODE_CHANGED, this._OnGlyphUnicodeChanged)
@@ -134,8 +128,8 @@ class FamilyDataBlock extends SimpleDataEx {
         let g = this._glyphs.Remove(p_glyph);
         if (!g) { return; }
 
-        let slot = this._catalog.FindFirstDataHolder(p_glyph, false);
-        slot.data = null;
+        delete this._glyphsMap[g.Get(IDS.UNICODE)];
+
         //TODO : If custom slot, release it.
 
         p_glyph
@@ -147,13 +141,8 @@ class FamilyDataBlock extends SimpleDataEx {
 
     }
 
-    _GetSlot(p_unicode) {
-        // Get or create slot matching a given unicode value
-        let slot = this._catalog.FindFirstByOptionValue(`unicode`, p_unicode);
-        if (slot) { return slot; }
-        let slotOptions = { unicode: p_unicode, itemClass: Slot };
-        slot = this._catalog.Register(slotOptions);
-        return slot;
+    GetGlyph(p_unicode){
+        return this._glyphsMap[p_unicode] || Glyph.NULL;
     }
 
     // Watch

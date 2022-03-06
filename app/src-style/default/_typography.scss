@@ -99,3 +99,9 @@ $family_title: 'Title', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "
     }
 
 }
+
+.ellispsis{
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}

@@ -34,8 +34,11 @@ class GlyphSlot extends nkm.datacontrols.ControlWidget {
     _Style() {
         return nkm.style.Extends({
             ':host': {
-                'transition': 'opacity 0.3s',
+                'transition': 'opacity 0.15s, transform 0.05s, box-shadow 0.05s',
+                'box-shadow': `none`,
+                'transform': 'scale(1)',
                 'position': 'relative',
+                '--col-cat': 'var(--col-active)',
                 //'min-height': 'var(--preview-size)',
                 //'border':'1px solid gray',
                 'display': 'flex',
@@ -44,7 +47,7 @@ class GlyphSlot extends nkm.datacontrols.ControlWidget {
                 'box-sizing': 'border-box',
                 'padding': '10px',
                 'border-radius': '5px',
-                'background-color': 'rgba(0,0,0,0.25)',
+                'background-color': '#1a1a1a',
                 'align-items': 'center',
                 'overflow': 'clip',
                 'opacity': '1'
@@ -52,8 +55,26 @@ class GlyphSlot extends nkm.datacontrols.ControlWidget {
             ':host(.unpainted)': {
                 'opacity': '0'
             },
+            ':host(:hover)': {
+                'box-shadow': `0 12px 20px -10px #131313`,
+                'z-index': 1,
+                'transform': 'scale(1.1)',
+            },
             ':host(.selected)': {
-                'background-color': 'rgba(127,127,127,0.25)'
+                'background-color': '#353535 !important'
+            },
+            ':host(.exists)': {
+                'background-color': '#1e1e1e'
+            },
+            '.cat-hint': {
+                'position': 'absolute',
+                'width': '4px',
+                'height': '4px',
+                'border-radius': '10px',
+                'background-color': 'var(--col-cat)',
+                'bottom': '10px',
+                'left': 'calc(50% - 2px)',
+                'opacity': '0.5'
             },
             ':host(.unpainted) .box': { 'display': 'none' },
             '.preview': {
@@ -108,6 +129,8 @@ class GlyphSlot extends nkm.datacontrols.ControlWidget {
 
         this._label = new ui.manipulators.Text(ui.dom.El(`div`, { class: `item label` }, this._host), false, false);
 
+        ui.dom.El(`div`, { class: `cat-hint` }, this._host);
+
     }
 
     get subFamily() { return this._subFamily; }
@@ -124,16 +147,29 @@ class GlyphSlot extends nkm.datacontrols.ControlWidget {
 
         let unicodeCharacter = ``;
         let glyphData = null;
+        let lookup = null;
 
         if (nkm.utils.isNumber(this._glyphInfos)) {
+            lookup = this._glyphInfos.toString(16).padStart(this._glyphInfos < 65535 ? 4 : 6, `0`);
             unicodeCharacter = UNICODE.GetUnicodeCharacter(this._glyphInfos);
+            this.style.removeProperty(`--col-cat`);
+        } else if (nkm.utils.isString(this._glyphInfos)) {
+            lookup = this._glyphInfos;
+            unicodeCharacter = this._glyphInfos;
+            this.style.setProperty(`--col-cat`, `var(--col-ligature)`);
         } else {
-            unicodeCharacter = UNICODE.GetUnicodeCharacter(parseInt(this._glyphInfos.u, 16));
+            // Referenced unicode character
+            lookup = this._glyphInfos.u;
+            unicodeCharacter = UNICODE.GetUnicodeCharacter(parseInt(lookup, 16));
+            if (`cat` in p_value) { this.style.setProperty(`--col-cat`, `var(--col-${p_value.cat.col})`); }
+            else { this.style.removeProperty(`--col-cat`); }
         }
+
+        glyphData = this._subFamily.family.GetGlyph(lookup);
 
         this._label.Set(`<code>${unicodeCharacter}</code>`);
         this._glyphPlaceholder.Set(unicodeCharacter);
-
+        
         this.data = glyphData;
 
     }
@@ -144,19 +180,24 @@ class GlyphSlot extends nkm.datacontrols.ControlWidget {
     }
 
     _UpdateGlyphPreview() {
+        
 
-        if (!this._data) {
+        if (!this._data || 
+            this._data == mkfData.Glyph.NULL) {
             this._glyphRender.Set(null);
-            delete this._glyphPlaceholder._element.style.display;
+            this._glyphPlaceholder._element.style.removeProperty(`display`);
+            this.classList.remove(`exists`);
             return;
         }
 
-        let glyphVariant = glyphData.GetVariant(this._subFamily);
+        let glyphVariant = this._data.GetVariant(this._subFamily);
 
         if (this._glyphRender.Set(glyphVariant)) {
             this._glyphPlaceholder._element.style.display = `none`;
+            this.classList.add(`exists`);
         } else {
             delete this._glyphPlaceholder._element.style.display;
+            this.classList.remove(`exists`);
         }
     }
 

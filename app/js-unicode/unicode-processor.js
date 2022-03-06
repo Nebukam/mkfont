@@ -34,45 +34,45 @@ function FindBlock(index) {
 
 let categories = {
     // Normative Categories
-    Lu: { name: `Letter, Uppercase`, icon:`directory` },
-    Ll: { name: `Letter, Lowercase`, icon:`directory` },
-    Lt: { name: `Letter, Titlecase`, icon:`directory` },
+    Lu: { name: `Letter, Uppercase`, icon: `directory`, col: `letter` },
+    Ll: { name: `Letter, Lowercase`, icon: `directory`, col: `letter` },
+    Lt: { name: `Letter, Titlecase`, icon: `directory`, col: `letter` },
 
-    Mn: { name: `Mark, Non-Spacing`, icon:`directory` },
-    Mc: { name: `Mark, Spacing Combining`, icon:`directory` },
-    Me: { name: `Mark, Enclosing`, icon:`directory` },
+    Mn: { name: `Mark, Non-Spacing`, icon: `directory`, col: `mark` },
+    Mc: { name: `Mark, Spacing Combining`, icon: `directory`, col: `mark` },
+    Me: { name: `Mark, Enclosing`, icon: `directory`, col: `mark` },
 
-    Nd: { name: `Number, Decimal Digit`, icon:`directory` },
-    Nl: { name: `Number, Letter`, icon:`directory` },
-    No: { name: `Number, Other`, icon:`directory` },
+    Nd: { name: `Number, Decimal Digit`, icon: `directory`, col: `number` },
+    Nl: { name: `Number, Letter`, icon: `directory`, col: `number` },
+    No: { name: `Number, Other`, icon: `directory`, col: `number` },
 
-    Zs: { name: `Separator, Space`, icon:`directory` },
-    Zl: { name: `Separator, Line`, icon:`directory` },
-    Zp: { name: `Separator, Paragraph`, icon:`directory` },
+    Zs: { name: `Separator, Space`, icon: `directory`, col: `separator` },
+    Zl: { name: `Separator, Line`, icon: `directory`, col: `separator` },
+    Zp: { name: `Separator, Paragraph`, icon: `directory`, col: `separator` },
 
-    Cc: { name: `Other, Control`, icon:`directory` },
-    Cf: { name: `Other, Format`, icon:`directory` },
-    Cs: { name: `Other, Surrogate`, icon:`directory` },
-    Co: { name: `Other, Private Use`, icon:`directory` },
+    Cc: { name: `Other, Control`, icon: `directory`, col: `control` },
+    Cf: { name: `Other, Format`, icon: `directory`, col: `other` },
+    Cs: { name: `Other, Surrogate`, icon: `directory`, col: `other` },
+    Co: { name: `Other, Private Use`, icon: `directory`, col: `other` },
 
     //Informative Categories
-    Lm: { name: `Letter, Modifier`, icon:`directory` },
-    Lo: { name: `Letter, Other`, icon:`directory` },
+    Lm: { name: `Letter, Modifier`, icon: `directory`, col: `modifier` },
+    Lo: { name: `Letter, Other`, icon: `directory`, col: `modifier` },
 
-    Pc: { name: `Punctuation, Connector`, icon:`directory` },
-    Pd: { name: `Punctuation, Dash`, icon:`directory` },
-    Ps: { name: `Punctuation, Open`, icon:`directory` },
-    Pe: { name: `Punctuation, Close`, icon:`directory` },
-    Pi: { name: `Punctuation, Initial quote`, icon:`directory` },
-    Pf: { name: `Punctuation, Final quote`, icon:`directory` },
-    Po: { name: `Punctuation, Other`, icon:`directory` },
+    Pc: { name: `Punctuation, Connector`, icon: `directory`, col: `punctuation` },
+    Pd: { name: `Punctuation, Dash`, icon: `directory`, col: `punctuation` },
+    Ps: { name: `Punctuation, Open`, icon: `directory`, col: `punctuation` },
+    Pe: { name: `Punctuation, Close`, icon: `directory`, col: `punctuation` },
+    Pi: { name: `Punctuation, Initial quote`, icon: `directory`, col: `punctuation` },
+    Pf: { name: `Punctuation, Final quote`, icon: `directory`, col: `punctuation` },
+    Po: { name: `Punctuation, Other`, icon: `directory`, col: `punctuation` },
 
-    Sm: { name: `Symbol, Math`, icon:`directory` },
-    Sc: { name: `Symbol, Currency`, icon:`directory` },
-    Sk: { name: `Symbol, Modifier`, icon:`directory` },
-    So: { name: `Symbol, Other`, icon:`directory` },
+    Sm: { name: `Symbol, Math`, icon: `directory`, col: `symbol` },
+    Sc: { name: `Symbol, Currency`, icon: `directory`, col: `symbol` },
+    Sk: { name: `Symbol, Modifier`, icon: `directory`, col: `symbol` },
+    So: { name: `Symbol, Other`, icon: `directory`, col: `symbol` },
 
-    Liga: { name: `Custom, Ligatures`, icon:`directory` },
+    Liga: { name: `Custom, Ligatures`, icon: `directory`, col: `ligature` },
 
 };
 
@@ -88,11 +88,11 @@ for (let p in categories) {
     obj.name = name[1];
 
     gCat = generalCategories[general];
-    if (gCat) { gCat.children.push(p); }
-    else {
+    if (!gCat) {
         gCat = { name: general, children: [] };
         generalCategories[general] = gCat;
     }
+    gCat.children.push(p);
 
     obj.id = p;
     obj.count = 0;
@@ -400,8 +400,11 @@ UNI_BLOCKS += `${tabs}]`;
 
 let UNI_CHAR_MAP = `{\n`;
 for (var p in charMap) {
-    let c = charMap[p];
-    UNI_CHAR_MAP += `${tabs}'${p}':{ u:'${p}', i:${c.i}, name:'${c.name}', canon:k.${c.canonical}, block:b[${c.block}]`;
+    let c = charMap[p], catstr = ``;
+    if (c.category) {
+        catstr = ` cat:c.${c.category.id},`;
+    }
+    UNI_CHAR_MAP += `${tabs}'${p}':{ u:'${p}', i:${c.i}, name:'${c.name}',${catstr} canon:k.${c.canonical}, block:b[${c.block}]`;
     UNI_CHAR_MAP += `},`;
 }
 UNI_CHAR_MAP += `${tabs}}`;
@@ -410,7 +413,7 @@ let UNI_CATEGORIES = `{\n`;
 for (let p in categories) {
     let obj = categories[p];
     let rinfos = getRanges(obj.glyphs);
-    UNI_CATEGORIES += `${tabs}'${p}':{ name:'${obj.name}', id:'${obj.id}', count:${obj.count}, imin:${rinfos.rmin}, imax:${rinfos.rmax}, icon:'${obj.icon}', includes:[${rinfos.r}] },`;
+    UNI_CATEGORIES += `${tabs}'${p}':{ name:'${obj.name}', id:'${obj.id}', col:'${obj.col || 'default'}', count:${obj.count}, imin:${rinfos.rmin}, imax:${rinfos.rmax}, icon:'${obj.icon}', includes:[${rinfos.r}] },`;
 }
 UNI_CATEGORIES += `${tabs}}`;
 
@@ -427,8 +430,7 @@ for (let p in generalCategories) {
         children[i] = `c.${ch}`;
     }
     obj.count = count;
-
-    UNI_GENERAL_CATEGORIES += `${tabs}'${p}':{ name:'${obj.name}', count:${count}, childrens:[${children.join(`, `)}] },`;
+    UNI_GENERAL_CATEGORIES += `${tabs}'${p}':{ name:'${obj.name}', count:${count}, subs:[${children.join(`, `)}] },`;
 }
 UNI_GENERAL_CATEGORIES += `${tabs}}`;
 
