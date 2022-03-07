@@ -146,30 +146,25 @@ class GlyphSlot extends nkm.datacontrols.ControlWidget {
         this._glyphInfos = p_value;
 
         let unicodeCharacter = ``;
-        let glyphData = null;
-        let lookup = null;
+        let glyphData = this._subFamily.family.TryGetGlyph(p_value),
+            colCat = null;
 
         if (nkm.utils.isNumber(this._glyphInfos)) {
-            lookup = this._glyphInfos.toString(16).padStart(this._glyphInfos < 65535 ? 4 : 6, `0`);
             unicodeCharacter = UNICODE.GetUnicodeCharacter(this._glyphInfos);
-            this.style.removeProperty(`--col-cat`);
         } else if (nkm.utils.isString(this._glyphInfos)) {
-            lookup = this._glyphInfos;
             unicodeCharacter = this._glyphInfos;
-            this.style.setProperty(`--col-cat`, `var(--col-ligature)`);
+            colCat = `var(--col-ligature)`;
         } else {
-            // Referenced unicode character
-            lookup = this._glyphInfos.u;
-            unicodeCharacter = UNICODE.GetUnicodeCharacter(parseInt(lookup, 16));
-            if (`cat` in p_value) { this.style.setProperty(`--col-cat`, `var(--col-${p_value.cat.col})`); }
-            else { this.style.removeProperty(`--col-cat`); }
+            unicodeCharacter = UNICODE.GetUnicodeCharacter(parseInt(this._glyphInfos.u, 16));
+            if (`cat` in p_value) { colCat = `var(--col-${p_value.cat.col})`; }
         }
 
-        glyphData = this._subFamily.family.GetGlyph(lookup);
+        if (colCat) { this.style.setProperty(`--col-cat`, colCat); }
+        else { this.style.removeProperty(`--col-cat`); }
 
         this._label.Set(`<code>${unicodeCharacter}</code>`);
         this._glyphPlaceholder.Set(unicodeCharacter);
-        
+
         this.data = glyphData;
 
     }
@@ -180,9 +175,9 @@ class GlyphSlot extends nkm.datacontrols.ControlWidget {
     }
 
     _UpdateGlyphPreview() {
-        
 
-        if (!this._data || 
+
+        if (!this._data ||
             this._data == mkfData.Glyph.NULL) {
             this._glyphRender.Set(null);
             this._glyphPlaceholder._element.style.removeProperty(`display`);

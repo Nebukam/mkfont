@@ -240,7 +240,7 @@ class IDS {
         [this.GLYPH_NAME]: {
             inputType: inputs.Text,
             label: `Glyph name`,
-            desc: `Define the color of the glyphs in the editor.`
+            desc: `Glyph name for search purposes & future uses`
         },
         [this.UNICODE]: {
             recompute:true,

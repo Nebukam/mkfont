@@ -23,6 +23,7 @@ class GlyphGroupHeader extends nkm.datacontrols.ControlView {
             ':host': {
                 'min-height': 'auto',
                 'padding': '20px',
+                'overflow':'clip'
             },
             '.title': {
                 'margin-bottom': '10px'

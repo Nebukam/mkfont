@@ -11,7 +11,7 @@ const mkfOperations = require(`../../operations`);
 
 const GlyphVariantInspector = require(`./glyph-iitem`);
 
-class SubFamilyInspector extends nkm.datacontrols.ControlView {
+class SubFamilyInspector extends nkm.datacontrols.InspectorView {
     constructor() { super(); }
 
     static __controls = [
@@ -60,9 +60,9 @@ class SubFamilyInspector extends nkm.datacontrols.ControlView {
     _Style() {
         return nkm.style.Extends({
             ':host': {
+                'min-width':'350px',
                 'display': 'flex',
                 'flex-flow': 'column nowrap',
-                'min-width': '300px'
             },
             '.body': {
                 'display': 'flex',

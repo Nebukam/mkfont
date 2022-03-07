@@ -51,6 +51,7 @@ class FontEditorHeader extends nkm.datacontrols.ControlView {
                 'min-height': 'auto',
                 'padding':'20px',
                 'box-shadow': `0px -2px 5px black`,
+                'border-bottom': `1px solid #242424`
             },
             '.title':{
                 'margin-bottom':'10px'

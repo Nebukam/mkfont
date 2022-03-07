@@ -1,0 +1,29 @@
+/*-------------------------------*/
+/*<!---- @nkmjs/ui-library ----!>*/
+/*-------------------------------*/
+
+@import '../_variables';
+@import '../_mixins';
+@import '../_functions';
+@import '../_constants';
+
+:host {
+
+}
+
+.field{
+    
+    border:none !important;
+
+    height: var(--size);
+    cursor: pointer;
+
+    background: url(../assets/icons/icon_checkbox-off.svg) no-repeat;
+    background-size: contain;
+}
+
+:host(.checked) .field {
+    background: url(../assets/icons/icon_checkbox-on.svg) no-repeat;
+    background-size: contain;
+}
+

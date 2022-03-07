@@ -5,6 +5,8 @@ const com = nkm.com;
 const u = nkm.utils;
 const io = nkm.io;
 
+const UNICODE = require(`../unicode`);
+
 const SimpleDataEx = require(`./simple-data-ex`);
 const SIGNAL = require(`./signal`);
 const IDS = require(`./ids`);
@@ -36,6 +38,7 @@ class GlyphDataBlock extends SimpleDataEx {
 
         this._family = null;
         this._arabic_form = null;
+        this._unicodeInfos = null;
 
         this._defaultGlyph = new GlyphVariant();
         this._defaultGlyph._isDefault = true;
@@ -49,10 +52,21 @@ class GlyphDataBlock extends SimpleDataEx {
 
     get defaultGlyph() { return this._defaultGlyph; }
 
-    get isLigature() { return this._unicode.length > 1; }
+    get isLigature() {
+        let unc = this._values[IDS.UNICODE].value;
+        return unc ? unc.length > 1 ? true : false : false;
+    }
 
     set family(p_value) { this._family = p_value; }
     get family() { return this._family; }
+
+    get unicodeInfos() { 
+        if(!this._unicodeInfos){ return UNICODE.GetSingle(this.Get(IDS.UNICODE)); }
+        return this._unicodeInfos; 
+    }
+    set unicodeInfos(p_value) { this._unicodeInfos = p_value; }
+
+    //
 
     _SetDefaultVariant(p_subFamily) {
         if (!this._glyphVariants.Add(p_subFamily)) { return this._defaultGlyph; }
@@ -133,6 +147,7 @@ class GlyphDataBlock extends SimpleDataEx {
     _CleanUp() {
         this.family = null;
         this._unicode = null;
+        this._unicodeInfos = null;
         super._CleanUp();
     }
 

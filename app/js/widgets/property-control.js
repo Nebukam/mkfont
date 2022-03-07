@@ -52,7 +52,7 @@ class PropertyControl extends nkm.datacontrols.ControlWidget {
                 'background-color': 'rgba(127,127,127,0.25)'
             },
 
-            ':host(.inherited) .input-field': {
+            ':host(.inherited) .input-field, :host(.inherited) .label': {
                 'pointer-events': 'none !important',
                 'opacity': '0.5'
             },
@@ -81,9 +81,9 @@ class PropertyControl extends nkm.datacontrols.ControlWidget {
                 'flex': '1 0 50%'
             },
             '.toggle': {
-                'width': '32px',
-                'margin-right': '10px',
-                'margin-left': '-10px'
+                //'width': '30px',
+                'margin-right': '4px',
+                //'margin-left': '-4px'
             }
         }, super._Style());
     }
@@ -91,7 +91,7 @@ class PropertyControl extends nkm.datacontrols.ControlWidget {
     _Render() {
         super._Render();
         let labelCtnr = ui.dom.El(`div`, { class: `label-area` }, this._host);
-        this._toggle = this.Add(inputs.Boolean, `toggle`, labelCtnr);
+        this._toggle = this.Add(inputs.Checkbox, `toggle`, labelCtnr);
         this._toggle.options = {
             size: nkm.ui.FLAGS.SIZE_XS,
             preventTabIndexing: true,

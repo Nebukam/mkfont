@@ -65,16 +65,18 @@ class GlyphCanvasRenderer extends ui.helpers.Canvas {
             w = this.width,
             h = this.height,
             ref = Math.min(w, h),
-            scale = (ref / f.ref) * z,
+            os = 0.5, ros = (1 - os)*0.5,
+            scale = (ref / f.ref) * z * os,
             iscale = 1 / scale;
 
         ctx.setTransform(scale, 0, 0, scale, 0, 0);
 
         if (this._centered) {
-            ctx.translate(((this.width * iscale) * 0.5) - this._glyphWidth * 0.5, 0);
+            ctx.translate(((w * iscale) * 0.5) - this._glyphWidth * 0.5, (h * iscale) * ros);
         } else {
-            //ctx.translate(f * 0.5, 0);
+            ctx.translate((w * iscale) * ros, (h * iscale) * ros);   
         }
+        
 
         // Draw glyph
         let col = nkm.style.Get(`--glyph-color`);

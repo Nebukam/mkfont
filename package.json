@@ -1,31 +1,16 @@
 {
-
     "dependencies": {
-
         "@nkmjs/core": "../nkmjs/packages/nkmjs-core",
-
         "svg2ttf": "^6.0.3",
-
         "svgo": "^2.8.0",
-
         "svgpath": "^2.5.0",
-
         "ttf2svg": "^1.2.0"
-
     },
-
     "scripts": {
-
         "nkmjs": "nkmjs",
         "processor": "node app/js-unicode/unicode-processor.js"
-
     },
-
     "devDependencies": {
-
         "@nkmjs/core-dev": "../nkmjs/packages/nkmjs-core-dev"
-
     }
-
 }
-

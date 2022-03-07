@@ -213,7 +213,7 @@ for (let i = 0; i < characterLines.length; i++) {
         if (refs.length != 0) {
             charData.relatives = [];
             for (let d = 0; d < refs.length; d++) {
-                charData.relatives.push(refs[d]);
+                if(refs[d]){ charData.relatives.push(refs[d]); }
             }
         }
 
@@ -393,7 +393,7 @@ for (let i = 0; i < blocks.length; i++) {
     //TODO : cross reference which categories are included within the ranges
     let rinfos = b.ranges;
     let cstr = rinfos.c ? `cats:[${rinfos.c.join(',')}], ` : ``;
-    UNI_BLOCKS += `${tabs}{ name:'${b.name}', count:${b.end - b.start}, icon:'view-grid', ${cstr}range:[${b.start},${b.end}]}${i == blockLines.length - 1 ? '' : ','}`;
+    UNI_BLOCKS += `${tabs}{ name:'${b.name}', count:${b.end - b.start}, icon:'view-grid', ${cstr}start:${b.start}}${i == blockLines.length - 1 ? '' : ','}`;
 }
 UNI_BLOCKS += `${tabs}]`;
 
@@ -403,6 +403,10 @@ for (var p in charMap) {
     let c = charMap[p], catstr = ``;
     if (c.category) {
         catstr = ` cat:c.${c.category.id},`;
+    }
+    if(c.relatives && c.relatives.length > 0){
+        for(let i = 0; i < c.relatives.length; i++ ){ c.relatives[i] = `'${c.relatives[i]}'`; }
+        catstr = ` relatives:[${c.relatives.join(`, `)}],`
     }
     UNI_CHAR_MAP += `${tabs}'${p}':{ u:'${p}', i:${c.i}, name:'${c.name}',${catstr} canon:k.${c.canonical}, block:b[${c.block}]`;
     UNI_CHAR_MAP += `},`;

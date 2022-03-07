@@ -4,6 +4,7 @@ const nkm = require(`@nkmjs/core`);
 const u = nkm.utils;
 const io = nkm.io;
 
+const UNICODE = require(`../unicode`);
 const SIGNAL = require(`./signal`);
 const IDS = require(`./ids`);
 
@@ -141,8 +142,23 @@ class FamilyDataBlock extends SimpleDataEx {
 
     }
 
-    GetGlyph(p_unicode){
+    /**
+     * Get the glyph currently existing at the specified UNICODE location
+     * otherwise returns Glyph.NULL
+     * @param {string} p_unicode 
+     * @returns 
+     */
+    GetGlyph(p_unicode) {
         return this._glyphsMap[p_unicode] || Glyph.NULL;
+    }
+
+    /**
+     * Attempts to find existing glyphs from UNICODE infos
+     * otherwise returns Glyph.NULL
+     * @param {*} p_infos 
+     */
+    TryGetGlyph(p_infos) {
+        return this._glyphsMap[UNICODE.GetLookup(p_infos)] || Glyph.NULL;
     }
 
     // Watch

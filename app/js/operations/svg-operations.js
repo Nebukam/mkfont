@@ -219,9 +219,9 @@ class SVGOperations {
             if(glyphUnicode.length != 1){
                 //assume ligature
             }else{
-                console.log(glyphUnicode);
                 glyphUnicode = UNICODE.GetAddress(glyphUnicode);
             }
+
 
             newGlyph.BatchSet({
                 [IDS.GLYPH_NAME]: glyphId,

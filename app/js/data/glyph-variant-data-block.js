@@ -9,6 +9,7 @@ const SimpleDataEx = require(`./simple-data-ex`);
 const IDS = require(`./ids`);
 
 const svgpath = require('svgpath');
+const UNICODE = require('../unicode');
 
 const domparser = new DOMParser();
 const svgString = `<glyph ${IDS.GLYPH_NAME}="" ${IDS.UNICODE}="" d="" ${IDS.WIDTH}="" ${IDS.HEIGHT}="" ></glyph>`;
@@ -65,7 +66,10 @@ class GlyphVariantDataBlock extends SimpleDataEx {
         dom.SAtt(glyph, IDS.WIDTH, this._subFamily.Get(IDS.MONOSPACE) ? this._subFamily.Get(IDS.WIDTH) : this.Resolve(IDS.WIDTH), true);
         dom.SAtt(glyph, IDS.HEIGHT, this.Resolve(IDS.HEIGHT), true);
         dom.SAtt(glyph, IDS.GLYPH_NAME, this.Resolve(IDS.GLYPH_NAME));
-        dom.SAtt(glyph, IDS.UNICODE, this.Resolve(IDS.UNICODE));
+
+        let uVal = parseInt(this.Resolve(IDS.UNICODE), 16);
+
+        dom.SAtt(glyph, IDS.UNICODE, `${UNICODE.GetUnicodeCharacter(uVal)}`);
 
         // Flip
         let glyphPath = svgpath(this.Get(IDS.PATH))

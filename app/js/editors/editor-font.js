@@ -2,6 +2,8 @@ const nkm = require(`@nkmjs/core`);
 const u = nkm.utils;
 const ui = nkm.ui;
 
+const UNICODE = require(`../unicode`);
+
 const mkfInspectors = require(`./inspectors`);
 const mkfViewports = require(`./viewports`);
 const mkfViews = require(`../views`);
@@ -50,13 +52,13 @@ class FontEditor extends nkm.uiworkspace.editors.EditorEx {
         this._leftShelfList.push(
             {
                 [ui.IDS.NAME]: `Unicode`,
-                [ui.IDS.ICON]: `icon`,
+                [ui.IDS.ICON]: `search`,
                 [ui.IDS.VIEW_CLASS]: mkfInspectors.FamilyContent,
                 assign: `_contentInspector`
             },
             {
                 [ui.IDS.NAME]: `Pangram`,
-                [ui.IDS.ICON]: `three-lines`,
+                [ui.IDS.ICON]: `text`,
                 [ui.IDS.VIEW_CLASS]: mkfInspectors.Pangram,
                 assign: `_pangramInspector`
             }
@@ -82,8 +84,6 @@ class FontEditor extends nkm.uiworkspace.editors.EditorEx {
                 view = item.GetOption('view', null),
                 assign = u.tils.Get(conf, `assign`, null);
 
-            //console.log(`${assign} >> ${view}`);
-
             if (view) {
                 if (conf.isInspector) { this._dataInspectors.Add(view); }
                 else { this._dataControllers.Add(view); }
@@ -96,19 +96,20 @@ class FontEditor extends nkm.uiworkspace.editors.EditorEx {
 
     _OnSelectionStackItemAdded(p_widget) {
         let glyphInfos = p_widget.glyphInfos;
-        if(glyphInfos){
+        if (glyphInfos) {
             let glyph = p_widget.data;
-            if(glyph){
+            if (glyph) {
                 // Has an existing glyph!
-                if(glyph == mkfData.Glyph.NULL){
-                    //null glyph
-                }else{
-
+                if (glyph == mkfData.Glyph.NULL) {
+                    glyph.unicodeInfos = glyphInfos;
+                    this.Inspect(null); //Ensure the data gets refreshed, since it won't change.
                 }
-            }else{
+                this.Inspect(glyph);
+            } else {
                 // No glyph associated... at all??
+                throw new Error(`Edge case, find why`);
             }
-        }else{
+        } else {
             this.Inspect(null);
         }
     }
@@ -120,6 +121,13 @@ class FontEditor extends nkm.uiworkspace.editors.EditorEx {
     _PostInit() {
         super._PostInit();
         this._contentInspector.RequestDisplay();
+        this._pangramInspector.RequestDisplay();
+
+        this._inspectorShell.header.style.display = `none`;
+        this._shelf._nav.visible = false;
+
+        this.Inspect(null);
+
     }
 
     set fontCatalog(p_catalog) {
@@ -157,8 +165,8 @@ class FontEditor extends nkm.uiworkspace.editors.EditorEx {
         super._Render();
 
         this._leftShelf = this.Add(this.constructor.__default_shelfClass, `shelf`, this._body);
-        this._leftShelf.orientation = ui.FLAGS.HORIZONTAL;
-        this._leftShelf.navPlacement = ui.FLAGS.TOP;
+        this._leftShelf.orientation = ui.FLAGS.VERTICAL;
+        this._leftShelf.navPlacement = ui.FLAGS.LEFT;
 
         this._shelf.orientation = ui.FLAGS.HORIZONTAL;
         this._shelf.navPlacement = ui.FLAGS.TOP;
@@ -168,7 +176,6 @@ class FontEditor extends nkm.uiworkspace.editors.EditorEx {
     }
 
     SetActiveRange(p_rangeData) {
-        console.log(`Set active range to : `, p_rangeData);
         this._viewport.displayRange = p_rangeData ? p_rangeData.options : null;
     }
 

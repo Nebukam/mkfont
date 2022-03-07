@@ -100,7 +100,7 @@ class MKFont extends nkm.app.AppBase {
 
         this._iconFolder = `D:/GIT/nkmjs/packages/nkmjs-style/src-style/default/assets/icons`;
 
-        let fName = `Basement-Medium`;// `Basement-Medium`;// `Meticula`; //`Inter-Regular`;
+        let fName = `Meticula`;// `Basement-Medium`;// `Meticula`; //`Inter-Regular`;
         this._tempFontData = mkfOperations.SVG.FamilyFromTTF(fs.readFileSync(`./assets/${fName}.ttf`));
 
         mkfOperations.commands.MakeTTFFont.Enable();

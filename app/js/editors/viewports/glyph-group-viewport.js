@@ -117,11 +117,10 @@ class GlyphGroupsView extends ui.views.View {
             this._referenceList = p_value.includes;
             this._OnIndexRequestCB = this._OnIndexRequestMixed;
 
-        } else if (`range` in p_value) {
-            // Single array representing a [a,b] range
-            let range = p_value.range;
-            this._indexOffset = range[0];
-            this._indexCount = range[1] - this._indexOffset;
+        } else if (`start` in p_value) {
+            // Block with a count & start index
+            this._indexOffset = p_value.start;
+            this._indexCount = p_value.count;
             this._OnIndexRequestCB = this._OnIndexRequestRange;
 
         } else if (`unicodes` in p_value) {
@@ -195,10 +194,14 @@ class GlyphGroupsView extends ui.views.View {
     }
 
     _OnIndexRequestRange(p_streamer, p_index, p_fragment) {
-        let index = p_index + this._indexOffset;
-        let data = UNICODE.instance._charList[index];
-        if (data) { this._OnItemRequestProcessed(data, p_streamer, p_index, p_fragment); }
-        else { this._OnItemRequestProcessed(index, p_streamer, p_index, p_fragment); }
+        let
+            index = p_index + this._indexOffset;
+            //hex = index.toString(16).padStart(4, `0`);
+        let data = UNICODE.GetSingle(index);
+
+        this._OnItemRequestProcessed(data, p_streamer, p_index, p_fragment);
+        //if (data) { this._OnItemRequestProcessed(data, p_streamer, p_index, p_fragment); }
+        //else { this._OnItemRequestProcessed(index, p_streamer, p_index, p_fragment); }
     }
 
     _OnIndexRequestUnicodes(p_streamer, p_index, p_fragment) {

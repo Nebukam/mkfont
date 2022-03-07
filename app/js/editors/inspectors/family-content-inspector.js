@@ -8,7 +8,7 @@ const mkfWidgets = require(`../../widgets`);
 
 // Manages what is shown & selectable in the viewport.
 
-class FamilyContentInspector extends nkm.datacontrols.ControlView {
+class FamilyContentInspector extends nkm.datacontrols.InspectorView {
     constructor() { super(); }
 
     _Init() {
@@ -18,8 +18,7 @@ class FamilyContentInspector extends nkm.datacontrols.ControlView {
     _Style() {
         return nkm.style.Extends({
             ':host': {
-                'flex': '0 0 auto',
-                'min-width': '300px'
+                //'flex': '0 0 auto',
             },
             '.list': {
                 'display': 'flex',

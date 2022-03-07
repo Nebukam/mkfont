@@ -10,9 +10,10 @@ const mkfWidgets = require(`../../widgets`);
 
 const UNICODE = require(`../../unicode`);
 
-const GlyphVariantInspector = require(`./glyph-iitem`);
+const GlyphIItem = require(`./glyph-iitem`);
+const GlyphIItemNone = require(`./glyph-iitem-none`);
 
-class GlyphInspector extends nkm.datacontrols.ControlView {
+class GlyphInspector extends nkm.datacontrols.InspectorView {
     constructor() { super(); }
 
     _Init() {
@@ -42,53 +43,40 @@ class GlyphInspector extends nkm.datacontrols.ControlView {
                 'flex': '0 0 auto',
                 'margin-bottom': '3px'
             },
+            '.identity': {
+                'margin-bottom': '10px',
+            },
             '.unicode-preview': {
                 'text-align': 'center',
                 //'margin': '0',
                 //'font-size': 'large',
                 'user-select': 'text',
-                'padding': '10px',
-                'text-transform': 'lowercase',
-            },
-            '.unicode-preview:first-letter': {
-                'text-transform': 'uppercase',
+                'padding': '10px'
             }
         }, super._Style());
     }
 
     _Render() {
         super._Render();
-        this._unicode = new ui.manipulators.Text(ui.dom.El(`code`, { class: `unicode-preview` }, this));
+        this._glyphIdentity = this.Add(mkfWidgets.GlyphIdentity, `identity`, this._host);
     }
 
     _OnDataChanged(p_oldData) {
         super._OnDataChanged(p_oldData);
-        let glyphData = this._data ? this._data.data : null;
-        if (!glyphData) {
+        if (!this._data) {
             for (let i = 0; i < this._variantCtrls.count; i++) { this._variantCtrls.At(i).Release(); }
             this._variantCtrls.Clear();
         } else {
-            let vList = glyphData._glyphVariants;
+            this._glyphIdentity.glyphInfos = this._data.unicodeInfos;
+            let vList = this._data._glyphVariants;
             for (let i = 0, n = vList.count; i < n; i++) {
-                this._OnVariantAdded(glyphData, glyphData.GetVariant(vList.At(i)));
+                this._OnVariantAdded(this._data, this._data.GetVariant(vList.At(i)));
             }
         }
     }
 
-    _OnDataUpdated(p_data) {
-        super._OnDataUpdated(p_data);
-        let glyphData = p_data.data,
-            unc = glyphData.Get(mkfData.IDS.UNICODE),
-            obj = UNICODE.GetSingle(unc),
-            uncDesc = obj
-                ? `(${obj.block.name}) ${obj.name}`
-                : unc;
-
-        this._unicode.Set(uncDesc);
-    }
-
     _OnVariantAdded(p_glyph, p_glyphVariant) {
-        let variantCtrl = this.Add(GlyphVariantInspector, `variant`);
+        let variantCtrl = this.Add(GlyphIItem, `variant`);
 
         this._variantCtrls.Add(variantCtrl);
         this._variantMap.Set(p_glyphVariant, variantCtrl);

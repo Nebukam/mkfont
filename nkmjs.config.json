@@ -24,5 +24,10 @@
             "%homepage%"
         ]
     },
-    "builds": []
+    "builds": [
+        {
+            "platform": "windows",
+            "arch": "x64"
+        }
+    ]
 }

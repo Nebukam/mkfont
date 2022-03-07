@@ -25,6 +25,11 @@ class PangramRenderer extends ui.Widget {
 
     }
 
+    _PostInit(){
+        super._PostInit();
+        this.align = `left`;
+    }
+
     _Style() {
         return nkm.style.Extends({
             ':host': {
@@ -45,6 +50,12 @@ class PangramRenderer extends ui.Widget {
                 'text-align': 'var(--font-align)',
                 'font-size': 'var(--font-size)',
                 'color':'var(--glyph-color)'
+            },
+            '.paninput':{
+                '-webkit-appearance': `none`,
+                'appearance': `none`,
+                'background-color': 'rgba(0,0,0,0)',
+                'border': 'none',
             }
         }, super._Style());
     }
