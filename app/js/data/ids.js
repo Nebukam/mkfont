@@ -24,7 +24,7 @@ class IDS {
         { name: `Extra Bold`, value: 800 },
         { name: `Black`, value: 900 },
     ]);
-
+    
     // Family properties
     static ID = 'id';
     static FAMILY = 'font-family';
@@ -70,6 +70,22 @@ class IDS {
 
     static COLOR_PREVIEW = 'color-preview';
     static PREVIEW_SIZE = 'preview-size';
+
+    // Import properties
+
+    static autoScaleRefList = nkm.data.catalogs.CreateFrom({ name: `Scale references`, autoSort:false }, [
+        { name: `EM units`, value:0 },
+        { name: `Ascender`, value:1 },
+        { name: `Ascender+Descender`, value:2 },
+    ]);
+
+    static IMPORT_APPLY_SCALE = 'import-apply-scale';
+    static IMPORT_SCALE_FACTOR_AUTO = 'import-scale-factor-auto';
+    static IMPORT_SCALE_FACTOR_AUTO_REF = 'import-scale-factor-auto-ref';
+    static IMPORT_SCALE_FACTOR = 'import-scale-factor';
+    static IMPORT_MATCH_WIDTH = 'import-match-width';
+    static IMPORT_MATCH_WIDTH_OFFSET = 'import-match-width-offset';
+    static IMPORT_MOVE_TO_BASELINE = 'import-move-to-baseline';
 
     static infos = {
 
@@ -263,6 +279,57 @@ class IDS {
             label: `Preview size`,
             inputOptions: { changeOnInput: true, step: 1, min: 100, max: 250, size:ui.FLAGS.SIZE_XXS },
             desc: `Preview size`
+        },
+
+        // Import settings
+
+        [this.IMPORT_APPLY_SCALE]: {
+            recompute:true,
+            inputType: inputs.Boolean,
+            label: `Apply scale`,
+            inputOptions: { changeOnInput: true },
+            desc: `Define the color of the glyphs in the editor.`
+        },
+        [this.IMPORT_SCALE_FACTOR_AUTO]: {
+            recompute:true,
+            inputType: inputs.Boolean,
+            label: `Auto scale`,
+            inputOptions: { changeOnInput: true, step: 1, min: 1, max: 1000, size:ui.FLAGS.SIZE_XXS },
+            desc: `Will compute scale factor based on selected reference`
+        },
+        [this.IMPORT_SCALE_FACTOR_AUTO_REF]: {
+            recompute:true,
+            inputType: inputs.Boolean,
+            label: `Scale reference`,
+            inputOptions: { catalog:this.autoScaleRefList },
+            desc: `Scale factor reference`
+        },
+        [this.IMPORT_SCALE_FACTOR]: {
+            recompute:true,
+            inputType: inputs.Slider,
+            label: `Scale factor`,
+            inputOptions: { changeOnInput: true, step: 1, min: 1, max: 1000, size:ui.FLAGS.SIZE_XXS },
+            desc: `Factor by which the input vector will be scaled.`
+        },
+        [this.IMPORT_MATCH_WIDTH]: {
+            recompute:true,
+            inputType: inputs.Boolean,
+            label: `Match width`,
+            desc: `Whether the imported vector width will be used as glyph width or not. If turned off, glyph width will be set to the Family default width.`
+        },
+        [this.IMPORT_MATCH_WIDTH_OFFSET]: {
+            recompute:true,
+            inputType: inputs.Number,
+            label: `Width offset`,
+            inputOptions: { step: 1, min: 0, max: 5000, size:ui.FLAGS.SIZE_XXS },
+            desc: `If 'Match width' is active, this value is added to the input SVG width.`
+        },
+        [this.IMPORT_MOVE_TO_BASELINE]: {
+            recompute:true,
+            inputType: inputs.SliderOnly,
+            label: `Move to baseline`,
+            inputOptions: { changeOnInput: true, step: 1, min: 100, max: 250, size:ui.FLAGS.SIZE_XXS },
+            desc: `If true, imported vector are moved down to the baseline`
         },
 
     }

@@ -1,0 +1,23 @@
+<!-- Generator: Adobe Illustrator 25.2.3, SVG Export Plug-In  -->
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="319.9px"
+	 height="396.58px" viewBox="0 0 319.9 396.58" style="overflow:visible;enable-background:new 0 0 319.9 396.58;"
+	 xml:space="preserve">
+<style type="text/css">
+	.st0{fill:#29ABE2;}
+	.st1{fill:none;stroke:#FF00FF;stroke-width:7;stroke-miterlimit:10;}
+</style>
+<defs>
+	<symbol  id="Home" viewBox="-34.73 -31.83 69.46 63.67">
+		<path class="st0" d="M34.73,5.32l-12.6,9.62v15.91h-9v-9.04L0,31.83L-34.73,5.32l5.46-7.16l3.74,2.86v-32.86h51.06V1.02l3.74-2.85
+			L34.73,5.32z M20.53-26.83H9v19H-9v-19h-11.53V4.2L0,19.88L20.53,4.2V-26.83z"/>
+	</symbol>
+</defs>
+<rect x="3.5" y="3.5" class="st1" width="308.18" height="308.18"/>
+<g>
+	<circle cx="165.14" cy="274.57" r="122.01"/>
+</g>
+<g>
+	<circle cx="175.71" cy="184.46" r="69.22"/>
+</g>
+<use xlink:href="#Home"  width="69.46" height="63.67" x="-34.73" y="-31.83" transform="matrix(2.0769 -1.1018 -1.1018 -2.0769 231.8021 186.7335)" style="overflow:visible;"/>
+</svg>

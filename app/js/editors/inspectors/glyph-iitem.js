@@ -26,7 +26,6 @@ class GlyphVariantInspectorItem extends nkm.datacontrols.ControlWidget {
 
         this._builder.defaultControlClass = mkfWidgets.PropertyControl;
         this._builder.defaultCSS = `control`;
-
     }
 
     _Style() {
@@ -83,7 +82,8 @@ class GlyphVariantInspectorItem extends nkm.datacontrols.ControlWidget {
 
         this._dataToolbar.CreateHandles(
             {
-                icon: `upload`, htitle: `Import SVG`,
+                icon: `document-download-small`, htitle: `Import SVG`,
+                trigger:{fn:()=>{ operations.commands.ImportExternalFile.Execute(this._data); }},
                 group: `modify`
             },
             {
@@ -106,6 +106,8 @@ class GlyphVariantInspectorItem extends nkm.datacontrols.ControlWidget {
         super._OnDataUpdated(p_data);
         this._svgRenderer.Set(p_data);
     }
+
+
 
 }
 

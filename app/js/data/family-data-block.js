@@ -11,6 +11,7 @@ const IDS = require(`./ids`);
 const SimpleDataEx = require(`./simple-data-ex`);
 const SubFamily = require(`./sub-family-data-block`);
 const Glyph = require(`./glyph-data-block`);
+const ImportSettings = require(`./import-settings-data-block`);
 
 class FamilyDataBlock extends SimpleDataEx {
 
@@ -39,6 +40,8 @@ class FamilyDataBlock extends SimpleDataEx {
 
             [IDS.PREVIEW_SIZE]: { value: 100 },
         };
+
+        this._importSettings = nkm.com.Rent(ImportSettings);
 
         this._glyphs = new nkm.collections.List();
         this._glyphsMap = {};

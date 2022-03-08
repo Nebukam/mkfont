@@ -68,7 +68,7 @@ class GlyphVariantDataBlock extends SimpleDataEx {
         dom.SAtt(glyph, IDS.GLYPH_NAME, this.Resolve(IDS.GLYPH_NAME));
 
         let uVal = parseInt(this.Resolve(IDS.UNICODE), 16);
-
+        
         dom.SAtt(glyph, IDS.UNICODE, `${UNICODE.GetUnicodeCharacter(uVal)}`);
 
         // Flip

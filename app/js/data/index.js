@@ -12,6 +12,8 @@ module.exports = {
     Family: require(`./family-data-block`),
     
     GlyphVariant: require(`./glyph-variant-data-block`),
-    Glyph: Glyph
+    Glyph: Glyph,
+
+    ImportSettings: require(`./import-settings-data-block`),
 
 }

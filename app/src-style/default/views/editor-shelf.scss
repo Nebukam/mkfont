@@ -1,0 +1,33 @@
+/*---------------------------------*/
+/*<!---- @nkmjs/ui-workspace ----!>*/
+/*---------------------------------*/
+
+@import '../_constants';
+@import '../_variables';
+@import '../_functions';
+@import '../_mixins';
+
+:host{
+    background-color: rgba(0,0,0,0.1);
+}
+
+$shelflinecol: rgba(127,127,127,0.1);
+
+.navigation{ 
+
+    &.top{
+        border-bottom: 1px solid $shelflinecol;
+    }
+
+    &.bottom{
+        border-top: 1px solid $shelflinecol;
+    }
+
+    &.left{
+        border-right: 1px solid $shelflinecol;
+    }
+
+    &.right{
+        border-left: 1px solid $shelflinecol;
+    }
+}

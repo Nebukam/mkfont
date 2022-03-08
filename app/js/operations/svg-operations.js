@@ -9,6 +9,15 @@ const svg2ttf = require('svg2ttf');
 const svgpath = require('svgpath');
 
 const domparser = new DOMParser();
+const svgopts = {
+    multipass: true,
+    plugins: [
+        `preset-default`,
+        `convertPathData`,
+        { name: `convertShapeToPath`, params: { convertArcs: true } },
+        { name: `convertPathData`, params: { applyTransforms: true } }
+    ]
+};
 
 const glyphStyle = `fill:var(--glyph-color); stroke:none;`;
 const svgFontString =
@@ -72,19 +81,7 @@ class SVGOperations {
         this._rAttsOnTag(svg, `rect`, [`rx`, `ry`]);
 
         svg = domparser.parseFromString(
-            optimize(svg.outerHTML,
-                {
-                    multipass: true,
-                    plugins:
-                        [
-                            `preset-default`,
-                            {
-                                name: `convertShapeToPath`,
-                                params: { convertArcs: true }
-                            }
-                        ]
-
-                }).data, `image/svg+xml`)
+            optimize(svg.outerHTML, svgopts).data, `image/svg+xml`)
             .getElementsByTagName(`svg`)[0];
 
         svg.removeAttribute(`style`);
@@ -140,6 +137,169 @@ class SVGOperations {
 
     //#endregion
 
+    //#region SVG Data processing
+
+    /**
+     * Return an SVG object with important informations
+     * if they are found.
+     * @param {*} p_input 
+     * @returns 
+     */
+    static SVGObject(p_input, p_markCol = `FF00FF`) {
+        let result = { validSvg: false };
+
+        try {
+
+            let svg = domparser.parseFromString(
+                optimize(p_input, svgopts).data, `image/svg+xml`).getElementsByTagName(`svg`)[0];
+
+            console.log(svg);
+
+            let
+                paths = svg.getElementsByTagName(`path`),
+                mergedPaths = ``,
+                markBBox = null;
+
+            if (paths.length > 0) {
+
+                p_markCol = p_markCol.toLowerCase();
+
+                let
+                    markCol = p_markCol[0] == `#` ? p_markCol.substring(1) : p_markCol,
+                    style = svg.getElementsByTagName(`style`)[0],
+                    styleObject = style ? this._CSS(style.innerHTML) : {};
+
+                for (let i = 0; i < paths.length; i++) {
+
+                    let p = paths[i],
+                        d = p.getAttribute(`d`),
+                        tr = p.getAttribute(`transform`);
+
+                    //Attempt to apply transforms that can be applied
+                    if (tr) { p.setAttribute(`d`, svgpath(d).transform(tr).toString()); }
+
+                    //Check if path is mark (if so remove it)
+                    if (!markBBox) {
+                        markBBox = this._FindMarkBBox(p, styleObject, markCol);
+                        if (markBBox) { d = null; }
+                    }
+
+                    if (d) { mergedPaths += `${mergedPaths.length > 0 ? ' ' : ''}${d}`; }
+
+                }
+
+            }
+
+            if (mergedPaths && mergedPaths != ``) {
+
+                result.path = mergedPaths;
+                result.bbox = markBBox;
+
+                let viewBox = svg.getAttribute(`viewBox`);
+                if(viewBox){
+                    let vbSplit = viewBox.split(` `);
+                    result.width = vbSplit[2];
+                    result.height = vbSplit[3];
+                }else{
+                    result.width = svg.getAttribute(`width`);
+                    result.height = svg.getAttribute(`height`);
+                }
+
+                result.validSvg = true;
+
+            }
+
+        } catch (e) { console.log(e); }
+
+        return result;
+    }
+
+    static bbox = { maxx: 0, minx: 0, maxy: 0, miny: 0, width: 0, height: 0 };
+
+    static _FindMarkBBox(p_path, p_style, p_markCol) {
+
+        let
+            A = `#${p_markCol}`,
+            B = p_markCol.length == 6 ? `#${p_markCol[0]}${p_markCol[2]}${p_markCol[4]}` : A,
+            inlineStyle = p_path.getAttribute(`style`),
+            classStyle = `.${p_path.getAttribute(`class`)}`,
+            fillStyle = p_path.getAttribute(`fill`),
+            strokeStyle = p_path.getAttribute(`stroke`),
+            foundRef = false;
+
+        if (classStyle && classStyle in p_style) {
+            for (let c in p_style[classStyle]) {
+                let refValue = p_style[classStyle][c];
+                if (refValue == A || refValue == B) {
+                    foundRef = true;
+                    break;
+                }
+            }
+        }
+
+        if (!foundRef && inlineStyle) {
+            let inlineObj = this._CSSRules(inlineStyle);
+            for (let c in inlineObj) {
+                let refValue = inlineObj[c];
+                if (refValue == A || refValue == B) { foundRef = true; break; }
+            }
+        }
+
+        if (!foundRef && (fillStyle == A || fillStyle == B)) { foundRef = true; }
+        if (!foundRef && (strokeStyle == A || strokeStyle == B)) { foundRef = true; }
+
+        if (foundRef) { return this.GetBBox(p_path.getAttribute(`d`)); }
+
+        return false;
+
+    }
+
+    static _CSS(p_styleString) {
+        let result = {};
+        try {
+            //.st0 |{| fill:#FF00FF;}.st1 |{| fill:#FF00FF;}
+            let baseSplit = p_styleString.split(`{`);
+            if (baseSplit.length > 1) {
+                //Has classes
+                let className = baseSplit[0];
+                for (let b = 1; b < baseSplit.length; b++) {
+                    let spl = baseSplit[b].split(`}`);
+                    result[className] = this._CSSRules(spl[0]);
+                    className = spl[1];
+                }
+            } else {
+                result = this._CSSRules(p_styleString);
+            }
+        } catch (e) { }
+        return result;
+    }
+
+    static _CSSRules(p_string) {
+        let
+            obj = {};
+
+        if (!p_string || p_string == ``) {
+            return obj;
+        }
+
+        let rules = p_string.trim().split(`;`);
+
+        if (rules.length == 1) {
+            // Single rule
+            let rule = p_string.split(`:`);
+            obj[rule[0]] = rule[1];
+        } else {
+            for (let s = 0; s < rules.length; s++) {
+                let rule = rules[s].split(`:`);
+                obj[rule[0]] = rule[1];
+            }
+        }
+
+        return obj;
+    }
+
+    //#endregion
+
     //#region SVG Font processing
 
     static SVGFontFromSubFamily(p_subFamily) {
@@ -164,6 +324,8 @@ class SVGOperations {
             svgFont = domparser.parseFromString(ttf2svg(p_ttfBytes), `image/svg+xml`),
             fontFace = svgFont.getElementsByTagName(`font-face`)[0],
             glyphs = svgFont.getElementsByTagName(`glyph`);
+
+        console.log(ttf2svg(p_ttfBytes));
 
         //console.log(svgFont);
 
@@ -216,9 +378,9 @@ class SVGOperations {
                 .translate(0, ascent)
                 .toString();
 
-            if(glyphUnicode.length != 1){
+            if (glyphUnicode.length != 1) {
                 //assume ligature
-            }else{
+            } else {
                 glyphUnicode = UNICODE.GetAddress(glyphUnicode);
             }
 
@@ -299,6 +461,26 @@ class SVGOperations {
             g.Set(IDS.PATH, d);
 
         }
+    }
+
+    static GetBBox(p_path) {
+
+        this.bbox.minx = this.bbox.miny = 99999999;
+        this.bbox.maxx = this.bbox.maxy = -99999999;
+
+        svgpath(p_path).iterate((segment, index, x, y) => {
+            if(segment[0] === 'M'){ return; }
+            this.bbox.minx = Math.min(x, this.bbox.minx);
+            this.bbox.maxx = Math.max(x, this.bbox.maxx);
+            this.bbox.miny = Math.min(y, this.bbox.miny);
+            this.bbox.maxy = Math.max(y, this.bbox.maxy);
+        });
+
+        this.bbox.width = this.bbox.maxx - this.bbox.minx;
+        this.bbox.height = this.bbox.maxy - this.bbox.miny;
+
+        return { ...this.bbox };
+
     }
 
     //#endregion
