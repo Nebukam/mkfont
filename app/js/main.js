@@ -69,18 +69,6 @@ class MKFont extends nkm.app.AppBase {
 
         mainShelf.visible = false;
 
-        /*
-        mainShelf.nav.toolbar.CreateHandle({
-            [com.IDS.NAME]: `Options`,
-            [com.IDS.ICON]: `icon`,
-            [ui.IDS.TRIGGER]: {
-                fn: mainShelf.SetCurrentView,
-                thisArg: mainShelf,
-                arg: ui.UI.Rent(AppOptionsExplorer)
-            }
-        });
-        */
-
 
         this._welcomeView = this.mainLayout.workspace.Host({
             [ui.IDS.VIEW_CLASS]: mkfViews.Welcome,
@@ -113,56 +101,28 @@ class MKFont extends nkm.app.AppBase {
         fontEditor.data = this._tempFontData;
         fontEditor.SetActiveRange(UNICODE.instance._blockCatalog.At(0));
 
+        //this._TestImportPopup();
+
     }
 
     _WriteTTF() {
         mkfOperations.commands.MakeTTFFont.Execute(this._tempFontData);
     }
 
-    _ReadIconDir(err, files) {
+    _TestImportPopup(){
 
-        let offset = 48;
-        for (let i = 0; i < files.length; i++) {
-            let filepath = files[i];
-            if (!filepath.includes(`.svg`)) { continue; }
-            let svg = fs.readFileSync(`${this._iconFolder}/${filepath}`, `utf8`);
-            this._PushSVG(this._tempFontData, svg, offset + i);
-        }
-    }
+        let iInspector = nkm.ui.UI.Rent(`mkfont-single-import-preview`);
 
-    _PushSVG(p_family, p_svgString, i) {
-        let svg = mkfOperations.SVG.ProcessString(p_svgString);
-        //            console.log(filepath, filecontent);
-        let slot = UNICODE.instance._ranges.FindFirstByOptionValue(`glyph`, String.fromCharCode(i), true);
-        if (!slot) { return; }
-        SET_SVG.Do({
-            family: p_family,
-            slot: slot,
-            svg: svg,
-            unicode: String.fromCharCode(i)
-        }, false);
-    }
-
-    _ReadTTF() {
-
-        let ttf = fs.readFileSync('./assets/Inter-Regular.ttf');
-
-        var svgContent = ttf2svg(ttf);
-        console.log(svgContent);
-        var D = new DOMParser();
-        var svg = D.parseFromString(svgContent, `image/svg+xml`);
-
-        // Read size of font
-
-        var glyphs = svg.getElementsByTagName(`glyph`);
-        console.log(`There's, like, ${glyphs.length} glyphs.`);
-        for (let i = 0; i < glyphs.length; i++) {
-            let g = glyphs[i],
-                uni = g.getAttribute(`unicode`),
-                path = g.getAttribute(`d`);
-            this._PushSVG(this._tempFontData, `<svg xmlns="http://www.w3.org/2000/svg"><path d="${path}"></path></svg>`, i);
-        }
-
+        nkm.dialog.Push({
+            title: `Import tweaks`,
+            message: `Tweak the imported data to make sure it fits!`,
+            content: [{ cl: iInspector, donotrelease: true }],
+            actions: [
+                { label: `Looks good`, flavor: nkm.com.FLAGS.READY, variant: nkm.ui.FLAGS.FRAME },
+                { label: `Cancel`, trigger: { fn: this._Cancel, thisArg: this } }
+            ],
+            origin: this,
+        });
     }
 
 }

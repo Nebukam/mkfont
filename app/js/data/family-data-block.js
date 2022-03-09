@@ -61,6 +61,8 @@ class FamilyDataBlock extends SimpleDataEx {
         this.AddSubFamily(this._defaultSubFamily);
     }
 
+    get importSettings(){ return this._importSettings; }
+
     get defaultSubFamily() { return this._defaultSubFamily; }
 
     // Subfamily management

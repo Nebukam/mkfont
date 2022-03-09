@@ -27,14 +27,14 @@ class CmdClipboardReadSVG extends actions.CommandAction {
 
         console.log(clipboard.readText());
 
-        let svgString = SVG.ProcessString(clipboard.readText());
+        let svgStats = SVG.SVGStats(clipboard.readText());
 
-        if (!svgString) { return null; }
+        if (!svgStats) { return null; }
 
         return {
             family: family,
             slot: slot,
-            svg: svgString
+            svg: svgStats
         };
 
     }

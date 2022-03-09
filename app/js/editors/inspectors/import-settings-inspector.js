@@ -12,12 +12,15 @@ class ImportSettingsInspector extends nkm.datacontrols.InspectorView {
     constructor() { super(); }
 
     static __controls = [
+        { cl:mkfWidgets.ControlHeader, options:{ label:`Scale` } },
         { options:{ propertyId:mkfData.IDS.IMPORT_APPLY_SCALE } },
         { options:{ propertyId:mkfData.IDS.IMPORT_SCALE_FACTOR_AUTO } },
         { options:{ propertyId:mkfData.IDS.IMPORT_SCALE_FACTOR_AUTO_REF } },
         { options:{ propertyId:mkfData.IDS.IMPORT_SCALE_FACTOR } },
+        { cl:mkfWidgets.ControlHeader, options:{ label:`Width` } },
         { options:{ propertyId:mkfData.IDS.IMPORT_MATCH_WIDTH } },
         { options:{ propertyId:mkfData.IDS.IMPORT_MATCH_WIDTH_OFFSET } },
+        { cl:mkfWidgets.ControlHeader, options:{ label:`Move` } },
         { options:{ propertyId:mkfData.IDS.IMPORT_MOVE_TO_BASELINE } },
     ];
 
@@ -54,17 +57,12 @@ class ImportSettingsInspector extends nkm.datacontrols.InspectorView {
         // - blocks need to be searchable, there is too much of them.
         this._body = ui.dom.El(`div`, {class:`body`}, this);
         
-        this._categories = this.Add(mkfWidgets.lists.FilterRoot, `asd`, this._body);
-        this._categories.data = UNICODE.instance._categoriesCatalog;
-
-        this._blocks = this.Add(mkfWidgets.lists.BlockRoot, `asd`, this._body);
-        this._blocks.data = UNICODE.instance._blockCatalog;
     }
 
     //#region Family properties
 
     _PreprocessData(p_data) {
-        if (!nkm.utils.isInstanceOf(p_data, mkfData.Family)) { return null; }
+        if (nkm.utils.isInstanceOf(p_data, mkfData.Family)) { return p_data.importSettings; }
         return p_data;
     }
 

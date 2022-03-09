@@ -49,7 +49,7 @@ class GlyphVariantInspectorItem extends nkm.datacontrols.ControlWidget {
             '.renderer': {
                 'position': 'relative',
                 'width': '100%',
-                'aspect-ratio': 'var(--preview-ratio)'
+                'aspect-ratio': '1/1', //'var(--preview-ratio)'
             },
             '.control': {
                 'flex': '1 1 auto',
@@ -83,7 +83,10 @@ class GlyphVariantInspectorItem extends nkm.datacontrols.ControlWidget {
         this._dataToolbar.CreateHandles(
             {
                 icon: `document-download-small`, htitle: `Import SVG`,
-                trigger:{fn:()=>{ operations.commands.ImportExternalFile.Execute(this._data); }},
+                trigger:{fn:()=>{ 
+                    operations.commands.ImportExternalFile.emitter = this;
+                    operations.commands.ImportExternalFile.Execute(this._data); 
+                }},
                 group: `modify`
             },
             {

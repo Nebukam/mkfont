@@ -287,21 +287,21 @@ class IDS {
             recompute:true,
             inputType: inputs.Boolean,
             label: `Apply scale`,
-            inputOptions: { changeOnInput: true },
+            inputOptions: { size:ui.FLAGS.SIZE_S },
             desc: `Define the color of the glyphs in the editor.`
         },
         [this.IMPORT_SCALE_FACTOR_AUTO]: {
             recompute:true,
             inputType: inputs.Boolean,
             label: `Auto scale`,
-            inputOptions: { changeOnInput: true, step: 1, min: 1, max: 1000, size:ui.FLAGS.SIZE_XXS },
+            inputOptions: { size:ui.FLAGS.SIZE_S },
             desc: `Will compute scale factor based on selected reference`
         },
         [this.IMPORT_SCALE_FACTOR_AUTO_REF]: {
             recompute:true,
-            inputType: inputs.Boolean,
+            inputType: inputs.Select,
             label: `Scale reference`,
-            inputOptions: { catalog:this.autoScaleRefList },
+            inputOptions: { catalog:this.autoScaleRefList, size:ui.FLAGS.SIZE_XS },
             desc: `Scale factor reference`
         },
         [this.IMPORT_SCALE_FACTOR]: {
@@ -315,6 +315,7 @@ class IDS {
             recompute:true,
             inputType: inputs.Boolean,
             label: `Match width`,
+            inputOptions: { size:ui.FLAGS.SIZE_S },
             desc: `Whether the imported vector width will be used as glyph width or not. If turned off, glyph width will be set to the Family default width.`
         },
         [this.IMPORT_MATCH_WIDTH_OFFSET]: {
@@ -326,9 +327,9 @@ class IDS {
         },
         [this.IMPORT_MOVE_TO_BASELINE]: {
             recompute:true,
-            inputType: inputs.SliderOnly,
+            inputType: inputs.Boolean,
             label: `Move to baseline`,
-            inputOptions: { changeOnInput: true, step: 1, min: 100, max: 250, size:ui.FLAGS.SIZE_XXS },
+            inputOptions: { size:ui.FLAGS.SIZE_S },
             desc: `If true, imported vector are moved down to the baseline`
         },
 

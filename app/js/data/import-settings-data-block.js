@@ -20,13 +20,13 @@ class ImportSettingsDataBlock extends SimpleDataEx {
         super._Init();
 
         this._values = {
-            [IDS.IMPORT_APPLY_SCALE]: { value: null },
-            [IDS.IMPORT_SCALE_FACTOR_AUTO]: { value: null },
+            [IDS.IMPORT_APPLY_SCALE]: { value: true },
+            [IDS.IMPORT_SCALE_FACTOR_AUTO]: { value: true },
             [IDS.IMPORT_SCALE_FACTOR_AUTO_REF]: { value: null },
-            [IDS.IMPORT_SCALE_FACTOR]: { value: null },
-            [IDS.IMPORT_MATCH_WIDTH]: { value: null },
-            [IDS.IMPORT_MATCH_WIDTH_OFFSET]: { value: null },
-            [IDS.IMPORT_MOVE_TO_BASELINE]: { value: null },
+            [IDS.IMPORT_SCALE_FACTOR]: { value: 10 },
+            [IDS.IMPORT_MATCH_WIDTH]: { value: true },
+            [IDS.IMPORT_MATCH_WIDTH_OFFSET]: { value: 0 },
+            [IDS.IMPORT_MOVE_TO_BASELINE]: { value: true },
         }
 
     }

@@ -1,4 +1,5 @@
 const nkm = require(`@nkmjs/core`);
+const style = nkm.style;
 const mkfData = require(`../data`);
 const IDS = mkfData.IDS;
 const UNICODE = require(`../unicode`);
@@ -31,112 +32,6 @@ const svgFontString =
 class SVGOperations {
     constructor() { }
 
-    //#region raw svg string processing
-
-    static ProcessString(p_value, p_params) {
-
-        let
-            col = `eaeaea`,
-            viewBox = { width: 1000, height: 1000 };
-
-        // Quickfixes on string
-
-        try {
-            // Replace all colors with white
-            let s = p_value.split(`:#`);
-            for (let i = 1; i < s.length; i++) {
-                let s2 = s[i], s3 = s2[3], s6 = s2[6];
-                if (s3 == `;` || s3 == `}` || s3 == `"`) { s2 = `${col}${s2.substr(3)}`; }
-                else if (s6 == `;` || s6 == `}` || s6 == `"`) { s2 = `${col}${s2.substr(6)}`; }
-                s[i] = s2;
-            }
-            p_value = s.join(`:#`);
-        } catch (e) { }
-
-        // Manipulation on SVG element
-
-        let svg = domparser.parseFromString(p_value, `image/svg+xml`)
-            .getElementsByTagName(`svg`)[0];
-
-        if (!svg) { return null; }
-
-        this._rAtts(svg, [`width`, `height`, `viewBox`]);
-
-        // Add viewBox
-        svg.setAttribute(`viewBox`, `0 0 ${viewBox.width} ${viewBox.height}`);
-
-        // Flatten groups
-        let groups = svg.getElementsByTagName(`g`);
-        for (let i = 0; i < groups.length; i++) {
-            let children = groups[i].children;
-            for (let c = 0; c < children.length; c++) {
-                let child = children[c];
-                if (child.tagName == `g`) { child.remove(); }
-                else { svg.appendChild(child); }
-            }
-            //groups[i].remove();
-        }
-
-        // Remove unsupported rounded corners on rect elements
-        this._rAttsOnTag(svg, `rect`, [`rx`, `ry`]);
-
-        svg = domparser.parseFromString(
-            optimize(svg.outerHTML, svgopts).data, `image/svg+xml`)
-            .getElementsByTagName(`svg`)[0];
-
-        svg.removeAttribute(`style`);
-        let path = svg.getElementsByTagName(`path`)[0];
-
-        if (!path) {
-            console.log(svg);
-            console.warn(`SVG will be ignored : it does not contain a path.`);
-            return null;
-        } else {
-
-            let pathlist = svg.getElementsByTagName(`path`);
-            let str = ``;
-            path = pathlist[0];
-            for (let i = 0; i < pathlist.length; i++) {
-                let tp = pathlist[i];
-                str += tp.getAttribute(`d`) + ` `;
-                if (i > 0) { tp.remove(); }
-            }
-
-            path.setAttribute(`d`, str);
-
-            // DEBUG : Try to scale D attribute
-            path.removeAttribute(`style`);
-            path.setAttribute(`fill`, `#${col}`);
-            path.setAttribute(`style`, glyphStyle);
-            /*
-            if (path.hasAttribute(`d`)) {
-                let d = path.getAttribute(`d`);
-                d = svgpath(d)
-                    .scale(10)
-                    //.translate(100,200)
-                    //.rel()
-                    //.round(1)
-                    .toString();
-                path.setAttribute(`d`, d);
-            }
-            */
-        }
-
-        return svg;
-
-    }
-
-    static _rAtts(p_el, p_atts) {
-        for (let i = 0; i < p_atts.length; i++) { p_el.removeAttribute(p_atts[i]); }
-    }
-
-    static _rAttsOnTag(p_el, p_tag, p_atts) {
-        let children = p_el.getElementsByTagName(p_tag);
-        for (let i = 0; i < children.length; i++) { this._rAtts(children[i], p_atts); }
-    }
-
-    //#endregion
-
     //#region SVG Data processing
 
     /**
@@ -145,15 +40,17 @@ class SVGOperations {
      * @param {*} p_input 
      * @returns 
      */
-    static SVGObject(p_input, p_markCol = `FF00FF`) {
-        let result = { validSvg: false };
+    static SVGStats(p_input, p_markCol = `FF00FF`) {
+        let result = { exists: false };
+
+        if(!p_input){ return result; }
 
         try {
 
             let svg = domparser.parseFromString(
                 optimize(p_input, svgopts).data, `image/svg+xml`).getElementsByTagName(`svg`)[0];
 
-            console.log(svg);
+            //console.log(svg);
 
             let
                 paths = svg.getElementsByTagName(`path`),
@@ -167,7 +64,7 @@ class SVGOperations {
                 let
                     markCol = p_markCol[0] == `#` ? p_markCol.substring(1) : p_markCol,
                     style = svg.getElementsByTagName(`style`)[0],
-                    styleObject = style ? this._CSS(style.innerHTML) : {};
+                    styleObject = style ? style.CSS.ClassCSS(style.innerHTML) : {};
 
                 for (let i = 0; i < paths.length; i++) {
 
@@ -205,7 +102,7 @@ class SVGOperations {
                     result.height = svg.getAttribute(`height`);
                 }
 
-                result.validSvg = true;
+                result.exists = true;
 
             }
 
@@ -238,7 +135,7 @@ class SVGOperations {
         }
 
         if (!foundRef && inlineStyle) {
-            let inlineObj = this._CSSRules(inlineStyle);
+            let inlineObj = style.CSS.Rules(inlineStyle);
             for (let c in inlineObj) {
                 let refValue = inlineObj[c];
                 if (refValue == A || refValue == B) { foundRef = true; break; }
@@ -251,66 +148,6 @@ class SVGOperations {
         if (foundRef) { return this.GetBBox(p_path.getAttribute(`d`)); }
 
         return false;
-
-    }
-
-    static _CSS(p_styleString) {
-        let result = {};
-        try {
-            //.st0 |{| fill:#FF00FF;}.st1 |{| fill:#FF00FF;}
-            let baseSplit = p_styleString.split(`{`);
-            if (baseSplit.length > 1) {
-                //Has classes
-                let className = baseSplit[0];
-                for (let b = 1; b < baseSplit.length; b++) {
-                    let spl = baseSplit[b].split(`}`);
-                    result[className] = this._CSSRules(spl[0]);
-                    className = spl[1];
-                }
-            } else {
-                result = this._CSSRules(p_styleString);
-            }
-        } catch (e) { }
-        return result;
-    }
-
-    static _CSSRules(p_string) {
-        let
-            obj = {};
-
-        if (!p_string || p_string == ``) {
-            return obj;
-        }
-
-        let rules = p_string.trim().split(`;`);
-
-        if (rules.length == 1) {
-            // Single rule
-            let rule = p_string.split(`:`);
-            obj[rule[0]] = rule[1];
-        } else {
-            for (let s = 0; s < rules.length; s++) {
-                let rule = rules[s].split(`:`);
-                obj[rule[0]] = rule[1];
-            }
-        }
-
-        return obj;
-    }
-
-    //#endregion
-
-    //#region SVG Font processing
-
-    static SVGFontFromSubFamily(p_subFamily) {
-
-        let XML = svgFontRef.cloneNode(true),
-            FontFace = XML.getElementsByTagName(`font-face`)[0],
-            FontFaceSrc = XML.getElementsByTagName(`font-face-src`)[0],
-            FontFaceSrcName = XML.getElementsByTagName(`font-face-src-name`)[0],
-            MissingGlyph = XML.getElementsByTagName(`missing-glyph`)[0];
-
-        // Font ID = complete font name. Family + SubFamily Name
 
     }
 

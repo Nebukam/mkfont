@@ -82,7 +82,7 @@ $br: 5px;
     //'box-shadow:`inset 0px 11px ${shadowSize}px -10px ${shadowColor} inset 0px -11px ${shadowSize}px -10px ${shadowColor};
 }
 
-@include scrollbar('.body', 4px, 8px);
+@include scrollbar('.body', 4px, 4px);
 
 .item {
     margin-top: $br;
