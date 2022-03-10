@@ -1,4 +1,4 @@
-const nkm = require(`@nkmjs/core`);
+/*const nkm = require(`@nkmjs/core`);*/
 const ui = nkm.ui;
 const uilib = nkm.uilib;
 const inputs = nkm.uilib.inputs;
@@ -11,6 +11,12 @@ class PropertyControl extends nkm.datacontrols.ControlWidget {
     constructor() { super(); }
 
     static __usePaintCallback = true;
+
+    static __ppdata = (p_owner, p_data) => {
+        if (!p_data) { return null; }
+        if (p_owner._subData) { return p_data[p_owner._subData]; }
+        return p_data;
+    };
 
     _Init() {
         super._Init();
@@ -31,6 +37,8 @@ class PropertyControl extends nkm.datacontrols.ControlWidget {
             .Hook(`allowOverride`, null, false)
             .Hook(`subData`, null, null)
             .Hook(`command`);
+
+        this._dataPreProcessor = this.constructor.__ppdata;
 
     }
 
@@ -157,12 +165,6 @@ class PropertyControl extends nkm.datacontrols.ControlWidget {
 
     set command(p_value) {
         this._cmd = p_value;
-    }
-
-    _PreprocessData(p_data) {
-        if (!p_data) { return null; }
-        if (this._subData) { return p_data[this._subData]; }
-        return p_data;
     }
 
     _OnDataUpdated(p_data) {

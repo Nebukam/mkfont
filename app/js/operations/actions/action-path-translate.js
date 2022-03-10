@@ -1,7 +1,7 @@
 'use strict'
 
 // Set svg property of a given char in a given glyph
-const nkm = require(`@nkmjs/core`);
+/*const nkm = require(`@nkmjs/core`);*/
 const actions = nkm.actions;
 const data = require(`../../data`);
 const svgpath = require('svgpath');

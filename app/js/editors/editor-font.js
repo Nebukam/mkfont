@@ -1,4 +1,4 @@
-const nkm = require(`@nkmjs/core`);
+/*const nkm = require(`@nkmjs/core`);*/
 const u = nkm.utils;
 const ui = nkm.ui;
 
@@ -35,6 +35,10 @@ class FontEditor extends nkm.uiworkspace.editors.EditorEx {
 
         this._dataObserver.Hook(nkm.data.SIGNAL.VALUE_CHANGED, this._OnDataValueChanged, this);
 
+        this._dataPreProcessor = (p_owner, p_data) =>{
+            return u.isInstanceOf(p_data, mkfData.Family) ? p_data : null;
+        };
+
     }
 
     _InitShelfCatalog(p_configList) {
@@ -64,8 +68,6 @@ class FontEditor extends nkm.uiworkspace.editors.EditorEx {
             }
         );
 
-        //this._dataControllers.Add(this._pangramInspector);
-
     }
 
     _RegisterEditorBits() {
@@ -85,8 +87,8 @@ class FontEditor extends nkm.uiworkspace.editors.EditorEx {
                 assign = u.tils.Get(conf, `assign`, null);
 
             if (view) {
-                if (conf.isInspector) { this._dataInspectors.Add(view); }
-                else { this._dataControllers.Add(view); }
+                if (conf.isInspector) { this.forwardInspected.To(view); }
+                else { this.forwardData.To(view); }
                 if (assign) { this[assign] = view; }
             }
 
@@ -177,11 +179,6 @@ class FontEditor extends nkm.uiworkspace.editors.EditorEx {
 
     SetActiveRange(p_rangeData) {
         this._viewport.displayRange = p_rangeData ? p_rangeData.options : null;
-    }
-
-    _PreprocessData(p_data) {
-        if (!nkm.utils.isInstanceOf(p_data, mkfData.Family)) { return null; }
-        return p_data;
     }
 
     _OnDataChanged(p_oldData) {

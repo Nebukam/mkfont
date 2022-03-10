@@ -1,5 +1,5 @@
 //
-const nkm = require(`@nkmjs/core`);
+/*const nkm = require(`@nkmjs/core`);*/
 const actions = nkm.actions;
 const u = nkm.utils;
 
@@ -60,7 +60,7 @@ class CmdImportExternalFile extends actions.Command {
         catch (e) { svgString = null; }
 
         svgStats = SVG.SVGStats(svgString);
-        svgStats.path = p;
+        svgStats.filepath = p;
         svgStats.name = nkm.utils.PATH.name(p);
 
         if (!svgStats.exists) {
@@ -90,8 +90,9 @@ class CmdImportExternalFile extends actions.Command {
             //this._importInspector.data = ;
             
             this._importInspector.glyphInfos = glyphInfos;
-            this._importInspector.importSettings = subFamily.family.importSettings;
-            this._importInspector.data = subFamily;
+            this._importInspector.importedGlyph = svgStats;
+            this._importInspector.subFamily = subFamily;
+            this._importInspector.data = subFamily.family.importSettings;
 
             nkm.dialog.Push({
                 title: `Tweaks`,
@@ -101,11 +102,10 @@ class CmdImportExternalFile extends actions.Command {
                     { label: `Looks good`, flavor: nkm.com.FLAGS.READY, variant: nkm.ui.FLAGS.FRAME },
                     { label: `Cancel`, trigger: { fn: this._Cancel, thisArg: this } }
                 ],
+                grow:true,
                 origin: this,
             });
         }
-
-        console.log(p, svgStats);
 
         this._Success();
     }

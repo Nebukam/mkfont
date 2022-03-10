@@ -1,4 +1,4 @@
-const nkm = require(`@nkmjs/core`);
+/*const nkm = require(`@nkmjs/core`);*/
 const ui = nkm.ui;
 const uilib = nkm.uilib;
 
@@ -11,8 +11,8 @@ class GlyphCanvasRenderer extends ui.helpers.Canvas {
         super._Init();
         this._alwaysFit = true;
         this._zoom = 1;
-        this._path2D = new Path2D();
-        this._infos = null;
+        this._glyphPath = new Path2D();
+        this._previewInfos = null;
         this._drawGuides = false;
         this._centered = true;
     }
@@ -32,24 +32,36 @@ class GlyphCanvasRenderer extends ui.helpers.Canvas {
         this.Render();
     }
 
+    set previewInfos(p_value){ 
+        this._previewInfos = p_value; 
+        if(p_value){ this._glyphWidth = p_value.w; }
+        this._delayedRedraw.Schedule();
+    }
+    set glyphPath(p_value){ 
+        this._glyphPath = p_value ? new Path2D(p_value) : null; 
+        this._delayedRedraw.Schedule();
+    }
+    set glyphWidth(p_value){ 
+        this._glyphWidth = p_value; 
+        this._delayedRedraw.Schedule();
+    }
+
     Set(p_glyphVariant) {
 
         if (!p_glyphVariant) {
             this.Clear();
-            this._infos = null;
-            this._path2D = null;
+            this.previewInfos = null;
+            this.glyphPath = null;
             return false;
         }
 
-        let path = p_glyphVariant.Get(IDS.PATH);
-
-        this._infos = p_glyphVariant.subFamily._previewInfos;
-        this._glyphWidth = p_glyphVariant.Resolve(IDS.WIDTH);
-        this._path2D = new Path2D(path);
+        this.previewInfos = p_glyphVariant.subFamily._previewInfos;
+        this.glyphWidth = p_glyphVariant.Resolve(IDS.WIDTH);
+        this.glyphPath = p_glyphVariant.Get(IDS.PATH);
 
         this.Draw();
 
-        return path ? true : false;
+        return this._glyphPath ? true : false;
 
     }
 
@@ -57,11 +69,11 @@ class GlyphCanvasRenderer extends ui.helpers.Canvas {
 
         this.Clear();
 
-        if (!this._infos) { return; }
+        if (!this._previewInfos || !this._glyphPath) { return; }
 
         let
             z = this._zoom,
-            f = this._infos,
+            f = this._previewInfos,
             w = this.width,
             h = this.height,
             ref = Math.min(w, h),
@@ -81,7 +93,7 @@ class GlyphCanvasRenderer extends ui.helpers.Canvas {
         // Draw glyph
         let col = nkm.style.Get(`--glyph-color`);
         ctx.fillStyle = col;
-        ctx.fill(this._path2D);
+        ctx.fill(this._glyphPath);
 
         if (this._drawGuides) {
 
@@ -110,6 +122,7 @@ class GlyphCanvasRenderer extends ui.helpers.Canvas {
     }
 
     _Cleanup() {
+        this._previewInfos = null;
         super._Cleanup();
     }
 

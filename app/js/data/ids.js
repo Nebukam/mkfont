@@ -1,6 +1,6 @@
 'use strict';
 
-const nkm = require(`@nkmjs/core`);
+/*const nkm = require(`@nkmjs/core`);*/
 const ui = nkm.ui;
 const inputs = nkm.uilib.inputs;
 
@@ -284,49 +284,42 @@ class IDS {
         // Import settings
 
         [this.IMPORT_APPLY_SCALE]: {
-            recompute:true,
             inputType: inputs.Boolean,
             label: `Apply scale`,
             inputOptions: { size:ui.FLAGS.SIZE_S },
             desc: `Define the color of the glyphs in the editor.`
         },
         [this.IMPORT_SCALE_FACTOR_AUTO]: {
-            recompute:true,
             inputType: inputs.Boolean,
             label: `Auto scale`,
             inputOptions: { size:ui.FLAGS.SIZE_S },
             desc: `Will compute scale factor based on selected reference`
         },
         [this.IMPORT_SCALE_FACTOR_AUTO_REF]: {
-            recompute:true,
             inputType: inputs.Select,
             label: `Scale reference`,
             inputOptions: { catalog:this.autoScaleRefList, size:ui.FLAGS.SIZE_XS },
             desc: `Scale factor reference`
         },
         [this.IMPORT_SCALE_FACTOR]: {
-            recompute:true,
             inputType: inputs.Slider,
             label: `Scale factor`,
             inputOptions: { changeOnInput: true, step: 1, min: 1, max: 1000, size:ui.FLAGS.SIZE_XXS },
             desc: `Factor by which the input vector will be scaled.`
         },
         [this.IMPORT_MATCH_WIDTH]: {
-            recompute:true,
             inputType: inputs.Boolean,
             label: `Match width`,
             inputOptions: { size:ui.FLAGS.SIZE_S },
             desc: `Whether the imported vector width will be used as glyph width or not. If turned off, glyph width will be set to the Family default width.`
         },
         [this.IMPORT_MATCH_WIDTH_OFFSET]: {
-            recompute:true,
             inputType: inputs.Number,
             label: `Width offset`,
             inputOptions: { step: 1, min: 0, max: 5000, size:ui.FLAGS.SIZE_XXS },
             desc: `If 'Match width' is active, this value is added to the input SVG width.`
         },
         [this.IMPORT_MOVE_TO_BASELINE]: {
-            recompute:true,
             inputType: inputs.Boolean,
             label: `Move to baseline`,
             inputOptions: { size:ui.FLAGS.SIZE_S },

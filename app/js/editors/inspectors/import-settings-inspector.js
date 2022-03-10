@@ -1,4 +1,4 @@
-const nkm = require(`@nkmjs/core`);
+/*const nkm = require(`@nkmjs/core`);*/
 const ui = nkm.ui;
 const uilib = nkm.uilib;
 
@@ -12,22 +12,29 @@ class ImportSettingsInspector extends nkm.datacontrols.InspectorView {
     constructor() { super(); }
 
     static __controls = [
-        { cl:mkfWidgets.ControlHeader, options:{ label:`Scale` } },
-        { options:{ propertyId:mkfData.IDS.IMPORT_APPLY_SCALE } },
-        { options:{ propertyId:mkfData.IDS.IMPORT_SCALE_FACTOR_AUTO } },
-        { options:{ propertyId:mkfData.IDS.IMPORT_SCALE_FACTOR_AUTO_REF } },
-        { options:{ propertyId:mkfData.IDS.IMPORT_SCALE_FACTOR } },
-        { cl:mkfWidgets.ControlHeader, options:{ label:`Width` } },
-        { options:{ propertyId:mkfData.IDS.IMPORT_MATCH_WIDTH } },
-        { options:{ propertyId:mkfData.IDS.IMPORT_MATCH_WIDTH_OFFSET } },
-        { cl:mkfWidgets.ControlHeader, options:{ label:`Move` } },
-        { options:{ propertyId:mkfData.IDS.IMPORT_MOVE_TO_BASELINE } },
+        { cl: mkfWidgets.ControlHeader, options: { label: `Scale` } },
+        { options: { propertyId: mkfData.IDS.IMPORT_APPLY_SCALE } },
+        { options: { propertyId: mkfData.IDS.IMPORT_SCALE_FACTOR_AUTO } },
+        { options: { propertyId: mkfData.IDS.IMPORT_SCALE_FACTOR_AUTO_REF } },
+        { options: { propertyId: mkfData.IDS.IMPORT_SCALE_FACTOR } },
+        { cl: mkfWidgets.ControlHeader, options: { label: `Width` } },
+        { options: { propertyId: mkfData.IDS.IMPORT_MATCH_WIDTH } },
+        { options: { propertyId: mkfData.IDS.IMPORT_MATCH_WIDTH_OFFSET } },
+        { cl: mkfWidgets.ControlHeader, options: { label: `Move` } },
+        { options: { propertyId: mkfData.IDS.IMPORT_MOVE_TO_BASELINE } },
     ];
 
     _Init() {
         super._Init();
         this._builder.defaultControlClass = mkfWidgets.PropertyControl;
         this._builder.defaultCSS = `control`;
+        this._dataPreProcessor = (p_owner, p_data) => {
+            if (nkm.utils.isInstanceOf(p_data, mkfData.Glyph)) { return p_data.family.importSettings; }
+            if (nkm.utils.isInstanceOf(p_data, mkfData.GlyphVariant)) { return p_data.glyph.family.importSettings; }
+            if (nkm.utils.isInstanceOf(p_data, mkfData.SubFamily)) { return p_data.family.importSettings; }
+            if (nkm.utils.isInstanceOf(p_data, mkfData.Family)) { return p_data.importSettings; }
+            return p_data;
+        };
     }
 
     _Style() {
@@ -55,16 +62,11 @@ class ImportSettingsInspector extends nkm.datacontrols.InspectorView {
         // Categories
         // Blocks
         // - blocks need to be searchable, there is too much of them.
-        this._body = ui.dom.El(`div`, {class:`body`}, this);
-        
+        this._body = ui.dom.El(`div`, { class: `body` }, this);
+
     }
 
     //#region Family properties
-
-    _PreprocessData(p_data) {
-        if (nkm.utils.isInstanceOf(p_data, mkfData.Family)) { return p_data.importSettings; }
-        return p_data;
-    }
 
     //#endregion
 

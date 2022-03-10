@@ -1,6 +1,8 @@
-const nkm = require(`@nkmjs/core`);
+/*const nkm = require(`@nkmjs/core`);*/
 const u = nkm.utils;
 const ui = nkm.ui;
+
+const svgpath = require('svgpath');
 
 const mkfData = require(`../data`);
 const mkfInspectors = require(`../editors/inspectors`);
@@ -11,7 +13,7 @@ class SingleImportPreview extends ui.views.View {
 
     _Init() {
         super._Init();
-
+        this._transformedPath = null;
     }
 
     _Style() {
@@ -56,10 +58,18 @@ class SingleImportPreview extends ui.views.View {
 
         this._identity = this.Add(mkfWidgets.GlyphIdentity, `item identity`, this._host);
         this._settingsInspector = this.Add(mkfInspectors.ImportSettings, `item settings`);
+        this.forwardData.To(this._settingsInspector);
 
         this._previewBox = ui.dom.El(`div`, { class: `item preview` }, this._host);
-        this._svgRenderer = this.Add(mkfWidgets.GlyphRenderer, `item renderer`, this._previewBox);
 
+        this._svgRenderer = this.Add(mkfWidgets.GlyphCanvasRenderer, `item renderer`, this._previewBox);
+        this._svgRenderer.drawGuides = true;
+        this._svgRenderer.centered = false;
+
+    }
+
+    set subFamily(p_value){
+        this._svgRenderer.previewInfos = p_value ? p_value._previewInfos : null;
     }
 
     set glyphInfos(p_value){
@@ -67,12 +77,29 @@ class SingleImportPreview extends ui.views.View {
         this._identity.glyphInfos = p_value;
     }
 
-    set importSettings(p_value){
-        this._settingsInspector.data = p_value;
+    set importedGlyph(p_value){
+        this._importedGlyph = p_value;
+        this._transformedPath = p_value;        
     }
 
     _OnDataUpdated(p_data){
-        super._OnDataUpdated(p_data);
+        super._OnDataUpdated(p_data);        
+        this._UpdatePathTransforms();
+    }
+
+    _UpdatePathTransforms(){
+        
+        if(!this._importedGlyph){ this._transformedPath = null; return; }
+
+        console.log(this._data);
+
+        let scale = this._data.Get(mkfData.IDS.IMPORT_SCALE_FACTOR);
+        console.log(scale);
+        this._transformedPath = svgpath(this._importedGlyph.path).scale(scale,scale).toString();
+        console.log(this._transformedPath);
+        this._svgRenderer.glyphPath = this._transformedPath;
+        this._svgRenderer.Draw();
+
     }
 
 }

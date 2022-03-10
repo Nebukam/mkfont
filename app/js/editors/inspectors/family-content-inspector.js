@@ -1,4 +1,4 @@
-const nkm = require(`@nkmjs/core`);
+/*const nkm = require(`@nkmjs/core`);*/
 const ui = nkm.ui;
 const uilib = nkm.uilib;
 
@@ -51,10 +51,6 @@ class FamilyContentInspector extends nkm.datacontrols.InspectorView {
 
     //#region Family properties
 
-    _PreprocessData(p_data) {
-        if (!nkm.utils.isInstanceOf(p_data, mkfData.Family)) { return null; }
-        return p_data;
-    }
 
     //#endregion
 

@@ -1,7 +1,7 @@
 
 //"builds": "D:/wamp/www/SGF"
 
-const nkm = require(`@nkmjs/core`);
+/*const nkm = require(`@nkmjs/core`);*/
 const com = nkm.com;
 const ui = nkm.ui;
 
@@ -27,8 +27,6 @@ class MKFont extends nkm.app.AppBase {
 
     _Init() {
         super._Init();
-
-
 
         this._layers = [
             { id: `mainLayout`, cl: require(`./main-layout`) }

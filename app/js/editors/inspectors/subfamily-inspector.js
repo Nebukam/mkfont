@@ -1,6 +1,6 @@
 'use strict';
 
-const nkm = require(`@nkmjs/core`);
+/*const nkm = require(`@nkmjs/core`);*/
 const ui = nkm.ui;
 const inputs = nkm.uilib.inputs;
 const operations = require(`../../operations/index`);
@@ -86,11 +86,6 @@ class SubFamilyInspector extends nkm.datacontrols.InspectorView {
         this._body = ui.dom.El(`div`, { class: `body` }, this._host);
         this._builder.host = this._body;
         super._Render();
-    }
-
-    _PreprocessData(p_data) {
-        if (!nkm.utils.isInstanceOf(p_data, mkfData.Family)) { return null; }
-        return p_data;
     }
 
     _OnDataChanged(p_oldData) {

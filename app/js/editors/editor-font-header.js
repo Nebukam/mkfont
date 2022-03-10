@@ -1,4 +1,4 @@
-const nkm = require(`@nkmjs/core`);
+/*const nkm = require(`@nkmjs/core`);*/
 const u = nkm.utils;
 const ui = nkm.ui;
 
@@ -51,7 +51,8 @@ class FontEditorHeader extends nkm.datacontrols.ControlView {
                 'min-height': 'auto',
                 'padding':'20px',
                 'box-shadow': `0px -2px 5px black`,
-                'border-bottom': `1px solid #242424`
+                'border-bottom': `1px solid #242424`,
+                'background-color':'rgba(127,127,127,0.1)',
             },
             '.title':{
                 'margin-bottom':'10px'
@@ -108,6 +109,7 @@ class FontEditorHeader extends nkm.datacontrols.ControlView {
             });
 
         this._btnSelectSubFamily.visible = false;
+        this.forwardData.To(this._btnSelectSubFamily, { dataMember:`_subFamiliesCatalog` });
 
     }
 
@@ -115,15 +117,9 @@ class FontEditorHeader extends nkm.datacontrols.ControlView {
         this._displayInspector.editor = this._editor;
     }
 
-    _OnDataChanged(p_oldData) {
-        super._OnDataChanged(p_oldData);
-        if (this._data) {
-            this._btnSelectSubFamily.data = this._data._subFamiliesCatalog;
-        }
-    }
-
     _OnDataUpdated(p_data) {
         super._OnDataUpdated(p_data);
+        console.log(p_data);
         this._title.Set(p_data.Resolve(mkfData.IDS.FAMILY));
     }
 

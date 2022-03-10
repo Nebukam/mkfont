@@ -1,5 +1,5 @@
-const nkm = require(`@nkmjs/core`);
-const style = nkm.style;
+/*const nkm = require(`@nkmjs/core`);*/
+const css = nkm.style.CSS;
 const mkfData = require(`../data`);
 const IDS = mkfData.IDS;
 const UNICODE = require(`../unicode`);
@@ -64,7 +64,7 @@ class SVGOperations {
                 let
                     markCol = p_markCol[0] == `#` ? p_markCol.substring(1) : p_markCol,
                     style = svg.getElementsByTagName(`style`)[0],
-                    styleObject = style ? style.CSS.ClassCSS(style.innerHTML) : {};
+                    styleObject = style ? css.ClassCSS(style.innerHTML) : {};
 
                 for (let i = 0; i < paths.length; i++) {
 
@@ -135,7 +135,7 @@ class SVGOperations {
         }
 
         if (!foundRef && inlineStyle) {
-            let inlineObj = style.CSS.Rules(inlineStyle);
+            let inlineObj = css.Rules(inlineStyle);
             for (let c in inlineObj) {
                 let refValue = inlineObj[c];
                 if (refValue == A || refValue == B) { foundRef = true; break; }

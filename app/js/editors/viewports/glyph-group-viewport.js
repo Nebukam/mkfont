@@ -1,5 +1,5 @@
 const { uilib } = require("@nkmjs/core");
-const nkm = require(`@nkmjs/core`);
+/*const nkm = require(`@nkmjs/core`);*/
 const com = nkm.com;
 const u = nkm.utils;
 const ui = nkm.ui;
@@ -60,6 +60,7 @@ class GlyphGroupsView extends ui.views.View {
         super._Render();
 
         this._header = this.Add(GlyphGroupHeader, `header`);
+        this.forwardData.To(this._header);
 
         this._domStreamer = this.Add(ui.helpers.DOMStreamer, 'dom-stream', this._host);
         this._domStreamer
@@ -230,11 +231,6 @@ class GlyphGroupsView extends ui.views.View {
         this._cachedAdvance = 0;
     }
     //#region Catalog Management
-
-    _OnDataChanged(p_oldData) {
-        super._OnDataChanged(p_oldData);
-        this._header.data = this._data;
-    }
 
     _OnDataUpdated(p_data) {
         super._OnDataUpdated(p_data);

@@ -1,4 +1,4 @@
-const nkm = require(`@nkmjs/core`);
+/*const nkm = require(`@nkmjs/core`);*/
 const u = nkm.utils;
 const ui = nkm.ui;
 
@@ -57,10 +57,6 @@ class GlyphGroupHeader extends nkm.datacontrols.ControlView {
 
     _OnEditorChanged(p_oldEditor) {
         this._displayInspector.editor = this._editor;
-    }
-
-    _OnDataChanged(p_oldData) {
-        super._OnDataChanged(p_oldData);
     }
 
     _OnDataUpdated(p_data) {

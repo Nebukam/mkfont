@@ -1,6 +1,6 @@
 'use strict';
 
-const nkm = require(`@nkmjs/core`);
+/*const nkm = require(`@nkmjs/core`);*/
 const ui = nkm.ui;
 const inputs = nkm.uilib.inputs;
 const operations = require(`../../operations/index`);

@@ -1,6 +1,6 @@
 'use strict';
 
-const nkm = require(`@nkmjs/core`);
+/*const nkm = require(`@nkmjs/core`);*/
 const ui = nkm.ui;
 const inputs = nkm.uilib.inputs;
 const operations = require(`../../operations/index`);
@@ -126,10 +126,6 @@ class SubFamilyInspector extends nkm.datacontrols.InspectorView {
         this._pangramRenderer.fontSize = 20;
     }
 
-    _PreprocessData(p_data) {
-        if (!nkm.utils.isInstanceOf(p_data, mkfData.Family)) { return null; }
-        return p_data;
-    }
 
     _OnDataChanged(p_oldData) {
 

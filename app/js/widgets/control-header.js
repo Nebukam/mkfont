@@ -1,4 +1,4 @@
-const nkm = require(`@nkmjs/core`);
+/*const nkm = require(`@nkmjs/core`);*/
 const ui = nkm.ui;
 const uilib = nkm.uilib;
 
@@ -42,7 +42,6 @@ class ControlHeader extends ui.Widget {
                 'position': 'relative',
                 'width': '100%',
                 //'border-top': '1px solid #000',
-                'opacity':'0.5',
                 'margin-top':'2px'
             },
             '.label': {
@@ -50,7 +49,8 @@ class ControlHeader extends ui.Widget {
                 //'padding-bottom':'2px',
                 //'font-style':'italic'
                 //'text-align':'center',
-                'text-transform':'uppercase'
+                'text-transform':'uppercase',
+                'opacity':'0.5',
             },
         }, super._Style());
     }
