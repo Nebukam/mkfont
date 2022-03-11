@@ -1,12 +1,14 @@
 'use strict';
 
-/*const nkm = require(`@nkmjs/core`);*/
+const nkm = require(`@nkmjs/core`);
 const ui = nkm.ui;
 const inputs = nkm.uilib.inputs;
 const operations = require(`../../operations/index`);
 
 const mkfData = require(`../../data`);
 const mkfWidgets = require(`../../widgets`);
+
+const TransformSettingsInspector = require(`./tr-settings-inspector`);
 
 class GlyphVariantInspectorItem extends nkm.datacontrols.ControlWidget {
     constructor() { super(); }
@@ -67,18 +69,24 @@ class GlyphVariantInspectorItem extends nkm.datacontrols.ControlWidget {
                 'padding-bottom': '5px',
                 'margin-bottom': '5px',
                 'border-bottom': '1px solid #323232',
+            },
+            '.settings':{
+                'margin-bottom':'10px'
             }
         }, super._Style());
     }
 
     _Render() {
+        
+        this._dataToolbar = this.Add(ui.WidgetBar, `toolbar`, this._host);
+
         this._previewBox = ui.dom.El(`div`, { class: `preview` }, this._host);
         this._svgRenderer = this.Add(mkfWidgets.GlyphRenderer, `renderer`, this._previewBox);
-        this._dataToolbar = this.Add(ui.WidgetBar, `toolbar`, this._host);
-        //this._dataToolbar.size = ui.FLAGS.SIZE_S;
-        this._dataToolbar._defaultWidgetClass = nkm.uilib.buttons.Tool;
+        
 
-        super._Render();
+        this._dataToolbar._defaultWidgetClass = nkm.uilib.buttons.Tool;
+        this._dataToolbar.inline = true;
+        this._dataToolbar._stretchEnum.Set(`stretch`);
 
         this._dataToolbar.CreateHandles(
             {
@@ -102,6 +110,11 @@ class GlyphVariantInspectorItem extends nkm.datacontrols.ControlWidget {
                 group: `file-actions`
             },
         );
+
+        let transformInspector = this.Add(TransformSettingsInspector, `settings`);
+        this.forwardData.To(transformInspector, { dataMember:`transformSettings` });
+
+        super._Render();
 
     }
 

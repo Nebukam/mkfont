@@ -1,5 +1,5 @@
 //
-/*const nkm = require(`@nkmjs/core`);*/
+const nkm = require(`@nkmjs/core`);
 const actions = nkm.actions;
 
 const { clipboard } = require('electron');

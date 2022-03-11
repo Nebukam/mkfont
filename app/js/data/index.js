@@ -14,6 +14,8 @@ module.exports = {
     GlyphVariant: require(`./glyph-variant-data-block`),
     Glyph: Glyph,
 
-    ImportSettings: require(`./import-settings-data-block`),
+    TransformSettings: require(`./tr-settings-data-block`),
+
+    TTF: require(`./ttf-import`),
 
 }

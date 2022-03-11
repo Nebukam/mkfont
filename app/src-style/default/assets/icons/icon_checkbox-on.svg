@@ -1,6 +1,25 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100">
+  <defs>
+    <style>
+      .cls-1, .cls-2 {
+        fill: none;
+        stroke: #fff;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+      }
+
+      .cls-1 {
+        stroke-width: 5px;
+        opacity: 0.5;
+      }
+
+      .cls-2 {
+        stroke-width: 10px;
+      }
+    </style>
+  </defs>
   <g id="main">
-    <rect x="10" y="10" width="80" height="80" rx="10" fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-width="5" opacity="0.5"/>
-    <polyline points="66.86 31.28 46.49 68.72 29.42 52.86" fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-width="10"/>
+    <rect class="cls-1" x="10" y="10" width="80" height="80" rx="10"/>
+    <polyline class="cls-2" points="66.86 31.28 46.49 68.72 29.42 52.86"/>
   </g>
 </svg>

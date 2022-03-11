@@ -1,4 +1,4 @@
-/*const nkm = require(`@nkmjs/core`);*/
+const nkm = require(`@nkmjs/core`);
 const u = nkm.utils;
 const ui = nkm.ui;
 
@@ -13,7 +13,6 @@ class FontEditorHeader extends nkm.datacontrols.ControlView {
 
         let fn = () => { return { editor: this.editor, data: this._data }; };
         let margins = { x: 0, y: 5 };
-
 
         this._displayInspector = ui.UI.Rent(mkfInspectors.Display);
         this._modalDisplayOpts = this._commands.Create(ui.commands.Modal, 'Display', 'gear');
@@ -111,6 +110,9 @@ class FontEditorHeader extends nkm.datacontrols.ControlView {
         this._btnSelectSubFamily.visible = false;
         this.forwardData.To(this._btnSelectSubFamily, { dataMember:`_subFamiliesCatalog` });
 
+//        this._test = this.Add(nkm.uilib.inputs.InlineSelect, `enumtest`);
+//        this._test.data = mkfData.IDS.weightList;
+
     }
 
     _OnEditorChanged(p_oldEditor) {
@@ -119,7 +121,6 @@ class FontEditorHeader extends nkm.datacontrols.ControlView {
 
     _OnDataUpdated(p_data) {
         super._OnDataUpdated(p_data);
-        console.log(p_data);
         this._title.Set(p_data.Resolve(mkfData.IDS.FAMILY));
     }
 

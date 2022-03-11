@@ -1,6 +1,6 @@
 'use strict';
 
-/*const nkm = require(`@nkmjs/core`);*/
+const nkm = require(`@nkmjs/core`);
 const u = nkm.utils;
 const io = nkm.io;
 
@@ -9,7 +9,9 @@ const UTILS = require(`./utils`);
 
 class SimpleDataEx extends nkm.data.SimpleDataBlock {
 
-    constructor() { super(); }
+    constructor() { 
+        super(); 
+    }
 
     _Init() {
         super._Init();

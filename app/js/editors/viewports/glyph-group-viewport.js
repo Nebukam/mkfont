@@ -1,5 +1,5 @@
 const { uilib } = require("@nkmjs/core");
-/*const nkm = require(`@nkmjs/core`);*/
+const nkm = require(`@nkmjs/core`);
 const com = nkm.com;
 const u = nkm.utils;
 const ui = nkm.ui;

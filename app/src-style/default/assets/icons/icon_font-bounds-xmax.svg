@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100">
+  <defs>
+    <style>
+      .cls-1, .cls-2, .cls-4 {
+        fill: none;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+      }
+
+      .cls-1, .cls-2 {
+        stroke: #fff;
+        stroke-width: 5px;
+      }
+
+      .cls-1, .cls-3 {
+        opacity: 0.5;
+      }
+
+      .cls-4 {
+        stroke: #3ec188;
+        stroke-width: 10px;
+      }
+    </style>
+  </defs>
+  <g id="main">
+    <g>
+      <line class="cls-1" x1="9.97" y1="24.29" x2="90" y2="24.29"/>
+      <line class="cls-2" x1="24.27" y1="90" x2="24.27" y2="10"/>
+    </g>
+    <line class="cls-1" x1="90" y1="75.71" x2="9.97" y2="75.71"/>
+    <g class="cls-3">
+      <line class="cls-2" x1="90.1" y1="56.92" x2="9.96" y2="56.92"/>
+    </g>
+  </g>
+  <g id="accent">
+    <line class="cls-4" x1="75.7" y1="9.98" x2="75.7" y2="90.02"/>
+  </g>
+</svg>

@@ -50,6 +50,24 @@ $btnBorderRadius: 3px;
 
 }
 
+:host(.inline){    
+    border-radius: 0;
+}
+
+:host(.inline:first-child),
+:host(.inline:first-of-type){
+    border-radius: $btnBorderRadius 0 0 $btnBorderRadius;
+}
+
+:host(.inline:last-child),
+:host(.inline:last-of-type){
+    border-radius: 0 $btnBorderRadius $btnBorderRadius 0;
+}
+
+:host(.inline:only-child){
+    border-radius: $btnBorderRadius;
+}
+
 // ----> States
 
 :host(#{$IDLE}){
@@ -62,7 +80,7 @@ $btnBorderRadius: 3px;
     }
 }
 
-$th: 4px;
+$th: 2px;
 
 :host(#{$FOCUSED}){
 
@@ -111,6 +129,10 @@ $th: 4px;
 
     top: auto;
     bottom: -$th*0.5; // Default state ~= top
+}
+
+:host(#{$TOGGLED}){
+    backdrop-filter:brightness(0.65);
 }
 
 // ----> Horizontal placement

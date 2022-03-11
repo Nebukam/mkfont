@@ -1,4 +1,4 @@
-/*const nkm = require(`@nkmjs/core`);*/
+const nkm = require(`@nkmjs/core`);
 const ui = nkm.ui;
 const uilib = nkm.uilib;
 const inputs = nkm.uilib.inputs;
@@ -31,11 +31,13 @@ class PropertyControl extends nkm.datacontrols.ControlWidget {
 
         this._onSubmitFn = null;
         this._inherited = false;
+        this._inputOnly = false;
 
         this._optionsHandler
             .Hook(`propertyId`)
             .Hook(`allowOverride`, null, false)
             .Hook(`subData`, null, null)
+            .Hook(`inputOnly`, null, null)
             .Hook(`command`);
 
         this._dataPreProcessor = this.constructor.__ppdata;
@@ -98,14 +100,14 @@ class PropertyControl extends nkm.datacontrols.ControlWidget {
 
     _Render() {
         super._Render();
-        let labelCtnr = ui.dom.El(`div`, { class: `label-area` }, this._host);
-        this._toggle = this.Add(inputs.Checkbox, `toggle`, labelCtnr);
+        this._labelCtnr = ui.dom.El(`div`, { class: `label-area` }, this._host);
+        this._toggle = this.Add(inputs.Checkbox, `toggle`, this._labelCtnr);
         this._toggle.options = {
             size: nkm.ui.FLAGS.SIZE_XS,
             preventTabIndexing: true,
             onSubmit: { fn: this._Bind(this._OnToggleSubmit) }
         }
-        this._label = new ui.manipulators.Text(ui.dom.El(`div`, { class: `label` }, labelCtnr), false, false);
+        this._label = new ui.manipulators.Text(ui.dom.El(`div`, { class: `label` }, this._labelCtnr), false, false);
     }
 
     _OnPaintChange() {
@@ -119,6 +121,12 @@ class PropertyControl extends nkm.datacontrols.ControlWidget {
 
     set subData(p_value) {
         this._subData = p_value;
+    }
+
+    set inputOnly(p_value){
+        this._inputOnly = p_value;
+        if(p_value){this._labelCtnr.style.display = `none`;}
+        else{this._labelCtnr.style.removeProperty(`display`);}
     }
 
     set propertyId(p_id) {

@@ -3,6 +3,6 @@
 module.exports = {
 
     Welcome: require(`./welcome-view`),
-    SingleImportPreview: require(`./single-import-preview`),
+    SingleImportPreview: require(`./single-tr-preview`),
 
 }

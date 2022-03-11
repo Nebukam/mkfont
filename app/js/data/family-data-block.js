@@ -1,6 +1,6 @@
 'use strict';
 
-/*const nkm = require(`@nkmjs/core`);*/
+const nkm = require(`@nkmjs/core`);
 const u = nkm.utils;
 const io = nkm.io;
 
@@ -11,7 +11,7 @@ const IDS = require(`./ids`);
 const SimpleDataEx = require(`./simple-data-ex`);
 const SubFamily = require(`./sub-family-data-block`);
 const Glyph = require(`./glyph-data-block`);
-const ImportSettings = require(`./import-settings-data-block`);
+const TransformSettings = require(`./tr-settings-data-block`);
 
 class FamilyDataBlock extends SimpleDataEx {
 
@@ -41,7 +41,7 @@ class FamilyDataBlock extends SimpleDataEx {
             [IDS.PREVIEW_SIZE]: { value: 100 },
         };
 
-        this._importSettings = nkm.com.Rent(ImportSettings);
+        this._transformSettings = nkm.com.Rent(TransformSettings);
 
         this._glyphs = new nkm.collections.List();
         this._glyphsMap = {};
@@ -61,7 +61,7 @@ class FamilyDataBlock extends SimpleDataEx {
         this.AddSubFamily(this._defaultSubFamily);
     }
 
-    get importSettings(){ return this._importSettings; }
+    get transformSettings(){ return this._transformSettings; }
 
     get defaultSubFamily() { return this._defaultSubFamily; }
 

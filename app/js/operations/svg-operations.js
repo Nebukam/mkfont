@@ -1,7 +1,6 @@
-/*const nkm = require(`@nkmjs/core`);*/
+const nkm = require(`@nkmjs/core`);
 const css = nkm.style.CSS;
-const mkfData = require(`../data`);
-const IDS = mkfData.IDS;
+const IDS = require(`../data/ids`);
 const UNICODE = require(`../unicode`);
 
 const { optimize } = require('svgo');
@@ -29,6 +28,50 @@ const svgFontString =
     `   <missing-glyph></missing-glyph>` +
     `</font>`;
 
+//#region getBBox hack
+
+const _getBBox = SVGGraphicsElement.prototype.getBBox;
+const __dummyDiv = document.createElement("div");
+__dummyDiv.setAttribute("style", "position:absolute; visibility:hidden; width:0; height:0");
+const __dummySVG = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+__dummyDiv.appendChild(__dummySVG);
+document.body.appendChild(__dummyDiv);
+const __pathSVG = document.createElementNS("http://www.w3.org/2000/svg", "path");
+
+SVGGraphicsElement.prototype.getBBox = function () {
+    var rect;
+    if (document.contains(this)) {
+        rect = _getBBox.apply(this);
+    } else {
+
+        if (this.tagName === "svg") {
+            __dummyDiv.appendChild(this);
+            rect = _getBBox.apply(this);
+        } else {
+            __dummySVG.appendChild(this);
+            rect = _getBBox.apply(__dummySVG);
+        }
+        this.remove();
+    }
+
+    let result = {
+        x: rect.x,
+        y: rect.y,
+        width: rect.width,
+        height: rect.height,
+        top: rect.y,
+        bottom: rect.y + rect.height,
+        left: rect.x,
+        right: rect.x + rect.width
+    };
+
+    console.log(rect, result);
+    return result;
+
+};
+
+//#endregion
+
 class SVGOperations {
     constructor() { }
 
@@ -43,7 +86,7 @@ class SVGOperations {
     static SVGStats(p_input, p_markCol = `FF00FF`) {
         let result = { exists: false };
 
-        if(!p_input){ return result; }
+        if (!p_input) { return result; }
 
         try {
 
@@ -55,7 +98,8 @@ class SVGOperations {
             let
                 paths = svg.getElementsByTagName(`path`),
                 mergedPaths = ``,
-                markBBox = null;
+                markedBBox = null,
+                markPath = null;
 
             if (paths.length > 0) {
 
@@ -76,9 +120,9 @@ class SVGOperations {
                     if (tr) { p.setAttribute(`d`, svgpath(d).transform(tr).toString()); }
 
                     //Check if path is mark (if so remove it)
-                    if (!markBBox) {
-                        markBBox = this._FindMarkBBox(p, styleObject, markCol);
-                        if (markBBox) { d = null; }
+                    if (!markedBBox) {
+                        markedBBox = this._FindMarkedBBox(p, styleObject, markCol);
+                        if (markedBBox) { d = null; }
                     }
 
                     if (d) { mergedPaths += `${mergedPaths.length > 0 ? ' ' : ''}${d}`; }
@@ -89,18 +133,31 @@ class SVGOperations {
 
             if (mergedPaths && mergedPaths != ``) {
 
-                result.path = mergedPaths;
-                result.bbox = markBBox;
+                result.markedBBox = markedBBox;
 
-                let viewBox = svg.getAttribute(`viewBox`);
-                if(viewBox){
-                    let vbSplit = viewBox.split(` `);
-                    result.width = vbSplit[2];
-                    result.height = vbSplit[3];
-                }else{
-                    result.width = svg.getAttribute(`width`);
-                    result.height = svg.getAttribute(`height`);
+                if (markedBBox) {
+                    result.width = markedBBox.width;
+                    result.height = markedBBox.height;
+
+                    //Move path so top left is at 0;0
+                    mergedPaths = svgpath(mergedPaths)
+                        .translate(-markedBBox.x, -markedBBox.y)
+                        .toString();
+
+                } else {
+                    let viewBox = svg.getAttribute(`viewBox`);
+                    if (viewBox) {
+                        let vbSplit = viewBox.split(` `);
+                        result.width = vbSplit[2];
+                        result.height = vbSplit[3];
+                    } else {
+                        result.width = result.BBox.width;
+                        result.height = result.BBox.height;
+                    }
                 }
+
+                result.path = mergedPaths;
+                result.BBox = this.GetBBox(mergedPaths);
 
                 result.exists = true;
 
@@ -111,9 +168,7 @@ class SVGOperations {
         return result;
     }
 
-    static bbox = { maxx: 0, minx: 0, maxy: 0, miny: 0, width: 0, height: 0 };
-
-    static _FindMarkBBox(p_path, p_style, p_markCol) {
+    static _FindMarkedBBox(p_path, p_style, p_markCol) {
 
         let
             A = `#${p_markCol}`,
@@ -145,136 +200,10 @@ class SVGOperations {
         if (!foundRef && (fillStyle == A || fillStyle == B)) { foundRef = true; }
         if (!foundRef && (strokeStyle == A || strokeStyle == B)) { foundRef = true; }
 
-        if (foundRef) { return this.GetBBox(p_path.getAttribute(`d`)); }
+        if (foundRef) { return p_path.getBBox(); }
 
         return false;
 
-    }
-
-    //#endregion
-
-    //#region TTF processing
-
-    static FamilyFromTTF(p_ttfBytes) {
-
-        let
-            svgFont = domparser.parseFromString(ttf2svg(p_ttfBytes), `image/svg+xml`),
-            fontFace = svgFont.getElementsByTagName(`font-face`)[0],
-            glyphs = svgFont.getElementsByTagName(`glyph`);
-
-        console.log(ttf2svg(p_ttfBytes));
-
-        //console.log(svgFont);
-
-        let
-            family = new mkfData.Family(),
-            subFamily = family.defaultSubFamily,
-            em_units = 1000,
-            fontAdvx = em_units,
-            fontAdvy = em_units,
-            ascent = em_units * 0.7,
-            descent = em_units * -0.25;
-
-        if (fontFace) {
-            this._sXMLAttNum(fontFace, IDS.EM_UNITS, subFamily, 1000);
-            ascent = this._sXMLAttNum(fontFace, IDS.ASCENT, subFamily, ascent);
-            descent = this._sXMLAttNum(fontFace, IDS.DESCENT, subFamily, descent);
-            em_units = this._sXMLAttNum(fontFace, IDS.EM_UNITS, subFamily, em_units);
-        }
-
-        fontAdvx = subFamily.Set(IDS.WIDTH, em_units);
-        fontAdvy = subFamily.Set(IDS.HEIGHT, em_units);
-
-        let
-            size = Math.max(em_units, ascent - descent),
-            displaySize = size * 1.25,
-            displayOffset = (displaySize - size) * -0.5;
-
-        subFamily.Set(IDS.SIZE, size);
-        subFamily.Set(IDS.DISPLAY_SIZE, displaySize);
-        subFamily.Set(IDS.DISPLAY_OFFSET, displayOffset);
-
-        for (let i = 0; i < glyphs.length; i++) {
-
-            let g = glyphs[i],
-                glyphUnicode = g.getAttribute(`unicode`),
-                glyphId = g.getAttribute(`glyph-name`),
-                glyphPath = g.getAttribute(`d`),
-                glyphAdvX = Number(g.getAttribute(IDS.WIDTH) || fontAdvx),
-                glyphAdvY = Number(g.getAttribute(IDS.HEIGHT) || fontAdvy);
-
-            let newGlyph = new mkfData.Glyph(),
-                defg = newGlyph._defaultGlyph;
-
-            if (glyphAdvX != fontAdvx) { defg.Set(IDS.WIDTH, glyphAdvX); }
-            //if (glyphAdvY != fontAdvy) { defg.Set(IDS.HEIGHT, glyphAdvY); }
-
-            // Flip & translate glyph
-            glyphPath = svgpath(glyphPath)
-                .scale(1, -1)
-                .translate(0, ascent)
-                .toString();
-
-            if (glyphUnicode.length != 1) {
-                //assume ligature
-            } else {
-                glyphUnicode = UNICODE.GetAddress(glyphUnicode);
-            }
-
-
-            newGlyph.BatchSet({
-                [IDS.GLYPH_NAME]: glyphId,
-                [IDS.UNICODE]: glyphUnicode
-            });
-
-            defg.Set(IDS.PATH, glyphPath);
-
-            family.AddGlyph(newGlyph);
-
-        }
-
-        return family;
-
-    }
-
-    static _sXMLAttNum(p_el, p_prop, p_data, p_default = null) {
-        let value = p_el.getAttribute(p_prop);
-        if (!value) {
-            if (!p_default) { return null; }
-            value = p_default;
-        }
-        value = Number(value);
-        p_data.Set(p_prop, value);
-        return value;
-    }
-
-    static _sXMLAttString(p_el, p_prop, p_data, p_default = null) {
-        let value = p_el.getAttribute(p_prop);
-        if (!value) {
-            if (!p_default) { return null; }
-            value = p_default;
-        }
-        p_data.Set(p_prop, value);
-        return value;
-    }
-
-    static TTFFontFromSubFamily(p_subFamily) {
-
-        var VERSION_RE = /^(Version )?(\d+[.]\d+)$/i;
-
-        let options = {
-            familyname: p_subFamily.Resolve(IDS.FAMILY),
-            subfamilyname: p_subFamily.Resolve(IDS.FONT_STYLE),
-            copyright: p_subFamily.Resolve(IDS.COPYRIGHT) || ``,
-            description: p_subFamily.Resolve(IDS.DESCRIPTION) || ``,
-            url: p_subFamily.Resolve(IDS.URL) || ``,
-            version: `Version ${p_subFamily.Resolve(IDS.VERSION) || '1.0'}`
-        }
-
-        console.log(options);
-
-        let ttf = svg2ttf(p_subFamily.fontObject.outerHTML, options);
-        return ttf.buffer; // For file writing, do Buffer.from(ttf.buffer)
     }
 
     //#endregion
@@ -302,21 +231,83 @@ class SVGOperations {
 
     static GetBBox(p_path) {
 
-        this.bbox.minx = this.bbox.miny = 99999999;
-        this.bbox.maxx = this.bbox.maxy = -99999999;
+        __pathSVG.setAttribute(`d`, p_path);
+        return __pathSVG.getBBox();
 
-        svgpath(p_path).iterate((segment, index, x, y) => {
-            if(segment[0] === 'M'){ return; }
-            this.bbox.minx = Math.min(x, this.bbox.minx);
-            this.bbox.maxx = Math.max(x, this.bbox.maxx);
-            this.bbox.miny = Math.min(y, this.bbox.miny);
-            this.bbox.maxy = Math.max(y, this.bbox.maxy);
-        });
+    }
 
-        this.bbox.width = this.bbox.maxx - this.bbox.minx;
-        this.bbox.height = this.bbox.maxy - this.bbox.miny;
 
-        return { ...this.bbox };
+    static FitPath(p_settings, p_context, p_svgStats) {
+
+        console.log(p_svgStats);
+
+        let
+            bbox = p_svgStats.BBox,
+            markedBBox = p_svgStats.markedBBox,
+            scale = 1,
+            heightRef = p_svgStats.height,
+            widthRef = p_svgStats.width,
+            wOff = p_settings.Get(IDS.TR_WIDTH_PUSH),
+            offsetY = 0,
+            offsetX = 0;
+
+        let scaleMode = p_settings.Get(IDS.TR_SCALE_MODE).GetOption(`value`, 0),
+            vAlign = p_settings.Get(IDS.TR_VER_ALIGN).GetOption(`value`, 0),
+            vAnchor = p_settings.Get(IDS.TR_VER_ALIGN_ANCHOR).GetOption(`value`, 0),
+            hAlign = p_settings.Get(IDS.TR_HOR_ALIGN).GetOption(`value`, 0),
+            hAnchor = p_settings.Get(IDS.TR_HOR_ALIGN_ANCHOR).GetOption(`value`, 0);
+
+        switch (scaleMode) {
+            case 0: scale = p_context.em / heightRef; break;// To Em
+            case 1: scale = p_context.asc / heightRef; break;// To Ascender
+            case 2: scale = (p_context.asc - p_context.dsc) / heightRef; break;// To Spread
+            case 3: scale = p_context.h / heightRef; break;// To Height
+            default: break;// None
+        }
+
+        heightRef *= scale; widthRef *= scale;
+
+        if (Math.abs(wOff) < 1.00001) { widthRef += widthRef * wOff; }
+        else { widthRef += wOff; }
+
+        // V align
+
+        switch (vAlign) {
+            case 0: offsetY = p_context.asc - heightRef; break;// To Baseline (ascent)
+            case 1: offsetY = (p_context.asc - p_context.dsc) - heightRef; break;// To Descent (ascent - descent)
+            default: offsetY = markedBBox ? -markedBBox.y * scale : 0; break;// None, or top
+        }
+
+        switch (vAnchor) {
+            case 0: offsetY += 0; break;// Bottom
+            case 1: offsetY += heightRef * 0.5; break;// Center
+            default: offsetY += heightRef; break; // Top
+        }
+
+
+        // H align
+
+        switch (hAlign) {
+            case 0: offsetX = 0; break;// To Baseline (ascent)
+            case 1: offsetX = 0; break;// To Descent (ascent - descent)
+            default: offsetX = 0; break;// None, or top
+        }
+
+        switch (hAnchor) {
+            case 0: offsetX += 0; break;// Left
+            case 1: offsetX -= widthRef * 0.5; break;// Center
+            default: offsetX -= widthRef; break;// Right
+        }
+
+
+        return {
+            height: heightRef,
+            width: widthRef,
+            path: svgpath(p_svgStats.path)
+                .scale(scale)
+                .translate(offsetX, offsetY)
+                .toString()
+        };
 
     }
 

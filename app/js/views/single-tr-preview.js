@@ -1,4 +1,4 @@
-/*const nkm = require(`@nkmjs/core`);*/
+const nkm = require(`@nkmjs/core`);
 const u = nkm.utils;
 const ui = nkm.ui;
 
@@ -7,57 +7,61 @@ const svgpath = require('svgpath');
 const mkfData = require(`../data`);
 const mkfInspectors = require(`../editors/inspectors`);
 const mkfWidgets = require(`../widgets`);
+const SVG = require(`../operations/svg-operations`);
 
 class SingleImportPreview extends ui.views.View {
     constructor() { super(); }
 
     _Init() {
         super._Init();
-        this._transformedPath = null;
+        this._transformedData = null;
     }
 
     _Style() {
         return nkm.style.Extends({
             ':host': {
-                'display':'grid',
-                'flex-flow':'column wrap',
-                'flex':'0 0 auto',
-                'grid-template-columns':'max-content max-content',
-                'grid-template-rows':'80px',
-                'grid-gap':'10px'
+                'display': 'grid',
+                'flex-flow': 'column wrap',
+                'flex': '0 0 auto',
+                'grid-template-columns': 'max-content max-content',
+                'grid-template-rows': '80px',
+                'grid-gap': '10px'
             },
-            '.item':{
-                'flex':'1 0 auto',
+            '.item': {
+                'flex': '1 0 auto',
                 'grid-column-start': '1',
             },
             '.preview': {
                 'position': 'relative',
                 'aspect-ratio': '1/1',
-                'width': '350px',
+                'width': '400px',
                 'overflow': 'hidden',
                 'padding': '10px',
-                'background-color': 'rgba(0,0,0,0.5)',
+                'background-color': 'rgba(0,0,0,0.6)',
                 'border-radius': '5px',
                 'grid-column-start': '2',
                 'grid-row': '1 / span 2',
+            },
+            '.settings':{
+                'width':'300px'
             },
             '.renderer': {
                 'position': 'relative',
                 'width': '100%',
                 'aspect-ratio': '1/1',
-                'flex':'0 0 100%'
+                'flex': '0 0 100%'
             },
-            '.identity':{
-                'width':'100%'
+            '.identity': {
+                'width': '100%'
             }
         }, super._Style());
     }
 
-    _Render(){
+    _Render() {
         super._Render();
 
         this._identity = this.Add(mkfWidgets.GlyphIdentity, `item identity`, this._host);
-        this._settingsInspector = this.Add(mkfInspectors.ImportSettings, `item settings`);
+        this._settingsInspector = this.Add(mkfInspectors.TransformSettings, `item settings`);
         this.forwardData.To(this._settingsInspector);
 
         this._previewBox = ui.dom.El(`div`, { class: `item preview` }, this._host);
@@ -68,36 +72,32 @@ class SingleImportPreview extends ui.views.View {
 
     }
 
-    set subFamily(p_value){
-        this._svgRenderer.previewInfos = p_value ? p_value._previewInfos : null;
+    set subFamily(p_value) {
+        this._contextInfos = p_value ? p_value._contextInfos : null;
+        this._svgRenderer.contextInfos = this._contextInfos;
     }
 
-    set glyphInfos(p_value){
+    set glyphInfos(p_value) {
         this._glyphInfos = p_value;
         this._identity.glyphInfos = p_value;
     }
 
-    set importedGlyph(p_value){
+    set importedGlyph(p_value) {
         this._importedGlyph = p_value;
-        this._transformedPath = p_value;        
     }
 
-    _OnDataUpdated(p_data){
-        super._OnDataUpdated(p_data);        
+    _OnDataUpdated(p_data) {
+        super._OnDataUpdated(p_data);
         this._UpdatePathTransforms();
     }
 
-    _UpdatePathTransforms(){
-        
-        if(!this._importedGlyph){ this._transformedPath = null; return; }
+    _UpdatePathTransforms() {
 
-        console.log(this._data);
+        if (!this._importedGlyph) { this._transformedPath = null; return; }
 
-        let scale = this._data.Get(mkfData.IDS.IMPORT_SCALE_FACTOR);
-        console.log(scale);
-        this._transformedPath = svgpath(this._importedGlyph.path).scale(scale,scale).toString();
-        console.log(this._transformedPath);
-        this._svgRenderer.glyphPath = this._transformedPath;
+        this._transformedData = SVG.FitPath(this._data, this._contextInfos, this._importedGlyph);
+        this._svgRenderer.glyphWidth = this._transformedData.width; 
+        this._svgRenderer.glyphPath = this._transformedData.path;
         this._svgRenderer.Draw();
 
     }
@@ -105,4 +105,4 @@ class SingleImportPreview extends ui.views.View {
 }
 
 module.exports = SingleImportPreview;
-ui.Register(`mkfont-single-import-preview`, SingleImportPreview);
+ui.Register(`mkfont-single-tr-preview`, SingleImportPreview);

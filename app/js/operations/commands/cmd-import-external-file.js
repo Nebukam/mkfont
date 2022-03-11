@@ -1,5 +1,5 @@
 //
-/*const nkm = require(`@nkmjs/core`);*/
+const nkm = require(`@nkmjs/core`);
 const actions = nkm.actions;
 const u = nkm.utils;
 
@@ -73,7 +73,7 @@ class CmdImportExternalFile extends actions.Command {
         } else {
 
             if (!this._importInspector) {
-                this._importInspector = nkm.ui.UI.Rent(`mkfont-single-import-preview`);
+                this._importInspector = nkm.ui.UI.Rent(`mkfont-single-tr-preview`);
             }
 
             let glyphInfos = null;
@@ -92,14 +92,14 @@ class CmdImportExternalFile extends actions.Command {
             this._importInspector.glyphInfos = glyphInfos;
             this._importInspector.importedGlyph = svgStats;
             this._importInspector.subFamily = subFamily;
-            this._importInspector.data = subFamily.family.importSettings;
+            this._importInspector.data = subFamily.family.transformSettings;
 
             nkm.dialog.Push({
                 title: `Tweaks`,
                 //message: `Tweak the imported data to make sure it fits!`,
                 content: [{ cl: this._importInspector, donotrelease: true }],
                 actions: [
-                    { label: `Looks good`, flavor: nkm.com.FLAGS.READY, variant: nkm.ui.FLAGS.FRAME },
+                    { label: `Looks good`, flavor: nkm.ui.FLAGS.CTA,  }, //variant: nkm.ui.FLAGS.FRAME
                     { label: `Cancel`, trigger: { fn: this._Cancel, thisArg: this } }
                 ],
                 grow:true,

@@ -1,4 +1,4 @@
-/*const nkm = require(`@nkmjs/core`);*/
+const nkm = require(`@nkmjs/core`);
 const ui = nkm.ui;
 const uilib = nkm.uilib;
 
@@ -12,7 +12,7 @@ class GlyphCanvasRenderer extends ui.helpers.Canvas {
         this._alwaysFit = true;
         this._zoom = 1;
         this._glyphPath = new Path2D();
-        this._previewInfos = null;
+        this._contextInfos = null;
         this._drawGuides = false;
         this._centered = true;
     }
@@ -32,17 +32,17 @@ class GlyphCanvasRenderer extends ui.helpers.Canvas {
         this.Render();
     }
 
-    set previewInfos(p_value){ 
-        this._previewInfos = p_value; 
-        if(p_value){ this._glyphWidth = p_value.w; }
+    set contextInfos(p_value) {
+        this._contextInfos = p_value;
+        if (p_value) { this._glyphWidth = p_value.w; }
         this._delayedRedraw.Schedule();
     }
-    set glyphPath(p_value){ 
-        this._glyphPath = p_value ? new Path2D(p_value) : null; 
+    set glyphPath(p_value) {
+        this._glyphPath = p_value ? new Path2D(p_value) : null;
         this._delayedRedraw.Schedule();
     }
-    set glyphWidth(p_value){ 
-        this._glyphWidth = p_value; 
+    set glyphWidth(p_value) {
+        this._glyphWidth = p_value;
         this._delayedRedraw.Schedule();
     }
 
@@ -50,12 +50,12 @@ class GlyphCanvasRenderer extends ui.helpers.Canvas {
 
         if (!p_glyphVariant) {
             this.Clear();
-            this.previewInfos = null;
+            this.contextInfos = null;
             this.glyphPath = null;
             return false;
         }
 
-        this.previewInfos = p_glyphVariant.subFamily._previewInfos;
+        this.contextInfos = p_glyphVariant.subFamily._contextInfos;
         this.glyphWidth = p_glyphVariant.Resolve(IDS.WIDTH);
         this.glyphPath = p_glyphVariant.Get(IDS.PATH);
 
@@ -69,15 +69,15 @@ class GlyphCanvasRenderer extends ui.helpers.Canvas {
 
         this.Clear();
 
-        if (!this._previewInfos || !this._glyphPath) { return; }
+        if (!this._contextInfos || !this._glyphPath) { return; }
 
         let
             z = this._zoom,
-            f = this._previewInfos,
+            f = this._contextInfos,
             w = this.width,
             h = this.height,
             ref = Math.min(w, h),
-            os = 0.5, ros = (1 - os)*0.5,
+            os = 0.5, ros = (1 - os) * 0.5,
             scale = (ref / f.ref) * z * os,
             iscale = 1 / scale;
 
@@ -86,9 +86,9 @@ class GlyphCanvasRenderer extends ui.helpers.Canvas {
         if (this._centered) {
             ctx.translate(((w * iscale) * 0.5) - this._glyphWidth * 0.5, (h * iscale) * ros);
         } else {
-            ctx.translate((w * iscale) * ros, (h * iscale) * ros);   
+            ctx.translate((w * iscale) * ros, (h * iscale) * ros);
         }
-        
+
 
         // Draw glyph
         let col = nkm.style.Get(`--glyph-color`);
@@ -97,24 +97,54 @@ class GlyphCanvasRenderer extends ui.helpers.Canvas {
 
         if (this._drawGuides) {
 
+            let
+                maxx = w * iscale,
+                minx = -maxx,
+                maxy = h * iscale,
+                miny = -maxy;
+
+                ctx.lineCap = 'round';
+
             // Baseline
             ctx.strokeStyle = nkm.style.Get(`--col-active`);
             ctx.lineWidth = iscale;
-            ctx.setLineDash([iscale, iscale]);
+            ctx.setLineDash([iscale, iscale*3]);
             ctx.beginPath();
-            ctx.moveTo(0, f.asc);
-            ctx.lineTo(w * iscale, f.asc);
+            ctx.moveTo(minx, f.asc);
+            ctx.lineTo(maxx, f.asc);
             ctx.stroke();
 
-            // Baseline
-            ctx.strokeStyle = `#fff`;// nkm.style.Get(`--col-error`);
+            ctx.setLineDash([]);
+
+            // Desc
+            ctx.strokeStyle = `rgba(255,255,255,0.1)`;// nkm.style.Get(`--col-error`);
             ctx.lineWidth = iscale;
             //ctx.setLineDash([iscale, iscale]);
             ctx.beginPath();
-            ctx.moveTo(0, 0);
-            ctx.lineTo(w * iscale, 0);
-            ctx.moveTo(0, f.em);
-            ctx.lineTo(w * iscale, f.em);
+            ctx.moveTo(minx, 0);
+            ctx.lineTo(maxx, 0);
+            ctx.moveTo(minx, f.asc - f.dsc);
+            ctx.lineTo(maxx, f.asc - f.dsc);
+            ctx.stroke();
+
+            // vLine
+            ctx.beginPath();
+            ctx.moveTo(0, miny);
+            ctx.lineTo(0, maxy);
+            ctx.moveTo(this._glyphWidth, miny);
+            ctx.lineTo(this._glyphWidth, maxy);
+            ctx.stroke();
+
+
+            // EM
+            ctx.strokeStyle = `rgba(255,0,0,0.25)`;// nkm.style.Get(`--col-error`);
+            ctx.lineWidth = iscale;
+            //ctx.setLineDash([iscale, iscale]);
+            ctx.beginPath();
+            //ctx.moveTo(minx, 0);
+            //ctx.lineTo(maxx, 0);
+            ctx.moveTo(minx, f.em);
+            ctx.lineTo(maxx, f.em);
             ctx.stroke();
 
         }
@@ -122,7 +152,7 @@ class GlyphCanvasRenderer extends ui.helpers.Canvas {
     }
 
     _Cleanup() {
-        this._previewInfos = null;
+        this._contextInfos = null;
         super._Cleanup();
     }
 

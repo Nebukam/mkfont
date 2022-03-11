@@ -7,5 +7,5 @@ module.exports = {
     Glyph: require(`./glyph-inspector`),
     Pangram: require(`./pangram-inspector`),
     FamilyContent:require(`./family-content-inspector`),
-    ImportSettings:require(`./import-settings-inspector`),
+    TransformSettings:require(`./tr-settings-inspector`),
 }

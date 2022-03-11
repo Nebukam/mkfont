@@ -1,6 +1,6 @@
 'use strict';
 
-/*const nkm = require(`@nkmjs/core`);*/
+const nkm = require(`@nkmjs/core`);
 const dom = nkm.ui.dom;
 const u = nkm.utils;
 const io = nkm.io;
@@ -32,7 +32,7 @@ class SubFamilyDataBlock extends SimpleDataEx {
         super._Init();
 
 
-        this._previewInfos = {
+        this._contextInfos = {
             raw: 1,
             rah: 1,
             w: 1000,
@@ -59,10 +59,10 @@ class SubFamilyDataBlock extends SimpleDataEx {
             [IDS.DESCENT]: { value: defaultEm * -0.25 },
             //[IDS.H_ORIGIN_X]: { value: 0 },
             //[IDS.H_ORIGIN_Y]: { value: 0 },
-            [IDS.WIDTH]: { value: null },
+            [IDS.WIDTH]: { value: 1000 },
             //[IDS.V_ORIGIN_X]: { value: 0 },
             //[IDS.V_ORIGIN_Y]: { value: 0 },
-            [IDS.HEIGHT]: { value: null },
+            [IDS.HEIGHT]: { value: 1000 },
             [IDS.MONOSPACE]: { value: false },
             [IDS.UNDERLINE_POSITION]: { value: null },
             [IDS.UNDERLINE_THICKNESS]: { value: null },
@@ -71,7 +71,6 @@ class SubFamilyDataBlock extends SimpleDataEx {
             [IDS.SIZE]: { value: null },
             [IDS.DISPLAY_SIZE]: { value: null },
             [IDS.DISPLAY_OFFSET]: { value: null }
-
             
         };
 
@@ -175,15 +174,15 @@ class SubFamilyDataBlock extends SimpleDataEx {
             ratio_h = ref / fw;
         }
 
-        this._previewInfos.raw = ratio_w;
-        this._previewInfos.rah = ratio_h;
-        this._previewInfos.w = fw;
-        this._previewInfos.h = fh;
-        this._previewInfos.rh = rh;
-        this._previewInfos.asc = asc;
-        this._previewInfos.dsc = dsc;
-        this._previewInfos.ref = ref;
-        this._previewInfos.em = em;
+        this._contextInfos.raw = ratio_w;
+        this._contextInfos.rah = ratio_h;
+        this._contextInfos.w = fw;
+        this._contextInfos.h = fh;
+        this._contextInfos.rh = rh;
+        this._contextInfos.asc = asc;
+        this._contextInfos.dsc = dsc;
+        this._contextInfos.ref = ref;
+        this._contextInfos.em = em;
 
         //this.Set(IDS.SIZE, rh, true);
         //this.Set(IDS.DISPLAY_SIZE, ref, true);

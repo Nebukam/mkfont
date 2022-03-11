@@ -1,12 +1,13 @@
 'use strict';
 
-/*const nkm = require(`@nkmjs/core`);*/
+const nkm = require(`@nkmjs/core`);
 const dom = nkm.ui.dom;
 const u = nkm.utils;
 const io = nkm.io;
 
 const SimpleDataEx = require(`./simple-data-ex`);
 const IDS = require(`./ids`);
+const TransformSettings = require(`./tr-settings-data-block`);
 
 const svgpath = require('svgpath');
 const UNICODE = require('../unicode');
@@ -31,8 +32,12 @@ class GlyphVariantDataBlock extends SimpleDataEx {
             [IDS.V_ORIGIN_X]: { value: null },
             [IDS.V_ORIGIN_Y]: { value: null },
             [IDS.HEIGHT]: { value: null },
-            [IDS.PATH]: { value: '' }
+            [IDS.PATH]: { value: '' },
+            [IDS.PATH_DATA]: { value: null }
         }
+
+        this._transformSettings = new TransformSettings();
+        this._transformSettings.glyphVariantOwner = this;
 
         this._glyph = null;
 
@@ -40,7 +45,9 @@ class GlyphVariantDataBlock extends SimpleDataEx {
 
     _BuildFontObject() { return svgGlyphRef.cloneNode(true); }
 
-    get resolutionFallbacks() { return [this._glyph, this._subFamily]; }
+    get resolutionFallbacks() { return [this._transformSettings, this._glyph, this._subFamily]; }
+
+    get transformSettings(){ return this._transformSettings; }
 
     set glyph(p_value) { this._glyph = p_value; }
     get glyph() { return this._glyph; }
@@ -71,6 +78,7 @@ class GlyphVariantDataBlock extends SimpleDataEx {
         
         dom.SAtt(glyph, IDS.UNICODE, `${UNICODE.GetUnicodeCharacter(uVal)}`);
 
+        
         // Flip
         let glyphPath = svgpath(this.Get(IDS.PATH))
             .scale(1, -1)

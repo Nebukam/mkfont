@@ -1,4 +1,4 @@
-/*const nkm = require(`@nkmjs/core`);*/
+const nkm = require(`@nkmjs/core`);
 
 class GlyhphDefinition extends nkm.data.catalogs.CatalogItem {
     constructor() { super(); }

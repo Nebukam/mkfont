@@ -1,7 +1,7 @@
 
 //"builds": "D:/wamp/www/SGF"
 
-/*const nkm = require(`@nkmjs/core`);*/
+const nkm = require(`@nkmjs/core`);
 const com = nkm.com;
 const ui = nkm.ui;
 
@@ -87,7 +87,7 @@ class MKFont extends nkm.app.AppBase {
         this._iconFolder = `D:/GIT/nkmjs/packages/nkmjs-style/src-style/default/assets/icons`;
 
         let fName = `Meticula`;// `Basement-Medium`;// `Meticula`; //`Inter-Regular`;
-        this._tempFontData = mkfOperations.SVG.FamilyFromTTF(fs.readFileSync(`./assets/${fName}.ttf`));
+        this._tempFontData = mkfData.TTF.FamilyFromTTF(fs.readFileSync(`./assets/${fName}.ttf`));
 
         mkfOperations.commands.MakeTTFFont.Enable();
 
@@ -109,7 +109,7 @@ class MKFont extends nkm.app.AppBase {
 
     _TestImportPopup(){
 
-        let iInspector = nkm.ui.UI.Rent(`mkfont-single-import-preview`);
+        let iInspector = nkm.ui.UI.Rent(`mkfont-single-tr-preview`);
 
         nkm.dialog.Push({
             title: `Import tweaks`,

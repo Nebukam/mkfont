@@ -1,6 +1,6 @@
 'use strict';
 
-/*const nkm = require(`@nkmjs/core`);*/
+const nkm = require(`@nkmjs/core`);
 const ui = nkm.ui;
 const inputs = nkm.uilib.inputs;
 const operations = require(`../../operations/index`);
@@ -28,9 +28,9 @@ class SubFamilyInspector extends nkm.datacontrols.InspectorView {
         { options:{ propertyId:mkfData.IDS.DESCENT } },
         //{ options:{ propertyId:mkfData.IDS.CAP_HEIGHT } },
         //{ options:{ propertyId:mkfData.IDS.X_HEIGHT } },
+        { options:{ propertyId:mkfData.IDS.HEIGHT } },
         { options:{ propertyId:mkfData.IDS.WIDTH } },
         { options:{ propertyId:mkfData.IDS.MONOSPACE } },
-        //{ options:{ propertyId:mkfData.IDS.HEIGHT } },
         //{ options:{ propertyId:mkfData.IDS.UNDERLINE_POSITION } },
         //{ options:{ propertyId:mkfData.IDS.UNDERLINE_THICKNESS } },
         //{ options:{ propertyId:mkfData.IDS.H_ORIGIN_X } },

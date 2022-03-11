@@ -1,4 +1,4 @@
-/*const nkm = require(`@nkmjs/core`);*/
+const nkm = require(`@nkmjs/core`);
 const u = nkm.utils;
 const ui = nkm.ui;
 
@@ -206,8 +206,8 @@ class FontEditor extends nkm.uiworkspace.editors.EditorEx {
             subFam._UpdateDisplayValues();
 
             let s = subFam.Resolve(mkfData.IDS.PREVIEW_SIZE),
-                rW = subFam._previewInfos.raw,
-                rH = subFam._previewInfos.rah,
+                rW = subFam._contextInfos.raw,
+                rH = subFam._contextInfos.rah,
                 pH = `auto`,
                 pW = `auto`,
                 fH = s, fW = s;

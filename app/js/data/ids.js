@@ -1,6 +1,6 @@
 'use strict';
 
-/*const nkm = require(`@nkmjs/core`);*/
+const nkm = require(`@nkmjs/core`);
 const ui = nkm.ui;
 const inputs = nkm.uilib.inputs;
 
@@ -13,7 +13,7 @@ const inputs = nkm.uilib.inputs;
 class IDS {
     constructor() { }
 
-    static weightList = nkm.data.catalogs.CreateFrom({ name: `Weights`, autoSort:false }, [
+    static weightList = nkm.data.catalogs.CreateFrom({ name: `Weights`, autoSort: false }, [
         { name: `Thin`, value: 100 },
         { name: `Extra Light`, value: 200 },
         { name: `Light`, value: 300 },
@@ -24,7 +24,7 @@ class IDS {
         { name: `Extra Bold`, value: 800 },
         { name: `Black`, value: 900 },
     ]);
-    
+
     // Family properties
     static ID = 'id';
     static FAMILY = 'font-family';
@@ -60,6 +60,7 @@ class IDS {
     static HEIGHT = 'vert-adv-y';
 
     static PATH = 'path';
+    static PATH_DATA = 'path-data';
     static GLYPH_NAME = 'glyph-name';
     static UNICODE = 'unicode';
 
@@ -73,19 +74,51 @@ class IDS {
 
     // Import properties
 
-    static autoScaleRefList = nkm.data.catalogs.CreateFrom({ name: `Scale references`, autoSort:false }, [
-        { name: `EM units`, value:0 },
-        { name: `Ascender`, value:1 },
-        { name: `Ascender+Descender`, value:2 },
+    static trScaleModes = nkm.data.catalogs.CreateFrom({ name: `Scale`, autoSort: false }, [
+        { name: `None `, value: -1, icon: 'minus' },
+        { name: `EM `, value: 0, icon: 'text-em' },
+        { name: `Baseline`, value: 1, icon: 'font-baseline' },
+        { name: `Spread`, value: 2, icon: 'font-bounds-h' },
+        { name: `Height`, value: 3, icon: 'spread-ver' },
     ]);
 
-    static IMPORT_APPLY_SCALE = 'import-apply-scale';
-    static IMPORT_SCALE_FACTOR_AUTO = 'import-scale-factor-auto';
-    static IMPORT_SCALE_FACTOR_AUTO_REF = 'import-scale-factor-auto-ref';
-    static IMPORT_SCALE_FACTOR = 'import-scale-factor';
-    static IMPORT_MATCH_WIDTH = 'import-match-width';
-    static IMPORT_MATCH_WIDTH_OFFSET = 'import-match-width-offset';
-    static IMPORT_MOVE_TO_BASELINE = 'import-move-to-baseline';
+    static trVerAlign = nkm.data.catalogs.CreateFrom({ name: `Vertical anchoring`, autoSort: false }, [
+        { name: `None `, value: -1, icon: 'font-ascender' },
+        { name: `Baseline`, value: 0, icon: 'font-baseline' },
+        { name: `Descender`, value: 1, icon: 'font-descender' },
+        //{ name: `To Value`, value: 2, icon: 'edit' },
+    ]);
+
+    static trVerAlignAnchors = nkm.data.catalogs.CreateFrom({ name: `Anchoring alignment`, autoSort: false }, [
+        { name: `Bottom `, value: 0, icon: 'align-ver-bottom' },
+        { name: `Center`, value: 1, icon: 'align-ver-center' },
+        { name: `Top`, value: 2, icon: 'align-ver-top' },
+    ]);
+
+    static trHorAlign = nkm.data.catalogs.CreateFrom({ name: `Horizontal anchoring`, autoSort: false }, [
+        { name: `None `, value: -1, icon: 'minus' },
+        { name: `Bound min x`, value: 0, icon: 'font-bounds-xmin' },
+        { name: `Bound max x`, value: 1, icon: 'font-bounds-xmax' },
+        //{ name: `To Value`, value: 2, icon: 'edit' },
+    ]);
+
+    static trHorAlignAnchors = nkm.data.catalogs.CreateFrom({ name: `Anchoring alignment`, autoSort: false }, [
+        { name: `Left `, value: 0, icon: 'align-hor-left' },
+        { name: `Center`, value: 1, icon: 'align-hor-center' },
+        { name: `Right`, value: 2, icon: 'align-hor-right' },
+    ]);
+
+    static TR_SCALE_MODE = 'tr-scale-mode';
+    static TR_SCALE_FACTOR = 'tr-scale-factor';
+    
+    static TR_VER_ALIGN = 'tr-ver-align';
+    static TR_VER_ALIGN_ANCHOR = 'tr-ver-align-anchor';
+    static TR_HOR_ALIGN = 'tr-hor-align';
+    static TR_HOR_ALIGN_ANCHOR = 'tr-hor-align-anchor';
+
+    static TR_WIDTH_SHIFT = 'tr-width-shift';
+    static TR_WIDTH_PUSH = 'tr-width-push';
+    
 
     static infos = {
 
@@ -94,43 +127,43 @@ class IDS {
         [this.ID]: {
             inputType: inputs.Text,
             label: `Identifier`,
-            inputOptions: { placeholder:`...` },
+            inputOptions: { placeholder: `...` },
             desc: ``
         },
         [this.FAMILY]: {
             inputType: inputs.Text,
             label: `Family name`,
-            inputOptions: { placeholder:`MkFamily`, maxlength:32 },
+            inputOptions: { placeholder: `MkFamily`, maxlength: 32 },
             desc: ``
         },
         [this.METADATA]: {
             inputType: inputs.Textarea,
             label: `Metadata`,
-            inputOptions: { placeholder:`metadata` },
+            inputOptions: { placeholder: `metadata` },
             desc: ``
         },
         [this.COPYRIGHT]: {
             inputType: inputs.Text,
             label: `Copyright`,
-            inputOptions: { placeholder:`copyright` },
+            inputOptions: { placeholder: `copyright` },
             desc: ``
         },
         [this.DESCRIPTION]: {
             inputType: inputs.Textarea,
             label: `Description`,
-            inputOptions: { placeholder:`Short description` },
+            inputOptions: { placeholder: `Short description` },
             desc: ``
         },
         [this.URL]: {
             inputType: inputs.Text,
             label: `URL`,
-            inputOptions: { placeholder:`www.website.com` },
+            inputOptions: { placeholder: `www.website.com` },
             desc: ``
         },
         [this.VERSION]: {
             inputType: inputs.Text,
             label: `Version`,
-            inputOptions: { placeholder:`1.0`, maxlength:12 },
+            inputOptions: { placeholder: `1.0`, maxlength: 12 },
             desc: ``
         },
         [this.ALPHABETIC]: {
@@ -151,43 +184,43 @@ class IDS {
         [this.WEIGHT_CLASS]: {
             inputType: inputs.Select,
             label: `Weight class`,
-            inputOptions: { catalog:this.weightList },
+            inputOptions: { catalog: this.weightList },
             desc: `Normal, Bold, Heavy, Ultra-Heavy`,
         },
         [this.FONT_STYLE]: {
             inputType: inputs.Text,
             label: `Sub Family`,
-            inputOptions: { placeholder:`Regular`, maxlength:32 },
+            inputOptions: { placeholder: `Regular`, maxlength: 32 },
             desc: `Regular, Italic, Condensed...`
         },
         [this.EM_UNITS]: {
-            recompute:true,
+            recompute: true,
             inputType: inputs.Number,
             label: `EM Size`,
             inputOptions: { step: 10, min: 20, max: 32000 },
             desc: `specifies the number of coordinate units on the "em square", an abstract square whose height is the intended distance between lines of type in the same type size. This is the size of the design grid on which glyphs are laid out.`,
         },
         [this.CAP_HEIGHT]: {
-            recompute:true,
+            recompute: true,
             inputType: inputs.Number,
             label: `Capital height`,
             desc: `defines the height of uppercase glyphs of the font within the font coordinate system.`
         },
         [this.X_HEIGHT]: {
-            recompute:true,
+            recompute: true,
             inputType: inputs.Number,
             label: `X height`,
             desc: `indicates the height of lowercase glyphs in the font within the font coordinate.`
         },
         [this.ASCENT]: {
-            recompute:true,
+            recompute: true,
             inputType: inputs.Number,
             label: `Ascender`,
             inputOptions: { step: 1, min: 0, max: 32000 },
             desc: `defines the maximum unaccented height of the font within the font coordinate system.`
         },
         [this.DESCENT]: {
-            recompute:true,
+            recompute: true,
             inputType: inputs.Number,
             label: `Descender`,
             inputOptions: { step: 1, min: -32000, max: 0 },
@@ -211,18 +244,18 @@ class IDS {
         },
         [this.EM_RESAMPLE]: {
             inputType: inputs.Boolean,
-            inputOptions: { size:ui.FLAGS.SIZE_XS },
+            inputOptions: { size: ui.FLAGS.SIZE_XS },
             label: `EM Resample`,
             desc: `If enabled, changing the EM Size will scale other metrics & glyphs. Disable this if you want to affect rendering size only.`
         },
         [this.MONOSPACE]: {
-            recompute:true,
+            recompute: true,
             inputType: inputs.Boolean,
-            inputOptions: { size:ui.FLAGS.SIZE_XS },
+            inputOptions: { size: ui.FLAGS.SIZE_XS },
             label: `Monospace`,
             desc: `If enabled, glyphs width will be overriden by the default font width value. Override happen at export time and does not affect custom data.`
         },
-        
+
         // Glyph properties
 
         [this.H_ORIGIN_X]: {
@@ -234,7 +267,7 @@ class IDS {
             desc: `indicates the y-coordinate in the font coordinate system of the origin of a glyph to be used when drawing horizontally oriented text.`
         },
         [this.WIDTH]: {
-            recompute:true,
+            recompute: true,
             inputType: inputs.Number,
             label: `Width`,
             desc: `indicates the horizontal advance after rendering a glyph in horizontal orientation.`
@@ -248,7 +281,7 @@ class IDS {
             desc: `indicates the y-coordinate in the font coordinate system of the origin of a glyph to be used when drawing vertically oriented text.`
         },
         [this.HEIGHT]: {
-            recompute:true,
+            recompute: true,
             inputType: inputs.Number,
             label: `Height`,
             desc: `indicates the vertical advance after rendering a glyph in vertical orientation.`
@@ -259,7 +292,7 @@ class IDS {
             desc: `Glyph name for search purposes & future uses`
         },
         [this.UNICODE]: {
-            recompute:true,
+            recompute: true,
             inputType: inputs.Text,
             desc: ``
         },
@@ -267,63 +300,80 @@ class IDS {
         // Misc
 
         [this.COLOR_PREVIEW]: {
-            recompute:true,
+            recompute: true,
             inputType: inputs.Color,
             label: `Preview color`,
             inputOptions: { changeOnInput: true },
             desc: `Define the color of the glyphs in the editor.`
         },
         [this.PREVIEW_SIZE]: {
-            recompute:true,
+            recompute: true,
             inputType: inputs.SliderOnly,
             label: `Preview size`,
-            inputOptions: { changeOnInput: true, step: 1, min: 100, max: 250, size:ui.FLAGS.SIZE_XXS },
+            inputOptions: { changeOnInput: true, step: 1, min: 100, max: 250, size: ui.FLAGS.SIZE_XXS },
             desc: `Preview size`
         },
 
         // Import settings
 
-        [this.IMPORT_APPLY_SCALE]: {
-            inputType: inputs.Boolean,
-            label: `Apply scale`,
-            inputOptions: { size:ui.FLAGS.SIZE_S },
-            desc: `Define the color of the glyphs in the editor.`
+        [this.TR_SCALE_MODE]: {
+            transform:true,
+            inputType: inputs.InlineSelect,
+            label: `Scale mode`,
+            inputOptions: { catalog: this.trScaleModes, size: ui.FLAGS.SIZE_M },
+            desc: `Scale`
         },
-        [this.IMPORT_SCALE_FACTOR_AUTO]: {
-            inputType: inputs.Boolean,
-            label: `Auto scale`,
-            inputOptions: { size:ui.FLAGS.SIZE_S },
-            desc: `Will compute scale factor based on selected reference`
-        },
-        [this.IMPORT_SCALE_FACTOR_AUTO_REF]: {
-            inputType: inputs.Select,
-            label: `Scale reference`,
-            inputOptions: { catalog:this.autoScaleRefList, size:ui.FLAGS.SIZE_XS },
-            desc: `Scale factor reference`
-        },
-        [this.IMPORT_SCALE_FACTOR]: {
+        [this.TR_SCALE_FACTOR]: {
+            transform:true,
             inputType: inputs.Slider,
             label: `Scale factor`,
-            inputOptions: { changeOnInput: true, step: 1, min: 1, max: 1000, size:ui.FLAGS.SIZE_XXS },
+            inputOptions: { changeOnInput: true, step: 1, min: 1, max: 1000, size: ui.FLAGS.SIZE_XXS },
             desc: `Factor by which the input vector will be scaled.`
         },
-        [this.IMPORT_MATCH_WIDTH]: {
-            inputType: inputs.Boolean,
-            label: `Match width`,
-            inputOptions: { size:ui.FLAGS.SIZE_S },
-            desc: `Whether the imported vector width will be used as glyph width or not. If turned off, glyph width will be set to the Family default width.`
-        },
-        [this.IMPORT_MATCH_WIDTH_OFFSET]: {
+
+        [this.TR_WIDTH_SHIFT]: {
+            transform:true,
             inputType: inputs.Number,
-            label: `Width offset`,
-            inputOptions: { step: 1, min: 0, max: 5000, size:ui.FLAGS.SIZE_XXS },
-            desc: `If 'Match width' is active, this value is added to the input SVG width.`
+            label: `Shift`,
+            inputOptions: { step: 1, min: 0, max: 5000, size: ui.FLAGS.SIZE_XXS },
+            desc: `Shifts the advance`
         },
-        [this.IMPORT_MOVE_TO_BASELINE]: {
-            inputType: inputs.Boolean,
-            label: `Move to baseline`,
-            inputOptions: { size:ui.FLAGS.SIZE_S },
-            desc: `If true, imported vector are moved down to the baseline`
+        [this.TR_WIDTH_PUSH]: {
+            transform:true,
+            inputType: inputs.Number,
+            label: `Push`,
+            inputOptions: { step: 1, min: 0, max: 5000, size: ui.FLAGS.SIZE_XXS },
+            desc: `Expands advance`
+        },
+
+        [this.TR_VER_ALIGN]: {
+            transform:true,
+            inputType: inputs.InlineSelect,
+            label: `Align`,
+            inputOptions: { catalog: this.trVerAlign, size: ui.FLAGS.SIZE_M },
+            desc: `...`
+        },
+        [this.TR_VER_ALIGN_ANCHOR]: {
+            transform:true,
+            inputType: inputs.InlineSelect,
+            label: `Anchor`,
+            inputOptions: { catalog: this.trVerAlignAnchors, size: ui.FLAGS.SIZE_M },
+            desc: `...`
+        },
+
+        [this.TR_HOR_ALIGN]: {
+            transform:true,
+            inputType: inputs.InlineSelect,
+            label: `Align`,
+            inputOptions: { catalog: this.trHorAlign, size: ui.FLAGS.SIZE_M },
+            desc: `...`
+        },
+        [this.TR_HOR_ALIGN_ANCHOR]: {
+            transform:true,
+            inputType: inputs.InlineSelect,
+            label: `Anchor`,
+            inputOptions: { catalog: this.trHorAlignAnchors, size: ui.FLAGS.SIZE_M },
+            desc: `...`
         },
 
     }
