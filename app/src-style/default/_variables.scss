@@ -226,7 +226,7 @@ $size_varnames_third:
     $varname_size_l_third, 
     $varname_size_xl_third;
 
-
+$transition_opacity: opacity 0.15s ease;
 
 /*----------------------------*/
 /*<!---- @nkmjs/ui-core ----!>*/
@@ -239,13 +239,15 @@ $default_states_ids:
     str-replace($IDLE, '.'),
     str-replace($FOCUSED, '.'),
     str-replace($SELECTED, '.'),
-    #{str-replace($SELECTED, '.')+'_'+str-replace($FOCUSED, '.')};
+    #{str-replace($SELECTED, '.')+'_'+str-replace($FOCUSED, '.')},
+    str-replace($TOGGLED, '.');
 
 $short_states_ids:
     'i',
     'f',
     's',
-    'sf';
+    'sf',
+    't';
 
 $tree_indent: 24px;
 $folder_indent: 24px;

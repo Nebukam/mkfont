@@ -32,7 +32,6 @@ class CatItem extends lists.FolderListItem {
                 'background-color': 'var(--col-cat)',
                 'top': '5px',
                 'left': 'calc(calc(var(--depth) * var(--folder-indent)) + 16px)',
-                //'opacity':'0.5'
             },
         }, super._Style());
     }

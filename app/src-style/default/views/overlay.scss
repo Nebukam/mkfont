@@ -10,7 +10,7 @@
 :host{
     --bg_color: rgba(0,0,0,0);
     background-color: var(--bg_color);
-    transition: background-color 0.15s linear;
+    transition: $transition_opacity, background-color 0.15s linear;
 }
 
 :host(#{$SHOWN}){

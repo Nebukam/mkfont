@@ -269,54 +269,30 @@
     $main_color, // idle
     lighten($main_color, 10%), // focused
     lighten($main_color, 5%), // selected
-    lighten($main_color, 20%); // focused+selected
-    //
-    $primaries: nth($bases, 1), rgba(nth($bases, 2), $prim_alpha), rgba(nth($bases, 3), $prim_alpha * 0.8), rgba(nth($bases, 4), $prim_alpha * 1.5);
-    $secondaries: $secondary_color, rgba(lighten($secondary_color, 10%), $sec_alpha), rgba(lighten($secondary_color, 5%), $sec_alpha * 0.8), rgba(lighten($secondary_color, 20%), $sec_alpha * 1.5);
-    $contrasties: label-color(nth($bases, 1)), label-color(nth($bases, 2)), label-color(nth($bases, 3)), label-color(nth($bases, 4));
+    lighten($main_color, 20%), // focused+selected
+    darken($main_color, 7%); // toggled
+    
+    $secBases: // secondary colors
+    $secondary_color, // idle
+    lighten($secondary_color, 10%), // focused
+    lighten($secondary_color, 5%), // selected
+    lighten($secondary_color, 20%), // focused+selected
+    darken($secondary_color, 7%); // toggled
+
+    $ctrstBases: // contrast colors
+    label-color(nth($bases, 1)), // idle
+    label-color(nth($bases, 2)), // focused
+    label-color(nth($bases, 3)), // selected
+    label-color(nth($bases, 4)), // focused+selected
+    label-color(nth($bases, 5)); // toggled 
+
+    $primaries: nth($bases, 1), rgba(nth($bases, 2), $prim_alpha), rgba(nth($bases, 3), $prim_alpha * 0.8), rgba(nth($bases, 4), $prim_alpha * 1.5), rgba(nth($bases, 5), $prim_alpha);
+
+    $secondaries: nth($secBases, 1), rgba(nth($secBases, 2), $sec_alpha), rgba(nth($secBases, 3), $sec_alpha * 0.8), rgba(nth($secBases, 4), $sec_alpha * 1.5), rgba(nth($secBases, 5), $sec_alpha * 1.5);
+
+    $contrasties: nth($ctrstBases, 1), nth($ctrstBases, 2), nth($ctrstBases, 3), nth($ctrstBases, 4), nth($ctrstBases, 5);
+    
     @include for-each-in($default_states_ids) using ($index, $state_name) {
         @content( $index, $state_name, nth($primaries, $index), nth($secondaries, $index), nth($contrasties, $index));
-    }
-}
-
-@mixin state-host( $main_color, $secondary_color, $variant: '', $prim_alpha: 0.5, $sec_alpha: 0.8) {
-    $c: nth($main_color, 1);
-    @if (lightness( $c) < 40) {
-        $c: lighten($c, 40%);
-    }
-     :host(#{$FOCUSED+$variant})::after,
-     :host(#{$TOGGLED+$variant})::after {
-        background-color: rgba($c, 1);
-    }
-    $m_states : $IDLE+$variant,
-    $FOCUSED+$variant,
-    $SELECTED+$variant,
-    $SELECTED+$FOCUSED+$variant;
-    $c:$main_color;
-    $m_colors: // base colors
-    $c, // idle
-    lighten($c, 10%), // focused
-    lighten($c, 5%), // selected
-    lighten($c, 20%); // focused+selected
-    $c:$m_colors;
-    $m_el_colors: // element color 
-    nth($c, 1),
-    rgba(nth($c, 2), $prim_alpha),
-    rgba(nth($c, 3), $prim_alpha * 0.8),
-    rgba(nth($c, 4), $prim_alpha * 1.5);
-    $c:$secondary_color;
-    $m_la_colors: // element color 
-    $c,
-    rgba(lighten($c, 10%), $sec_alpha),
-    rgba(lighten($c, 5%), $sec_alpha * 0.8),
-    rgba(lighten($c, 20%), $sec_alpha * 1.5);
-    @for $i from 0 to length($m_states) {
-        $m_state: nth($m_states, $i + 1);
-        $m_main_color: nth($m_el_colors, $i + 1);
-        $m_secondary_color: nth($m_la_colors, $i + 1);
-        $m_label_color: label-color(nth($m_colors, $i + 1));
-        #{':host('+$m_state+')'} {
-            @content($m_main_color, $m_secondary_color, $m_label_color);
-        }
     }
 }

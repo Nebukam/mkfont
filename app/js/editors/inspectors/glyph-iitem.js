@@ -17,7 +17,6 @@ class GlyphVariantInspectorItem extends nkm.datacontrols.ControlWidget {
         { cl: mkfWidgets.ControlHeader, options: { label: `Metrics` } },
         { options: { propertyId: mkfData.IDS.WIDTH, allowOverride: true } },//, css:'helf'
         { options: { propertyId: mkfData.IDS.HEIGHT, allowOverride: true } },//, css:'helf'
-        { cl: mkfWidgets.ControlHeader, options: { label: `Transformations` } },
         { cl: mkfWidgets.ControlHeader, options: { label: `Metadata` } },
         { options: { propertyId: mkfData.IDS.GLYPH_NAME } },//, css:'separator' 
     ];
@@ -46,7 +45,6 @@ class GlyphVariantInspectorItem extends nkm.datacontrols.ControlWidget {
                 'padding': '10px',
                 'background-color': 'rgba(0,0,0,0.5)',
                 'border-radius': '5px',
-                'margin-bottom': '10px'
             },
             '.renderer': {
                 'position': 'relative',
@@ -58,9 +56,10 @@ class GlyphVariantInspectorItem extends nkm.datacontrols.ControlWidget {
                 'margin-bottom': '5px'
             },
             '.toolbar': {
-                'margin-bottom': '4px',
+                //'margin-bottom': '10px',
                 'flex': `1 1 auto`,
                 'justify-content': `center`,
+                'border-bottom':'1px solid rgba(0,0,0,0.25)',
             },
             '.helf': {
                 'max-width': '48%'
@@ -78,19 +77,20 @@ class GlyphVariantInspectorItem extends nkm.datacontrols.ControlWidget {
 
     _Render() {
         
-        this._dataToolbar = this.Add(ui.WidgetBar, `toolbar`, this._host);
-
+        
         this._previewBox = ui.dom.El(`div`, { class: `preview` }, this._host);
         this._svgRenderer = this.Add(mkfWidgets.GlyphRenderer, `renderer`, this._previewBox);
         
+        this._dataToolbar = this.Add(ui.WidgetBar, `toolbar`, this._host);
 
         this._dataToolbar._defaultWidgetClass = nkm.uilib.buttons.Tool;
-        this._dataToolbar.inline = true;
+        //this._dataToolbar.inline = true;
         this._dataToolbar._stretchEnum.Set(`stretch`);
 
         this._dataToolbar.CreateHandles(
             {
                 icon: `document-download-small`, htitle: `Import SVG`,
+                variant:ui.FLAGS.MINIMAL,
                 trigger:{fn:()=>{ 
                     operations.commands.ImportExternalFile.emitter = this;
                     operations.commands.ImportExternalFile.Execute(this._data); 
@@ -99,14 +99,17 @@ class GlyphVariantInspectorItem extends nkm.datacontrols.ControlWidget {
             },
             {
                 icon: `clipboard-read`, htitle: `Import clipboard content`,
+                variant:ui.FLAGS.MINIMAL,
                 group: `modify`
             },
             {
                 icon: `edit`, htitle: `Edit using default SVG editor`,
+                variant:ui.FLAGS.MINIMAL,
                 group: `modify`
             },
             {
                 icon: `clipboard-write`, htitle: `Copy glyph to clipboard`,
+                variant:ui.FLAGS.MINIMAL,
                 group: `file-actions`
             },
         );

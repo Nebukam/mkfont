@@ -10,7 +10,7 @@
 :host{
 
     backdrop-filter: blur(0);
-    transition: backdrop-filter 0.25s linear;
+    transition: $transition_opacity, backdrop-filter 0.25s linear;
 
     padding:var(#{$varname_size_l});
 
@@ -19,8 +19,6 @@
         transform: perspective(800px) scale(1.2) rotateX(20deg);
         opacity:0;
     }
-    
-    transition: backdrop-fil;
 
 }
 

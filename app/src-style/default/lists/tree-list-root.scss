@@ -6,7 +6,7 @@
 @import '../_variables';
 @import '../_mixins';
 
-@import './tree-group';
+@import './tree-list';
 
 :host{
     #{$varname_tree_size}: var(--size-s);

@@ -18,16 +18,18 @@ class GlyphIdentity extends ui.Widget {
                 'flex-flow': 'column nowrap',
                 'padding-bottom': '5px',
                 'margin-bottom': '5px',
-                //'border-bottom': '1px solid #131313',
+                //'border-bottom': '1px solid rgba(0,0,0,0.25)',
             },
             '.long-name': {
                 'padding-bottom': '15px',
                 'margin-bottom': '5px',
-                'border-bottom': '1px solid #131313',
+                'border-bottom': '1px solid rgba(0,0,0,0.25)',
                 'height': '2.2em'
             },
             '.tagbar': {
-                'max-height':'16px'
+                'max-height':'16px',
+                'margin-left':'4px',
+                'margin-right':'4px'
             },
             '.toolbar': {
 

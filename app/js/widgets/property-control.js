@@ -110,15 +110,6 @@ class PropertyControl extends nkm.datacontrols.ControlWidget {
         this._label = new ui.manipulators.Text(ui.dom.El(`div`, { class: `label` }, this._labelCtnr), false, false);
     }
 
-    _OnPaintChange() {
-        super._OnPaintChange();
-        if (this._isPainted) {
-            //this.style.opacity = 1;
-        } else {
-            //this.style.opacity = 0;
-        }
-    }
-
     set subData(p_value) {
         this._subData = p_value;
     }

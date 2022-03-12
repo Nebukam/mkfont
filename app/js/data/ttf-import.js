@@ -23,37 +23,21 @@ class TTFImport {
             fontFace = svgFont.getElementsByTagName(`font-face`)[0],
             glyphs = svgFont.getElementsByTagName(`glyph`);
 
-        console.log(ttf2svg(p_ttfBytes));
-
-        //console.log(svgFont);
+        if (!fontFace) { throw new Error(`fontFace element missing`); }
 
         let
             family = new Family(),
             subFamily = family.defaultSubFamily,
-            em_units = 1000,
-            fontAdvx = em_units,
-            fontAdvy = em_units,
-            ascent = em_units * 0.7,
-            descent = em_units * -0.25;
+            em_units = this.fwd(subFamily, IDS.EM_UNITS, fontFace, 1000),
+            fontAdvx = subFamily.Set(IDS.WIDTH, em_units),
+            fontAdvy = subFamily.Set(IDS.HEIGHT, em_units),
+            ascent = this.fwd(subFamily, IDS.ASCENT, fontFace, em_units * 0.7),
+            descent = this.fwd(subFamily, IDS.DESCENT, fontFace, em_units * -0.25),
+            size = subFamily.Set(IDS.SIZE, Math.max(em_units, ascent - descent)),
+            displaySize = size * 1.25;
 
-        if (fontFace) {
-            this._sXMLAttNum(fontFace, IDS.EM_UNITS, subFamily, 1000);
-            ascent = this._sXMLAttNum(fontFace, IDS.ASCENT, subFamily, ascent);
-            descent = this._sXMLAttNum(fontFace, IDS.DESCENT, subFamily, descent);
-            em_units = this._sXMLAttNum(fontFace, IDS.EM_UNITS, subFamily, em_units);
-        }
-
-        fontAdvx = subFamily.Set(IDS.WIDTH, em_units);
-        fontAdvy = subFamily.Set(IDS.HEIGHT, em_units);
-
-        let
-            size = Math.max(em_units, ascent - descent),
-            displaySize = size * 1.25,
-            displayOffset = (displaySize - size) * -0.5;
-
-        subFamily.Set(IDS.SIZE, size);
-        subFamily.Set(IDS.DISPLAY_SIZE, displaySize);
-        subFamily.Set(IDS.DISPLAY_OFFSET, displayOffset);
+            subFamily.Set(IDS.DISPLAY_SIZE, displaySize),
+            subFamily.Set(IDS.DISPLAY_OFFSET, (displaySize - size) * -0.5);
 
         for (let i = 0; i < glyphs.length; i++) {
 
@@ -82,6 +66,8 @@ class TTFImport {
                 glyphUnicode = UNICODE.GetAddress(glyphUnicode);
             }
 
+            // Reconstruct SVG Stats
+            // get bounding box and clamp it
 
             newGlyph.BatchSet({
                 [IDS.GLYPH_NAME]: glyphId,
@@ -98,14 +84,14 @@ class TTFImport {
 
     }
 
-    static _sXMLAttNum(p_el, p_prop, p_data, p_default = null) {
-        let value = p_el.getAttribute(p_prop);
+    static fwd(p_data, p_id, p_el, p_defaultValue = null) {
+        let value = p_el.getAttribute(p_id);
         if (!value) {
-            if (!p_default) { return null; }
-            value = p_default;
+            if (!p_defaultValue) { return null; }
+            value = p_defaultValue;
         }
         value = Number(value);
-        p_data.Set(p_prop, value);
+        p_data.Set(p_id, value);
         return value;
     }
 

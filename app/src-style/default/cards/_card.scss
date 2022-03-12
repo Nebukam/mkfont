@@ -14,7 +14,7 @@ $cardBorderRadius: 5px;
 
 :host{
 
-    transition: background-color 0.15s ease;
+    transition: $transition_opacity, background-color 0.15s ease;
     
     box-sizing: border-box;
     position: relative;
@@ -152,7 +152,6 @@ $th: 4px;
 /* Base state : DISABLED */
 
 :host(#{$DISABLED}){
-    opacity:0.5;
 
     background-color: var(--flavor-primary-disabled);
     border-color: var(--flavor-secondary-disabled);

@@ -47,14 +47,19 @@ class FontEditorHeader extends nkm.datacontrols.ControlView {
     _Style() {
         return nkm.style.Extends({
             ':host': {
+                'display':'flex',
+                'flex-flow':'row nowrap',
+                'align-items': 'center',
+                'justify-content': 'space-between',
+
                 'min-height': 'auto',
-                'padding':'20px',
+                'padding':'10px',
                 'box-shadow': `0px -2px 5px black`,
                 'border-bottom': `1px solid #242424`,
                 'background-color':'rgba(127,127,127,0.1)',
             },
             '.title':{
-                'margin-bottom':'10px'
+                'opacity':'0.2'
             },
             '.toolbar':{
                 
@@ -66,12 +71,9 @@ class FontEditorHeader extends nkm.datacontrols.ControlView {
 
         super._Render();
 
-        this._title = new ui.manipulators.Text(ui.dom.El("div", { class: "title font-large" }, this));
-        this._title.Set("---");
         this._toolbarLeft = this.Add(ui.WidgetBar, `toolbar left`);
+        this._toolbarLeft.inline = true;
         this._toolbarLeft._defaultWidgetClass = nkm.uilib.buttons.Button;
-        this._toolbarRight = this.Add(ui.WidgetBar, `toolbar right`);
-        this._toolbarRight._defaultWidgetClass = nkm.uilib.buttons.Button;
 
         this._toolbarLeft.CreateHandles(
             {
@@ -110,8 +112,8 @@ class FontEditorHeader extends nkm.datacontrols.ControlView {
         this._btnSelectSubFamily.visible = false;
         this.forwardData.To(this._btnSelectSubFamily, { dataMember:`_subFamiliesCatalog` });
 
-//        this._test = this.Add(nkm.uilib.inputs.InlineSelect, `enumtest`);
-//        this._test.data = mkfData.IDS.weightList;
+        this._title = new ui.manipulators.Text(ui.dom.El("div", { class: "title font-large" }, this));
+        this._title.Set("---");
 
     }
 

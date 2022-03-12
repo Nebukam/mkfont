@@ -34,6 +34,7 @@ class GlyphSlot extends nkm.datacontrols.ControlWidget {
     _Style() {
         return nkm.style.Extends({
             ':host': {
+                '@':['fade-in'],
                 'transition': 'opacity 0.15s, transform 0.05s, box-shadow 0.05s',
                 'box-shadow': `none`,
                 'transform': 'scale(1)',
@@ -50,10 +51,6 @@ class GlyphSlot extends nkm.datacontrols.ControlWidget {
                 'background-color': '#1a1a1a',
                 'align-items': 'center',
                 'overflow': 'clip',
-                'opacity': '1'
-            },
-            ':host(.unpainted)': {
-                'opacity': '0'
             },
             ':host(:hover)': {
                 'box-shadow': `0 12px 20px -10px #131313`,

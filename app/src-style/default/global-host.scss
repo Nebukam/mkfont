@@ -18,6 +18,18 @@
     width: 0;
 }
 
+:host{
+    //transition: $transition_opacity;
+}
+
+:host(:not(.unpainted)){
+    opacity:1;
+}
+
+:host(.unpainted){
+    //opacity:0;
+    visibility: hidden !important;
+}
 
 // ----> Host presets
 // Sizes
@@ -117,8 +129,12 @@
     
 }
 
-:host(.unpainted){
-    visibility: hidden !important;
+
+
+:host(.disabled){
+    user-select: none;
+    pointer-events: none;
+    opacity: 0.4;
 }
 
  /* Hide scrollbar for IE, Edge and Firefox */
