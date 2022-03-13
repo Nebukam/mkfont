@@ -35143,7 +35143,6 @@ class UNICODE extends nkm.com.helpers.Singleton {
 
     /**
      * Attempts to find existing glyphs from UNICODE infos
-     * otherwise returns Glyph.NULL
      * @param {*} p_infos 
      */
     static GetLookup(p_infos) {

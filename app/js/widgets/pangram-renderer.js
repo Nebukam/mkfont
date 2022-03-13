@@ -100,12 +100,14 @@ class PangramRenderer extends ui.Widget {
 
     Draw() {
 
+        return;
         let subFamily = this._data;
         let ttf = svg2ttf(subFamily.fontObject.outerHTML, {});
 
         //console.log(subFamily.fontObject.outerHTML);
 
         let base64 = u.tils.BytesToBase64(ttf.buffer);
+
 
         if (this._tempFont) { document.fonts.delete(this._tempFont); }
         this._tempFont = new FontFace('tempFont', `url(data:application/octet-stream;charset=utf-8;base64,${base64}) format('truetype')`);

@@ -5,8 +5,6 @@ const nkm = require(`@nkmjs/core`);
 const actions = nkm.actions;
 const data = require(`../../data`);
 
-const SVG = require(`../svg-operations`);
-
 class ActionSetAscent extends actions.Action {
     constructor() { super(); }
 
@@ -26,7 +24,7 @@ class ActionSetAscent extends actions.Action {
         // Update subFamily first so display values will be computed prior to glyph update
         subFamily.Set(data.IDS.ASCENT, newAsc);
 
-        SVG.TransformAll(subFamily, (svg) => { return svg.translate(0, offset); });
+        SVGOPS.TransformAll(subFamily, (svg) => { return svg.translate(0, offset); });
 
         /*
         for (let i = 0, n = glyphs.count; i < n; i++) {

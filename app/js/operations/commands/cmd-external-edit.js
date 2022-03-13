@@ -8,7 +8,6 @@ const fs = require('fs');
 const mkfData = require(`../../data`);
 
 const ActionSetSVG = require(`../actions/action-set-svg`);
-const SVG = require(`../svg-operations`);
 
 class CmdExternalEdit extends actions.Command {
     constructor() { super(); }

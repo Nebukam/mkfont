@@ -5,8 +5,6 @@ const nkm = require(`@nkmjs/core`);
 const actions = nkm.actions;
 const data = require(`../../data`);
 
-const SVG = require(`../svg-operations`);
-
 class ActionPathCenterScaleAll extends actions.Action {
     constructor() { super(); }
 

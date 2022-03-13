@@ -28,12 +28,13 @@ class GlyphVariantDataBlock extends SimpleDataEx {
         this._values = {
             [IDS.H_ORIGIN_X]: { value: null },
             [IDS.H_ORIGIN_Y]: { value: null },
-            [IDS.WIDTH]: { value: null },
+            [IDS.WIDTH]: { value: null, override:true },
             [IDS.V_ORIGIN_X]: { value: null },
             [IDS.V_ORIGIN_Y]: { value: null },
-            [IDS.HEIGHT]: { value: null },
+            [IDS.HEIGHT]: { value: null, override:false },
             [IDS.PATH]: { value: '' },
-            [IDS.PATH_DATA]: { value: null }
+            [IDS.PATH_DATA]: { value: null },
+            [IDS.OUT_OF_BOUNDS]: { value: false }
         }
 
         this._transformSettings = new TransformSettings();
@@ -70,11 +71,12 @@ class GlyphVariantDataBlock extends SimpleDataEx {
 
         let glyph = this._fontObject;
 
+        let uVal = parseInt(this.Resolve(IDS.UNICODE), 16);
+
         dom.SAtt(glyph, IDS.WIDTH, this._subFamily.Get(IDS.MONOSPACE) ? this._subFamily.Get(IDS.WIDTH) : this.Resolve(IDS.WIDTH), true);
         dom.SAtt(glyph, IDS.HEIGHT, this.Resolve(IDS.HEIGHT), true);
-        dom.SAtt(glyph, IDS.GLYPH_NAME, this.Resolve(IDS.GLYPH_NAME));
-
-        let uVal = parseInt(this.Resolve(IDS.UNICODE), 16);
+        //dom.SAtt(glyph, IDS.GLYPH_NAME, this.Resolve(IDS.GLYPH_NAME));
+        dom.SAtt(glyph, IDS.GLYPH_NAME, `${`${uVal}`.padStart(4,'0')}`);
         
         dom.SAtt(glyph, IDS.UNICODE, `${UNICODE.GetUnicodeCharacter(uVal)}`);
 

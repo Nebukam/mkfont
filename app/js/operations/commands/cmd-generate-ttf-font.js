@@ -10,7 +10,6 @@ const svg2ttf = require('svg2ttf');
 const mkfData = require(`../../data`);
 
 const ActionSetSVG = require(`../actions/action-set-svg`);
-const SVG = require(`../svg-operations`);
 
 class CmdGenerateTTFFont extends actions.Command {
     constructor() { super(); }
@@ -34,7 +33,7 @@ class CmdGenerateTTFFont extends actions.Command {
 
         let
             family = this._context,
-            bytes = SVG.TTFFontFromSubFamily(family.defaultSubFamily);
+            bytes = SVGOPS.TTFFontFromSubFamily(family.defaultSubFamily);
             
         try{
         fs.writeFileSync('./assets/myfont.ttf', Buffer.from(bytes));

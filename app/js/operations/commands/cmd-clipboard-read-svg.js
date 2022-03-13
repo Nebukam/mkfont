@@ -5,7 +5,6 @@ const actions = nkm.actions;
 const { clipboard } = require('electron');
 
 const ActionSetSVG = require(`../actions/action-set-svg`);
-const SVG = require(`../svg-operations`);
 
 class CmdClipboardReadSVG extends actions.CommandAction {
     constructor() { super(); }
@@ -27,7 +26,7 @@ class CmdClipboardReadSVG extends actions.CommandAction {
 
         console.log(clipboard.readText());
 
-        let svgStats = SVG.SVGStats(clipboard.readText());
+        let svgStats = SVGOPS.SVGStats(clipboard.readText());
 
         if (!svgStats) { return null; }
 

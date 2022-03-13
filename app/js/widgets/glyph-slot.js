@@ -7,6 +7,8 @@ const mkfData = require(`../data`);
 const GlyphRenderer = require(`./glyph-renderer`);
 const GlyphCanvasRenderer = require(`./glyph-canvas-renderer`);
 
+const __out_of_bounds = `outofbounds`;
+
 class GlyphSlot extends nkm.datacontrols.ControlWidget {
     constructor() { super(); }
 
@@ -23,6 +25,8 @@ class GlyphSlot extends nkm.datacontrols.ControlWidget {
 
         this._subFamily = null;
         this._glyphInfos = null;
+
+        this._flags.Add(this, __out_of_bounds);
 
     }
 
@@ -106,12 +110,25 @@ class GlyphSlot extends nkm.datacontrols.ControlWidget {
                 'display': `grid`,
                 'place-items': `center`,
                 'text-align': `center`,
-                'font-size': 'calc(var(--preview-size) * 0.7)',
+                'font-size': 'calc(var(--preview-size) * 0.5)',
                 'user-select': 'none',
                 'color': 'rgba(255,255,255,0.05)',
                 'font-family': 'monospace',
                 'line-height': '100%'
             },
+            '.oob-hint':{
+                'display':'none',
+                'position':'absolute',
+                'background-color':'var(--col-error)',
+                'transform':'rotate(45deg)',
+                'top':'0',
+                'left':'50%',
+                'width':'100%',
+                'height':'10%'
+            },
+            ':host(.outofbounds) .oob-hint':{
+                'display':'block !important'
+            }
         }, super._Style());
     }
 
@@ -127,6 +144,7 @@ class GlyphSlot extends nkm.datacontrols.ControlWidget {
         this._label = new ui.manipulators.Text(ui.dom.El(`div`, { class: `item label` }, this._host), false, false);
 
         ui.dom.El(`div`, { class: `cat-hint` }, this._host);
+        ui.dom.El(`div`, { class: `oob-hint` }, this._host);
 
     }
 
@@ -174,8 +192,7 @@ class GlyphSlot extends nkm.datacontrols.ControlWidget {
     _UpdateGlyphPreview() {
 
 
-        if (!this._data ||
-            this._data == mkfData.Glyph.NULL) {
+        if (!this._data || this._data.isNull) {
             this._glyphRender.Set(null);
             this._glyphPlaceholder._element.style.removeProperty(`display`);
             this.classList.remove(`exists`);
@@ -187,8 +204,10 @@ class GlyphSlot extends nkm.datacontrols.ControlWidget {
         if (this._glyphRender.Set(glyphVariant)) {
             this._glyphPlaceholder._element.style.display = `none`;
             this.classList.add(`exists`);
+            this._flags.Set(__out_of_bounds, glyphVariant.Get(mkfData.IDS.OUT_OF_BOUNDS));
         } else {
             delete this._glyphPlaceholder._element.style.display;
+            this._flags.Set(__out_of_bounds, false);
             this.classList.remove(`exists`);
         }
     }
@@ -198,6 +217,7 @@ class GlyphSlot extends nkm.datacontrols.ControlWidget {
     }
 
     _Cleanup() {
+        this._flags.Set(__out_of_bounds, false);
         super._Cleanup();
     }
 

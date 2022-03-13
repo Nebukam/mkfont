@@ -102,9 +102,11 @@ class FontEditor extends nkm.uiworkspace.editors.EditorEx {
             let glyph = p_widget.data;
             if (glyph) {
                 // Has an existing glyph!
-                if (glyph == mkfData.Glyph.NULL) {
+                if (glyph.isNull) {
                     glyph.unicodeInfos = glyphInfos;
-                    this.Inspect(null); //Ensure the data gets refreshed, since it won't change.
+                    //glyph.subFamily
+                    glyph.CommitUpdate();//Ensure the data gets refreshed, since it hasn't changed.
+                    glyph.defaultGlyph.CommitUpdate();
                 }
                 this.Inspect(glyph);
             } else {

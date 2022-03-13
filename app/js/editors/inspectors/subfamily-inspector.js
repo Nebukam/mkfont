@@ -39,6 +39,12 @@ class SubFamilyInspector extends nkm.datacontrols.InspectorView {
         //{ options:{ propertyId:mkfData.IDS.V_ORIGIN_Y } },
     ];
 
+    static __trControls = [
+        { cl: mkfWidgets.ControlHeader, options: { label: `Glyph boundaries` }, css:'header' },
+        { options: { propertyId: mkfData.IDS.TR_WIDTH_SHIFT, hideOverride:true } },
+        { options: { propertyId: mkfData.IDS.TR_WIDTH_PUSH, hideOverride:true } },
+    ];
+
     _Init() {
         super._Init();
 
@@ -53,6 +59,11 @@ class SubFamilyInspector extends nkm.datacontrols.InspectorView {
 
         this._builder.defaultControlClass = mkfWidgets.PropertyControl;
         this._builder.defaultCSS = `control`;
+        
+
+        this._trBuilder = new nkm.datacontrols.helpers.ControlBuilder(this);
+        this._trBuilder.defaultControlClass = mkfWidgets.PropertyControl;
+        this._trBuilder.defaultCSS = `control`;
 
 
     }
@@ -86,6 +97,8 @@ class SubFamilyInspector extends nkm.datacontrols.InspectorView {
         this._body = ui.dom.El(`div`, { class: `body` }, this._host);
         this._builder.host = this._body;
         super._Render();
+        this._trBuilder.host = this._body;
+        this._trBuilder.Build(this.constructor.__trControls);
     }
 
     _OnDataChanged(p_oldData) {
@@ -99,6 +112,11 @@ class SubFamilyInspector extends nkm.datacontrols.InspectorView {
 
     }
 
+    _OnDataUpdated(p_data){
+        super._OnDataUpdated(p_data);
+        this._trBuilder.RefreshConditionals();
+    }
+
     _OnSubFamilyChanged(p_selectedSubFamily) {
 
         this._subFamily = p_selectedSubFamily;
@@ -106,9 +124,9 @@ class SubFamilyInspector extends nkm.datacontrols.InspectorView {
         if (!p_selectedSubFamily) { return; }
 
         this._builder.data = p_selectedSubFamily;
+        this._trBuilder.data =  p_selectedSubFamily.transformSettings;
 
     }
-
 
     _OnDisplayGain() {
         super._OnDisplayGain();

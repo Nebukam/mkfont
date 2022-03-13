@@ -8,6 +8,7 @@ const io = nkm.io;
 const SimpleDataEx = require(`./simple-data-ex`);
 const SIGNAL = require(`./signal`);
 const IDS = require(`./ids`);
+const TransformSettings = require(`./tr-settings-data-block`);
 
 const domparser = new DOMParser();
 const svgFontString =
@@ -49,10 +50,10 @@ class SubFamilyDataBlock extends SimpleDataEx {
         this._values = {
             [IDS.WEIGHT_CLASS]: { value: IDS.weightList.At(3) },
             [IDS.FONT_STYLE]: { value: null },
-            
+
             [IDS.CAP_HEIGHT]: { value: null },
             [IDS.X_HEIGHT]: { value: null },
-            
+
             [IDS.EM_UNITS]: { value: defaultEm },
             [IDS.EM_RESAMPLE]: { value: true },
             [IDS.ASCENT]: { value: defaultEm * 0.8 },
@@ -71,17 +72,22 @@ class SubFamilyDataBlock extends SimpleDataEx {
             [IDS.SIZE]: { value: null },
             [IDS.DISPLAY_SIZE]: { value: null },
             [IDS.DISPLAY_OFFSET]: { value: null }
-            
+
         };
 
         this._family = null;
         this._ttfBytes = null;
+
+        this._transformSettings = new TransformSettings();
+        this._transformSettings.Watch(nkm.data.SIGNAL.VALUE_CHANGED, this._OnTransformSettingsUpdated, this);
 
         this._catalogItem = null;
 
     }
 
     _BuildFontObject() { return svgFontRef.cloneNode(true); }
+
+    get transformSettings() { return this._transformSettings; }
 
     get resolutionFallbacks() { return [this._family.defaultSubFamily, this._family]; }
 
@@ -100,27 +106,6 @@ class SubFamilyDataBlock extends SimpleDataEx {
 
     _OnFamilyValueChanged(p_data, p_id, p_valueObj) {
         //this._scheduledUpdate.Schedule();
-    }
-
-    Resolve(p_id) {
-
-        let localValue = this.Get(p_id);
-
-        if (localValue == null) {
-
-            switch (p_id) {
-                case IDS.CAP_HEIGHT: return this.Get(IDS.ASCENT); break;
-                case IDS.X_HEIGHT: return this.Get(IDS.ASCENT) * 0.75; break;
-                case IDS.UNDERLINE_POSITION: return this.Get(IDS.DESCENT) * 1.2; break;
-                case IDS.UNDERLINE_THICKNESS: return this.Get(IDS.EM_UNITS) * 0.1; break;
-                //case IDS.WIDTH: return this.Get(IDS.MONOSPACE) ? this.Get(IDS.EM_UNITS); break;
-                case IDS.HEIGHT: return this.Get(IDS.ASCENT) - this.Get(IDS.DESCENT); break;
-                default: return super.Resolve(p_id); break;
-            }
-
-        }
-
-        return super.Resolve(p_id);
     }
 
     _UpdateFontObject() {
@@ -143,7 +128,7 @@ class SubFamilyDataBlock extends SimpleDataEx {
 
         dom.SAtt(fontFace, this._values, `value`, true);
 
-        dom.SAtt(fontFace, IDS.WEIGHT_CLASS, this.Get(IDS.WEIGHT_CLASS).GetOption(`value`), true);
+        dom.SAtt(fontFace, IDS.WEIGHT_CLASS, this.Get(IDS.WEIGHT_CLASS).value, true);
 
         if (this._catalogItem) { this._catalogItem.name = fullName; }
 
@@ -187,6 +172,22 @@ class SubFamilyDataBlock extends SimpleDataEx {
         //this.Set(IDS.SIZE, rh, true);
         //this.Set(IDS.DISPLAY_SIZE, ref, true);
         //this.Set(IDS.DISPLAY_OFFSET, 0, true);
+
+    }
+
+    _OnTransformSettingsUpdated(p_data, p_id, valueObj) {
+        if ((`override` in valueObj)) {
+            //Value is overridable, go through all glyphs and CommitUpdate the one who aren't overriding the value
+            let list = this._family._glyphs.internalArray;
+            for (let i = 0; i < list.length; i++) {
+                let glyphVariant = list[i].GetVariant(this);
+                if (!glyphVariant.transformSettings._values[p_id].override) {
+                    glyphVariant.transformSettings.CommitUpdate();
+                }
+            }
+        }
+
+        //this.CommitUpdate();
 
     }
 

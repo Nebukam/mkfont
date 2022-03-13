@@ -23,7 +23,7 @@ class GlyphIdentity extends ui.Widget {
             '.long-name': {
                 'padding-bottom': '15px',
                 'margin-bottom': '5px',
-                'border-bottom': '1px solid rgba(0,0,0,0.25)',
+                'border-bottom': '1px solid rgba(127, 127, 127, 0.1)',
                 'height': '2.2em'
             },
             '.tagbar': {
@@ -41,7 +41,7 @@ class GlyphIdentity extends ui.Widget {
 
         super._Render();
 
-        this._title = new ui.manipulators.Text(ui.dom.El("code", { class: "long-name" }, this));
+        this._title = new ui.manipulators.Text(ui.dom.El("code", { class: "long-name" }, this), false);
         this._title.Set("---");
 
         this._tagBar = this.Add(ui.WidgetBar, `tagbar`);
@@ -70,7 +70,7 @@ class GlyphIdentity extends ui.Widget {
             return;
         }
 
-        this._title.Set(p_infos.name);
+        this._title.Set(p_infos.name || `0×${p_infos.u}`);
         this._hexTag.label = `0×${p_infos.u}`;
 
         if (p_infos.block) {

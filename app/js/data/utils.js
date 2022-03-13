@@ -9,27 +9,24 @@
 class UTILS {
     constructor() { }
 
-    static Resolve(p_id, p_self, ...p_fallbacks){
-        
+    static Resolve(p_id, p_self, ...p_fallbacks) {
+
+        if(!p_self){ return null; }
+
         //console.log(`Resolve ${p_id} in ${p_self} -> ${p_fallbacks}`);
-        let result = p_self.Get(p_id);
+        let valueObj = p_self._values[p_id];
+        let result = valueObj ? valueObj.value : null;
 
         // TODO : If valueObj.override = true, attempt to return local value
         // TODO : If valueObj.override = false, skip local value and go straight to inherited one
 
-        if(result != null){ return result; }
-
-        // Check if value has designed fallback first
-        if(p_id in p_self._values){
-            let obj = p_self._values[p_id];
-            if(`defaultsTo` in obj){
-                result = p_self.Get(obj.defaultsTo);
-            }
+        if (result != null) {
+            if (`override` in valueObj) {
+                if (valueObj.override) { return result; }
+            } else { return result; }
         }
 
-        if(result != null){ return result; }
-
-        if(p_fallbacks.length > 0){
+        if (p_fallbacks.length > 0) {
             p_self = p_fallbacks.shift();
             return this.Resolve(p_id, p_self, ...p_fallbacks);
         }

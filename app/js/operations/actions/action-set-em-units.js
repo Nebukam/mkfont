@@ -6,8 +6,6 @@ const actions = nkm.actions;
 const data = require(`../../data`);
 const svgpath = require('svgpath');
 
-const SVG = require(`../svg-operations`);
-
 const scaleList = [
     data.IDS.ASCENT,
     data.IDS.DESCENT,

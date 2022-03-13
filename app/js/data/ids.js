@@ -69,10 +69,18 @@ class IDS {
     static DISPLAY_SIZE = 'display-size';
     static DISPLAY_OFFSET = 'display-offset';
 
+    static CUSTOM_WIDTH = 'custom-width';
+
     static COLOR_PREVIEW = 'color-preview';
     static PREVIEW_SIZE = 'preview-size';
+    static OUT_OF_BOUNDS = 'out-of-bounds';
 
     // Import properties
+
+    static trReference = nkm.data.catalogs.CreateFrom({ name: `Transform reference`, autoSort: false }, [
+        { name: `Imported bounds`, value: 0, icon: 'bounds-outside' },
+        { name: `Glyph bounds`, value: 1, icon: 'bounds-inside' },
+    ]);
 
     static trScaleModes = nkm.data.catalogs.CreateFrom({ name: `Scale`, autoSort: false }, [
         { name: `None `, value: -1, icon: 'minus' },
@@ -80,12 +88,14 @@ class IDS {
         { name: `Baseline`, value: 1, icon: 'font-baseline' },
         { name: `Spread`, value: 2, icon: 'font-bounds-h' },
         { name: `Height`, value: 3, icon: 'spread-ver' },
+        { name: `Manual`, value: 4, icon: 'edit' },
     ]);
 
     static trVerAlign = nkm.data.catalogs.CreateFrom({ name: `Vertical anchoring`, autoSort: false }, [
-        { name: `None `, value: -1, icon: 'font-ascender' },
+        { name: `Top `, value: -1, icon: 'font-ascender' },
         { name: `Baseline`, value: 0, icon: 'font-baseline' },
         { name: `Descender`, value: 1, icon: 'font-descender' },
+        { name: `Vertical spread`, value: 2, icon: 'center-ver' },
         //{ name: `To Value`, value: 2, icon: 'edit' },
     ]);
 
@@ -96,9 +106,9 @@ class IDS {
     ]);
 
     static trHorAlign = nkm.data.catalogs.CreateFrom({ name: `Horizontal anchoring`, autoSort: false }, [
-        { name: `None `, value: -1, icon: 'minus' },
         { name: `Bound min x`, value: 0, icon: 'font-bounds-xmin' },
-        { name: `Bound max x`, value: 1, icon: 'font-bounds-xmax' },
+        { name: `Horizontal spread`, value: 1, icon: 'center-hor' },
+        { name: `Bound max x`, value: 2, icon: 'font-bounds-xmax' },
         //{ name: `To Value`, value: 2, icon: 'edit' },
     ]);
 
@@ -108,6 +118,7 @@ class IDS {
         { name: `Right`, value: 2, icon: 'align-hor-right' },
     ]);
 
+    static TR_REFERENCE = 'tr-reference';
     static TR_SCALE_MODE = 'tr-scale-mode';
     static TR_SCALE_FACTOR = 'tr-scale-factor';
     
@@ -315,7 +326,14 @@ class IDS {
         },
 
         // Import settings
-
+        
+        [this.TR_REFERENCE]: {
+            transform:true,
+            inputType: inputs.InlineSelect,
+            label: `Glyph bounds`,
+            inputOptions: { catalog: this.trReference, size: ui.FLAGS.SIZE_M },
+            desc: `The reference bounds used to compute transformations.`
+        },
         [this.TR_SCALE_MODE]: {
             transform:true,
             inputType: inputs.InlineSelect,
@@ -327,7 +345,7 @@ class IDS {
             transform:true,
             inputType: inputs.Slider,
             label: `Scale factor`,
-            inputOptions: { changeOnInput: true, step: 1, min: 1, max: 1000, size: ui.FLAGS.SIZE_XXS },
+            inputOptions: { changeOnInput: true, step: 1, min: 0.01, max: 100, size: ui.FLAGS.SIZE_XXS },
             desc: `Factor by which the input vector will be scaled.`
         },
 

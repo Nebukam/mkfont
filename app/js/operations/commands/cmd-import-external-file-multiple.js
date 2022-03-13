@@ -8,7 +8,6 @@ const fs = require('fs');
 const mkfData = require(`../../data`);
 
 const ActionSetSVG = require(`../actions/action-set-svg`);
-const SVG = require(`../svg-operations`);
 
 class CmdImportExternalFileMultiple extends actions.Command {
     constructor() { super(); }
@@ -59,7 +58,7 @@ class CmdImportExternalFileMultiple extends actions.Command {
             try { svgString = fs.readFileSync(p, 'utf8'); }
             catch (e) { svgString = null; }
 
-            svgStats = SVG.SVGStats(svgString);
+            svgStats = SVGOPS.SVGStats(svgString);
             svgStats.path = p;
             svgStats.name = nkm.utils.PATH.name(p);
 

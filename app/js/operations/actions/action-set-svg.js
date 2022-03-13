@@ -19,7 +19,7 @@ class ActionSetSVG extends actions.Action {
 
         if (!glyphData) { return; }
 
-        if(glyphData == data.Glyph.NULL ){
+        if(glyphData,isNull){
             
             glyphData = nkm.com.Rent(data.Glyph);
             glyphData.unicode = p_operation.unicode ? p_operation.unicode : slot._options.glyph;

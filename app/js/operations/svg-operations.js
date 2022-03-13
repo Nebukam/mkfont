@@ -65,7 +65,6 @@ SVGGraphicsElement.prototype.getBBox = function () {
         right: rect.x + rect.width
     };
 
-    console.log(rect, result);
     return result;
 
 };
@@ -74,6 +73,7 @@ SVGGraphicsElement.prototype.getBBox = function () {
 
 class SVGOperations {
     constructor() { }
+
 
     //#region SVG Data processing
 
@@ -236,10 +236,26 @@ class SVGOperations {
 
     }
 
+    static TranslateBBox(p_bbox, p_trx, p_try = 0) {
+        p_bbox.x = p_bbox.x + p_trx;
+        p_bbox.y = p_bbox.y + p_try;
+        p_bbox.top = p_bbox.y;
+        p_bbox.bottom = p_bbox.y + p_bbox.height;
+        p_bbox.left = p_bbox.x;
+        p_bbox.right = p_bbox.x + p_bbox.width;
+    }
 
     static FitPath(p_settings, p_context, p_svgStats) {
 
-        console.log(p_svgStats);
+        let path = p_svgStats.path,
+            refMode = p_settings.Get(IDS.TR_REFERENCE).GetOption(`value`, 0),
+            scaleMode = p_settings.Get(IDS.TR_SCALE_MODE).GetOption(`value`, 0),
+            vAlign = p_settings.Get(IDS.TR_VER_ALIGN).GetOption(`value`, 0),
+            vAnchor = p_settings.Get(IDS.TR_VER_ALIGN_ANCHOR).GetOption(`value`, 0),
+            hAlign = p_settings.Get(IDS.TR_HOR_ALIGN).GetOption(`value`, 0),
+            hAnchor = p_settings.Get(IDS.TR_HOR_ALIGN_ANCHOR).GetOption(`value`, 0),
+            sShift = p_settings.Resolve(IDS.TR_WIDTH_SHIFT),
+            sPush = p_settings.Resolve(IDS.TR_WIDTH_PUSH);
 
         let
             bbox = p_svgStats.BBox,
@@ -251,17 +267,21 @@ class SVGOperations {
             offsetY = 0,
             offsetX = 0;
 
-        let scaleMode = p_settings.Get(IDS.TR_SCALE_MODE).GetOption(`value`, 0),
-            vAlign = p_settings.Get(IDS.TR_VER_ALIGN).GetOption(`value`, 0),
-            vAnchor = p_settings.Get(IDS.TR_VER_ALIGN_ANCHOR).GetOption(`value`, 0),
-            hAlign = p_settings.Get(IDS.TR_HOR_ALIGN).GetOption(`value`, 0),
-            hAnchor = p_settings.Get(IDS.TR_HOR_ALIGN_ANCHOR).GetOption(`value`, 0);
+        if (refMode == 1) {
+            heightRef = bbox.height;
+            widthRef = bbox.width;
+            path = svgpath(path)
+                .translate(-bbox.x, -bbox.y)
+                .toString();
+        }
+
 
         switch (scaleMode) {
-            case 0: scale = p_context.em / heightRef; break;// To Em
-            case 1: scale = p_context.asc / heightRef; break;// To Ascender
-            case 2: scale = (p_context.asc - p_context.dsc) / heightRef; break;// To Spread
-            case 3: scale = p_context.h / heightRef; break;// To Height
+            case 0: scale = p_context.em / heightRef; break;// EM
+            case 1: scale = p_context.asc / heightRef; break;// Baseline
+            case 2: scale = (p_context.asc - p_context.dsc) / heightRef; break;// Spread
+            case 3: scale = p_context.h / heightRef; break;// Height
+            case 4: scale = p_settings.Resolve(IDS.TR_SCALE_FACTOR); break;// Manual
             default: break;// None
         }
 
@@ -275,7 +295,8 @@ class SVGOperations {
         switch (vAlign) {
             case 0: offsetY = p_context.asc - heightRef; break;// To Baseline (ascent)
             case 1: offsetY = (p_context.asc - p_context.dsc) - heightRef; break;// To Descent (ascent - descent)
-            default: offsetY = markedBBox ? -markedBBox.y * scale : 0; break;// None, or top
+            case 2: offsetY = p_context.em * 0.5 - heightRef; break;// To Descent (ascent - descent)
+            default: offsetY = -heightRef; break;// None, or top
         }
 
         switch (vAnchor) {
@@ -287,11 +308,6 @@ class SVGOperations {
 
         // H align
 
-        switch (hAlign) {
-            case 0: offsetX = 0; break;// To Baseline (ascent)
-            case 1: offsetX = 0; break;// To Descent (ascent - descent)
-            default: offsetX = 0; break;// None, or top
-        }
 
         switch (hAnchor) {
             case 0: offsetX += 0; break;// Left
@@ -299,14 +315,31 @@ class SVGOperations {
             default: offsetX -= widthRef; break;// Right
         }
 
+        switch (hAlign) {
+            case 0:
+                offsetX += sShift;
+                widthRef += sShift + sPush;
+                break;// To Base
+            case 1:// To Center
+                widthRef = p_context.w;
+                offsetX += widthRef * 0.5;
+                break;
+            default:// To Family extent
+                widthRef = p_context.w;
+                offsetX += widthRef;
+                break;
+        }
+
+        path = svgpath(path)
+            .scale(scale)
+            .translate(offsetX, offsetY)
+            .toString();
 
         return {
-            height: heightRef,
-            width: widthRef,
-            path: svgpath(p_svgStats.path)
-                .scale(scale)
-                .translate(offsetX, offsetY)
-                .toString()
+            height: Math.max(heightRef, 0),
+            width: Math.max(widthRef, 0),
+            path: path,
+            bbox : this.GetBBox(path)
         };
 
     }
@@ -315,4 +348,4 @@ class SVGOperations {
 
 }
 
-module.exports = SVGOperations;
+globalThis.SVGOPS = module.exports = SVGOperations;

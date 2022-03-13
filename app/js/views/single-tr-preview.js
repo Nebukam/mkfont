@@ -7,7 +7,6 @@ const svgpath = require('svgpath');
 const mkfData = require(`../data`);
 const mkfInspectors = require(`../editors/inspectors`);
 const mkfWidgets = require(`../widgets`);
-const SVG = require(`../operations/svg-operations`);
 
 class SingleImportPreview extends ui.views.View {
     constructor() { super(); }
@@ -34,9 +33,9 @@ class SingleImportPreview extends ui.views.View {
             '.preview': {
                 'position': 'relative',
                 'aspect-ratio': '1/1',
-                'width': '400px',
+                'width': '420px',
                 'overflow': 'hidden',
-                'padding': '10px',
+                //'padding': '10px',
                 'background-color': 'rgba(0,0,0,0.6)',
                 'border-radius': '5px',
                 'grid-column-start': '2',
@@ -69,6 +68,7 @@ class SingleImportPreview extends ui.views.View {
         this._svgRenderer = this.Add(mkfWidgets.GlyphCanvasRenderer, `item renderer`, this._previewBox);
         this._svgRenderer.drawGuides = true;
         this._svgRenderer.centered = false;
+        this._svgRenderer.drawLabels = true;
 
     }
 
@@ -88,6 +88,8 @@ class SingleImportPreview extends ui.views.View {
 
     _OnDataUpdated(p_data) {
         super._OnDataUpdated(p_data);
+        this._svgRenderer.drawHorAxis = p_data.Get(mkfData.IDS.TR_VER_ALIGN).value == 2;
+        this._svgRenderer.drawVerAxis = p_data.Get(mkfData.IDS.TR_HOR_ALIGN).value != 0;
         this._UpdatePathTransforms();
     }
 
@@ -95,7 +97,7 @@ class SingleImportPreview extends ui.views.View {
 
         if (!this._importedGlyph) { this._transformedPath = null; return; }
 
-        this._transformedData = SVG.FitPath(this._data, this._contextInfos, this._importedGlyph);
+        this._transformedData = SVGOPS.FitPath(this._data, this._contextInfos, this._importedGlyph);
         this._svgRenderer.glyphWidth = this._transformedData.width; 
         this._svgRenderer.glyphPath = this._transformedData.path;
         this._svgRenderer.Draw();

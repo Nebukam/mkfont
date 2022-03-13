@@ -5,8 +5,6 @@ const nkm = require(`@nkmjs/core`);
 const actions = nkm.actions;
 const data = require(`../../data`);
 
-const SVG = require(`../svg-operations`);
-
 class ActionPathBaselineScaleAll extends actions.Action {
     constructor() { super(); }
 
@@ -24,7 +22,7 @@ class ActionPathBaselineScaleAll extends actions.Action {
         p_operation.prevAscent = currentEM;
         p_operation.scaleFactor = scaleFactor; // do 1/scaleFactor to revert
 
-        SVG.TransformAll(subFamily, (svg) => { return svg.scale(scaleFactor, scaleFactor).translate(0, offset); });
+        SVGOPS.TransformAll(subFamily, (svg) => { return svg.scale(scaleFactor, scaleFactor).translate(0, offset); });
 
     }
 

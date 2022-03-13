@@ -35,7 +35,7 @@ class PropertyControl extends nkm.datacontrols.ControlWidget {
 
         this._optionsHandler
             .Hook(`propertyId`)
-            .Hook(`allowOverride`, null, false)
+            .Hook(`hideOverride`)
             .Hook(`subData`, null, null)
             .Hook(`inputOnly`, null, null)
             .Hook(`command`);
@@ -57,6 +57,7 @@ class PropertyControl extends nkm.datacontrols.ControlWidget {
                 'display': 'flex',
                 'flex-flow': 'row nowrap',
                 'align-items': 'center',
+                'flex': '1 1 auto'
             },
             ':host(.selected)': {
                 'background-color': 'rgba(127,127,127,0.25)'
@@ -114,10 +115,10 @@ class PropertyControl extends nkm.datacontrols.ControlWidget {
         this._subData = p_value;
     }
 
-    set inputOnly(p_value){
+    set inputOnly(p_value) {
         this._inputOnly = p_value;
-        if(p_value){this._labelCtnr.style.display = `none`;}
-        else{this._labelCtnr.style.removeProperty(`display`);}
+        if (p_value) { this._labelCtnr.style.display = `none`; }
+        else { this._labelCtnr.style.removeProperty(`display`); }
     }
 
     set propertyId(p_id) {
@@ -147,9 +148,18 @@ class PropertyControl extends nkm.datacontrols.ControlWidget {
 
     }
 
+    set hideOverride(p_value){
+        this._hideOverride = p_value;
+        this._toggle.visible = !p_value;
+    }
+
     set allowOverride(p_value) {
         this._allowOverride = p_value;
         this._toggle.visible = p_value;
+    }
+
+    get localValueObj() {
+        return this._data._values[this._valueID];
     }
 
     get localValue() {
@@ -166,6 +176,14 @@ class PropertyControl extends nkm.datacontrols.ControlWidget {
         this._cmd = p_value;
     }
 
+    _OnDataChanged(p_oldData) {
+        super._OnDataChanged(p_oldData);
+        if (this._data) {
+            let dataObj = this.localValueObj;
+            this.allowOverride = this._hideOverride ? false : dataObj ? (`override` in dataObj) : false;
+        }
+    }
+
     _OnDataUpdated(p_data) {
         super._OnDataUpdated(p_data);
 
@@ -173,12 +191,19 @@ class PropertyControl extends nkm.datacontrols.ControlWidget {
             this._input.currentValue = this.exportedValue;
         }
 
-        this._inherited = this.localValue == null;
+        this._inherited = this._allowOverride ? !this.localValueObj.override : false;
 
         if (this._allowOverride) {
             this._flags.Set(__flag_inherited, this._inherited);
         }
+        
         this._toggle.currentValue = !this._inherited;
+
+        if(this._inherited){
+            this._input.currentValue = this.exportedValue;
+        }else{
+            this._input.currentValue = this.localValue;
+        }
     }
 
     _OnValueSubmit(p_input, p_value) {
@@ -194,13 +219,26 @@ class PropertyControl extends nkm.datacontrols.ControlWidget {
     }
 
     _OnToggleSubmit(p_input, p_value) {
-        if (this._inherited != p_value) { return; } //Same?
+
+        let
+            valueObj = this.localValueObj,
+            manualUpdate = true,
+            exportedValue = this.exportedValue;
+
+        valueObj.override = p_value;
+
         if (p_value) {
-            console.log(`this.exportedValue = ${this.exportedValue}`);
-            this._data.Set(this._valueID, this.exportedValue);
+            if (!this.localValue) { this._data.Set(this._valueID, exportedValue); }
+            else { manualUpdate = true; }
         } else {
-            this._data.Set(this._valueID, null);
+            manualUpdate = true;
         }
+
+        if (manualUpdate) {
+            this._data.CommitValueUpdate(this._valueID, valueObj, exportedValue, false);
+            this._data.CommitUpdate();
+        }
+
     }
 
     _ToClipboard() {

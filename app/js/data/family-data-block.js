@@ -52,6 +52,12 @@ class FamilyDataBlock extends SimpleDataEx {
         this._defaultSubFamily = new SubFamily();
         this._defaultSubFamily._isDefault = true;
 
+        
+        this._nullGlyph = new Glyph();
+        this._nullGlyph.family = this;
+        this._nullGlyph._SetDefaultVariant(this._defaultSubFamily);
+        this._nullGlyph.isNull = true;
+
         this._selectedSubFamily = this._defaultSubFamily;
 
     }
@@ -60,6 +66,8 @@ class FamilyDataBlock extends SimpleDataEx {
         super._PostInit();
         this.AddSubFamily(this._defaultSubFamily);
     }
+
+    get nullGlyph(){ return this._nullGlyph; }
 
     get transformSettings(){ return this._transformSettings; }
 
@@ -149,21 +157,21 @@ class FamilyDataBlock extends SimpleDataEx {
 
     /**
      * Get the glyph currently existing at the specified UNICODE location
-     * otherwise returns Glyph.NULL
+     * otherwise returns nullGlyphL
      * @param {string} p_unicode 
      * @returns 
      */
     GetGlyph(p_unicode) {
-        return this._glyphsMap[p_unicode] || Glyph.NULL;
+        return this._glyphsMap[p_unicode] || this._nullGlyph;
     }
 
     /**
      * Attempts to find existing glyphs from UNICODE infos
-     * otherwise returns Glyph.NULL
+     * otherwise returns nullGlyph
      * @param {*} p_infos 
      */
     TryGetGlyph(p_infos) {
-        return this._glyphsMap[UNICODE.GetLookup(p_infos)] || Glyph.NULL;
+        return this._glyphsMap[UNICODE.GetLookup(p_infos)] || this._nullGlyph;
     }
 
     // Watch

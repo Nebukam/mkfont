@@ -12,24 +12,27 @@ class TransformSettingsInspector extends nkm.datacontrols.InspectorView {
     constructor() { super(); }
 
     static __controls = [
-        { cl: mkfWidgets.ControlHeader, options: { label: `Scale` }, css:'header' },
-        { options: { propertyId: mkfData.IDS.TR_SCALE_MODE } },
-        //{ options: { propertyId: mkfData.IDS.TR_SCALE_FACTOR } },
+        { cl: mkfWidgets.ControlHeader, options: { label: `Glyph boundaries` }, css:'header' },
+        { options: { propertyId: mkfData.IDS.TR_REFERENCE, inputOnly:true }, css:'small' },
+        { options: { propertyId: mkfData.IDS.TR_SCALE_MODE, inputOnly:true }, css:'small' },
+        { options: { propertyId: mkfData.IDS.TR_SCALE_FACTOR }, requireData:true, hideWhen:{ fn:(owner)=>{ return owner.data.Get(mkfData.IDS.TR_SCALE_MODE).value == 4; } } },
         { cl: mkfWidgets.ControlHeader, options: { label: `Vertical align` }, css:'header' },
         { options: { propertyId: mkfData.IDS.TR_VER_ALIGN, inputOnly:true }, css:'small' },
         { options: { propertyId: mkfData.IDS.TR_VER_ALIGN_ANCHOR, inputOnly:true }, css:'small' },
         { cl: mkfWidgets.ControlHeader, options: { label: `Horizontal align` }, css:'header' },
         { options: { propertyId: mkfData.IDS.TR_HOR_ALIGN, inputOnly:true }, css:'small' },
         { options: { propertyId: mkfData.IDS.TR_HOR_ALIGN_ANCHOR, inputOnly:true }, css:'small' },
-        { cl: mkfWidgets.ControlHeader, options: { label: `Advance` }, css:'header' },
-        { options: { propertyId: mkfData.IDS.TR_WIDTH_SHIFT } },
-        { options: { propertyId: mkfData.IDS.TR_WIDTH_PUSH } },
+        { cl: mkfWidgets.ControlHeader, options: { label: `Advance` }, css:'header', requireData:true, hideWhen:{ fn:(owner)=>{ return owner.data.Get(mkfData.IDS.TR_HOR_ALIGN).value == 0; } } },
+        { options: { propertyId: mkfData.IDS.TR_WIDTH_SHIFT }, requireData:true, hideWhen:{ fn:(owner)=>{ return owner.data.Get(mkfData.IDS.TR_HOR_ALIGN).value == 0; } } },
+        { options: { propertyId: mkfData.IDS.TR_WIDTH_PUSH }, requireData:true, hideWhen:{ fn:(owner)=>{ return owner.data.Get(mkfData.IDS.TR_HOR_ALIGN).value == 0; } } },
     ];
 
     _Init() {
         super._Init();
+
         this._builder.defaultControlClass = mkfWidgets.PropertyControl;
         this._builder.defaultCSS = `control`;
+
         this._dataPreProcessor = (p_owner, p_data) => {
             if (nkm.utils.isInstanceOf(p_data, mkfData.Glyph)) { return p_data.family.transformSettings; }
             if (nkm.utils.isInstanceOf(p_data, mkfData.GlyphVariant)) { return p_data.glyph.family.transformSettings; }
@@ -42,6 +45,7 @@ class TransformSettingsInspector extends nkm.datacontrols.InspectorView {
     _Style() {
         return nkm.style.Extends({
             ':host': {
+                '@':['fade-in'],
                 'display': 'flex',
                 'flex-flow': 'row wrap',
                 //'min-height': '0',
@@ -62,14 +66,14 @@ class TransformSettingsInspector extends nkm.datacontrols.InspectorView {
         }, super._Style());
     }
 
-    _Render() {
-        super._Render();
-
-    }
-
     //#region Family properties
 
     //#endregion
+
+    _CleanUp(){
+        if (this.constructor.__clearBuilderOnRelease) { this._builder.Clear(); }
+        super._CleanUp();
+    }
 
 }
 

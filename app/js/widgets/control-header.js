@@ -41,11 +41,11 @@ class ControlHeader extends ui.Widget {
             ':host': {
                 'position': 'relative',
                 'width': '100%',
-                //'border-top': '1px solid #000',
+                'border-bottom': '1px solid rgba(127, 127, 127, 0.1)',
                 'margin-top':'2px'
             },
             '.label': {
-                //'border-bottom': '1px solid #656565',
+                //'border-bottom': 'rgba(127, 127, 127, 0.1)',
                 //'padding-bottom':'2px',
                 //'font-style':'italic'
                 //'text-align':'center',

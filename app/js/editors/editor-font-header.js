@@ -79,6 +79,12 @@ class FontEditorHeader extends nkm.datacontrols.ControlView {
             {
                 label:`Save`, icon:`save`,
                 size: ui.FLAGS.SIZE_S,
+                flavor:ui.FLAGS.CTA,// variant:ui.FLAGS.FRAME,
+                group:`file-actions`
+            },
+            {
+                label:`Export`, icon:`download`,
+                size: ui.FLAGS.SIZE_S,
                 flavor:ui.FLAGS.CTA, variant:ui.FLAGS.FRAME,
                 group:`file-actions`
             },

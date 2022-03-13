@@ -8,6 +8,7 @@ const UNICODE = require(`../unicode`);
 const { optimize } = require('svgo');
 const ttf2svg = require('ttf2svg');
 const svgpath = require('svgpath');
+const { CatalogWatcher } = require('../../../../nkmjs/packages/nkmjs-documents/node_modules/@nkmjs/data-core/lib/catalogs');
 
 const domparser = new DOMParser();
 
@@ -36,8 +37,9 @@ class TTFImport {
             size = subFamily.Set(IDS.SIZE, Math.max(em_units, ascent - descent)),
             displaySize = size * 1.25;
 
-            subFamily.Set(IDS.DISPLAY_SIZE, displaySize),
-            subFamily.Set(IDS.DISPLAY_OFFSET, (displaySize - size) * -0.5);
+        subFamily.Set(IDS.DISPLAY_SIZE, displaySize);
+        subFamily.Set(IDS.DISPLAY_OFFSET, (displaySize - size) * -0.5);
+        subFamily._UpdateDisplayValues();
 
         for (let i = 0; i < glyphs.length; i++) {
 
@@ -61,22 +63,40 @@ class TTFImport {
                 .toString();
 
             if (glyphUnicode.length != 1) {
-                //assume ligature
+                //assume ligature, handle it.
             } else {
                 glyphUnicode = UNICODE.GetAddress(glyphUnicode);
             }
-
-            // Reconstruct SVG Stats
-            // get bounding box and clamp it
 
             newGlyph.BatchSet({
                 [IDS.GLYPH_NAME]: glyphId,
                 [IDS.UNICODE]: glyphUnicode
             });
 
-            defg.Set(IDS.PATH, glyphPath);
+            // Reconstruct SVG Stats
+            let bbox = SVGOPS.GetBBox(glyphPath);
+
+            let
+                svgStats = {
+                    width: bbox.width,
+                    height: ascent -bbox.y,
+                    BBox: bbox
+                },
+                sShift = bbox.x,
+                sPush = glyphAdvX - (bbox.width + sShift);
+
+            svgStats.path = svgpath(glyphPath).translate(-bbox.x, -bbox.y).toString();
+            SVGOPS.TranslateBBox(bbox, -bbox.x, -bbox.y);
+
+            defg.Set(IDS.PATH_DATA, svgStats);
 
             family.AddGlyph(newGlyph);
+
+            defg.transformSettings.BatchSet({
+                [IDS.TR_SCALE_MODE]: IDS.trScaleModes.At(0),
+                [IDS.TR_WIDTH_SHIFT]: sShift,
+                [IDS.TR_WIDTH_PUSH]: sPush,
+            });
 
         }
 
