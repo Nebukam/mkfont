@@ -80,6 +80,7 @@ class GlyphSlot extends nkm.datacontrols.ControlWidget {
             ':host(.unpainted) .box': { 'display': 'none' },
             '.preview': {
                 'position': 'relative',
+                'border-radius':'inherit',
                 //'aspect-ratio': 'var(--preview-ratio)',
                 'flex': '1 0 auto',
                 'min-height': 'var(--preview-height)',
@@ -116,18 +117,16 @@ class GlyphSlot extends nkm.datacontrols.ControlWidget {
                 'font-family': 'monospace',
                 'line-height': '100%'
             },
-            '.oob-hint':{
+            '.oob':{
                 'display':'none',
-                'position':'absolute',
-                'background-color':'var(--col-error)',
-                'transform':'rotate(45deg)',
-                'top':'0',
-                'left':'50%',
-                'width':'100%',
-                'height':'10%'
+                '@':['absolute-centered'],
+                'width':'50%'
             },
-            ':host(.outofbounds) .oob-hint':{
+            ':host(.outofbounds) .oob':{
                 'display':'block !important'
+            },
+            ':host(.outofbounds)':{
+                'background-color':'rgba(var(--col-error-rgb), 0.5) !important'
             }
         }, super._Style());
     }
@@ -142,9 +141,10 @@ class GlyphSlot extends nkm.datacontrols.ControlWidget {
         this._glyphRender = this.Add(GlyphCanvasRenderer, `box renderer`, this._previewBox);
 
         this._label = new ui.manipulators.Text(ui.dom.El(`div`, { class: `item label` }, this._host), false, false);
+        //this._oobIcon = new ui.manipulators.Icon(ui.dom.El(`div`, {class:`oob` }, this._previewBox), false, false);
+        //this._oobIcon.Set(`remove`);
 
         ui.dom.El(`div`, { class: `cat-hint` }, this._host);
-        ui.dom.El(`div`, { class: `oob-hint` }, this._host);
 
     }
 

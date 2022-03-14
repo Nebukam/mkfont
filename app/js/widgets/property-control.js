@@ -33,12 +33,12 @@ class PropertyControl extends nkm.datacontrols.ControlWidget {
         this._inherited = false;
         this._inputOnly = false;
 
-        this._optionsHandler
-            .Hook(`propertyId`)
-            .Hook(`hideOverride`)
-            .Hook(`subData`, null, null)
-            .Hook(`inputOnly`, null, null)
-            .Hook(`command`);
+        this._distribute
+            .To(`propertyId`)
+            .To(`hideOverride`)
+            .To(`subData`, null, null)
+            .To(`inputOnly`, null, null)
+            .To(`command`);
 
         this._dataPreProcessor = this.constructor.__ppdata;
 

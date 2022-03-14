@@ -23,7 +23,7 @@ class GlyphGroupHeader extends nkm.datacontrols.ControlView {
             ':host': {
                 'min-height': 'auto',
                 'padding': '20px',
-                'overflow':'clip'
+                'overflow': 'clip'
             },
             '.title': {
                 'margin-bottom': '10px'
@@ -42,15 +42,18 @@ class GlyphGroupHeader extends nkm.datacontrols.ControlView {
         this._title.Set("---");
 
         this._tagBar = this.Add(ui.WidgetBar, `tagbar left`);
-        this._tagBar._defaultWidgetClass = nkm.uilib.widgets.Tag;
-        this._tagBar.size = ui.FLAGS.SIZE_XS;
+        this._tagBar.options = {
+            defaultWidgetClass: nkm.uilib.widgets.Tag,
+            size: ui.FLAGS.SIZE_XS
+        };
+
 
         this._typeTag = this._tagBar.CreateHandle();
         this._typeTag.bgColor = `black`;
 
         this._countTag = this._tagBar.CreateHandle();
 
-        this._subTags = this._tagBar.CreateHandle({ cl: ui.WidgetBar, group:`categories` });
+        this._subTags = this._tagBar.CreateHandle({ cl: ui.WidgetBar, group: `categories` });
         this._subTags._defaultWidgetClass = nkm.uilib.widgets.Tag;
 
     }

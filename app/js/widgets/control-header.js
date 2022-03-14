@@ -20,15 +20,15 @@ class ControlHeader extends ui.Widget {
         this._extensions.Remove(this._extDrag);
         this._notifiesSelectionStack = true;
 
-        this._optionsHandler = new nkm.com.helpers.OptionsHandler();
-        this._optionsHandler.Setup(this);
+        this._distribute = new nkm.com.helpers.OptionsDistribute();
+        this._distribute.Setup(this);
 
-        this._optionsHandler
-            .Hook(`label`, (p_value) => { this._label.Set(p_value); });
+        this._distribute
+            .To(`label`, (p_value) => { this._label.Set(p_value); });
 
     }
 
-    set options(p_value){ this._optionsHandler.Process(this, p_value); }
+    set options(p_value){ this._distribute.Update(this, p_value); }
 
     get editor() {
         if (this._editor) { return this._editor; }

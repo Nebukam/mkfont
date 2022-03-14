@@ -31,6 +31,10 @@
     visibility: hidden !important;
 }
 
+:host(.disabled){
+    filter: grayscale(1);
+}
+
 // ----> Host presets
 // Sizes
 @include for-each-host-selector('', $SIZES, '', '', $size_varnames) using ($index, $val) {
@@ -173,6 +177,13 @@ using ($index, $val){
 
 /* Icon */
 
+.icon-element{
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center center;
+    aspect-ratio: 1/1;
+}
+
 .icon {
     
     aspect-ratio: 1/1;
@@ -186,15 +197,6 @@ using ($index, $val){
     width: var(--clamped-size);
     min-width: var(--clamped-size);
     max-width: var(--clamped-size);
-
-    height: var(--clamped-size);
-    min-height: var(--clamped-size);
-    max-height: var(--clamped-size);
-
-    //border: 3px solid #e5e5e5;
-    background-size: contain;
-    background-repeat: no-repeat;
-    background-position: center center;
 
     opacity: 0.8;
 

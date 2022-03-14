@@ -84,30 +84,32 @@ class SubFamilyInspector extends nkm.datacontrols.InspectorView {
         this._pangramRenderer = this.Add(mkfWidgets.PangramRenderer, 'pangram', this._body);
 
         this._toolbar = this.Add(ui.WidgetBar, `toolbar`, this._footer);
-        this._toolbar._defaultWidgetClass = nkm.uilib.buttons.Tool;
-        this._toolbar.size = ui.FLAGS.SIZE_S;
-        this._toolbar.CreateHandles(
-            {
-                icon: `text-direction-ltr`, group: 'direction',
-                trigger: { fn: () => { this._pangramRenderer.direction = 'ltr'; } },
-            },
-            {
-                icon: `text-direction-rtl`, group: 'direction',
-                trigger: { fn: () => { this._pangramRenderer.direction = 'rtl'; } }
-            },
-            {
-                icon: `text-align-left`, group: 'align',
-                trigger: { fn: () => { this._pangramRenderer.align = `left` } }
-            },
-            {
-                icon: `text-align-center`, group: 'align',
-                trigger: { fn: () => { this._pangramRenderer.align = `center` } }
-            },
-            {
-                icon: `text-align-right`, group: 'align',
-                trigger: { fn: () => { this._pangramRenderer.align = `right` } },
-            },
-        );
+        this._toolbar.options = {
+            defaultWidgetClass: nkm.uilib.buttons.Tool,
+            size: ui.FLAGS.SIZE_S,
+            handles: [
+                {
+                    icon: `text-direction-ltr`, group: 'direction',
+                    trigger: { fn: () => { this._pangramRenderer.direction = 'ltr'; } },
+                },
+                {
+                    icon: `text-direction-rtl`, group: 'direction',
+                    trigger: { fn: () => { this._pangramRenderer.direction = 'rtl'; } }
+                },
+                {
+                    icon: `text-align-left`, group: 'align',
+                    trigger: { fn: () => { this._pangramRenderer.align = `left` } }
+                },
+                {
+                    icon: `text-align-center`, group: 'align',
+                    trigger: { fn: () => { this._pangramRenderer.align = `center` } }
+                },
+                {
+                    icon: `text-align-right`, group: 'align',
+                    trigger: { fn: () => { this._pangramRenderer.align = `right` } },
+                },
+            ]
+        };
 
         this._slider = this.Add(nkm.uilib.inputs.SliderOnly, `slider`, this._footer);
         this._slider.options = {

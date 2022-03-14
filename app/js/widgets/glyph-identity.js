@@ -27,9 +27,9 @@ class GlyphIdentity extends ui.Widget {
                 'height': '2.2em'
             },
             '.tagbar': {
-                'max-height':'16px',
-                'margin-left':'4px',
-                'margin-right':'4px'
+                'max-height': '16px',
+                'margin-left': '4px',
+                'margin-right': '4px'
             },
             '.toolbar': {
 
@@ -45,8 +45,10 @@ class GlyphIdentity extends ui.Widget {
         this._title.Set("---");
 
         this._tagBar = this.Add(ui.WidgetBar, `tagbar`);
-        this._tagBar._defaultWidgetClass = nkm.uilib.widgets.Tag;
-        this._tagBar.size = ui.FLAGS.SIZE_XS;
+        this._tagBar.options = {
+            defaultWidgetClass: nkm.uilib.widgets.Tag,
+            size: ui.FLAGS.SIZE_XS
+        };
 
         this._hexTag = this._tagBar.CreateHandle();
         this._hexTag.bgColor = `#3c3c3c`;

@@ -10,7 +10,7 @@ class DisplayInspector extends nkm.datacontrols.InspectorView {
 
     static __controls = [
         { cl:mkfWidgets.ControlHeader, options:{ label:`Display options` } },
-        { options: { propertyId: mkfData.IDS.COLOR_PREVIEW } },
+        //{ options: { propertyId: mkfData.IDS.COLOR_PREVIEW } },
         { options: { propertyId: mkfData.IDS.PREVIEW_SIZE } },
     ];
 

@@ -12,26 +12,36 @@ class GlyphCanvasRenderer extends ui.helpers.Canvas {
     _Init() {
         super._Init();
 
-        if(!__patternImg){
+        if (!__patternImg) {
             __patternImg = new Image();
             __patternImg.src = nkm.style.URLImgs(`dot100.png`);
         }
 
-        this._alwaysFit = true;
         this._zoom = 1;
         this._glyphPath = new Path2D();
+
         this._contextInfos = null;
         this._drawGuides = false;
         this._drawLabels = false;
         this._centered = true;
-
         this._drawHorAxis = false;
         this._drawVerAxis = false;
+
+        this._distribute = new nkm.com.helpers.OptionsDistribute();
+        this._distribute
+            .To(`drawGuides`)
+            .To(`drawLabels`)
+            .To(`drawHorAxis`)
+            .To(`drawVerAxis`)
+            .To(`centered`);
+
     }
 
     _PostInit() {
         super._PostInit();
     }
+
+    set options(p_value){ this._distribute.Update(this, p_value); }
 
     get drawGuides() { return this._drawGuides; }
     set drawGuides(p_value) { this._drawGuides = p_value; }
@@ -234,7 +244,7 @@ class GlyphCanvasRenderer extends ui.helpers.Canvas {
             // family values            
             ctx.strokeStyle = `rgba(${nkm.style.Get(`--col-warning-rgb`)},0.5)`;
 
-            if(this._drawHorAxis){
+            if (this._drawHorAxis) {
                 ctx.beginPath();
                 //ctx.moveTo(minx, 0);
                 //ctx.lineTo(maxx, 0);
@@ -243,7 +253,7 @@ class GlyphCanvasRenderer extends ui.helpers.Canvas {
                 ctx.stroke();
             }
 
-            if(this._drawVerAxis){
+            if (this._drawVerAxis) {
                 ctx.beginPath();
                 //ctx.moveTo(minx, 0);
                 //ctx.lineTo(maxx, 0);

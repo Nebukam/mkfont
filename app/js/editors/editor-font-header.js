@@ -47,22 +47,22 @@ class FontEditorHeader extends nkm.datacontrols.ControlView {
     _Style() {
         return nkm.style.Extends({
             ':host': {
-                'display':'flex',
-                'flex-flow':'row nowrap',
+                'display': 'flex',
+                'flex-flow': 'row nowrap',
                 'align-items': 'center',
                 'justify-content': 'space-between',
 
                 'min-height': 'auto',
-                'padding':'10px',
+                'padding': '10px',
                 'box-shadow': `0px -2px 5px black`,
                 'border-bottom': `1px solid #242424`,
-                'background-color':'rgba(127,127,127,0.1)',
+                'background-color': 'rgba(127,127,127,0.1)',
             },
-            '.title':{
-                'opacity':'0.2'
+            '.title': {
+                'opacity': '0.2'
             },
-            '.toolbar':{
-                
+            '.toolbar': {
+
             }
         }, super._Style());
     }
@@ -72,51 +72,53 @@ class FontEditorHeader extends nkm.datacontrols.ControlView {
         super._Render();
 
         this._toolbarLeft = this.Add(ui.WidgetBar, `toolbar left`);
-        this._toolbarLeft.inline = true;
-        this._toolbarLeft._defaultWidgetClass = nkm.uilib.buttons.Button;
-
-        this._toolbarLeft.CreateHandles(
-            {
-                label:`Save`, icon:`save`,
-                size: ui.FLAGS.SIZE_S,
-                flavor:ui.FLAGS.CTA,// variant:ui.FLAGS.FRAME,
-                group:`file-actions`
-            },
-            {
-                label:`Export`, icon:`download`,
-                size: ui.FLAGS.SIZE_S,
-                flavor:ui.FLAGS.CTA, variant:ui.FLAGS.FRAME,
-                group:`file-actions`
-            },
-            {
-                command: this._modalDisplayOpts,
-                size: ui.FLAGS.SIZE_S,
-                cl:nkm.uilib.buttons.Tool,
-                group:`family`
-            },
-            {
-                command: this._modalFamilyOpts,
-                size: ui.FLAGS.SIZE_S,
-                group:`family`
-            },
-            {
-                member: { owner: this, id: `_btnSelectSubFamily` },
-                cl: nkm.uilib.inputs.Select,
-                group:`family`
-            },
-            {
-                command: this._modalSubFamilyOpts,
-                size: ui.FLAGS.SIZE_S,
-                group:`family`
-            },
-            {
-                label:`Load`, icon:`directory-download`,
-                size: ui.FLAGS.SIZE_S,
-                group:`external`
-            });
+        this._toolbarLeft.options = {
+            inline: true,
+            defaultWidgetClass: nkm.uilib.buttons.Button,
+            handles: [
+                {
+                    label: `Save`, icon: `save`,
+                    size: ui.FLAGS.SIZE_S,
+                    flavor: ui.FLAGS.CTA,// variant:ui.FLAGS.FRAME,
+                    group: `file-actions`
+                },
+                {
+                    label: `Export`, icon: `download`,
+                    size: ui.FLAGS.SIZE_S,
+                    flavor: ui.FLAGS.CTA, variant: ui.FLAGS.FRAME,
+                    group: `file-actions`
+                },
+                {
+                    command: this._modalDisplayOpts,
+                    size: ui.FLAGS.SIZE_S,
+                    cl: nkm.uilib.buttons.Tool,
+                    group: `family`
+                },
+                {
+                    command: this._modalFamilyOpts,
+                    size: ui.FLAGS.SIZE_S,
+                    group: `family`
+                },
+                {
+                    member: { owner: this, id: `_btnSelectSubFamily` },
+                    cl: nkm.uilib.inputs.Select,
+                    group: `family`
+                },
+                {
+                    command: this._modalSubFamilyOpts,
+                    size: ui.FLAGS.SIZE_S,
+                    group: `family`
+                },
+                {
+                    label: `Load`, icon: `directory-download`,
+                    size: ui.FLAGS.SIZE_S,
+                    group: `external`
+                }
+            ]
+        };
 
         this._btnSelectSubFamily.visible = false;
-        this.forwardData.To(this._btnSelectSubFamily, { dataMember:`_subFamiliesCatalog` });
+        this.forwardData.To(this._btnSelectSubFamily, { dataMember: `_subFamiliesCatalog` });
 
         this._title = new ui.manipulators.Text(ui.dom.El("div", { class: "title font-large" }, this));
         this._title.Set("---");

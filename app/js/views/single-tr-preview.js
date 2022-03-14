@@ -66,9 +66,11 @@ class SingleImportPreview extends ui.views.View {
         this._previewBox = ui.dom.El(`div`, { class: `item preview` }, this._host);
 
         this._svgRenderer = this.Add(mkfWidgets.GlyphCanvasRenderer, `item renderer`, this._previewBox);
-        this._svgRenderer.drawGuides = true;
-        this._svgRenderer.centered = false;
-        this._svgRenderer.drawLabels = true;
+        this._svgRenderer.options = {
+            drawGuides: true,
+            drawLabels: true,
+            centered: false,
+        };
 
     }
 
