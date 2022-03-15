@@ -4,6 +4,7 @@ const ui = nkm.ui;
 
 const mkfData = require(`../data`);
 const mkfInspectors = require(`./inspectors`);
+const mkfOperations = require(`../operations`);
 
 class FontEditorHeader extends nkm.datacontrols.ControlView {
     constructor() { super(); }
@@ -112,7 +113,13 @@ class FontEditorHeader extends nkm.datacontrols.ControlView {
                 {
                     label: `Load`, icon: `directory-download`,
                     size: ui.FLAGS.SIZE_S,
-                    group: `external`
+                    group: `external`,
+                    trigger: {
+                        fn: () => {
+                            mkfOperations.commands.ImportExternalFileMultiple.emitter = this;
+                            mkfOperations.commands.ImportExternalFileMultiple.Execute(this._data);
+                        }
+                    },
                 }
             ]
         };

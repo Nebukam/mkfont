@@ -2,13 +2,10 @@
 
 module.exports = {
 
-    SetSVG: require(`./action-set-svg`),
     SetAscent: require(`./action-set-ascent`),
     SetEM: require(`./action-set-em-units`),
-    PathScale: require(`./action-path-scale`),
-    PathTranslate: require(`./action-path-translate`),
-    PathBaselineScaleAll:require(`./action-path-baseline-scale-all`),
-    PathCenterScaleAll:require(`./action-path-center-scale-all`),
-
+    SetPathData: require(`./action-set-path-data`),
+    CreateGlyph: require(`./action-create-glyph`),
+    SetProperty: require(`./action-set-property-value`)
     
 }

@@ -4,14 +4,14 @@ const actions = nkm.actions;
 
 const { clipboard } = require('electron');
 
-const ActionSetSVG = require(`../actions/action-set-svg`);
+const ActionSetPathData = require(`../actions/action-set-path-data`);
 
 class CmdClipboardReadSVG extends actions.CommandAction {
     constructor() { super(); }
 
     _Init() {
         super._Init();
-        this._actionClass = ActionSetSVG;
+        this._actionClass = ActionSetPathData;
         this._shortcut = actions.Keystroke.CreateFromString("Ctrl V");
         this.Disable();
     }

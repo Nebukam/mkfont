@@ -9,7 +9,7 @@ const svg2ttf = require('svg2ttf');
 
 const mkfData = require(`../../data`);
 
-const ActionSetSVG = require(`../actions/action-set-svg`);
+const ActionSetPathData = require(`../actions/action-set-path-data`);
 
 class CmdGenerateTTFFont extends actions.Command {
     constructor() { super(); }

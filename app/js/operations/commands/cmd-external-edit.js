@@ -7,7 +7,7 @@ const fs = require('fs');
 
 const mkfData = require(`../../data`);
 
-const ActionSetSVG = require(`../actions/action-set-svg`);
+const ActionSetPathData = require(`../actions/action-set-svg`);
 
 class CmdExternalEdit extends actions.Command {
     constructor() { super(); }

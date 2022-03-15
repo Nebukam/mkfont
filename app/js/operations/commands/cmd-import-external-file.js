@@ -6,9 +6,9 @@ const u = nkm.utils;
 const { clipboard } = require('electron');
 const fs = require('fs');
 
+const UNICODE = require(`../../unicode`);
 const mkfData = require(`../../data`);
-
-const ActionSetSVG = require(`../actions/action-set-svg`);
+const mkfActions = require(`../actions`);
 
 class CmdImportExternalFile extends actions.Command {
     constructor() { super(); }
@@ -17,15 +17,12 @@ class CmdImportExternalFile extends actions.Command {
         super._Init();
         this._Bind(this._OnPicked);
         this._glyphInfos = null;
-        this._importInspector = null;
     }
 
     set glyphInfos(p_value) { this._glyphInfos = p_value; }
     get glyphInfos() { return this._glyphInfos; }
 
     _InternalExecute() {
-
-        console.log(`CmdImportExternalFile -> `, this._context);
 
         // - File picker
         // - DIALOG popup management
@@ -69,44 +66,41 @@ class CmdImportExternalFile extends actions.Command {
                 actions: [{ label: `Okay` }],
                 origin: this, flavor: nkm.com.FLAGS.WARNING
             });
+            this._Cancel();
+            return;
+        }
+
+
+        let
+            editor = this._emitter.editor,
+            family = editor.data,
+            subFamily = family.selectedSubFamily;
+
+        // Check if glyph exists
+        let
+            variant = this._context,
+            glyph = variant.glyph,
+            unicodeInfos;
+
+        if (glyph.isNull) {
+            // Need to create a new glyph!
+            unicodeInfos = glyph.unicodeInfos;
+            editor.Do(mkfActions.CreateGlyph, {
+                family: family,
+                unicode: unicodeInfos.u,
+                pathData: svgStats
+            });
         } else {
-
-            if (!this._importInspector) {
-                this._importInspector = nkm.ui.UI.Rent(`mkfont-single-tr-preview`);
-            }
-
-            let glyphInfos = null;
-            let subFamily = this._emitter.editor.data.selectedSubFamily;;
-
-            if(u.isInstanceOf(this._context, mkfData.Glyph)){
-                glyphInfos = this._context.unicodeInfos;
-            }else if(u.isInstanceOf(this._context, mkfData.GlyphVariant)){
-                glyphInfos = this._context.glyph.unicodeInfos;
-            }else{
-                throw new Error(`Context is not a glyph`);
-            }
-            
-            //this._importInspector.data = ;
-            
-            this._importInspector.glyphInfos = glyphInfos;
-            this._importInspector.importedGlyph = svgStats;
-            this._importInspector.subFamily = subFamily;
-            this._importInspector.data = subFamily.family.transformSettings;
-
-            nkm.dialog.Push({
-                title: `Tweaks`,
-                //message: `Tweak the imported data to make sure it fits!`,
-                content: [{ cl: this._importInspector, donotrelease: true }],
-                actions: [
-                    { label: `Looks good`, flavor: nkm.ui.FLAGS.CTA,  }, //variant: nkm.ui.FLAGS.FRAME
-                    { label: `Cancel`, trigger: { fn: this._Cancel, thisArg: this } }
-                ],
-                grow:true,
-                origin: this,
+            unicodeInfos = glyph.unicodeInfos;
+            editor.Do(mkfActions.SetProperty, {
+                target: variant,
+                id: mkfData.IDS.PATH_DATA,
+                value: svgStats
             });
         }
 
         this._Success();
+
     }
 
     _OnImportContinue() {

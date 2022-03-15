@@ -9,5 +9,5 @@ module.exports = {
     FilterList: require(`./cat-list`),
     FilterRoot: require(`./cat-root`),
     
-    
+    ImportListRoot: require(`./import-list-root`),
 }

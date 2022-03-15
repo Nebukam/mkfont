@@ -16,8 +16,6 @@ const fs = require('fs');
 
 com.BINDINGS.Expand(require(`./bindings`)); //!important
 
-const SET_SVG = new mkfOperations.actions.SetSVG();
-
 /**
  * SteamGameFinder allows you to find which multiplayer games are shared within a group of steam users
  */

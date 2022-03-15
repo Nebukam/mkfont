@@ -4,11 +4,11 @@ const nkm = require(`@nkmjs/core`);
 const ui = nkm.ui;
 const inputs = nkm.uilib.inputs;
 const uilib = nkm.uilib;
-const operations = require(`../../operations/index`);
 
 const UNICODE = require(`../../unicode`);
 const mkfData = require(`../../data`);
 const mkfWidgets = require(`../../widgets`);
+const mkfOperations = require(`../../operations`);
 
 const TransformSettingsInspector = require(`./tr-settings-inspector`);
 
@@ -27,7 +27,7 @@ class GlyphVariantInspectorItem extends nkm.datacontrols.ControlWidget {
 
     _Init() {
         super._Init();
-        this._svgPaste = operations.commands.ClipboardReadSVG;
+        this._svgPaste = mkfOperations.commands.ClipboardReadSVG;
 
         this._builder.defaultControlClass = mkfWidgets.PropertyControl;
         this._builder.defaultCSS = `control`;
@@ -115,8 +115,8 @@ class GlyphVariantInspectorItem extends nkm.datacontrols.ControlWidget {
                     variant: ui.FLAGS.MINIMAL,
                     trigger: {
                         fn: () => {
-                            operations.commands.ImportExternalFile.emitter = this;
-                            operations.commands.ImportExternalFile.Execute(this._data);
+                            mkfOperations.commands.ImportExternalFile.emitter = this;
+                            mkfOperations.commands.ImportExternalFile.Execute(this._data);
                         }
                     },
                     group: `read`

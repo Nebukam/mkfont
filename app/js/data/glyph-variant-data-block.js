@@ -73,6 +73,8 @@ class GlyphVariantDataBlock extends SimpleDataEx {
 
         let uVal = parseInt(this.Resolve(IDS.UNICODE), 16);
 
+        //this._transformSettings.UpdateTransform();
+
         dom.SAtt(glyph, IDS.WIDTH, this._subFamily.Get(IDS.MONOSPACE) ? this._subFamily.Get(IDS.WIDTH) : this.Resolve(IDS.WIDTH), true);
         dom.SAtt(glyph, IDS.HEIGHT, this.Resolve(IDS.HEIGHT), true);
         //dom.SAtt(glyph, IDS.GLYPH_NAME, this.Resolve(IDS.GLYPH_NAME));

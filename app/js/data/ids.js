@@ -308,6 +308,14 @@ class IDS {
             desc: ``
         },
 
+        
+        [this.PATH]: {
+            recompute: true,
+        },
+        [this.PATH_DATA]: {
+            recompute: true,
+        },
+
         // Misc
 
         [this.COLOR_PREVIEW]: {
