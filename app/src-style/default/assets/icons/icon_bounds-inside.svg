@@ -4,23 +4,22 @@
       .cls-1, .cls-2 {
         fill: none;
         stroke: #fff;
+        stroke-linecap: round;
+        stroke-linejoin: round;
       }
 
       .cls-1 {
-        stroke-linecap: round;
-        stroke-linejoin: round;
         stroke-width: 5px;
         opacity: 0.5;
       }
 
       .cls-2 {
-        stroke-miterlimit: 10;
         stroke-width: 10px;
       }
     </style>
   </defs>
   <g id="main">
     <rect class="cls-1" x="10" y="10" width="80" height="80" rx="10"/>
-    <circle class="cls-2" cx="50" cy="49.93" r="25.53"/>
+    <rect class="cls-2" x="31.84" y="31.84" width="36.31" height="36.31"/>
   </g>
 </svg>

@@ -20,7 +20,7 @@ class SubFamilyInspector extends nkm.datacontrols.InspectorView {
         //{ options:{ propertyId:mkfData.IDS.WEIGHT_CLASS } },
 
         { cl:mkfWidgets.ControlHeader, options:{ label:`Resolution` } },
-        { options:{ propertyId:mkfData.IDS.EM_UNITS, command:mkfOperations.commands.SetEMUnits } },
+        { options:{ propertyId:mkfData.IDS.EM_UNITS, command:mkfOperations.commands.SetEM } },
         { options:{ propertyId:mkfData.IDS.EM_RESAMPLE } },
         
         { cl:mkfWidgets.ControlHeader, options:{ label:`Metrics` } },
@@ -48,7 +48,7 @@ class SubFamilyInspector extends nkm.datacontrols.InspectorView {
     _Init() {
         super._Init();
 
-        this._svgPaste = operations.commands.ClipboardReadSVG;
+        this._svgPaste = operations.commands.ImportClipboard;
         //this._builder.preProcessDataFn = this._Bind(this._PreprocessControlData);
         //TODO ::: IDS.ASCENT => this._Bind(this._SetAscent)
 

@@ -80,6 +80,7 @@ class IDS {
     static trReference = nkm.data.catalogs.CreateFrom({ name: `Transform reference`, autoSort: false }, [
         { name: `Imported bounds`, value: 0, icon: 'bounds-outside' },
         { name: `Glyph bounds`, value: 1, icon: 'bounds-inside' },
+        { name: `Mixed bounds`, value: 2, icon: 'bounds-mixed' },
     ]);
 
     static trScaleModes = nkm.data.catalogs.CreateFrom({ name: `Scale`, autoSort: false }, [
@@ -107,8 +108,8 @@ class IDS {
 
     static trHorAlign = nkm.data.catalogs.CreateFrom({ name: `Horizontal anchoring`, autoSort: false }, [
         { name: `Bound min x`, value: 0, icon: 'font-bounds-xmin' },
-        { name: `Horizontal spread`, value: 1, icon: 'center-hor' },
         { name: `Bound max x`, value: 2, icon: 'font-bounds-xmax' },
+        { name: `Horizontal spread`, value: 1, icon: 'center-hor' },
         //{ name: `To Value`, value: 2, icon: 'edit' },
     ]);
 
@@ -130,6 +131,9 @@ class IDS {
     static TR_WIDTH_SHIFT = 'tr-width-shift';
     static TR_WIDTH_PUSH = 'tr-width-push';
     
+    //
+    static IMPORT_PREFIX = 'import-prefix';
+    static IMPORT_SEPARATOR = 'import-separator';
 
     static infos = {
 
@@ -209,7 +213,7 @@ class IDS {
             inputType: inputs.Number,
             label: `EM Size`,
             inputOptions: { step: 10, min: 20, max: 32000 },
-            desc: `specifies the number of coordinate units on the "em square", an abstract square whose height is the intended distance between lines of type in the same type size. This is the size of the design grid on which glyphs are laid out.`,
+            desc: `specifies the number of coordinate units on the "em square", an abstract square whose height is the intended distance between lines of type in the same type size.\nThis is the size of the design grid on which glyphs are laid out.`,
         },
         [this.CAP_HEIGHT]: {
             recompute: true,
@@ -257,14 +261,14 @@ class IDS {
             inputType: inputs.Boolean,
             inputOptions: { size: ui.FLAGS.SIZE_XS },
             label: `EM Resample`,
-            desc: `If enabled, changing the EM Size will scale other metrics & glyphs. Disable this if you want to affect rendering size only.`
+            desc: `If enabled, changing the EM Size will scale other metrics & glyphs.\nDisable this if you want to affect rendering size only.`
         },
         [this.MONOSPACE]: {
             recompute: true,
             inputType: inputs.Boolean,
             inputOptions: { size: ui.FLAGS.SIZE_XS },
             label: `Monospace`,
-            desc: `If enabled, glyphs width will be overriden by the default font width value. Override happen at export time and does not affect custom data.`
+            desc: `If enabled, glyphs width will be overriden by the default font width value.\nOverride happen at export time and does not affect custom data.`
         },
 
         // Glyph properties
@@ -330,7 +334,7 @@ class IDS {
             inputType: inputs.SliderOnly,
             label: `Preview size`,
             inputOptions: { changeOnInput: true, step: 1, min: 100, max: 250, size: ui.FLAGS.SIZE_XXS },
-            desc: `Preview size`
+            desc: `Define the size of individual items in the list.`
         },
 
         // Import settings
@@ -362,14 +366,14 @@ class IDS {
             inputType: inputs.Number,
             label: `Shift`,
             inputOptions: { step: 1, min: 0, max: 5000, size: ui.FLAGS.SIZE_XXS },
-            desc: `Shifts the advance`
+            desc: `Shifts the X-advance.\nValues between -1 & 1 are treated as percentage of the glyph' width.\ni.e, 0.12 will be 12% of the glyph width.`
         },
         [this.TR_WIDTH_PUSH]: {
             transform:true,
             inputType: inputs.Number,
             label: `Push`,
             inputOptions: { step: 1, min: 0, max: 5000, size: ui.FLAGS.SIZE_XXS },
-            desc: `Expands advance`
+            desc: `Expands glyph X-advance.\nValues between -1 & 1 are treated as percentage of the glyph' width.\ni.e, 0.12 will be 12% of the glyph width.`
         },
 
         [this.TR_VER_ALIGN]: {
@@ -400,6 +404,19 @@ class IDS {
             label: `Anchor`,
             inputOptions: { catalog: this.trHorAlignAnchors, size: ui.FLAGS.SIZE_M },
             desc: `...`
+        },
+
+        [this.IMPORT_PREFIX]: {
+            transform:true,
+            inputType: inputs.Text,
+            label: `Control prefix`,
+            desc: `Prefix used to check where the unicode definition starts in the filename.\nThe prefix and all characters before will be ignored.`
+        },
+        [this.IMPORT_SEPARATOR]: {
+            transform:true,
+            inputType: inputs.Text,
+            label: `Separator`,
+            desc: `Separator character in filenames.\nUsed to separate unicode values\ni.e char_U+0000, char_U+0000_U+0000, char_l_i_g_a`
         },
 
     }

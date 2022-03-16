@@ -23,6 +23,8 @@ class ActionCreateGlyph extends actions.Action {
 
         p_operation.createdGlyph = newGlyph; // Store created glyph
 
+        newGlyph.CommitUpdate();
+
     }
 
     _InternalUndo() {

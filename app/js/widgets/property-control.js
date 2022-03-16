@@ -4,6 +4,7 @@ const uilib = nkm.uilib;
 const inputs = nkm.uilib.inputs;
 
 const mkfData = require(`../data`);
+const mkfOperations = require(`../operations`);
 
 const __flag_inherited = `inherited`;
 
@@ -38,7 +39,7 @@ class PropertyControl extends nkm.datacontrols.ControlWidget {
             .To(`hideOverride`)
             .To(`subData`, null, null)
             .To(`inputOnly`, null, null)
-            .To(`command`);
+            .To(`command`, null, mkfOperations.commands.SetProperty);
 
         this._dataPreProcessor = this.constructor.__ppdata;
 
@@ -121,6 +122,7 @@ class PropertyControl extends nkm.datacontrols.ControlWidget {
         else { this._labelCtnr.style.removeProperty(`display`); }
     }
 
+    get propertyId(){ return this._valueID; }
     set propertyId(p_id) {
 
         this._valueID = p_id;

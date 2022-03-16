@@ -241,7 +241,7 @@ class GlyphGroupsView extends ui.views.View {
     _RefreshItems() {
         for (let i = 0; i < this._displayList.count; i++) {
             let item = this._displayList.At(i);
-            if (`_UpdateGlyphPreview` in item) { item._UpdateGlyphPreview(); }
+            //if (`_UpdateGlyphPreview` in item) { item._UpdateGlyphPreview(); }
         }
     }
 

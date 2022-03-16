@@ -65,8 +65,8 @@ class SingleImportPreview extends ui.views.View {
 
         this._previewBox = ui.dom.El(`div`, { class: `item preview` }, this._host);
 
-        this._svgRenderer = this.Add(mkfWidgets.GlyphCanvasRenderer, `item renderer`, this._previewBox);
-        this._svgRenderer.options = {
+        this._glyphRenderer = this.Add(mkfWidgets.GlyphCanvasRenderer, `item renderer`, this._previewBox);
+        this._glyphRenderer.options = {
             drawGuides: true,
             drawLabels: true,
             centered: false,
@@ -76,7 +76,7 @@ class SingleImportPreview extends ui.views.View {
 
     set subFamily(p_value) {
         this._contextInfos = p_value ? p_value._contextInfos : null;
-        this._svgRenderer.contextInfos = this._contextInfos;
+        this._glyphRenderer.contextInfos = this._contextInfos;
     }
 
     set glyphInfos(p_value) {
@@ -90,8 +90,8 @@ class SingleImportPreview extends ui.views.View {
 
     _OnDataUpdated(p_data) {
         super._OnDataUpdated(p_data);
-        this._svgRenderer.drawHorAxis = p_data.Get(mkfData.IDS.TR_VER_ALIGN).value == 2;
-        this._svgRenderer.drawVerAxis = p_data.Get(mkfData.IDS.TR_HOR_ALIGN).value != 0;
+        this._glyphRenderer.drawHorAxis = p_data.Get(mkfData.IDS.TR_VER_ALIGN).value == 2;
+        this._glyphRenderer.drawVerAxis = p_data.Get(mkfData.IDS.TR_HOR_ALIGN).value != 0;
         this._UpdatePathTransforms();
     }
 
@@ -100,9 +100,9 @@ class SingleImportPreview extends ui.views.View {
         if (!this._importedGlyph) { this._transformedPath = null; return; }
 
         this._transformedData = SVGOPS.FitPath(this._data, this._contextInfos, this._importedGlyph);
-        this._svgRenderer.glyphWidth = this._transformedData.width; 
-        this._svgRenderer.glyphPath = this._transformedData.path;
-        this._svgRenderer.Draw();
+        this._glyphRenderer.glyphWidth = this._transformedData.width; 
+        this._glyphRenderer.glyphPath = this._transformedData.path;
+        this._glyphRenderer.Draw();
 
     }
 

@@ -12,6 +12,8 @@ class ActionSetPropertyValue extends actions.Action {
 
     _InternalDo(p_operation, p_merge = false) {
 
+        console.log(`SetPropertyValue`, p_operation);
+
         let
             target = p_operation.target,
             propertyId = p_operation.id,
@@ -20,33 +22,35 @@ class ActionSetPropertyValue extends actions.Action {
 
         p_operation.oldValue = oldValue;
         target.Set(propertyId, newValue, true);
-        this._UpdateValue(newValue, oldValue);
+        this._UpdateValue(target, newValue, oldValue);
         target.CommitUpdate();
 
     }
 
-    _UpdateValue(p_from, p_to) {
+    _UpdateValue(p_target, p_from, p_to) {
 
     }
 
     _InternalUndo() {
         let
+            target = this._operation.target,
             oldValue = this._operation.oldValue,
             newValue = this._operation.value;
 
         target.Set(this._operation.id, oldValue, true);
-        this._UpdateValue(oldValue, newValue);
+        this._UpdateValue(target, oldValue, newValue);
         target.CommitUpdate();
     }
 
     _InternalRedo() {
 
         let
+            target = this._operation.target,
             oldValue = this._operation.oldValue,
             newValue = this._operation.value;
 
         target.Set(this._operation.id, newValue, true);
-        this._UpdateValue(newValue, oldValue);
+        this._UpdateValue(target, newValue, oldValue);
         target.CommitUpdate();
 
     }

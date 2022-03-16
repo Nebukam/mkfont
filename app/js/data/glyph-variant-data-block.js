@@ -10,6 +10,7 @@ const IDS = require(`./ids`);
 const TransformSettings = require(`./tr-settings-data-block`);
 
 const svgpath = require('svgpath');
+const ContentUpdater = require(`../content-updater`);
 const UNICODE = require('../unicode');
 
 const domparser = new DOMParser();
@@ -28,10 +29,10 @@ class GlyphVariantDataBlock extends SimpleDataEx {
         this._values = {
             [IDS.H_ORIGIN_X]: { value: null },
             [IDS.H_ORIGIN_Y]: { value: null },
-            [IDS.WIDTH]: { value: null, override:true },
+            [IDS.WIDTH]: { value: null, override: true },
             [IDS.V_ORIGIN_X]: { value: null },
             [IDS.V_ORIGIN_Y]: { value: null },
-            [IDS.HEIGHT]: { value: null, override:false },
+            [IDS.HEIGHT]: { value: null, override: false },
             [IDS.PATH]: { value: '' },
             [IDS.PATH_DATA]: { value: null },
             [IDS.OUT_OF_BOUNDS]: { value: false }
@@ -48,7 +49,7 @@ class GlyphVariantDataBlock extends SimpleDataEx {
 
     get resolutionFallbacks() { return [this._transformSettings, this._glyph, this._subFamily]; }
 
-    get transformSettings(){ return this._transformSettings; }
+    get transformSettings() { return this._transformSettings; }
 
     set glyph(p_value) { this._glyph = p_value; }
     get glyph() { return this._glyph; }
@@ -78,11 +79,11 @@ class GlyphVariantDataBlock extends SimpleDataEx {
         dom.SAtt(glyph, IDS.WIDTH, this._subFamily.Get(IDS.MONOSPACE) ? this._subFamily.Get(IDS.WIDTH) : this.Resolve(IDS.WIDTH), true);
         dom.SAtt(glyph, IDS.HEIGHT, this.Resolve(IDS.HEIGHT), true);
         //dom.SAtt(glyph, IDS.GLYPH_NAME, this.Resolve(IDS.GLYPH_NAME));
-        dom.SAtt(glyph, IDS.GLYPH_NAME, `${`${uVal}`.padStart(4,'0')}`);
-        
+        dom.SAtt(glyph, IDS.GLYPH_NAME, `${`${uVal}`.padStart(4, '0')}`);
+
         dom.SAtt(glyph, IDS.UNICODE, `${UNICODE.GetUnicodeCharacter(uVal)}`);
 
-        
+
         // Flip
         let glyphPath = svgpath(this.Get(IDS.PATH))
             .scale(1, -1)
@@ -93,8 +94,24 @@ class GlyphVariantDataBlock extends SimpleDataEx {
 
     }
 
-    _OnSubFamilyValueUpdated(p_subFamily, p_valueObj) {
+    CommitValueUpdate(p_id, p_valueObj, p_oldValue, p_silent = false) {
+        super.CommitValueUpdate(p_id, p_valueObj, p_oldValue, p_silent);
+        let infos = IDS.infos[p_id];
+        if (infos.recompute && this._subFamily) {
+            this._ScheduleTransformationUpdate();
+        }
+    }
 
+    _OnSubFamilyValueUpdated(p_subFamily, p_id, p_valueObj, p_oldValue) {
+        this._ScheduleTransformationUpdate();
+    }
+
+    _ScheduleTransformationUpdate() {
+        ContentUpdater.Push(this, this._ApplyTransformUpdate);
+    }
+
+    _ApplyTransformUpdate(){
+        this._transformSettings.UpdateTransform();
     }
 
     _CleanUp() {

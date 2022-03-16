@@ -26,13 +26,13 @@ class ActionSetEM extends ActionSetPropertyValue {
 
     // Expected operation format : { target:SimpleDataBlock, id:`ID`, value:*, resample:bool }
 
-    _UpdateValue(p_from, p_to) {
+    _UpdateValue(p_target, p_from, p_to) {
         let
             resample = this._operation.resample,
-            scaleFactor = p_to / p_from;
+            scaleFactor = p_from / p_to;
 
         if (resample) {
-            
+
             // Need to scale all subFamily metrics
             // - Ascent
             // - Descent
@@ -44,9 +44,11 @@ class ActionSetEM extends ActionSetPropertyValue {
             // - Push
             // - Manual scale factor if any
 
+            let subFamily = p_target;
+
             for (let s = 0; s < subFamilyIDs.length; s++) {
-                let id = subFamilyIDs[s];
-                value = subFamily.Get(id);
+                let id = subFamilyIDs[s],
+                    value = subFamily.Get(id);
                 if (value != null) { subFamily.Set(id, value * scaleFactor); }
             }
 
@@ -54,13 +56,19 @@ class ActionSetEM extends ActionSetPropertyValue {
                 list = subFamily.family._glyphs.internalArray,
                 tn = transformIDs.length;
 
-            for (let g = 0, n = list.length; i < n; i++) {
+            for (let g = 0, n = list.length; g < n; g++) {
 
-                let transform = list[i].GetVariant(subFamily)._transformSettings;
+                let variant = list[g].GetVariant(subFamily),
+                    transform = variant._transformSettings,
+                    pathData = variant.Get(mkfData.IDS.PATH_DATA);
+
+                if (pathData) {
+                    SVGOPS.ScalePathData(pathData, scaleFactor);
+                }
 
                 for (let t = 0; t < tn; t++) {
-                    let id = transformIDs[t];
-                    value = transform.Get(id);
+                    let id = transformIDs[t],
+                        value = transform.Get(id);
                     if (value != null) { transform.Set(id, value * scaleFactor); }
                 }
 

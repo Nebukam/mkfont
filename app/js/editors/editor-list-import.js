@@ -5,10 +5,10 @@ const ui = nkm.ui;
 const svgpath = require('svgpath');
 
 const mkfData = require(`../data`);
-const mkfInspectors = require(`../editors/inspectors`);
+const mkfInspectors = require(`./inspectors`);
 const mkfWidgets = require(`../widgets`);
 
-class MultipleImportPreview extends ui.views.View {
+class EditorListImport extends nkm.datacontrols.Editor {
     constructor() { super(); }
 
     _Init() {
@@ -50,7 +50,7 @@ class MultipleImportPreview extends ui.views.View {
                 'height': '100%',
                 //'aspect-ratio': '1/1',
                 'flex': '0 0 100%',                
-                'background-color': 'rgba(0,0,0,0.6)',
+                'background-color': '#1b1b1b',
                 'border-radius':'3px', 
                 'grid-column-start': '3',
                 'grid-row': '1 / span 2',
@@ -74,7 +74,12 @@ class MultipleImportPreview extends ui.views.View {
 
         this._importListBrowser = this.Add(mkfWidgets.lists.ImportListRoot, `list`, this._host);
 
-        this._svgRenderer = this.Add(mkfWidgets.GlyphCanvasRenderer, `preview`, this._host);
+        this._glyphRenderer = this.Add(mkfWidgets.GlyphCanvasRenderer, `preview`, this._host);
+        this._glyphRenderer.options = {
+            drawGuides: true,
+            drawLabels: true,
+            centered: false,
+        };
     }
 
     set subFamily(p_value) {
@@ -86,11 +91,34 @@ class MultipleImportPreview extends ui.views.View {
         this._importListBrowser.data = p_value;
     }
 
+    _OnInspectedDataChanged(p_oldData){
+        super._OnInspectedDataChanged(p_oldData);
+        if(this._inspectedData){ this._UpdatePreview(); }
+    }
+
     _OnDataUpdated(p_data) {
         super._OnDataUpdated(p_data);
+        if(this._inspectedData){ this._UpdatePreview(); }
+    }
+
+    _UpdatePreview(){
+
+        let subFamily = this._inspectedData.GetOption(`subFamily`),
+            contextInfos = subFamily._contextInfos,
+            pathData = this._inspectedData.GetOption(`svgStats`),
+            transformedPath = SVGOPS.FitPath(
+                this._data,
+                contextInfos,
+                pathData
+            );
+
+        this._glyphRenderer.contextInfos = contextInfos;
+        this._glyphRenderer.glyphWidth = transformedPath.width;
+        this._glyphRenderer.glyphPath = transformedPath.path;
+        this._glyphRenderer.Draw();
     }
 
 }
 
-module.exports = MultipleImportPreview;
-ui.Register(`mkfont-multiple-import-preview`, MultipleImportPreview);
+module.exports = EditorListImport;
+ui.Register(`mkfont-list-import-editor`, EditorListImport);

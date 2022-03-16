@@ -21,7 +21,7 @@ class ImportListRoot extends lists.FolderListRoot {
 
     _PostInit() {
         super._PostInit();
-        //this.focusArea = this;
+        this.focusArea = null;
     }
 
     _Style() {
@@ -29,6 +29,7 @@ class ImportListRoot extends lists.FolderListRoot {
             ':host': {
 
             },
+            '.header':{ 'display':'none' }
         }, super._Style());
     }
 

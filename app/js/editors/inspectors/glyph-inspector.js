@@ -17,7 +17,7 @@ class GlyphInspector extends nkm.datacontrols.InspectorView {
 
     _Init() {
         super._Init();
-        this._svgPaste = operations.commands.ClipboardReadSVG;
+        this._svgPaste = operations.commands.ImportClipboard;
         this._ctrls = [];
         this._idList = [
             mkfData.IDS.GLYPH_NAME,
@@ -45,7 +45,7 @@ class GlyphInspector extends nkm.datacontrols.InspectorView {
                 'margin-bottom': '3px'
             },
             '.identity': {
-                'margin-bottom': '10px',
+                'margin-bottom': '0',
             },
             '.body': {
 

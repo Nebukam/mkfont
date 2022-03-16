@@ -52,7 +52,7 @@ class FamilyDataBlock extends SimpleDataEx {
         this._defaultSubFamily = new SubFamily();
         this._defaultSubFamily._isDefault = true;
 
-        
+
         this._nullGlyph = new Glyph();
         this._nullGlyph.family = this;
         this._nullGlyph._SetDefaultVariant(this._defaultSubFamily);
@@ -67,9 +67,9 @@ class FamilyDataBlock extends SimpleDataEx {
         this.AddSubFamily(this._defaultSubFamily);
     }
 
-    get nullGlyph(){ return this._nullGlyph; }
+    get nullGlyph() { return this._nullGlyph; }
 
-    get transformSettings(){ return this._transformSettings; }
+    get transformSettings() { return this._transformSettings; }
 
     get defaultSubFamily() { return this._defaultSubFamily; }
 
@@ -191,10 +191,12 @@ class FamilyDataBlock extends SimpleDataEx {
         this._scheduledUpdate.Schedule();
     }
 
-    _OnSubFamilyValueUpdated(p_subFamily, p_valueObj) {
+    _OnSubFamilyValueUpdated(p_subFamily, p_id, p_valueObj, p_oldValue) {
+        let infos = IDS.GetInfos(p_id);
+        if (!infos || !infos.recompute) { return; }
         for (let i = 0, n = this._glyphs.count; i < n; i++) {
             let g = this._glyphs.At(i);
-            g._OnSubFamilyValueUpdated(p_subFamily, p_valueObj);
+            g._OnSubFamilyValueUpdated(p_subFamily, p_id, p_valueObj, p_oldValue);
         }
         this._scheduledUpdate.Schedule();
     }

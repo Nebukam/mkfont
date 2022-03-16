@@ -7,9 +7,6 @@ const { clipboard } = require('electron');
 const fs = require('fs');
 
 const mkfData = require(`../../data`);
-const mkfViews = require(`../../views`);
-
-const ActionSetPathData = require(`../actions/action-set-path-data`);
 
 class CmdImportExternalFileMultiple extends actions.Command {
     constructor() { super(); }
@@ -24,7 +21,7 @@ class CmdImportExternalFileMultiple extends actions.Command {
         this._importCatalog = nkm.data.catalogs.CreateFrom({ name: `Import list` });
         this._importCatalog.expanded = true;
 
-        this._importInspector = null;
+        this._importEditor = null;
         this._importTransformationSettings = new mkfData.TransformSettings();
 
     }
@@ -66,6 +63,8 @@ class CmdImportExternalFileMultiple extends actions.Command {
             return;
         }
 
+        let subFamily = this._context.selectedSubFamily;
+
         for (let i = 0; i < list.length; i++) {
 
             let filePath = nkm.utils.PATH.Sanitize(list[i]);
@@ -81,7 +80,9 @@ class CmdImportExternalFileMultiple extends actions.Command {
                 let entryOptions = {
                     filePath: filePath,
                     name: nkm.utils.PATH.name(filePath),
-                    svgStats: svgStats
+                    svgStats: svgStats,
+                    subFamily: subFamily,
+                    transforms: this._importTransformationSettings
                 };
 
                 console.log(entryOptions);
@@ -99,24 +100,25 @@ class CmdImportExternalFileMultiple extends actions.Command {
 
         //this._importInspector.data = ;
 
-        if (!this._importInspector) {
-            this._importInspector = nkm.ui.UI.Rent(`mkfont-multiple-import-preview`);
+        if (!this._importEditor) {
+            this._importEditor = nkm.ui.UI.Rent(`mkfont-list-import-editor`);
         }
 
         //this._importTransformationSettings
 
-        this._importInspector.subFamily = this._context.selectedSubFamily;
-        this._importInspector.data = this._importTransformationSettings;
-        this._importInspector.catalog = this._importCatalog;
+        this._importEditor.subFamily = subFamily;
+        this._importEditor.data = this._importTransformationSettings;
+        this._importEditor.catalog = this._importCatalog;
 
         nkm.dialog.Push({
             title: `List import`,
             //message: `Tweak the imported data to make sure it fits!`,
-            content: [{ cl: this._importInspector, donotrelease: true }],
+            content: [{ cl: this._importEditor, donotrelease: true }],
             actions: [
                 { label: `Looks good`, flavor: nkm.ui.FLAGS.CTA, trigger: { fn: this._OnImportContinue } }, //variant: nkm.ui.FLAGS.FRAME
                 { label: `Cancel`, trigger: { fn: this._Cancel, thisArg: this } }
             ],
+            icon:`directory-download`,
             grow: true,
             origin: this,
         });

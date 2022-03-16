@@ -2,6 +2,7 @@ const nkm = require(`@nkmjs/core`);
 const u = nkm.utils;
 const ui = nkm.ui;
 
+
 class GlyphIdentity extends ui.Widget {
     constructor() { super(); }
 
@@ -50,8 +51,13 @@ class GlyphIdentity extends ui.Widget {
             size: ui.FLAGS.SIZE_XS
         };
 
-        this._hexTag = this._tagBar.CreateHandle();
-        this._hexTag.bgColor = `#3c3c3c`;
+        let hexCtnr = this._tagBar.CreateHandle({ cl: ui.WidgetButton });
+        hexCtnr.options = {
+            htitle: `Copy value to clipboard`,
+            trigger: { fn: () => { navigator.clipboard.writeText((`U+${this._glyphInfos.u}`).toUpperCase()); }, thisArg:this }
+        }
+        this._hexTag = hexCtnr.Add(nkm.uilib.widgets.Tag, `tag`);
+        this._hexTag.bgColor = `rgba(var(--col-cta-rgb),0.5)`;
 
         this._blockTag = this._tagBar.CreateHandle();
         this._blockTag.bgColor = `black`;
@@ -63,6 +69,9 @@ class GlyphIdentity extends ui.Widget {
     }
 
     set glyphInfos(p_infos) {
+
+        this._glyphInfos = p_infos;
+
         if (!p_infos) {
             this._title.Set(`---`);
             this._blockTag.label = `---`; this._blockTag.htitle = null;
@@ -72,8 +81,8 @@ class GlyphIdentity extends ui.Widget {
             return;
         }
 
-        this._title.Set(p_infos.name || `0×${p_infos.u}`);
-        this._hexTag.label = `0×${p_infos.u}`;
+        this._title.Set(p_infos.name || `U+${p_infos.u}`);
+        this._hexTag.label = `U+${p_infos.u}`;
 
         if (p_infos.block) {
             this._blockTag.label = p_infos.block.name;

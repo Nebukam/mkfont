@@ -12,7 +12,7 @@ class TransformSettingsInspector extends nkm.datacontrols.InspectorView {
     constructor() { super(); }
 
     static __controls = [
-        { cl: mkfWidgets.ControlHeader, options: { label: `Glyph boundaries` }, css:'header' },
+        { cl: mkfWidgets.ControlHeader, options: { label: `Boundaries` }, css:'header' },
         { options: { propertyId: mkfData.IDS.TR_REFERENCE, inputOnly:true }, css:'small' },
         { options: { propertyId: mkfData.IDS.TR_SCALE_MODE, inputOnly:true }, css:'small' },
         { options: { propertyId: mkfData.IDS.TR_SCALE_FACTOR }, requireData:true, hideWhen:{ fn:(owner)=>{ return owner.data.Get(mkfData.IDS.TR_SCALE_MODE).value == 4; } } },

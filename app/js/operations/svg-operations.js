@@ -273,6 +273,11 @@ class SVGOperations {
             path = svgpath(path)
                 .translate(-bbox.x, -bbox.y)
                 .toString();
+        }else if (refMode == 2){
+            widthRef = bbox.width;
+            path = svgpath(path)
+                .translate(-bbox.x, 0)
+                .toString();
         }
 
 
@@ -342,6 +347,21 @@ class SVGOperations {
             bbox : this.GetBBox(path)
         };
 
+    }
+
+    static ScalePathData(p_pathData, p_scale){
+        p_pathData.width *= p_scale;
+        p_pathData.height *= p_scale;
+        p_pathData.path = svgpath(p_pathData.path).scale(p_scale, p_scale).toString();
+        let bbox = p_pathData.BBox;
+        bbox.x *= p_scale;
+        bbox.y *= p_scale;
+        bbox.width *= p_scale;
+        bbox.height *= p_scale;
+        bbox.left = bbox.x;
+        bbox.top = bbox.y;
+        bbox.right = bbox.x + bbox.width;
+        bbox.bottom = bbox.y + bbox.height;
     }
 
     //#endregion

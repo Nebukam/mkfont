@@ -129,18 +129,18 @@ class GlyphDataBlock extends SimpleDataEx {
         }
     }
 
-    _OnSubFamilyValueUpdated(p_subFamily, p_valueObj) {
+    _OnSubFamilyValueUpdated(p_subFamily, p_id, p_valueObj, p_oldValue) {
         let glyphVariant;
         if (p_subFamily._isDefault) {
             // Forward update to all
             for (let i = 0, n = this._glyphVariants.count; i < n; i++) {
                 glyphVariant = this.GetVariant(this._glyphVariants.At(i));
-                glyphVariant._OnSubFamilyValueUpdated(p_subFamily, p_valueObj);
+                glyphVariant._OnSubFamilyValueUpdated(p_subFamily, p_id, p_valueObj, p_oldValue);
             }
         } else {
             // Forward update only to mapped glyphVariant
             glyphVariant = this.GetVariant(p_subFamily);
-            glyphVariant._OnSubFamilyValueUpdated(p_subFamily, p_valueObj);
+            glyphVariant._OnSubFamilyValueUpdated(p_subFamily, p_id, p_valueObj, p_oldValue);
         }
     }
 

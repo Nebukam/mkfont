@@ -14,7 +14,7 @@ class FontEditor extends nkm.uiworkspace.editors.EditorEx {
 
     static __default_viewportClass = mkfViewports.GlyphGroupViewport;
     static __default_headerClass = require(`./editor-font-header`);
-    //static __default_footerClass = require(`./editor-font-footer`);
+    static __default_footerClass = require(`./editor-font-footer`);
 
     _Init() {
         super._Init();

@@ -182,13 +182,10 @@ class SubFamilyDataBlock extends SimpleDataEx {
             for (let i = 0; i < list.length; i++) {
                 let glyphVariant = list[i].GetVariant(this);
                 if (!glyphVariant.transformSettings._values[p_id].override) {
-                    glyphVariant.transformSettings.CommitUpdate();
+                    glyphVariant._ScheduleTransformationUpdate();
                 }
             }
         }
-
-        //this.CommitUpdate();
-
     }
 
     CommitUpdate() {

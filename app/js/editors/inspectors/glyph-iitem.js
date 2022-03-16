@@ -27,7 +27,7 @@ class GlyphVariantInspectorItem extends nkm.datacontrols.ControlWidget {
 
     _Init() {
         super._Init();
-        this._svgPaste = mkfOperations.commands.ClipboardReadSVG;
+        this._svgPaste = mkfOperations.commands.ImportClipboard;
 
         this._builder.defaultControlClass = mkfWidgets.PropertyControl;
         this._builder.defaultCSS = `control`;
@@ -64,7 +64,7 @@ class GlyphVariantInspectorItem extends nkm.datacontrols.ControlWidget {
                 //'margin-bottom': '10px',
                 'flex': `1 1 auto`,
                 'justify-content': `center`,
-                //'border-bottom':'1px solid rgba(127, 127, 127, 0.1)',
+                'border-top': `1px solid rgba(127, 127, 127, 0.1)`,
             },
             '.settings': {
                 'flex': '1 0 100%',
@@ -94,18 +94,19 @@ class GlyphVariantInspectorItem extends nkm.datacontrols.ControlWidget {
 
     _Render() {
 
+        this._importToolbar = this.Add(ui.WidgetBar, `toolbar`, this._host);
+
         this._previewBox = ui.dom.El(`div`, { class: `preview` }, this._host);
         this._svgPlaceholder = new ui.manipulators.Text(ui.dom.El(`div`, { class: `box placeholder` }, this._previewBox), false, false);
 
-        this._svgRenderer = this.Add(mkfWidgets.GlyphCanvasRenderer, `renderer`, this._previewBox);
-        this._svgRenderer.options = {
+        this._glyphRenderer = this.Add(mkfWidgets.GlyphCanvasRenderer, `renderer`, this._previewBox);
+        this._glyphRenderer.options = {
             drawGuides: true,
             drawLabels: true,
             centered: false,
         };
 
 
-        this._importToolbar = this.Add(ui.WidgetBar, `toolbar`, this._host);
         this._importToolbar.options = {
             inline: true,
             defaultWidgetClass: nkm.uilib.buttons.Tool,
@@ -124,13 +125,19 @@ class GlyphVariantInspectorItem extends nkm.datacontrols.ControlWidget {
                 {
                     icon: `clipboard-read`, htitle: `Import clipboard content`,
                     variant: ui.FLAGS.MINIMAL,
+                    trigger: {
+                        fn: () => {
+                            mkfOperations.commands.ImportClipboard.emitter = this;
+                            mkfOperations.commands.ImportClipboard.Execute(this._data);
+                        }
+                    },
                     group: `read`
-                },
+                },/*
                 {
                     icon: `edit`, htitle: `Edit using default SVG editor`,
                     variant: ui.FLAGS.MINIMAL,
                     group: `read`, member: { owner: this, id: `_editInPlaceBtn` }
-                },
+                },*/
                 {
                     icon: `clipboard-write`, htitle: `Copy glyph to clipboard`,
                     variant: ui.FLAGS.MINIMAL,
@@ -148,7 +155,7 @@ class GlyphVariantInspectorItem extends nkm.datacontrols.ControlWidget {
         this._oobTag.options = {
             label:`out of bounds`,
             flavor:nkm.com.FLAGS.ERROR,
-            htitle:`The glyph is out of bounds and won't be added to the font.\n Keep it within -32000..32000`
+            htitle:`The glyph is out of bounds and won't be added to the font.\nKeep it within -32000..32000`
         };
         this._oobTag.visible = false;
 
@@ -182,13 +189,13 @@ class GlyphVariantInspectorItem extends nkm.datacontrols.ControlWidget {
             let isNullGlyph = this._data.glyph.isNull;
             this._flags.Set(__nullGlyph, isNullGlyph);
             this._writeToClipboardBtn.disabled = isNullGlyph;
-            this._editInPlaceBtn.disabled = isNullGlyph;
+            //this._editInPlaceBtn.disabled = isNullGlyph;
         }
     }
 
     _OnDataUpdated(p_data) {
         super._OnDataUpdated(p_data);
-        this._svgRenderer.Set(p_data);
+        this._glyphRenderer.Set(p_data);
         this.glyphInfos = p_data.glyph.unicodeInfos;
         this._oobTag.visible = p_data.Get(mkfData.IDS.OUT_OF_BOUNDS);
     }
