@@ -8,7 +8,7 @@ const io = nkm.io;
 const SimpleDataEx = require(`./simple-data-ex`);
 const SIGNAL = require(`../signal`);
 const IDS = require(`./ids`);
-const TransformSettings = require(`./tr-settings-data-block`);
+const ImportSettings = require(`./import-settings-data-block`);
 
 const domparser = new DOMParser();
 const svgFontString =
@@ -78,7 +78,7 @@ class SubFamilyDataBlock extends SimpleDataEx {
         this._family = null;
         this._ttfBytes = null;
 
-        this._transformSettings = new TransformSettings();
+        this._transformSettings = new ImportSettings();
         this._transformSettings.Watch(nkm.data.SIGNAL.VALUE_CHANGED, this._OnTransformSettingsUpdated, this);
 
         this._catalogItem = null;

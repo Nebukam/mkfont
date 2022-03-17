@@ -16,8 +16,6 @@ class ActionCreateGlyph extends actions.Action {
             newGlyph = new mkfData.Glyph(),
             glyphVariant = newGlyph._defaultGlyph;
 
-            console.log(p_operation);
-
         newGlyph.Set(mkfData.IDS.UNICODE, p_operation.unicode.u);
         newGlyph.unicodeInfos = p_operation.unicode;
 
@@ -27,18 +25,26 @@ class ActionCreateGlyph extends actions.Action {
         p_operation.family.AddGlyph(newGlyph);
         glyphVariant.transformSettings.UpdateTransform();
 
-        p_operation.createdGlyph = newGlyph; // Store created glyph
+        p_operation.glyph = newGlyph; // Store created glyph
 
         newGlyph.CommitUpdate();
 
     }
 
     _InternalUndo() {
-        // if prevSvgString == null, release glyph, it was NULL before.
+        let
+            targetGlyph = this._operation.glyph,
+            family = this._operation.family;
+
+        family.RemoveGlyph(targetGlyph);
     }
 
     _InternalRedo() {
+        let
+            targetGlyph = this._operation.glyph,
+            family = this._operation.family;
 
+        family.AddGlyph(targetGlyph);
     }
 
 }

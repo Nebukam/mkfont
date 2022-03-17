@@ -1,17 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100">
-  <defs>
-    <style>
-      .cls-1 {
-        fill: none;
-        stroke: #fff;
-        stroke-linecap: round;
-        stroke-linejoin: round;
-        stroke-width: 5px;
-        opacity: 0.5;
-      }
-    </style>
-  </defs>
   <g id="main">
-    <rect class="cls-1" x="10" y="10" width="80" height="80" rx="10"/>
+    <rect x="10" y="10" width="80" height="80" rx="10" fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-width="10" opacity="0.5"/>
   </g>
 </svg>

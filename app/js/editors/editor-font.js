@@ -37,7 +37,8 @@ class FontEditor extends nkm.uiworkspace.editors.EditorEx {
         //const ContentUpdater = require(`../content-updater`);
         this._dataObserver
             .Hook(nkm.data.SIGNAL.VALUE_CHANGED, this._OnDataValueChanged, this)
-            .Hook(SIGNAL.GLYPH_ADDED, this._OnGlyphAdded, this);
+            .Hook(SIGNAL.GLYPH_ADDED, this._OnGlyphAdded, this)
+            .Hook(SIGNAL.GLYPH_REMOVED, this._OnGlyphRemoved, this);
 
         this._dataPreProcessor = (p_owner, p_data) => {
             return u.isInstanceOf(p_data, mkfData.Family) ? p_data : null;
@@ -115,7 +116,8 @@ class FontEditor extends nkm.uiworkspace.editors.EditorEx {
                 this.Inspect(glyph);
             } else {
                 // No glyph associated... at all??
-                throw new Error(`Edge case, find why`);
+                console.error(`Edge case, find why`);
+                this.Inspect(null);
             }
         } else {
             this.Inspect(null);
@@ -241,11 +243,19 @@ class FontEditor extends nkm.uiworkspace.editors.EditorEx {
         }
     }
 
-    _OnGlyphAdded(p_family, p_glyph){
-        if(this._inspectedData){
-            if(this._inspectedData.unicodeInfos == p_glyph.unicodeInfos){
+    _OnGlyphAdded(p_family, p_glyph) {
+        if (this._inspectedData) {
+            if (this._inspectedData.unicodeInfos == p_glyph.unicodeInfos) {
                 this.Inspect(p_glyph);
             }
+        }
+    }
+
+    _OnGlyphRemoved(p_family, p_glyph) {
+        console.log(`glyph removed`, p_glyph, this._inspectedData);
+        if (this._inspectedData == p_glyph) {
+            p_family.nullGlyph.unicodeInfos = p_glyph.unicodeInfos;
+            this.Inspect(p_family.nullGlyph);
         }
     }
 

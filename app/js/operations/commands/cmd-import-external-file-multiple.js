@@ -22,7 +22,7 @@ class CmdImportExternalFileMultiple extends actions.Command {
         this._importCatalog.expanded = true;
 
         this._importEditor = null;
-        this._importTransformationSettings = new mkfData.TransformSettings();
+        this._importTransformationSettings = new mkfData.ImportSettings();
 
     }
 

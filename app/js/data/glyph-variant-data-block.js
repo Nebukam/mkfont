@@ -91,10 +91,10 @@ class GlyphVariantDataBlock extends SimpleDataEx {
 
         glyph.setAttribute(`d`, glyphPath);
 
-        if (this.Get(IDS.OUT_OF_BOUNDS)) {
+        if (this.Get(IDS.OUT_OF_BOUNDS) || !this.Resolve(IDS.EXPORT_GLYPH)) {
             this._fontObject.remove();
         } else if (this._subFamily) {
-            this._subFamily.fontObject.appendChild(this._fontObject)
+            this._subFamily.fontObject.appendChild(this._fontObject);
         }
 
     }

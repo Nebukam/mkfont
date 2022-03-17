@@ -13,6 +13,8 @@ class EditorListImport extends nkm.datacontrols.Editor {
 
     _Init() {
         super._Init();
+        this._builder = new nkm.datacontrols.helpers.ControlBuilder(this);
+        this.forwardData.To(this._builder);
     }
 
     _Style() {
@@ -22,7 +24,7 @@ class EditorListImport extends nkm.datacontrols.Editor {
                 'flex-flow': 'column wrap',
                 'flex': '0 0 auto',
                 'grid-template-columns': 'max-content max-content max-content',
-                'grid-template-rows': '80px auto',
+                'grid-template-rows': '90px auto',
                 'grid-gap': '10px'
             },
             '.item': {
@@ -32,14 +34,14 @@ class EditorListImport extends nkm.datacontrols.Editor {
             '.list': {
                 'position': 'relative',
                 'height': '0',
-                'width': '350px',
+                'width': '300px',
                 'overflow': 'hidden',
                 //'padding': '10px',
                 'background-color': 'rgba(0,0,0,0.2)',
                 'grid-column-start': '2',
                 'grid-row': '1 / span 2',
-                'overflow':'auto',
-                'min-height':'100%',
+                'overflow': 'auto',
+                'min-height': '100%',
             },
             '.settings': {
                 'width': '300px'
@@ -49,17 +51,25 @@ class EditorListImport extends nkm.datacontrols.Editor {
                 'width': '400px',
                 'height': '100%',
                 //'aspect-ratio': '1/1',
-                'flex': '0 0 100%',                
+                'flex': '0 0 100%',
                 'background-color': '#1b1b1b',
-                'border-radius':'3px', 
+                'border-radius': '3px',
                 'grid-column-start': '3',
                 'grid-row': '1 / span 2',
             },
             '.identity': {
                 'width': '100%'
             },
-            '.header':{
-                'height':'50px'
+            '.header': {
+                'display': 'flex',
+                'flex-flow': 'column nowrap',
+                'flex': '1 1 auto',
+                'min-height': '0',
+                'overflow': 'auto',
+            },
+            '.control': {
+                'flex': '0 1 auto',
+                'margin-bottom': '5px'
             }
         }, super._Style());
     }
@@ -67,7 +77,16 @@ class EditorListImport extends nkm.datacontrols.Editor {
     _Render() {
         super._Render();
 
-        this._header = ui.El(`div`, {class:`item header`}, this._host);
+        this._header = ui.El(`div`, { class: `item header` }, this._host);
+
+        this._builder.defaultControlClass = mkfWidgets.PropertyControl;
+        this._builder.defaultCSS = `control`;
+        this._builder.host = this._header;
+        this._builder.Build([
+            { cl: mkfWidgets.ControlHeader, options: { label: `Options` } },
+            { options: { propertyId: mkfData.IDS.IMPORT_PREFIX } },
+            { options: { propertyId: mkfData.IDS.IMPORT_SEPARATOR } },
+        ]);
 
         this._settingsInspector = this.Add(mkfInspectors.TransformSettings, `item settings`);
         this.forwardData.To(this._settingsInspector);
@@ -80,6 +99,7 @@ class EditorListImport extends nkm.datacontrols.Editor {
             drawLabels: true,
             centered: false,
         };
+
     }
 
     set subFamily(p_value) {
@@ -91,17 +111,18 @@ class EditorListImport extends nkm.datacontrols.Editor {
         this._importListBrowser.data = p_value;
     }
 
-    _OnInspectedDataChanged(p_oldData){
+    _OnInspectedDataChanged(p_oldData) {
         super._OnInspectedDataChanged(p_oldData);
-        if(this._inspectedData){ this._UpdatePreview(); }
+        if (this._inspectedData) { this._UpdatePreview(); }
     }
 
     _OnDataUpdated(p_data) {
         super._OnDataUpdated(p_data);
-        if(this._inspectedData){ this._UpdatePreview(); }
+        console.log(`thisdata = `, this._data);
+        if (this._inspectedData) { this._UpdatePreview(); }
     }
 
-    _UpdatePreview(){
+    _UpdatePreview() {
 
         let subFamily = this._inspectedData.GetOption(`subFamily`),
             contextInfos = subFamily._contextInfos,

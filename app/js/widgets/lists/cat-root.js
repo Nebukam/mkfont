@@ -12,6 +12,7 @@ const CatList = require(`./cat-list`);
 class CatRoot extends lists.FolderListRoot {
     constructor() { super(); }
 
+    static __draggable = false;
     static __defaultItemClass = CatItem;
     static __defaultDirClass = CatList;
 

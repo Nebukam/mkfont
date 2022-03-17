@@ -33,7 +33,7 @@ class GlyphDataBlock extends SimpleDataEx {
         this._values = {
             [IDS.GLYPH_NAME]: { value: '' },
             [IDS.UNICODE]: { value: null },
-            [IDS.PATH]: { value: '' }
+            [IDS.EXPORT_GLYPH]: { value: true }
         };
 
         this._family = null;
@@ -60,9 +60,9 @@ class GlyphDataBlock extends SimpleDataEx {
     set family(p_value) { this._family = p_value; }
     get family() { return this._family; }
 
-    get unicodeInfos() { 
-        if(!this._unicodeInfos){ return UNICODE.GetSingle(this.Get(IDS.UNICODE)); }
-        return this._unicodeInfos; 
+    get unicodeInfos() {
+        if (!this._unicodeInfos) { return UNICODE.GetSingle(this.Get(IDS.UNICODE)); }
+        return this._unicodeInfos;
     }
     set unicodeInfos(p_value) { this._unicodeInfos = p_value; }
 

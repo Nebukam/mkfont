@@ -10,6 +10,7 @@ const BlockItem = require(`./block-item`);
 class BlockRoot extends lists.FolderListRoot {
     constructor() { super(); }
 
+    static __draggable = false;
     static __defaultItemClass = BlockItem;
 
     _Init() {

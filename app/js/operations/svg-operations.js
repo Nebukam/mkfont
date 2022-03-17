@@ -153,13 +153,18 @@ class SVGOperations {
                     result.BBox = this.GetBBox(mergedPaths);
 
                     let viewBox = svg.getAttribute(`viewBox`);
+
                     if (viewBox) {
                         let vbSplit = viewBox.split(` `);
-                        result.width = vbSplit[2];
-                        result.height = vbSplit[3];
+                        result.width = Number(vbSplit[2]);
+                        result.height = Number(vbSplit[3]);
                     } else {
-                        result.width = result.BBox.width;
-                        result.height = result.BBox.height;
+                        let
+                            wAtt = Number(svg.getAttribute(`width`)),
+                            hAtt = Number(svg.getAttribute(`height`));
+
+                        result.width = Number.isNaN(wAtt) ? result.BBox.width : wAtt;
+                        result.height = Number.isNaN(hAtt) ? result.BBox.height : hAtt;
                     }
                 }
 

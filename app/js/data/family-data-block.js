@@ -11,7 +11,7 @@ const IDS = require(`./ids`);
 const SimpleDataEx = require(`./simple-data-ex`);
 const SubFamily = require(`./sub-family-data-block`);
 const Glyph = require(`./glyph-data-block`);
-const TransformSettings = require(`./tr-settings-data-block`);
+const ImportSettings = require(`./import-settings-data-block`);
 
 const ContentUpdater = require(`../content-updater`);
 
@@ -40,10 +40,10 @@ class FamilyDataBlock extends SimpleDataEx {
             [IDS.MATHEMATICAL]: { value: 350 },
             [IDS.IDEOGRAPHIC]: { value: 400 },
 
-            [IDS.PREVIEW_SIZE]: { value: 100 },
+            [IDS.PREVIEW_SIZE]: { value: 70 },
         };
 
-        this._transformSettings = nkm.com.Rent(TransformSettings);
+        this._transformSettings = nkm.com.Rent(ImportSettings);
 
         this._glyphs = new nkm.collections.List();
         this._glyphsMap = {};

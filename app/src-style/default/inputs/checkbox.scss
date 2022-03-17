@@ -9,6 +9,8 @@
 
 :host {
 
+    
+
 }
 
 .field{
@@ -18,12 +20,17 @@
     height: var(--size);
     cursor: pointer;
 
-    background: url(../assets/icons/icon_checkbox-off.svg) no-repeat;
+    background-image: url(../assets/icons/icon_checkbox-off.svg);
+    background-repeat: no-repeat;
     background-size: contain;
+
+    background-color: rgba(32, 32, 32, 0.65);
+    border-radius: 5%;
+
 }
 
 :host(.checked) .field {
-    background: url(../assets/icons/icon_checkbox-on.svg) no-repeat;
-    background-size: contain;
+    background-image: url(../assets/icons/icon_checkbox-on.svg);
+    
 }
 

@@ -3,7 +3,8 @@
 module.exports = {
 
     SetEM: require(`./action-set-em`),
-    CreateGlyph: require(`./action-create-glyph`),
+    CreateGlyph: require(`./action-glyph-create`),
+    DeleteGlyph: require(`./action-glyph-delete`),
     SetProperty: require(`./action-set-property-value`)
     
 }

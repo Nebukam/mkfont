@@ -7,7 +7,7 @@ const ImportEmpty = require(`./cmd-import-empty`);
 const ImportClipboard = require(`./cmd-import-clipboard`);
 const ImportExternalFile = require(`./cmd-import-external-file`);
 const ImportExternalFileMultiple = require(`./cmd-import-external-file-multiple`);
-const DeleteGlyph = require(`./cmd-delete-glyph`);
+const DeleteGlyph = require(`./cmd-glyph-delete`);
 
 module.exports = {
 

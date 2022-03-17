@@ -13,6 +13,11 @@ const mkfOperations = require(`../../operations`);
 
 const GlyphVariantInspector = require(`./glyph-iitem`);
 
+const longPangram = 
+`Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.
+
+Ut wisi enim ad minim veniam, quis nostrud exercitation ulliam corper suscipit lobortis nisl ut aliquip ex ea commodo consequat.`;
+
 class SubFamilyInspector extends nkm.datacontrols.InspectorView {
     constructor() { super(); }
 
@@ -122,12 +127,13 @@ class SubFamilyInspector extends nkm.datacontrols.InspectorView {
 
         this._text = this.Add(nkm.uilib.inputs.Textarea, `text`, this._footer);
         this._text.options = {
-            currentValue: `By Jove, my quick study of lexicography won a prize!`,
+            currentValue: longPangram,//`By Jove, my quick study of lexicography won a prize!`,
             //size: ui.FLAGS.SIZE_XXS,
             onSubmit: { fn: (p_i, p_t) => { this._pangramRenderer.text = p_t; } }
         }
 
         this._pangramRenderer.fontSize = 20;
+        this._pangramRenderer.text = longPangram;
     }
 
 

@@ -67,7 +67,7 @@ class GlyphVariantInspectorItem extends nkm.datacontrols.ControlWidget {
                 'border-top': `1px solid rgba(127, 127, 127, 0.1)`,
             },
             '.settings': {
-                'flex': '1 0 100%',
+                'flex': '0 0 auto',
                 'margin-bottom': '10px'
             },
             ':host(.null-glyph) .settings, :host(:not(.null-glyph)) .placeholder': { 'display': 'none' },
@@ -82,7 +82,7 @@ class GlyphVariantInspectorItem extends nkm.datacontrols.ControlWidget {
                 'text-align': `center`,
                 'font-size': '10em',
                 'user-select': 'none',
-                'color': 'rgba(255,255,255,0.05)',
+                'color': 'rgba(255,255,255,0.25)',
                 'font-family': 'monospace',
                 'line-height': '100%'
             },
@@ -159,6 +159,13 @@ class GlyphVariantInspectorItem extends nkm.datacontrols.ControlWidget {
                 {
                     icon: `delete`, htitle: `Delete Glyph from font`,
                     variant: ui.FLAGS.MINIMAL,
+                    trigger: {
+                        fn: () => {
+                            console.log(`Yo ?`);
+                            mkfOperations.commands.DeleteGlyph.emitter = this;
+                            mkfOperations.commands.DeleteGlyph.Execute(this._data);
+                        }
+                    },
                     group: `delete`, member: { owner: this, id: `_deleteGlyphBtn` }
                 },
             ]

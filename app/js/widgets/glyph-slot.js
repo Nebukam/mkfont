@@ -35,10 +35,6 @@ class GlyphSlot extends nkm.datacontrols.ControlWidget {
 
         this._dataObserver.Hook(SIGNAL.VARIANT_UPDATED, this._UpdateGlyphPreview, this);
 
-        this._subFamilyObserver = new nkm.com.signals.Observer();
-        this._subFamilyObserver
-            .Hook(SIGNAL.GLYPH_ADDED, this._OnGlyphVariantAdded, this)
-            .Hook(SIGNAL.GLYPH_REMOVED, this._OnGlyphVariantRemoved, this);
     }
 
     _PostInit() {
@@ -63,7 +59,7 @@ class GlyphSlot extends nkm.datacontrols.ControlWidget {
                 'box-sizing': 'border-box',
                 'padding': '10px',
                 'border-radius': '5px',
-                'background-color': '#1a1a1a',
+                'background-color': '#161616',
                 'align-items': 'center',
                 'overflow': 'clip',
             },
@@ -124,7 +120,7 @@ class GlyphSlot extends nkm.datacontrols.ControlWidget {
                 'text-align': `center`,
                 'font-size': 'calc(var(--preview-size) * 0.5)',
                 'user-select': 'none',
-                'color': 'rgba(255,255,255,0.05)',
+                'color': 'rgba(255,255,255,0.25)',
                 'font-family': 'monospace',
                 'line-height': '100%'
             },
@@ -163,12 +159,11 @@ class GlyphSlot extends nkm.datacontrols.ControlWidget {
     set subFamily(p_value) {
         if (this._subFamily == p_value) { return; }
         this._subFamily = p_value;
-        this._subFamilyObserver.ObserveOnly(p_value);
     }
 
     get glyphInfos() { return this._glyphInfos; }
     set glyphInfos(p_value) {
-        if (this._glyphInfos == p_value) { return; }
+        //if (this._glyphInfos == p_value) { return; }
 
         this._glyphInfos = p_value;
 
@@ -199,17 +194,6 @@ class GlyphSlot extends nkm.datacontrols.ControlWidget {
     _OnDataUpdated(p_data) {
         super._OnDataUpdated(p_data);
         this._UpdateGlyphPreview();
-    }
-
-    _OnGlyphVariantAdded(p_subFamily, p_glyphVariant) {
-        if (!this._data || !this._data.isNull) { return; }
-        if (this._glyphInfos == p_glyphVariant.glyph.unicodeInfos) {
-            this.data = p_glyphVariant.glyph;
-        }
-    }
-
-    _OnGlyphVariantRemoved(p_subFamily, p_glyphVariant) {
-
     }
 
     _UpdateGlyphPreview() {

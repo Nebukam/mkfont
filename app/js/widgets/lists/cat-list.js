@@ -10,10 +10,12 @@ const CatItem = require(`./cat-item`);
 class CatList extends lists.FolderList {
     constructor() { super(); }
 
+    static __draggable = false;
     static __defaultItemClass = CatItem;
 
     _Init() {
         super._Init();
+        this._extensions.Remove(this._extDrag);
     }
 
     _PostInit() {

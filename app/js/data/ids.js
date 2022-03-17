@@ -73,14 +73,16 @@ class IDS {
 
     static COLOR_PREVIEW = 'color-preview';
     static PREVIEW_SIZE = 'preview-size';
+
     static OUT_OF_BOUNDS = 'out-of-bounds';
+    static EXPORT_GLYPH = 'export-glyph';
 
     // Import properties
 
     static trReference = nkm.data.catalogs.CreateFrom({ name: `Transform reference`, autoSort: false }, [
         { name: `Imported bounds`, value: 0, icon: 'bounds-outside' },
-        { name: `Glyph bounds`, value: 1, icon: 'bounds-inside' },
         { name: `Mixed bounds`, value: 2, icon: 'bounds-mixed' },
+        { name: `Glyph bounds`, value: 1, icon: 'bounds-inside' },
     ]);
 
     static trScaleModes = nkm.data.catalogs.CreateFrom({ name: `Scale`, autoSort: false }, [
@@ -333,7 +335,7 @@ class IDS {
             recompute: true,
             inputType: inputs.SliderOnly,
             label: `Preview size`,
-            inputOptions: { changeOnInput: true, step: 1, min: 100, max: 250, size: ui.FLAGS.SIZE_XXS },
+            inputOptions: { changeOnInput: true, step: 1, min: 50, max: 250, size: ui.FLAGS.SIZE_XXS },
             desc: `Define the size of individual items in the list.`
         },
 
@@ -409,7 +411,7 @@ class IDS {
         [this.IMPORT_PREFIX]: {
             transform:true,
             inputType: inputs.Text,
-            label: `Control prefix`,
+            label: `Name prefix`,
             desc: `Prefix used to check where the unicode definition starts in the filename.\nThe prefix and all characters before will be ignored.`
         },
         [this.IMPORT_SEPARATOR]: {
@@ -419,7 +421,13 @@ class IDS {
             desc: `Separator character in filenames.\nUsed to separate unicode values\ni.e char_U+0000, char_U+0000_U+0000, char_l_i_g_a`
         },
 
-
+        
+        [this.EXPORT_GLYPH]: {
+            label: `Export`,
+            inputType: inputs.Boolean,
+            inputOptions: { size: ui.FLAGS.SIZE_XS },
+            desc: `Whtether this glyph will be added to the exported font or not.`
+        },
         [this.OUT_OF_BOUNDS]: {
             label: `Out-of-bounds`,
             desc: `Separator character in filenames.\nUsed to separate unicode values\ni.e char_U+0000, char_U+0000_U+0000, char_l_i_g_a`

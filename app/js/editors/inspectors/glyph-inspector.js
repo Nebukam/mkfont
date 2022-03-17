@@ -15,6 +15,12 @@ const GlyphIItem = require(`./glyph-iitem`);
 class GlyphInspector extends nkm.datacontrols.InspectorView {
     constructor() { super(); }
 
+    static __controls = [
+        { cl: mkfWidgets.ControlHeader, options: { label: `Export` } },
+        { options: { propertyId: mkfData.IDS.EXPORT_GLYPH } },
+        //{ options: { propertyId: mkfData.IDS.GLYPH_NAME } },//, css:'separator' 
+    ];
+
     _Init() {
         super._Init();
         this._svgPaste = operations.commands.ImportClipboard;
@@ -31,6 +37,10 @@ class GlyphInspector extends nkm.datacontrols.InspectorView {
         this._dataObserver
             .Hook(nkm.com.SIGNAL.ITEM_ADDED, this._OnVariantAdded, this)
             .Hook(nkm.com.SIGNAL.ITEM_REMOVED, this._OnVariantRemoved, this);
+
+        this._builder.defaultControlClass = mkfWidgets.PropertyControl;
+        this._builder.defaultCSS = `control`;
+
     }
 
     _Style() {
@@ -49,17 +59,27 @@ class GlyphInspector extends nkm.datacontrols.InspectorView {
             },
             '.body': {
 
+            },
+            '.settings': {
+                'flex': '1 0 100%',
+                'margin-bottom': '10px'
+            },
+            '.control': {
+                'margin-bottom': '5px',
             }
         }, super._Style());
     }
 
     _Render() {
-        super._Render();
+
         this._glyphIdentity = this.Add(mkfWidgets.GlyphIdentity, `identity`, this._host);
         //this._body = ui.El(`div`, { class: `body` }, this._host);
         this._variantCtrl = this.Add(GlyphIItem, `variant`, this._host);
-
         this.forwardData.To(this._variantCtrl, { dataMember: `defaultGlyph` });
+
+        this._builder.host = ui.El(`div`, { class: `settings` }, this._host);
+
+        super._Render();
 
     }
 
@@ -69,6 +89,13 @@ class GlyphInspector extends nkm.datacontrols.InspectorView {
 
         } else {
             this._glyphIdentity.glyphInfos = this._data.unicodeInfos;
+
+            if (this._data.isNull) {
+                this._builder.host.style.setProperty(`display`, `none`);
+            } else {
+                this._builder.host.style.removeProperty(`display`);
+            }
+
         }
     }
 

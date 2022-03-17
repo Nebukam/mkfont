@@ -5,6 +5,8 @@ const u = nkm.utils;
 const ui = nkm.ui;
 
 const UNICODE = require(`../../unicode`);
+const SIGNAL = require(`../../signal`);
+const ContentUpdater = require("../../content-updater");
 const mkfWidgets = require(`../../widgets`);
 const GlyphGroup = require(`./glyph-group`);
 const GlyphGroupHeader = require(`./glyph-group-header`);
@@ -26,10 +28,15 @@ class GlyphGroupsView extends ui.views.View {
 
         this._OnIndexRequestCB = null;
         this._domStreamer = null;
+        this._unicodeMap = new Map();
 
         this._indexOffset = 0;
         this._indexCount = 0;
         this._referenceList = null;
+
+        this._dataObserver
+            .Hook(SIGNAL.GLYPH_ADDED, this._OnGlyphAdded, this)
+            .Hook(SIGNAL.GLYPH_REMOVED, this._OnGlyphRemoved, this);
 
     }
 
@@ -64,7 +71,7 @@ class GlyphGroupsView extends ui.views.View {
 
         this._domStreamer = this.Add(ui.helpers.DOMStreamer, 'dom-stream', this._host);
         this._domStreamer
-            //.Watch(ui.SIGNAL.ITEM_REQUESTED, this._OnItemRequest, this)
+            .Watch(ui.SIGNAL.ITEM_CLEARED, this._OnItemCleared, this)
             .Watch(ui.SIGNAL.ITEM_REQUEST_RANGE_UPDATE, this._OnItemRequestRangeUpdate, this);
 
         this._domStreamer.options = {
@@ -197,7 +204,7 @@ class GlyphGroupsView extends ui.views.View {
     _OnIndexRequestRange(p_streamer, p_index, p_fragment) {
         let
             index = p_index + this._indexOffset;
-            //hex = index.toString(16).padStart(4, `0`);
+        //hex = index.toString(16).padStart(4, `0`);
         let data = UNICODE.GetSingle(index);
 
         this._OnItemRequestProcessed(data, p_streamer, p_index, p_fragment);
@@ -222,14 +229,21 @@ class GlyphGroupsView extends ui.views.View {
         widget.subFamily = this._data.selectedSubFamily;
         widget.glyphInfos = p_data;
 
+        this._unicodeMap.set(p_data, widget);
+
         p_streamer.ItemRequestAnswer(p_index, widget);
 
+    }
+
+    _OnItemCleared(p_item) {
+        this._unicodeMap.delete(p_item.glyphInfos);
     }
 
     _OnItemRequestRangeUpdate() {
         this._cachedLoopStart = 0;
         this._cachedAdvance = 0;
     }
+
     //#region Catalog Management
 
     _OnDataUpdated(p_data) {
@@ -247,9 +261,35 @@ class GlyphGroupsView extends ui.views.View {
 
     //#endregion
 
-    //#region Preview tweaks
+    //#region Preview updates
 
+    _OnGlyphAdded(p_family, p_glyph) {
 
+        let
+            uInfos = p_glyph.unicodeInfos,
+            widget = this._unicodeMap.get(uInfos);
+
+        if (widget) {
+            widget.data = p_glyph;
+        }
+
+    }
+
+    _OnGlyphRemoved(p_family, p_glyph) {
+
+        let
+            uInfos = p_glyph.unicodeInfos,
+            widget = this._unicodeMap.get(uInfos);
+
+        if (widget) {
+            widget.data = p_family.nullGlyph;
+        }
+
+    }
+
+    _OnGlyphVariantRemoved(p_subFamily, p_glyphVariant) {
+
+    }
 
     //#endregion
 

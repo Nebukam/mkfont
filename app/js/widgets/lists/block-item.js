@@ -9,9 +9,11 @@ const mkfData = require(`../../data`);
 class BlockItem extends lists.FolderListItem {
     constructor() { super(); }
 
+    static __draggable = false;
 
     _Init() {
         super._Init();
+        this._extensions.Remove(this._extDrag);
     }
 
     _PostInit() {

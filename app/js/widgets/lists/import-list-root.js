@@ -9,10 +9,12 @@ const ImportListItem = require(`./import-list-item`);
 
 class ImportListRoot extends lists.FolderListRoot {
     constructor() { super(); }
+    
+    static __draggable = false;
 
     static __defaultItemClass = ImportListItem;
 
-    static __itemHeight = 50;
+    static __itemHeight = 70;
 
     _Init() {
         super._Init();
