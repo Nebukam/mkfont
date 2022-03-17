@@ -48,7 +48,7 @@ class TransformSettingsDataBlock extends SimpleDataEx {
 
         let pathData = this._glyphVariantOwner.Get(IDS.PATH_DATA);
 
-        if (!pathData) { return; }
+        if (!pathData || !this._glyphVariantOwner.subFamily) { return; }
 
         let
             path = SVGOPS.FitPath(this,

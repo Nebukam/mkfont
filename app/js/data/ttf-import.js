@@ -26,6 +26,8 @@ class TTFImport {
 
         if (!fontFace) { throw new Error(`fontFace element missing`); }
 
+        console.log(svgFont);
+
         let
             family = new Family(),
             subFamily = family.defaultSubFamily,

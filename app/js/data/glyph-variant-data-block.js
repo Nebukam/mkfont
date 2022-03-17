@@ -83,7 +83,6 @@ class GlyphVariantDataBlock extends SimpleDataEx {
 
         dom.SAtt(glyph, IDS.UNICODE, `${UNICODE.GetUnicodeCharacter(uVal)}`);
 
-
         // Flip
         let glyphPath = svgpath(this.Get(IDS.PATH))
             .scale(1, -1)
@@ -92,17 +91,25 @@ class GlyphVariantDataBlock extends SimpleDataEx {
 
         glyph.setAttribute(`d`, glyphPath);
 
+        if (this.Get(IDS.OUT_OF_BOUNDS)) {
+            this._fontObject.remove();
+        } else if (this._subFamily) {
+            this._subFamily.fontObject.appendChild(this._fontObject)
+        }
+
     }
 
     CommitValueUpdate(p_id, p_valueObj, p_oldValue, p_silent = false) {
         super.CommitValueUpdate(p_id, p_valueObj, p_oldValue, p_silent);
-        let infos = IDS.infos[p_id];
+        let infos = IDS.GetInfos(p_id);
+        if (!infos) { return; }
         if (infos.recompute && this._subFamily) {
             this._ScheduleTransformationUpdate();
         }
     }
 
     _OnSubFamilyValueUpdated(p_subFamily, p_id, p_valueObj, p_oldValue) {
+        // TODO : Room for optim here, no need to propagate udpate of EVERY property
         this._ScheduleTransformationUpdate();
     }
 
@@ -110,7 +117,7 @@ class GlyphVariantDataBlock extends SimpleDataEx {
         ContentUpdater.Push(this, this._ApplyTransformUpdate);
     }
 
-    _ApplyTransformUpdate(){
+    _ApplyTransformUpdate() {
         this._transformSettings.UpdateTransform();
     }
 

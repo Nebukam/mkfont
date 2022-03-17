@@ -419,6 +419,14 @@ class IDS {
             desc: `Separator character in filenames.\nUsed to separate unicode values\ni.e char_U+0000, char_U+0000_U+0000, char_l_i_g_a`
         },
 
+
+        [this.OUT_OF_BOUNDS]: {
+            label: `Out-of-bounds`,
+            desc: `Separator character in filenames.\nUsed to separate unicode values\ni.e char_U+0000, char_U+0000_U+0000, char_l_i_g_a`
+        },
+
+        
+
     }
 
     static GetInfos(p_id) {

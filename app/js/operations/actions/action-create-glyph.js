@@ -16,10 +16,16 @@ class ActionCreateGlyph extends actions.Action {
             newGlyph = new mkfData.Glyph(),
             glyphVariant = newGlyph._defaultGlyph;
 
-        newGlyph.Set(mkfData.IDS.UNICODE, p_operation.unicode);
+            console.log(p_operation);
+
+        newGlyph.Set(mkfData.IDS.UNICODE, p_operation.unicode.u);
+        newGlyph.unicodeInfos = p_operation.unicode;
+
         glyphVariant.Set(mkfData.IDS.PATH_DATA, p_operation.path);
+        glyphVariant.transformSettings.BatchSet(p_operation.family.selectedSubFamily.transformSettings);
 
         p_operation.family.AddGlyph(newGlyph);
+        glyphVariant.transformSettings.UpdateTransform();
 
         p_operation.createdGlyph = newGlyph; // Store created glyph
 

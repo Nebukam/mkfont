@@ -98,7 +98,7 @@ class GlyphCanvasRenderer extends ui.helpers.Canvas {
 
     }
 
-    _InternalDraw(ctx, p_delta) {
+    _InternalDraw(ctx, p_delta = 0) {
 
         this.Clear();
 
@@ -180,7 +180,7 @@ class GlyphCanvasRenderer extends ui.helpers.Canvas {
             if (this._drawLabels) { ctx.fillText('Asc', txoff, tyoff); }
 
             // Baseline
-            ctx.strokeStyle = nkm.style.Get(`--col-active`);
+            ctx.strokeStyle = nkm.style.Get(`--col-${(f.asc > f.em) ? 'warning' : 'active'}`);
             ctx.lineWidth = iscale;
             ctx.setLineDash([iscale * 2, iscale * 2]);
             ctx.beginPath();
@@ -231,12 +231,16 @@ class GlyphCanvasRenderer extends ui.helpers.Canvas {
 
             // EM
             ctx.lineWidth = iscale;
-            //ctx.setLineDash([iscale, iscale]);
             ctx.beginPath();
-            //ctx.moveTo(minx, 0);
-            //ctx.lineTo(maxx, 0);
             ctx.moveTo(minx, f.em);
             ctx.lineTo(maxx, f.em);
+            ctx.stroke();
+
+            ctx.strokeStyle = `rgba(255,255,255,0.5)`;
+            ctx.lineWidth = iscale*2;
+            ctx.beginPath();
+            ctx.moveTo(-10*iscale, f.em);
+            ctx.lineTo(0, f.em);
             ctx.stroke();
 
             if (this._drawLabels) { ctx.fillText('EM', txoff, f.em + tyoff); }

@@ -3,6 +3,7 @@ const u = nkm.utils;
 const ui = nkm.ui;
 
 const ContentUpdater = require(`../content-updater`);
+const SIGNAL = require(`../signal`);
 const mkfData = require(`../data`);
 const mkfWidgets = require(`../widgets`);
 
@@ -11,7 +12,7 @@ class FontEditorFooter extends nkm.datacontrols.ControlView {
 
     _Init() {
         super._Init();
-        this._dataObserver.Hook(mkfData.SIGNAL.SUBFAMILY_CHANGED, this._OnSubFamilyChanged, this);
+        this._dataObserver.Hook(SIGNAL.SUBFAMILY_CHANGED, this._OnSubFamilyChanged, this);
         ContentUpdater.instance
             .Watch(nkm.com.SIGNAL.UPDATED, this._OnContentUpdate, this)
             .Watch(nkm.com.SIGNAL.READY, this._OnContentUpdateComplete, this);

@@ -12,8 +12,6 @@ class ActionSetPropertyValue extends actions.Action {
 
     _InternalDo(p_operation, p_merge = false) {
 
-        console.log(`SetPropertyValue`, p_operation);
-
         let
             target = p_operation.target,
             propertyId = p_operation.id,

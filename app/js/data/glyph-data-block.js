@@ -8,7 +8,7 @@ const io = nkm.io;
 const UNICODE = require(`../unicode`);
 
 const SimpleDataEx = require(`./simple-data-ex`);
-const SIGNAL = require(`./signal`);
+const SIGNAL = require(`../signal`);
 const IDS = require(`./ids`);
 
 const GlyphVariant = require(`./glyph-variant-data-block`);
@@ -95,6 +95,7 @@ class GlyphDataBlock extends SimpleDataEx {
         p_subFamily.Watch(com.SIGNAL.RELEASED, this._OnSubFamilyReleased, this);
 
         this._Broadcast(com.SIGNAL.ITEM_ADDED, this, p_glyphVariant);
+        p_subFamily._Broadcast(SIGNAL.GLYPH_ADDED, this, p_glyphVariant);
 
     }
 
@@ -106,6 +107,7 @@ class GlyphDataBlock extends SimpleDataEx {
 
         this._Broadcast(com.SIGNAL.ITEM_REMOVED, this, glyphVariant);
 
+        p_subFamily._Broadcast(SIGNAL.GLYPH_REMOVED, this, glyphVariant);
         return this._subFamiliesMap.Get(p_subFamily);
     }
 

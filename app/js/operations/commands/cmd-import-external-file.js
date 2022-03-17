@@ -87,11 +87,10 @@ class CmdImportExternalFile extends actions.Command {
             unicodeInfos = glyph.unicodeInfos;
             editor.Do(mkfActions.CreateGlyph, {
                 family: family,
-                unicode: unicodeInfos.u,
-                pathData: svgStats
+                unicode: unicodeInfos,
+                path: svgStats
             });
         } else {
-            unicodeInfos = glyph.unicodeInfos;
             editor.Do(mkfActions.SetProperty, {
                 target: variant,
                 id: mkfData.IDS.PATH_DATA,

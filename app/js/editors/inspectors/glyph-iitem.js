@@ -95,6 +95,7 @@ class GlyphVariantInspectorItem extends nkm.datacontrols.ControlWidget {
     _Render() {
 
         this._importToolbar = this.Add(ui.WidgetBar, `toolbar`, this._host);
+        this._importToolbar.stretch = ui.WidgetBar.FLAG_STRETCH;
 
         this._previewBox = ui.dom.El(`div`, { class: `preview` }, this._host);
         this._svgPlaceholder = new ui.manipulators.Text(ui.dom.El(`div`, { class: `box placeholder` }, this._previewBox), false, false);
@@ -132,6 +133,18 @@ class GlyphVariantInspectorItem extends nkm.datacontrols.ControlWidget {
                         }
                     },
                     group: `read`
+                },
+                {
+                    icon: `new`, htitle: `Empty glyph.\nClears existing data, or create an empty glyph in place of an empty unicode slot.`,
+                    variant: ui.FLAGS.MINIMAL,
+                    trigger: {
+                        fn: () => {
+                            console.log(`Yo ?`);
+                            mkfOperations.commands.ImportEmpty.emitter = this;
+                            mkfOperations.commands.ImportEmpty.Execute(this._data);
+                        }
+                    },
+                    group: `read`
                 },/*
                 {
                     icon: `edit`, htitle: `Edit using default SVG editor`,
@@ -142,6 +155,11 @@ class GlyphVariantInspectorItem extends nkm.datacontrols.ControlWidget {
                     icon: `clipboard-write`, htitle: `Copy glyph to clipboard`,
                     variant: ui.FLAGS.MINIMAL,
                     group: `write`, member: { owner: this, id: `_writeToClipboardBtn` }
+                },
+                {
+                    icon: `delete`, htitle: `Delete Glyph from font`,
+                    variant: ui.FLAGS.MINIMAL,
+                    group: `delete`, member: { owner: this, id: `_deleteGlyphBtn` }
                 },
             ]
         };
@@ -190,6 +208,7 @@ class GlyphVariantInspectorItem extends nkm.datacontrols.ControlWidget {
             this._flags.Set(__nullGlyph, isNullGlyph);
             this._writeToClipboardBtn.disabled = isNullGlyph;
             //this._editInPlaceBtn.disabled = isNullGlyph;
+            this._deleteGlyphBtn.disabled = isNullGlyph;            
         }
     }
 

@@ -144,7 +144,14 @@ class SVGOperations {
                         .translate(-markedBBox.x, -markedBBox.y)
                         .toString();
 
+                    result.path = mergedPaths;
+                    result.BBox = this.GetBBox(mergedPaths);
+
                 } else {
+
+                    result.path = mergedPaths;
+                    result.BBox = this.GetBBox(mergedPaths);
+
                     let viewBox = svg.getAttribute(`viewBox`);
                     if (viewBox) {
                         let vbSplit = viewBox.split(` `);
@@ -156,15 +163,30 @@ class SVGOperations {
                     }
                 }
 
-                result.path = mergedPaths;
-                result.BBox = this.GetBBox(mergedPaths);
-
                 result.exists = true;
 
             }
 
         } catch (e) { console.log(e); }
 
+        return result;
+    }
+
+    static EmptySVGStats() {
+
+        let
+            path = `M 0 0 L 0 0 z`,
+            result = {
+                exists: true,
+                markedBBox: false,
+                path: path,
+                BBox: this.GetBBox(path),
+                width: 0,
+                height: 0,
+                emptyPath: true
+            };
+
+        console.log(result);
         return result;
     }
 
@@ -257,6 +279,15 @@ class SVGOperations {
             sShift = p_settings.Resolve(IDS.TR_WIDTH_SHIFT),
             sPush = p_settings.Resolve(IDS.TR_WIDTH_PUSH);
 
+        if (p_svgStats.emptyPath) {
+            return {
+                height: 0,
+                width: Math.max(sShift + sPush, 0),
+                path: p_svgStats.path,
+                bbox: p_svgStats.BBox
+            };
+        }
+
         let
             bbox = p_svgStats.BBox,
             markedBBox = p_svgStats.markedBBox,
@@ -273,7 +304,7 @@ class SVGOperations {
             path = svgpath(path)
                 .translate(-bbox.x, -bbox.y)
                 .toString();
-        }else if (refMode == 2){
+        } else if (refMode == 2) {
             widthRef = bbox.width;
             path = svgpath(path)
                 .translate(-bbox.x, 0)
@@ -344,12 +375,12 @@ class SVGOperations {
             height: Math.max(heightRef, 0),
             width: Math.max(widthRef, 0),
             path: path,
-            bbox : this.GetBBox(path)
+            bbox: this.GetBBox(path)
         };
 
     }
 
-    static ScalePathData(p_pathData, p_scale){
+    static ScalePathData(p_pathData, p_scale) {
         p_pathData.width *= p_scale;
         p_pathData.height *= p_scale;
         p_pathData.path = svgpath(p_pathData.path).scale(p_scale, p_scale).toString();

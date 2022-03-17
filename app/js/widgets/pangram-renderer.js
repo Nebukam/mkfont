@@ -7,6 +7,8 @@ const mkfData = require(`../data`);
 
 const svg2ttf = require('svg2ttf');
 
+const ContentUpdater = require(`../content-updater`);
+
 const defaultPangram = `By Jove, my quick study of lexicography won a prize!`;
 
 class PangramRenderer extends ui.Widget {
@@ -22,6 +24,8 @@ class PangramRenderer extends ui.Widget {
 
         this._Bind(this.Draw);
         this._scheduledDraw = nkm.com.DelayedCall(this.Draw, 500);
+        
+        ContentUpdater.Watch(nkm.com.SIGNAL.READY, this._OnContentReady, this);
 
     }
 
@@ -98,9 +102,17 @@ class PangramRenderer extends ui.Widget {
         this._scheduledDraw.Schedule();
     }
 
+    _OnContentReady(){
+        this._scheduledDraw.Schedule();
+    }
+
     Draw() {
 
-        return;
+        if(!ContentUpdater.ready){
+            this._scheduledDraw.Schedule();
+            return;
+        }
+        
         let subFamily = this._data;
         let ttf = svg2ttf(subFamily.fontObject.outerHTML, {});
 

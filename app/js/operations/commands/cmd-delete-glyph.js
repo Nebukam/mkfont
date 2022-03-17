@@ -10,16 +10,13 @@ const UNICODE = require(`../../unicode`);
 const mkfData = require(`../../data`);
 const mkfActions = require(`../actions`);
 
-class CmdImportClipboard extends actions.Command {
+class CmdDeleteGlyph extends actions.Command {
     constructor() { super(); }
 
     _Init() {
         super._Init();
 
-        this._shortcut = actions.Keystroke.CreateFromString("Ctrl V");
         this._glyphInfos = null;
-
-        this.Disable();
     }
 
     set glyphInfos(p_value) { this._glyphInfos = p_value; }
@@ -27,26 +24,9 @@ class CmdImportClipboard extends actions.Command {
 
     _InternalExecute() {
 
-        let svgStats = { exists: false };
+        console.log(`AHAH`);
 
-        try {
-            svgStats = SVGOPS.SVGStats(clipboard.readText());
-        } catch (e) {  console.log(e);}
-
-        console.log(svgStats);
-
-        if (!svgStats.exists) {
-            /*
-            nkm.dialog.Push({
-                title: `Invalid content`,
-                message: `Couldn't find how to use the selected file :()`,
-                actions: [{ label: `Okay` }],
-                origin: this, flavor: nkm.com.FLAGS.WARNING
-            });
-            */
-            this._Cancel();
-            return;
-        }
+        let svgStats = SVGOPS.EmptySVGStats();
 
         let
             editor = this._emitter.editor,
@@ -81,4 +61,4 @@ class CmdImportClipboard extends actions.Command {
 
 }
 
-module.exports = CmdImportClipboard;
+module.exports = CmdDeleteGlyph;

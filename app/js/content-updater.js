@@ -2,7 +2,8 @@
 
 const nkm = require(`@nkmjs/core`);
 const u = nkm.utils;
-const mkfData = require(`./data`);
+
+const SIGNAL = require(`./signal`);
 
 class ContentUpdater extends nkm.com.helpers.SingletonEx {
     constructor() { super(); }
@@ -15,6 +16,7 @@ class ContentUpdater extends nkm.com.helpers.SingletonEx {
         this._methods = new Map();
         this._totalCount = 0;
         this._processedCount = 0;
+        this._ready = false;
 
         this._delayedUpdate = nkm.com.DelayedCall(this._Bind(this._Update));
 
@@ -23,6 +25,8 @@ class ContentUpdater extends nkm.com.helpers.SingletonEx {
     static Push(p_data, p_method) {
         this.instance._Push(p_data, p_method);
     }
+
+    static get ready(){ return this.instance._ready; }
 
     _Push(p_data, p_method) {
 
@@ -33,6 +37,7 @@ class ContentUpdater extends nkm.com.helpers.SingletonEx {
             this._methods.set(p_data, array);
             this._data.push(p_data);
             this._totalCount ++;
+            this._ready = false;
         }
 
         if (array.includes(p_method)) { return; }
@@ -44,7 +49,7 @@ class ContentUpdater extends nkm.com.helpers.SingletonEx {
 
     _Update() {
 
-        let updateCount = Math.min(this._data.length, 1);
+        let updateCount = Math.min(this._data.length, 20);
         for (let i = 0; i < updateCount; i++) {
 
             let data = this._data.shift(),
@@ -64,6 +69,7 @@ class ContentUpdater extends nkm.com.helpers.SingletonEx {
         }else{
             this._processedCount = 0;
             this._totalCount = 0;
+            this._ready = true;
             this._Broadcast(nkm.com.SIGNAL.READY);
         }
 

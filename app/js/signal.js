@@ -44,6 +44,20 @@ class SIGNAL {
      */
      static SUBFAMILY_CHANGED = Symbol(`subfamily-changed`);
 
+     /**
+     * @description TODO
+     * @type {symbol}
+     * @customtag read-only
+     */
+      static GLYPH_ADDED = Symbol(`glyph-added`);
+
+      /**
+     * @description TODO
+     * @type {symbol}
+     * @customtag read-only
+     */
+       static GLYPH_REMOVED = Symbol(`glyph-removed`);
+
 }
 
 module.exports = SIGNAL;

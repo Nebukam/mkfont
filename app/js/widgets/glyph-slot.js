@@ -3,7 +3,10 @@ const ui = nkm.ui;
 const uilib = nkm.uilib;
 
 const UNICODE = require(`../unicode`);
+const SIGNAL = require(`../signal`);
+
 const mkfData = require(`../data`);
+
 const GlyphRenderer = require(`./glyph-renderer`);
 const GlyphCanvasRenderer = require(`./glyph-canvas-renderer`);
 
@@ -20,6 +23,8 @@ class GlyphSlot extends nkm.datacontrols.ControlWidget {
 
         super._Init();
 
+        this._Bind(this._UpdateGlyphPreview);
+
         this._extensions.Remove(this._extDrag);
         this._notifiesSelectionStack = true;
 
@@ -28,6 +33,12 @@ class GlyphSlot extends nkm.datacontrols.ControlWidget {
 
         this._flags.Add(this, __out_of_bounds);
 
+        this._dataObserver.Hook(SIGNAL.VARIANT_UPDATED, this._UpdateGlyphPreview, this);
+
+        this._subFamilyObserver = new nkm.com.signals.Observer();
+        this._subFamilyObserver
+            .Hook(SIGNAL.GLYPH_ADDED, this._OnGlyphVariantAdded, this)
+            .Hook(SIGNAL.GLYPH_REMOVED, this._OnGlyphVariantRemoved, this);
     }
 
     _PostInit() {
@@ -38,7 +49,7 @@ class GlyphSlot extends nkm.datacontrols.ControlWidget {
     _Style() {
         return nkm.style.Extends({
             ':host': {
-                '@':['fade-in'],
+                '@': ['fade-in'],
                 'transition': 'opacity 0.15s, transform 0.05s, box-shadow 0.05s',
                 'box-shadow': `none`,
                 'transform': 'scale(1)',
@@ -80,7 +91,7 @@ class GlyphSlot extends nkm.datacontrols.ControlWidget {
             ':host(.unpainted) .box': { 'display': 'none' },
             '.preview': {
                 'position': 'relative',
-                'border-radius':'inherit',
+                'border-radius': 'inherit',
                 //'aspect-ratio': 'var(--preview-ratio)',
                 'flex': '1 0 auto',
                 'min-height': 'var(--preview-height)',
@@ -117,16 +128,16 @@ class GlyphSlot extends nkm.datacontrols.ControlWidget {
                 'font-family': 'monospace',
                 'line-height': '100%'
             },
-            '.oob':{
-                'display':'none',
-                '@':['absolute-centered'],
-                'width':'50%'
+            '.oob': {
+                'display': 'none',
+                '@': ['absolute-centered'],
+                'width': '50%'
             },
-            ':host(.outofbounds) .oob':{
-                'display':'block !important'
+            ':host(.outofbounds) .oob': {
+                'display': 'block !important'
             },
-            ':host(.outofbounds)':{
-                'background-color':'rgba(var(--col-error-rgb), 0.5) !important'
+            ':host(.outofbounds)': {
+                'background-color': 'rgba(var(--col-error-rgb), 0.5) !important'
             }
         }, super._Style());
     }
@@ -138,7 +149,7 @@ class GlyphSlot extends nkm.datacontrols.ControlWidget {
         this._previewBox = ui.dom.El(`div`, { class: `preview` }, this._host);
 
         this._glyphPlaceholder = new ui.manipulators.Text(ui.dom.El(`div`, { class: `box placeholder` }, this._previewBox), false, false);
-        this._glyphRender = this.Add(GlyphCanvasRenderer, `box renderer`, this._previewBox);
+        this._glyphRenderer = this.Add(GlyphCanvasRenderer, `box renderer`, this._previewBox);
 
         this._label = new ui.manipulators.Text(ui.dom.El(`div`, { class: `item label` }, this._host), false, false);
         //this._oobIcon = new ui.manipulators.Icon(ui.dom.El(`div`, {class:`oob` }, this._previewBox), false, false);
@@ -152,6 +163,7 @@ class GlyphSlot extends nkm.datacontrols.ControlWidget {
     set subFamily(p_value) {
         if (this._subFamily == p_value) { return; }
         this._subFamily = p_value;
+        this._subFamilyObserver.ObserveOnly(p_value);
     }
 
     get glyphInfos() { return this._glyphInfos; }
@@ -189,11 +201,21 @@ class GlyphSlot extends nkm.datacontrols.ControlWidget {
         this._UpdateGlyphPreview();
     }
 
+    _OnGlyphVariantAdded(p_subFamily, p_glyphVariant) {
+        if (!this._data || !this._data.isNull) { return; }
+        if (this._glyphInfos == p_glyphVariant.glyph.unicodeInfos) {
+            this.data = p_glyphVariant.glyph;
+        }
+    }
+
+    _OnGlyphVariantRemoved(p_subFamily, p_glyphVariant) {
+
+    }
+
     _UpdateGlyphPreview() {
 
-
         if (!this._data || this._data.isNull) {
-            this._glyphRender.Set(null);
+            this._glyphRenderer.Set(null);
             this._glyphPlaceholder._element.style.removeProperty(`display`);
             this.classList.remove(`exists`);
             return;
@@ -201,7 +223,7 @@ class GlyphSlot extends nkm.datacontrols.ControlWidget {
 
         let glyphVariant = this._data.GetVariant(this._subFamily);
 
-        if (this._glyphRender.Set(glyphVariant)) {
+        if (this._glyphRenderer.Set(glyphVariant)) {
             this._glyphPlaceholder._element.style.display = `none`;
             this.classList.add(`exists`);
             this._flags.Set(__out_of_bounds, glyphVariant.Get(mkfData.IDS.OUT_OF_BOUNDS));

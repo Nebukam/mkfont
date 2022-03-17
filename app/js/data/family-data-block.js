@@ -5,13 +5,15 @@ const u = nkm.utils;
 const io = nkm.io;
 
 const UNICODE = require(`../unicode`);
-const SIGNAL = require(`./signal`);
+const SIGNAL = require(`../signal`);
 const IDS = require(`./ids`);
 
 const SimpleDataEx = require(`./simple-data-ex`);
 const SubFamily = require(`./sub-family-data-block`);
 const Glyph = require(`./glyph-data-block`);
 const TransformSettings = require(`./tr-settings-data-block`);
+
+const ContentUpdater = require(`../content-updater`);
 
 class FamilyDataBlock extends SimpleDataEx {
 
@@ -135,7 +137,9 @@ class FamilyDataBlock extends SimpleDataEx {
             else { p_glyph.AddVariant(subFamily); }
         }
 
-        this._Broadcast(nkm.com.SIGNAL.ITEM_ADDED, this, p_glyph);
+        this._Broadcast(SIGNAL.GLYPH_ADDED, this, p_glyph);
+        ContentUpdater.instance._Broadcast(SIGNAL.GLYPH_ADDED, p_glyph);
+
     }
 
     RemoveGlyph(p_glyph) {
@@ -151,7 +155,8 @@ class FamilyDataBlock extends SimpleDataEx {
             .Unwatch(SIGNAL.VARIANT_UPDATED, this._OnGlyphVariantUpdated)
             .Unwatch(nkm.com.SIGNAL.UPDATED, this._OnGlyphUpdated);
 
-        this._Broadcast(nkm.com.SIGNAL.ITEM_REMOVED, this, g);
+        this._Broadcast(SIGNAL.GLYPH_REMOVED, this, g);
+        ContentUpdater.instance._Broadcast(SIGNAL.GLYPH_REMOVED, g);
 
     }
 

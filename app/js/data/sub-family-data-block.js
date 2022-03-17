@@ -6,7 +6,7 @@ const u = nkm.utils;
 const io = nkm.io;
 
 const SimpleDataEx = require(`./simple-data-ex`);
-const SIGNAL = require(`./signal`);
+const SIGNAL = require(`../signal`);
 const IDS = require(`./ids`);
 const TransformSettings = require(`./tr-settings-data-block`);
 
@@ -143,7 +143,7 @@ class SubFamilyDataBlock extends SimpleDataEx {
             dsc = this.Resolve(IDS.DESCENT),
             em = this.Resolve(IDS.EM_UNITS),
             h = asc - dsc,
-            rh = Math.max(fh, h),
+            rh = Math.max(em, h),
             sc = 1,
             ratio_w = 1,
             ratio_h = 1,

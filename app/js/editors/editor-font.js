@@ -3,6 +3,7 @@ const u = nkm.utils;
 const ui = nkm.ui;
 
 const UNICODE = require(`../unicode`);
+const SIGNAL = require(`../signal`);
 
 const mkfInspectors = require(`./inspectors`);
 const mkfViewports = require(`./viewports`);
@@ -33,9 +34,12 @@ class FontEditor extends nkm.uiworkspace.editors.EditorEx {
         this._selectedSubFamily = null;
         this._pangramInspector = null;
 
-        this._dataObserver.Hook(nkm.data.SIGNAL.VALUE_CHANGED, this._OnDataValueChanged, this);
+        //const ContentUpdater = require(`../content-updater`);
+        this._dataObserver
+            .Hook(nkm.data.SIGNAL.VALUE_CHANGED, this._OnDataValueChanged, this)
+            .Hook(SIGNAL.GLYPH_ADDED, this._OnGlyphAdded, this);
 
-        this._dataPreProcessor = (p_owner, p_data) =>{
+        this._dataPreProcessor = (p_owner, p_data) => {
             return u.isInstanceOf(p_data, mkfData.Family) ? p_data : null;
         };
 
@@ -56,7 +60,7 @@ class FontEditor extends nkm.uiworkspace.editors.EditorEx {
         this._leftShelfList.push(
             {
                 [ui.IDS.NAME]: `Unicode`,
-                [ui.IDS.ICON]: `search`,
+                [ui.IDS.ICON]: `text-style`,
                 [ui.IDS.VIEW_CLASS]: mkfInspectors.FamilyContent,
                 assign: `_contentInspector`
             },
@@ -234,6 +238,14 @@ class FontEditor extends nkm.uiworkspace.editors.EditorEx {
 
             this._viewport.SetPreviewSize(fW, fH);
 
+        }
+    }
+
+    _OnGlyphAdded(p_family, p_glyph){
+        if(this._inspectedData){
+            if(this._inspectedData.unicodeInfos == p_glyph.unicodeInfos){
+                this.Inspect(p_glyph);
+            }
         }
     }
 

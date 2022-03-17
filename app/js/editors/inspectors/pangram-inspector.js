@@ -5,6 +5,8 @@ const ui = nkm.ui;
 const inputs = nkm.uilib.inputs;
 const operations = require(`../../operations/index`);
 
+const SIGNAL = require(`../../signal`);
+
 const mkfData = require(`../../data`);
 const mkfWidgets = require(`../../widgets`);
 const mkfOperations = require(`../../operations`);
@@ -37,7 +39,7 @@ class SubFamilyInspector extends nkm.datacontrols.InspectorView {
 
 
         this._dataObserver
-            .Hook(mkfData.SIGNAL.SUBFAMILY_CHANGED, this._OnSubFamilyChanged, this);
+            .Hook(SIGNAL.SUBFAMILY_CHANGED, this._OnSubFamilyChanged, this);
 
         this._builder.defaultControlClass = mkfWidgets.PropertyControl;
         this._builder.defaultCSS = `control`;
