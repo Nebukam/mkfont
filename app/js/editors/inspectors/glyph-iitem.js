@@ -67,7 +67,7 @@ class GlyphVariantInspectorItem extends nkm.datacontrols.ControlWidget {
                 'border-top': `1px solid rgba(127, 127, 127, 0.1)`,
             },
             '.settings': {
-                'flex': '0 0 auto',
+                'flex': '1 1 auto',
                 'margin-bottom': '10px'
             },
             ':host(.null-glyph) .settings, :host(:not(.null-glyph)) .placeholder': { 'display': 'none' },

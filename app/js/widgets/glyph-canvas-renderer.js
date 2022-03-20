@@ -41,7 +41,7 @@ class GlyphCanvasRenderer extends ui.helpers.Canvas {
         super._PostInit();
     }
 
-    set options(p_value){ this._distribute.Update(this, p_value); }
+    set options(p_value) { this._distribute.Update(this, p_value); }
 
     get drawGuides() { return this._drawGuides; }
     set drawGuides(p_value) { this._drawGuides = p_value; }
@@ -229,6 +229,8 @@ class GlyphCanvasRenderer extends ui.helpers.Canvas {
             ctx.lineTo(f.w, maxy);
             ctx.stroke();
 
+
+
             // EM
             ctx.lineWidth = iscale;
             ctx.beginPath();
@@ -237,9 +239,9 @@ class GlyphCanvasRenderer extends ui.helpers.Canvas {
             ctx.stroke();
 
             ctx.strokeStyle = `rgba(255,255,255,0.5)`;
-            ctx.lineWidth = iscale*2;
+            ctx.lineWidth = iscale * 2;
             ctx.beginPath();
-            ctx.moveTo(-10*iscale, f.em);
+            ctx.moveTo(-10 * iscale, f.em);
             ctx.lineTo(0, f.em);
             ctx.stroke();
 
@@ -263,6 +265,15 @@ class GlyphCanvasRenderer extends ui.helpers.Canvas {
                 //ctx.lineTo(maxx, 0);
                 ctx.moveTo(f.w * 0.5, miny);
                 ctx.lineTo(f.w * 0.5, maxy);
+                ctx.stroke();
+            }
+
+            if (f.mono) {
+                ctx.strokeStyle = `rgba(${nkm.style.Get(`--col-infos-rgb`)},0.5)`;
+                ctx.lineWidth = iscale * 2;
+                ctx.beginPath();
+                ctx.moveTo(0, f.em);
+                ctx.lineTo(f.w, f.em);
                 ctx.stroke();
             }
 

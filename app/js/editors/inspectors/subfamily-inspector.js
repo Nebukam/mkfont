@@ -26,7 +26,7 @@ class SubFamilyInspector extends nkm.datacontrols.InspectorView {
         { options:{ propertyId:mkfData.IDS.EM_RESAMPLE } },
         
         { cl:mkfWidgets.ControlHeader, options:{ label:`Metrics` } },
-        { options:{ propertyId:mkfData.IDS.ASCENT, command:mkfOperations.commands.SetAscent } },
+        { options:{ propertyId:mkfData.IDS.ASCENT } },
         { options:{ propertyId:mkfData.IDS.DESCENT } },
         //{ options:{ propertyId:mkfData.IDS.CAP_HEIGHT } },
         //{ options:{ propertyId:mkfData.IDS.X_HEIGHT } },

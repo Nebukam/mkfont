@@ -8,7 +8,25 @@ const data = require(`../../data`);
 class ActionSetPropertyValue extends actions.Action {
     constructor() { super(); }
 
+
+    static get mergeable() { return true; }
+
+    CanMerge(p_operation) {
+        return (this._operation.target == p_operation.target && this._operation.id == p_operation.id)
+    }
+
     // Expected operation format : { target:SimpleDataBlock, id:`ID`, value:* }
+
+    get title(){ return `${this._operation.id}`; }
+    get htitle() {
+
+        let infos =
+            `${this._operation.target}'s ${this._operation.id}\n` +
+            `from : ${this._operation.oldValue}\n` +
+            `to: ${this._operation.value}`;
+
+        return infos;
+    }
 
     _InternalDo(p_operation, p_merge = false) {
 
@@ -18,7 +36,9 @@ class ActionSetPropertyValue extends actions.Action {
             oldValue = target.Get(propertyId),
             newValue = p_operation.value;
 
-        p_operation.oldValue = oldValue;
+        if (!p_merge) { p_operation.oldValue = oldValue; }
+        else { this._operation.value = newValue; }
+
         target.Set(propertyId, newValue, true);
         this._UpdateValue(target, newValue, oldValue);
         target.CommitUpdate();

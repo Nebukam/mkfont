@@ -68,15 +68,15 @@ class MKFont extends nkm.app.AppBase {
 
         this._welcomeView = this.mainLayout.workspace.Host({
             [ui.IDS.VIEW_CLASS]: mkfViews.Welcome,
-            [ui.IDS.NAME]: `Welcome`,
-            [ui.IDS.ICON]: `visible`,
+            [ui.IDS.NAME]: `Home`,
+            [ui.IDS.ICON]: `gear`,
             [ui.IDS.STATIC]: true
         });
 
         this._editorView = this.mainLayout.workspace.Host({
             [ui.IDS.VIEW_CLASS]: mkfEditors.FontEditor,
             [ui.IDS.NAME]: `Family Editor`,
-            [ui.IDS.ICON]: `visible`,
+            [ui.IDS.ICON]: `font`,
             [ui.IDS.STATIC]: true
         });
 

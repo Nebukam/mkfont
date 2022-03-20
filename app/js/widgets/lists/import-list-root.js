@@ -14,7 +14,7 @@ class ImportListRoot extends lists.FolderListRoot {
 
     static __defaultItemClass = ImportListItem;
 
-    static __itemHeight = 70;
+    static __itemHeight = 66;
 
     _Init() {
         super._Init();

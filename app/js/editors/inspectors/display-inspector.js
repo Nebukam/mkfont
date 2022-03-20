@@ -9,9 +9,17 @@ class DisplayInspector extends nkm.datacontrols.InspectorView {
     constructor() { super(); }
 
     static __controls = [
-        { cl:mkfWidgets.ControlHeader, options:{ label:`Display options` } },
+        { cl: mkfWidgets.ControlHeader, options: { label: `Display options` } },
         //{ options: { propertyId: mkfData.IDS.COLOR_PREVIEW } },
-        { options: { propertyId: mkfData.IDS.PREVIEW_SIZE } },
+        {
+            options: {
+                propertyId: mkfData.IDS.PREVIEW_SIZE, 
+                onSubmit: (p_input, p_id, p_value) => {
+                    p_input.data.Set(p_id, p_value);
+
+                }
+            }
+        },
     ];
 
     _Init() {
@@ -23,7 +31,7 @@ class DisplayInspector extends nkm.datacontrols.InspectorView {
     _Style() {
         return nkm.style.Extends({
             ':host': {
-                'min-width':'350px',
+                'min-width': '350px',
                 //'flex': '0 0 auto',
             },
             '.list': {
@@ -57,7 +65,7 @@ class DisplayInspector extends nkm.datacontrols.InspectorView {
 
     }
 
-    
+
 
     //#region Family properties
 

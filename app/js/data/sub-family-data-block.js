@@ -43,6 +43,7 @@ class SubFamilyDataBlock extends SimpleDataEx {
             dsc: 0,
             ref: 1000,
             em: 1000,
+            mono:false
         }
 
         let defaultEm = 1000;
@@ -168,11 +169,18 @@ class SubFamilyDataBlock extends SimpleDataEx {
         this._contextInfos.dsc = dsc;
         this._contextInfos.ref = ref;
         this._contextInfos.em = em;
+        this._contextInfos.mono = this.Resolve(IDS.MONOSPACE);
 
         //this.Set(IDS.SIZE, rh, true);
         //this.Set(IDS.DISPLAY_SIZE, ref, true);
         //this.Set(IDS.DISPLAY_OFFSET, 0, true);
 
+    }
+
+    CommitValueUpdate(p_id, p_valueObj, p_oldValue, p_silent = false) {
+        super.CommitValueUpdate(p_id, p_valueObj, p_oldValue, p_silent);
+        let infos = IDS.GetInfos(p_id);
+        if (infos && infos.recompute) { this._ScheduleGlyphUpdate(); }
     }
 
     _OnTransformSettingsUpdated(p_data, p_id, valueObj) {
@@ -185,6 +193,13 @@ class SubFamilyDataBlock extends SimpleDataEx {
                     glyphVariant._ScheduleTransformationUpdate();
                 }
             }
+        }
+    }
+
+    _ScheduleGlyphUpdate() {
+        let list = this._family._glyphs.internalArray;
+        for (let i = 0; i < list.length; i++) {
+            list[i].GetVariant(this)._ScheduleTransformationUpdate();
         }
     }
 

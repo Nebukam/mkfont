@@ -54,7 +54,6 @@ class FamilyInspector extends nkm.datacontrols.InspectorView {
         this._body = ui.dom.El(`div`, { class: `list` }, this._host);
         this._builder.host = this._body;
 
-
         super._Render();
 
         // Preview align mode (left/center/right)

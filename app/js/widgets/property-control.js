@@ -39,6 +39,7 @@ class PropertyControl extends nkm.datacontrols.ControlWidget {
             .To(`hideOverride`)
             .To(`subData`, null, null)
             .To(`inputOnly`, null, null)
+            .To(`onSubmit`, `_onSubmitFn`, null)
             .To(`command`, null, mkfOperations.commands.SetProperty);
 
         this._dataPreProcessor = this.constructor.__ppdata;
@@ -49,6 +50,8 @@ class PropertyControl extends nkm.datacontrols.ControlWidget {
         super._PostInit();
         //this.focusArea = this;
     }
+
+
 
     _Style() {
         return nkm.style.Extends({
@@ -122,7 +125,7 @@ class PropertyControl extends nkm.datacontrols.ControlWidget {
         else { this._labelCtnr.style.removeProperty(`display`); }
     }
 
-    get propertyId(){ return this._valueID; }
+    get propertyId() { return this._valueID; }
     set propertyId(p_id) {
 
         this._valueID = p_id;
@@ -150,7 +153,7 @@ class PropertyControl extends nkm.datacontrols.ControlWidget {
 
     }
 
-    set hideOverride(p_value){
+    set hideOverride(p_value) {
         this._hideOverride = p_value;
         this._toggle.visible = !p_value;
     }
@@ -198,23 +201,23 @@ class PropertyControl extends nkm.datacontrols.ControlWidget {
         if (this._allowOverride) {
             this._flags.Set(__flag_inherited, this._inherited);
         }
-        
+
         this._toggle.currentValue = !this._inherited;
 
-        if(this._inherited){
+        if (this._inherited) {
             this._input.currentValue = this.exportedValue;
-        }else{
+        } else {
             this._input.currentValue = this.localValue;
         }
     }
 
     _OnValueSubmit(p_input, p_value) {
-        if (this._cmd) {
+        if (this._onSubmitFn) {
+            this._onSubmitFn(this, this._valueID, p_value);
+        } else if (this._cmd) {
             this._cmd.emitter = this;
             this._cmd.inputValue = p_value;
             this._cmd.Execute();
-        } else if (this._onSubmitFn) {
-            this._onSubmitFn(this._valueID, p_value);
         } else {
             this._data.Set(this._valueID, p_value);
         }
@@ -248,6 +251,7 @@ class PropertyControl extends nkm.datacontrols.ControlWidget {
     }
 
     _Cleanup() {
+        this._onSubmitFn = null;
         this._cmd = null;
         super._Cleanup();
     }

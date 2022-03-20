@@ -282,7 +282,8 @@ class SVGOperations {
             hAlign = p_settings.Get(IDS.TR_HOR_ALIGN).GetOption(`value`, 0),
             hAnchor = p_settings.Get(IDS.TR_HOR_ALIGN_ANCHOR).GetOption(`value`, 0),
             sShift = p_settings.Resolve(IDS.TR_WIDTH_SHIFT),
-            sPush = p_settings.Resolve(IDS.TR_WIDTH_PUSH);
+            sPush = p_settings.Resolve(IDS.TR_WIDTH_PUSH),
+            mono = p_context.mono;
 
         if (p_svgStats.emptyPath) {
             return {
@@ -356,6 +357,8 @@ class SVGOperations {
             default: offsetX -= widthRef; break;// Right
         }
 
+        if (mono) { widthRef = p_context.w; }
+
         switch (hAlign) {
             case 0:
                 offsetX += sShift;
@@ -370,6 +373,8 @@ class SVGOperations {
                 offsetX += widthRef;
                 break;
         }
+
+
 
         path = svgpath(path)
             .scale(scale)

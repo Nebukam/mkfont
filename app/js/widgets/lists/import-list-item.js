@@ -4,6 +4,7 @@ const uilib = nkm.uilib;
 const inputs = nkm.uilib.inputs;
 const lists = nkm.uilib.lists;
 
+const UNICODE = require(`../../unicode`);
 const mkfData = require(`../../data`);
 const GlyphCanvasRenderer = require(`../glyph-canvas-renderer`);
 
@@ -15,7 +16,10 @@ class ImportListItem extends lists.FolderListItem {
     _Init() {
         super._Init();
         this._Bind(this._UpdatePreview);
+        this._Bind(this._OnSubmit);
+
         this._extensions.Remove(this._extDrag);
+        this._dataObserver.Hook(nkm.com.SIGNAL.VALUE_CHANGED, this._OnDataUpdated, this);
     }
 
     _PostInit() {
@@ -27,27 +31,28 @@ class ImportListItem extends lists.FolderListItem {
         return nkm.style.Extends({
             ':host': {
                 'display': 'grid',
-                'grid-template-rows': `32px max-content`,
+                'grid-template-rows': `5px 28px 28px`,
                 'grid-template-columns': `max-content min-content 1fr`,
-                'align-items': `center`
+                'align-items': `center`,
+                'padding-bottom': `5px`
             },
             '.renderer': {
-
+                'position': 'relative',
                 'aspect-ratio': '1/1',
-                'width': '55px',
-                'margin': '5px 5px 5px 0',
+                'width': '52px',
                 'border-radius': '3px',
                 'background-color': '#1b1b1b',
                 'grid-column': '1',
-                'grid-row': '1 / span 2',
+                'grid-row': '2 / span 2',
+                'align-self': `flex-start`,
 
             },
-            '.icon': {
-                'grid-column': '2',
-                'grid-row': '1',
+            '.hidden': {
+                'display': 'none',
             },
             '.label': {
-                'grid-column': '3',
+                'position': 'relative',
+                'grid-column': '1 / span 3',
                 'grid-row': '1',
             },
             '.toolbar': {
@@ -55,17 +60,33 @@ class ImportListItem extends lists.FolderListItem {
                 'grid-row': '2',
                 'align-self': `flex-start`,
                 'margin-left': `4px`,
+            },
+            '.output': {
+                'grid-column': '2 / span 2',
+                'grid-row': '3',
+                'margin-left': `6px`,
+                'padding': `3px`,
+                'padding-left': `6px`,
+                //'background-color': `rgba(127,127,127,0.05)`,
+                'border-radius': '3px'
             }
         }, super._Style());
     }
 
     _Render() {
+
         this._glyphRenderer = this.Add(GlyphCanvasRenderer, `renderer`, this._host);
         //this._glyphRenderer.centered = true;
         super._Render();
+        this._label.element.classList.add(`hidden`);
+
+        this._outputLabel = new ui.manipulators.Text(ui.El(`div`, { class: `output label font-xsmall` }, this._host));
+        this._outputLabel.ellipsis = true;
+
         this._tb = this.Add(ui.WidgetBar, `toolbar`, this._host);
         this._tb.options = {
             //inline: true,
+            stretch: ui.WidgetBar.FLAG_STRETCH,
             size: ui.FLAGS.SIZE_XS,
             defaultWidgetClass: nkm.uilib.buttons.Tool,
             handles: [
@@ -81,13 +102,8 @@ class ImportListItem extends lists.FolderListItem {
                 },
                 {
                     cl: uilib.inputs.Text,
-                    variant: ui.FLAGS.MINIMAL,/*
-                    trigger: {
-                        fn: () => {
-                            mkfOperations.commands.ImportExternalFile.emitter = this;
-                            mkfOperations.commands.ImportExternalFile.Execute(this._data);
-                        }
-                    },*/
+                    variant: ui.FLAGS.MINIMAL,
+                    onSubmit: { fn: this._OnSubmit },
                     group: `read`, member: { owner: this, id: `_unicodeInputField` }
                 },
             ]
@@ -112,17 +128,6 @@ class ImportListItem extends lists.FolderListItem {
             this._transformSettings = this._data.GetOption(`transforms`);
             this._transformSettings.Watch(nkm.com.SIGNAL.UPDATED, this._UpdatePreview);
 
-            let customUnicode = this._data.GetOption(`use-custom-unicode`, false);
-            this._unicodeInputField.disabled = !customUnicode;
-            this._useCustomUniCheckbox.currentValue = customUnicode;
-
-            if (customUnicode) {
-                this._unicodeInputField.placeholderValue = `xxx`;
-                this._unicodeInputField.currentValue = ``;
-            } else {
-                this._unicodeInputField.placeholderValue = `imported value`;
-                this._unicodeInputField.currentValue = this._data.GetOption(`unicode-value`, `---`);
-            }
         } else {
             if (this._transformSettings) { this._transformSettings.Unwatch(nkm.com.SIGNAL.UPDATED, this._UpdatePreview); }
         }
@@ -130,6 +135,36 @@ class ImportListItem extends lists.FolderListItem {
 
     _OnDataUpdated(p_data) {
         super._OnDataUpdated(p_data);
+
+        let
+            useCustom = this._data.GetOption(`use-custom-unicode`, false),
+            uniStruct = null;
+        this._unicodeInputField.disabled = !useCustom;
+        this._useCustomUniCheckbox.currentValue = useCustom;
+
+        if (useCustom) {
+            uniStruct = this._data.GetOption(`unicode-user-input`, ``);
+            this._unicodeInputField.placeholderValue = `custom...`;
+            this._unicodeInputField.currentValue = uniStruct;
+        } else {
+            uniStruct = this._data.GetOption(`name`, ``);
+            this._unicodeInputField.placeholderValue = uniStruct;
+            this._unicodeInputField.currentValue = this._data.GetOption(`name`, ``)
+        }
+
+        let editor = nkm.datacontrols.FindEditor(this);
+
+        uniStruct = editor._FindUnicodeStructure(uniStruct);
+        //uniStruct.forEach((val) => { displayValue.push(UNICODE.GetUnicodeCharacter(Number.parseInt(val, 16))); });
+
+        if (!uniStruct || uniStruct.length == 0) {
+            this._outputLabel.Set(`<span style='color:var(--col-warning)'>invalid, will be ignored.</span>`);
+        } else {
+            let unichars = [];
+            uniStruct.forEach((val) => { unichars.push(UNICODE.GetUnicodeCharacter(Number.parseInt(val, 16))); });
+            this._outputLabel.Set(uniStruct.join(`<span style='opacity:0.5'>+</span>`) + ` = <b>${unichars.join(``)}</b>`);
+        }
+
         this._UpdatePreview();
     }
 
@@ -148,6 +183,11 @@ class ImportListItem extends lists.FolderListItem {
         this._glyphRenderer.glyphWidth = transformedPath.width;
         this._glyphRenderer.glyphPath = transformedPath.path;
         this._glyphRenderer.Draw();
+
+    }
+
+    _OnSubmit(p_input, p_value) {
+        this._data.SetOption(`unicode-user-input`, p_value);
     }
 
     _Cleanup() {

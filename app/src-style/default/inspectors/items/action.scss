@@ -1,0 +1,22 @@
+/*---------------------------------*/
+/*<!---- @nkmjs/ui-workspace ----!>*/
+/*---------------------------------*/
+
+@import '../../_constants';
+@import '../../_variables';
+@import '../../_functions';
+@import '../../_mixins';
+
+:host{
+    background-color: rgba(0,0,0,0.1);
+    height:28px;
+    margin:2px;
+    display:flex;
+    flex:row nowrap;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.label{
+
+}

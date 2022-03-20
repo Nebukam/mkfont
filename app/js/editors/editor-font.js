@@ -46,6 +46,12 @@ class FontEditor extends nkm.uiworkspace.editors.EditorEx {
 
     }
 
+    _PostInit(){
+        super._PostInit();
+        this._actionStackInspector.data = this._actionStack;
+        console.log(this._actionStackInspector.data);
+    }
+
     _InitShelfCatalog(p_configList) {
 
         p_configList.push(
@@ -70,6 +76,14 @@ class FontEditor extends nkm.uiworkspace.editors.EditorEx {
                 [ui.IDS.ICON]: `text`,
                 [ui.IDS.VIEW_CLASS]: mkfInspectors.Pangram,
                 assign: `_pangramInspector`
+            },
+            {
+                [ui.IDS.NAME]: `History`,
+                [ui.IDS.ICON]: `refresh`,
+                [ui.IDS.VIEW_CLASS]: nkm.uiworkspace.inspectors.ActionStack,
+                assign: `_actionStackInspector`,
+                [ui.IDS.DATA]: this._actionStack,
+                ignoreData:true
             }
         );
 
@@ -93,7 +107,7 @@ class FontEditor extends nkm.uiworkspace.editors.EditorEx {
 
             if (view) {
                 if (conf.isInspector) { this.forwardInspected.To(view); }
-                else { this.forwardData.To(view); }
+                else if(!conf.ignoreData){ this.forwardData.To(view); }
                 if (assign) { this[assign] = view; }
             }
 
@@ -204,7 +218,8 @@ class FontEditor extends nkm.uiworkspace.editors.EditorEx {
 
     _OnDataValueChanged(p_data, p_id, p_valueObj) {
 
-        let infos = mkfData.IDS.infos[p_id];
+        let infos = mkfData.IDS.GetInfos(p_id);
+        console.log(infos);
         if (!infos) { return; }
 
         if (infos.recompute) {

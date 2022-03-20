@@ -61,7 +61,7 @@ class GlyphInspector extends nkm.datacontrols.InspectorView {
 
             },
             '.settings': {
-                'flex': '1 0 100%',
+                'flex': '1 0 auto',
                 'margin-bottom': '10px'
             },
             '.control': {

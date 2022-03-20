@@ -17,7 +17,7 @@ class TransformSettingsDataBlock extends SimpleDataEx {
         super._Init();
 
         this._values = {
-            [IDS.TR_REFERENCE]: { value: IDS.trReference.At(0) },
+            [IDS.TR_REFERENCE]: { value: IDS.trReference.At(1) },
             [IDS.TR_SCALE_MODE]: { value: IDS.trScaleModes.At(2) },
             [IDS.TR_SCALE_FACTOR]: { value: 1 },
             [IDS.TR_VER_ALIGN]: { value: IDS.trVerAlign.At(1) },
