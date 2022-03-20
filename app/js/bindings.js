@@ -23,6 +23,12 @@ class Bindings extends nkm.com.helpers.BindingKit {
                     { key: mkfData.Slot, binding: mkfInspectors.Glyph },
                     { key: mkfData.SubFamily, binding: mkfInspectors.SubFamily },
                 ]
+            },
+            {
+                context: nkm.data.serialization.CONTEXT.JSON,
+                kvps: [
+                    { key: mkfData.Family, binding: mkfData.serialization.json.Family }
+                ]
             });
 
     }

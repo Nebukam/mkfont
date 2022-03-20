@@ -2,6 +2,8 @@
 
 module.exports = {
 
+    serialization: require(`./serialization`),
+
     IDS: require(`./ids`),
 
     SubFamily: require(`./sub-family-data-block`),

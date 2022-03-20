@@ -40,6 +40,41 @@ class SimpleDataEx extends nkm.data.SimpleDataBlock {
         return UTILS.Resolve(p_id, this, ...this.resolutionFallbacks);
     }
 
+    ValuesAndOverrides(p_ids) {
+        let v = {};
+        if (u.isArray(p_ids)) {
+            for (let p in this._values) {
+                if (!p_ids.includes(p)) { continue; }
+                let obj = this._values[p];
+                if(u.isInstanceOf(obj.value, nkm.data.catalogs.CatalogItem)){
+                    v[p] = { value:obj.value.value, override:obj.override };
+                }else{
+                    v[p] = { value:obj.value, override:obj.override };
+                }
+            }
+        } else if (u.isObject(p_ids)) {
+            for (let p in this._values) {
+                if (!(p in p_ids)) { continue; }
+                let obj = this._values[p];
+                if(u.isInstanceOf(obj.value, nkm.data.catalogs.CatalogItem)){
+                    v[p] = { value:obj.value.value, override:obj.override };
+                }else{
+                    v[p] = { value:obj.value, override:obj.override };
+                }
+            }
+        } else {
+            for (let p in this._values) {
+                let obj = this._values[p];
+                if(u.isInstanceOf(obj.value, nkm.data.catalogs.CatalogItem)){
+                    v[p] = { value:obj.value.value, override:obj.override };
+                }else{
+                    v[p] = { value:obj.value, override:obj.override };
+                }
+            }
+        }
+        return v;
+    }
+
     _BuildFontObject() {
         return null;
     }
