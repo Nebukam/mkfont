@@ -15,8 +15,8 @@ class DisplayInspector extends nkm.datacontrols.InspectorView {
             options: {
                 propertyId: mkfData.IDS.PREVIEW_SIZE, 
                 onSubmit: (p_input, p_id, p_value) => {
-                    p_input.data.Set(p_id, p_value);
-
+                    let editor = nkm.datacontrols.FindEditor(p_input);
+                    editor.data.Set(p_id, p_value);
                 }
             }
         },

@@ -49,7 +49,7 @@ class CmdImportClipboard extends actions.Command {
         }
 
         let
-            editor = this._emitter.editor,
+            editor = nkm.datacontrols.FindEditor(this._emitter),
             family = editor.data;
 
         // Check if glyph exists

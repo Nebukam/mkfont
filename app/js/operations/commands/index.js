@@ -8,6 +8,7 @@ const ImportClipboard = require(`./cmd-import-clipboard`);
 const ImportExternalFile = require(`./cmd-import-external-file`);
 const ImportExternalFileMultiple = require(`./cmd-import-external-file-multiple`);
 const DeleteGlyph = require(`./cmd-glyph-delete`);
+const ExportToClipboard = require(`./cmd-export-to-clipboard`);
 
 module.exports = {
 
@@ -21,5 +22,7 @@ module.exports = {
     ImportExternalFile: new ImportExternalFile(),
     ImportExternalFileMultiple: new ImportExternalFileMultiple(),
     ImportClipboard: new ImportClipboard(),
+
+    ExportToClipboard: new ExportToClipboard(),
     
 }

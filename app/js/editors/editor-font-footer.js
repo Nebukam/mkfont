@@ -33,6 +33,7 @@ class FontEditorFooter extends nkm.datacontrols.ControlView {
             '.progress-bar': {
                 'position':'absolute',
                 'box-sizing':'border-box',
+                'transition':'all 0.05s ease',
                 'width': 'var(--progress, 0%)',
                 'height': '100%',
                 'background-color':'rgba(var(--col-loading-rgb),0.1)',

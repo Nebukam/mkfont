@@ -154,6 +154,13 @@ class GlyphVariantInspectorItem extends nkm.datacontrols.ControlWidget {
                 {
                     icon: `clipboard-write`, htitle: `Copy glyph to clipboard`,
                     variant: ui.FLAGS.MINIMAL,
+                    trigger: {
+                        fn: () => {
+                            console.log(`Yo ?`);
+                            mkfOperations.commands.ExportToClipboard.emitter = this;
+                            mkfOperations.commands.ExportToClipboard.Execute(this._data);
+                        }
+                    },
                     group: `write`, member: { owner: this, id: `_writeToClipboardBtn` }
                 },
                 {

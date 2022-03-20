@@ -111,6 +111,9 @@ class EditorListImport extends nkm.datacontrols.Editor {
         this._catalog = p_value;
         this._importListBrowser.data = p_value;
         this._UpdateUnicodeImportedValues();
+        if(this._catalog){
+            this.Inspect(this._catalog.At(0));
+        }
     }
 
     _OnInspectedDataChanged(p_oldData) {

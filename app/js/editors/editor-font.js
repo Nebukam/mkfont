@@ -36,7 +36,7 @@ class FontEditor extends nkm.uiworkspace.editors.EditorEx {
 
         //const ContentUpdater = require(`../content-updater`);
         this._dataObserver
-            .Hook(nkm.data.SIGNAL.VALUE_CHANGED, this._OnDataValueChanged, this)
+            .Hook(nkm.com.SIGNAL.VALUE_CHANGED, this._OnDataValueChanged, this)
             .Hook(SIGNAL.GLYPH_ADDED, this._OnGlyphAdded, this)
             .Hook(SIGNAL.GLYPH_REMOVED, this._OnGlyphRemoved, this);
 
