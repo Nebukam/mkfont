@@ -61,6 +61,10 @@
     --default-level-2-color: #{$col};
     --default-level-2-color-rgb: red(#{$col}), green(#{$col}), blue(#{$col});
 
+    $col: $col_input_bg;
+    #{$varname_col_input_bg}:#{$col};
+    #{$varname_col_input_bg+'-rgb'}: red($col), green($col), blue($col);
+
 }
 
 @include prefers_dark{

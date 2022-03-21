@@ -64,11 +64,13 @@ class GlyphVariantInspectorItem extends nkm.datacontrols.ControlWidget {
                 //'margin-bottom': '10px',
                 'flex': `1 1 auto`,
                 'justify-content': `center`,
-                'border-top': `1px solid rgba(127, 127, 127, 0.1)`,
+                //'border-top': `1px solid rgba(127, 127, 127, 0.1)`,
+                'margin-bottom': '5px',
+                'margin-top': '5px',
             },
             '.settings': {
                 'flex': '1 1 auto',
-                'margin-bottom': '10px'
+                'margin-bottom': '10px',
             },
             ':host(.null-glyph) .settings, :host(:not(.null-glyph)) .placeholder': { 'display': 'none' },
             '.control': {
@@ -114,7 +116,7 @@ class GlyphVariantInspectorItem extends nkm.datacontrols.ControlWidget {
             handles: [
                 {
                     icon: `document-download-small`, htitle: `Import SVG`,
-                    variant: ui.FLAGS.MINIMAL,
+                    flavor: nkm.com.FLAGS.LOADING, variant: ui.FLAGS.MINIMAL,
                     trigger: {
                         fn: () => {
                             mkfOperations.commands.ImportExternalFile.emitter = this;
@@ -125,7 +127,7 @@ class GlyphVariantInspectorItem extends nkm.datacontrols.ControlWidget {
                 },
                 {
                     icon: `clipboard-read`, htitle: `Import clipboard content`,
-                    variant: ui.FLAGS.MINIMAL,
+                    flavor: nkm.com.FLAGS.LOADING, variant: ui.FLAGS.MINIMAL,
                     trigger: {
                         fn: () => {
                             mkfOperations.commands.ImportClipboard.emitter = this;
@@ -139,7 +141,6 @@ class GlyphVariantInspectorItem extends nkm.datacontrols.ControlWidget {
                     variant: ui.FLAGS.MINIMAL,
                     trigger: {
                         fn: () => {
-                            console.log(`Yo ?`);
                             mkfOperations.commands.ImportEmpty.emitter = this;
                             mkfOperations.commands.ImportEmpty.Execute(this._data);
                         }
@@ -156,7 +157,6 @@ class GlyphVariantInspectorItem extends nkm.datacontrols.ControlWidget {
                     variant: ui.FLAGS.MINIMAL,
                     trigger: {
                         fn: () => {
-                            console.log(`Yo ?`);
                             mkfOperations.commands.ExportToClipboard.emitter = this;
                             mkfOperations.commands.ExportToClipboard.Execute(this._data);
                         }
@@ -168,7 +168,6 @@ class GlyphVariantInspectorItem extends nkm.datacontrols.ControlWidget {
                     variant: ui.FLAGS.MINIMAL,
                     trigger: {
                         fn: () => {
-                            console.log(`Yo ?`);
                             mkfOperations.commands.DeleteGlyph.emitter = this;
                             mkfOperations.commands.DeleteGlyph.Execute(this._data);
                         }

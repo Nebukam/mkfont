@@ -40,13 +40,19 @@ class FamilyContentInspector extends nkm.datacontrols.InspectorView {
         // Categories
         // Blocks
         // - blocks need to be searchable, there is too much of them.
-        this._body = ui.dom.El(`div`, {class:`body`}, this);
-        
-        this._categories = this.Add(mkfWidgets.lists.FilterRoot, `asd`, this._body);
+        this._body = ui.dom.El(`div`, { class: `body` }, this);
+        /*
+        this._categories = this.Add(nkm.uilib.lists.FolderListRoot, `asd`, this._body);
+        this._categories.data = UNICODE.instance._categoriesCatalog;
+        */
+        //this._categories = this.Add(mkfWidgets.lists.FilterRoot, `asd`, this._body);
+        this._categories = this.Add(nkm.uilib.lists.FolderListRoot, `asd`, this._body);
         this._categories.data = UNICODE.instance._categoriesCatalog;
 
-        this._blocks = this.Add(mkfWidgets.lists.BlockRoot, `asd`, this._body);
+        //this._blocks = this.Add(mkfWidgets.lists.BlockRoot, `asd`, this._body);
+        this._blocks = this.Add(nkm.uilib.lists.FolderListRoot, `asd`, this._body);
         this._blocks.data = UNICODE.instance._blockCatalog;
+
     }
 
     //#region Family properties

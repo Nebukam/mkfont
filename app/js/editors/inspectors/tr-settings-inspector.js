@@ -8,23 +8,26 @@ const mkfWidgets = require(`../../widgets`);
 
 // Manages what is shown & selectable in the viewport.
 
+const isXMIN = (owner) => { return owner.data.Get(mkfData.IDS.TR_HOR_ALIGN) == mkfData.ENUMS.HALIGN_XMIN; };
+const isMANUAL = (owner) => { return owner.data.Get(mkfData.IDS.TR_SCALE_MODE) == mkfData.ENUMS.SCALE_MANUAL; };
+
 class TransformSettingsInspector extends nkm.datacontrols.InspectorView {
     constructor() { super(); }
 
     static __controls = [
-        { cl: mkfWidgets.ControlHeader, options: { label: `Boundaries` }, css:'header' },
-        { options: { propertyId: mkfData.IDS.TR_REFERENCE, inputOnly:true }, css:'small' },
-        { options: { propertyId: mkfData.IDS.TR_SCALE_MODE, inputOnly:true }, css:'small' },
-        { options: { propertyId: mkfData.IDS.TR_SCALE_FACTOR }, requireData:true, hideWhen:{ fn:(owner)=>{ return owner.data.Get(mkfData.IDS.TR_SCALE_MODE).value == 4; } } },
-        { cl: mkfWidgets.ControlHeader, options: { label: `Vertical align` }, css:'header' },
-        { options: { propertyId: mkfData.IDS.TR_VER_ALIGN, inputOnly:true }, css:'small' },
-        { options: { propertyId: mkfData.IDS.TR_VER_ALIGN_ANCHOR, inputOnly:true }, css:'small' },
-        { cl: mkfWidgets.ControlHeader, options: { label: `Horizontal align` }, css:'header' },
-        { options: { propertyId: mkfData.IDS.TR_HOR_ALIGN, inputOnly:true }, css:'small' },
-        { options: { propertyId: mkfData.IDS.TR_HOR_ALIGN_ANCHOR, inputOnly:true }, css:'small' },
-        { cl: mkfWidgets.ControlHeader, options: { label: `Advance` }, css:'header', requireData:true, hideWhen:{ fn:(owner)=>{ return owner.data.Get(mkfData.IDS.TR_HOR_ALIGN).value == 0; } } },
-        { options: { propertyId: mkfData.IDS.TR_WIDTH_SHIFT }, requireData:true, hideWhen:{ fn:(owner)=>{ return owner.data.Get(mkfData.IDS.TR_HOR_ALIGN).value == 0; } } },
-        { options: { propertyId: mkfData.IDS.TR_WIDTH_PUSH }, requireData:true, hideWhen:{ fn:(owner)=>{ return owner.data.Get(mkfData.IDS.TR_HOR_ALIGN).value == 0; } } },
+        { cl: mkfWidgets.ControlHeader, options: { label: `Boundaries` }, css: 'header' },
+        { options: { propertyId: mkfData.IDS.TR_BOUNDS_MODE, inputOnly: true }, css: 'small' },
+        { options: { propertyId: mkfData.IDS.TR_SCALE_MODE, inputOnly: true }, css: 'small' },
+        { options: { propertyId: mkfData.IDS.TR_SCALE_FACTOR }, requireData: true, hideWhen: { fn: isMANUAL } },
+        { cl: mkfWidgets.ControlHeader, options: { label: `Vertical align` }, css: 'header' },
+        { options: { propertyId: mkfData.IDS.TR_VER_ALIGN, inputOnly: true }, css: 'small' },
+        { options: { propertyId: mkfData.IDS.TR_VER_ALIGN_ANCHOR, inputOnly: true }, css: 'small' },
+        { cl: mkfWidgets.ControlHeader, options: { label: `Horizontal align` }, css: 'header' },
+        { options: { propertyId: mkfData.IDS.TR_HOR_ALIGN, inputOnly: true }, css: 'small' },
+        { options: { propertyId: mkfData.IDS.TR_HOR_ALIGN_ANCHOR, inputOnly: true }, css: 'small' },
+        { cl: mkfWidgets.ControlHeader, options: { label: `Advance` }, css: 'header', requireData: true, hideWhen: { fn: isXMIN } },
+        { options: { propertyId: mkfData.IDS.TR_WIDTH_SHIFT }, requireData: true, hideWhen: { fn: isXMIN } },
+        { options: { propertyId: mkfData.IDS.TR_WIDTH_PUSH }, requireData: true, hideWhen: { fn: isXMIN } },
     ];
 
     _Init() {
@@ -45,7 +48,7 @@ class TransformSettingsInspector extends nkm.datacontrols.InspectorView {
     _Style() {
         return nkm.style.Extends({
             ':host': {
-                '@':['fade-in'],
+                '@': ['fade-in'],
                 'display': 'flex',
                 'flex-flow': 'row wrap',
                 //'min-height': '0',
@@ -70,7 +73,7 @@ class TransformSettingsInspector extends nkm.datacontrols.InspectorView {
 
     //#endregion
 
-    _CleanUp(){
+    _CleanUp() {
         if (this.constructor.__clearBuilderOnRelease) { this._builder.Clear(); }
         super._CleanUp();
     }

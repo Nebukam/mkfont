@@ -84,7 +84,7 @@ class FontEditorHeader extends nkm.datacontrols.ControlView {
                     group: `file-actions`
                 },
                 {
-                    label: `Export`, icon: `download`,
+                    label: `Export`, icon: `upload`,
                     size: ui.FLAGS.SIZE_S,
                     flavor: ui.FLAGS.CTA, variant: ui.FLAGS.FRAME,
                     group: `file-actions`
@@ -111,13 +111,26 @@ class FontEditorHeader extends nkm.datacontrols.ControlView {
                     group: `family`
                 },
                 {
-                    label: `Load`, icon: `directory-download`,
-                    size: ui.FLAGS.SIZE_S,
+                    label: `SVGs`, icon: `directory-download-small`,
+                    size: ui.FLAGS.SIZE_S, variant: ui.FLAGS.FRAME,
+                    flavor: nkm.com.FLAGS.LOADING,
                     group: `external`,
                     trigger: {
                         fn: () => {
                             mkfOperations.commands.ImportExternalFileMultiple.emitter = this;
                             mkfOperations.commands.ImportExternalFileMultiple.Execute(this._data);
+                        }
+                    },
+                },
+                {
+                    label: `TTF`, icon: `directory-download-small`,
+                    size: ui.FLAGS.SIZE_S, variant: ui.FLAGS.FRAME,
+                    flavor: nkm.com.FLAGS.LOADING,
+                    group: `external`,
+                    trigger: {
+                        fn: () => {
+                            mkfOperations.commands.ImportImportTTF.emitter = this;
+                            mkfOperations.commands.ImportImportTTF.Execute(this._data);
                         }
                     },
                 }

@@ -3,6 +3,9 @@
 const nkm = require(`@nkmjs/core`);
 const u = nkm.utils;
 const mkfData = require(`./data`);
+const CmdSetDisplay = require(`./operations/commands/cmd-set-display-list`);
+const UniBlock = require(`./catalogs/definition-uni-block`);
+const UniCategory = require(`./catalogs/definition-uni-cat`);
 
 class UNICODE extends nkm.com.helpers.Singleton {
     constructor() { super(); }
@@ -10,6 +13,8 @@ class UNICODE extends nkm.com.helpers.Singleton {
     _Init() {
 
         super._Init();
+
+        let setDisplayCmd = new CmdSetDisplay();
 
         let c = {
 
@@ -66,6 +71,8 @@ class UNICODE extends nkm.com.helpers.Singleton {
             for (let i = 0; i < subs.length; i++) {
                 let lcgc = subs[i];
                 lcgc.parent = lgc;
+                lcgc.primaryCommand = setDisplayCmd;
+                lcgc.itemClass = UniCategory;
                 cgc.content.push(lcgc);
             }
             mgc.push(cgc);
@@ -394,6 +401,12 @@ class UNICODE extends nkm.com.helpers.Singleton {
 			{ name:'Supplementary Private Use Area-A', count:65535, icon:'view-grid', cats:[c.Co], start:983040},
 			{ name:'Supplementary Private Use Area-B', count:65535, icon:'view-grid', cats:[c.Co], start:1048576}
 			];
+
+        b.forEach((obj) =>{ 
+            obj.itemClass = UniBlock;
+            obj.primaryCommand = setDisplayCmd;
+        });
+
         this._blocks = b;
         this._blockCatalog = nkm.data.catalogs.CreateFrom({ name: `Unicode blocks` }, b);
         this._blockCatalog.expanded = true;

@@ -24,8 +24,6 @@ class CmdImportEmpty extends actions.Command {
 
     _InternalExecute() {
 
-        console.log(`AHAH`);
-
         let svgStats = SVGOPS.EmptySVGStats();
 
         let

@@ -8,21 +8,23 @@ const mkfData = require(`../../data`);
 class ActionCreateGlyph extends actions.Action {
     constructor() { super(); }
 
-    // Expected operation format : { family:FamilyDataBlock, unicode:`abc`, path:pathData }
+    // Expected operation format : { family:FamilyDataBlock, unicode:`abc`, path:pathData, transforms:{} }
 
     _InternalDo(p_operation, p_merge = false) {
 
         let
             newGlyph = new mkfData.Glyph(),
-            glyphVariant = newGlyph._defaultGlyph;
+            glyphVariant = newGlyph._defaultGlyph,
+            family = p_operation.family,
+            transforms = p_operation.transforms || family.selectedSubFamily.transformSettings;
 
         newGlyph.Set(mkfData.IDS.UNICODE, p_operation.unicode.u);
         newGlyph.unicodeInfos = p_operation.unicode;
 
         glyphVariant.Set(mkfData.IDS.PATH_DATA, p_operation.path);
-        glyphVariant.transformSettings.BatchSet(p_operation.family.selectedSubFamily.transformSettings);
+        glyphVariant.transformSettings.BatchSet(transforms);
 
-        p_operation.family.AddGlyph(newGlyph);
+        family.AddGlyph(newGlyph);
         glyphVariant.transformSettings.UpdateTransform();
 
         p_operation.glyph = newGlyph; // Store created glyph

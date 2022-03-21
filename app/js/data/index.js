@@ -4,6 +4,7 @@ module.exports = {
 
     serialization: require(`./serialization`),
 
+    ENUMS: require(`./enums`),
     IDS: require(`./ids`),
 
     SubFamily: require(`./sub-family-data-block`),
@@ -12,8 +13,8 @@ module.exports = {
     GlyphVariant: require(`./glyph-variant-data-block`),
     Glyph: require(`./glyph-data-block`),
 
-    TransformSettings: require(`./tr-settings-data-block`),
-    ImportSettings: require(`./import-settings-data-block`),
+    TransformSettings: require(`./settings-transforms-data-block`),
+    ImportSettings: require(`./settings-import-data-block`),
 
     TTF: require(`./ttf-import`),
 

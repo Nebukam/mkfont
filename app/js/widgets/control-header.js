@@ -2,10 +2,6 @@ const nkm = require(`@nkmjs/core`);
 const ui = nkm.ui;
 const uilib = nkm.uilib;
 
-const mkfData = require(`../data`);
-const GlyphRenderer = require(`./glyph-renderer`);
-const GlyphCanvasRenderer = require(`./glyph-canvas-renderer`);
-
 class ControlHeader extends ui.Widget {
     constructor() { super(); }
 

@@ -11,7 +11,7 @@ const IDS = require(`./ids`);
 const SimpleDataEx = require(`./simple-data-ex`);
 const SubFamily = require(`./sub-family-data-block`);
 const Glyph = require(`./glyph-data-block`);
-const ImportSettings = require(`./import-settings-data-block`);
+const ImportSettings = require(`./settings-import-data-block`);
 
 const ContentUpdater = require(`../content-updater`);
 

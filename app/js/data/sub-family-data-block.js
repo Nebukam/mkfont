@@ -8,7 +8,8 @@ const io = nkm.io;
 const SimpleDataEx = require(`./simple-data-ex`);
 const SIGNAL = require(`../signal`);
 const IDS = require(`./ids`);
-const ImportSettings = require(`./import-settings-data-block`);
+const ENUMS = require(`./enums`);
+const ImportSettings = require(`./settings-import-data-block`);
 
 const domparser = new DOMParser();
 const svgFontString =
@@ -43,13 +44,13 @@ class SubFamilyDataBlock extends SimpleDataEx {
             dsc: 0,
             ref: 1000,
             em: 1000,
-            mono:false
+            mono: false
         }
 
         let defaultEm = 1000;
 
         this._values = {
-            [IDS.WEIGHT_CLASS]: { value: IDS.weightList.At(3) },
+            [IDS.WEIGHT_CLASS]: { value: ENUMS.WEIGHTS.At(3).value },
             [IDS.FONT_STYLE]: { value: null },
 
             [IDS.CAP_HEIGHT]: { value: null },
@@ -69,10 +70,6 @@ class SubFamilyDataBlock extends SimpleDataEx {
             [IDS.UNDERLINE_POSITION]: { value: null },
             [IDS.UNDERLINE_THICKNESS]: { value: null },
             //[IDS.HANGING]: { value: 500 },
-
-            [IDS.SIZE]: { value: null },
-            [IDS.DISPLAY_SIZE]: { value: null },
-            [IDS.DISPLAY_OFFSET]: { value: null }
 
         };
 
@@ -170,10 +167,6 @@ class SubFamilyDataBlock extends SimpleDataEx {
         this._contextInfos.ref = ref;
         this._contextInfos.em = em;
         this._contextInfos.mono = this.Resolve(IDS.MONOSPACE);
-
-        //this.Set(IDS.SIZE, rh, true);
-        //this.Set(IDS.DISPLAY_SIZE, ref, true);
-        //this.Set(IDS.DISPLAY_OFFSET, 0, true);
 
     }
 

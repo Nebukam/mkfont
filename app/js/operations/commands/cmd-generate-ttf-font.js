@@ -32,12 +32,10 @@ class CmdGenerateTTFFont extends actions.Command {
         let
             family = this._context,
             bytes = SVGOPS.TTFFontFromSubFamily(family.defaultSubFamily);
-            
-        try{
-        fs.writeFileSync('./assets/myfont.ttf', Buffer.from(bytes));
-        }catch(e){
-            console.log(e);
-        }
+
+        try {
+            fs.writeFileSync('./assets/myfont.ttf', Buffer.from(bytes));
+        } catch (e) { console.error(e); }
 
         //console.log(svgFont);
 

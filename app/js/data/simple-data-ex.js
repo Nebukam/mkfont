@@ -9,8 +9,8 @@ const UTILS = require(`./utils`);
 
 class SimpleDataEx extends nkm.data.SimpleDataBlock {
 
-    constructor() { 
-        super(); 
+    constructor() {
+        super();
     }
 
     _Init() {
@@ -23,9 +23,9 @@ class SimpleDataEx extends nkm.data.SimpleDataBlock {
 
     }
 
-    _PostInit(){
+    _PostInit() {
         super._PostInit();
-        for(let i = 0; i < this._values.length; i++){
+        for (let i = 0; i < this._values.length; i++) {
             let valueObject = this._values[i];
             valueObject.override = valueObject.value == null ? false : true;
         }
@@ -46,30 +46,22 @@ class SimpleDataEx extends nkm.data.SimpleDataBlock {
             for (let p in this._values) {
                 if (!p_ids.includes(p)) { continue; }
                 let obj = this._values[p];
-                if(u.isInstanceOf(obj.value, nkm.data.catalogs.CatalogItem)){
-                    v[p] = { value:obj.value.value, override:obj.override };
-                }else{
-                    v[p] = { value:obj.value, override:obj.override };
-                }
+                if (`override` in obj) { v[p] = { value: obj.value, override: obj.override }; }
+                else { v[p] = obj.value; }
+
             }
         } else if (u.isObject(p_ids)) {
             for (let p in this._values) {
                 if (!(p in p_ids)) { continue; }
                 let obj = this._values[p];
-                if(u.isInstanceOf(obj.value, nkm.data.catalogs.CatalogItem)){
-                    v[p] = { value:obj.value.value, override:obj.override };
-                }else{
-                    v[p] = { value:obj.value, override:obj.override };
-                }
+                if (`override` in obj) { v[p] = { value: obj.value, override: obj.override }; }
+                else { v[p] = obj.value; }
             }
         } else {
             for (let p in this._values) {
                 let obj = this._values[p];
-                if(u.isInstanceOf(obj.value, nkm.data.catalogs.CatalogItem)){
-                    v[p] = { value:obj.value.value, override:obj.override };
-                }else{
-                    v[p] = { value:obj.value, override:obj.override };
-                }
+                if (`override` in obj) { v[p] = { value: obj.value, override: obj.override }; }
+                else { v[p] = obj.value; }
             }
         }
         return v;

@@ -7,10 +7,7 @@ const SIGNAL = require(`../signal`);
 
 const mkfData = require(`../data`);
 
-const GlyphRenderer = require(`./glyph-renderer`);
 const GlyphCanvasRenderer = require(`./glyph-canvas-renderer`);
-
-const __out_of_bounds = `outofbounds`;
 
 class GlyphSlot extends nkm.datacontrols.ControlWidget {
     constructor() { super(); }
@@ -31,7 +28,7 @@ class GlyphSlot extends nkm.datacontrols.ControlWidget {
         this._subFamily = null;
         this._glyphInfos = null;
 
-        this._flags.Add(this, __out_of_bounds);
+        this._flags.Add(this, mkfData.IDS.OUT_OF_BOUNDS);
 
         this._dataObserver.Hook(SIGNAL.VARIANT_UPDATED, this._UpdateGlyphPreview, this);
 
@@ -210,10 +207,10 @@ class GlyphSlot extends nkm.datacontrols.ControlWidget {
         if (this._glyphRenderer.Set(glyphVariant)) {
             this._glyphPlaceholder._element.style.display = `none`;
             this.classList.add(`exists`);
-            this._flags.Set(__out_of_bounds, glyphVariant.Get(mkfData.IDS.OUT_OF_BOUNDS));
+            this._flags.Set(mkfData.IDS.OUT_OF_BOUNDS, glyphVariant.Get(mkfData.IDS.OUT_OF_BOUNDS));
         } else {
             delete this._glyphPlaceholder._element.style.display;
-            this._flags.Set(__out_of_bounds, false);
+            this._flags.Set(mkfData.IDS.OUT_OF_BOUNDS, false);
             this.classList.remove(`exists`);
         }
     }
@@ -223,7 +220,7 @@ class GlyphSlot extends nkm.datacontrols.ControlWidget {
     }
 
     _Cleanup() {
-        this._flags.Set(__out_of_bounds, false);
+        this._flags.Set(mkfData.IDS.OUT_OF_BOUNDS, false);
         super._Cleanup();
     }
 

@@ -1,5 +1,6 @@
 const nkm = require(`@nkmjs/core`);
-const { Glyph } = require("../..");
+const Glyph = require(`../../glyph-data-block`);
+const IDS  = require(`../../ids`);
 
 
 
@@ -40,8 +41,7 @@ class FamilyDataBlockJSONSerializer extends nkm.data.serialization.json.DataBloc
     static SerializeContent(p_serial, p_data, p_options = null) {
         let fontObj = {};
 
-        // Font basic params
-        fontObj.params = p_data.ValuesAndOverrides();
+        fontObj.values = p_data.ValuesAndOverrides();
         fontObj.transforms = p_data._transformSettings.ValuesAndOverrides();
 
         // Glyphs
@@ -55,7 +55,7 @@ class FamilyDataBlockJSONSerializer extends nkm.data.serialization.json.DataBloc
                 glyph = p_data._glyphs.At(i),
                 variants = [],
                 glyphObj = {
-                    params: glyph.ValuesAndOverrides(),
+                    values: glyph.ValuesAndOverrides(),
                     variants: variants
                 };
 
@@ -66,9 +66,13 @@ class FamilyDataBlockJSONSerializer extends nkm.data.serialization.json.DataBloc
                 let
                     variant = glyph.GetVariant(glyph._glyphVariants.At(v)),
                     variantObj = {
-                        params: variant.ValuesAndOverrides(),
+                        values: variant.ValuesAndOverrides(),
                         transforms: variant._transformSettings.ValuesAndOverrides()
                     };
+
+                // cleanup runtime-computed values
+                delete variantObj.values[IDS.PATH];
+                delete variantObj.values[IDS.OUT_OF_BOUNDS];
 
                 variants.push(variantObj);
             }
@@ -84,7 +88,7 @@ class FamilyDataBlockJSONSerializer extends nkm.data.serialization.json.DataBloc
             let
                 subFamily = p_data._subFamilies.At(i),
                 subFamilyObj = {
-                    params: subFamily.ValuesAndOverrides(),
+                    values: subFamily.ValuesAndOverrides(),
                     transforms: subFamily._transformSettings.ValuesAndOverrides()
                 };
 
@@ -105,7 +109,7 @@ class FamilyDataBlockJSONSerializer extends nkm.data.serialization.json.DataBloc
 
         // Need specific implementation.
         let fontObj = p_serial[nkm.data.serialization.CONTEXT.JSON.DATA_KEY];
-        if (fontObj.params) { p_data.BatchSet(fontObj.params, true); }
+        if (fontObj.values) { p_data.BatchSet(fontObj.values, true); }
         if (fontObj.transforms) { p_data._transformSettings.BatchSet(fontObj.transforms, true); }
 
         // Re-create subFamilies first
@@ -124,7 +128,7 @@ class FamilyDataBlockJSONSerializer extends nkm.data.serialization.json.DataBloc
                     throw new Error(`not implemented`);
                 }
 
-                if (subFamObj.params) { subFam.BatchSet(subFamObj.params); }
+                if (subFamObj.values) { subFam.BatchSet(subFamObj.values); }
                 if (subFamObj.transforms) { subFam._transformSettings.BatchSet(subFamObj.transforms); }
                 subFamilies.push(subFam);
             }
@@ -136,7 +140,7 @@ class FamilyDataBlockJSONSerializer extends nkm.data.serialization.json.DataBloc
                         glyphObj = fontObj.glyphs[i],
                         variants = glyphObj.variants;
 
-                    if (glyphObj.params) { glyph.BatchSet(glyphObj.params); }
+                    if (glyphObj.values) { glyph.BatchSet(glyphObj.values); }
 
                     p_data.AddGlyph(glyph);
 
@@ -146,7 +150,7 @@ class FamilyDataBlockJSONSerializer extends nkm.data.serialization.json.DataBloc
 
                         variant = glyph.GetVariant(subFamilies[v]);
 
-                        if (glyphObj.params) { variant.BatchSet(variantObj.params); }
+                        if (glyphObj.values) { variant.BatchSet(variantObj.values); }
                         if (glyphObj.transforms) { variant._transformSettings.BatchSet(variantObj.transforms); }
                         
                     }

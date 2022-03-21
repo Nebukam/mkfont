@@ -73,11 +73,6 @@ class GlyphGroup extends ui.WidgetItem {
         this._tpl = ui.DOMTemplate.Render(uilib.dom.BodyExpand, this);
     }
 
-    _OnItemDataChanged(p_oldItemData) {
-        super._OnItemDataChanged(p_oldItemData);
-        console.log(this._itemData);
-    }
-
     //#region Catalog Management
 
     /**

@@ -46,10 +46,9 @@ class FontEditor extends nkm.uiworkspace.editors.EditorEx {
 
     }
 
-    _PostInit(){
+    _PostInit() {
         super._PostInit();
         this._actionStackInspector.data = this._actionStack;
-        console.log(this._actionStackInspector.data);
     }
 
     _InitShelfCatalog(p_configList) {
@@ -83,7 +82,7 @@ class FontEditor extends nkm.uiworkspace.editors.EditorEx {
                 [ui.IDS.VIEW_CLASS]: nkm.uiworkspace.inspectors.ActionStack,
                 assign: `_actionStackInspector`,
                 [ui.IDS.DATA]: this._actionStack,
-                ignoreData:true
+                ignoreData: true
             }
         );
 
@@ -107,7 +106,7 @@ class FontEditor extends nkm.uiworkspace.editors.EditorEx {
 
             if (view) {
                 if (conf.isInspector) { this.forwardInspected.To(view); }
-                else if(!conf.ignoreData){ this.forwardData.To(view); }
+                else if (!conf.ignoreData) { this.forwardData.To(view); }
                 if (assign) { this[assign] = view; }
             }
 
@@ -267,7 +266,6 @@ class FontEditor extends nkm.uiworkspace.editors.EditorEx {
     }
 
     _OnGlyphRemoved(p_family, p_glyph) {
-        console.log(`glyph removed`, p_glyph, this._inspectedData);
         if (this._inspectedData == p_glyph) {
             p_family.nullGlyph.unicodeInfos = p_glyph.unicodeInfos;
             this.Inspect(p_family.nullGlyph);

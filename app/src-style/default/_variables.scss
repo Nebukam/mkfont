@@ -10,15 +10,19 @@ $primary_light: #e5e5e5;
 $bg_dark: #191919; 
 $bg_light: #f0f0f0;
 
+//$col_error: rgb(226, 53, 0);
+//$col_loading: rgb(102, 119, 204);
+
 $col_infos: rgb(102, 175, 204);
 $col_warning: rgb(255, 166, 0);
-$col_error: rgb(226, 53, 0);
+$col_error: rgb(237, 30, 121);
 $col_ready: rgb(120, 164, 0);
 $col_dirty: rgb(164, 100, 0);
-$col_loading: rgb(102, 119, 204);
+$col_loading: rgb(112, 141, 204);
 $col_processing: rgb(102, 119, 204);
 $col_waiting: rgb(102, 119, 204);
 $col_active: rgb(62, 193, 136);
+$col_input_bg: rgb(32, 32, 32);
 
 $varname_col_infos: '--col-infos';
 $varname_col_warning: '--col-warning';
@@ -30,6 +34,8 @@ $varname_col_processing: '--col-processing';
 $varname_col_waiting: '--col-waiting';
 $varname_col_active: '--col-active';
 $varname_col_cta: '--col-cta';
+
+$varname_col_input_bg: '--col-input-bg';
 
 ///////////
 /* Sizes */

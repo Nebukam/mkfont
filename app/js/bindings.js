@@ -3,6 +3,8 @@
 const nkm = require("@nkmjs/core");
 const mkfInspectors = require(`./editors/inspectors`);
 const mkfData = require(`./data`);
+const mkfCatalogs = require(`./catalogs`);
+const mkfWidgets = require(`./widgets`);
 
 class Bindings extends nkm.com.helpers.BindingKit {
     constructor() { super(); }
@@ -14,6 +16,12 @@ class Bindings extends nkm.com.helpers.BindingKit {
                 context: nkm.data.catalogs.Catalog,
                 kvps: [
                     { key: mkfData.Glyph, binding: mkfData.Slot },
+                ]
+            },
+            {
+                context: nkm.uilib.lists.FolderList,
+                kvps: [
+                    { key: mkfCatalogs.UniCategory, binding: mkfWidgets.lists.UniCategory },
                 ]
             },
             {

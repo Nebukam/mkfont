@@ -4,6 +4,8 @@ const nkm = require(`@nkmjs/core`);
 const ui = nkm.ui;
 const inputs = nkm.uilib.inputs;
 
+const ENUMS = require(`./enums`);
+
 /**
  * @description TODO
  * @class
@@ -12,18 +14,6 @@ const inputs = nkm.uilib.inputs;
  */
 class IDS {
     constructor() { }
-
-    static weightList = nkm.data.catalogs.CreateFrom({ name: `Weights`, autoSort: false }, [
-        { name: `Thin`, value: 100 },
-        { name: `Extra Light`, value: 200 },
-        { name: `Light`, value: 300 },
-        { name: `Normal`, value: 400 },
-        { name: `Medium`, value: 500 },
-        { name: `Semi Bold`, value: 600 },
-        { name: `Bold`, value: 700 },
-        { name: `Extra Bold`, value: 800 },
-        { name: `Black`, value: 900 },
-    ]);
 
     // Family properties
     static ID = 'id';
@@ -65,10 +55,6 @@ class IDS {
     static UNICODE = 'unicode';
 
     // Misc properties
-    static SIZE = 'size';
-    static DISPLAY_SIZE = 'display-size';
-    static DISPLAY_OFFSET = 'display-offset';
-
     static CUSTOM_WIDTH = 'custom-width';
 
     static COLOR_PREVIEW = 'color-preview';
@@ -79,63 +65,22 @@ class IDS {
 
     // Import properties
 
-    static trReference = nkm.data.catalogs.CreateFrom({ name: `Transform reference`, autoSort: false }, [
-        { name: `Imported bounds`, value: 0, icon: 'bounds-outside' },
-        { name: `Mixed bounds`, value: 2, icon: 'bounds-mixed' },
-        { name: `Glyph bounds`, value: 1, icon: 'bounds-inside' },
-    ]);
 
-    static trScaleModes = nkm.data.catalogs.CreateFrom({ name: `Scale`, autoSort: false }, [
-        { name: `None `, value: -1, icon: 'minus' },
-        { name: `EM `, value: 0, icon: 'text-em' },
-        { name: `Baseline`, value: 1, icon: 'font-baseline' },
-        { name: `Spread`, value: 2, icon: 'font-bounds-h' },
-        { name: `Height`, value: 3, icon: 'spread-ver' },
-        { name: `Manual`, value: 4, icon: 'edit' },
-    ]);
-
-    static trVerAlign = nkm.data.catalogs.CreateFrom({ name: `Vertical anchoring`, autoSort: false }, [
-        { name: `Top `, value: -1, icon: 'font-ascender' },
-        { name: `Baseline`, value: 0, icon: 'font-baseline' },
-        { name: `Descender`, value: 1, icon: 'font-descender' },
-        { name: `Vertical spread`, value: 2, icon: 'center-ver' },
-        //{ name: `To Value`, value: 2, icon: 'edit' },
-    ]);
-
-    static trVerAlignAnchors = nkm.data.catalogs.CreateFrom({ name: `Anchoring alignment`, autoSort: false }, [
-        { name: `Bottom `, value: 0, icon: 'align-ver-bottom' },
-        { name: `Center`, value: 1, icon: 'align-ver-center' },
-        { name: `Top`, value: 2, icon: 'align-ver-top' },
-    ]);
-
-    static trHorAlign = nkm.data.catalogs.CreateFrom({ name: `Horizontal anchoring`, autoSort: false }, [
-        { name: `Bound min x`, value: 0, icon: 'font-bounds-xmin' },
-        { name: `Bound max x`, value: 2, icon: 'font-bounds-xmax' },
-        { name: `Horizontal spread`, value: 1, icon: 'center-hor' },
-        //{ name: `To Value`, value: 2, icon: 'edit' },
-    ]);
-
-    static trHorAlignAnchors = nkm.data.catalogs.CreateFrom({ name: `Anchoring alignment`, autoSort: false }, [
-        { name: `Left `, value: 0, icon: 'align-hor-left' },
-        { name: `Center`, value: 1, icon: 'align-hor-center' },
-        { name: `Right`, value: 2, icon: 'align-hor-right' },
-    ]);
-
-    static TR_REFERENCE = 'tr-reference';
-    static TR_SCALE_MODE = 'tr-scale-mode';
-    static TR_SCALE_FACTOR = 'tr-scale-factor';
+    static TR_BOUNDS_MODE = 'bounds';
+    static TR_SCALE_MODE = 'scale';
+    static TR_SCALE_FACTOR = 'scale-factor';
     
-    static TR_VER_ALIGN = 'tr-ver-align';
-    static TR_VER_ALIGN_ANCHOR = 'tr-ver-align-anchor';
-    static TR_HOR_ALIGN = 'tr-hor-align';
-    static TR_HOR_ALIGN_ANCHOR = 'tr-hor-align-anchor';
+    static TR_VER_ALIGN = 'valign';
+    static TR_VER_ALIGN_ANCHOR = 'vanchor';
+    static TR_HOR_ALIGN = 'halign';
+    static TR_HOR_ALIGN_ANCHOR = 'hanchor';
 
-    static TR_WIDTH_SHIFT = 'tr-width-shift';
-    static TR_WIDTH_PUSH = 'tr-width-push';
+    static TR_WIDTH_SHIFT = 'xshift';
+    static TR_WIDTH_PUSH = 'xpush';
     
     //
     static IMPORT_PREFIX = 'import-prefix';
-    static IMPORT_SEPARATOR = 'import-separator';
+    static IMPORT_SEPARATOR = 'import-sep';
 
     static infos = {
 
@@ -200,8 +145,9 @@ class IDS {
 
         [this.WEIGHT_CLASS]: {
             inputType: inputs.Select,
+            enum:ENUMS.WEIGHTS,
             label: `Weight class`,
-            inputOptions: { catalog: this.weightList },
+            inputOptions: { catalog: ENUMS.WEIGHTS, itemKey:nkm.com.IDS.VALUE },
             desc: `Normal, Bold, Heavy, Ultra-Heavy`,
         },
         [this.FONT_STYLE]: {
@@ -341,18 +287,20 @@ class IDS {
 
         // Import settings
         
-        [this.TR_REFERENCE]: {
+        [this.TR_BOUNDS_MODE]: {
             transform:true,
+            enum:ENUMS.BOUNDS,
             inputType: inputs.InlineSelect,
             label: `Glyph bounds`,
-            inputOptions: { catalog: this.trReference, size: ui.FLAGS.SIZE_M },
+            inputOptions: { catalog: ENUMS.BOUNDS, itemKey:nkm.com.IDS.VALUE, size: ui.FLAGS.SIZE_M },
             desc: `The reference bounds used to compute transformations.`
         },
         [this.TR_SCALE_MODE]: {
             transform:true,
+            enum:ENUMS.SCALE,
             inputType: inputs.InlineSelect,
             label: `Scale mode`,
-            inputOptions: { catalog: this.trScaleModes, size: ui.FLAGS.SIZE_M },
+            inputOptions: { catalog: ENUMS.SCALE, itemKey:nkm.com.IDS.VALUE, size: ui.FLAGS.SIZE_M },
             desc: `Scale`
         },
         [this.TR_SCALE_FACTOR]: {
@@ -380,31 +328,35 @@ class IDS {
 
         [this.TR_VER_ALIGN]: {
             transform:true,
+            enum:ENUMS.VALIGN,
             inputType: inputs.InlineSelect,
             label: `Align`,
-            inputOptions: { catalog: this.trVerAlign, size: ui.FLAGS.SIZE_M },
+            inputOptions: { catalog: ENUMS.VALIGN, itemKey:nkm.com.IDS.VALUE, size: ui.FLAGS.SIZE_M },
             desc: `...`
         },
         [this.TR_VER_ALIGN_ANCHOR]: {
             transform:true,
+            enum:ENUMS.VANCHOR,
             inputType: inputs.InlineSelect,
             label: `Anchor`,
-            inputOptions: { catalog: this.trVerAlignAnchors, size: ui.FLAGS.SIZE_M },
+            inputOptions: { catalog: ENUMS.VANCHOR, itemKey:nkm.com.IDS.VALUE, size: ui.FLAGS.SIZE_M },
             desc: `...`
         },
 
         [this.TR_HOR_ALIGN]: {
             transform:true,
+            enum:ENUMS.HALIGN,
             inputType: inputs.InlineSelect,
             label: `Align`,
-            inputOptions: { catalog: this.trHorAlign, size: ui.FLAGS.SIZE_M },
+            inputOptions: { catalog: ENUMS.HALIGN, itemKey:nkm.com.IDS.VALUE, size: ui.FLAGS.SIZE_M },
             desc: `...`
         },
         [this.TR_HOR_ALIGN_ANCHOR]: {
             transform:true,
+            enum:ENUMS.HANCHOR,
             inputType: inputs.InlineSelect,
             label: `Anchor`,
-            inputOptions: { catalog: this.trHorAlignAnchors, size: ui.FLAGS.SIZE_M },
+            inputOptions: { catalog: ENUMS.HANCHOR, itemKey:nkm.com.IDS.VALUE, size: ui.FLAGS.SIZE_M },
             desc: `...`
         },
 

@@ -45,23 +45,23 @@ select {
     -moz-appearance: none;
     appearance: none; 
 
-    background-color: var(--col-active-contrast);
+    background-color: var(#{$varname_col_input_bg});
     color: rgba(200,200,200,1);
  
     &:checked{
         //font-weight: bolder;
-        background-color: var(--col-active-contrast);
+        background-color: var(#{$varname_col_input_bg});
         color: var(--col-active);
     }
 
     &:hover {
         background-color: var(--col-active);
-        color: var(--col-active-contrast);
+        color: var(#{$varname_col_input_bg});
     }
 
     &:active{
         background-color: var(--col-active);
-        color: var(--col-active-contrast);
+        color: var(#{$varname_col_input_bg});
     }
 
 }

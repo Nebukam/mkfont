@@ -16,6 +16,8 @@ const fs = require('fs');
 
 com.BINDINGS.Expand(require(`./bindings`)); //!important
 
+const __fontName = `Inter-Regular`;// `Basement-Medium`;// `Meticula`; //`Inter-Regular`
+
 /**
  * SteamGameFinder allows you to find which multiplayer games are shared within a group of steam users
  */
@@ -36,17 +38,21 @@ class MKFont extends nkm.app.AppBase {
 
         super.AppReady();
 
-        nkm.style.Set(`--col-default`, `#000`);
-        nkm.style.Set(`--col-letter`, `#00ff96`);
-        nkm.style.Set(`--col-mark`, `#ffea00`);
-        nkm.style.Set(`--col-number`, `#00a2ff`);
-        nkm.style.Set(`--col-separator`, `#ba00ff`);
-        nkm.style.Set(`--col-control`, `#ff0000`);
-        nkm.style.Set(`--col-other`, `#c5c5c5`);
-        nkm.style.Set(`--col-modifier`, `#7259a6`);
-        nkm.style.Set(`--col-punctuation`, `#a6932d`);
-        nkm.style.Set(`--col-symbol`, `#4d638e`);
-        nkm.style.Set(`--col-ligature`, `#72d300`);
+        let cols = {
+            default: `#000`,
+            letter: `#00ff96`,
+            mark: `#ffea00`,
+            number: `#00a2ff`,
+            separator: `#ba00ff`,
+            control: `#ff0000`,
+            other: `#c5c5c5`,
+            modifier: `#7259a6`,
+            punctuation: `#a6932d`,
+            symbol: `#4d638e`,
+            ligature: `#72d300`,
+        };
+
+        for (var p in cols) { nkm.style.Set(`--col-${p}`, cols[p]); }
 
         this._mainCatalog = nkm.data.catalogs.CreateFrom({
             [com.IDS.NAME]: `MKF`
@@ -80,46 +86,39 @@ class MKFont extends nkm.app.AppBase {
             [ui.IDS.STATIC]: true
         });
 
+        //mkfOperations.commands.MakeTTFFont.Enable();
+        //nkm.actions.KeystrokeEx.CreateFromString(`Ctrl E`, { fn: this._Bind(this._WriteTTF) }).Enable();
+
+        this._EmptyFamily();
+        //this._FamilyFromTTF();
+
+    }
+
+    _EmptyFamily() {
         this._tempFontData = new mkfData.Family();
+        this._AssignFamily(this._tempFontData);
+    }
 
-        this._iconFolder = `D:/GIT/nkmjs/packages/nkmjs-style/src-style/default/assets/icons`;
+    _FamilyFromTTF() {
+        this._tempFontData = new mkfData.Family();
+        this._tempFontData = mkfData.TTF.FamilyFromTTF(fs.readFileSync(`./assets/${__fontName}.ttf`));
+        this._AssignFamily(this._tempFontData);
+    }
 
-        let fName = `Inter-Regular`;// `Basement-Medium`;// `Meticula`; //`Inter-Regular`;
-        this._tempFontData = mkfData.TTF.FamilyFromTTF(fs.readFileSync(`./assets/${fName}.ttf`));
-
-        mkfOperations.commands.MakeTTFFont.Enable();
-
-        nkm.actions.KeystrokeEx.CreateFromString(`Ctrl E`, { fn: this._Bind(this._WriteTTF) }).Enable();
+    _AssignFamily(p_family) {
 
         let fontEditor = this._editorView.options.view;
-
         fontEditor.RequestDisplay();
         fontEditor.data = this._tempFontData;
+
         fontEditor.SetActiveRange(UNICODE.instance._blockCatalog.At(0));
 
-        //this._TestImportPopup();
         console.log(JSON.stringify(nkm.data.serialization.JSONSerializer.Serialize(this._tempFontData)));
 
     }
 
     _WriteTTF() {
         mkfOperations.commands.MakeTTFFont.Execute(this._tempFontData);
-    }
-
-    _TestImportPopup(){
-
-        let iInspector = nkm.ui.UI.Rent(`mkfont-single-tr-preview`);
-
-        nkm.dialog.Push({
-            title: `Import tweaks`,
-            message: `Tweak the imported data to make sure it fits!`,
-            content: [{ cl: iInspector, donotrelease: true }],
-            actions: [
-                { label: `Looks good`, flavor: nkm.com.FLAGS.READY, variant: nkm.ui.FLAGS.FRAME },
-                { label: `Cancel`, trigger: { fn: this._Cancel, thisArg: this } }
-            ],
-            origin: this,
-        });
     }
 
 }

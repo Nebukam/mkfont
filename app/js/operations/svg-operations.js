@@ -1,6 +1,7 @@
 const nkm = require(`@nkmjs/core`);
 const css = nkm.style.CSS;
 const IDS = require(`../data/ids`);
+const ENUMS = require(`../data/enums`);
 const UNICODE = require(`../unicode`);
 
 const { optimize } = require('svgo');
@@ -191,7 +192,6 @@ class SVGOperations {
                 emptyPath: true
             };
 
-        console.log(result);
         return result;
     }
 
@@ -275,12 +275,7 @@ class SVGOperations {
     static FitPath(p_settings, p_context, p_svgStats) {
 
         let path = p_svgStats.path,
-            refMode = p_settings.Get(IDS.TR_REFERENCE).GetOption(`value`, 0),
-            scaleMode = p_settings.Get(IDS.TR_SCALE_MODE).GetOption(`value`, 0),
-            vAlign = p_settings.Get(IDS.TR_VER_ALIGN).GetOption(`value`, 0),
-            vAnchor = p_settings.Get(IDS.TR_VER_ALIGN_ANCHOR).GetOption(`value`, 0),
-            hAlign = p_settings.Get(IDS.TR_HOR_ALIGN).GetOption(`value`, 0),
-            hAnchor = p_settings.Get(IDS.TR_HOR_ALIGN_ANCHOR).GetOption(`value`, 0),
+            refMode = p_settings.Get(IDS.TR_BOUNDS_MODE),
             sShift = p_settings.Resolve(IDS.TR_WIDTH_SHIFT),
             sPush = p_settings.Resolve(IDS.TR_WIDTH_PUSH),
             mono = p_context.mono;
@@ -304,13 +299,13 @@ class SVGOperations {
             offsetY = 0,
             offsetX = 0;
 
-        if (refMode == 1) {
+        if (refMode == ENUMS.BOUNDS_INSIDE) {
             heightRef = bbox.height;
             widthRef = bbox.width;
             path = svgpath(path)
                 .translate(-bbox.x, -bbox.y)
                 .toString();
-        } else if (refMode == 2) {
+        } else if (refMode == ENUMS.BOUNDS_MIXED) {
             widthRef = bbox.width;
             path = svgpath(path)
                 .translate(-bbox.x, 0)
@@ -318,63 +313,99 @@ class SVGOperations {
         }
 
 
-        switch (scaleMode) {
-            case 0: scale = p_context.em / heightRef; break;// EM
-            case 1: scale = p_context.asc / heightRef; break;// Baseline
-            case 2: scale = (p_context.asc - p_context.dsc) / heightRef; break;// Spread
-            case 3: scale = p_context.h / heightRef; break;// Height
-            case 4: scale = p_settings.Resolve(IDS.TR_SCALE_FACTOR); break;// Manual
-            default: break;// None
+        switch (p_settings.Get(IDS.TR_SCALE_MODE)) {
+            case ENUMS.SCALE_EM:
+                scale = p_context.em / heightRef;
+                break;
+            case ENUMS.SCALE_BASELINE:
+                scale = p_context.asc / heightRef;
+                break;
+            case ENUMS.SCALE_SPREAD:
+                scale = (p_context.asc - p_context.dsc) / heightRef;
+                break;
+            case ENUMS.SCALE_HEIGHT:
+                scale = p_context.h / heightRef;
+                break;
+            case ENUMS.SCALE_MANUAL:
+                scale = p_settings.Resolve(IDS.TR_SCALE_FACTOR);
+                break;
+            default:
+            case ENUMS.SCALE_NONE:
+                break;
         }
 
         heightRef *= scale; widthRef *= scale;
 
-        if (Math.abs(wOff) < 1.00001) { widthRef += widthRef * wOff; }
-        else { widthRef += wOff; }
-
         // V align
 
-        switch (vAlign) {
-            case 0: offsetY = p_context.asc - heightRef; break;// To Baseline (ascent)
-            case 1: offsetY = (p_context.asc - p_context.dsc) - heightRef; break;// To Descent (ascent - descent)
-            case 2: offsetY = p_context.em * 0.5 - heightRef; break;// To Descent (ascent - descent)
-            default: offsetY = -heightRef; break;// None, or top
+        switch (p_settings.Get(IDS.TR_VER_ALIGN)) {
+            case ENUMS.VALIGN_BASELINE:
+                offsetY = p_context.asc - heightRef;
+                break;
+            case ENUMS.VALIGN_DESC:
+                offsetY = (p_context.asc - p_context.dsc) - heightRef;
+                break;
+            case ENUMS.VALIGN_SPREAD:
+                offsetY = p_context.em * 0.5 - heightRef;
+                break;
+            default:
+            case ENUMS.VALIGN_TOP:
+                offsetY = -heightRef;
+                break;
         }
 
-        switch (vAnchor) {
-            case 0: offsetY += 0; break;// Bottom
-            case 1: offsetY += heightRef * 0.5; break;// Center
-            default: offsetY += heightRef; break; // Top
+        switch (p_settings.Get(IDS.TR_VER_ALIGN_ANCHOR)) {
+            case ENUMS.VANCHOR_BOTTOM:
+                offsetY += 0;
+                break;
+            case ENUMS.VANCHOR_CENTER:
+                offsetY += heightRef * 0.5;
+                break;
+            default:
+            case ENUMS.VANCHOR_TOP:
+                offsetY += heightRef;
+                break;
         }
 
 
         // H align
 
+        let hAlign = p_settings.Get(IDS.TR_HOR_ALIGN);
+        if (hAlign == ENUMS.HALIGN_XMIN) {
+            if (Math.abs(wOff) < 1.00001) { widthRef += widthRef * wOff; }
+            else { widthRef += wOff; }
+        }
 
-        switch (hAnchor) {
-            case 0: offsetX += 0; break;// Left
-            case 1: offsetX -= widthRef * 0.5; break;// Center
-            default: offsetX -= widthRef; break;// Right
+        switch (p_settings.Get(IDS.TR_HOR_ALIGN_ANCHOR)) {
+            case ENUMS.HANCHOR_LEFT:
+                offsetX += 0;
+                break;
+            case ENUMS.HANCHOR_CENTER:
+                offsetX -= widthRef * 0.5;
+                break;
+            default:
+            case ENUMS.HANCHOR_RIGHT:
+                offsetX -= widthRef;
+                break;
         }
 
         if (mono) { widthRef = p_context.w; }
 
         switch (hAlign) {
-            case 0:
+            case ENUMS.HALIGN_XMIN:
                 offsetX += sShift;
                 widthRef += sShift + sPush;
-                break;// To Base
-            case 1:// To Center
+                break;
+            case ENUMS.HALIGN_SPREAD:
                 widthRef = p_context.w;
                 offsetX += widthRef * 0.5;
                 break;
-            default:// To Family extent
+            default:
+            case ENUMS.HALIGN_XMAX:
                 widthRef = p_context.w;
                 offsetX += widthRef;
                 break;
         }
-
-
 
         path = svgpath(path)
             .scale(scale)

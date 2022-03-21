@@ -7,7 +7,7 @@ const io = nkm.io;
 
 const SimpleDataEx = require(`./simple-data-ex`);
 const IDS = require(`./ids`);
-const TransformSettings = require(`./tr-settings-data-block`);
+const TransformSettings = require(`./settings-transforms-data-block`);
 
 const svgpath = require('svgpath');
 const ContentUpdater = require(`../content-updater`);
@@ -27,11 +27,11 @@ class GlyphVariantDataBlock extends SimpleDataEx {
         super._Init();
 
         this._values = {
-            [IDS.H_ORIGIN_X]: { value: null },
-            [IDS.H_ORIGIN_Y]: { value: null },
+            //[IDS.H_ORIGIN_X]: { value: null },
+            //[IDS.H_ORIGIN_Y]: { value: null },
             [IDS.WIDTH]: { value: null, override: true },
-            [IDS.V_ORIGIN_X]: { value: null },
-            [IDS.V_ORIGIN_Y]: { value: null },
+            //[IDS.V_ORIGIN_X]: { value: null },
+            //[IDS.V_ORIGIN_Y]: { value: null },
             [IDS.HEIGHT]: { value: null, override: false },
             [IDS.PATH]: { value: '' },
             [IDS.PATH_DATA]: { value: null },

@@ -1,13 +1,11 @@
 'use strict';
 
 module.exports = {
-        
-    Block: require(`./block-item`),
-    BlockRoot: require(`./block-root`),
-    
-    Filter: require(`./cat-item`),
-    FilterList: require(`./cat-list`),
-    FilterRoot: require(`./cat-root`),
-    
+      
+    UniFamily: require(`./item-uni-family`),
+    UniCategory: require(`./item-uni-cat`),
+    UniBlock: require(`./item-uni-block`),
+
     ImportListRoot: require(`./import-list-root`),
+
 }

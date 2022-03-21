@@ -339,7 +339,7 @@ function getRanges(p_glyphList) {
                 ranges.push(currentRange);
             }
         } else {
-            console.log(`${current_i} / ${last_i + 1} / ${last_i} `);
+            //console.log(`${current_i} / ${last_i + 1} / ${last_i} `);
             currentRange = [];
             ranges.push(currentRange);
         }
@@ -456,7 +456,7 @@ console.log(characterLines.length);
 
 
 
-let js = fs.readFileSync(`./assets/unicode-singleton-template.js`, `utf8`);
+let js = fs.readFileSync(`./app/js-unicode/unicode-singleton-template.js`, `utf8`);
 js = js.split(`UNI_BLOCKS`).join(UNI_BLOCKS);
 js = js.split(`UNI_GENERAL_CATEGORIES`).join(UNI_GENERAL_CATEGORIES);
 js = js.split(`UNI_CATEGORIES`).join(UNI_CATEGORIES);

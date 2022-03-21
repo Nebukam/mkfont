@@ -1,8 +1,12 @@
 'use strict';
 
 module.exports = {
-        
-    GlyphDefinition: require(`./glyph-definition`),
-    ImportDefinition: require(`./import-definition`),
+
+    Glyph: require(`./definition-glyph`),
+    Import: require(`./definition-import`),
+
+    UniBlock: require(`./definition-uni-block`),
+    UniCategory: require(`./definition-uni-cat`),
+    UniFamily: require(`./definition-uni-family`),
 
 }

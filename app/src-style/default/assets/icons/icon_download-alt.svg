@@ -4,8 +4,8 @@
   </g>
   <g id="accent">
     <g>
-      <polyline points="71.48 36.5 49.85 58.13 28.21 36.5" fill="none" stroke="#3ec188" stroke-linecap="round" stroke-linejoin="round" stroke-width="10"/>
-      <line x1="49.85" y1="14.86" x2="49.85" y2="58.13" fill="none" stroke="#3ec188" stroke-linecap="round" stroke-linejoin="round" stroke-width="10"/>
+      <polyline points="71.48 36.5 49.85 58.13 28.21 36.5" fill="none" stroke="#708dcc" stroke-linecap="round" stroke-linejoin="round" stroke-width="10"/>
+      <line x1="49.85" y1="14.86" x2="49.85" y2="58.13" fill="none" stroke="#708dcc" stroke-linecap="round" stroke-linejoin="round" stroke-width="10"/>
     </g>
   </g>
 </svg>

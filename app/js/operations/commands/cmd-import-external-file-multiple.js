@@ -35,13 +35,6 @@ class CmdImportExternalFileMultiple extends actions.Command {
 
     _InternalExecute() {
 
-        console.log(`CmdImportExternalFileMultiple -> `, this._context);
-
-        // - File picker
-        // - DIALOG popup management
-        // - If dialog confirms import, then move on to next step
-        // - If dialog is cancelled, then fail this command.
-
         if (nkm.env.isNodeEnabled) {
             nkm.actions.RELAY.ShowOpenDialog({
                 //defaultPath: this._currentValue ? this._currentValue : ``,
@@ -94,7 +87,7 @@ class CmdImportExternalFileMultiple extends actions.Command {
                 this._importCatalog.Register(entryOptions);
 
             }
-            catch (e) { console.log(e); }
+            catch (e) { console.error(e); }
         }
 
         if (this._importCatalog.count == 0) {
@@ -139,7 +132,7 @@ class CmdImportExternalFileMultiple extends actions.Command {
             list = this._importCatalog._items,
             trValues = this._importTransformationSettings.Values();
 
-        editor.StartActionGroup();
+        editor.StartActionGroup({ title: `Import SVGs` });
 
         for (let i = 0; i < list.length; i++) {
             let item = list[i],
@@ -158,7 +151,6 @@ class CmdImportExternalFileMultiple extends actions.Command {
                     unicodeInfos = UNICODE.GetSingle(uniStruct[0]),
                     existingGlyph = family.GetGlyph(unicodeInfos.u);
 
-                console.log(`unistruct : `, uniStruct, unicodeInfos);
                 if (existingGlyph.isNull) {
                     editor.Do(mkfActions.CreateGlyph, {
                         family: family,

@@ -40,6 +40,7 @@ class ActionSetEM extends ActionSetPropertyValue {
             // - Width
             // - Height
             // Need to scale all glyph metrics
+            // - Width (even thought it's computed)
             // - Shift
             // - Push
             // - Manual scale factor if any
