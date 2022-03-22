@@ -1,7 +1,7 @@
 'use strict';
 
 const IDS = require(`./ids`);
-
+const IDS_EXT = require(`./ids-ext`);
 /**
  * @description TODO
  * @class
@@ -37,6 +37,40 @@ class UTILS {
 
     }
 
+    static GetRangeInfos(p_family, p_value){
+
+        let results = {
+            indexOffset:0,
+            indexCount:0,
+            list:null,
+            type:null
+        };
+
+        if (`includes` in p_value) {
+            // Expect an mixed array of indices & [a,b] ranges
+            results.indexOffset = p_value.imin;
+            results.indexCount = p_value.count;
+            results.list = p_value.includes;
+            results.type = IDS_EXT.RANGE_MIXED;
+
+        } else if (`start` in p_value) {
+            // Block with a count & start index
+            results.indexOffset = p_value.start;
+            results.indexCount = p_value.count;
+            results.type = IDS_EXT.RANGE_INLINE;
+
+        } else if (`fetchList` in p_value) {
+            // Single array of unicode string, likely ligatures.
+            results.list = p_value.fetchList(p_family);
+            results.indexOffset = 0;
+            results.indexCount = results.list.length;
+            results.type = IDS_EXT.RANGE_PLAIN;
+        }
+
+        return results;
+
+    }
+
     static GetFamilyUArray(p_family) {
         return p_family._glyphUnicodeCache;
     }
@@ -47,6 +81,7 @@ class UTILS {
             (item, index) => {
                 if (p_family._ligatureSet.has(item)) { result.push(item.Get(IDS.UNICODE)); }
             });
+            console.log(result);
         return result;
     }
 
@@ -54,6 +89,9 @@ class UTILS {
         return [];
     }
 
+    static GetSearchResultsArray(p_family){
+        return [];
+    }
 
 }
 

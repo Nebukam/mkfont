@@ -6,10 +6,13 @@ const ui = nkm.ui;
 
 const UNICODE = require(`../../unicode`);
 const SIGNAL = require(`../../signal`);
+const IDS_EXT = require(`../../data/ids-ext`);
+const UTILS = require(`../../data/utils`);
 const ContentUpdater = require("../../content-updater");
 const mkfWidgets = require(`../../widgets`);
 const GlyphGroup = require(`./glyph-group`);
 const GlyphGroupHeader = require(`./glyph-group-header`);
+const GlyphGroupSearch = require(`./glyph-group-search`);
 
 class GlyphGroupsView extends ui.views.View {
     constructor() { super(); }
@@ -29,10 +32,7 @@ class GlyphGroupsView extends ui.views.View {
         this._OnIndexRequestCB = null;
         this._domStreamer = null;
         this._unicodeMap = new Map();
-
-        this._indexOffset = 0;
-        this._indexCount = 0;
-        this._referenceList = null;
+        this._rangeInfos = null;
 
         this._dataObserver
             .Hook(SIGNAL.GLYPH_ADDED, this._OnGlyphAdded, this)
@@ -71,6 +71,10 @@ class GlyphGroupsView extends ui.views.View {
         this._header = this.Add(GlyphGroupHeader, `header`);
         this.forwardData.To(this._header);
 
+        console.log(GlyphGroupSearch);
+        this._search = this.Add(GlyphGroupSearch, `search`);
+        //this.forwardData.To(this._search);
+
         this._domStreamer = this.Add(ui.helpers.DOMStreamer, 'dom-stream', this._host);
         this._domStreamer
             .Watch(ui.SIGNAL.ITEM_CLEARED, this._OnItemCleared, this)
@@ -93,7 +97,6 @@ class GlyphGroupsView extends ui.views.View {
             layout: {
                 itemWidth: p_width,
                 itemHeight: p_height + 50,
-                //itemCount: this._indexCount,
                 gap: 5
             }
         };
@@ -107,44 +110,37 @@ class GlyphGroupsView extends ui.views.View {
         }
 
         this._header.displayRange = p_value;
+        //this._search.displayRange = p_value;
 
         if (this._OnIndexRequestCB) {
             this._domStreamer.Unwatch(ui.SIGNAL.ITEM_REQUESTED, this._OnIndexRequestCB, this);
         }
 
         this._displayRanges = p_value;
-        this._referenceList = null;
+        this._rangeInfos = null;
         this._individualFetchGlyphFn = null;
 
         this._dynamicRange = p_value.isDynamic;
-        if(this._dynamicRange){ this._cachedRange = p_value; }
+        if (this._dynamicRange) { this._cachedRange = p_value; }
 
         if (!p_value) {
             // TODO: Clear streamer
             return;
         }
 
-        if (`includes` in p_value) {
-            // Expect an mixed array of indices & [a,b] ranges
-            this._indexOffset = p_value.imin;
-            this._indexCount = p_value.count;
-            this._referenceList = p_value.includes;
-            this._OnIndexRequestCB = this._OnIndexRequestMixed;
+        this._rangeInfos = UTILS.GetRangeInfos(this._data, p_value);
 
-        } else if (`start` in p_value) {
-            // Block with a count & start index
-            this._indexOffset = p_value.start;
-            this._indexCount = p_value.count;
-            this._OnIndexRequestCB = this._OnIndexRequestRange;
-
-        } else if (`fetchList` in p_value) {
-            // Single array of unicode string, likely ligatures.
-            let list = p_value.fetchList(this._data);
-            this._indexOffset = 0;
-            this._indexCount = list.length;
-            this._referenceList = list;
-            this._individualFetchGlyphFn = p_value.fetchGlyph || null;
-            this._OnIndexRequestCB = this._OnIndexRequestUnicodes;
+        switch (this._rangeInfos.type) {
+            case IDS_EXT.RANGE_MIXED:
+                this._OnIndexRequestCB = this._OnIndexRequestMixed;
+                break;
+            case IDS_EXT.RANGE_INLINE:
+                this._OnIndexRequestCB = this._OnIndexRequestRange;
+                break;
+            case IDS_EXT.RANGE_PLAIN:
+                this._individualFetchGlyphFn = p_value.fetchGlyph || null;
+                this._OnIndexRequestCB = this._OnIndexRequestUnicodes;
+                break;
         }
 
         // Update request handler based on range type
@@ -153,7 +149,7 @@ class GlyphGroupsView extends ui.views.View {
         }
 
         //this._domStreamer._ClearItems();
-        this._domStreamer.itemCount = this._indexCount;
+        this._domStreamer.itemCount = this._rangeInfos.indexCount;
         this._domStreamer.scroll({ top: 0 });
 
     }
@@ -170,7 +166,7 @@ class GlyphGroupsView extends ui.views.View {
     _GetMixedIndex(p_index) {
 
         let
-            list = this._referenceList,
+            list = this._rangeInfos.list,
             advance = this._cachedAdvance;
 
         for (let i = this._cachedLoopStart, n = list.length; i < n; i++) {
@@ -209,7 +205,7 @@ class GlyphGroupsView extends ui.views.View {
 
     _OnIndexRequestRange(p_streamer, p_index, p_fragment) {
         let
-            index = p_index + this._indexOffset;
+            index = p_index + this._rangeInfos.indexOffset;
         //hex = index.toString(16).padStart(4, `0`);
         let data = UNICODE.GetSingle(index);
 
@@ -220,13 +216,14 @@ class GlyphGroupsView extends ui.views.View {
 
     _OnIndexRequestUnicodes(p_streamer, p_index, p_fragment) {
         let
-            unicode = this._referenceList[p_index],
+            unicode = this._rangeInfos.list[p_index],
             data;
 
         if (this._individualFetchGlyphFn) {
             data = this._individualFetchGlyphFn(this._data, unicode);
         } else {
             data = UNICODE.instance._charMap[unicode];
+            if (!data) { data = UNICODE.instance._ligaMap[unicode]; }
         }
 
         if (data) { this._OnItemRequestProcessed(data, p_streamer, p_index, p_fragment); }
@@ -285,7 +282,7 @@ class GlyphGroupsView extends ui.views.View {
             widget.data = p_glyph;
         }
 
-        if(this._dynamicRange){ this._delayedReloadList.Schedule(); }
+        if (this._dynamicRange) { this._delayedReloadList.Schedule(); }
 
     }
 
@@ -299,7 +296,7 @@ class GlyphGroupsView extends ui.views.View {
             widget.data = p_family.nullGlyph;
         }
 
-        if(this._dynamicRange){ this._delayedReloadList.Schedule(); }
+        if (this._dynamicRange) { this._delayedReloadList.Schedule(); }
 
     }
 

@@ -12,6 +12,7 @@ const SimpleDataEx = require(`./simple-data-ex`);
 const SubFamily = require(`./sub-family-data-block`);
 const Glyph = require(`./glyph-data-block`);
 const ImportSettings = require(`./settings-import-data-block`);
+const SearchSettings = require(`./settings-search-data-block`);
 
 const ContentUpdater = require(`../content-updater`);
 
@@ -44,6 +45,7 @@ class FamilyDataBlock extends SimpleDataEx {
         };
 
         this._transformSettings = nkm.com.Rent(ImportSettings);
+        this._searchSettings = nkm.com.Rent(SearchSettings);
 
         this._glyphs = new nkm.collections.List();
         this._glyphsMap = {};
@@ -75,6 +77,7 @@ class FamilyDataBlock extends SimpleDataEx {
     get nullGlyph() { return this._nullGlyph; }
 
     get transformSettings() { return this._transformSettings; }
+    get searchSettings() { return this._searchSettings; }
 
     get defaultSubFamily() { return this._defaultSubFamily; }
 

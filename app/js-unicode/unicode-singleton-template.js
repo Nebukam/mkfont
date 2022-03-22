@@ -68,7 +68,7 @@ class UNICODE extends nkm.com.helpers.Singleton {
             char.char = this.constructor.GetUnicodeCharacter(parseInt(cid, 16));
         }
 
-        this._ligaMap = new Map();
+        this._ligaMap = {};
 
     }
 
@@ -117,7 +117,7 @@ class UNICODE extends nkm.com.helpers.Singleton {
         p_lookups.forEach((item) => { lps.push(this.GetLookup(item)); });
         let
             ligatureLookup = lps.join(`+`),
-            ligature = this.instance._ligaMap.get(ligatureLookup);
+            ligature = this.instance._ligaMap[ligatureLookup];
 
         if (!ligature) {
             if (!p_create) { return null; }
@@ -125,7 +125,7 @@ class UNICODE extends nkm.com.helpers.Singleton {
             lps.forEach((item) => { charPts.push(this.GetUnicodeCharacter(parseInt(item, 16))); });
 
             ligature = { u: ligatureLookup, name: `LIGATURE ${ligatureLookup}`, cat: this.instance._categories.Liga, ligature: true, char: charPts.join('') };
-            this.instance._ligaMap.set(ligatureLookup, ligature);
+            this.instance._ligaMap[ligatureLookup] = ligature;
         }
 
         return ligature;
