@@ -84,6 +84,10 @@ class SubFamilyInspector extends nkm.datacontrols.InspectorView {
     }
 
     _Render() {
+
+        this._header = this.Add(mkfWidgets.InspectorHeader, `header`, this._host);
+        this._header.options = { title:`Text preview`, icon:`text` };
+
         this._body = ui.dom.El(`div`, { class: `body` }, this._host);
         this._footer = ui.dom.El(`div`, { class: `footer` }, this._host);
         //this._builder.host = this._body;
@@ -92,29 +96,17 @@ class SubFamilyInspector extends nkm.datacontrols.InspectorView {
 
         this._toolbar = this.Add(ui.WidgetBar, `toolbar`, this._footer);
         this._toolbar.options = {
-            defaultWidgetClass: nkm.uilib.buttons.Tool,
+            defaultWidgetClass: nkm.uilib.inputs.InlineSelect,
             size: ui.FLAGS.SIZE_S,
             handles: [
                 {
-                    icon: `text-direction-ltr`, group: 'direction',
-                    trigger: { fn: () => { this._pangramRenderer.direction = 'ltr'; } },
+                    catalog:mkfData.ENUMS.PANGRAM_DIR,
+                    onSubmit: { fn: (p_input, p_value) => { this._pangramRenderer.direction = p_value.value; } },
                 },
                 {
-                    icon: `text-direction-rtl`, group: 'direction',
-                    trigger: { fn: () => { this._pangramRenderer.direction = 'rtl'; } }
-                },
-                {
-                    icon: `text-align-left`, group: 'align',
-                    trigger: { fn: () => { this._pangramRenderer.align = `left` } }
-                },
-                {
-                    icon: `text-align-center`, group: 'align',
-                    trigger: { fn: () => { this._pangramRenderer.align = `center` } }
-                },
-                {
-                    icon: `text-align-right`, group: 'align',
-                    trigger: { fn: () => { this._pangramRenderer.align = `right` } },
-                },
+                    catalog:mkfData.ENUMS.PANGRAM_ALIGN,
+                    onSubmit: { fn: (p_input, p_value) => { this._pangramRenderer.align = p_value.value; } },
+                }
             ]
         };
 

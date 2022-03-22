@@ -197,6 +197,11 @@ class EditorListImport extends nkm.datacontrols.Editor {
         this._glyphRenderer.Draw();
     }
 
+    _CleanUp(){
+        this.catalog = null;
+        super._CleanUp();
+    }
+
 }
 
 module.exports = EditorListImport;

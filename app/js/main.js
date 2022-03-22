@@ -10,6 +10,7 @@ const mkfViews = require(`./views`);
 const mkfEditors = require(`./editors`);
 const mkfExplorers = require(`./explorers`);
 const mkfOperations = require(`./operations`);
+const mkfWidgets = require(`./widgets`);
 
 const UNICODE = require(`./unicode`);
 const fs = require('fs');
@@ -32,6 +33,7 @@ class MKFont extends nkm.app.AppBase {
             { id: `mainLayout`, cl: require(`./main-layout`) }
         ];
 
+        ui.UI.instance._Preload(mkfWidgets.GlyphSlot, 300);        
     }
 
     AppReady() {
@@ -86,10 +88,12 @@ class MKFont extends nkm.app.AppBase {
             [ui.IDS.STATIC]: true
         });
 
+        this._welcomeView._options.view.RequestDisplay();
+
         //mkfOperations.commands.MakeTTFFont.Enable();
         //nkm.actions.KeystrokeEx.CreateFromString(`Ctrl E`, { fn: this._Bind(this._WriteTTF) }).Enable();
 
-        this._EmptyFamily();
+        //this._EmptyFamily();
         //this._FamilyFromTTF();
 
     }
@@ -113,7 +117,7 @@ class MKFont extends nkm.app.AppBase {
 
         fontEditor.SetActiveRange(UNICODE.instance._blockCatalog.At(0));
 
-        console.log(JSON.stringify(nkm.data.serialization.JSONSerializer.Serialize(this._tempFontData)));
+        //console.log(JSON.stringify(nkm.data.serialization.JSONSerializer.Serialize(this._tempFontData)));
 
     }
 

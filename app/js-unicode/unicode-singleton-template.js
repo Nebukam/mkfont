@@ -10,11 +10,11 @@ const UniCategory = require(`./catalogs/definition-uni-cat`);
 class UNICODE extends nkm.com.helpers.Singleton {
     constructor() { super(); }
 
+    static SetDisplayCmd = new CmdSetDisplay();
+
     _Init() {
 
         super._Init();
-
-        let setDisplayCmd = new CmdSetDisplay();
 
         let c = UNI_CATEGORIES;
         this._categories = c;
@@ -29,7 +29,7 @@ class UNICODE extends nkm.com.helpers.Singleton {
             for (let i = 0; i < subs.length; i++) {
                 let lcgc = subs[i];
                 lcgc.parent = lgc;
-                lcgc.primaryCommand = setDisplayCmd;
+                lcgc.primaryCommand = this.constructor.SetDisplayCmd;
                 lcgc.itemClass = UniCategory;
                 cgc.content.push(lcgc);
             }
@@ -38,9 +38,9 @@ class UNICODE extends nkm.com.helpers.Singleton {
 
         let b = UNI_BLOCKS;
 
-        b.forEach((obj) =>{ 
+        b.forEach((obj) => {
             obj.itemClass = UniBlock;
-            obj.primaryCommand = setDisplayCmd;
+            obj.primaryCommand = this.constructor.SetDisplayCmd;
         });
 
         this._blocks = b;
@@ -65,7 +65,10 @@ class UNICODE extends nkm.com.helpers.Singleton {
         for (let cid in cMap) {
             let char = cMap[cid];
             this._charList[char.i] = char;
+            char.char = this.constructor.GetUnicodeCharacter(parseInt(cid, 16));
         }
+
+        this._ligaMap = new Map();
 
     }
 
@@ -101,11 +104,32 @@ class UNICODE extends nkm.com.helpers.Singleton {
                 }
 
                 if (ownerBlock) { result.block = ownerBlock; }
-                else{ console.error(`p_lookup = ${p_lookup} / index : ${index}`); }
+                else { console.error(`p_lookup = ${p_lookup} / index : ${index}`); }
 
             }
         }
         return result;
+    }
+
+    static GetLigature(p_lookups, p_create = true) {
+
+        let lps = [];
+        p_lookups.forEach((item) => { lps.push(this.GetLookup(item)); });
+        let
+            ligatureLookup = lps.join(`+`),
+            ligature = this.instance._ligaMap.get(ligatureLookup);
+
+        if (!ligature) {
+            if (!p_create) { return null; }
+            let charPts = [];
+            lps.forEach((item) => { charPts.push(this.GetUnicodeCharacter(parseInt(item, 16))); });
+
+            ligature = { u: ligatureLookup, name: `LIGATURE ${ligatureLookup}`, cat: this.instance._categories.Liga, ligature: true, char: charPts.join('') };
+            this.instance._ligaMap.set(ligatureLookup, ligature);
+        }
+
+        return ligature;
+
     }
 
     static GetAddress(p_character) {

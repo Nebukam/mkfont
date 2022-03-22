@@ -6,6 +6,7 @@ module.exports = {
 
     ENUMS: require(`./enums`),
     IDS: require(`./ids`),
+    UTILS: require(`./utils`),
 
     SubFamily: require(`./sub-family-data-block`),
     Family: require(`./family-data-block`),

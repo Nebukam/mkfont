@@ -18,7 +18,6 @@ class FontEditorHeader extends nkm.datacontrols.ControlView {
         this._displayInspector = ui.UI.Rent(mkfInspectors.Display);
         this._modalDisplayOpts = this._commands.Create(ui.commands.Modal, 'Display', 'gear');
         this._modalDisplayOpts.options = {
-            modalClass: nkm.uilib.modals.Simple,
             content: this._displayInspector,
             anchorToEmitter: true, margins: margins,
             placement: ui.ANCHORING.BOTTOM_LEFT,
@@ -27,7 +26,6 @@ class FontEditorHeader extends nkm.datacontrols.ControlView {
 
         this._modalFamilyOpts = this._commands.Create(ui.commands.Modal, 'Infos', 'font');
         this._modalFamilyOpts.options = {
-            modalClass: nkm.uilib.modals.Simple,
             content: mkfInspectors.Family,
             anchorToEmitter: true, margins: margins,
             placement: ui.ANCHORING.BOTTOM_LEFT,
@@ -36,11 +34,22 @@ class FontEditorHeader extends nkm.datacontrols.ControlView {
 
         this._modalSubFamilyOpts = this._commands.Create(ui.commands.Modal, 'Metrics', 'layout');
         this._modalSubFamilyOpts.options = {
-            modalClass: nkm.uilib.modals.Simple,
             content: mkfInspectors.SubFamily,
             anchorToEmitter: true, margins: margins,
             placement: ui.ANCHORING.BOTTOM_LEFT,
             contentOptionsGetter: { fn: fn, thisArg: this }
+        };
+
+        this._menuHah = this._commands.Create(ui.commands.Menu, 'Menu test', 'layout');
+        this._menuHah.options = {
+            anchorToEmitter: true,
+            items: [
+                { name: `item 1` },
+                { name: `item 2` },
+                { separator: true },
+            ]
+            //placement: ui.ANCHORING.BOTTOM_LEFT,
+            //contentOptionsGetter: { fn: fn, thisArg: this }
         };
 
     }
@@ -79,24 +88,28 @@ class FontEditorHeader extends nkm.datacontrols.ControlView {
             handles: [
                 {
                     label: `Save`, icon: `save`,
+                    htitle: `Save file to disk`,
                     size: ui.FLAGS.SIZE_S,
                     flavor: ui.FLAGS.CTA,// variant:ui.FLAGS.FRAME,
                     group: `file-actions`
                 },
                 {
                     label: `Export`, icon: `upload`,
+                    htitle: `Export as TTF file`,
                     size: ui.FLAGS.SIZE_S,
                     flavor: ui.FLAGS.CTA, variant: ui.FLAGS.FRAME,
                     group: `file-actions`
                 },
                 {
                     command: this._modalDisplayOpts,
+                    htitle: `Display options`,
                     size: ui.FLAGS.SIZE_S,
                     cl: nkm.uilib.buttons.Tool,
                     group: `family`
                 },
                 {
                     command: this._modalFamilyOpts,
+                    htitle: `Family infos & metadata`,
                     size: ui.FLAGS.SIZE_S,
                     group: `family`
                 },
@@ -107,11 +120,21 @@ class FontEditorHeader extends nkm.datacontrols.ControlView {
                 },
                 {
                     command: this._modalSubFamilyOpts,
+                    htitle: `Font metrics`,
                     size: ui.FLAGS.SIZE_S,
                     group: `family`
                 },
+                /*{
+                    command: this._menuHah,
+                    icon: `new`,
+                    htitle: `Create a new Glyph`,
+                    size: ui.FLAGS.SIZE_S, variant: ui.FLAGS.FRAME,
+                    flavor: ui.FLAGS.CTA,
+                    group: `create`
+                },*/
                 {
                     label: `SVGs`, icon: `directory-download-small`,
+                    htitle: `Import multiple SVGs`,
                     size: ui.FLAGS.SIZE_S, variant: ui.FLAGS.FRAME,
                     flavor: nkm.com.FLAGS.LOADING,
                     group: `external`,
@@ -124,6 +147,7 @@ class FontEditorHeader extends nkm.datacontrols.ControlView {
                 },
                 {
                     label: `TTF`, icon: `directory-download-small`,
+                    htitle: `Import a TTF file`,
                     size: ui.FLAGS.SIZE_S, variant: ui.FLAGS.FRAME,
                     flavor: nkm.com.FLAGS.LOADING,
                     group: `external`,

@@ -22,8 +22,8 @@ class FontEditorFooter extends nkm.datacontrols.ControlView {
         return nkm.style.Extends({
             ':host': {
                 'display': 'flex',
-                'min-height': '50px',
-                'height': '50px'
+                'min-height': '20px',
+                'height': '20px'
             },
             '.progress': {
                 'position':'absolute',

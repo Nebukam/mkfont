@@ -21,9 +21,11 @@ class CmdImportExternalFileMultiple extends actions.Command {
         this._Bind(this._OnPicked);
         this._Bind(this._OnImportContinue);
 
-        this._importCatalog = nkm.data.catalogs.CreateFrom({ name: `Import list` });
-        this._importCatalog.expanded = true;
-        this._importCatalog._localItemClass = mkfCatalog.ImportDefinition;
+        this._importCatalog = nkm.data.catalogs.CreateFrom({
+            name: `Import list`,
+            localItemClass: mkfCatalog.Import,
+            expanded: true
+        });
 
         this._importEditor = null;
         this._importTransformationSettings = new mkfData.ImportSettings();
@@ -61,6 +63,7 @@ class CmdImportExternalFileMultiple extends actions.Command {
         }
 
         let subFamily = this._context.selectedSubFamily;
+        this._importCatalog.Clear();
 
         for (let i = 0; i < list.length; i++) {
 
@@ -112,7 +115,7 @@ class CmdImportExternalFileMultiple extends actions.Command {
             //message: `Tweak the imported data to make sure it fits!`,
             content: [{ cl: this._importEditor, donotrelease: true }],
             actions: [
-                { label: `Import`, flavor: nkm.ui.FLAGS.CTA, trigger: { fn: this._OnImportContinue } }, //variant: nkm.ui.FLAGS.FRAME
+                { label: `Import`, flavor: nkm.com.FLAGS.LOADING, trigger: { fn: this._OnImportContinue } }, //variant: nkm.ui.FLAGS.FRAME
                 { label: `Cancel`, trigger: { fn: this._Cancel, thisArg: this } }
             ],
             icon: `directory-download`,
@@ -144,34 +147,29 @@ class CmdImportExternalFileMultiple extends actions.Command {
 
             if (uniStruct.length == 0) { continue; }
 
-            if (uniStruct.length == 1) {
-                // Set or create
+            let
+                unicodeInfos = uniStruct.length == 1 ?
+                    UNICODE.GetSingle(uniStruct[0]) :
+                    UNICODE.GetLigature(uniStruct, true),
+                existingGlyph = family.GetGlyph(unicodeInfos.u);
 
-                let
-                    unicodeInfos = UNICODE.GetSingle(uniStruct[0]),
-                    existingGlyph = family.GetGlyph(unicodeInfos.u);
-
-                if (existingGlyph.isNull) {
-                    editor.Do(mkfActions.CreateGlyph, {
-                        family: family,
-                        unicode: unicodeInfos,
-                        path: svgStats
-                    });
-                } else {
-                    let variant = existingGlyph.GetVariant(family.selectedSubFamily);
-                    editor.Do(mkfActions.SetProperty, {
-                        target: variant,
-                        id: mkfData.IDS.PATH_DATA,
-                        value: svgStats
-                    });
-                    editor.Do(mkfActions.SetPropertyMultiple, {
-                        target: variant.transformSettings,
-                        values: trValues
-                    });
-                }
-
+            if (existingGlyph.isNull) {
+                editor.Do(mkfActions.CreateGlyph, {
+                    family: family,
+                    unicode: unicodeInfos,
+                    path: svgStats
+                });
             } else {
-                // Set or create ligature
+                let variant = existingGlyph.GetVariant(family.selectedSubFamily);
+                editor.Do(mkfActions.SetProperty, {
+                    target: variant,
+                    id: mkfData.IDS.PATH_DATA,
+                    value: svgStats
+                });
+                editor.Do(mkfActions.SetPropertyMultiple, {
+                    target: variant.transformSettings,
+                    values: trValues
+                });
             }
 
         }
@@ -186,7 +184,7 @@ class CmdImportExternalFileMultiple extends actions.Command {
     }
 
     _End() {
-        this._importCatalog.Clear();
+        if(this._importEditor){ this._importEditor.catalog = null; }
         super._End();
     }
 

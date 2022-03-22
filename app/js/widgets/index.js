@@ -10,4 +10,5 @@ module.exports = {
     PropertyControl: require(`./property-control`),
     PangramRenderer: require(`./pangram-renderer`),
     ControlHeader: require(`./control-header`),
+    InspectorHeader: require(`./inspector-header`),
 }

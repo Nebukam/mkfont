@@ -7,22 +7,118 @@ class WelcomeView extends ui.views.View {
 
     _Init() {
         super._Init();
-
-
     }
 
 
     _Style() {
         return nkm.style.Extends({
             ':host': {
-
+                'display': 'flex',
+                'align-content': `center`,
+                'justify-content': `center`,
+                'align-items': `center`,
             },
+            '.body': {
+                'width': `750px`,
+                'height': `500px`,
+                'display': 'grid',
+                'grid-template-columns': '350px 1fr',
+                'grid-template-rows': '1fr 1fr 50px',
+            },
+            '.ico': {
+                'grid-column': `1`,
+                'grid-row': `1 / span 2`,
+            },
+            '.title': {
+                'padding':'15px',
+            },
+            '.start': { 'align-self': `end` },
+            '.end': { 'align-self': `start` },
+            '.block': {
+                'grid-column': `2`,
+                'padding-top':'10px',
+                'padding-left':'10px',
+                'border-left':'1px solid rgba(127,127,127,0.1)'
+            },
+            '.block:hover': {
+                'border-left':'1px solid rgba(127,127,127,0.5)'
+            },
+            '.actionlist': {
+                'align-items': `flex-start`
+            },
+            '.footer': {
+                'align-self': `center`,
+                'justify-self': `center`,
+                'grid-column': `1 / span 2`
+            }
         }, super._Style());
     }
 
-    _Render(){
+    _Render() {
+
         super._Render();
 
+        this._body = ui.El(`div`, { class: `body` }, this._host);
+
+        this._logo = new ui.manipulators.Icon(ui.El(`div`, { class: `ico` }, this._body));
+        this._logo.Set(`icon`);
+
+        this._startBlock = ui.El(`div`, { class: `block start` }, this._body);
+        let title = new ui.manipulators.Text(ui.El(`div`, { class: `title` }, this._startBlock));
+        title.Set(`Start`);
+        this._toolbar = this.Add(ui.WidgetBar, `actionlist`, this._startBlock);
+        this._toolbar.options = {
+            orientation: ui.FLAGS.VERTICAL,
+            stretch: ui.WidgetBar.FLAG_STRETCH,
+            defaultWidgetClass: nkm.uilib.buttons.Button,
+            handles: [
+                {
+                    label: `New .mkfont`, icon: `new`,
+                    variant: ui.FLAGS.MINIMAL, flavor: ui.FLAGS.CTA,
+                    group:`n`
+                },
+                {
+                    label: `New .mkfont from TTF`, icon: `directory-download-small`,
+                    variant: ui.FLAGS.MINIMAL, flavor: nkm.com.FLAGS.LOADING
+                },
+                {
+                    label: `New .mkfont from SVGs`, icon: `directory-download-small`,
+                    variant: ui.FLAGS.MINIMAL, flavor: nkm.com.FLAGS.LOADING
+                },
+                {
+                    label: `Load .mkfont`, icon: `document-download-small`,
+                    variant: ui.FLAGS.MINIMAL, flavor: nkm.com.FLAGS.LOADING,
+                    group:`plop`
+                },
+            ]
+        };
+
+        this._recentBlock = ui.El(`div`, { class: `block end` }, this._body);
+        title = new ui.manipulators.Text(ui.El(`div`, { class: `title` }, this._recentBlock));
+        title.Set(`Recent`);
+
+        this._footer = this.Add(ui.WidgetBar, `footer`, this._body);
+        this._footer.options = {
+            size:ui.FLAGS.SIZE_XS,
+            defaultWidgetClass: nkm.uilib.buttons.Button,
+            handles: [
+                {
+                    label: `1.0.1`,
+                    cl:nkm.uilib.widgets.Tag, //flavor: ui.FLAGS.CTA,
+                    group: `Version`
+                },
+                {
+                    label: `About`,
+                    variant: ui.FLAGS.MINIMAL, flavor: ui.FLAGS.CTA,
+                    group: `about`
+                },
+                {
+                    label: `Help`,
+                    variant: ui.FLAGS.MINIMAL,
+                    group: `help`
+                }
+            ]
+        };
     }
 
 }

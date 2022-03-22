@@ -101,13 +101,10 @@ class GlyphSlot extends nkm.datacontrols.ControlWidget {
                 //'aspect-ratio': 'var(--preview-ratio)',
                 'position': 'absolute',
             },
-            '.label': {
-                'margin-top': '10px',
-                'text-align': `center`,
-                'padding': '5px'
-            },
             'code': {
                 'margin': '0',
+                'text-align': `center`,
+                'padding': '5px',
                 'font-size': 'large',
                 'user-select': 'text'
             },
@@ -144,7 +141,7 @@ class GlyphSlot extends nkm.datacontrols.ControlWidget {
         this._glyphPlaceholder = new ui.manipulators.Text(ui.dom.El(`div`, { class: `box placeholder` }, this._previewBox), false, false);
         this._glyphRenderer = this.Add(GlyphCanvasRenderer, `box renderer`, this._previewBox);
 
-        this._label = new ui.manipulators.Text(ui.dom.El(`div`, { class: `item label` }, this._host), false, false);
+        this._label = new ui.manipulators.Text(ui.dom.El(`code`, { class: `item` }, this._host), false, false);
         //this._oobIcon = new ui.manipulators.Icon(ui.dom.El(`div`, {class:`oob` }, this._previewBox), false, false);
         //this._oobIcon.Set(`remove`);
 
@@ -181,8 +178,8 @@ class GlyphSlot extends nkm.datacontrols.ControlWidget {
         if (colCat) { this.style.setProperty(`--col-cat`, colCat); }
         else { this.style.removeProperty(`--col-cat`); }
 
-        this._label.Set(`<code>${unicodeCharacter}</code>`);
-        this._glyphPlaceholder.Set(unicodeCharacter);
+        this._label.Set(`${unicodeCharacter}`, true);
+        this._glyphPlaceholder.Set(unicodeCharacter, true);
 
         this.data = glyphData;
 

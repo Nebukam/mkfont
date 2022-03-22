@@ -1,5 +1,7 @@
 'use strict';
 
+const IDS = require(`./ids`);
+
 /**
  * @description TODO
  * @class
@@ -11,7 +13,7 @@ class UTILS {
 
     static Resolve(p_id, p_self, ...p_fallbacks) {
 
-        if(!p_self){ return null; }
+        if (!p_self) { return null; }
 
         //console.log(`Resolve ${p_id} in ${p_self} -> ${p_fallbacks}`);
         let valueObj = p_self._values[p_id];
@@ -34,6 +36,24 @@ class UTILS {
         return null;
 
     }
+
+    static GetFamilyUArray(p_family) {
+        return p_family._glyphUnicodeCache;
+    }
+
+    static GetFamilyLigaUArray(p_family) {
+        let result = [];
+        p_family._glyphs.ForEach(
+            (item, index) => {
+                if (p_family._ligatureSet.has(item)) { result.push(item.Get(IDS.UNICODE)); }
+            });
+        return result;
+    }
+
+    static GetFamilyComponents(p_family) {
+        return [];
+    }
+
 
 }
 

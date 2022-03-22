@@ -70,18 +70,19 @@ class GlyphVariantDataBlock extends SimpleDataEx {
 
         if (!this._glyph) { return; }
 
-        let glyph = this._fontObject;
-
-        let uVal = parseInt(this.Resolve(IDS.UNICODE), 16);
+        let
+            glyph = this._fontObject,
+            uInfos = this._glyph.unicodeInfos,
+            uCode = this.Resolve(IDS.UNICODE);
 
         //this._transformSettings.UpdateTransform();
 
         dom.SAtt(glyph, IDS.WIDTH, this._subFamily.Get(IDS.MONOSPACE) ? this._subFamily.Get(IDS.WIDTH) : this.Resolve(IDS.WIDTH), true);
         dom.SAtt(glyph, IDS.HEIGHT, this.Resolve(IDS.HEIGHT), true);
         //dom.SAtt(glyph, IDS.GLYPH_NAME, this.Resolve(IDS.GLYPH_NAME));
-        dom.SAtt(glyph, IDS.GLYPH_NAME, `${`${uVal}`.padStart(4, '0')}`);
 
-        dom.SAtt(glyph, IDS.UNICODE, `${UNICODE.GetUnicodeCharacter(uVal)}`);
+        dom.SAtt(glyph, IDS.GLYPH_NAME, `${uCode}`);
+        dom.SAtt(glyph, IDS.UNICODE, `${uInfos.char}`);
 
         // Flip
         let glyphPath = svgpath(this.Get(IDS.PATH))

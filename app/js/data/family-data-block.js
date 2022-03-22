@@ -47,6 +47,8 @@ class FamilyDataBlock extends SimpleDataEx {
 
         this._glyphs = new nkm.collections.List();
         this._glyphsMap = {};
+        this._ligatureSet = new Set();
+        this._glyphUnicodeCache = [];
 
         this._subFamiliesCatalog = nkm.data.catalogs.CreateFrom({ name: 'Sub Families' });
 
@@ -54,11 +56,12 @@ class FamilyDataBlock extends SimpleDataEx {
         this._defaultSubFamily = new SubFamily();
         this._defaultSubFamily._isDefault = true;
 
-
         this._nullGlyph = new Glyph();
         this._nullGlyph.family = this;
         this._nullGlyph._SetDefaultVariant(this._defaultSubFamily);
         this._nullGlyph.isNull = true;
+
+        this._missingGlyph = new Glyph();
 
         this._selectedSubFamily = this._defaultSubFamily;
 
@@ -124,7 +127,11 @@ class FamilyDataBlock extends SimpleDataEx {
             throw new Error(`Glyph already registered with unicode @${unicode}`);
         }
 
-        if (unicode) { this._glyphsMap[unicode] = p_glyph; }
+        if (unicode) {
+            this._glyphsMap[unicode] = p_glyph;
+            if (p_glyph.isLigature) { this._ligatureSet.add(p_glyph); }
+            this._glyphUnicodeCache.push(unicode);
+        }
 
         p_glyph
             .Watch(SIGNAL.UNICODE_CHANGED, this._OnGlyphUnicodeChanged)
@@ -146,7 +153,13 @@ class FamilyDataBlock extends SimpleDataEx {
         let g = this._glyphs.Remove(p_glyph);
         if (!g) { return; }
 
-        delete this._glyphsMap[g.Get(IDS.UNICODE)];
+        let unicode = g.Get(IDS.UNICODE);
+
+        delete this._glyphsMap[unicode];
+        this._ligatureSet.delete(p_glyph);
+
+        let index = this._glyphUnicodeCache.indexOf(unicode);
+        if (index != -1) { this._glyphUnicodeCache.splice(index, 1); }
 
         //TODO : If custom slot, release it.
 
@@ -183,8 +196,15 @@ class FamilyDataBlock extends SimpleDataEx {
 
     _OnGlyphUnicodeChanged(p_glyph, p_valueObj, p_oldValue) {
         // TODO : Move from old slot to the new one
+        let index = this._glyphUnicodeCache.indexOf(p_oldValue);
+
+        if (index != -1) { this._glyphUnicodeCache[index] = unicode; }
+        else { this._glyphUnicodeCache.push(unicode); }
+
         delete this._glyphsMap[p_oldValue];
         this._glyphsMap[p_valueObj.value] = p_glyph;
+        if (p_glyph.isLigature) { this._ligatureSet.add(p_glyph); }
+        else { this._ligatureSet.delete(p_glyph); }
     }
 
     _OnGlyphUpdated() {
@@ -205,6 +225,7 @@ class FamilyDataBlock extends SimpleDataEx {
         }
         this._scheduledUpdate.Schedule();
     }
+
 
 
 }

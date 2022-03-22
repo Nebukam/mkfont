@@ -54,7 +54,7 @@ class GlyphDataBlock extends SimpleDataEx {
 
     get isLigature() {
         let unc = this._values[IDS.UNICODE].value;
-        return unc ? unc.length > 1 ? true : false : false;
+        return unc ? unc.includes(`+`) ? true : false : false;
     }
 
     set family(p_value) { this._family = p_value; }

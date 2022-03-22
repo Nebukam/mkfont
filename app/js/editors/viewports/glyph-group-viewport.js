@@ -38,6 +38,8 @@ class GlyphGroupsView extends ui.views.View {
             .Hook(SIGNAL.GLYPH_ADDED, this._OnGlyphAdded, this)
             .Hook(SIGNAL.GLYPH_REMOVED, this._OnGlyphRemoved, this);
 
+        this._delayedReloadList = nkm.com.DelayedCall(this._Bind(this._ReloadList));
+
     }
 
     _PostInit() {
@@ -112,6 +114,10 @@ class GlyphGroupsView extends ui.views.View {
 
         this._displayRanges = p_value;
         this._referenceList = null;
+        this._individualFetchGlyphFn = null;
+
+        this._dynamicRange = p_value.isDynamic;
+        if(this._dynamicRange){ this._cachedRange = p_value; }
 
         if (!p_value) {
             // TODO: Clear streamer
@@ -131,14 +137,14 @@ class GlyphGroupsView extends ui.views.View {
             this._indexCount = p_value.count;
             this._OnIndexRequestCB = this._OnIndexRequestRange;
 
-        } else if (`unicodes` in p_value) {
+        } else if (`fetchList` in p_value) {
             // Single array of unicode string, likely ligatures.
-            let list = p_value.unicodes;
+            let list = p_value.fetchList(this._data);
             this._indexOffset = 0;
             this._indexCount = list.length;
             this._referenceList = list;
+            this._individualFetchGlyphFn = p_value.fetchGlyph || null;
             this._OnIndexRequestCB = this._OnIndexRequestUnicodes;
-
         }
 
         // Update request handler based on range type
@@ -213,12 +219,18 @@ class GlyphGroupsView extends ui.views.View {
     }
 
     _OnIndexRequestUnicodes(p_streamer, p_index, p_fragment) {
-        let unicode = this._referenceList[p_index];
-        let data = UNICODE.instance._charMap[unicode];
-        if (!data) {
-            //Look for data custom entries?
+        let
+            unicode = this._referenceList[p_index],
+            data;
+
+        if (this._individualFetchGlyphFn) {
+            data = this._individualFetchGlyphFn(this._data, unicode);
+        } else {
+            data = UNICODE.instance._charMap[unicode];
         }
+
         if (data) { this._OnItemRequestProcessed(data, p_streamer, p_index, p_fragment); }
+
     }
 
     //#endregion
@@ -273,6 +285,8 @@ class GlyphGroupsView extends ui.views.View {
             widget.data = p_glyph;
         }
 
+        if(this._dynamicRange){ this._delayedReloadList.Schedule(); }
+
     }
 
     _OnGlyphRemoved(p_family, p_glyph) {
@@ -285,6 +299,13 @@ class GlyphGroupsView extends ui.views.View {
             widget.data = p_family.nullGlyph;
         }
 
+        if(this._dynamicRange){ this._delayedReloadList.Schedule(); }
+
+    }
+
+    _ReloadList() {
+        this._displayRanges = null;
+        this.displayRange = this._cachedRange;
     }
 
     _OnGlyphVariantRemoved(p_subFamily, p_glyphVariant) {

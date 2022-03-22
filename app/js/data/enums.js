@@ -97,9 +97,20 @@ class ENUMS {
     static HANCHOR_RIGHT = 2;
 
     static HANCHOR = nkm.data.catalogs.CreateFrom({ name: `Anchoring alignment`, autoSort: false }, [
-        { name: `Left `, [nkm.com.IDS.VALUE]: this.HANCHOR_LEFT, icon: 'align-hor-left' },
+        { name: `Left`, [nkm.com.IDS.VALUE]: this.HANCHOR_LEFT, icon: 'align-hor-left' },
         { name: `Center`, [nkm.com.IDS.VALUE]: this.HANCHOR_CENTER, icon: 'align-hor-center' },
         { name: `Right`, [nkm.com.IDS.VALUE]: this.HANCHOR_RIGHT, icon: 'align-hor-right' },
+    ]);
+
+    static PANGRAM_ALIGN = nkm.data.catalogs.CreateFrom({ name: `Align`, autoSort: false }, [
+        { name: `Left`, [nkm.com.IDS.VALUE]: `left`, icon: 'text-align-left' },
+        { name: `Center`, [nkm.com.IDS.VALUE]: `center`, icon: 'text-align-center' },
+        { name: `Right`, [nkm.com.IDS.VALUE]: `right`, icon: 'text-align-right' },
+    ]);
+
+    static PANGRAM_DIR = nkm.data.catalogs.CreateFrom({ name: `Direction`, autoSort: false }, [
+        { name: `LTR`, [nkm.com.IDS.VALUE]: `ltr`, icon: 'text-direction-ltr' },
+        { name: `RTL`, [nkm.com.IDS.VALUE]: `rtl`, icon: 'text-direction-rtl' },
     ]);
 
 

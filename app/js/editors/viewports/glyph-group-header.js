@@ -73,11 +73,18 @@ class GlyphGroupHeader extends nkm.datacontrols.ControlView {
         if (p_value) {
             if (p_value.parent) {
                 this._title.Set(`${p_value.parent.name} : ${p_value.name}`);
-                this._typeTag.label = `Mixed blocks`;
+                this._typeTag.label = p_value.typeTag || `Mixed blocks`;
                 //this._typeTag.bgColor = `var(--col-${p_value.col || `default`})`;
             } else {
                 this._title.Set(p_value.name);
-                this._typeTag.label = `Unicode block`;
+                if (p_value.typeTag) {
+                    this._typeTag.label = p_value.typeTag;
+                } else {
+                    let r = `U+${p_value.start.toString(16).padStart(4, `0`)} .. U+${(p_value.start + p_value.count).toString(16).padStart(4, `0`)}`;
+                    //this._typeTag.label = `Unicode block ${r}`;
+                    this._typeTag.label = `${r}`;
+                }
+
                 /*
                 for(let i = 0; i < p_value.cats.length; i++){
                     let cat = p_value.cats[i];
@@ -86,7 +93,7 @@ class GlyphGroupHeader extends nkm.datacontrols.ControlView {
                 */
                 //this._typeTag.bgColor = `var(--col-default)`;
             }
-            this._countTag.label = `<b>${p_value.count}</b> Glyphs`;
+            this._countTag.label = `<b>${u.isFunc(p_value.count) ? p_value.count(this._data) : p_value.count}</b> Glyphs`;
         } else {
             this._title.Set(`---`);
         }
