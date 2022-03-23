@@ -11,6 +11,8 @@ const IDS = require(`./ids`);
 const SimpleDataEx = require(`./simple-data-ex`);
 const SubFamily = require(`./sub-family-data-block`);
 const Glyph = require(`./glyph-data-block`);
+const GlyphVariant = require(`./glyph-variant-data-block`);
+const GlyphVariantMissing = require(`./glyph-missing-data-block`);
 const ImportSettings = require(`./settings-import-data-block`);
 const SearchSettings = require(`./settings-search-data-block`);
 
@@ -46,6 +48,7 @@ class FamilyDataBlock extends SimpleDataEx {
 
         this._transformSettings = nkm.com.Rent(ImportSettings);
         this._searchSettings = nkm.com.Rent(SearchSettings);
+        this._searchSettings.family = this;
 
         this._glyphs = new nkm.collections.List();
         this._glyphsMap = {};
@@ -62,8 +65,14 @@ class FamilyDataBlock extends SimpleDataEx {
         this._nullGlyph.family = this;
         this._nullGlyph._SetDefaultVariant(this._defaultSubFamily);
         this._nullGlyph.isNull = true;
+        this._nullGlyph._defaultGlyph._fontObject.remove();
 
+        Glyph.__defaultVariantClass = GlyphVariantMissing;
         this._missingGlyph = new Glyph();
+        Glyph.__defaultVariantClass = GlyphVariant;
+        this._missingGlyph.family = this;
+        this._missingGlyph._SetDefaultVariant(this._defaultSubFamily);
+        this._missingGlyph.defaultGlyph.Set(IDS.PATH_DATA, SVGOPS.EmptySVGStats());
 
         this._selectedSubFamily = this._defaultSubFamily;
 
@@ -170,6 +179,13 @@ class FamilyDataBlock extends SimpleDataEx {
             .Unwatch(SIGNAL.UNICODE_CHANGED, this._OnGlyphUnicodeChanged)
             .Unwatch(SIGNAL.VARIANT_UPDATED, this._OnGlyphVariantUpdated)
             .Unwatch(nkm.com.SIGNAL.UPDATED, this._OnGlyphUpdated);
+
+        p_glyph.family = null;
+
+        for (let i = 0, n = this._subFamilies.count; i < n; i++) {
+            let glyphVariant = p_glyph.GetVariant(this._subFamilies.At(i));
+            ContentUpdater.Push(glyphVariant, glyphVariant._UpdateFontObject);
+        }
 
         this._Broadcast(SIGNAL.GLYPH_REMOVED, this, g);
         ContentUpdater.instance._Broadcast(SIGNAL.GLYPH_REMOVED, g);

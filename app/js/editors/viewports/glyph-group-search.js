@@ -14,8 +14,9 @@ class GlyphGroupSearch extends nkm.datacontrols.ControlView {
         //{ cl: mkfWidgets.ControlHeader, options: { label: `Boundaries` }, css: 'header' },
         { options: { propertyId: mkfData.IDS_EXT.SEARCH_ENABLED }, css: `main-toggle` },
         { options: { propertyId: mkfData.IDS_EXT.SEARCH_TERM, inputOnly: true } },
-        { options: { propertyId: mkfData.IDS_EXT.SHOW_DECOMPOSITION, invertInputOrder: true }, css: `large` },
-        { options: { propertyId: mkfData.IDS_EXT.FILTER_ONLY_EXISTING, invertInputOrder: true }, css: `large` },
+        //{ options: { propertyId: mkfData.IDS_EXT.CASE_INSENSITIVE, invertInputOrder: true }, css: `large` },
+        { options: { propertyId: mkfData.IDS_EXT.ADD_COMPOSITION, invertInputOrder: true }, css: `large` },
+        { options: { propertyId: mkfData.IDS_EXT.MUST_EXISTS, invertInputOrder: true }, css: `large` },
     ];
 
     _Init() {
@@ -33,7 +34,10 @@ class GlyphGroupSearch extends nkm.datacontrols.ControlView {
 
         this._flags.Add(this, `enabled`);
 
-        this._dataObserver.Hook(SIGNAL.SEARCH_PROGRESS, this._OnSearchProgress, this);
+        this._dataObserver
+            .Hook(SIGNAL.SEARCH_COMPLETE, this._OnSearchComplete, this)
+            .Hook(SIGNAL.SEARCH_TOGGLED, this._OnSearchToggle, this)
+            .Hook(SIGNAL.SEARCH_PROGRESS, this._OnSearchProgress, this);
 
         this._builder.defaultControlClass = mkfWidgets.PropertyControl;
         this._builder.defaultCSS = `control`;
@@ -92,13 +96,38 @@ class GlyphGroupSearch extends nkm.datacontrols.ControlView {
         }
     }
 
+    get activeSearch() { return this._data ? this._data.Get(mkfData.IDS_EXT.SEARCH_ENABLED) : false; }
+
+    set status(p_value) {
+        this._status = p_value;
+        this._status.visible = false;
+    }
+
     _OnDataUpdated(p_data) {
         super._OnDataUpdated(p_data);
         this._flags.Set(`enabled`, p_data.Get(mkfData.IDS_EXT.SEARCH_ENABLED));
     }
 
     _OnSearchProgress(p_progress) {
+        this._status.visible = this.activeSearch;
+        this._status.Progress(p_progress, this._data._results.length);
         this._progressBar.progress = p_progress;
+    }
+
+    _OnSearchComplete() {
+        if (this._data._results.length == 0) {
+            this._status.NoResults();
+            this._status.visible = this.activeSearch;
+        } else {
+            this._status.visible = false;
+        }
+    }
+
+    _OnSearchToggle(){
+        if(this.activeSearch){
+            if(this._data.running){ this._status.visible = false; }
+            else{ this._OnSearchComplete(); }
+        }
     }
 
     _CleanUp() {

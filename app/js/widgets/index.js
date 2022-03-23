@@ -11,4 +11,5 @@ module.exports = {
     PangramRenderer: require(`./pangram-renderer`),
     ControlHeader: require(`./control-header`),
     InspectorHeader: require(`./inspector-header`),
+    SearchStatus: require(`./search-status`),
 }

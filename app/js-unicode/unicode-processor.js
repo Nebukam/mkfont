@@ -169,7 +169,7 @@ for (let p in decompositions) {
 //#endregion
 
 //#region Glyphs
-
+let relMap = {};
 let charMap = {};
 let charList = [];
 for (let i = 0; i < characterLines.length; i++) {
@@ -215,9 +215,26 @@ for (let i = 0; i < characterLines.length; i++) {
         }
 
         if (refs.length != 0) {
+
             charData.relatives = [];
+
             for (let d = 0; d < refs.length; d++) {
-                if (refs[d]) { charData.relatives.push(refs[d]); }
+
+                let ref = refs[d];
+                if (ref) { 
+                    
+                    charData.relatives.push(ref); 
+
+                    if(charCode != ``){
+
+                        if (!(ref in relMap)) { relMap[ref] = [`'${charCode}'`]; }
+                        else if (!relMap[ref].includes(`'${charCode}'`)) { relMap[ref].push(`'${charCode}'`); }
+
+                        if (!(charCode in relMap)) { relMap[charCode] = [`'${ref}'`]; }
+                        else if (!relMap[charCode].includes(`'${ref}'`)) { relMap[charCode].push(`'${ref}'`); }
+
+                    }
+                }
             }
         }
 
@@ -409,10 +426,16 @@ for (var p in charMap) {
     if (c.category) {
         catstr = ` cat:c.${c.category.id},`;
     }
+    /*
     if (c.relatives && c.relatives.length > 0) {
         for (let i = 0; i < c.relatives.length; i++) { c.relatives[i] = `'${c.relatives[i]}'`; }
         catstr = ` relatives:[${c.relatives.join(`, `)}],`
     }
+    */
+   if(p in relMap){
+    catstr = ` relatives:[${relMap[p].join(`, `)}],`
+   }
+
     UNI_CHAR_MAP += `${tabs}'${p}':{ u:'${p}', i:${c.i}, name:'${c.name}',${catstr} canon:k.${c.canonical}, block:b[${c.block}]`;
     if (c.indexed) { UNI_CHAR_MAP += `, indexed:[${c.indexed.join(`,`)}]` }
     UNI_CHAR_MAP += `},`;
@@ -453,6 +476,14 @@ UNI_CANON += `${tabs}}`;
 
 //#endregion
 
+let UNI_REL_MAPPING = `{\n`;
+for (let p in relMap) {
+    let obj = relMap[p];
+    if(obj.length == 0){continue;}
+    UNI_REL_MAPPING += `${tabs}'${p}':[${obj.join(`,`)}],`;
+}
+UNI_REL_MAPPING += `${tabs}}`;
+
 console.log(generalCategories);
 console.log(categories);
 console.log(canonicalClasses);
@@ -468,4 +499,5 @@ js = js.split(`UNI_GENERAL_CATEGORIES`).join(UNI_GENERAL_CATEGORIES);
 js = js.split(`UNI_CATEGORIES`).join(UNI_CATEGORIES);
 js = js.split(`UNI_CANON`).join(UNI_CANON);
 js = js.split(`UNI_CHAR_MAP`).join(UNI_CHAR_MAP);
+//js = js.split(`UNI_REL_MAPPING`).join(UNI_REL_MAPPING);
 fs.writeFileSync(`./app/js/unicode.js`, js);

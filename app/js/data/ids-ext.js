@@ -17,8 +17,9 @@ class IDS_EXT {
     static SEARCH_ENABLED = 'searchEnabled';
     static SEARCH_RESULTS = 'searchResults';
     static SEARCH_TERM = 'search';
-    static SHOW_DECOMPOSITION = 'decomposition';
-    static FILTER_ONLY_EXISTING = 'existingOnly';
+    static ADD_COMPOSITION = 'addComp';
+    static MUST_EXISTS = 'mustExists';
+    static CASE_INSENSITIVE = 'broadSearch';
     static FILTER_CATEGORY = 'categories';
 
     static RANGE_MIXED = 0;
@@ -41,19 +42,26 @@ class IDS_EXT {
             inputOptions: { placeholder: `search` },
             desc: `Search for characters within Unicode.\nSeparate search terms with a space.`
         },
-        [this.SHOW_DECOMPOSITION]: {
+        [this.CASE_INSENSITIVE]: {
             recompute:true,
             inputType: inputs.Checkbox,
-            label: `Decomp`,
+            label: `Broad`,
+            inputOptions: { placeholder: `...`, size:ui.FLAGS.SIZE_XS },
+            desc: `Broad search doesn't care whether the case is uppercase or lowercase.`
+        },
+        [this.ADD_COMPOSITION]: {
+            recompute:true,
+            inputType: inputs.Checkbox,
+            label: `Comps`,
             inputOptions: { placeholder: `...`, size:ui.FLAGS.SIZE_XS },
             desc: `Whether to include glyph relatives & decompositions to initial results.\ni.e, "é" will add ' and e to the results.`
         },
-        [this.FILTER_ONLY_EXISTING]: {
+        [this.MUST_EXISTS]: {
             recompute:true,
             inputType: inputs.Checkbox,
             label: `Exists`,
             inputOptions: { placeholder: `...`, size:ui.FLAGS.SIZE_XS },
-            desc: `Show only existing glyphs.`
+            desc: `Show only glyphs existing within the font.`
         },
     }
 

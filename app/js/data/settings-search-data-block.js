@@ -27,8 +27,9 @@ class SettingsSearchDataBlock extends SimpleDataEx {
             [IDS_EXT.SEARCH_RESULTS]: { value: null },
             [IDS_EXT.SEARCH_ENABLED]: { value: false },
             [IDS_EXT.SEARCH_TERM]: { value: `` },
-            [IDS_EXT.SHOW_DECOMPOSITION]: { value: true },
-            [IDS_EXT.FILTER_ONLY_EXISTING]: { value: false },
+            [IDS_EXT.CASE_INSENSITIVE]: { value: false },
+            [IDS_EXT.ADD_COMPOSITION]: { value: false },
+            [IDS_EXT.MUST_EXISTS]: { value: false },
         }
 
         this._searchCount = 0;
@@ -47,7 +48,12 @@ class SettingsSearchDataBlock extends SimpleDataEx {
 
         this._delayedAdvance = nkm.com.DelayedCall(this._Bind(this._AdvanceSearch));
 
+        this._family = null;
+
     }
+
+    set family(p_value) { this._family = p_value; }
+    get family() { return this._family; }
 
     get ready() { return this._ready; }
     get running() { return this._running; }
@@ -80,11 +86,21 @@ class SettingsSearchDataBlock extends SimpleDataEx {
         this._searchCount = 0;
         this._searchCovered = 0;
 
+        this._caseSensitive = !this.Get(IDS_EXT.CASE_INSENSITIVE);
+        this._addComps = this.Get(IDS_EXT.ADD_COMPOSITION);
+        this._mustExists = this.Get(IDS_EXT.MUST_EXISTS);
+
         this._terms = this.Get(IDS_EXT.SEARCH_TERM).split(` `);
-        for(let i = 0; i < this._terms.length; i++){
+        this._upperTerms = [];
+        this._upperIndexed = [];
+        for (let i = 0; i < this._terms.length; i++) {
             let t = this._terms[i].trim();
-            if(!t || t == ``){this._terms.splice(i, 1); i--;}
-            else{this._terms[i] = t;}
+            if (!t || t == ``) { this._terms.splice(i, 1); i--; }
+            else {
+                this._terms[i] = this._caseSensitive ? t : t.toUpperCase();
+                if (t.length > 1) { this._upperTerms.push(t.toUpperCase()); }
+                else { this._upperIndexed.push(t.toUpperCase()); }
+            }
         }
 
         this._results.length = 0;
@@ -152,42 +168,53 @@ class SettingsSearchDataBlock extends SimpleDataEx {
         if (this._resultSet.has(p_unicodeInfos)) { return; }
 
         if (this._terms.length != 0) {
-
             let
                 char = p_unicodeInfos.char,
                 name = p_unicodeInfos.name;
 
-            if (!char) { return; }
+            if (char) {
 
-            if (char.length == 1) {
-
-                searchloop: for (let i = 0; i < this._terms.length; i++) {
-                    let term = this._terms[i];
-                    if (term.length == 1) {
-                        if (char == term) { pass = true; break searchloop; }
-                        continue;
+                if (!this._caseSensitive) { char = char.toUpperCase(); }
+                
+                if (char.length == 1) {
+                    charLoop: for (let i = 0; i < this._terms.length; i++) {
+                        if (char == this._terms[i]) { pass = true; break charLoop; }
                     }
-                    if (name.includes(term.toUpperCase())) { pass = true; break searchloop; }
+                } else {
+                    charLoop: for (let i = 0; i < this._terms.length; i++) {
+                        if (char.includes(this._terms[i])) { pass = true; break charLoop; }
+                    }
                 }
+            }
 
-            } else {
-
-                searchloop: for (let i = 0; i < this._terms.length; i++) {
-                    let term = this._terms[i];
-
-                    if (char.includes(term)) { pass = true; break searchloop; }
-                    if (term.length == 1) { continue; }
-                    if (name.includes(term.toUpperCase())) { pass = true; break searchloop; }
+            if (!pass && name) {
+                // Look in Glyph name (uppercase only)
+                // Upperterms only contains length > 1
+                nameLoop: for (let i = 0; i < this._upperTerms.length; i++) {
+                    if (name.includes(this._upperTerms[i])) { pass = true; break nameLoop; }
                 }
             }
 
             if (!pass && p_unicodeInfos.indexed) {
                 let indexed = p_unicodeInfos.indexed;
-                searchloop: for (let i = 0; i < this._terms.length; i++) {
-                    if (indexed.includes(this._terms[i].toUpperCase())) { pass = true; break searchloop; }
+                indexedLoop: for (let i = 0; i < this._upperIndexed.length; i++) {
+                    if (indexed.includes(this._upperIndexed[i])) { pass = true; break indexedLoop; }
                 }
             }
 
+        }
+
+        if (!pass) { return; }
+
+        if (this._mustExists) { if (!(p_unicodeInfos.u in this._family._glyphsMap)) { return; } }
+
+        if(this._addComps && p_unicodeInfos.relatives){
+            let relatives =p_unicodeInfos.relatives;
+            for(let i = 0; i < relatives.length; i++){
+                let infos = UNICODE.instance._charMap[relatives[i]];
+                this._results.push(infos);
+                this._resultSet.add(infos);    
+            }
         }
 
         if (pass) {

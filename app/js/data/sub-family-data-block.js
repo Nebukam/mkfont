@@ -17,7 +17,6 @@ const svgFontString =
     `   <font-face>` +
     `       <font-face-src><font-face-src-name></font-face-src-name></font-face-src>` +
     `   </font-face>` +
-    `   <missing-glyph></missing-glyph>` +
     `</font>`;
 
 const svgFontRef = domparser.parseFromString(svgFontString, `image/svg+xml`).getElementsByTagName(`font`)[0];

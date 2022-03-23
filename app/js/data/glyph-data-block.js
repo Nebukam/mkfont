@@ -17,12 +17,11 @@ class GlyphDataBlock extends SimpleDataEx {
 
     constructor() { super(); }
 
+    static __defaultVariantClass = GlyphVariant;
+
     static __signalValueMap = {
         [IDS.UNICODE]: SIGNAL.UNICODE_CHANGED
     };
-
-    static NULL = new GlyphDataBlock();
-
 
     _Init() {
 
@@ -38,7 +37,7 @@ class GlyphDataBlock extends SimpleDataEx {
         this._arabic_form = null;
         this._unicodeInfos = null;
 
-        this._defaultGlyph = new GlyphVariant();
+        this._defaultGlyph = new this.constructor.__defaultVariantClass();
         this._defaultGlyph._isDefault = true;
 
         this._glyphVariants = new nkm.collections.List();
@@ -114,7 +113,9 @@ class GlyphDataBlock extends SimpleDataEx {
     }
 
     GetVariant(p_subFamily) {
-        return this._subFamiliesMap.Get(p_subFamily);
+        let variant = this._subFamiliesMap.Get(p_subFamily);
+        if (!variant) { variant = this._defaultGlyph; }
+        return variant;
     }
 
     //

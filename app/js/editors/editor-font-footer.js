@@ -22,8 +22,8 @@ class FontEditorFooter extends nkm.datacontrols.ControlView {
         return nkm.style.Extends({
             ':host': {
                 'display': 'flex',
-                'min-height': '20px',
-                'height': '20px'
+                'min-height': '8px',
+                'height': '8px'
             },
             '.progress': {
                 'position':'absolute',
@@ -39,7 +39,7 @@ class FontEditorFooter extends nkm.datacontrols.ControlView {
             size: ui.FLAGS.SIZE_XXS,
             flavor: nkm.com.FLAGS.LOADING
         }
-        this._progressLabel = new ui.manipulators.Text(ui.El(`div`, { class: `label` }, this._host));
+        //this._progressLabel = new ui.manipulators.Text(ui.El(`div`, { class: `label` }, this._host));
     }
 
     _OnDataChanged(p_oldData) {
@@ -62,12 +62,12 @@ class FontEditorFooter extends nkm.datacontrols.ControlView {
 
     _OnContentUpdate(p_processed, p_total) {
         this._progressBar.progress = (p_processed / p_total);
-        this._progressLabel.Set(`${p_processed} / ${p_total}`);
+        //this._progressLabel.Set(`${p_processed} / ${p_total}`);
     }
 
     _OnContentUpdateComplete() {
         this._progressBar.progress = 0;
-        this._progressLabel.Set(`---`);
+        //this._progressLabel.Set(`---`);
     }
 
 }

@@ -69,6 +69,7 @@ class GlyphVariantDataBlock extends SimpleDataEx {
     _UpdateFontObject() {
 
         if (!this._glyph) { return; }
+        if (!this._glyph.family) { this._fontObject.remove(); return; }
 
         let
             glyph = this._fontObject,
@@ -82,7 +83,7 @@ class GlyphVariantDataBlock extends SimpleDataEx {
         //dom.SAtt(glyph, IDS.GLYPH_NAME, this.Resolve(IDS.GLYPH_NAME));
 
         dom.SAtt(glyph, IDS.GLYPH_NAME, `${uCode}`);
-        dom.SAtt(glyph, IDS.UNICODE, `${uInfos.char}`);
+        dom.SAtt(glyph, IDS.UNICODE, `${uInfos ? uInfos.char : ''}`);
 
         // Flip
         let glyphPath = svgpath(this.Get(IDS.PATH))
@@ -92,7 +93,7 @@ class GlyphVariantDataBlock extends SimpleDataEx {
 
         glyph.setAttribute(`d`, glyphPath);
 
-        if (this.Get(IDS.OUT_OF_BOUNDS) || !this.Resolve(IDS.EXPORT_GLYPH)) {
+        if (this.Get(IDS.OUT_OF_BOUNDS) || !this.Resolve(IDS.EXPORT_GLYPH) || this._glyph.isNull) {
             this._fontObject.remove();
         } else if (this._subFamily) {
             this._subFamily.fontObject.appendChild(this._fontObject);

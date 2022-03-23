@@ -62,7 +62,8 @@ class GlyphGroupsView extends ui.views.View {
                 'position': 'relative',
                 'display': 'flex',
                 'flex-flow': 'column nowrap',
-                '--streamer-gap': '10px'
+                '--streamer-gap': '10px',
+                'overflow':'clip'
             },
             '.header, .search': {
                 'flex': '0 0 auto',
@@ -71,6 +72,9 @@ class GlyphGroupsView extends ui.views.View {
                 'position': 'relative',
                 'flex': '1 1 auto',
                 'overflow': 'auto',
+            },
+            '.search-status':{
+                '@':['absolute-centered']
             }
         }, super._Style());
     }
@@ -81,9 +85,12 @@ class GlyphGroupsView extends ui.views.View {
         this._header = this.Add(GlyphGroupHeader, `header`);
         this.forwardData.To(this._header);
 
+        this._searchStatus = this.Add(mkfWidgets.SearchStatus, `search-status`);        
         this._search = this.Add(GlyphGroupSearch, `search`);
+        this._search.status = this._searchStatus;
+        
 
-        this._domStreamer = this.Add(ui.helpers.DOMStreamer, 'dom-stream', this._host);
+        this._domStreamer = this.Add(ui.helpers.DOMStreamer, 'dom-stream');
         this._domStreamer
             .Watch(ui.SIGNAL.ITEM_CLEARED, this._OnItemCleared, this)
             .Watch(ui.SIGNAL.ITEM_REQUEST_RANGE_UPDATE, this._OnItemRequestRangeUpdate, this);
@@ -181,7 +188,7 @@ class GlyphGroupsView extends ui.views.View {
     _DisplaySearch() {
 
         this._domStreamer.Unwatch(ui.SIGNAL.ITEM_REQUESTED, this._streamRequestFn, this);
-        this._streamRequestFn = this._defaultStreamFn;
+        this._streamRequestFn = this._OnIndexRequestSearchResult;
         this._domStreamer.Watch(ui.SIGNAL.ITEM_REQUESTED, this._streamRequestFn, this);
 
         this._domStreamer.itemCount = this._searchSettings._results.length;
@@ -190,8 +197,6 @@ class GlyphGroupsView extends ui.views.View {
     }
 
     _OnSearchToggled() {
-
-        console.log(`_OnSearchToggled`);
 
         let oldValue = this._searchActive;
         this._searchActive = this._searchSettings ? this._searchSettings.Get(IDS_EXT.SEARCH_ENABLED) : false;

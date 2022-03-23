@@ -68,6 +68,8 @@ class UNICODE extends nkm.com.helpers.Singleton {
             char.char = this.constructor.GetUnicodeCharacter(parseInt(cid, 16));
         }
 
+        //let relMap = UNI_REL_MAPPING;
+
     }
 
     static GetInfos(p_unicode) {
