@@ -28,8 +28,9 @@ class GlyphGroupsView extends ui.views.View {
         this._Bind(this._OnIndexRequestMixed);
         this._Bind(this._OnIndexRequestRange);
         this._Bind(this._OnIndexRequestUnicodes);
+        this._Bind(this._OnIndexRequestSearchResult);
 
-        this._OnIndexRequestCB = null;
+        this._streamRequestFn = this._OnIndexRequestUnicodes;
         this._domStreamer = null;
         this._unicodeMap = new Map();
         this._rangeInfos = null;
@@ -38,7 +39,16 @@ class GlyphGroupsView extends ui.views.View {
             .Hook(SIGNAL.GLYPH_ADDED, this._OnGlyphAdded, this)
             .Hook(SIGNAL.GLYPH_REMOVED, this._OnGlyphRemoved, this);
 
+        this._searchSettings = null;
+        this._searchObserver = new nkm.com.signals.Observer();
+        this._searchObserver
+            .Hook(SIGNAL.SEARCH_TOGGLED, this._OnSearchToggled, this)
+            .Hook(SIGNAL.SEARCH_STARTED, this._OnSearchStarted, this)
+            .Hook(SIGNAL.SEARCH_COMPLETE, this._OnSearchComplete, this);
+
         this._delayedReloadList = nkm.com.DelayedCall(this._Bind(this._ReloadList));
+        this._defaultStreamFn = null;
+        this._searchActive = false;
 
     }
 
@@ -54,7 +64,7 @@ class GlyphGroupsView extends ui.views.View {
                 'flex-flow': 'column nowrap',
                 '--streamer-gap': '10px'
             },
-            '.header': {
+            '.header, .search': {
                 'flex': '0 0 auto',
             },
             '.dom-stream': {
@@ -71,9 +81,7 @@ class GlyphGroupsView extends ui.views.View {
         this._header = this.Add(GlyphGroupHeader, `header`);
         this.forwardData.To(this._header);
 
-        console.log(GlyphGroupSearch);
         this._search = this.Add(GlyphGroupSearch, `search`);
-        //this.forwardData.To(this._search);
 
         this._domStreamer = this.Add(ui.helpers.DOMStreamer, 'dom-stream', this._host);
         this._domStreamer
@@ -91,7 +99,6 @@ class GlyphGroupsView extends ui.views.View {
 
     }
 
-
     SetPreviewSize(p_width, p_height) {
         this._domStreamer.options = {
             layout: {
@@ -100,6 +107,19 @@ class GlyphGroupsView extends ui.views.View {
                 gap: 5
             }
         };
+    }
+
+    _OnDataChanged(p_oldData) {
+        super._OnDataChanged(p_oldData);
+        this.searchSettings = this._data ? this._data.searchSettings : null;
+    }
+
+    set searchSettings(p_value) {
+        if (this._searchSettings == p_value) { return; }
+        this._searchSettings = p_value;
+        this._searchObserver.ObserveOnly(p_value);
+        this._search.data = p_value;
+        //this._OnSearchToggled();
     }
 
     set displayRange(p_value) {
@@ -111,10 +131,6 @@ class GlyphGroupsView extends ui.views.View {
 
         this._header.displayRange = p_value;
         //this._search.displayRange = p_value;
-
-        if (this._OnIndexRequestCB) {
-            this._domStreamer.Unwatch(ui.SIGNAL.ITEM_REQUESTED, this._OnIndexRequestCB, this);
-        }
 
         this._displayRanges = p_value;
         this._rangeInfos = null;
@@ -132,27 +148,117 @@ class GlyphGroupsView extends ui.views.View {
 
         switch (this._rangeInfos.type) {
             case IDS_EXT.RANGE_MIXED:
-                this._OnIndexRequestCB = this._OnIndexRequestMixed;
+                this._defaultStreamFn = this._OnIndexRequestMixed;
                 break;
             case IDS_EXT.RANGE_INLINE:
-                this._OnIndexRequestCB = this._OnIndexRequestRange;
+                this._defaultStreamFn = this._OnIndexRequestRange;
                 break;
             case IDS_EXT.RANGE_PLAIN:
                 this._individualFetchGlyphFn = p_value.fetchGlyph || null;
-                this._OnIndexRequestCB = this._OnIndexRequestUnicodes;
+                this._defaultStreamFn = this._OnIndexRequestUnicodes;
                 break;
         }
 
-        // Update request handler based on range type
-        if (this._OnIndexRequestCB) {
-            this._domStreamer.Watch(ui.SIGNAL.ITEM_REQUESTED, this._OnIndexRequestCB, this);
-        }
+        if (this._searchSettings) { this._searchSettings._UpdateSearchData(this._displayRanges, this._rangeInfos); }
+        if (this._searchActive) { this._StartSearch(); }
+        else { this._DisplaySelectedRange(); }
 
-        //this._domStreamer._ClearItems();
+    }
+
+    _DisplaySelectedRange() {
+
+        this._domStreamer.Unwatch(ui.SIGNAL.ITEM_REQUESTED, this._streamRequestFn, this);
+        this._streamRequestFn = this._defaultStreamFn;
+        this._domStreamer.Watch(ui.SIGNAL.ITEM_REQUESTED, this._streamRequestFn, this);
+
         this._domStreamer.itemCount = this._rangeInfos.indexCount;
         this._domStreamer.scroll({ top: 0 });
 
     }
+
+    //#region search
+
+    _DisplaySearch() {
+
+        this._domStreamer.Unwatch(ui.SIGNAL.ITEM_REQUESTED, this._streamRequestFn, this);
+        this._streamRequestFn = this._defaultStreamFn;
+        this._domStreamer.Watch(ui.SIGNAL.ITEM_REQUESTED, this._streamRequestFn, this);
+
+        this._domStreamer.itemCount = this._searchSettings._results.length;
+        this._domStreamer.scroll({ top: 0 });
+
+    }
+
+    _OnSearchToggled() {
+
+        console.log(`_OnSearchToggled`);
+
+        let oldValue = this._searchActive;
+        this._searchActive = this._searchSettings ? this._searchSettings.Get(IDS_EXT.SEARCH_ENABLED) : false;
+
+        if (oldValue == this._searchActive) { return; }
+
+        if (!this._searchActive) {
+            this._DisplaySelectedRange();
+        } else {
+            if (this._searchSettings.ready) {
+                this._DisplaySearch();
+            } else {
+                // Wait for results to be ready
+                this._OnSearchStarted();
+            }
+        }
+
+    }
+
+    _StartSearch() {
+
+        this._domStreamer.Unwatch(ui.SIGNAL.ITEM_REQUESTED, this._streamRequestFn, this);
+
+        this._domStreamer.itemCount = 0;
+        this._domStreamer.scroll({ top: 0 });
+
+        // Reset search
+        this._searchSettings._UpdateSearchData(this._displayRanges, this._rangeInfos);
+
+    }
+
+    _OnSearchStarted() {
+
+        if (!this._searchActive) { return; }
+
+        this._domStreamer.itemCount = 0;
+        this._domStreamer.scroll({ top: 0 });
+
+    }
+
+    _OnSearchComplete() {
+
+
+        if (!this._searchActive) { return; }
+
+        this._domStreamer.Unwatch(ui.SIGNAL.ITEM_REQUESTED, this._streamRequestFn, this);
+        this._streamRequestFn = this._OnIndexRequestSearchResult;
+        this._domStreamer.Watch(ui.SIGNAL.ITEM_REQUESTED, this._streamRequestFn, this);
+
+        this._domStreamer.itemCount = this._searchSettings._results.length;
+        this._domStreamer.scroll({ top: 0 });
+
+    }
+
+    _OnIndexRequestSearchResult(p_streamer, p_index, p_fragment) {
+
+        let
+            unicode = this._searchSettings._results[p_index],
+            data = this._searchSettings._results[p_index]; //UNICODE.GetInfos(unicode);
+
+        console.log(`${unicode}`, data);
+
+        if (data) { this._OnItemRequestProcessed(data, p_streamer, p_index, p_fragment); }
+
+    }
+
+    //#endregion
 
     //#region Index request handler
 
@@ -215,16 +321,13 @@ class GlyphGroupsView extends ui.views.View {
     }
 
     _OnIndexRequestUnicodes(p_streamer, p_index, p_fragment) {
+
         let
             unicode = this._rangeInfos.list[p_index],
             data;
 
-        if (this._individualFetchGlyphFn) {
-            data = this._individualFetchGlyphFn(this._data, unicode);
-        } else {
-            data = UNICODE.instance._charMap[unicode];
-            if (!data) { data = UNICODE.instance._ligaMap[unicode]; }
-        }
+        if (this._individualFetchGlyphFn) { data = this._individualFetchGlyphFn(this._data, unicode); }
+        else { data = UNICODE.GetInfos(unicode); }
 
         if (data) { this._OnItemRequestProcessed(data, p_streamer, p_index, p_fragment); }
 

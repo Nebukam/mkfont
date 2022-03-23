@@ -6,15 +6,17 @@ const mkfData = require(`../../data`);
 const mkfWidgets = require(`../../widgets`);
 const mkfInspectors = require(`../inspectors`);
 
-console.log(mkfWidgets);
-
 class GlyphGroupSearch extends nkm.datacontrols.ControlView {
     constructor() { super(); }
 
     static __controls = [
-        { cl: mkfWidgets.ControlHeader, options: { label: `Boundaries` }, css: 'header' },
+        //{ cl: mkfWidgets.ControlHeader, options: { label: `Boundaries` }, css: 'header' },
+        { options: { propertyId: mkfData.IDS_EXT.SEARCH_ENABLED }, css:`main-toggle` },
+        { options: { propertyId: mkfData.IDS_EXT.SEARCH_TERM, inputOnly:true } },
+        { options: { propertyId: mkfData.IDS_EXT.SHOW_DECOMPOSITION, invertInputOrder:true }, css:`large` },
+        { options: { propertyId: mkfData.IDS_EXT.FILTER_ONLY_EXISTING, invertInputOrder:true }, css:`large` },
     ];
-    
+
     _Init() {
         super._Init();
 
@@ -28,6 +30,11 @@ class GlyphGroupSearch extends nkm.datacontrols.ControlView {
             return p_data;
         };
 
+        this._flags.Add(this, `enabled`);
+
+        this._builder.defaultControlClass = mkfWidgets.PropertyControl;
+        this._builder.defaultCSS = `control`;
+
     }
 
     _Style() {
@@ -35,16 +42,26 @@ class GlyphGroupSearch extends nkm.datacontrols.ControlView {
             ':host': {
                 '@': ['fade-in'],
                 'display': 'flex',
-                'flex-flow': 'row wrap',
+                'flex-flow': 'row nowrap',
                 //'min-height': '0',
                 //'overflow': 'auto',
                 //'padding': '10px',
                 'align-content': 'flex-start',
+                'background-color': 'rgba(46,46,46,0.5)',
+                'padding': '10px 20px',
+                'min-height':'28px',
+                //'border-radius':'5px',
+                //'margin':'0 10px'
             },
             '.control': {
-                'flex': '1 1 auto',
-                'margin': '0 2px 5px 2px'
+                'flex': '0 1 auto',
+                'margin-right': '10px'
             },
+            '.main-toggle':{'min-width': '100px',},
+            '.large':{'margin-right': '30px'},
+            
+            ':host(.enabled)': { 'background-color': 'rgba(var(--col-active-dark-rgb),0.5)', },
+            ':host(:not(.enabled)) .control:not(.main-toggle)': { opacity: 0.5, 'pointer-events':'none' },
             '.small': {
                 'flex': '1 1 45%'
             },
@@ -76,6 +93,11 @@ class GlyphGroupSearch extends nkm.datacontrols.ControlView {
         } else {
             this._title.Set(`---`);
         }
+    }
+
+    _OnDataUpdated(p_data) {
+        super._OnDataUpdated(p_data);
+        this._flags.Set(`enabled`, p_data.Get(mkfData.IDS_EXT.SEARCH_ENABLED));
     }
 
     _CleanUp() {

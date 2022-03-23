@@ -51,7 +51,7 @@ class SubFamilyDataBlock extends SimpleDataEx {
 
         this._values = {
             [IDS.WEIGHT_CLASS]: { value: ENUMS.WEIGHTS.At(3).value },
-            [IDS.FONT_STYLE]: { value: null },
+            [IDS.FONT_STYLE]: { value: `Regular` },
 
             [IDS.CAP_HEIGHT]: { value: null },
             [IDS.X_HEIGHT]: { value: null },
@@ -59,6 +59,7 @@ class SubFamilyDataBlock extends SimpleDataEx {
             [IDS.EM_UNITS]: { value: defaultEm },
             [IDS.EM_RESAMPLE]: { value: true },
             [IDS.ASCENT]: { value: defaultEm * 0.8 },
+            [IDS.ASC_RESAMPLE]: { value: true },
             [IDS.DESCENT]: { value: defaultEm * -0.25 },
             //[IDS.H_ORIGIN_X]: { value: 0 },
             //[IDS.H_ORIGIN_Y]: { value: 0 },

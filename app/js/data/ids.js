@@ -38,7 +38,8 @@ class IDS {
     static HANGING = 'hanging';
     static UNDERLINE_THICKNESS = 'underline-thickness';
     static UNDERLINE_POSITION = 'underline-position';
-    static EM_RESAMPLE = 'do-em-scale';
+    static EM_RESAMPLE = 'em-resample';
+    static ASC_RESAMPLE = 'asc-resample';
     static MONOSPACE = 'monospace';
 
     // Glyph properties
@@ -209,7 +210,13 @@ class IDS {
             inputType: inputs.Boolean,
             inputOptions: { size: ui.FLAGS.SIZE_XS },
             label: `EM Resample`,
-            desc: `If enabled, changing the EM Size will scale other metrics & glyphs.\nDisable this if you want to affect rendering size only.`
+            desc: `If enabled, changing the EM Size will scale other metrics & glyphs accordingly.\nDisable this if you want to affect rendering size only.`
+        },
+        [this.ASC_RESAMPLE]: {
+            inputType: inputs.Boolean,
+            inputOptions: { size: ui.FLAGS.SIZE_XS },
+            label: `Ascender Resample`,
+            desc: `If enabled, changing the ascender will scale other metrics & glyphs accordingly.\nDisable this if you want to affect positioning only.`
         },
         [this.MONOSPACE]: {
             recompute: true,

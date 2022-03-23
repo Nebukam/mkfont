@@ -94,11 +94,6 @@ class FamilyContentInspector extends nkm.datacontrols.InspectorView {
 
     }
 
-    _OnDataChanged(p_oldData) {
-        super._OnDataChanged(p_oldData);
-        console.log(`FAMILY CONTENT`, this._data);
-    }
-
 }
 
 module.exports = FamilyContentInspector;

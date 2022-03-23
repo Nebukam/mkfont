@@ -29,22 +29,31 @@ class IDS_EXT {
 
         // Family properties
         [this.SEARCH_ENABLED]: {
-            inputType: inputs.Checkbox,
-            label: `Enable search`,
-            inputOptions: { placeholder: `...` },
-            desc: `Enable search within glyph.\nMakes everything slower!`
+            inputType: inputs.Boolean,
+            label: `Search`,
+            inputOptions: { placeholder: `...`, size:ui.FLAGS.SIZE_XS },
+            desc: `Enable filter within current glyph selection.\nSeparate terms with an empty space.\nNote : search can impact responsiveness.`
         },
         [this.SEARCH_TERM]: {
-            inputType: inputs.Text,
+            recompute:true,
+            inputType: inputs.Search,
             label: `Search`,
-            inputOptions: { placeholder: `...` },
+            inputOptions: { placeholder: `search` },
             desc: `Search for characters within Unicode.\nSeparate search terms with a space.`
         },
         [this.SHOW_DECOMPOSITION]: {
+            recompute:true,
             inputType: inputs.Checkbox,
-            label: `Decomposition`,
-            inputOptions: { placeholder: `...` },
-            desc: `Whether to include glyph relatives & decompositions to initial results.`
+            label: `Decomp`,
+            inputOptions: { placeholder: `...`, size:ui.FLAGS.SIZE_XS },
+            desc: `Whether to include glyph relatives & decompositions to initial results.\ni.e, "é" will add ' and e to the results.`
+        },
+        [this.FILTER_ONLY_EXISTING]: {
+            recompute:true,
+            inputType: inputs.Checkbox,
+            label: `Exists`,
+            inputOptions: { placeholder: `...`, size:ui.FLAGS.SIZE_XS },
+            desc: `Show only existing glyphs.`
         },
     }
 

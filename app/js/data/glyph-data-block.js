@@ -17,11 +17,9 @@ class GlyphDataBlock extends SimpleDataEx {
 
     constructor() { super(); }
 
-    static __GetSignalValueMap() {
-        return {
-            [IDS.UNICODE]: SIGNAL.UNICODE_CHANGED
-        };
-    }
+    static __signalValueMap = {
+        [IDS.UNICODE]: SIGNAL.UNICODE_CHANGED
+    };
 
     static NULL = new GlyphDataBlock();
 

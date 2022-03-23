@@ -63,6 +63,13 @@ class SIGNAL {
    * @type {symbol}
    * @customtag read-only
    */
+   static SEARCH_TOGGLED = Symbol(`search-toggled`);
+
+  /**
+   * @description TODO
+   * @type {symbol}
+   * @customtag read-only
+   */
   static SEARCH_STARTED = Symbol(`search-started`);
 
   /**

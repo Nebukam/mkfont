@@ -31,9 +31,9 @@ class FamilyDataBlock extends SimpleDataEx {
 
         this._values = {
             [IDS.FAMILY]: { value: `Font Family Name` },
-            [IDS.COPYRIGHT]: { value: `` },
-            [IDS.DESCRIPTION]: { value: `` },
-            [IDS.URL]: { value: `` },
+            [IDS.COPYRIGHT]: { value: `(c) mkfont 2022` },
+            [IDS.DESCRIPTION]: { value: `Made with mkfont` },
+            [IDS.URL]: { value: `https://github.com/Nebukam/mkfont` },
             [IDS.VERSION]: { value: `1.0` },
             [IDS.COLOR_PREVIEW]: { value: `#f5f5f5` },
 

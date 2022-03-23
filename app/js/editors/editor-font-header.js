@@ -87,17 +87,19 @@ class FontEditorHeader extends nkm.datacontrols.ControlView {
             defaultWidgetClass: nkm.uilib.buttons.Button,
             handles: [
                 {
-                    label: `Save`, icon: `save`,
-                    htitle: `Save file to disk`,
-                    size: ui.FLAGS.SIZE_S,
-                    flavor: ui.FLAGS.CTA,// variant:ui.FLAGS.FRAME,
+                    label: `Save`, icon: `save`, htitle: `Save file to disk`,
+                    size: ui.FLAGS.SIZE_S, flavor: ui.FLAGS.CTA,// variant:ui.FLAGS.FRAME,
                     group: `file-actions`
                 },
                 {
-                    label: `Export`, icon: `upload`,
-                    htitle: `Export as TTF file`,
-                    size: ui.FLAGS.SIZE_S,
-                    flavor: ui.FLAGS.CTA, variant: ui.FLAGS.FRAME,
+                    label: `Export`, icon: `upload`, htitle: `Export as TTF file`,
+                    size: ui.FLAGS.SIZE_S, flavor: ui.FLAGS.CTA, variant: ui.FLAGS.FRAME,
+                    trigger: {
+                        fn: () => {
+                            mkfOperations.commands.ExportTTF.emitter = this;
+                            mkfOperations.commands.ExportTTF.Execute(this._data);
+                        }
+                    },
                     group: `file-actions`
                 },
                 {
@@ -153,8 +155,8 @@ class FontEditorHeader extends nkm.datacontrols.ControlView {
                     group: `external`,
                     trigger: {
                         fn: () => {
-                            mkfOperations.commands.ImportImportTTF.emitter = this;
-                            mkfOperations.commands.ImportImportTTF.Execute(this._data);
+                            mkfOperations.commands.ImportTTF.emitter = this;
+                            mkfOperations.commands.ImportTTF.Execute(this._data);
                         }
                     },
                 }

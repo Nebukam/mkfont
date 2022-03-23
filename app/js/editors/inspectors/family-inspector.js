@@ -15,7 +15,7 @@ class FamilyInspector extends nkm.datacontrols.InspectorView {
         { options:{ propertyId:mkfData.IDS.WEIGHT_CLASS, subData:`selectedSubFamily` } },
         { cl:mkfWidgets.ControlHeader, options:{ label:`Infos` } },
         { options: { propertyId: mkfData.IDS.COPYRIGHT } },
-        { options: { propertyId: mkfData.IDS.METADATA } },
+        //{ options: { propertyId: mkfData.IDS.METADATA } },
         { options: { propertyId: mkfData.IDS.DESCRIPTION } },
         { options: { propertyId: mkfData.IDS.URL } },
         { options: { propertyId: mkfData.IDS.VERSION } },

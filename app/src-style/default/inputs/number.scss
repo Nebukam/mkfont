@@ -18,14 +18,14 @@
     }
 
     &::before{ 
-        background: url(../assets/icons/icon_down-short.svg) no-repeat;
+        background: url('../assets/icons/icon_down-short.svg') no-repeat;
         background-size: contain;
         background-position: top;
         bottom:0;
     }
 
     &::after { 
-        background: url(../assets/icons/icon_up-short.svg) no-repeat;
+        background: url('../assets/icons/icon_up-short.svg') no-repeat;
         background-size: contain;
         background-position: bottom;
         top:0;

@@ -66,6 +66,7 @@ class ContentUpdater extends nkm.com.helpers.SingletonEx {
 
         if (this._data.length != 0) {
             this._delayedUpdate.Schedule();
+            this._ready = false;
         }else{
             this._processedCount = 0;
             this._totalCount = 0;

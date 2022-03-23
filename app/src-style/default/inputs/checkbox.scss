@@ -20,7 +20,7 @@
     height: var(--size);
     cursor: pointer;
 
-    background-image: url(../assets/icons/icon_checkbox-off.svg);
+    background-image: url('../assets/icons/icon_checkbox-off.svg');
     background-repeat: no-repeat;
     background-size: contain;
     background-position: center;
@@ -31,7 +31,7 @@
 }
 
 :host(.checked) .field {
-    background-image: url(../assets/icons/icon_checkbox-on.svg);
+    background-image: url('../assets/icons/icon_checkbox-on.svg');
     
 }
 

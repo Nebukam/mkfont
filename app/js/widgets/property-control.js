@@ -40,10 +40,11 @@ class PropertyControl extends nkm.datacontrols.ControlWidget {
             .To(`subData`, null, null)
             .To(`inputOnly`, null, null)
             .To(`onSubmit`, `_onSubmitFn`, null)
+            .To(`invertInputOrder`, null, false)
             .To(`command`, null, mkfOperations.commands.SetProperty);
 
         this._dataPreProcessor = this.constructor.__ppdata;
-
+        this._inputOrder = 1;
     }
 
     _PostInit() {
@@ -80,9 +81,9 @@ class PropertyControl extends nkm.datacontrols.ControlWidget {
                 'flex': '1 1 50%'
             },
             '.label': {
-                'text-overflow': 'ellipsis',
+                //'text-overflow': 'ellipsis',
                 'white-space': 'nowrap',
-                'overflow': 'hidden',
+                //'overflow': 'hidden',
             },
             '.label::after': {
                 'content': '"🛈"',
@@ -112,11 +113,23 @@ class PropertyControl extends nkm.datacontrols.ControlWidget {
             preventTabIndexing: true,
             onSubmit: { fn: this._Bind(this._OnToggleSubmit) }
         }
-        this._label = new ui.manipulators.Text(ui.dom.El(`div`, { class: `label` }, this._labelCtnr), false, false);
+        this._label = new ui.manipulators.Text(ui.dom.El(`span`, { class: `label` }, this._labelCtnr), false, false);
     }
 
     set subData(p_value) {
         this._subData = p_value;
+    }
+
+    set invertInputOrder(p_value) {
+
+        if (p_value) {
+            this._labelCtnr.style.order = `1`;
+            this._inputOrder = 0;
+        } else {
+            this._labelCtnr.style.order = `0`;
+            this._inputOrder = 1;
+        }
+        if (this._input) { this._input.order = this._inputOrder; }
     }
 
     set inputOnly(p_value) {
@@ -129,9 +142,10 @@ class PropertyControl extends nkm.datacontrols.ControlWidget {
     set propertyId(p_id) {
 
         this._valueID = p_id;
-        this._valueInfos = mkfData.IDS.GetInfos(p_id);
+        this._valueInfos = mkfData.IDS.GetInfos(p_id) || mkfData.IDS_EXT.GetInfos(p_id);
 
         if (this._input) {
+            this._input.order = null;
             this._input.Release();
             this._input = null;
         }
@@ -150,6 +164,8 @@ class PropertyControl extends nkm.datacontrols.ControlWidget {
             onSubmit: { fn: this._OnValueSubmit },
             ...this._valueInfos.inputOptions
         }
+
+        this._input.order = this._inputOrder;
 
     }
 

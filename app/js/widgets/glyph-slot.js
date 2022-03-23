@@ -165,7 +165,10 @@ class GlyphSlot extends nkm.datacontrols.ControlWidget {
         let glyphData = this._subFamily.family.TryGetGlyph(p_value),
             colCat = null;
 
-        if (unicodeCharacter.length > 1) {
+        if(!unicodeCharacter){
+            unicodeCharacter = ` `;
+            colCat = `var(--col-error)`;
+        }else if (unicodeCharacter.length > 1) {
             colCat = `var(--col-ligature)`;
         } else {
             if (`cat` in p_value) { colCat = `var(--col-${p_value.cat.col})`; }
