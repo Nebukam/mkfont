@@ -248,13 +248,8 @@ class GlyphGroupsView extends ui.views.View {
 
     _OnIndexRequestSearchResult(p_streamer, p_index, p_fragment) {
 
-        let
-            unicode = this._searchSettings._results[p_index],
-            data = this._searchSettings._results[p_index]; //UNICODE.GetInfos(unicode);
-
-        console.log(`${unicode}`, data);
-
-        if (data) { this._OnItemRequestProcessed(data, p_streamer, p_index, p_fragment); }
+        let unicode = this._searchSettings._results[p_index];
+        if (unicode) { this._OnItemRequestProcessed(unicode, p_streamer, p_index, p_fragment); }
 
     }
 
@@ -325,6 +320,11 @@ class GlyphGroupsView extends ui.views.View {
         let
             unicode = this._rangeInfos.list[p_index],
             data;
+
+        if (u.isObject(unicode)) {
+            this._OnItemRequestProcessed(unicode, p_streamer, p_index, p_fragment);
+            return;
+        }
 
         if (this._individualFetchGlyphFn) { data = this._individualFetchGlyphFn(this._data, unicode); }
         else { data = UNICODE.GetInfos(unicode); }

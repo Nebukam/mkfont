@@ -28,26 +28,18 @@ class FontEditorFooter extends nkm.datacontrols.ControlView {
             '.progress': {
                 'position':'absolute',
                 'width': '100%',
-                'height': '20px'
             },
-            '.progress-bar': {
-                'position':'absolute',
-                'box-sizing':'border-box',
-                'transition':'all 0.05s ease',
-                'width': 'var(--progress, 0%)',
-                'height': '100%',
-                'background-color':'rgba(var(--col-loading-rgb),0.1)',
-                'border-right':'2px solid var(--col-loading)'
-            }
         }, super._Style());
     }
 
     _Render() {
         super._Render();
-        this._progressBar = ui.El(`div`, { class: `progress` }, this._host);
-        ui.El(`div`, { class: `progress-bar` }, this._progressBar);
-
-        this._progressLabel = new ui.manipulators.Text(ui.El(`div`, { class: `label` }, this._progressBar));
+        this._progressBar = this.Add(nkm.uilib.bars.ProgressBar, `progress`);
+        this._progressBar.options = {
+            size: ui.FLAGS.SIZE_XXS,
+            flavor: nkm.com.FLAGS.LOADING
+        }
+        this._progressLabel = new ui.manipulators.Text(ui.El(`div`, { class: `label` }, this._host));
     }
 
     _OnDataChanged(p_oldData) {
@@ -69,12 +61,12 @@ class FontEditorFooter extends nkm.datacontrols.ControlView {
     //
 
     _OnContentUpdate(p_processed, p_total) {
-        this._progressBar.style.setProperty(`--progress`, `${Math.round((p_processed / p_total)* 100)}%`);
+        this._progressBar.progress = (p_processed / p_total);
         this._progressLabel.Set(`${p_processed} / ${p_total}`);
     }
 
     _OnContentUpdateComplete() {
-        this._progressBar.style.setProperty(`--progress`, `0%`);
+        this._progressBar.progress = 0;
         this._progressLabel.Set(`---`);
     }
 

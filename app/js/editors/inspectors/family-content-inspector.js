@@ -21,6 +21,10 @@ const CountComponents = (p_family) => {
     return 0;
 }
 
+const CountAll = (p_family) => {
+    return UNICODE.instance._charList.length;
+}
+
 class FamilyContentInspector extends nkm.datacontrols.InspectorView {
     constructor() { super(); }
 
@@ -43,6 +47,11 @@ class FamilyContentInspector extends nkm.datacontrols.InspectorView {
                     name: 'Components', typeTag: `Custom`, count: CountComponents,
                     icon: 'icon', isDynamic: true,
                     fetchList: mkfData.UTILS.GetFamilyComponents
+                },
+                {//TODO : All glyph for full search opportunities
+                    name: 'All', typeTag: `Custom`, count: CountAll,
+                    icon: 'text', isDynamic: true,
+                    fetchList: mkfData.UTILS.GetAllKnownUArray
                 }
             ]);
 

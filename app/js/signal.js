@@ -79,6 +79,13 @@ class SIGNAL {
    */
   static SEARCH_COMPLETE = Symbol(`search-complete`);
 
+  /**
+   * @description TODO
+   * @type {symbol}
+   * @customtag read-only
+   */
+   static SEARCH_PROGRESS = Symbol(`search-progress`);
+
 }
 
 module.exports = SIGNAL;

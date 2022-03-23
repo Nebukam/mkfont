@@ -80,6 +80,9 @@ class SubFamilyDataBlock extends SimpleDataEx {
         this._transformSettings = new ImportSettings();
         this._transformSettings.Watch(nkm.data.SIGNAL.VALUE_CHANGED, this._OnTransformSettingsUpdated, this);
 
+        this._globalTransforms = new ImportSettings();
+        this._globalTransforms.Watch(nkm.data.SIGNAL.VALUE_CHANGED, this._OnTransformSettingsUpdated, this);
+
         this._catalogItem = null;
 
     }

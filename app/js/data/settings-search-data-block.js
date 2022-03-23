@@ -43,6 +43,7 @@ class SettingsSearchDataBlock extends SimpleDataEx {
         this._running = false;
 
         this._results = [];
+        this._resultSet = new Set();
 
         this._delayedAdvance = nkm.com.DelayedCall(this._Bind(this._AdvanceSearch));
 
@@ -80,15 +81,20 @@ class SettingsSearchDataBlock extends SimpleDataEx {
         this._searchCovered = 0;
 
         this._terms = this.Get(IDS_EXT.SEARCH_TERM).split(` `);
-        if (this._terms.length == 1) { if (this._terms[0] == ``) { this._terms = []; } }
+        for(let i = 0; i < this._terms.length; i++){
+            let t = this._terms[i].trim();
+            if(!t || t == ``){this._terms.splice(i, 1); i--;}
+            else{this._terms[i] = t;}
+        }
 
-        this._results = [];
+        this._results.length = 0;
+        this._resultSet.clear();
 
         this._displayRange = p_displayRange;
         this._rangeInfos = p_rangeInfos;
 
 
-        console.log(`Search data updated`, p_displayRange, p_rangeInfos, this._terms);
+        //console.log(`Search data updated`, p_displayRange, p_rangeInfos, this._terms);
 
         switch (this._rangeInfos.type) {
             case IDS_EXT.RANGE_MIXED:
@@ -112,7 +118,7 @@ class SettingsSearchDataBlock extends SimpleDataEx {
 
     _AdvanceSearch() {
 
-        let length = 10;
+        let length = 5000;
 
         if (this._searchCovered + length > this._rangeInfos.indexCount) {
             length = this._rangeInfos.indexCount - this._searchCovered;
@@ -133,6 +139,8 @@ class SettingsSearchDataBlock extends SimpleDataEx {
             this._fetchFn(this._searchCovered, length);
             this._searchCovered += length;
 
+            this._Broadcast(SIGNAL.SEARCH_PROGRESS, this._searchCovered / this._rangeInfos.indexCount);
+
             this._delayedAdvance.Schedule();
 
         }
@@ -141,6 +149,7 @@ class SettingsSearchDataBlock extends SimpleDataEx {
     _ProcessInfos(p_unicodeInfos) {
 
         let pass = false;
+        if (this._resultSet.has(p_unicodeInfos)) { return; }
 
         if (this._terms.length != 0) {
 
@@ -148,32 +157,42 @@ class SettingsSearchDataBlock extends SimpleDataEx {
                 char = p_unicodeInfos.char,
                 name = p_unicodeInfos.name;
 
+            if (!char) { return; }
+
             if (char.length == 1) {
 
-                searchloop : for (let i = 0; i < this._terms.length; i++) {
+                searchloop: for (let i = 0; i < this._terms.length; i++) {
                     let term = this._terms[i];
                     if (term.length == 1) {
                         if (char == term) { pass = true; break searchloop; }
                         continue;
                     }
-                    if (name.includes(term)) { pass = true; break searchloop; }
+                    if (name.includes(term.toUpperCase())) { pass = true; break searchloop; }
                 }
 
             } else {
 
-                searchloop : for (let i = 0; i < this._terms.length; i++) {
+                searchloop: for (let i = 0; i < this._terms.length; i++) {
                     let term = this._terms[i];
 
                     if (char.includes(term)) { pass = true; break searchloop; }
                     if (term.length == 1) { continue; }
-                    if (name.includes(term)) { pass = true; break searchloop; }
+                    if (name.includes(term.toUpperCase())) { pass = true; break searchloop; }
+                }
+            }
+
+            if (!pass && p_unicodeInfos.indexed) {
+                let indexed = p_unicodeInfos.indexed;
+                searchloop: for (let i = 0; i < this._terms.length; i++) {
+                    if (indexed.includes(this._terms[i].toUpperCase())) { pass = true; break searchloop; }
                 }
             }
 
         }
 
-        if (pass) { 
-            this._results.push(p_unicodeInfos); 
+        if (pass) {
+            this._results.push(p_unicodeInfos);
+            this._resultSet.add(p_unicodeInfos);
         }
 
     }
@@ -257,10 +276,16 @@ class SettingsSearchDataBlock extends SimpleDataEx {
         let
             unicodeInfos;
 
-        for (let i = p_start, n = p_start + p_count; i < end; i++) {
-            unicodeInfos = UNICODE.GetInfos(this._rangeInfos.list[p_index]);
-            if (!unicodeInfos) { continue; }
-            this._ProcessInfos(unicodeInfos);
+        for (let i = p_start, n = p_start + p_count; i < n; i++) {
+            let lookup = this._rangeInfos.list[i];
+            if (u.isObject(lookup)) {
+                this._ProcessInfos(lookup);
+            } else {
+                unicodeInfos = UNICODE.GetInfos(lookup);
+                if (!unicodeInfos) { continue; }
+                this._ProcessInfos(unicodeInfos);
+            }
+
         }
 
     }

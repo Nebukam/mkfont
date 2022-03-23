@@ -37,6 +37,8 @@ $varname_col_cta: '--col-cta';
 
 $varname_col_input_bg: '--col-input-bg';
 
+$transition_opacity: opacity 0.15s ease;
+
 ///////////
 /* Sizes */
 ///////////
@@ -47,6 +49,8 @@ $size_s: 24px;
 $size_m: 32px;
 $size_l: 50px;
 $size_xl: 108px;
+$size_fill: 100%;
+$size_custom: var(--custom-size, $size_m);
 
 $varname_size_xxs: '--size-xxs';
 $varname_size_xs: '--size-xs';
@@ -54,6 +58,8 @@ $varname_size_s: '--size-s';
 $varname_size_m: '--size-m';
 $varname_size_l: '--size-l';
 $varname_size_xl: '--size-xl';
+$varname_size_fill: '--size-fill';
+$varname_size_custom: '--size-custom';
 
 ////////////////
 /* Font sizes */
@@ -159,14 +165,18 @@ $size_values:
     $size_s, 
     $size_m, 
     $size_l, 
-    $size_xl;
+    $size_xl, 
+    $size_fill,
+    $size_custom;
 $size_varnames: 
     $varname_size_xxs, 
     $varname_size_xs, 
     $varname_size_s, 
     $varname_size_m, 
     $varname_size_l, 
-    $varname_size_xl;
+    $varname_size_xl, 
+    $varname_size_fill,
+    $varname_size_custom;
 
 // Halves
 
@@ -176,6 +186,8 @@ $size_s_half: _round($size_s*0.5);
 $size_m_half: _round($size_m*0.5);
 $size_l_half: _round($size_l*0.5);
 $size_xl_half: _round($size_xl*0.5);
+$size_fill_half: _round($size_fill*0.5);
+$size_custom_half: calc(var(--custom-size) * 0.5);
 
 $suffix: '-half';
 $varname_size_xxs_half: $varname_size_xxs+$suffix;
@@ -184,6 +196,8 @@ $varname_size_s_half: $varname_size_s+$suffix;
 $varname_size_m_half: $varname_size_m+$suffix;
 $varname_size_l_half: $varname_size_l+$suffix;
 $varname_size_xl_half: $varname_size_xl+$suffix;
+$varname_size_fill_half: $varname_size_fill+$suffix;
+$varname_size_custom_half: $varname_size_custom+$suffix;
 
 $size_values_half: 
     $size_xxs_half, 
@@ -191,14 +205,18 @@ $size_values_half:
     $size_s_half, 
     $size_m_half, 
     $size_l_half, 
-    $size_xl_half;
+    $size_xl_half, 
+    $size_fill_half, 
+    $size_custom_half;
 $size_varnames_half: 
     $varname_size_xxs_half, 
     $varname_size_xs_half, 
     $varname_size_s_half, 
     $varname_size_m_half, 
     $varname_size_l_half, 
-    $varname_size_xl_half;
+    $varname_size_xl_half, 
+    $varname_size_fill_half, 
+    $varname_size_custom_half;
 
 // Thirds
 
@@ -208,6 +226,8 @@ $size_s_third: _round($size_s*0.333);
 $size_m_third: _round($size_m*0.333);
 $size_l_third: _round($size_l*0.333);
 $size_xl_third: _round($size_xl*0.333);
+$size_fill_third: _round($size_fill*0.333);
+$size_custom_third: calc(var(--custom-size) * 0.333);
 
 $suffix: '-third';
 $varname_size_xxs_third: $varname_size_xxs+$suffix;
@@ -216,6 +236,8 @@ $varname_size_s_third: $varname_size_s+$suffix;
 $varname_size_m_third: $varname_size_m+$suffix;
 $varname_size_l_third: $varname_size_l+$suffix;
 $varname_size_xl_third: $varname_size_xl+$suffix;
+$varname_size_fill_third: $varname_size_fill+$suffix;
+$varname_size_custom_third: $varname_size_custom+$suffix;
 
 $size_values_third: 
     $size_xxs_third, 
@@ -223,16 +245,19 @@ $size_values_third:
     $size_s_third, 
     $size_m_third, 
     $size_l_third, 
-    $size_xl_third;
+    $size_xl_third, 
+    $size_fill_third, 
+    $size_custom_third;
 $size_varnames_third: 
     $varname_size_xxs_third, 
     $varname_size_xs_third, 
     $varname_size_s_third, 
     $varname_size_m_third, 
     $varname_size_l_third, 
-    $varname_size_xl_third;
+    $varname_size_xl_third, 
+    $varname_size_fill_third, 
+    $varname_size_custom_third;
 
-$transition_opacity: opacity 0.15s ease;
 
 /*----------------------------*/
 /*<!---- @nkmjs/ui-core ----!>*/

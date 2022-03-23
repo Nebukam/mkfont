@@ -179,7 +179,7 @@ class IDS {
         [this.ASCENT]: {
             recompute: true,
             inputType: inputs.Number,
-            label: `Ascender`,
+            label: `Baseline`,
             inputOptions: { step: 1, min: 0, max: 32000 },
             desc: `defines the maximum unaccented height of the font within the font coordinate system.`
         },
@@ -215,8 +215,8 @@ class IDS {
         [this.ASC_RESAMPLE]: {
             inputType: inputs.Boolean,
             inputOptions: { size: ui.FLAGS.SIZE_XS },
-            label: `Ascender Resample`,
-            desc: `If enabled, changing the ascender will scale other metrics & glyphs accordingly.\nDisable this if you want to affect positioning only.`
+            label: `Baseline Resample`,
+            desc: `If enabled, changing the baseline will scale other metrics & glyphs accordingly.\nDisable this if you want to affect positioning only.`
         },
         [this.MONOSPACE]: {
             recompute: true,

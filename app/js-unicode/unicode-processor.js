@@ -200,6 +200,10 @@ for (let i = 0; i < characterLines.length; i++) {
     charData.canon = canon;
     charData.block = block;
 
+    let solos = charName.split(` `), indexed = [];
+    solos.forEach((item) => { if (item.length == 1) { indexed.push(`"${item}"`); } });
+    if (indexed.length > 0) { charData.indexed = indexed; }
+
     try {
 
         let refs = decomposition.split(` `);
@@ -213,7 +217,7 @@ for (let i = 0; i < characterLines.length; i++) {
         if (refs.length != 0) {
             charData.relatives = [];
             for (let d = 0; d < refs.length; d++) {
-                if(refs[d]){ charData.relatives.push(refs[d]); }
+                if (refs[d]) { charData.relatives.push(refs[d]); }
             }
         }
 
@@ -290,7 +294,8 @@ for (let b = 0; b < blocks.length; b++) {
             name = name.replace(`${longestMatch}-`, ``);
             name = name.replace(longestMatch, ``);
             name = name.trim();
-            glyph.name = name;
+            //glyph.name = name;
+
         }
 
     }
@@ -404,11 +409,12 @@ for (var p in charMap) {
     if (c.category) {
         catstr = ` cat:c.${c.category.id},`;
     }
-    if(c.relatives && c.relatives.length > 0){
-        for(let i = 0; i < c.relatives.length; i++ ){ c.relatives[i] = `'${c.relatives[i]}'`; }
+    if (c.relatives && c.relatives.length > 0) {
+        for (let i = 0; i < c.relatives.length; i++) { c.relatives[i] = `'${c.relatives[i]}'`; }
         catstr = ` relatives:[${c.relatives.join(`, `)}],`
     }
     UNI_CHAR_MAP += `${tabs}'${p}':{ u:'${p}', i:${c.i}, name:'${c.name}',${catstr} canon:k.${c.canonical}, block:b[${c.block}]`;
+    if (c.indexed) { UNI_CHAR_MAP += `, indexed:[${c.indexed.join(`,`)}]` }
     UNI_CHAR_MAP += `},`;
 }
 UNI_CHAR_MAP += `${tabs}}`;

@@ -1,5 +1,6 @@
 'use strict';
 
+const UNICODE = require(`../unicode`);
 const IDS = require(`./ids`);
 const IDS_EXT = require(`./ids-ext`);
 /**
@@ -89,8 +90,8 @@ class UTILS {
         return [];
     }
 
-    static GetSearchResultsArray(p_family){
-        return [];
+    static GetAllKnownUArray(p_family){
+        return UNICODE.instance._charList;
     }
 
 }
