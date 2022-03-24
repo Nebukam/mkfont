@@ -212,6 +212,7 @@ class SettingsSearchDataBlock extends SimpleDataEx {
             let relatives =p_unicodeInfos.relatives;
             for(let i = 0; i < relatives.length; i++){
                 let infos = UNICODE.instance._charMap[relatives[i]];
+                if (this._mustExists) { if (!(infos.u in this._family._glyphsMap)) { continue; } }
                 this._results.push(infos);
                 this._resultSet.add(infos);    
             }

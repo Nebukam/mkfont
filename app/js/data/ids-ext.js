@@ -52,7 +52,7 @@ class IDS_EXT {
         [this.ADD_COMPOSITION]: {
             recompute:true,
             inputType: inputs.Checkbox,
-            label: `Comps`,
+            label: `Relatives`,
             inputOptions: { placeholder: `...`, size:ui.FLAGS.SIZE_XS },
             desc: `Whether to include glyph relatives & decompositions to initial results.\ni.e, "é" will add ' and e to the results.`
         },
