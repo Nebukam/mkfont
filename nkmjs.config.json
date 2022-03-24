@@ -27,7 +27,8 @@
     "builds": [
         {
             "platform": "windows",
-            "arch": "x64"
+            "arch": "x64",
+            "asar": true
         }
     ]
 }

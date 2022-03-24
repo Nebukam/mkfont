@@ -25,7 +25,8 @@ class GlyphIdentity extends ui.Widget {
                 'padding-bottom': '15px',
                 'margin-bottom': '5px',
                 'border-bottom': '1px solid rgba(127, 127, 127, 0.1)',
-                'height': '2.2em'
+                'height': '2.2em',
+                'word-break': 'break-all',
             },
             '.tagbar': {
                 'max-height': '16px',
@@ -54,10 +55,11 @@ class GlyphIdentity extends ui.Widget {
         let hexCtnr = this._tagBar.CreateHandle({ cl: ui.WidgetButton });
         hexCtnr.options = {
             htitle: `Copy value to clipboard`,
-            trigger: { fn: () => { navigator.clipboard.writeText((`U+${this._glyphInfos.u}`).toUpperCase()); }, thisArg:this }
+            trigger: { fn: () => { navigator.clipboard.writeText((this._GetUni(this._glyphInfos)).toUpperCase()); }, thisArg: this }
         }
         this._hexTag = hexCtnr.Add(nkm.uilib.widgets.Tag, `tag`);
         this._hexTag.bgColor = `rgba(var(--col-cta-rgb),0.5)`;
+        this._hexTag.maxWidth = `100px`;
 
         this._blockTag = this._tagBar.CreateHandle();
         this._blockTag.bgColor = `black`;
@@ -65,6 +67,7 @@ class GlyphIdentity extends ui.Widget {
 
         this._catTag = this._tagBar.CreateHandle();
         this._catTag.bgColor = `black`;
+        this._catTag.maxWidth = `100px`;
 
     }
 
@@ -81,8 +84,9 @@ class GlyphIdentity extends ui.Widget {
             return;
         }
 
-        this._title.Set(p_infos.name || `U+${p_infos.u}`);
-        this._hexTag.label = `U+${p_infos.u}`;
+        this._title.Set((p_infos.name || `U+${p_infos.u}`).substr(0, 80));
+
+        this._hexTag.label = this._GetUni(p_infos);
 
         if (p_infos.block) {
             this._blockTag.label = p_infos.block.name;
@@ -97,6 +101,16 @@ class GlyphIdentity extends ui.Widget {
             this._catTag.visible = true;
         } else {
             this._catTag.visible = false;
+        }
+    }
+
+    _GetUni(p_infos) {
+        if (p_infos.ligature) {
+            let ulist = p_infos.u.split(`+`);
+            for (let i = 0; i < ulist.length; i++) { ulist[i] = `U+${ulist[i]}`; }
+            return ulist.join(`_`);
+        } else {
+            return `U+${p_infos.u}`;
         }
     }
 

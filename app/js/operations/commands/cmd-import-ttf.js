@@ -9,7 +9,6 @@ const fs = require('fs');
 const UNICODE = require(`../../unicode`);
 const mkfData = require(`../../data`);
 const mkfActions = require(`../actions`);
-const { IDS } = require('../../../../../nkmjs/packages/nkmjs-io-core/node_modules/@nkmjs/common');
 
 class CmdImportTTF extends actions.Command {
     constructor() { super(); }

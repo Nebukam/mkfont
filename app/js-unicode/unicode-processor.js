@@ -221,11 +221,11 @@ for (let i = 0; i < characterLines.length; i++) {
             for (let d = 0; d < refs.length; d++) {
 
                 let ref = refs[d];
-                if (ref) { 
-                    
-                    charData.relatives.push(ref); 
+                if (ref) {
 
-                    if(charCode != ``){
+                    charData.relatives.push(ref);
+
+                    if (charCode != ``) {
 
                         if (!(ref in relMap)) { relMap[ref] = [`'${charCode}'`]; }
                         else if (!relMap[ref].includes(`'${charCode}'`)) { relMap[ref].push(`'${charCode}'`); }
@@ -432,9 +432,9 @@ for (var p in charMap) {
         catstr = ` relatives:[${c.relatives.join(`, `)}],`
     }
     */
-   if(p in relMap){
-    catstr = ` relatives:[${relMap[p].join(`, `)}],`
-   }
+    if (p in relMap) {
+        catstr = ` relatives:[${relMap[p].join(`, `)}],`
+    }
 
     UNI_CHAR_MAP += `${tabs}'${p}':{ u:'${p}', i:${c.i}, name:'${c.name}',${catstr} canon:k.${c.canonical}, block:b[${c.block}]`;
     if (c.indexed) { UNI_CHAR_MAP += `, indexed:[${c.indexed.join(`,`)}]` }
@@ -479,7 +479,7 @@ UNI_CANON += `${tabs}}`;
 let UNI_REL_MAPPING = `{\n`;
 for (let p in relMap) {
     let obj = relMap[p];
-    if(obj.length == 0){continue;}
+    if (obj.length == 0) { continue; }
     UNI_REL_MAPPING += `${tabs}'${p}':[${obj.join(`,`)}],`;
 }
 UNI_REL_MAPPING += `${tabs}}`;

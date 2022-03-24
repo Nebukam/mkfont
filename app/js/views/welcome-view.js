@@ -28,6 +28,8 @@ class WelcomeView extends ui.views.View {
             '.ico': {
                 'grid-column': `1`,
                 'grid-row': `1 / span 2`,
+                'background-image': nkm.style.URLAssets(`mkfont-logo-nobg.svg`, true),
+                'background-size':`70%`
             },
             '.title': {
                 'padding':'15px',
@@ -93,6 +95,9 @@ class WelcomeView extends ui.views.View {
             ]
         };
 
+
+        console.log(nkm.env.CONF);
+
         this._recentBlock = ui.El(`div`, { class: `block end` }, this._body);
         title = new ui.manipulators.Text(ui.El(`div`, { class: `title` }, this._recentBlock));
         title.Set(`Recent`);
@@ -103,7 +108,7 @@ class WelcomeView extends ui.views.View {
             defaultWidgetClass: nkm.uilib.buttons.Button,
             handles: [
                 {
-                    label: `1.0.1`,
+                    label: `${nkm.env.CONF.version}`,
                     cl:nkm.uilib.widgets.Tag, //flavor: ui.FLAGS.CTA,
                     group: `Version`
                 },

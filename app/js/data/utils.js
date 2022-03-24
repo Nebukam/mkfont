@@ -38,13 +38,13 @@ class UTILS {
 
     }
 
-    static GetRangeInfos(p_family, p_value){
+    static GetRangeInfos(p_family, p_value) {
 
         let results = {
-            indexOffset:0,
-            indexCount:0,
-            list:null,
-            type:null
+            indexOffset: 0,
+            indexCount: 0,
+            list: null,
+            type: null
         };
 
         if (`includes` in p_value) {
@@ -82,7 +82,6 @@ class UTILS {
             (item, index) => {
                 if (p_family._ligatureSet.has(item)) { result.push(item.Get(IDS.UNICODE)); }
             });
-            console.log(result);
         return result;
     }
 
@@ -90,7 +89,7 @@ class UTILS {
         return [];
     }
 
-    static GetAllKnownUArray(p_family){
+    static GetAllKnownUArray(p_family) {
         return UNICODE.instance._charList;
     }
 

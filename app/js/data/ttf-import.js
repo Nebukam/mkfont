@@ -6,10 +6,8 @@ const IDS = require(`./ids`);
 const ENUMS = require(`./enums`);
 const UNICODE = require(`../unicode`);
 
-const { optimize } = require('svgo');
 const ttf2svg = require('ttf2svg');
 const svgpath = require('svgpath');
-const { CatalogWatcher } = require('../../../../nkmjs/packages/nkmjs-documents/node_modules/@nkmjs/data-core/lib/catalogs');
 
 const domparser = new DOMParser();
 
