@@ -22,11 +22,12 @@ class WelcomeView extends ui.views.View {
                 'width': `750px`,
                 'height': `500px`,
                 'display': 'grid',
-                'grid-template-columns': '350px 1fr',
+                'grid-template-columns': '400px 1fr',
                 'grid-template-rows': '1fr 1fr 50px',
             },
             '.ico': {
                 'grid-column': `1`,
+                'align-self': `center`,
                 'grid-row': `1 / span 2`,
                 'background-image': nkm.style.URLAssets(`mkfont-logo-nobg.svg`, true),
                 'background-size':`70%`
@@ -34,8 +35,8 @@ class WelcomeView extends ui.views.View {
             '.title': {
                 'padding':'15px',
             },
-            '.start': { 'align-self': `end` },
-            '.end': { 'align-self': `start` },
+            '.start': { 'align-self': `center`, 'grid-row':'1 / span 2' },//start
+            '.end': { 'align-self': `start`, 'display':`none` }, 
             '.block': {
                 'grid-column': `2`,
                 'padding-top':'10px',
