@@ -67,6 +67,32 @@ class SimpleDataEx extends nkm.data.SimpleDataBlock {
         return v;
     }
 
+    BatchSetWithOverrides(p_values, p_silent = false) {
+        if (u.isInstanceOf(p_values, nkm.data.SimpleDataBlock)) {
+            for (var p in p_values._values) {
+                let srcObj = p_values._values[p],
+                    tgtObj = this._values[p];
+                if (`override` in srcObj) { tgtObj.override = srcObj.override; }
+                this.Set(p, srcObj.value, true);
+            }
+        }
+        else {
+            for (var p in p_values) {
+                let srcObj = p_values[p];
+                if (u.isObject(srcObj)) {
+                    if (`override` in srcObj) { this._values[p].override = srcObj.override; }
+                    if (`value` in srcObj) { this.Set(p, srcObj.value, true); }
+                    else { this.Set(p, srcObj, true); }
+
+                } else {
+                    this.Set(p, srcObj, true);
+                }
+            }
+        }
+        if (!p_silent) { this.CommitUpdate(); }
+    }
+
+
     _BuildFontObject() {
         return null;
     }

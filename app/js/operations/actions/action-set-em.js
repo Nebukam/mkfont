@@ -9,6 +9,7 @@ const svgpath = require('svgpath');
 const ActionSetPropertyValue = require(`./action-set-property-value`);
 
 const subFamilyIDs = [
+    mkfData.IDS.BASELINE,
     mkfData.IDS.ASCENT,
     mkfData.IDS.DESCENT,
     mkfData.IDS.WIDTH,

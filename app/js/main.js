@@ -117,7 +117,11 @@ class MKFont extends nkm.app.AppBase {
 
         fontEditor.SetActiveRange(UNICODE.instance._blockCatalog.At(0));
 
-        //console.log(JSON.stringify(nkm.data.serialization.JSONSerializer.Serialize(this._tempFontData)));
+        let outputStr = JSON.stringify(nkm.data.serialization.JSONSerializer.Serialize(this._tempFontData));
+        console.log(JSON.parse(outputStr));
+
+        this._anotherFamily = nkm.data.serialization.JSONSerializer.Deserialize(JSON.parse(outputStr));
+        console.log(this._anotherFamily);
 
     }
 

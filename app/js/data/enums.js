@@ -46,12 +46,12 @@ class ENUMS {
     static SCALE_MANUAL = 5;
 
     static SCALE = nkm.data.catalogs.CreateFrom({ name: `Scale`, autoSort: false }, [
-        { name: `None `, [nkm.com.IDS.VALUE]: this.SCALE_NONE, icon: 'minus' },
-        { name: `EM `, [nkm.com.IDS.VALUE]: this.SCALE_EM, icon: 'text-em' },
-        { name: `Baseline`, [nkm.com.IDS.VALUE]: this.SCALE_BASELINE, icon: 'font-baseline' },
-        { name: `Spread`, [nkm.com.IDS.VALUE]: this.SCALE_SPREAD, icon: 'font-bounds-h' },
-        { name: `Height`, [nkm.com.IDS.VALUE]: this.SCALE_HEIGHT, icon: 'spread-ver' },
+        { name: `Baseline to Ascender`, [nkm.com.IDS.VALUE]: this.SCALE_BASELINE, icon: 'font-ascender' },
+        { name: `Ascender to Descender`, [nkm.com.IDS.VALUE]: this.SCALE_SPREAD, icon: 'font-bounds-h' },
+        { name: `Height (from Metrics)`, [nkm.com.IDS.VALUE]: this.SCALE_HEIGHT, icon: 'spread-ver' },
+        { name: `EM (from Metrics)`, [nkm.com.IDS.VALUE]: this.SCALE_EM, icon: 'text-em' },
         { name: `Manual`, [nkm.com.IDS.VALUE]: this.SCALE_MANUAL, icon: 'edit' },
+        { name: `None `, [nkm.com.IDS.VALUE]: this.SCALE_NONE, icon: 'clear' },
     ]);
 
 

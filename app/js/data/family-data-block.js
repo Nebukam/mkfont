@@ -19,8 +19,12 @@ const SearchSettings = require(`./settings-search-data-block`);
 const ContentUpdater = require(`../content-updater`);
 
 class FamilyDataBlock extends SimpleDataEx {
-
     constructor() { super(); }
+
+    static __NFO__ = {
+        [nkm.com.IDS.UID]: `@mkf:family-data-block`,
+        [nkm.com.IDS.ICON]: `data-block`
+    };
 
     _Init() {
 
@@ -245,6 +249,10 @@ class FamilyDataBlock extends SimpleDataEx {
         this._scheduledUpdate.Schedule();
     }
 
+    _Cleanup(){
+
+        super._CleanUp();
+    }
 
 
 }

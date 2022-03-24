@@ -54,7 +54,7 @@ class ControlHeader extends ui.Widget {
     _Render() {
 
         super._Render();
-        this._label = new ui.manipulators.Text(ui.dom.El(`div`, { class: `label font-small` }, this._host), false, false);
+        this._label = new ui.manipulators.Text(ui.dom.El(`div`, { class: `label font-xsmall` }, this._host), false, false);
 
     }
 

@@ -1,8 +1,14 @@
-const nkm = require(`@nkmjs/core`);
-const Glyph = require(`../../glyph-data-block`);
+const nkm = require(`@nkmjs/core`)
 const IDS  = require(`../../ids`);
 
+const Glyph = require(`../../glyph-data-block`);
+const SubFamily = require(`../../sub-family-data-block`);
 
+const __ID_tr = `transforms`;
+const __ID_values = `values`;
+const __ID_glyphs = `glyphs`;
+const __ID_variants = `variants`;
+const __ID_subFamilies = `subFamilies`;
 
 /**
  * This is a base implementation. It only add & serialize the known "metadata" property.
@@ -41,12 +47,12 @@ class FamilyDataBlockJSONSerializer extends nkm.data.serialization.json.DataBloc
     static SerializeContent(p_serial, p_data, p_options = null) {
         let fontObj = {};
 
-        fontObj.values = p_data.ValuesAndOverrides();
-        fontObj.transforms = p_data._transformSettings.ValuesAndOverrides();
+        fontObj[__ID_values] = p_data.ValuesAndOverrides();
+        fontObj[__ID_tr] = p_data._transformSettings.ValuesAndOverrides();
 
         // Glyphs
         let glyphs = [];
-        fontObj.glyphs = glyphs;
+        fontObj[__ID_glyphs] = glyphs;
 
         // First, go through all glyphs
         for (let i = 0; i < p_data._glyphs.count; i++) {
@@ -55,8 +61,8 @@ class FamilyDataBlockJSONSerializer extends nkm.data.serialization.json.DataBloc
                 glyph = p_data._glyphs.At(i),
                 variants = [],
                 glyphObj = {
-                    values: glyph.ValuesAndOverrides(),
-                    variants: variants
+                    [__ID_values]: glyph.ValuesAndOverrides(),
+                    [__ID_variants]: variants
                 };
 
             // Order of variant is the same as subFamilies.
@@ -66,13 +72,13 @@ class FamilyDataBlockJSONSerializer extends nkm.data.serialization.json.DataBloc
                 let
                     variant = glyph.GetVariant(glyph._glyphVariants.At(v)),
                     variantObj = {
-                        values: variant.ValuesAndOverrides(),
-                        transforms: variant._transformSettings.ValuesAndOverrides()
+                        [__ID_values]: variant.ValuesAndOverrides(),
+                        [__ID_tr]: variant._transformSettings.ValuesAndOverrides()
                     };
 
                 // cleanup runtime-computed values
-                delete variantObj.values[IDS.PATH];
-                delete variantObj.values[IDS.OUT_OF_BOUNDS];
+                delete variantObj[__ID_values][IDS.PATH];
+                delete variantObj[__ID_values][IDS.OUT_OF_BOUNDS];
 
                 variants.push(variantObj);
             }
@@ -82,14 +88,14 @@ class FamilyDataBlockJSONSerializer extends nkm.data.serialization.json.DataBloc
         }
 
         let subFamilies = [];
-        fontObj.subFamilies = subFamilies;
+        fontObj[__ID_subFamilies] = subFamilies;
 
         for (let i = 0; i < p_data._subFamilies.count; i++) {
             let
                 subFamily = p_data._subFamilies.At(i),
                 subFamilyObj = {
-                    values: subFamily.ValuesAndOverrides(),
-                    transforms: subFamily._transformSettings.ValuesAndOverrides()
+                    [__ID_values]: subFamily.ValuesAndOverrides(),
+                    [__ID_tr]: subFamily._transformSettings.ValuesAndOverrides()
                 };
 
             subFamilies.push(subFamilyObj);
@@ -107,58 +113,43 @@ class FamilyDataBlockJSONSerializer extends nkm.data.serialization.json.DataBloc
      */
     static DeserializeContent(p_serial, p_data, p_options = null, p_meta = null) {
 
-        // Need specific implementation.
-        let fontObj = p_serial[nkm.data.serialization.CONTEXT.JSON.DATA_KEY];
-        if (fontObj.values) { p_data.BatchSet(fontObj.values, true); }
-        if (fontObj.transforms) { p_data._transformSettings.BatchSet(fontObj.transforms, true); }
 
-        // Re-create subFamilies first
-        if (fontObj.subFamilies) {
-            let subFamilies = [];
-            for (let i = 0; i < fontObj.subFamilies.length; i++) {
-                let
-                    subFam = null,
-                    subFamObj = fontObj.subFamilies[i];
+        console.log(p_serial, p_data);
 
-                if (i == 0) {
-                    // Default subFamily
-                    subFam = p_data.defaultSubFamily;
-                } else {
-                    // Additional subFamily, needs to be created.
-                    throw new Error(`not implemented`);
-                }
+        // First load family data specifics
+        p_data.BatchSetWithOverrides(p_serial[__ID_values]);
+        p_data._transformSettings.BatchSetWithOverrides(p_serial[__ID_tr]);
 
-                if (subFamObj.values) { subFam.BatchSet(subFamObj.values); }
-                if (subFamObj.transforms) { subFam._transformSettings.BatchSet(subFamObj.transforms); }
-                subFamilies.push(subFam);
+        // Add subfamilies
+        let subFamilies = p_serial[__ID_subFamilies],
+        sfInstances = [];
+
+        for(let i = 0; i < subFamilies.length; i++){
+            let sf, sfData = subFamilies[i];
+            if(i == 0){
+                sf = p_data.defaultSubFamily;
+            }else{
+                sf = new SubFamily();
+                p_data.AddSubFamily(sf);
             }
 
-            if (fontObj.glyphs) {
-                for (let i = 0; i < fontObj.glyphs.length; i++) {
-                    let
-                        glyph = new Glyph(),
-                        glyphObj = fontObj.glyphs[i],
-                        variants = glyphObj.variants;
+            sfInstances.push(sf);
+            sf.BatchSetWithOverrides(sfData[__ID_values]);
+            sf._transformSettings.BatchSetWithOverrides(sfData[__ID_tr]);
 
-                    if (glyphObj.values) { glyph.BatchSet(glyphObj.values); }
+        }
 
-                    p_data.AddGlyph(glyph);
-
-                    for (let v = 0; v < variants.length; v++) {
-                        let variant = null,
-                            variantObj = variants[v];
-
-                        variant = glyph.GetVariant(subFamilies[v]);
-
-                        if (glyphObj.values) { variant.BatchSet(variantObj.values); }
-                        if (glyphObj.transforms) { variant._transformSettings.BatchSet(variantObj.transforms); }
-                        
-                    }
-                }
+        // Add glyphs
+        let glyphs = p_serial[__ID_glyphs];
+        for(let i = 0; i < glyphs.length; i++){
+            let glyph = new Glyph(), glyphData = glyphs[i], variantsData = glyphData[__ID_variants];
+            glyph.BatchSetWithOverrides(glyphData[__ID_values]);
+            p_data.AddGlyph(glyph);
+            for(let s = 0; s < sfInstances.length; s++){
+                let variant = glyph.GetVariant(sfInstances[s]), vData = variantsData[s];
+                variant.BatchSetWithOverrides(vData[__ID_values]);
+                variant._transformSettings.BatchSetWithOverrides(vData[__ID_tr]);
             }
-
-        } else {
-
         }
 
     }

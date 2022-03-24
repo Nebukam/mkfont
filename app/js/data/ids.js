@@ -36,10 +36,10 @@ class IDS {
     static ASCENT = 'ascent';
     static DESCENT = 'descent';
     static HANGING = 'hanging';
+    static BASELINE = 'baseline';
     static UNDERLINE_THICKNESS = 'underline-thickness';
     static UNDERLINE_POSITION = 'underline-position';
     static EM_RESAMPLE = 'em-resample';
-    static ASC_RESAMPLE = 'asc-resample';
     static MONOSPACE = 'monospace';
 
     // Glyph properties
@@ -167,7 +167,7 @@ class IDS {
         [this.CAP_HEIGHT]: {
             recompute: true,
             inputType: inputs.Number,
-            label: `Capital height`,
+            label: `CAP height`,
             desc: `defines the height of uppercase glyphs of the font within the font coordinate system.`
         },
         [this.X_HEIGHT]: {
@@ -179,16 +179,23 @@ class IDS {
         [this.ASCENT]: {
             recompute: true,
             inputType: inputs.Number,
-            label: `Baseline`,
+            label: `Ascender`,
             inputOptions: { step: 1, min: 0, max: 32000 },
-            desc: `defines the maximum unaccented height of the font within the font coordinate system.`
+            desc: `defines the maximum unaccented height of the font within the font coordinate system.\nRelative to baseline.`
         },
         [this.DESCENT]: {
             recompute: true,
             inputType: inputs.Number,
             label: `Descender`,
             inputOptions: { step: 1, min: -32000, max: 0 },
-            desc: `defines the maximum unaccented depth of the font.`
+            desc: `defines the maximum unaccented depth of the font.\nRelative to baseline.`
+        },
+        [this.BASELINE]: {
+            recompute: true,
+            inputType: inputs.Number,
+            label: `Baseline`,
+            inputOptions: { step: 1, min: 0, max: 32000 },
+            desc: `defines the position of the font baseline within the font coordinate system.`
         },
 
         [this.UNDERLINE_THICKNESS]: {
@@ -211,12 +218,6 @@ class IDS {
             inputOptions: { size: ui.FLAGS.SIZE_XS },
             label: `EM Resample`,
             desc: `If enabled, changing the EM Size will scale other metrics & glyphs accordingly.\nDisable this if you want to affect rendering size only.`
-        },
-        [this.ASC_RESAMPLE]: {
-            inputType: inputs.Boolean,
-            inputOptions: { size: ui.FLAGS.SIZE_XS },
-            label: `Baseline Resample`,
-            desc: `If enabled, changing the baseline will scale other metrics & glyphs accordingly.\nDisable this if you want to affect positioning only.`
         },
         [this.MONOSPACE]: {
             recompute: true,
