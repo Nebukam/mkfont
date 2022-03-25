@@ -113,9 +113,6 @@ class FamilyDataBlockJSONSerializer extends nkm.data.serialization.json.DataBloc
      */
     static DeserializeContent(p_serial, p_data, p_options = null, p_meta = null) {
 
-
-        console.log(p_serial, p_data);
-
         // First load family data specifics
         p_data.BatchSetWithOverrides(p_serial[__ID_values]);
         p_data._transformSettings.BatchSetWithOverrides(p_serial[__ID_tr]);

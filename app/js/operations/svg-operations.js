@@ -76,6 +76,27 @@ class SVGOperations {
     constructor() { }
 
 
+    static ATT_PATH = `d`;
+    static ATT_EM_UNITS = `units-per-em`;
+    static ATT_CAP_HEIGHT = `cap-height`;
+    static ATT_X_HEIGHT = `x-height`;
+    static ATT_ASCENT = `ascent`;
+    static ATT_DESCENT = `descent`;
+    static ATT_HANGING = `hanging`;
+    static ATT_UNDERLINE_THICKNESS = `underline-thickness`;
+    static ATT_UNDERLINE_POSITION = `underline-position`;
+    static ATT_H_ORIGIN_X = 'horiz-origin-x';
+    static ATT_H_ORIGIN_Y = 'horiz-origin-y';
+    static ATT_H_ADVANCE = `horiz-adv-x`;
+    static ATT_V_ORIGIN_X = 'vert-origin-x';
+    static ATT_V_ORIGIN_Y = 'vert-origin-y';
+    static ATT_V_ADVANCE = `vert-adv-y`;
+    static ATT_WEIGHT_CLASS = `font-weight`;
+    static ATT_GLYPH_NAME = `glyph-name`;
+    static ATT_UNICODE = `unicode`;
+
+    static GetAttId(p_id) { return this.ATT_MAPPING[p_id]; }
+
     //#region SVG Data processing
 
     /**
@@ -317,11 +338,17 @@ class SVGOperations {
             case ENUMS.SCALE_EM:
                 scale = p_context.em / heightRef;
                 break;
-            case ENUMS.SCALE_BASELINE:
+            case ENUMS.SCALE_ASCENDER:
                 scale = p_context.asc / heightRef;
                 break;
             case ENUMS.SCALE_SPREAD:
                 scale = (p_context.asc - p_context.dsc) / heightRef;
+                break;
+            case ENUMS.SCALE_X_HEIGHT:
+                scale = p_context.xh / heightRef;
+                break;
+            case ENUMS.SCALE_CAP_HEIGHT:
+                scale = p_context.ch / heightRef;
                 break;
             case ENUMS.SCALE_HEIGHT:
                 scale = p_context.h / heightRef;
@@ -339,8 +366,9 @@ class SVGOperations {
         // V align
 
         switch (p_settings.Get(IDS.TR_VER_ALIGN)) {
+            default:
             case ENUMS.VALIGN_BASELINE:
-                offsetY = p_context.asc - heightRef;
+                offsetY = p_context.bsl - heightRef;
                 break;
             case ENUMS.VALIGN_DESC:
                 offsetY = (p_context.asc - p_context.dsc) - heightRef;
@@ -348,9 +376,8 @@ class SVGOperations {
             case ENUMS.VALIGN_SPREAD:
                 offsetY = p_context.em * 0.5 - heightRef;
                 break;
-            default:
-            case ENUMS.VALIGN_TOP:
-                offsetY = -heightRef;
+            case ENUMS.VALIGN_ASCENDER:
+                offsetY = p_context.bsl - heightRef -p_context.asc;
                 break;
         }
 

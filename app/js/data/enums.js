@@ -40,14 +40,18 @@ class ENUMS {
 
     static SCALE_NONE = 0;
     static SCALE_EM = 1;
-    static SCALE_BASELINE = 2;
+    static SCALE_ASCENDER = 2;
     static SCALE_SPREAD = 3;
-    static SCALE_HEIGHT = 4;
-    static SCALE_MANUAL = 5;
+    static SCALE_X_HEIGHT = 4;
+    static SCALE_CAP_HEIGHT = 5;
+    static SCALE_HEIGHT = 6;
+    static SCALE_MANUAL = 7;
 
     static SCALE = nkm.data.catalogs.CreateFrom({ name: `Scale`, autoSort: false }, [
-        { name: `Baseline to Ascender`, [nkm.com.IDS.VALUE]: this.SCALE_BASELINE, icon: 'font-ascender' },
+        { name: `Baseline to Ascender`, [nkm.com.IDS.VALUE]: this.SCALE_ASCENDER, icon: 'font-ascender' },
         { name: `Ascender to Descender`, [nkm.com.IDS.VALUE]: this.SCALE_SPREAD, icon: 'font-bounds-h' },
+        { name: `Baseline to X Height`, [nkm.com.IDS.VALUE]: this.SCALE_X_HEIGHT, icon: 'font-x-height' },
+        { name: `Baseline to Cap heignt`, [nkm.com.IDS.VALUE]: this.SCALE_CAP_HEIGHT, icon: 'font-cap-height' },
         { name: `Height (from Metrics)`, [nkm.com.IDS.VALUE]: this.SCALE_HEIGHT, icon: 'spread-ver' },
         { name: `EM (from Metrics)`, [nkm.com.IDS.VALUE]: this.SCALE_EM, icon: 'text-em' },
         { name: `Manual`, [nkm.com.IDS.VALUE]: this.SCALE_MANUAL, icon: 'edit' },
@@ -55,13 +59,13 @@ class ENUMS {
     ]);
 
 
-    static VALIGN_TOP = 0;
+    static VALIGN_ASCENDER = 0;
     static VALIGN_BASELINE = 1;
     static VALIGN_DESC = 2;
     static VALIGN_SPREAD = 3;
 
     static VALIGN = nkm.data.catalogs.CreateFrom({ name: `Vertical anchoring`, autoSort: false }, [
-        { name: `Top `, [nkm.com.IDS.VALUE]: this.VALIGN_TOP, icon: 'font-ascender' },
+        { name: `Top `, [nkm.com.IDS.VALUE]: this.VALIGN_ASCENDER, icon: 'font-ascender' },
         { name: `Baseline`, [nkm.com.IDS.VALUE]: this.VALIGN_BASELINE, icon: 'font-baseline' },
         { name: `Descender`, [nkm.com.IDS.VALUE]: this.VALIGN_DESC, icon: 'font-descender' },
         { name: `Vertical spread`, [nkm.com.IDS.VALUE]: this.VALIGN_SPREAD, icon: 'center-ver' },

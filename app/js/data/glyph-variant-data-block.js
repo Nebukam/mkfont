@@ -74,24 +74,22 @@ class GlyphVariantDataBlock extends SimpleDataEx {
         let
             glyph = this._fontObject,
             uInfos = this._glyph.unicodeInfos,
-            uCode = this.Resolve(IDS.UNICODE);
+            uCode = this.Resolve(IDS.UNICODE),
+            width = this._subFamily.Get(IDS.MONOSPACE) ? this._subFamily.Get(IDS.WIDTH) : this.Resolve(IDS.WIDTH),
+            height = this.Resolve(IDS.HEIGHT);
 
-        //this._transformSettings.UpdateTransform();
-
-        dom.SAtt(glyph, IDS.WIDTH, this._subFamily.Get(IDS.MONOSPACE) ? this._subFamily.Get(IDS.WIDTH) : this.Resolve(IDS.WIDTH), true);
-        dom.SAtt(glyph, IDS.HEIGHT, this.Resolve(IDS.HEIGHT), true);
-        //dom.SAtt(glyph, IDS.GLYPH_NAME, this.Resolve(IDS.GLYPH_NAME));
-
-        dom.SAtt(glyph, IDS.GLYPH_NAME, `${uCode}`);
-        dom.SAtt(glyph, IDS.UNICODE, `${uInfos ? uInfos.char : ''}`);
+        glyph.setAttribute(SVGOPS.ATT_H_ADVANCE, width);
+        glyph.setAttribute(SVGOPS.ATT_V_ADVANCE, height);
+        glyph.setAttribute(SVGOPS.ATT_GLYPH_NAME, `${uCode}`);
+        glyph.setAttribute(SVGOPS.ATT_UNICODE, `${uInfos ? uInfos.char : ''}`);
 
         // Flip
         let glyphPath = svgpath(this.Get(IDS.PATH))
             .scale(1, -1)
-            .translate(0, this._subFamily.Get(IDS.ASCENT))
+            .translate(0, this._subFamily.Get(IDS.BASELINE))
             .toString();
 
-        glyph.setAttribute(`d`, glyphPath);
+        glyph.setAttribute(SVGOPS.ATT_PATH, glyphPath);
 
         if (this.Get(IDS.OUT_OF_BOUNDS) || !this.Resolve(IDS.EXPORT_GLYPH) || this._glyph.isNull) {
             this._fontObject.remove();

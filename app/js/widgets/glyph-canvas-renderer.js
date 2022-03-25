@@ -117,11 +117,10 @@ class GlyphCanvasRenderer extends ui.helpers.Canvas {
         ctx.setTransform(scale, 0, 0, scale, 0, 0);
 
         if (this._centered) {
-            ctx.translate(((w * iscale) * 0.5) - this._glyphWidth * 0.5 + 0.5, (h * iscale) * ros + 0.5);
+            ctx.translate(((w * iscale) * 0.5) - this._glyphWidth * 0.5 + 0.5, (h * iscale) * ros + 0.5 - (f.offy));
         } else {
-            ctx.translate((w * iscale) * ros, (h * iscale) * ros);
+            ctx.translate((w * iscale) * ros, (h * iscale) * ros - (f.offy));
         }
-
 
         // Draw glyph
         let col = nkm.style.Get(`--glyph-color`);
@@ -135,8 +134,8 @@ class GlyphCanvasRenderer extends ui.helpers.Canvas {
                 minx = -maxx,
                 maxy = h * iscale,
                 miny = -maxy,
-                txoff = -10 * iscale,
-                tyoff = -5 * iscale,
+                txoff = -20 * iscale,
+                tyoff = -3 * iscale,
                 gw = this._glyphWidth;
 
             // Draw mask
@@ -177,20 +176,23 @@ class GlyphCanvasRenderer extends ui.helpers.Canvas {
             }
 
 
-            if (this._drawLabels) { ctx.fillText('Asc', txoff, tyoff); }
+            let bsl = f.bsl,
+                ascy = bsl - f.asc;
+
+            if (this._drawLabels) { ctx.fillText('Asc', txoff, ascy + tyoff); }
 
             // Baseline
-            ctx.strokeStyle = nkm.style.Get(`--col-${(f.asc > f.em) ? 'warning' : 'active'}`);
+            ctx.strokeStyle = nkm.style.Get(`--col-${(f.bsl > f.em) ? 'warning' : 'active'}`);
             ctx.lineWidth = iscale;
             ctx.setLineDash([iscale * 2, iscale * 2]);
             ctx.beginPath();
 
             ctx.lineCap = 'round';
-            ctx.moveTo(minx, f.asc);
-            ctx.lineTo(maxx, f.asc);
+            ctx.moveTo(minx, bsl);
+            ctx.lineTo(maxx, bsl);
             ctx.stroke();
 
-            if (this._drawLabels) { ctx.fillText('Base', txoff, f.asc + tyoff); }
+            if (this._drawLabels) { ctx.fillText('Base', txoff, bsl + tyoff); }
 
             ctx.setLineDash([]);
 
@@ -198,19 +200,19 @@ class GlyphCanvasRenderer extends ui.helpers.Canvas {
 
             ctx.strokeStyle = `rgba(127,127,127,0.5)`;// ${nkm.style.Get(`--col-processing-rgb`)}
 
-            // Desc
             ctx.lineWidth = iscale;
-            //ctx.setLineDash([iscale, iscale]);
+
+            // Asc + Desc
             ctx.beginPath();
-            ctx.moveTo(minx, 0);
-            ctx.lineTo(maxx, 0);
-            ctx.moveTo(minx, f.asc - f.dsc);
-            ctx.lineTo(maxx, f.asc - f.dsc);
+            ctx.moveTo(minx, ascy);
+            ctx.lineTo(maxx, ascy);
+            ctx.moveTo(minx, bsl - f.dsc);
+            ctx.lineTo(maxx, bsl - f.dsc);
             ctx.stroke();
 
-            if (this._drawLabels) { ctx.fillText('Desc', txoff, f.asc - f.dsc + tyoff); }
+            if (this._drawLabels) { ctx.fillText('Desc', txoff, bsl - f.dsc + tyoff); }
 
-            // vLine
+            // Vertical bounds 
             ctx.beginPath();
             ctx.moveTo(0, miny);
             ctx.lineTo(0, maxy);
@@ -221,19 +223,34 @@ class GlyphCanvasRenderer extends ui.helpers.Canvas {
             // family values            
             ctx.strokeStyle = `rgba(255,255,255,0.1)`;
 
-            // subfm width
+            // family width
             ctx.beginPath();
-            ctx.moveTo(0, miny);
-            ctx.lineTo(0, maxy);
             ctx.moveTo(f.w, miny);
             ctx.lineTo(f.w, maxy);
             ctx.stroke();
 
+            if (this._drawLabels) {
+                ctx.fillText('X', txoff, bsl - f.xh + tyoff);
+                ctx.fillText('CAP', txoff, bsl - f.ch + tyoff);
+            }
 
+            ctx.strokeStyle = `rgba(127,127,127,0.1)`;
 
-            // EM
             ctx.lineWidth = iscale;
             ctx.beginPath();
+            ctx.moveTo(minx, bsl - f.xh);
+            ctx.lineTo(maxx, bsl - f.xh);
+            ctx.moveTo(minx, bsl - f.ch);
+            ctx.lineTo(maxx, bsl - f.ch);
+            ctx.stroke();
+
+            ctx.strokeStyle = `rgba(255,255,255,0.1)`;
+
+            // EM square
+            ctx.lineWidth = iscale;
+            ctx.beginPath();
+            ctx.moveTo(minx, 0);
+            ctx.lineTo(maxx, 0);
             ctx.moveTo(minx, f.em);
             ctx.lineTo(maxx, f.em);
             ctx.stroke();

@@ -20,82 +20,104 @@ class TTFImport {
 
         let
             svgFont = domparser.parseFromString(ttf2svg(p_ttfBytes), `image/svg+xml`),
+            font = svgFont.getElementsByTagName(`font`)[0],
             fontFace = svgFont.getElementsByTagName(`font-face`)[0],
             glyphs = svgFont.getElementsByTagName(`glyph`);
 
         if (!fontFace) { throw new Error(`fontFace element missing`); }
 
-        //console.log(svgFont);
+        console.log(ttf2svg(p_ttfBytes));
 
         let
             family = new Family(),
             subFamily = family.defaultSubFamily,
-            em_units = this.fwd(subFamily, IDS.EM_UNITS, fontFace, 1000),
-            fontAdvx = subFamily.Set(IDS.WIDTH, em_units),
-            fontAdvy = subFamily.Set(IDS.HEIGHT, em_units),
-            ascent = this.fwd(subFamily, IDS.ASCENT, fontFace, em_units * 0.7),
-            descent = this.fwd(subFamily, IDS.DESCENT, fontFace, em_units * -0.25);
+            em = this.numeric(fontFace, SVGOPS.ATT_EM_UNITS, 1000),
+            width = this.numeric(font, SVGOPS.ATT_H_ADVANCE, em),
+            height = em, //this.numeric(font, SVGOPS.ATT_V_ADVANCE, em),
+            ascend = this.numeric(fontFace, SVGOPS.ATT_ASCENT, em * 0.7),
+            descend = this.numeric(fontFace, SVGOPS.ATT_DESCENT, em * -0.25),
+            baseline = ascend,
+            max_adv_x = 0;
+
+        family.Set(IDS.FAMILY, font.getAttribute(`id`));
+
+        subFamily.BatchSet({
+            [IDS.WIDTH]: width,
+            [IDS.HEIGHT]: height,
+            [IDS.ASCENT]: ascend,
+            [IDS.DESCENT]: descend,
+            [IDS.BASELINE]: baseline,
+        });
+
+        // NOTE : When importing a TTF, the ASCENT is actually the baseline, and real ascender == BASELINE.
 
         subFamily._UpdateDisplayValues();
 
         for (let i = 0; i < glyphs.length; i++) {
 
             let g = glyphs[i],
-                glyphUnicode = g.getAttribute(`unicode`),
-                glyphId = g.getAttribute(`glyph-name`),
-                glyphPath = g.getAttribute(`d`),
-                glyphAdvX = Number(g.getAttribute(IDS.WIDTH) || fontAdvx),
-                glyphAdvY = Number(g.getAttribute(IDS.HEIGHT) || fontAdvy);
+                gU = g.getAttribute(SVGOPS.ATT_UNICODE),
+                gName = g.getAttribute(SVGOPS.ATT_GLYPH_NAME),
+                path = g.getAttribute(SVGOPS.ATT_PATH),
+                gW = this.numeric(g, SVGOPS.ATT_H_ADVANCE, width),
+                gH = this.numeric(g, SVGOPS.ATT_V_ADVANCE, height);
+
+            max_adv_x = Math.max(max_adv_x, gW);
 
             let newGlyph = new Glyph(),
-                defg = newGlyph._defaultGlyph;
+                variant = newGlyph._defaultGlyph;
 
-            if (glyphAdvX != fontAdvx) { defg.Set(IDS.WIDTH, glyphAdvX); }
+            if (gW != width) { variant.Set(IDS.WIDTH, gW); }
             //if (glyphAdvY != fontAdvy) { defg.Set(IDS.HEIGHT, glyphAdvY); }
 
             // Flip & translate glyph
-            glyphPath = svgpath(glyphPath)
+            path = svgpath(path)
                 .scale(1, -1)
-                .translate(0, ascent)
+                .translate(0, baseline)
                 .toString();
 
-            if (glyphUnicode.length != 1) {
+            if (gU.length != 1) {
                 //assume ligature, handle it.
             } else {
-                glyphUnicode = UNICODE.GetAddress(glyphUnicode);
+                gU = UNICODE.GetAddress(gU);
             }
 
             newGlyph.BatchSet({
-                [IDS.GLYPH_NAME]: glyphId,
-                [IDS.UNICODE]: glyphUnicode
+                [IDS.GLYPH_NAME]: gName,
+                [IDS.UNICODE]: gU
             });
 
             // Reconstruct SVG Stats
-            let bbox = SVGOPS.GetBBox(glyphPath);
+            let bbox = SVGOPS.GetBBox(path);
 
             let
                 svgStats = {
                     width: bbox.width,
-                    height: ascent - bbox.y,
+                    height: baseline, //bsl - bbox.y,
                     BBox: bbox
                 },
                 sShift = bbox.x,
-                sPush = glyphAdvX - (bbox.width + sShift);
+                sPush = gW - (bbox.width + sShift);
 
-            svgStats.path = svgpath(glyphPath).translate(-bbox.x, -bbox.y).toString();
-            SVGOPS.TranslateBBox(bbox, -bbox.x, -bbox.y);
+            svgStats.path = svgpath(path).translate(-bbox.x, 0).toString();
+            SVGOPS.TranslateBBox(bbox, -bbox.x, 0);
 
-            defg.Set(IDS.PATH_DATA, svgStats);
+            variant.BatchSet({
+                [IDS.PATH_DATA]: svgStats,
+                [IDS.HEIGHT]: gH,
+            });
 
             family.AddGlyph(newGlyph);
 
-            defg.transformSettings.BatchSet({
-                [IDS.TR_SCALE_MODE]: ENUMS.SCALE_NONE,
+            variant.transformSettings.BatchSet({
+                [IDS.TR_SCALE_MODE]: ENUMS.SCALE_ASCENDER,
                 [IDS.TR_WIDTH_SHIFT]: sShift,
                 [IDS.TR_WIDTH_PUSH]: sPush,
             });
 
         }
+
+        subFamily.Set(IDS.WIDTH, Math.min(max_adv_x, em));
 
         return family;
 
@@ -114,58 +136,59 @@ class TTFImport {
             family = p_subFamily.family,
             subFamily = p_subFamily,
             importList = [],
-            em_units = this.numeric(fontFace, IDS.EM_UNITS),
-            fontAdvx = this.numeric(fontFace, IDS.WIDTH, em_units),
-            fontAdvy = this.numeric(fontFace, IDS.HEIGHT, em_units),
-            ascent = this.numeric(fontFace, IDS.ASCENT, em_units * 0.7),
-            descent = this.numeric(fontFace, IDS.DESCENT, em_units * -0.25),
+            em = this.numeric(fontFace, SVGOPS.ATT_EM_UNITS),
+            width = this.numeric(fontFace, SVGOPS.ATT_H_ADVANCE, em),
+            height = this.numeric(fontFace, SVGOPS.ATT_V_ADVANCE, em),
+            ascent = this.numeric(fontFace, SVGOPS.ATT_ASCENT, em * 0.7),
+            descent = this.numeric(fontFace, SVGOPS.ATT_DESCENT, em * -0.25),
             asc = p_subFamily.Resolve(IDS.ASCENT),
-            scale = subFamily.Resolve(IDS.EM_UNITS) / em_units, // Scale down on import to match existing settings;
-            scale2 = scale * (asc / ascent);
+            scale = asc / ascent;
+
+
 
         for (let i = 0; i < glyphs.length; i++) {
 
             let g = glyphs[i],
-                glyphUnicode = g.getAttribute(IDS.UNICODE),
-                glyphId = g.getAttribute(IDS.GLYPH_NAME),
-                glyphPath = g.getAttribute(`d`),
-                glyphAdvX = this.numeric(g, IDS.WIDTH, fontAdvx),
-                glyphAdvY = this.numeric(g, IDS.HEIGHT, fontAdvy);
+                gU = g.getAttribute(SVGOPS.ATT_UNICODE),
+                gName = g.getAttribute(SVGOPS.ATT_GLYPH_NAME),
+                path = g.getAttribute(SVGOPS.ATT_PATH),
+                gW = this.numeric(g, SVGOPS.ATT_H_ADVANCE, width),
+                gH = this.numeric(g, SVGOPS.ATT_V_ADVANCE, height);
 
             // Flip & translate path
-            glyphPath = svgpath(glyphPath)
-                .scale(scale2, -scale2)
+            path = svgpath(path)
+                .scale(scale, -scale)
                 .translate(0, ascent * scale)
                 .toString();
 
-            if (glyphUnicode.length != 1) {
+            if (gU.length != 1) {
                 //assume ligature, handle it.
             } else {
-                glyphUnicode = UNICODE.GetAddress(glyphUnicode);
+                gU = UNICODE.GetAddress(gU);
             }
 
             // Reconstruct SVG Stats
             let
-                bbox = SVGOPS.GetBBox(glyphPath),
+                bbox = SVGOPS.GetBBox(path),
                 svgStats = {
                     width: bbox.width,
-                    height: (ascent * scale) - bbox.y,
+                    height: (ascent * scale),
                     BBox: bbox,
-                    path: svgpath(glyphPath).translate(-bbox.x, -bbox.y).toString()
+                    path: svgpath(path).translate(-bbox.x, 0).toString()
                 },
                 sShift = bbox.x,
-                sPush = (glyphAdvX * scale2) - (bbox.width + sShift);
+                sPush = (gW * scale) - (bbox.width + sShift);
 
-            SVGOPS.TranslateBBox(bbox, -bbox.x, -bbox.y);
+            SVGOPS.TranslateBBox(bbox, -bbox.x, 0);
 
             importList.push({
-                [IDS.GLYPH_NAME]: glyphId,
-                [IDS.UNICODE]: glyphUnicode,
+                [IDS.GLYPH_NAME]: gName,
+                [IDS.UNICODE]: gU,
                 [IDS.PATH_DATA]: svgStats,
                 transforms: {
                     // Make sure to push defaults
                     [IDS.TR_BOUNDS_MODE]: ENUMS.BOUNDS_MIXED,
-                    [IDS.TR_SCALE_MODE]: ENUMS.SCALE_NONE,
+                    [IDS.TR_SCALE_MODE]: ENUMS.SCALE_ASCENDER,
                     [IDS.TR_SCALE_FACTOR]: 1,
                     [IDS.TR_VER_ALIGN]: ENUMS.VALIGN_BASELINE,
                     [IDS.TR_VER_ALIGN_ANCHOR]: ENUMS.VANCHOR_BOTTOM,

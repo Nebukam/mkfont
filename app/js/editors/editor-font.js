@@ -28,6 +28,8 @@ class FontEditor extends nkm.uiworkspace.editors.EditorEx {
         // However, Helper functions to do the search & match should reside
         // somewhere else
 
+        this._Bind(this._ConfirmClose);
+
         this._leftShelfList = [];
         this._leftShelfCatalog = new nkm.data.catalogs.Catalog(false);
 
@@ -218,7 +220,7 @@ class FontEditor extends nkm.uiworkspace.editors.EditorEx {
     _OnDataValueChanged(p_data, p_id, p_valueObj) {
 
         let infos = mkfData.IDS.GetInfos(p_id);
-        console.log(infos);
+        
         if (!infos) { return; }
 
         if (infos.recompute) {
@@ -271,6 +273,32 @@ class FontEditor extends nkm.uiworkspace.editors.EditorEx {
             this.Inspect(p_family.nullGlyph);
         }
     }
+
+    //
+
+    RequestClose() {
+        // TODO : Check if unsaved changes
+        if(this._data.isDirty){
+            nkm.dialog.Push({
+                title: `Close editor`,
+                message: `Unsaved changes will be lost, are you sure?`,
+                actions: [
+                    { label: `Close`, icon:`warning`, flavor: nkm.com.FLAGS.WARNING, trigger: { fn: this._ConfirmClose } }, //variant: nkm.ui.FLAGS.FRAME
+                    { label: `Cancel` }
+                ],
+                icon: `warning`,
+                flavor: nkm.com.FLAGS.WARNING,
+                origin: this,
+            });
+        }else{
+            super.RequestClose();
+        }
+    }
+
+    _ConfirmClose(){
+        super.RequestClose();
+    }
+    
 
 }
 

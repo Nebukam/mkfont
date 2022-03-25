@@ -49,7 +49,7 @@ class ContentUpdater extends nkm.com.helpers.SingletonEx {
 
     _Update() {
 
-        let updateCount = Math.min(this._data.length, 20);
+        let updateCount = Math.min(this._data.length, 50);
         for (let i = 0; i < updateCount; i++) {
 
             let data = this._data.shift(),

@@ -40,8 +40,11 @@ class SubFamilyDataBlock extends SimpleDataEx {
             h: 1000,
             rh: 1000,
             asc: 1000,
+            bsl: 1000,
             dsc: 0,
             ref: 1000,
+            xh:1000,
+            ch:1000,
             em: 1000,
             mono: false
         }
@@ -59,6 +62,7 @@ class SubFamilyDataBlock extends SimpleDataEx {
             [IDS.EM_RESAMPLE]: { value: true },
             [IDS.BASELINE]: { value: defaultEm * 0.8 },
             [IDS.ASCENT]: { value: defaultEm * 0.8 },
+            [IDS.ASC_RESAMPLE]: { value: false },
             [IDS.DESCENT]: { value: defaultEm * -0.25 },
             //[IDS.H_ORIGIN_X]: { value: 0 },
             //[IDS.H_ORIGIN_Y]: { value: 0 },
@@ -121,15 +125,18 @@ class SubFamilyDataBlock extends SimpleDataEx {
 
             fullName = `${this.Resolve(IDS.FAMILY)}-${this.Resolve(IDS.FONT_STYLE)}`;
 
-        dom.SAtt(font, IDS.ID, fullName, true);
-        dom.SAtt(font, IDS.WIDTH, this.Resolve(IDS.WIDTH), true);
-        dom.SAtt(font, IDS.HEIGHT, this.Resolve(IDS.HEIGHT), true);
+        font.setAttribute(IDS.ID, fullName);
+        font.setAttribute(SVGOPS.ATT_H_ADVANCE, this.Resolve(IDS.WIDTH));
+        font.setAttribute(SVGOPS.ATT_V_ADVANCE, this.Resolve(IDS.HEIGHT));
 
-        dom.SAtt(fontFaceSrcName, `name`, fullName, true);
+        fontFaceSrcName.setAttribute(`name`, fullName);
 
-        dom.SAtt(fontFace, this._values, `value`, true);
-
-        dom.SAtt(fontFace, IDS.WEIGHT_CLASS, this.Get(IDS.WEIGHT_CLASS).value, true);
+        fontFace.setAttribute(SVGOPS.ATT_ASCENT, this.Get(IDS.BASELINE));
+        fontFace.setAttribute(SVGOPS.ATT_DESCENT, this.Get(IDS.DESCENT));
+        fontFace.setAttribute(SVGOPS.ATT_EM_UNITS, this.Get(IDS.EM_UNITS));
+        fontFace.setAttribute(SVGOPS.ATT_WEIGHT_CLASS, this.Get(IDS.WEIGHT_CLASS));
+        fontFace.setAttribute('font-stretch', 'normal');
+        
 
         if (this._catalogItem) { this._catalogItem.name = fullName; }
 
@@ -140,10 +147,14 @@ class SubFamilyDataBlock extends SimpleDataEx {
         let
             fw = this.Resolve(IDS.WIDTH),
             fh = this.Resolve(IDS.HEIGHT),
+            bsl = this.Resolve(IDS.BASELINE),
             asc = this.Resolve(IDS.ASCENT),
             dsc = this.Resolve(IDS.DESCENT),
             em = this.Resolve(IDS.EM_UNITS),
+            xh = this.Resolve(IDS.X_HEIGHT),
+            ch = this.Resolve(IDS.CAP_HEIGHT),
             h = asc - dsc,
+            offy = Math.min(bsl - asc, 0),
             rh = Math.max(em, h),
             sc = 1,
             ratio_w = 1,
@@ -164,9 +175,13 @@ class SubFamilyDataBlock extends SimpleDataEx {
         this._contextInfos.rah = ratio_h;
         this._contextInfos.w = fw;
         this._contextInfos.h = fh;
+        this._contextInfos.offy = offy;
         this._contextInfos.rh = rh;
+        this._contextInfos.bsl = bsl;
         this._contextInfos.asc = asc;
         this._contextInfos.dsc = dsc;
+        this._contextInfos.xh = xh;
+        this._contextInfos.ch = ch;
         this._contextInfos.ref = ref;
         this._contextInfos.em = em;
         this._contextInfos.mono = this.Resolve(IDS.MONOSPACE);

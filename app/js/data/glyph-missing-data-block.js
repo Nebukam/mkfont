@@ -16,9 +16,7 @@ const missingGlyphRef = domparser.parseFromString(svgString, `image/svg+xml`).ge
 class GlyphMissingDataBlock extends GlyphVariant {
 
     constructor() { super(); }
-
-    _BuildFontObject() { console.log(`huh`); return missingGlyphRef.cloneNode(true); }
-
+    _BuildFontObject() { return missingGlyphRef.cloneNode(true); }
 
 }
 

@@ -20,11 +20,12 @@ class ControlHeader extends ui.Widget {
         this._distribute.Setup(this);
 
         this._distribute
-            .To(`label`, (p_value) => { this._label.Set(p_value); });
+            .To(`label`, (p_value) => { this._label.Set(p_value); })
+            .To(`htitle`, (p_value) => { this.htitle = p_value; });
 
     }
 
-    set options(p_value){ this._distribute.Update(this, p_value); }
+    set options(p_value) { this._distribute.Update(this, p_value); }
 
     get editor() {
         if (this._editor) { return this._editor; }
@@ -38,15 +39,15 @@ class ControlHeader extends ui.Widget {
                 'position': 'relative',
                 'width': '100%',
                 'border-bottom': '1px solid rgba(127, 127, 127, 0.1)',
-                'margin-top':'2px'
+                'margin-top': '2px'
             },
             '.label': {
                 //'border-bottom': 'rgba(127, 127, 127, 0.1)',
                 //'padding-bottom':'2px',
                 //'font-style':'italic'
                 //'text-align':'center',
-                'text-transform':'uppercase',
-                'opacity':'0.5',
+                'text-transform': 'uppercase',
+                'opacity': '0.5',
             },
         }, super._Style());
     }

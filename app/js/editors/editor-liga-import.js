@@ -9,7 +9,7 @@ const mkfData = require(`../data`);
 const mkfInspectors = require(`./inspectors`);
 const mkfWidgets = require(`../widgets`);
 
-class EditorListImport extends nkm.datacontrols.Editor {
+class EditorLigaImport extends nkm.datacontrols.Editor {
     constructor() { super(); }
 
     _Init() {
@@ -82,19 +82,8 @@ class EditorListImport extends nkm.datacontrols.Editor {
     _Render() {
         super._Render();
 
-        this._header = ui.El(`div`, { class: `item header` }, this._host);
+        this._textInput = this.Add(nkm.uilib.inputs.Textarea, ``);
 
-        this._builder.defaultControlClass = mkfWidgets.PropertyControl;
-        this._builder.defaultCSS = `control`;
-        this._builder.host = this._header;
-        this._builder.Build([
-            { cl: mkfWidgets.ControlHeader, options: { label: `Options` } },
-            { options: { propertyId: mkfData.IDS.IMPORT_PREFIX } },
-            { options: { propertyId: mkfData.IDS.IMPORT_SEPARATOR } },
-            { options: { propertyId: mkfData.IDS.IMPORT_MARK_X }, css: 'small' },
-            { options: { propertyId: mkfData.IDS.IMPORT_MARK_CAP }, css: 'small' },
-            { options: { propertyId: mkfData.IDS.IMPORT_MARK_COL } },
-        ]);
 
         this._settingsInspector = this.Add(mkfInspectors.TransformSettings, `item settings`);
         this.forwardData.To(this._settingsInspector);
@@ -211,5 +200,5 @@ class EditorListImport extends nkm.datacontrols.Editor {
 
 }
 
-module.exports = EditorListImport;
-ui.Register(`mkfont-list-import-editor`, EditorListImport);
+module.exports = EditorLigaImport;
+ui.Register(`mkfont-liga-import-editor`, EditorLigaImport);

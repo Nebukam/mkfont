@@ -115,7 +115,7 @@ class CmdImportExternalFileMultiple extends actions.Command {
             //message: `Tweak the imported data to make sure it fits!`,
             content: [{ cl: this._importEditor, donotrelease: true }],
             actions: [
-                { label: `Import`, flavor: nkm.com.FLAGS.LOADING, trigger: { fn: this._OnImportContinue } }, //variant: nkm.ui.FLAGS.FRAME
+                { label: `Import`, icon:`load-arrow-small`, flavor: nkm.com.FLAGS.LOADING, trigger: { fn: this._OnImportContinue } }, //variant: nkm.ui.FLAGS.FRAME
                 { label: `Cancel`, trigger: { fn: this._Cancel, thisArg: this } }
             ],
             icon: `directory-download`,

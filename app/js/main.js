@@ -17,7 +17,7 @@ const fs = require('fs');
 
 com.BINDINGS.Expand(require(`./bindings`)); //!important
 
-const __fontName = `Inter-Regular`;// `Basement-Medium`;// `Meticula`; //`Inter-Regular`
+const __fontName = `Basement-Medium`;// `Basement-Medium`;// `Meticula`; //`Inter-Regular`
 
 /**
  * SteamGameFinder allows you to find which multiplayer games are shared within a group of steam users
@@ -85,7 +85,7 @@ class MKFont extends nkm.app.AppBase {
             [ui.IDS.VIEW_CLASS]: mkfEditors.FontEditor,
             [ui.IDS.NAME]: `Family Editor`,
             [ui.IDS.ICON]: `font`,
-            [ui.IDS.STATIC]: true
+            //[ui.IDS.STATIC]: true
         });
 
         this._welcomeView._options.view.RequestDisplay();
@@ -93,8 +93,8 @@ class MKFont extends nkm.app.AppBase {
         //mkfOperations.commands.MakeTTFFont.Enable();
         //nkm.actions.KeystrokeEx.CreateFromString(`Ctrl E`, { fn: this._Bind(this._WriteTTF) }).Enable();
 
-        this._EmptyFamily();
-        //this._FamilyFromTTF();
+        //this._EmptyFamily();
+        this._FamilyFromTTF();
 
     }
 
@@ -118,10 +118,10 @@ class MKFont extends nkm.app.AppBase {
         fontEditor.SetActiveRange(UNICODE.instance._blockCatalog.At(0));
 
         let outputStr = JSON.stringify(nkm.data.serialization.JSONSerializer.Serialize(this._tempFontData));
-        console.log(JSON.parse(outputStr));
+        //console.log(JSON.parse(outputStr));
 
         this._anotherFamily = nkm.data.serialization.JSONSerializer.Deserialize(JSON.parse(outputStr));
-        console.log(this._anotherFamily);
+        //console.log(this._anotherFamily);
 
     }
 

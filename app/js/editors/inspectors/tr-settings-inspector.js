@@ -16,8 +16,9 @@ class TransformSettingsInspector extends nkm.datacontrols.InspectorView {
 
     static __controls = [
         { cl: mkfWidgets.ControlHeader, options: { label: `Boundaries` }, css: 'header' },
-        { options: { propertyId: mkfData.IDS.TR_BOUNDS_MODE, inputOnly: true }, css: 'small' },
-        { options: { propertyId: mkfData.IDS.TR_SCALE_MODE, inputOnly: true }, css: 'small' },
+        { options: { propertyId: mkfData.IDS.TR_BOUNDS_MODE, inputOnly: true }, css: 'vsmall' },
+        { cl: mkfWidgets.ControlHeader, options: { label: `Scaling` }, css: 'header' },
+        { options: { propertyId: mkfData.IDS.TR_SCALE_MODE, inputOnly: true }, css: 'osmall' },
         { options: { propertyId: mkfData.IDS.TR_SCALE_FACTOR }, requireData: true, hideWhen: { fn: isMANUAL } },
         { cl: mkfWidgets.ControlHeader, options: { label: `Vertical align` }, css: 'header' },
         { options: { propertyId: mkfData.IDS.TR_VER_ALIGN, inputOnly: true }, css: 'small' },
@@ -65,6 +66,12 @@ class TransformSettingsInspector extends nkm.datacontrols.InspectorView {
             },
             '.header': {
                 'margin': '5px 2px 5px 2px'
+            },
+            '.vsmall': {
+                'flex': '1 1 25%'
+            },
+            '.osmall': {
+                'flex': '1 1 80%'
             }
         }, super._Style());
     }

@@ -43,9 +43,9 @@ class FamilyDataBlock extends SimpleDataEx {
             [IDS.VERSION]: { value: `1.0` },
             [IDS.COLOR_PREVIEW]: { value: `#f5f5f5` },
 
-            [IDS.ALPHABETIC]: { value: 0 },
-            [IDS.MATHEMATICAL]: { value: 350 },
-            [IDS.IDEOGRAPHIC]: { value: 400 },
+            //[IDS.ALPHABETIC]: { value: 0 },
+            //[IDS.MATHEMATICAL]: { value: 350 },
+            //[IDS.IDEOGRAPHIC]: { value: 400 },
 
             [IDS.PREVIEW_SIZE]: { value: 70 },
         };

@@ -19,7 +19,7 @@ class TransformSettingsDataBlock extends SimpleDataEx {
 
         this._values = {
             [IDS.TR_BOUNDS_MODE]: { value: ENUMS.BOUNDS_MIXED },
-            [IDS.TR_SCALE_MODE]: { value: ENUMS.SCALE_BASELINE },
+            [IDS.TR_SCALE_MODE]: { value: ENUMS.SCALE_ASCENDER },
             [IDS.TR_SCALE_FACTOR]: { value: 1 },
             [IDS.TR_VER_ALIGN]: { value: ENUMS.VALIGN_BASELINE },
             [IDS.TR_VER_ALIGN_ANCHOR]: { value: ENUMS.VANCHOR_BOTTOM },
@@ -62,6 +62,7 @@ class TransformSettingsDataBlock extends SimpleDataEx {
                 path.bbox.bottom > 32000 ||
                 path.bbox.right > 32000);
 
+            if(Math.abs(Math.max(path.bbox.height, path.bbox.width)) > 2000){ console.log(this._glyphVariantOwner.glyph); }
 
         if (this.Get(IDS.TR_HOR_ALIGN) == ENUMS.HALIGN_XMIN) {
             w = path.width;

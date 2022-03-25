@@ -28,31 +28,31 @@ class IDS {
     static IDEOGRAPHIC = 'ideographic';
 
     // SubFamily properties
-    static WEIGHT_CLASS = 'font-weight';
-    static FONT_STYLE = 'font-style';
-    static EM_UNITS = 'units-per-em';
+    static WEIGHT_CLASS = 'weight';
+    static FONT_STYLE = 'style';
+    static EM_UNITS = 'em';
     static CAP_HEIGHT = 'cap-height';
     static X_HEIGHT = 'x-height';
     static ASCENT = 'ascent';
     static DESCENT = 'descent';
     static HANGING = 'hanging';
     static BASELINE = 'baseline';
-    static UNDERLINE_THICKNESS = 'underline-thickness';
-    static UNDERLINE_POSITION = 'underline-position';
+    static UNDERLINE_THICKNESS = 'u-thickness';
+    static UNDERLINE_POSITION = 'u-position';
     static EM_RESAMPLE = 'em-resample';
     static MONOSPACE = 'monospace';
 
     // Glyph properties
     static H_ORIGIN_X = 'horiz-origin-x';
     static H_ORIGIN_Y = 'horiz-origin-y';
-    static WIDTH = 'horiz-adv-x';
+    static WIDTH = 'width';
     static V_ORIGIN_X = 'vert-origin-x';
     static V_ORIGIN_Y = 'vert-origin-y';
-    static HEIGHT = 'vert-adv-y';
+    static HEIGHT = 'height';
 
     static PATH = 'path';
     static PATH_DATA = 'path-data';
-    static GLYPH_NAME = 'glyph-name';
+    static GLYPH_NAME = 'name';
     static UNICODE = 'unicode';
 
     // Misc properties
@@ -82,6 +82,10 @@ class IDS {
     //
     static IMPORT_PREFIX = 'import-prefix';
     static IMPORT_SEPARATOR = 'import-sep';
+    static IMPORT_MARK_X = 'import-x';
+    static IMPORT_MARK_CAP = 'import-cap';
+    static IMPORT_MARK_COL = 'import-col';
+    
 
     static infos = {
 
@@ -219,6 +223,12 @@ class IDS {
             label: `EM Resample`,
             desc: `If enabled, changing the EM Size will scale other metrics & glyphs accordingly.\nDisable this if you want to affect rendering size only.`
         },
+        [this.ASC_RESAMPLE]: {
+            inputType: inputs.Boolean,
+            inputOptions: { size: ui.FLAGS.SIZE_XS },
+            label: `Scale X+Cap`,
+            desc: `If enabled, changing the Ascender will scale x-height & cap-height accordingly.`
+        },
         [this.MONOSPACE]: {
             recompute: true,
             inputType: inputs.Boolean,
@@ -228,7 +238,7 @@ class IDS {
         },
 
         // Glyph properties
-
+        /*
         [this.H_ORIGIN_X]: {
             inputType: inputs.Number,
             desc: `indicates the x-coordinate in the font coordinate system of the origin of a glyph to be used when drawing horizontally oriented text.`
@@ -237,12 +247,14 @@ class IDS {
             inputType: inputs.Number,
             desc: `indicates the y-coordinate in the font coordinate system of the origin of a glyph to be used when drawing horizontally oriented text.`
         },
+        */
         [this.WIDTH]: {
             recompute: true,
             inputType: inputs.Number,
             label: `Width`,
             desc: `indicates the horizontal advance after rendering a glyph in horizontal orientation.`
         },
+        /*
         [this.V_ORIGIN_X]: {
             inputType: inputs.Number,
             desc: `indicates the x-coordinate in the font coordinate system of the origin of a glyph to be used when drawing vertically oriented text.`
@@ -251,6 +263,7 @@ class IDS {
             inputType: inputs.Number,
             desc: `indicates the y-coordinate in the font coordinate system of the origin of a glyph to be used when drawing vertically oriented text.`
         },
+        */
         [this.HEIGHT]: {
             recompute: true,
             inputType: inputs.Number,
@@ -379,6 +392,24 @@ class IDS {
             inputType: inputs.Text,
             label: `Separator`,
             desc: `Separator character in filenames.\nUsed to separate unicode values\ni.e char_U+0000, char_U+0000_U+0000, char_l_i_g_a`
+        },
+        [this.IMPORT_MARK_X]: {
+            transform:true,
+            inputType: inputs.Text,
+            label: `X hint`,
+            desc: `A string of text that, if found in the file name, will scale the glyph to X-Height instead of selected default.`
+        },
+        [this.IMPORT_MARK_CAP]: {
+            transform:true,
+            inputType: inputs.Text,
+            label: `Cap hint`,
+            desc: `A string of text that, if found in the file name, will scale the glyph to Cap-Height instead of selected default.`
+        },
+        [this.IMPORT_MARK_COL]: {
+            transform:true,
+            inputType: inputs.Color,
+            label: `Bounds color`,
+            desc: `Color used inside the imported SVG to 'mark' its special boundaries.\nSee online help for more about special boundaries.`
         },
 
         

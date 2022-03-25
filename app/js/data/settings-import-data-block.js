@@ -18,6 +18,9 @@ class ImportSettingsDataBlock extends TransformSettingsDataBlock {
 
         this._values[IDS.IMPORT_PREFIX] = { value: `char` };
         this._values[IDS.IMPORT_SEPARATOR] = { value: `_` };
+        this._values[IDS.IMPORT_MARK_X] = { value: `-x` };
+        this._values[IDS.IMPORT_MARK_CAP] = { value: `-c` };
+        this._values[IDS.IMPORT_MARK_COL] = { value: `#ff00ff` };
 
     }
 

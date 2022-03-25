@@ -27,12 +27,13 @@ class SubFamilyInspector extends nkm.datacontrols.InspectorView {
         
         { cl:mkfWidgets.ControlHeader, options:{ label:`Metrics` } },
         { options:{ propertyId:mkfData.IDS.BASELINE } },
-        { options:{ propertyId:mkfData.IDS.ASCENT } },
+        { options:{ propertyId:mkfData.IDS.ASCENT, command:mkfOperations.commands.SetAscent } },
+        { options:{ propertyId:mkfData.IDS.ASC_RESAMPLE } },
         { options:{ propertyId:mkfData.IDS.DESCENT } },
         
         { cl:mkfWidgets.ControlHeader, options:{ label:`Control metrics` } },
-        { options:{ propertyId:mkfData.IDS.CAP_HEIGHT } },
         { options:{ propertyId:mkfData.IDS.X_HEIGHT } },
+        { options:{ propertyId:mkfData.IDS.CAP_HEIGHT } },
         { options:{ propertyId:mkfData.IDS.HEIGHT } },
         { options:{ propertyId:mkfData.IDS.WIDTH } },
         { options:{ propertyId:mkfData.IDS.MONOSPACE } },

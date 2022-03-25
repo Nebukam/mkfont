@@ -104,14 +104,14 @@ class FontEditorHeader extends nkm.datacontrols.ControlView {
                 },
                 {
                     command: this._modalDisplayOpts,
-                    htitle: `Display options`,
+                    htitle: `Viewport options`,
                     size: ui.FLAGS.SIZE_S,
                     cl: nkm.uilib.buttons.Tool,
                     group: `family`
                 },
                 {
                     command: this._modalFamilyOpts,
-                    htitle: `Family infos & metadata`,
+                    htitle: `Family name, infos & metadata`,
                     size: ui.FLAGS.SIZE_S,
                     group: `family`
                 },
@@ -122,7 +122,7 @@ class FontEditorHeader extends nkm.datacontrols.ControlView {
                 },
                 {
                     command: this._modalSubFamilyOpts,
-                    htitle: `Font metrics`,
+                    htitle: `Global metrics (affect all glyphs)`,
                     size: ui.FLAGS.SIZE_S,
                     group: `family`
                 },
@@ -134,6 +134,19 @@ class FontEditorHeader extends nkm.datacontrols.ControlView {
                     flavor: ui.FLAGS.CTA,
                     group: `create`
                 },*/
+                {
+                    label: `Liga`, icon: `text-liga`,
+                    htitle: `Analyze a text blurb to find and create ligatures`,
+                    size: ui.FLAGS.SIZE_S, variant: ui.FLAGS.FRAME,
+                    flavor: nkm.com.FLAGS.LOADING,
+                    group: `external`,
+                    trigger: {
+                        fn: () => {
+                            mkfOperations.commands.ImportTextLiga.emitter = this;
+                            mkfOperations.commands.ImportTextLiga.Execute(this._data);
+                        }
+                    },
+                },
                 {
                     label: `SVGs`, icon: `directory-download-small`,
                     htitle: `Import multiple SVGs`,
