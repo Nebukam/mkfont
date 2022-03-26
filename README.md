@@ -10,7 +10,7 @@ MKFont is a free tool to make font out of vector graphics. Works for Windows, Ma
 For older releases, check the [release](https://github.com/Nebukam/mkfont/releases) page.
 
 ## Getting started
-Help & quickstart guides can be found on the [MKFont wiki]()
+Help & quickstart guides can be found on the [MKFont wiki](https://github.com/Nebukam/mkfont/wiki)
 
 ## Screenshots
 
