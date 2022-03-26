@@ -13,7 +13,7 @@ class ActionCreateGlyph extends actions.Action {
     _InternalDo(p_operation, p_merge = false) {
 
         let
-            newGlyph = new mkfData.Glyph(),
+            newGlyph = nkm.com.Rent(mkfData.Glyph),
             glyphVariant = newGlyph._defaultGlyph,
             family = p_operation.family,
             transforms = p_operation.transforms || family.selectedSubFamily.transformSettings;

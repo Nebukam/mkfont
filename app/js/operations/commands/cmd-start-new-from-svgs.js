@@ -1,9 +1,7 @@
 //
 const nkm = require(`@nkmjs/core`);
 const actions = nkm.actions;
-const u = nkm.utils;
 
-const { clipboard } = require('electron');
 const fs = require('fs');
 
 const UNICODE = require(`../../unicode`);
@@ -11,15 +9,16 @@ const mkfData = require(`../../data`);
 const mkfCatalog = require(`../../catalogs`);
 const mkfActions = require(`../actions`);
 
-class CmdImportExternalFileMultiple extends actions.Command {
+const CmdStartNewMKFont = require(`./cmd-start-new-mkfont`);
+
+class CmdStartNewMKFontFromSVGs extends CmdStartNewMKFont {
     constructor() { super(); }
 
+    static __defaultName = `New .mkfont from SVGs`;
+    static __defaultIcon = `directory-download-small`;
+
     _Init() {
-
         super._Init();
-
-        this._Bind(this._OnPicked);
-        this._Bind(this._OnImportContinue);
 
         this._importCatalog = nkm.data.catalogs.CreateFrom({
             name: `Import list`,
@@ -31,9 +30,6 @@ class CmdImportExternalFileMultiple extends actions.Command {
         this._importTransformationSettings = new mkfData.ImportSettings();
 
     }
-
-    set glyphInfos(p_value) { this._glyphInfos = p_value; }
-    get glyphInfos() { return this._glyphInfos; }
 
     _InternalExecute() {
 
@@ -63,7 +59,9 @@ class CmdImportExternalFileMultiple extends actions.Command {
             return;
         }
 
-        let subFamily = this._context.selectedSubFamily;
+        this._newFamily = nkm.com.Rent(mkfData.Family);
+
+        let subFamily = this._newFamily.selectedSubFamily;
         this._importCatalog.Clear();
 
         for (let i = 0; i < list.length; i++) {
@@ -131,14 +129,11 @@ class CmdImportExternalFileMultiple extends actions.Command {
         //Go through the catalog
 
         let
-            editor = this._emitter.editor,
-            family = editor.data,
             list = this._importCatalog._items,
             trValues = this._importTransformationSettings.Values();
 
-        editor.StartActionGroup({ title: `Import SVGs` });
-
         for (let i = 0; i < list.length; i++) {
+
             let item = list[i],
                 svgStats = item.GetOption(`svgStats`),
                 useCustom = item.GetOption(`use-custom-unicode`),
@@ -150,44 +145,24 @@ class CmdImportExternalFileMultiple extends actions.Command {
 
             let
                 unicodeInfos = UNICODE.GetInfos(uniStruct, true),
-                existingGlyph = family.GetGlyph(unicodeInfos.u);
+                newGlyph = nkm.com.Rent(mkfData.Glyph),
+                glyphVariant = newGlyph._defaultGlyph;
 
-            if (existingGlyph.isNull) {
-                editor.Do(mkfActions.CreateGlyph, {
-                    family: family,
-                    unicode: unicodeInfos,
-                    path: svgStats,
-                    transforms: trValues
-                });
-            } else {
-                let variant = existingGlyph.GetVariant(family.selectedSubFamily);
-                editor.Do(mkfActions.SetProperty, {
-                    target: variant,
-                    id: mkfData.IDS.PATH_DATA,
-                    value: svgStats
-                });
-                editor.Do(mkfActions.SetPropertyMultiple, {
-                    target: variant.transformSettings,
-                    values: trValues
-                });
-            }
+            newGlyph.Set(mkfData.IDS.UNICODE, unicodeInfos.u);
+            newGlyph.unicodeInfos = unicodeInfos;
+
+            glyphVariant.Set(mkfData.IDS.PATH_DATA, svgStats);
+            glyphVariant.transformSettings.BatchSet(trValues);
+
+            this._newFamily.AddGlyph(newGlyph);
+            glyphVariant.transformSettings.UpdateTransform();
 
         }
 
-        editor.EndActionGroup();
+        this._RequestEdit();
 
-        this._Success();
-    }
-
-    _OnImportCancel() {
-        this._Cancel();
-    }
-
-    _End() {
-        if (this._importEditor) { this._importEditor.catalog = null; }
-        super._End();
     }
 
 }
 
-module.exports = CmdImportExternalFileMultiple;
+module.exports = CmdStartNewMKFontFromSVGs;

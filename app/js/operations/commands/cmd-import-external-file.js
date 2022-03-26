@@ -32,6 +32,7 @@ class CmdImportExternalFile extends actions.Command {
         if (nkm.env.isNodeEnabled) {
             nkm.actions.RELAY.ShowOpenDialog({
                 //defaultPath: this._currentValue ? this._currentValue : ``,
+                filters:[{ name:'SVG files', extensions:['svg'] } ],
                 properties: ['openFile']
             }, this._OnPicked);
         } else {

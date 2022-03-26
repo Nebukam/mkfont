@@ -1,7 +1,7 @@
 'use strict';
 
 const nkm = require("@nkmjs/core");
-const mkfInspectors = require(`./editors/inspectors`);
+const mkfEditors = require(`./editors`);
 const mkfData = require(`./data`);
 const mkfCatalogs = require(`./catalogs`);
 const mkfWidgets = require(`./widgets`);
@@ -25,11 +25,17 @@ class Bindings extends nkm.com.helpers.BindingKit {
                 ]
             },
             {
-                context: nkm.uicontrols.CONTEXT.INSPECTOR,
+                context: nkm.datacontrols.CONTEXT.DEFAULT_EDITOR,
                 kvps: [
-                    { key: mkfData.Glyph, binding: mkfInspectors.Glyph },
-                    { key: mkfData.Slot, binding: mkfInspectors.Glyph },
-                    { key: mkfData.SubFamily, binding: mkfInspectors.SubFamily },
+                    { key: mkfData.Family, binding: mkfEditors.FontEditor },
+                ]
+            },
+            {
+                context: nkm.datacontrols.CONTEXT.INSPECTOR,
+                kvps: [
+                    { key: mkfData.Glyph, binding: mkfEditors.inspectors.Glyph },
+                    { key: mkfData.Slot, binding: mkfEditors.inspectors.Glyph },
+                    { key: mkfData.SubFamily, binding: mkfEditors.inspectors.SubFamily },
                 ]
             },
             {

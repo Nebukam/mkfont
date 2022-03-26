@@ -33,7 +33,7 @@ class MKFont extends nkm.app.AppBase {
             { id: `mainLayout`, cl: require(`./main-layout`) }
         ];
 
-        ui.UI.instance._Preload(mkfWidgets.GlyphSlot, 300);        
+        ui.UI.instance._Preload(mkfWidgets.GlyphSlot, 300);
     }
 
     AppReady() {
@@ -81,32 +81,30 @@ class MKFont extends nkm.app.AppBase {
             [ui.IDS.STATIC]: true
         });
 
-        this._editorView = this.mainLayout.workspace.Host({
-            [ui.IDS.VIEW_CLASS]: mkfEditors.FontEditor,
-            [ui.IDS.NAME]: `Family Editor`,
-            [ui.IDS.ICON]: `font`,
-            //[ui.IDS.STATIC]: true
-        });
-
         this._welcomeView._options.view.RequestDisplay();
 
         //mkfOperations.commands.MakeTTFFont.Enable();
         //nkm.actions.KeystrokeEx.CreateFromString(`Ctrl E`, { fn: this._Bind(this._WriteTTF) }).Enable();
 
         //this._EmptyFamily();
-        this._FamilyFromTTF();
+        //this._FamilyFromTTF();
 
     }
 
     _EmptyFamily() {
-        this._tempFontData = new mkfData.Family();
-        this._AssignFamily(this._tempFontData);
+
+        let family = new mkfData.Family();
+        nkm.actions.Emit(nkm.actions.REQUEST.EDIT, { data: family },
+            this, this._Success, this._Fail);
+
     }
 
     _FamilyFromTTF() {
-        this._tempFontData = new mkfData.Family();
-        this._tempFontData = mkfData.TTF.FamilyFromTTF(fs.readFileSync(`./assets/${__fontName}.ttf`));
-        this._AssignFamily(this._tempFontData);
+
+        let family = mkfData.TTF.FamilyFromTTF(fs.readFileSync(`./assets/${__fontName}.ttf`));
+        nkm.actions.Emit(nkm.actions.REQUEST.EDIT, { data: family },
+            this, this._Success, this._Fail);
+
     }
 
     _AssignFamily(p_family) {
@@ -114,8 +112,6 @@ class MKFont extends nkm.app.AppBase {
         let fontEditor = this._editorView.options.view;
         fontEditor.RequestDisplay();
         fontEditor.data = this._tempFontData;
-
-        fontEditor.SetActiveRange(UNICODE.instance._blockCatalog.At(0));
 
         let outputStr = JSON.stringify(nkm.data.serialization.JSONSerializer.Serialize(this._tempFontData));
         //console.log(JSON.parse(outputStr));

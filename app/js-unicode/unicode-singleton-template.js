@@ -72,9 +72,20 @@ class UNICODE extends nkm.com.helpers.Singleton {
 
     }
 
-    static GetInfos(p_unicode) {
-        let data = this.instance._charMap[p_unicode];
+    static GetInfos(p_unicode, p_createLigature = false) {
+
+        let data = null;
+
+        if (u.isArray(p_unicode)) {
+            data = p_unicode.length == 1 ?
+                this.GetSingle(p_unicode[0]) :
+                this.GetLigature(p_unicode, p_createLigature);
+        } else {
+            data = this.instance._charMap[p_unicode];
+        }
+
         return data || null;
+
     }
 
     static GetSingle(p_lookup) {

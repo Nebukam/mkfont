@@ -35092,9 +35092,20 @@ class UNICODE extends nkm.com.helpers.Singleton {
 
     }
 
-    static GetInfos(p_unicode) {
-        let data = this.instance._charMap[p_unicode];
+    static GetInfos(p_unicode, p_createLigature = false) {
+
+        let data = null;
+
+        if (u.isArray(p_unicode)) {
+            data = p_unicode.length == 1 ?
+                this.GetSingle(p_unicode[0]) :
+                this.GetLigature(p_unicode, p_createLigature);
+        } else {
+            data = this.instance._charMap[p_unicode];
+        }
+
         return data || null;
+
     }
 
     static GetSingle(p_lookup) {
@@ -35107,7 +35118,7 @@ class UNICODE extends nkm.com.helpers.Singleton {
             if (isHex) {
 
                 let
-					uid = `${p_lookup}`,
+                    uid = `${p_lookup}`,
                     index = parseInt(uid, 16),
                     list = this.instance._blocks,
                     ownerBlock = null;
@@ -35117,7 +35128,7 @@ class UNICODE extends nkm.com.helpers.Singleton {
                     u: p_lookup,
                     i: -1,
                     block: null,
-					char: this.GetUnicodeCharacter(index)
+                    char: this.GetUnicodeCharacter(index)
                 };
 
                 for (let i = 0, n = list.length; i < n; i++) {
@@ -35133,7 +35144,7 @@ class UNICODE extends nkm.com.helpers.Singleton {
                 if (ownerBlock) { result.block = ownerBlock; }
                 else { console.error(`p_lookup = ${p_lookup} / index : ${index}`); }
 
-				this.instance._charMap[uid] = result;
+                this.instance._charMap[uid] = result;
 
             }
         }

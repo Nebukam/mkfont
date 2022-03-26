@@ -23,7 +23,7 @@ class FamilyDataBlock extends SimpleDataEx {
 
     static __NFO__ = {
         [nkm.com.IDS.UID]: `@mkf:family-data-block`,
-        [nkm.com.IDS.ICON]: `data-block`
+        [nkm.com.IDS.ICON]: `font`
     };
 
     _Init() {
@@ -80,6 +80,10 @@ class FamilyDataBlock extends SimpleDataEx {
 
         this._selectedSubFamily = this._defaultSubFamily;
 
+    }
+
+    Wake(){
+        this._id = nkm.data.ID.New(`New MKFont`);
     }
 
     _PostInit() {
@@ -247,6 +251,11 @@ class FamilyDataBlock extends SimpleDataEx {
             g._OnSubFamilyValueUpdated(p_subFamily, p_id, p_valueObj, p_oldValue);
         }
         this._scheduledUpdate.Schedule();
+    }
+
+    CommitUpdate(){
+        this._id.name = this.Get(IDS.FAMILY);
+        super.CommitUpdate();
     }
 
     _Cleanup(){

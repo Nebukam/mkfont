@@ -215,6 +215,9 @@ class FontEditor extends nkm.uiworkspace.editors.EditorEx {
             this.selectedSubFamily = null;
             this.fontCatalog = null;
         }
+        
+        this.SetActiveRange(UNICODE.instance._blockCatalog.At(0));
+        
     }
 
     _OnDataValueChanged(p_data, p_id, p_valueObj) {

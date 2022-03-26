@@ -29,7 +29,7 @@ class TTFImport {
         console.log(ttf2svg(p_ttfBytes));
 
         let
-            family = new Family(),
+            family = nkm.com.Rent(Family),
             subFamily = family.defaultSubFamily,
             em = this.numeric(fontFace, SVGOPS.ATT_EM_UNITS, 1000),
             width = this.numeric(font, SVGOPS.ATT_H_ADVANCE, em),
@@ -64,7 +64,7 @@ class TTFImport {
 
             max_adv_x = Math.max(max_adv_x, gW);
 
-            let newGlyph = new Glyph(),
+            let newGlyph = nkm.com.Rent(Glyph),
                 variant = newGlyph._defaultGlyph;
 
             if (gW != width) { variant.Set(IDS.WIDTH, gW); }

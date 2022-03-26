@@ -2,6 +2,8 @@ const nkm = require(`@nkmjs/core`);
 const u = nkm.utils;
 const ui = nkm.ui;
 
+const mkfOperations = require(`../operations`);
+
 class WelcomeView extends ui.views.View {
     constructor() { super(); }
 
@@ -76,20 +78,20 @@ class WelcomeView extends ui.views.View {
             defaultWidgetClass: nkm.uilib.buttons.Button,
             handles: [
                 {
-                    label: `New .mkfont`, icon: `new`,
+                    command: mkfOperations.commands.StartNewMKFont,
                     variant: ui.FLAGS.MINIMAL, flavor: ui.FLAGS.CTA,
                     group:`n`
                 },
                 {
-                    label: `New .mkfont from TTF`, icon: `directory-download-small`,
+                    command: mkfOperations.commands.StartNewFromTTF,
                     variant: ui.FLAGS.MINIMAL, flavor: nkm.com.FLAGS.LOADING
                 },
                 {
-                    label: `New .mkfont from SVGs`, icon: `directory-download-small`,
+                    command: mkfOperations.commands.StartNewFromSVGS,
                     variant: ui.FLAGS.MINIMAL, flavor: nkm.com.FLAGS.LOADING
                 },
                 {
-                    label: `Load .mkfont`, icon: `document-download-small`,
+                    command: mkfOperations.commands.OpenMKFont,
                     variant: ui.FLAGS.MINIMAL, flavor: nkm.com.FLAGS.LOADING,
                     group:`plop`
                 },

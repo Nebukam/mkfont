@@ -28,6 +28,7 @@ class CmdImportTTF extends actions.Command {
         if (nkm.env.isNodeEnabled) {
             nkm.actions.RELAY.ShowOpenDialog({
                 //defaultPath: this._currentValue ? this._currentValue : ``,
+                filters:[{ name:'TrueType files', extensions:['ttf'] } ],
                 properties: ['openFile']
             }, this._OnPicked);
         } else {

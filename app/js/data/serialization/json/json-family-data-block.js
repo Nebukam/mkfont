@@ -139,7 +139,7 @@ class FamilyDataBlockJSONSerializer extends nkm.data.serialization.json.DataBloc
         // Add glyphs
         let glyphs = p_serial[__ID_glyphs];
         for(let i = 0; i < glyphs.length; i++){
-            let glyph = new Glyph(), glyphData = glyphs[i], variantsData = glyphData[__ID_variants];
+            let glyph = nkm.com.Rent(Glyph), glyphData = glyphs[i], variantsData = glyphData[__ID_variants];
             glyph.BatchSetWithOverrides(glyphData[__ID_values]);
             p_data.AddGlyph(glyph);
             for(let s = 0; s < sfInstances.length; s++){

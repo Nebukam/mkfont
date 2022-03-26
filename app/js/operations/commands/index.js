@@ -18,6 +18,11 @@ const DeleteGlyph = require(`./cmd-glyph-delete`);
 const ExportToClipboard = require(`./cmd-export-to-clipboard`);
 const ExportTTF = require(`./cmd-export-ttf`);
 
+const OpenMKFont = require(`./cmd-open-mkfont`);
+const StartNewMKFont = require(`./cmd-start-new-mkfont`);
+const StartNewFromTTF = require(`./cmd-start-new-from-ttf`);
+const StartNewFromSVGS = require(`./cmd-start-new-from-svgs`);
+
 module.exports = {
 
     MakeTTFFont: new MakeTTFFont(),
@@ -37,5 +42,11 @@ module.exports = {
     ExportTTF: new ExportTTF(),
 
     ExportToClipboard: new ExportToClipboard(),
+
+    OpenMKFont : new OpenMKFont(),
+    
+    StartNewMKFont: new StartNewMKFont(),
+    StartNewFromTTF: new StartNewFromTTF(),
+    StartNewFromSVGS: new StartNewFromSVGS(),
     
 }
