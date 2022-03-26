@@ -9,14 +9,13 @@ MKFont is a free tool to make font out of vector graphics. Works for Windows, Ma
 
 For older releases, check the [release](https://github.com/Nebukam/mkfont/releases) page.
 
-<br>  
-
 ## Getting started
 Help & quickstart guides can be found on the [MKFont wiki]()
 
 ## Screenshots
 
-
+## Roadmap
+MKFont is under active developement, have a look to the repo [issues](https://github.com/Nebukam/mkfont/issues) to see knowns bug and upcoming improvements/features!
 
 ## Kudos
 MKFont wouldn't be possible if not for [@fontello](https://github.com/fontello) folks sharing their magic : the app is primarily built around [svg2ttf](https://github.com/fontello/svg2ttf) & [svgpath](https://github.com/fontello/svgpath).  
