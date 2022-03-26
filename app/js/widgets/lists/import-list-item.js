@@ -75,7 +75,7 @@ class ImportListItem extends lists.FolderListItem {
 
     _Render() {
 
-        this._glyphRenderer = this.Add(GlyphCanvasRenderer, `renderer`, this._host);
+        this._glyphRenderer = this.Attach(GlyphCanvasRenderer, `renderer`, this._host);
         //this._glyphRenderer.centered = true;
         super._Render();
         this._label.element.classList.add(`hidden`);
@@ -83,7 +83,7 @@ class ImportListItem extends lists.FolderListItem {
         this._outputLabel = new ui.manipulators.Text(ui.El(`div`, { class: `output label font-xsmall` }, this._host));
         this._outputLabel.ellipsis = true;
 
-        this._tb = this.Add(ui.WidgetBar, `toolbar`, this._host);
+        this._tb = this.Attach(ui.WidgetBar, `toolbar`, this._host);
         this._tb.options = {
             //inline: true,
             stretch: ui.WidgetBar.FLAG_STRETCH,

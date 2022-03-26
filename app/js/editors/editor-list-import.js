@@ -25,7 +25,7 @@ class EditorListImport extends nkm.datacontrols.Editor {
                 'flex-flow': 'column wrap',
                 'flex': '0 0 auto',
                 'grid-template-columns': 'max-content max-content max-content',
-                'grid-template-rows': '180px auto',
+                'grid-template-rows': '180px 1fr',
                 'grid-gap': '10px'
             },
             '.item': {
@@ -36,7 +36,6 @@ class EditorListImport extends nkm.datacontrols.Editor {
                 'position': 'relative',
                 'height': '0',
                 'width': '300px',
-                'overflow': 'hidden',
                 //'padding': '10px',
                 'background-color': 'rgba(0,0,0,0.2)',
                 'grid-column-start': '2',
@@ -96,12 +95,12 @@ class EditorListImport extends nkm.datacontrols.Editor {
             { options: { propertyId: mkfData.IDS.IMPORT_MARK_COL } },
         ]);
 
-        this._settingsInspector = this.Add(mkfInspectors.TransformSettings, `item settings`);
+        this._settingsInspector = this.Attach(mkfInspectors.TransformSettings, `item settings`);
         this.forwardData.To(this._settingsInspector);
 
-        this._importListBrowser = this.Add(mkfWidgets.lists.ImportListRoot, `list`, this._host);
+        this._importListBrowser = this.Attach(mkfWidgets.lists.ImportListRoot, `list`, this._host);
 
-        this._glyphRenderer = this.Add(mkfWidgets.GlyphCanvasRenderer, `preview`, this._host);
+        this._glyphRenderer = this.Attach(mkfWidgets.GlyphCanvasRenderer, `preview`, this._host);
         this._glyphRenderer.options = {
             drawGuides: true,
             drawLabels: true,

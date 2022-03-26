@@ -62,7 +62,7 @@ class TransformSettingsDataBlock extends SimpleDataEx {
                 path.bbox.bottom > 32000 ||
                 path.bbox.right > 32000);
 
-            if(Math.abs(Math.max(path.bbox.height, path.bbox.width)) > 2000){ console.log(this._glyphVariantOwner.glyph); }
+            if(Math.abs(Math.max(path.bbox.height, path.bbox.width)) > 2000){  }
 
         if (this.Get(IDS.TR_HOR_ALIGN) == ENUMS.HALIGN_XMIN) {
             w = path.width;

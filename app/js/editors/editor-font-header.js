@@ -81,7 +81,7 @@ class FontEditorHeader extends nkm.datacontrols.ControlView {
 
         super._Render();
 
-        this._toolbarLeft = this.Add(ui.WidgetBar, `toolbar left`);
+        this._toolbarLeft = this.Attach(ui.WidgetBar, `toolbar left`);
         this._toolbarLeft.options = {
             inline: true,
             defaultWidgetClass: nkm.uilib.buttons.Button,

@@ -14,6 +14,11 @@ class CmdStartNewMKFontFromTTF extends CmdStartNewMKFont {
     static __defaultName = `New .mkfont from TTF`;
     static __defaultIcon = `directory-download-small`;
 
+    _Init(){
+        super._Init();
+        this._Bind(this._OnPicked);
+    }
+
     _InternalExecute() {
 
         if (nkm.env.isNodeEnabled) {

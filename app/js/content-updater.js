@@ -62,7 +62,7 @@ class ContentUpdater extends nkm.com.helpers.SingletonEx {
         }
 
         this._processedCount += updateCount;
-        this._Broadcast(nkm.com.SIGNAL.UPDATED, this._processedCount, this._totalCount);
+        this.Broadcast(nkm.com.SIGNAL.UPDATED, this._processedCount, this._totalCount);
 
         if (this._data.length != 0) {
             this._delayedUpdate.Schedule();
@@ -71,7 +71,7 @@ class ContentUpdater extends nkm.com.helpers.SingletonEx {
             this._processedCount = 0;
             this._totalCount = 0;
             this._ready = true;
-            this._Broadcast(nkm.com.SIGNAL.READY);
+            this.Broadcast(nkm.com.SIGNAL.READY);
         }
 
     }

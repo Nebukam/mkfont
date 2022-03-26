@@ -46,7 +46,7 @@ class GlyphIdentity extends ui.Widget {
         this._title = new ui.manipulators.Text(ui.dom.El("code", { class: "long-name" }, this), false);
         this._title.Set("---");
 
-        this._tagBar = this.Add(ui.WidgetBar, `tagbar`);
+        this._tagBar = this.Attach(ui.WidgetBar, `tagbar`);
         this._tagBar.options = {
             defaultWidgetClass: nkm.uilib.widgets.Tag,
             size: ui.FLAGS.SIZE_XS
@@ -57,7 +57,7 @@ class GlyphIdentity extends ui.Widget {
             htitle: `Copy value to clipboard`,
             trigger: { fn: () => { navigator.clipboard.writeText((this._GetUni(this._glyphInfos)).toUpperCase()); }, thisArg: this }
         }
-        this._hexTag = hexCtnr.Add(nkm.uilib.widgets.Tag, `tag`);
+        this._hexTag = hexCtnr.Attach(nkm.uilib.widgets.Tag, `tag`);
         this._hexTag.bgColor = `rgba(var(--col-cta-rgb),0.5)`;
         this._hexTag.maxWidth = `100px`;
 

@@ -26,7 +26,7 @@ class TTFImport {
 
         if (!fontFace) { throw new Error(`fontFace element missing`); }
 
-        console.log(ttf2svg(p_ttfBytes));
+        //console.log(ttf2svg(p_ttfBytes));
 
         let
             family = nkm.com.Rent(Family),
@@ -42,6 +42,7 @@ class TTFImport {
         family.Set(IDS.FAMILY, font.getAttribute(`id`));
 
         subFamily.BatchSet({
+            [IDS.EM_UNITS]: em,
             [IDS.WIDTH]: width,
             [IDS.HEIGHT]: height,
             [IDS.ASCENT]: ascend,

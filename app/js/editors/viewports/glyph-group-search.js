@@ -87,7 +87,7 @@ class GlyphGroupSearch extends nkm.datacontrols.ControlView {
 
     _Render() {
         super._Render();
-        this._progressBar = this.Add(nkm.uilib.bars.ProgressBar, `progress`);
+        this._progressBar = this.Attach(nkm.uilib.bars.ProgressBar, `progress`);
         this._progressBar.style.setProperty(`--size-custom`, `2px`);
         this._progressBar.options = {
             hideWhenComplete: true,

@@ -104,7 +104,7 @@ class FamilyDataBlock extends SimpleDataEx {
     set selectedSubFamily(p_value) {
         if (!p_value) { p_value = this._defaultSubFamily; }
         this._selectedSubFamily = p_value;
-        this._Broadcast(SIGNAL.SUBFAMILY_CHANGED, this._selectedSubFamily);
+        this.Broadcast(SIGNAL.SUBFAMILY_CHANGED, this._selectedSubFamily);
     }
 
     AddSubFamily(p_subFamily) {
@@ -164,8 +164,8 @@ class FamilyDataBlock extends SimpleDataEx {
             else { p_glyph.AddVariant(subFamily); }
         }
 
-        this._Broadcast(SIGNAL.GLYPH_ADDED, this, p_glyph);
-        ContentUpdater.instance._Broadcast(SIGNAL.GLYPH_ADDED, p_glyph);
+        this.Broadcast(SIGNAL.GLYPH_ADDED, this, p_glyph);
+        ContentUpdater.instance.Broadcast(SIGNAL.GLYPH_ADDED, p_glyph);
 
     }
 
@@ -195,8 +195,8 @@ class FamilyDataBlock extends SimpleDataEx {
             ContentUpdater.Push(glyphVariant, glyphVariant._UpdateFontObject);
         }
 
-        this._Broadcast(SIGNAL.GLYPH_REMOVED, this, g);
-        ContentUpdater.instance._Broadcast(SIGNAL.GLYPH_REMOVED, g);
+        this.Broadcast(SIGNAL.GLYPH_REMOVED, this, g);
+        ContentUpdater.instance.Broadcast(SIGNAL.GLYPH_REMOVED, g);
 
     }
 

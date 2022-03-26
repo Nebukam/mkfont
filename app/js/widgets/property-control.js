@@ -107,7 +107,7 @@ class PropertyControl extends nkm.datacontrols.ControlWidget {
     _Render() {
         super._Render();
         this._labelCtnr = ui.dom.El(`div`, { class: `label-area` }, this._host);
-        this._toggle = this.Add(inputs.Checkbox, `toggle`, this._labelCtnr);
+        this._toggle = this.Attach(inputs.Checkbox, `toggle`, this._labelCtnr);
         this._toggle.options = {
             size: nkm.ui.FLAGS.SIZE_XS,
             preventTabIndexing: true,
@@ -158,7 +158,7 @@ class PropertyControl extends nkm.datacontrols.ControlWidget {
         // if info 'overridable' : show toggle.
         // override value = if value is null, not overriden. Otherwise, ok.
 
-        this._input = this.Add(this._valueInfos.inputType, `input-field`);
+        this._input = this.Attach(this._valueInfos.inputType, `input-field`);
         this._input.options = {
             size: nkm.ui.FLAGS.SIZE_S,
             onSubmit: { fn: this._OnValueSubmit },

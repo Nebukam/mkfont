@@ -44,10 +44,10 @@ class UNICODE extends nkm.com.helpers.Singleton {
         });
 
         this._blocks = b;
-        this._blockCatalog = nkm.data.catalogs.CreateFrom({ name: `Unicode blocks` }, b);
+        this._blockCatalog = nkm.data.catalogs.CreateFrom({ name: `Unicode blocks`, autoSort:false }, b);
         this._blockCatalog.expanded = true;
 
-        this._categoriesCatalog = nkm.data.catalogs.CreateFrom({ name: `Categories` }, mgc);
+        this._categoriesCatalog = nkm.data.catalogs.CreateFrom({ name: `Categories`, autoSort:false }, mgc);
         this._categoriesCatalog.expanded = true;
 
         for (var g in gc) {

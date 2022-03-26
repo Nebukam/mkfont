@@ -258,6 +258,8 @@ class GlyphCanvasRenderer extends ui.helpers.Canvas {
             ctx.strokeStyle = `rgba(255,255,255,0.5)`;
             ctx.lineWidth = iscale * 2;
             ctx.beginPath();
+            ctx.moveTo(-10 * iscale, 0);
+            ctx.lineTo(0, 0);
             ctx.moveTo(-10 * iscale, f.em);
             ctx.lineTo(0, f.em);
             ctx.stroke();

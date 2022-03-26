@@ -82,15 +82,15 @@ class GlyphGroupsView extends ui.views.View {
     _Render() {
         super._Render();
 
-        this._header = this.Add(GlyphGroupHeader, `header`);
+        this._header = this.Attach(GlyphGroupHeader, `header`);
         this.forwardData.To(this._header);
 
-        this._searchStatus = this.Add(mkfWidgets.SearchStatus, `search-status`);        
-        this._search = this.Add(GlyphGroupSearch, `search`);
+        this._searchStatus = this.Attach(mkfWidgets.SearchStatus, `search-status`);        
+        this._search = this.Attach(GlyphGroupSearch, `search`);
         this._search.status = this._searchStatus;
         
 
-        this._domStreamer = this.Add(ui.helpers.DOMStreamer, 'dom-stream');
+        this._domStreamer = this.Attach(ui.helpers.DOMStreamer, 'dom-stream');
         this._domStreamer
             .Watch(ui.SIGNAL.ITEM_CLEARED, this._OnItemCleared, this)
             .Watch(ui.SIGNAL.ITEM_REQUEST_RANGE_UPDATE, this._OnItemRequestRangeUpdate, this);
@@ -342,7 +342,7 @@ class GlyphGroupsView extends ui.views.View {
 
     _OnItemRequestProcessed(p_data, p_streamer, p_index, p_fragment) {
 
-        let widget = this.Add(mkfWidgets.GlyphSlot, 'glyph', p_fragment);
+        let widget = this.Attach(mkfWidgets.GlyphSlot, 'glyph', p_fragment);
         widget.subFamily = this._data.selectedSubFamily;
         widget.glyphInfos = p_data;
 

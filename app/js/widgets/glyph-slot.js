@@ -139,7 +139,7 @@ class GlyphSlot extends nkm.datacontrols.ControlWidget {
         this._previewBox = ui.dom.El(`div`, { class: `preview` }, this._host);
 
         this._glyphPlaceholder = new ui.manipulators.Text(ui.dom.El(`div`, { class: `box placeholder` }, this._previewBox), false, false);
-        this._glyphRenderer = this.Add(GlyphCanvasRenderer, `box renderer`, this._previewBox);
+        this._glyphRenderer = this.Attach(GlyphCanvasRenderer, `box renderer`, this._previewBox);
 
         this._label = new ui.manipulators.Text(ui.dom.El(`code`, { class: `item` }, this._host), false, false);
         //this._oobIcon = new ui.manipulators.Icon(ui.dom.El(`div`, {class:`oob` }, this._previewBox), false, false);

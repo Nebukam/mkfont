@@ -43,8 +43,8 @@ class SubFamilyDataBlock extends SimpleDataEx {
             bsl: 1000,
             dsc: 0,
             ref: 1000,
-            xh:1000,
-            ch:1000,
+            xh: 1000,
+            ch: 1000,
             em: 1000,
             mono: false
         }
@@ -55,13 +55,13 @@ class SubFamilyDataBlock extends SimpleDataEx {
             [IDS.WEIGHT_CLASS]: { value: ENUMS.WEIGHTS.At(3).value },
             [IDS.FONT_STYLE]: { value: `Regular` },
 
-            [IDS.CAP_HEIGHT]: { value: defaultEm * 0.75 },
-            [IDS.X_HEIGHT]: { value: defaultEm * 0.65 },
+            [IDS.CAP_HEIGHT]: { value: defaultEm * 0.8 },
+            [IDS.X_HEIGHT]: { value: defaultEm * 0.8 * 0.72 },
 
             [IDS.EM_UNITS]: { value: defaultEm },
             [IDS.EM_RESAMPLE]: { value: true },
             [IDS.BASELINE]: { value: defaultEm * 0.8 },
-            [IDS.ASCENT]: { value: defaultEm * 0.8 },
+            [IDS.ASCENT]: { value: defaultEm },
             [IDS.ASC_RESAMPLE]: { value: false },
             [IDS.DESCENT]: { value: defaultEm * -0.25 },
             //[IDS.H_ORIGIN_X]: { value: 0 },
@@ -136,7 +136,7 @@ class SubFamilyDataBlock extends SimpleDataEx {
         fontFace.setAttribute(SVGOPS.ATT_EM_UNITS, this.Get(IDS.EM_UNITS));
         fontFace.setAttribute(SVGOPS.ATT_WEIGHT_CLASS, this.Get(IDS.WEIGHT_CLASS));
         fontFace.setAttribute('font-stretch', 'normal');
-        
+
 
         if (this._catalogItem) { this._catalogItem.name = fullName; }
 

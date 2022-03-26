@@ -31,7 +31,7 @@ class FamilyContentInspector extends nkm.datacontrols.InspectorView {
     _Init() {
         super._Init();
         this._specialCatalog = nkm.data.catalogs.CreateFrom(
-            { name: 'Family content', localItemClass: mkfCatalog.UniFamily, expanded: true },
+            { name: 'Family content', localItemClass: mkfCatalog.UniFamily, expanded: true, autoSort:false },
             [
                 {
                     name: 'Glyphs', typeTag: `Custom`, count: CountGlyphs,
@@ -85,20 +85,20 @@ class FamilyContentInspector extends nkm.datacontrols.InspectorView {
         // Categories
         // Blocks
         // - blocks need to be searchable, there is too much of them.
-        this._header = this.Add(mkfWidgets.InspectorHeader, `header`, this._host);
+        this._header = this.Attach(mkfWidgets.InspectorHeader, `header`, this._host);
         this._header.options = { title: `Content browser`, icon: `text-style` };
 
         this._body = ui.dom.El(`div`, { class: `body` }, this);
 
-        this._specials = this.Add(nkm.uilib.lists.FolderListRoot, `item`, this._body);
+        this._specials = this.Attach(nkm.uilib.lists.FolderListRoot, `item`, this._body);
         this._specials.data = this._specialCatalog;
 
-        //this._categories = this.Add(mkfWidgets.lists.FilterRoot, `asd`, this._body);
-        this._categories = this.Add(nkm.uilib.lists.FolderListRoot, `item`, this._body);
+        //this._categories = this.Attach(mkfWidgets.lists.FilterRoot, `asd`, this._body);
+        this._categories = this.Attach(nkm.uilib.lists.FolderListRoot, `item`, this._body);
         this._categories.data = UNICODE.instance._categoriesCatalog;
 
-        //this._blocks = this.Add(mkfWidgets.lists.BlockRoot, `asd`, this._body);
-        this._blocks = this.Add(nkm.uilib.lists.FolderListRoot, `item`, this._body);
+        //this._blocks = this.Attach(mkfWidgets.lists.BlockRoot, `asd`, this._body);
+        this._blocks = this.Attach(nkm.uilib.lists.FolderListRoot, `item`, this._body);
         this._blocks.data = UNICODE.instance._blockCatalog;
 
     }

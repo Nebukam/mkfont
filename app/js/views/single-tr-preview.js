@@ -59,13 +59,13 @@ class SingleImportPreview extends ui.views.View {
     _Render() {
         super._Render();
 
-        this._identity = this.Add(mkfWidgets.GlyphIdentity, `item identity`, this._host);
-        this._settingsInspector = this.Add(mkfInspectors.TransformSettings, `item settings`);
+        this._identity = this.Attach(mkfWidgets.GlyphIdentity, `item identity`, this._host);
+        this._settingsInspector = this.Attach(mkfInspectors.TransformSettings, `item settings`);
         this.forwardData.To(this._settingsInspector);
 
         this._previewBox = ui.dom.El(`div`, { class: `item preview` }, this._host);
 
-        this._glyphRenderer = this.Add(mkfWidgets.GlyphCanvasRenderer, `item renderer`, this._previewBox);
+        this._glyphRenderer = this.Attach(mkfWidgets.GlyphCanvasRenderer, `item renderer`, this._previewBox);
         this._glyphRenderer.options = {
             drawGuides: true,
             drawLabels: true,

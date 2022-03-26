@@ -71,7 +71,7 @@ class WelcomeView extends ui.views.View {
         this._startBlock = ui.El(`div`, { class: `block start` }, this._body);
         let title = new ui.manipulators.Text(ui.El(`div`, { class: `title` }, this._startBlock));
         title.Set(`Start`);
-        this._toolbar = this.Add(ui.WidgetBar, `actionlist`, this._startBlock);
+        this._toolbar = this.Attach(ui.WidgetBar, `actionlist`, this._startBlock);
         this._toolbar.options = {
             orientation: ui.FLAGS.VERTICAL,
             stretch: ui.WidgetBar.FLAG_STRETCH,
@@ -105,7 +105,7 @@ class WelcomeView extends ui.views.View {
         title = new ui.manipulators.Text(ui.El(`div`, { class: `title` }, this._recentBlock));
         title.Set(`Recent`);
 
-        this._footer = this.Add(ui.WidgetBar, `footer`, this._body);
+        this._footer = this.Attach(ui.WidgetBar, `footer`, this._body);
         this._footer.options = {
             size:ui.FLAGS.SIZE_XS,
             defaultWidgetClass: nkm.uilib.buttons.Button,

@@ -189,7 +189,7 @@ class FontEditor extends nkm.uiworkspace.editors.EditorEx {
 
         super._Render();
 
-        this._leftShelf = this.Add(this.constructor.__default_shelfClass, `shelf`, this._body);
+        this._leftShelf = this.Attach(this.constructor.__default_shelfClass, `shelf`, this._body);
         this._leftShelf.orientation = ui.FLAGS.VERTICAL;
         this._leftShelf.navPlacement = ui.FLAGS.LEFT;
 
@@ -217,7 +217,7 @@ class FontEditor extends nkm.uiworkspace.editors.EditorEx {
         }
         
         this.SetActiveRange(UNICODE.instance._blockCatalog.At(0));
-        
+
     }
 
     _OnDataValueChanged(p_data, p_id, p_valueObj) {

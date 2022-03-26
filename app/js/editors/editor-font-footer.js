@@ -34,7 +34,7 @@ class FontEditorFooter extends nkm.datacontrols.ControlView {
 
     _Render() {
         super._Render();
-        this._progressBar = this.Add(nkm.uilib.bars.ProgressBar, `progress`);
+        this._progressBar = this.Attach(nkm.uilib.bars.ProgressBar, `progress`);
         this._progressBar.options = {
             size: ui.FLAGS.SIZE_XXS,
             flavor: nkm.com.FLAGS.LOADING

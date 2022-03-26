@@ -20,6 +20,8 @@ class CmdStartNewMKFontFromSVGs extends CmdStartNewMKFont {
     _Init() {
         super._Init();
 
+        this._Bind(this._OnPicked);
+
         this._importCatalog = nkm.data.catalogs.CreateFrom({
             name: `Import list`,
             localItemClass: mkfCatalog.Import,
@@ -60,6 +62,7 @@ class CmdStartNewMKFontFromSVGs extends CmdStartNewMKFont {
         }
 
         this._newFamily = nkm.com.Rent(mkfData.Family);
+        this._newFamily.defaultSubFamily._UpdateDisplayValues();
 
         let subFamily = this._newFamily.selectedSubFamily;
         this._importCatalog.Clear();

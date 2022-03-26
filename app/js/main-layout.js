@@ -38,7 +38,7 @@ class MainLayout extends ui.views.Layer {
         this.header = header;
 
         // Side Shelf
-        let shelf = this.Add(MainShelf, `shelf`);
+        let shelf = this.Attach(MainShelf, `shelf`);
         shelf.nav.size = ui.FLAGS.SIZE_L;
         shelf.nav.defaultWidgetOptions = {
             variant: ui.FLAGS.MINIMAL
@@ -47,7 +47,7 @@ class MainLayout extends ui.views.Layer {
         this.shelf = shelf;
 
         // Workspace
-        let wkspace = this.Add(nkm.uiworkspace.WorkspaceRoot, `workspace`);
+        let wkspace = this.Attach(nkm.uiworkspace.WorkspaceRoot, `workspace`);
         new ui.manipulators.GridItem(wkspace, 2, 2, 1, 1);
         this.workspace = wkspace;
 

@@ -33,7 +33,8 @@ class MKFont extends nkm.app.AppBase {
             { id: `mainLayout`, cl: require(`./main-layout`) }
         ];
 
-        ui.UI.instance._Preload(mkfWidgets.GlyphSlot, 300);
+        ui.Preload(mkfWidgets.GlyphSlot, 300);
+        //ui.Preload(mkfEditors.FontEditor, 3);
     }
 
     AppReady() {
@@ -82,6 +83,8 @@ class MKFont extends nkm.app.AppBase {
         });
 
         this._welcomeView._options.view.RequestDisplay();
+
+        nkm.style.Set(`--glyph-color`, `#f5f5f5`);
 
         //mkfOperations.commands.MakeTTFFont.Enable();
         //nkm.actions.KeystrokeEx.CreateFromString(`Ctrl E`, { fn: this._Bind(this._WriteTTF) }).Enable();

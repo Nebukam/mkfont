@@ -41,7 +41,7 @@ class GlyphGroupHeader extends nkm.datacontrols.ControlView {
         this._title = new ui.manipulators.Text(ui.dom.El("div", { class: "title font-medium" }, this));
         this._title.Set("---");
 
-        this._tagBar = this.Add(ui.WidgetBar, `tagbar left`);
+        this._tagBar = this.Attach(ui.WidgetBar, `tagbar left`);
         this._tagBar.options = {
             defaultWidgetClass: nkm.uilib.widgets.Tag,
             size: ui.FLAGS.SIZE_XS

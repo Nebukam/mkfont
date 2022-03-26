@@ -82,15 +82,15 @@ class EditorLigaImport extends nkm.datacontrols.Editor {
     _Render() {
         super._Render();
 
-        this._textInput = this.Add(nkm.uilib.inputs.Textarea, ``);
+        this._textInput = this.Attach(nkm.uilib.inputs.Textarea, ``);
 
 
-        this._settingsInspector = this.Add(mkfInspectors.TransformSettings, `item settings`);
+        this._settingsInspector = this.Attach(mkfInspectors.TransformSettings, `item settings`);
         this.forwardData.To(this._settingsInspector);
 
-        this._importListBrowser = this.Add(mkfWidgets.lists.ImportListRoot, `list`, this._host);
+        this._importListBrowser = this.Attach(mkfWidgets.lists.ImportListRoot, `list`, this._host);
 
-        this._glyphRenderer = this.Add(mkfWidgets.GlyphCanvasRenderer, `preview`, this._host);
+        this._glyphRenderer = this.Attach(mkfWidgets.GlyphCanvasRenderer, `preview`, this._host);
         this._glyphRenderer.options = {
             drawGuides: true,
             drawLabels: true,

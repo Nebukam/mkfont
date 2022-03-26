@@ -96,13 +96,13 @@ class GlyphVariantInspectorItem extends nkm.datacontrols.ControlWidget {
 
     _Render() {
 
-        this._importToolbar = this.Add(ui.WidgetBar, `toolbar`, this._host);
+        this._importToolbar = this.Attach(ui.WidgetBar, `toolbar`, this._host);
         this._importToolbar.stretch = ui.WidgetBar.FLAG_STRETCH;
 
         this._previewBox = ui.dom.El(`div`, { class: `preview` }, this._host);
         this._svgPlaceholder = new ui.manipulators.Text(ui.dom.El(`div`, { class: `box placeholder` }, this._previewBox), false, false);
 
-        this._glyphRenderer = this.Add(mkfWidgets.GlyphCanvasRenderer, `renderer`, this._previewBox);
+        this._glyphRenderer = this.Attach(mkfWidgets.GlyphCanvasRenderer, `renderer`, this._previewBox);
         this._glyphRenderer.options = {
             drawGuides: true,
             drawLabels: true,
@@ -177,12 +177,12 @@ class GlyphVariantInspectorItem extends nkm.datacontrols.ControlWidget {
             ]
         };
 
-        this._transformInspector = this.Add(TransformSettingsInspector, `settings`);
+        this._transformInspector = this.Attach(TransformSettingsInspector, `settings`);
         this.forwardData.To(this._transformInspector, { dataMember: `transformSettings` });
 
         this._builder.host = ui.El(`div`, { class: `settings` }, this._host);
 
-        this._oobTag = this.Add(uilib.widgets.Tag, `oob`, this._previewBox);
+        this._oobTag = this.Attach(uilib.widgets.Tag, `oob`, this._previewBox);
         this._oobTag.options = {
             label:`out of bounds`,
             flavor:nkm.com.FLAGS.ERROR,

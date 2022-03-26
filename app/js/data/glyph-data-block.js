@@ -91,8 +91,8 @@ class GlyphDataBlock extends SimpleDataEx {
         p_glyphVariant.Watch(com.SIGNAL.UPDATED, this._OnGlyphVariantUpdated, this);
         p_subFamily.Watch(com.SIGNAL.RELEASED, this._OnSubFamilyReleased, this);
 
-        this._Broadcast(com.SIGNAL.ITEM_ADDED, this, p_glyphVariant);
-        p_subFamily._Broadcast(SIGNAL.GLYPH_ADDED, this, p_glyphVariant);
+        this.Broadcast(com.SIGNAL.ITEM_ADDED, this, p_glyphVariant);
+        p_subFamily.Broadcast(SIGNAL.GLYPH_ADDED, this, p_glyphVariant);
 
     }
 
@@ -102,14 +102,14 @@ class GlyphDataBlock extends SimpleDataEx {
         glyphVariant.subFamily = null;
         glyphVariant.Unwatch(com.SIGNAL.UPDATED, this._OnGlyphVariantUpdated, this);
 
-        this._Broadcast(com.SIGNAL.ITEM_REMOVED, this, glyphVariant);
+        this.Broadcast(com.SIGNAL.ITEM_REMOVED, this, glyphVariant);
 
-        p_subFamily._Broadcast(SIGNAL.GLYPH_REMOVED, this, glyphVariant);
+        p_subFamily.Broadcast(SIGNAL.GLYPH_REMOVED, this, glyphVariant);
         return this._subFamiliesMap.Get(p_subFamily);
     }
 
     _OnGlyphVariantUpdated(p_glyphVariant) {
-        this._Broadcast(SIGNAL.VARIANT_UPDATED, this, p_glyphVariant);
+        this.Broadcast(SIGNAL.VARIANT_UPDATED, this, p_glyphVariant);
     }
 
     GetVariant(p_subFamily) {

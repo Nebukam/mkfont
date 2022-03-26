@@ -128,7 +128,7 @@ class SettingsSearchDataBlock extends SimpleDataEx {
 
         this._AdvanceSearch();
 
-        this._Broadcast(SIGNAL.SEARCH_STARTED, this);
+        this.Broadcast(SIGNAL.SEARCH_STARTED, this);
 
     }
 
@@ -148,14 +148,14 @@ class SettingsSearchDataBlock extends SimpleDataEx {
             this._values[IDS_EXT.SEARCH_RESULTS].value = null;
             this.Set(IDS_EXT.SEARCH_RESULTS, this._results);
 
-            this._Broadcast(SIGNAL.SEARCH_COMPLETE, this);
+            this.Broadcast(SIGNAL.SEARCH_COMPLETE, this);
 
         } else {
 
             this._fetchFn(this._searchCovered, length);
             this._searchCovered += length;
 
-            this._Broadcast(SIGNAL.SEARCH_PROGRESS, this._searchCovered / this._rangeInfos.indexCount);
+            this.Broadcast(SIGNAL.SEARCH_PROGRESS, this._searchCovered / this._rangeInfos.indexCount);
 
             this._delayedAdvance.Schedule();
 

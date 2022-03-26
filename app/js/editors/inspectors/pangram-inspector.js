@@ -85,16 +85,16 @@ class SubFamilyInspector extends nkm.datacontrols.InspectorView {
 
     _Render() {
 
-        this._header = this.Add(mkfWidgets.InspectorHeader, `header`, this._host);
+        this._header = this.Attach(mkfWidgets.InspectorHeader, `header`, this._host);
         this._header.options = { title:`Text preview`, icon:`text` };
 
         this._body = ui.dom.El(`div`, { class: `body` }, this._host);
         this._footer = ui.dom.El(`div`, { class: `footer` }, this._host);
         //this._builder.host = this._body;
         super._Render();
-        this._pangramRenderer = this.Add(mkfWidgets.PangramRenderer, 'pangram', this._body);
+        this._pangramRenderer = this.Attach(mkfWidgets.PangramRenderer, 'pangram', this._body);
 
-        this._toolbar = this.Add(ui.WidgetBar, `toolbar`, this._footer);
+        this._toolbar = this.Attach(ui.WidgetBar, `toolbar`, this._footer);
         this._toolbar.options = {
             defaultWidgetClass: nkm.uilib.inputs.InlineSelect,
             size: ui.FLAGS.SIZE_S,
@@ -110,14 +110,14 @@ class SubFamilyInspector extends nkm.datacontrols.InspectorView {
             ]
         };
 
-        this._slider = this.Add(nkm.uilib.inputs.SliderOnly, `slider`, this._footer);
+        this._slider = this.Attach(nkm.uilib.inputs.SliderOnly, `slider`, this._footer);
         this._slider.options = {
             min: 8, max: 72, currentValue: 20,
             size: ui.FLAGS.SIZE_XXS,
             onSubmit: { fn: this._Bind(this._UpdateFontSize) }
         }
 
-        this._text = this.Add(nkm.uilib.inputs.Textarea, `text`, this._footer);
+        this._text = this.Attach(nkm.uilib.inputs.Textarea, `text`, this._footer);
         this._text.options = {
             currentValue: longPangram,//`By Jove, my quick study of lexicography won a prize!`,
             //size: ui.FLAGS.SIZE_XXS,

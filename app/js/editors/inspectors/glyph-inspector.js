@@ -72,9 +72,9 @@ class GlyphInspector extends nkm.datacontrols.InspectorView {
 
     _Render() {
 
-        this._glyphIdentity = this.Add(mkfWidgets.GlyphIdentity, `identity`, this._host);
+        this._glyphIdentity = this.Attach(mkfWidgets.GlyphIdentity, `identity`, this._host);
         //this._body = ui.El(`div`, { class: `body` }, this._host);
-        this._variantCtrl = this.Add(GlyphIItem, `variant`, this._host);
+        this._variantCtrl = this.Attach(GlyphIItem, `variant`, this._host);
         this.forwardData.To(this._variantCtrl, { dataMember: `defaultGlyph` });
 
         this._builder.host = ui.El(`div`, { class: `settings` }, this._host);
@@ -106,9 +106,9 @@ class GlyphInspector extends nkm.datacontrols.InspectorView {
 
     _OnVariantAdded(p_glyph, p_glyphVariant) {
         /*
-        let variantCtrl = this.Add(GlyphIItem, `variant`, this._body);
+        let variantCtrl = this.Attach(GlyphIItem, `variant`, this._body);
 
-        this._variantCtrls.Add(variantCtrl);
+        this._variantCtrls.Attach(variantCtrl);
         this._variantMap.Set(p_glyphVariant, variantCtrl);
 
         variantCtrl.data = p_glyphVariant;
