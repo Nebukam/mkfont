@@ -19,4 +19,4 @@ Help & quickstart guides can be found on the [MKFont wiki]()
 
 
 ## Kudos
-MKFont wouldn't be possible if not for [@fontello](https://github.com/fontello) folks sharing their magic : the app is built on top of [svg2ttf](https://github.com/fontello/svg2ttf) & [svgpath](https://github.com/fontello/svgpath).  
+MKFont wouldn't be possible if not for [@fontello](https://github.com/fontello) folks sharing their magic : the app is primarily built around [svg2ttf](https://github.com/fontello/svg2ttf) & [svgpath](https://github.com/fontello/svgpath).  
