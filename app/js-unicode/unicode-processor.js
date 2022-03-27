@@ -50,7 +50,7 @@ let categories = {
     Zl: { name: `Separator, Line`, icon: `directory`, col: `separator` },
     Zp: { name: `Separator, Paragraph`, icon: `directory`, col: `separator` },
 
-    Cc: { name: `Other, Control`, icon: `directory`, col: `control` },
+    //Cc: { name: `Other, Control`, icon: `directory`, col: `control` },
     Cf: { name: `Other, Format`, icon: `directory`, col: `other` },
     Cs: { name: `Other, Surrogate`, icon: `directory`, col: `other` },
     Co: { name: `Other, Private Use`, icon: `directory`, col: `other` },
@@ -172,7 +172,8 @@ for (let p in decompositions) {
 let relMap = {};
 let charMap = {};
 let charList = [];
-for (let i = 0; i < characterLines.length; i++) {
+let ci = 0;
+charloop : for (let i = 0; i < characterLines.length; i++) {
     let
         entry = characterLines[i].split(`;`),
         charCode = entry[0].toLowerCase(),
@@ -183,9 +184,13 @@ for (let i = 0; i < characterLines.length; i++) {
         decomposition = entry[5],
         index = parseInt(charCode, 16),
         block = FindBlock(index),
-        charData = { i: i };
+        charData = { i: ci };
 
-    if (charName == `<control>`) { charName = entry[10]; }
+    if (charName == `<control>`) { 
+        charName = entry[10]; 
+        continue charloop; // IGNORE CONTROL CHARS FOR NOW
+    }
+    ci++;
     charData.name = charName;
 
     let cat = categories[generalCategory];
