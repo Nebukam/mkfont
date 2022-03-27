@@ -45,6 +45,7 @@ SVGGraphicsElement.prototype.getBBox = function () {
         rect = _getBBox.apply(this);
     } else {
 
+        let prevParent = this.parentNode;
         if (this.tagName === "svg") {
             __dummyDiv.appendChild(this);
             rect = _getBBox.apply(this);
@@ -52,7 +53,8 @@ SVGGraphicsElement.prototype.getBBox = function () {
             __dummySVG.appendChild(this);
             rect = _getBBox.apply(__dummySVG);
         }
-        this.remove();
+        if (prevParent) { prevParent.appendChild(this); }
+        else { this.remove(); }
     }
 
     let result = {
@@ -115,8 +117,6 @@ class SVGOperations {
             let svg = domparser.parseFromString(
                 optimize(p_input, svgopts).data, `image/svg+xml`).getElementsByTagName(`svg`)[0];
 
-            //console.log(svg);
-
             let
                 paths = svg.getElementsByTagName(`path`),
                 mergedPaths = ``,
@@ -125,6 +125,10 @@ class SVGOperations {
 
             if (paths.length > 0) {
 
+                let pathArray = [];
+                // Copy past to avoid paths from being mutated as we check for bbox.
+                for (let i = 0; i < paths.length; i++) { pathArray.push(paths[i]); }
+
                 p_markCol = p_markCol.toLowerCase();
 
                 let
@@ -132,19 +136,21 @@ class SVGOperations {
                     style = svg.getElementsByTagName(`style`)[0],
                     styleObject = style ? css.ClassCSS(style.innerHTML) : {};
 
-                for (let i = 0; i < paths.length; i++) {
+                for (let i = 0; i < pathArray.length; i++) {
 
-                    let p = paths[i],
+                    let p = pathArray[i],
                         d = p.getAttribute(`d`),
                         tr = p.getAttribute(`transform`);
 
                     //Attempt to apply transforms that can be applied
                     if (tr) { p.setAttribute(`d`, svgpath(d).transform(tr).toString()); }
 
-                    //Check if path is mark (if so remove it)
+                    //Check if path is mark (if so ignore it)
                     if (!markedBBox) {
                         markedBBox = this._FindMarkedBBox(p, styleObject, markCol);
-                        if (markedBBox) { d = null; }
+                        if (markedBBox) { 
+                            d = null; 
+                        }
                     }
 
                     if (d) { mergedPaths += `${mergedPaths.length > 0 ? ' ' : ''}${d}`; }
@@ -238,11 +244,15 @@ class SVGOperations {
         }
 
         if (!foundRef && inlineStyle) {
+            let lwrc = inlineStyle.toLowerCase();
+            if (lwrc.includes(A) || lwrc.includes(B)) { foundRef = true; }
+            /*
             let inlineObj = css.Rules(inlineStyle);
             for (let c in inlineObj) {
                 let refValue = inlineObj[c];
                 if (refValue == A || refValue == B) { foundRef = true; break; }
             }
+            */
         }
 
         if (!foundRef && (fillStyle == A || fillStyle == B)) { foundRef = true; }
@@ -377,7 +387,7 @@ class SVGOperations {
                 offsetY = p_context.em * 0.5 - heightRef;
                 break;
             case ENUMS.VALIGN_ASCENDER:
-                offsetY = p_context.bsl - heightRef -p_context.asc;
+                offsetY = p_context.bsl - heightRef - p_context.asc;
                 break;
         }
 
