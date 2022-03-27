@@ -55,13 +55,13 @@ class SubFamilyDataBlock extends SimpleDataEx {
             [IDS.WEIGHT_CLASS]: { value: ENUMS.WEIGHTS.At(3).value },
             [IDS.FONT_STYLE]: { value: `Regular` },
 
-            [IDS.CAP_HEIGHT]: { value: defaultEm * 0.8 },
-            [IDS.X_HEIGHT]: { value: defaultEm * 0.8 * 0.72 },
+            [IDS.CAP_HEIGHT]: { value: defaultEm * 0.7 },
+            [IDS.X_HEIGHT]: { value: defaultEm * 0.7 * 0.72 },
 
             [IDS.EM_UNITS]: { value: defaultEm },
             [IDS.EM_RESAMPLE]: { value: true },
             [IDS.BASELINE]: { value: defaultEm * 0.8 },
-            [IDS.ASCENT]: { value: defaultEm },
+            [IDS.ASCENT]: { value: defaultEm * 0.8 },
             [IDS.ASC_RESAMPLE]: { value: false },
             [IDS.DESCENT]: { value: defaultEm * -0.25 },
             //[IDS.H_ORIGIN_X]: { value: 0 },
