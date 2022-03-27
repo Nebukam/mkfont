@@ -4,11 +4,11 @@
 
 MKFont is a free tool to make font out of vector graphics. Works for Windows, Mac OS X and Linux.  
 
-## **Download** ![beta](https://img.shields.io/badge/-BETA-ed1e79)
+## **Downloads** ![beta](https://img.shields.io/badge/-BETA-ed1e79)
 
-- :package: [**Windows**](https://chrome.google.com/webstore/detail/steam-game-finder/aagflcmpdhjkbgmbjmidndegeabadeip)
-- :package: [**Mac OS**](https://microsoftedge.microsoft.com/addons/detail/steam-game-finder/okpoofcmlpdkbogkmnlmpemgkfalebkp)
-- :package: [**Linux**](https://addons.mozilla.org/en-US/firefox/addon/steam-game-finder/)
+- [**Windows**](https://chrome.google.com/webstore/detail/steam-game-finder/aagflcmpdhjkbgmbjmidndegeabadeip)
+- [**Mac OS**](https://microsoftedge.microsoft.com/addons/detail/steam-game-finder/okpoofcmlpdkbogkmnlmpemgkfalebkp)
+- [**Linux**](https://addons.mozilla.org/en-US/firefox/addon/steam-game-finder/)
 
 ## **Getting started** & doc
 - [Documentation wiki](https://github.com/Nebukam/mkfont/wiki)
