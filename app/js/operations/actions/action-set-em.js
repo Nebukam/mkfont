@@ -14,6 +14,8 @@ const subFamilyIDs = [
     mkfData.IDS.DESCENT,
     mkfData.IDS.WIDTH,
     mkfData.IDS.HEIGHT,
+    mkfData.IDS.X_HEIGHT,
+    mkfData.IDS.CAP_HEIGHT,
 ];
 
 const transformIDs = [
