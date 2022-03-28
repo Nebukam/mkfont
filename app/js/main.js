@@ -82,9 +82,22 @@ class MKFont extends nkm.app.AppBase {
             [ui.IDS.STATIC]: true
         });
 
-        this._welcomeView._options.view.RequestDisplay();
-
         nkm.style.Set(`--glyph-color`, `#f5f5f5`);
+
+        let openPath = null;
+        // Check if ARGV contains an .mkfont file path
+        searchloop: for (var p in nkm.env.ARGV) {
+            if (p.includes(`.mkfont`)) {
+                openPath = p;
+                break searchloop;
+            }
+        }
+
+        if(openPath != null && !nkm.utils.isVoid(openPath)){
+            mkfOperations.commands.IOLoadFamily.Execute(openPath);
+        }else{
+            this._welcomeView._options.view.RequestDisplay();
+        }
 
         //mkfOperations.commands.MakeTTFFont.Enable();
         //nkm.actions.KeystrokeEx.CreateFromString(`Ctrl E`, { fn: this._Bind(this._WriteTTF) }).Enable();

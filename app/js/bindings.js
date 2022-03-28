@@ -11,6 +11,10 @@ class Bindings extends nkm.com.helpers.BindingKit {
     _Init() {
         super._Init();
 
+        this.AddClasses(
+            mkfData.Family
+        );
+
         this.Add(
             {
                 context: nkm.data.catalogs.Catalog,

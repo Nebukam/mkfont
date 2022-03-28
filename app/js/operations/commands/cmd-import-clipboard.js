@@ -27,15 +27,24 @@ class CmdImportClipboard extends actions.Command {
 
     _InternalExecute() {
 
+        if (nkm.ui.dom.isTextHighlighted) {
+            this._Cancel();
+            return;
+        }
+
+        this._context = this._emitter.data;
+        if (u.isInstanceOf(this._context, mkfData.Glyph)) { this._context = this._context.GetVariant(this._context.family.selectedSubFamily); }
+
         let
             svgStats = { exists: false },
             svgString = clipboard.readText();
 
         try {
+
             svgStats = SVGOPS.SVGStats(svgString);
         } catch (e) { console.log(e); }
 
-        console.log(svgStats);
+        //console.log(svgStats);
 
         if (!svgStats.exists) {
             /*
@@ -76,15 +85,13 @@ class CmdImportClipboard extends actions.Command {
                 id: mkfData.IDS.PATH_DATA,
                 value: svgStats
             });
-            if(trValues){
+            if (trValues) {
                 editor.Do(mkfActions.SetPropertyMultiple, {
                     target: variant.transformSettings,
                     values: trValues
                 });
             }
         }
-
-
 
         glyph.CommitUpdate();
         this._Success();

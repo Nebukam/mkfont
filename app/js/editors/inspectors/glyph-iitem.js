@@ -27,7 +27,6 @@ class GlyphVariantInspectorItem extends nkm.datacontrols.ControlWidget {
 
     _Init() {
         super._Init();
-        this._svgPaste = mkfOperations.commands.ImportClipboard;
 
         this._builder.defaultControlClass = mkfWidgets.PropertyControl;
         this._builder.defaultCSS = `control`;
@@ -36,6 +35,15 @@ class GlyphVariantInspectorItem extends nkm.datacontrols.ControlWidget {
 
         this._flags.Add(this, __nullGlyph);
 
+    }
+
+    _OnPaintChange() {
+        super._OnPaintChange();
+        if (this._isPainted) {
+
+        } else {
+            
+        }
     }
 
     _Style() {
@@ -130,7 +138,7 @@ class GlyphVariantInspectorItem extends nkm.datacontrols.ControlWidget {
                     flavor: nkm.com.FLAGS.LOADING, variant: ui.FLAGS.MINIMAL,
                     trigger: {
                         fn: () => {
-                            mkfOperations.commands.ImportClipboard.emitter = this;
+                            //mkfOperations.commands.ImportClipboard.emitter = this;
                             mkfOperations.commands.ImportClipboard.Execute(this._data);
                         }
                     },
@@ -157,7 +165,7 @@ class GlyphVariantInspectorItem extends nkm.datacontrols.ControlWidget {
                     variant: ui.FLAGS.MINIMAL,
                     trigger: {
                         fn: () => {
-                            mkfOperations.commands.ExportToClipboard.emitter = this;
+                            //mkfOperations.commands.ExportToClipboard.emitter = this;
                             mkfOperations.commands.ExportToClipboard.Execute(this._data);
                         }
                     },

@@ -1,58 +1,35 @@
 'use strict';
 
-const MakeTTFFont = require(`./cmd-generate-ttf-font`);
-const SetProperty = require(`./cmd-action-set-property`);
-
-const SetEMUnits = require(`./cmd-action-set-em`);
-const SetAscent = require(`./cmd-action-set-ascent`);
-
-const ImportTTF = require(`./cmd-import-ttf`);
-const ImportEmpty = require(`./cmd-import-empty`);
-const ImportClipboard = require(`./cmd-import-clipboard`);
-const ImportExternalFile = require(`./cmd-import-external-file`);
-const ImportExternalFileMultiple = require(`./cmd-import-external-file-multiple`);
-const ImportTextLiga = require(`./cmd-import-text-liga`);
-
-const DeleteGlyph = require(`./cmd-glyph-delete`);
-
-const ExportToClipboard = require(`./cmd-export-to-clipboard`);
-const ExportTTF = require(`./cmd-export-ttf`);
-
-const ExportUniClipboard = require(`./cmd-export-uni-clipboard`);
-const ExportUniHexToClipboard = require(`./cmd-export-uni-hex-clipboard`);
-
-const OpenMKFont = require(`./cmd-open-mkfont`);
-const StartNewMKFont = require(`./cmd-start-new-mkfont`);
-const StartNewFromTTF = require(`./cmd-start-new-from-ttf`);
-const StartNewFromSVGS = require(`./cmd-start-new-from-svgs`);
-
 module.exports = {
 
-    MakeTTFFont: new MakeTTFFont(),
-    SetProperty: new SetProperty(),
-    SetEM: new SetEMUnits(),
-    SetAscent: new SetAscent(),
+    MakeTTFFont: new (require(`./cmd-generate-ttf-font`))(),
+    SetProperty: new (require(`./cmd-action-set-property`))(),
+    SetEM: new (require(`./cmd-action-set-em`))(),
+    SetAscent: new (require(`./cmd-action-set-ascent`))(),
 
-    DeleteGlyph: new DeleteGlyph(),
+    DeleteGlyph: new (require(`./cmd-glyph-delete`))(),
 
-    ImportTTF: new ImportTTF(),
-    ImportEmpty: new ImportEmpty(),
-    ImportExternalFile: new ImportExternalFile(),
-    ImportExternalFileMultiple: new ImportExternalFileMultiple(),
-    ImportClipboard: new ImportClipboard(),
-    ImportTextLiga: new ImportTextLiga(),
+    ImportTTF: new (require(`./cmd-import-ttf`))(),
+    ImportEmpty: new (require(`./cmd-import-empty`))(),
+    ImportExternalFile: new (require(`./cmd-import-external-file`))(),
+    ImportExternalFileMultiple: new (require(`./cmd-import-external-file-multiple`))(),
+    ImportClipboard: new (require(`./cmd-import-clipboard`))(),
+    ImportTextLiga: new (require(`./cmd-import-text-liga`))(),
 
-    ExportTTF: new ExportTTF(),
+    ExportTTF: new (require(`./cmd-export-ttf`))(),
 
-    
-    ExportToClipboard: new ExportToClipboard(),
-    ExportUniClipboard: new ExportUniClipboard(),
-    ExportUniHexToClipboard: new ExportUniHexToClipboard(),
 
-    OpenMKFont: new OpenMKFont(),
+    ExportToClipboard: new (require(`./cmd-export-to-clipboard`))(),
+    ExportUniClipboard: new (require(`./cmd-export-uni-clipboard`))(),
+    ExportUniHexToClipboard: new (require(`./cmd-export-uni-hex-clipboard`))(),
 
-    StartNewMKFont: new StartNewMKFont(),
-    StartNewFromTTF: new StartNewFromTTF(),
-    StartNewFromSVGS: new StartNewFromSVGS(),
+    OpenMKFont: new (require(`./cmd-open-mkfont`))(),
+
+    StartNewMKFont: new (require(`./cmd-start-new-mkfont`))(),
+    StartNewFromTTF: new (require(`./cmd-start-new-from-ttf`))(),
+    StartNewFromSVGS: new (require(`./cmd-start-new-from-svgs`))(),
+
+    IOSaveFamily: new (require(`./cmd-io-save-family`))(),
+    IOLoadFamily: new (require(`./cmd-io-load-family`))(),
 
 }

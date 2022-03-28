@@ -39,7 +39,7 @@ class IDS_EXT {
             recompute:true,
             inputType: inputs.Search,
             label: `Search`,
-            inputOptions: { placeholder: `search` },
+            inputOptions: { placeholder: `search`, changeOnInput:true, submitOnChange:true,  },
             desc: `Search for characters within Unicode.\nSeparate search terms with a space.`
         },
         [this.CASE_INSENSITIVE]: {

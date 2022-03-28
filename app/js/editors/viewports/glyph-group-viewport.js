@@ -343,6 +343,8 @@ class GlyphGroupsView extends ui.views.View {
 
     _OnItemRequestProcessed(p_data, p_streamer, p_index, p_fragment) {
 
+        if(!this._data){ return; }
+
         let widget = this.Attach(mkfWidgets.GlyphSlot, 'glyph', p_fragment);
         widget.subFamily = this._data.selectedSubFamily;
         widget.glyphInfos = p_data;

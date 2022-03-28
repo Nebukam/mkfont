@@ -89,6 +89,12 @@ class FontEditorHeader extends nkm.datacontrols.ControlView {
                 {
                     label: `Save`, icon: `save`, htitle: `Save file to disk`,
                     size: ui.FLAGS.SIZE_S, flavor: ui.FLAGS.CTA,// variant:ui.FLAGS.FRAME,
+                    trigger: {
+                        fn: () => {
+                            mkfOperations.commands.IOSaveFamily.emitter = this;
+                            mkfOperations.commands.IOSaveFamily.Execute(this._data);
+                        }
+                    },
                     group: `file-actions`
                 },
                 {

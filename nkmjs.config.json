@@ -1,9 +1,9 @@
 {
-    "name": "my-app",
+    "name": "mkfont",
     "longName": "mkfont",
     "shortName": "mkfont",
     "description": "Makes font.",
-    "homepage": "https://www.undefined.com",
+    "homepage": "https://github.com/Nebukam/mkfont",
     "app": {
         "display": "standalone",
         "orientation": "portrait",
@@ -24,6 +24,13 @@
             "%homepage%"
         ]
     },
+    "fileAssociations": [
+        {
+            "ext": "mkfont",
+            "name": "MKFONT File",
+            "role": "Editor"
+        }
+    ],
     "builds": [
         {
             "platform": "windows",

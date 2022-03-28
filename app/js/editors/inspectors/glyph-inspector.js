@@ -23,6 +23,7 @@ class GlyphInspector extends nkm.datacontrols.InspectorView {
 
     _Init() {
         super._Init();
+        this._svgCopy = operations.commands.ExportToClipboard;
         this._svgPaste = operations.commands.ImportClipboard;
         this._ctrls = [];
         this._idList = [
@@ -128,11 +129,14 @@ class GlyphInspector extends nkm.datacontrols.InspectorView {
         super._OnDisplayGain();
         this._svgPaste.emitter = this;
         this._svgPaste.Enable();
+        this._svgCopy.emitter = this;
+        this._svgCopy.Enable();
     }
 
     _OnDisplayLost() {
         super._OnDisplayLost();
         if (this._svgPaste.emitter == this) { this._svgPaste.Disable(); }
+        if (this._svgCopy.emitter == this) { this._svgCopy.Disable(); }
     }
 
 }

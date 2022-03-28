@@ -91,7 +91,7 @@ class WelcomeView extends ui.views.View {
                     variant: ui.FLAGS.MINIMAL, flavor: nkm.com.FLAGS.LOADING
                 },
                 {
-                    command: mkfOperations.commands.OpenMKFont,
+                    command: mkfOperations.commands.IOLoadFamily,
                     variant: ui.FLAGS.MINIMAL, flavor: nkm.com.FLAGS.LOADING,
                     group:`plop`
                 },
