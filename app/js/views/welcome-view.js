@@ -1,6 +1,7 @@
 const nkm = require(`@nkmjs/core`);
 const u = nkm.utils;
 const ui = nkm.ui;
+const { shell } = require(`electron`);
 
 const mkfOperations = require(`../operations`);
 
@@ -111,19 +112,25 @@ class WelcomeView extends ui.views.View {
             defaultWidgetClass: nkm.uilib.buttons.Button,
             handles: [
                 {
-                    label: `${nkm.env.CONF.version}`,
-                    cl:nkm.uilib.widgets.Tag, //flavor: ui.FLAGS.CTA,
+                    label: `beta`,
+                    cl:nkm.uilib.widgets.Tag,
                     group: `Version`
                 },
                 {
                     label: `About`,
                     variant: ui.FLAGS.MINIMAL, flavor: ui.FLAGS.CTA,
-                    group: `about`
+                    group: `about`,
+                    trigger:{
+                        fn:()=>{ shell.openExternal("https://github.com/Nebukam/mkfont") }
+                    }
                 },
                 {
                     label: `Help`,
                     variant: ui.FLAGS.MINIMAL,
-                    group: `help`
+                    group: `help`,
+                    trigger:{
+                        fn:()=>{ shell.openExternal("https://github.com/Nebukam/mkfont/wiki") }
+                    }
                 }
             ]
         };

@@ -90,9 +90,9 @@ class EditorListImport extends nkm.datacontrols.Editor {
             { cl: mkfWidgets.ControlHeader, options: { label: `Options` } },
             { options: { propertyId: mkfData.IDS.IMPORT_PREFIX } },
             { options: { propertyId: mkfData.IDS.IMPORT_SEPARATOR } },
-            { options: { propertyId: mkfData.IDS.IMPORT_MARK_X }, css: 'small' },
-            { options: { propertyId: mkfData.IDS.IMPORT_MARK_CAP }, css: 'small' },
-            { options: { propertyId: mkfData.IDS.IMPORT_MARK_COL } },
+            //{ options: { propertyId: mkfData.IDS.IMPORT_MARK_X }, css: 'small' },
+            //{ options: { propertyId: mkfData.IDS.IMPORT_MARK_CAP }, css: 'small' },
+            //{ options: { propertyId: mkfData.IDS.IMPORT_MARK_COL } },
         ]);
 
         this._settingsInspector = this.Attach(mkfInspectors.TransformSettings, `item settings`);

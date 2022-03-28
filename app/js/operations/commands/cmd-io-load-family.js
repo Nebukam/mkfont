@@ -73,6 +73,7 @@ class CmdIOSaveFamily extends actions.Command {
     _OnReadSuccess(p_rsc) {
 
         this._family = nkm.data.serialization.JSONSerializer.Deserialize(p_rsc.content);
+        this._family.CommitUpdate();
         nkm.actions.Emit(nkm.actions.REQUEST.EDIT, { data: this._family },
             this, this._Success, this._Fail);
 

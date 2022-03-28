@@ -41,12 +41,15 @@ class CmdExportToClipboard extends actions.Command {
 
             let
                 inlineTr = ``,
+                markedPath = ``,
                 tr = this._context._transformSettings,
                 p = this._context.Get(mkfData.IDS.PATH_DATA);
 
             for (let p in tr._values) { inlineTr += `${p}="${tr._values[p].value}" `; }
 
-            let string = `<svg viewBox="0 0 ${p.width} ${p.height}" ${inlineTr}><path d="${p.path}"></path></svg>`;
+            markedPath = `<path style="stroke:#FF00FF;fill:none" d="M 0 0 L ${p.width} 0 L ${p.width} ${p.height} L 0 ${p.height} z"></path>`;
+
+            let string = `<svg viewBox="0 0 ${p.width} ${p.height}" ${inlineTr}><path d="${p.path}"></path>${markedPath}</svg>`;
             clipboard.writeText(string);
         } catch (e) { console.log(e); }
 

@@ -9,6 +9,7 @@ const mkfInspectors = require(`./inspectors`);
 const mkfViewports = require(`./viewports`);
 const mkfViews = require(`../views`);
 const mkfData = require(`../data`);
+const mkfOperations = require(`../operations`);
 
 class FontEditor extends nkm.uiworkspace.editors.EditorEx {
     constructor() { super(); }
@@ -46,6 +47,17 @@ class FontEditor extends nkm.uiworkspace.editors.EditorEx {
             return u.isInstanceOf(p_data, mkfData.Family) ? p_data : null;
         };
 
+    }
+
+    _OnDisplayGain() {
+        super._OnDisplayGain();
+        mkfOperations.commands.IOSaveFamily.emitter = this;
+        mkfOperations.commands.IOSaveFamily.Enable();
+    }
+
+    _OnDisplayLost() {
+        super._OnDisplayLost();
+        if (mkfOperations.commands.IOSaveFamily.emitter == this) { mkfOperations.commands.IOSaveFamily.Disable(); }
     }
 
     _PostInit() {
@@ -146,7 +158,7 @@ class FontEditor extends nkm.uiworkspace.editors.EditorEx {
     _PostInit() {
         super._PostInit();
         this._contentInspector.RequestDisplay();
-        this._pangramInspector.RequestDisplay();
+        //this._pangramInspector.RequestDisplay();
 
         this._inspectorShell.header.style.display = `none`;
         this._shelf._nav.visible = false;

@@ -43,10 +43,10 @@ class CmdExportTTF extends actions.Command {
                 ttf = svg2ttf(subFamily.fontObject.outerHTML, {
                     familyname: subFamily.Resolve(IDS.FAMILY),
                     subfamilyname: subFamily.Resolve(IDS.FONT_STYLE),
-                    copyright:subFamily.Resolve(IDS.COPYRIGHT) || `mkfont`,
-                    description:subFamily.Resolve(IDS.DESCRIPTION) || `Made with mkfont`,
-                    url:subFamily.Resolve(IDS.URL) || `https://github.com/Nebukam/mkfont`,
-                    version:subFamily.Resolve(IDS.VERSION) || `1.0`,
+                    copyright: subFamily.Resolve(IDS.COPYRIGHT) || `mkfont`,
+                    description: subFamily.Resolve(IDS.DESCRIPTION) || `Made with mkfont`,
+                    url: subFamily.Resolve(IDS.URL) || `https://github.com/Nebukam/mkfont`,
+                    version: subFamily.Resolve(IDS.VERSION) || `1.0`,
                 });
 
             u.Download(`font`, ttf.buffer, u.MIME.Get(`.ttf`));

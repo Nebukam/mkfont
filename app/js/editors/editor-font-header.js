@@ -69,7 +69,8 @@ class FontEditorHeader extends nkm.datacontrols.ControlView {
                 'background-color': 'rgba(127,127,127,0.1)',
             },
             '.title': {
-                'opacity': '0.2'
+                'opacity': '0.2',
+                'pointer-events':'none'
             },
             '.toolbar': {
 
@@ -85,13 +86,13 @@ class FontEditorHeader extends nkm.datacontrols.ControlView {
         this._toolbarLeft.options = {
             inline: true,
             defaultWidgetClass: nkm.uilib.buttons.Button,
-            handles: [
+            handles: [    
                 {
-                    label: `Save`, icon: `save`, htitle: `Save file to disk`,
+                    label: `Save`, icon: `save`, htitle: `Save`,
                     size: ui.FLAGS.SIZE_S, flavor: ui.FLAGS.CTA,// variant:ui.FLAGS.FRAME,
                     trigger: {
                         fn: () => {
-                            mkfOperations.commands.IOSaveFamily.emitter = this;
+                            //mkfOperations.commands.IOSaveFamily.emitter = this;
                             mkfOperations.commands.IOSaveFamily.Execute(this._data);
                         }
                     },
@@ -188,6 +189,7 @@ class FontEditorHeader extends nkm.datacontrols.ControlView {
         this.forwardData.To(this._btnSelectSubFamily, { dataMember: `_subFamiliesCatalog` });
 
         this._title = new ui.manipulators.Text(ui.dom.El("div", { class: "title font-large" }, this));
+        this._title.ellipsis = true;
         this._title.Set("---");
 
     }
@@ -198,7 +200,7 @@ class FontEditorHeader extends nkm.datacontrols.ControlView {
 
     _OnDataUpdated(p_data) {
         super._OnDataUpdated(p_data);
-        this._title.Set(p_data.Resolve(mkfData.IDS.FAMILY));
+        this._title.Set(`${p_data.Resolve(mkfData.IDS.FAMILY)}-${p_data.selectedSubFamily.Resolve(mkfData.IDS.FONT_STYLE)}`);
     }
 
 }

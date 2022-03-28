@@ -18,6 +18,7 @@ class CmdStartNewMKFont extends actions.Command {
     _InternalExecute() {
 
         this._newFamily = nkm.com.Rent(mkfData.Family);
+        this._newFamily.CommitUpdate();
         this._RequestEdit();
 
     }

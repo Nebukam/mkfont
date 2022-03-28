@@ -294,41 +294,26 @@ class SVGOperations {
 
     }
 
-
-    static __trList = [
-        IDS.TR_BOUNDS_MODE,
-        IDS.TR_SCALE_MODE,
-        IDS.TR_SCALE_FACTOR,
-        IDS.TR_VER_ALIGN,
-        IDS.TR_VER_ALIGN_ANCHOR,
-        IDS.TR_HOR_ALIGN,
-        IDS.TR_HOR_ALIGN_ANCHOR,
-        IDS.TR_WIDTH_SHIFT,
-        IDS.TR_WIDTH_PUSH,
-    ];
-
-    static TryGetTRValues(p_svgString) {
+    static TryGetTRValues(p_obj, p_svgString) {
 
         try {
 
             let svg = domparser.parseFromString(p_svgString, `image/svg+xml`).getElementsByTagName(`svg`)[0];
             if (!svg) { return null; }
 
-            let infos = {}, count = 0;
-            for (let i = 0; i < this.__trList.length; i++) {
+            for (var id in p_obj) {
                 let
-                    id = this.__trList[i],
                     value = svg.getAttribute(id),
-                    num = Number(value);
+                    num = Number.parseFloat(value);
 
-                if (!isNaN(num)) { infos[id] = num; count++; }
+                if (!isNaN(num)) { p_obj[id] = num; }
             }
 
-            return count == 0 ? null : infos;
+            return p_obj;
 
         } catch (e) {
             console.log(e);
-            return null;
+            return p_obj;
         }
 
     }

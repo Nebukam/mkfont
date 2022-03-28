@@ -67,8 +67,12 @@ class CmdImportClipboard extends actions.Command {
         let
             variant = this._context,
             glyph = variant.glyph,
-            trValues = SVGOPS.TryGetTRValues(svgString),
+            trValues = variant._transformSettings.Values(),
             unicodeInfos;
+
+        SVGOPS.TryGetTRValues(trValues, svgString);
+
+        console.log(trValues);
 
         if (glyph.isNull) {
             // Need to create a new glyph!

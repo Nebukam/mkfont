@@ -34,6 +34,7 @@ class FamilyDataBlock extends SimpleDataEx {
         this._Bind(this._OnGlyphVariantUpdated);
         this._Bind(this._OnGlyphUpdated);
 
+        this._filepath = null;
 
         this._values = {
             [IDS.FAMILY]: { value: `Font Family Name` },
@@ -254,11 +255,12 @@ class FamilyDataBlock extends SimpleDataEx {
     }
 
     CommitUpdate(){
-        this._id.name = this.Get(IDS.FAMILY);
+        this._id.name = this._selectedSubFamily ? `${this.Get(IDS.FAMILY)}-${this._selectedSubFamily.Get(IDS.FONT_STYLE)}` : this.Get(IDS.FAMILY);
         super.CommitUpdate();
     }
 
     _Cleanup(){
+        this._filepath = null;
         //TODO : Cleanup up subFamilies, glyphs, and their variant
         super._CleanUp();
     }
