@@ -33,9 +33,39 @@
     ],
     "builds": [
         {
+            "enabled":false,
             "platform": "windows",
             "arch": "x64",
-            "asar": true
+            "asar": true,
+            "build":{
+                "target": "nsis",
+                "nsis": {
+                    "oneClick": false,
+                    "perMachine": false,
+                    "allowToChangeInstallationDirectory": true
+                  }
+            }
+        },
+        {
+            "enabled":false,
+            "platform": "mac",
+            "arch": "x64",
+            "asar": true,
+            "build":{
+                "target": "deb",
+                "mac": { "target": "zip" }
+            }
+            
+        },
+        {
+            "enabled":false,
+            "platform": "linux",
+            "arch": "x64",
+            "asar": true,
+            "build":{
+                "target": "deb",
+                "deb": {}
+            }
         }
     ]
 }
