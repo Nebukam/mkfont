@@ -1,6 +1,6 @@
 # mkfont ![version](https://img.shields.io/badge/dynamic/json?color=ed1e79&label=version&query=version&url=https://github.com/Nebukam/mkfont/raw/main//package.json) ![release](https://img.shields.io/badge/license-MIT-black.svg)
 
-![Splash](/assets/Splash.png)
+![Splash](/assets/Splash-beta.png)
 
 MKFont is a free tool to make font out of vector graphics. Works for Windows, Mac OS X and Linux.  
 
