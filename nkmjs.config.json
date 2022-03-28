@@ -33,7 +33,7 @@
     ],
     "builds": [
         {
-            "enabled":false,
+            "enabled":true,
             "platform": "windows",
             "arch": "x64",
             "asar": true,
@@ -61,11 +61,7 @@
             "enabled":false,
             "platform": "linux",
             "arch": "x64",
-            "asar": true,
-            "build":{
-                "target": "deb",
-                "deb": {}
-            }
+            "asar": true
         }
     ]
 }
