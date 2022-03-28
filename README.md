@@ -1,4 +1,4 @@
-# MKFont ![version](https://img.shields.io/badge/dynamic/json?color=ed1e79&label=version&query=version&url=https://github.com/Nebukam/mkfont/raw/main//package.json) ![release](https://img.shields.io/badge/license-MIT-black.svg)
+# mkfont ![version](https://img.shields.io/badge/dynamic/json?color=ed1e79&label=version&query=version&url=https://github.com/Nebukam/mkfont/raw/main//package.json) ![release](https://img.shields.io/badge/license-MIT-black.svg)
 
 ![Splash](/assets/Splash.png)
 
