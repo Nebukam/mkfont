@@ -12,15 +12,15 @@ class ImportSettingsDataBlock extends TransformSettingsDataBlock {
 
     constructor() { super(); }
 
-    _Init() {
+    _ResetValues(p_values) {
 
-        super._Init();
+        super._ResetValues(p_values);
 
-        this._values[IDS.IMPORT_PREFIX] = { value: `char` };
-        this._values[IDS.IMPORT_SEPARATOR] = { value: `_` };
-        this._values[IDS.IMPORT_MARK_X] = { value: `-x` };
-        this._values[IDS.IMPORT_MARK_CAP] = { value: `-c` };
-        this._values[IDS.IMPORT_MARK_COL] = { value: `#ff00ff` };
+        p_values[IDS.IMPORT_PREFIX] = { value: `char` };
+        p_values[IDS.IMPORT_SEPARATOR] = { value: `_` };
+        p_values[IDS.IMPORT_MARK_X] = { value: `-x` };
+        p_values[IDS.IMPORT_MARK_CAP] = { value: `-c` };
+        p_values[IDS.IMPORT_MARK_COL] = { value: `#ff00ff` };
 
     }
 

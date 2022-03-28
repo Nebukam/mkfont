@@ -34,6 +34,7 @@ class GlyphGroupsView extends ui.views.View {
         this._domStreamer = null;
         this._unicodeMap = new Map();
         this._rangeInfos = null;
+        this._displayRanges = null;
 
         this._dataObserver
             .Hook(SIGNAL.GLYPH_ADDED, this._OnGlyphAdded, this)
@@ -63,7 +64,7 @@ class GlyphGroupsView extends ui.views.View {
                 'display': 'flex',
                 'flex-flow': 'column nowrap',
                 '--streamer-gap': '10px',
-                'overflow':'clip'
+                'overflow': 'clip'
             },
             '.header, .search': {
                 'flex': '0 0 auto',
@@ -73,8 +74,8 @@ class GlyphGroupsView extends ui.views.View {
                 'flex': '1 1 auto',
                 'overflow': 'auto',
             },
-            '.search-status':{
-                '@':['absolute-centered']
+            '.search-status': {
+                '@': ['absolute-centered']
             }
         }, super._Style());
     }
@@ -85,10 +86,10 @@ class GlyphGroupsView extends ui.views.View {
         this._header = this.Attach(GlyphGroupHeader, `header`);
         this.forwardData.To(this._header);
 
-        this._searchStatus = this.Attach(mkfWidgets.SearchStatus, `search-status`);        
+        this._searchStatus = this.Attach(mkfWidgets.SearchStatus, `search-status`);
         this._search = this.Attach(GlyphGroupSearch, `search`);
         this._search.status = this._searchStatus;
-        
+
 
         this._domStreamer = this.Attach(ui.helpers.DOMStreamer, 'dom-stream');
         this._domStreamer

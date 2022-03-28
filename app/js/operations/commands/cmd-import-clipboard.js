@@ -27,11 +27,13 @@ class CmdImportClipboard extends actions.Command {
 
     _InternalExecute() {
 
-        let svgStats = { exists: false };
+        let
+            svgStats = { exists: false },
+            svgString = clipboard.readText();
 
         try {
-            svgStats = SVGOPS.SVGStats(clipboard.readText());
-        } catch (e) {  console.log(e);}
+            svgStats = SVGOPS.SVGStats(svgString);
+        } catch (e) { console.log(e); }
 
         console.log(svgStats);
 
@@ -56,6 +58,7 @@ class CmdImportClipboard extends actions.Command {
         let
             variant = this._context,
             glyph = variant.glyph,
+            trValues = SVGOPS.TryGetTRValues(svgString),
             unicodeInfos;
 
         if (glyph.isNull) {
@@ -64,7 +67,8 @@ class CmdImportClipboard extends actions.Command {
             editor.Do(mkfActions.CreateGlyph, {
                 family: family,
                 unicode: unicodeInfos,
-                path: svgStats
+                path: svgStats,
+                transforms: trValues
             });
         } else {
             editor.Do(mkfActions.SetProperty, {
@@ -72,7 +76,15 @@ class CmdImportClipboard extends actions.Command {
                 id: mkfData.IDS.PATH_DATA,
                 value: svgStats
             });
+            if(trValues){
+                editor.Do(mkfActions.SetPropertyMultiple, {
+                    target: variant.transformSettings,
+                    values: trValues
+                });
+            }
         }
+
+
 
         glyph.CommitUpdate();
         this._Success();

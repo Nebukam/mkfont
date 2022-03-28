@@ -21,7 +21,13 @@ class ImportSettingsDataBlock extends TransformSettingsDataBlock {
             if (!(`override` in obj)) { obj.override = false; }
         }
 
-        this._values[IDS.MONOSPACE] = { value: false };
+    }
+
+    _ResetValues(p_values) {
+
+        super._ResetValues(p_values);
+
+        p_values[IDS.MONOSPACE] = { value: false };
 
     }
 

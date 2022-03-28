@@ -148,8 +148,8 @@ class SVGOperations {
                     //Check if path is mark (if so ignore it)
                     if (!markedBBox) {
                         markedBBox = this._FindMarkedBBox(p, styleObject, markCol);
-                        if (markedBBox) { 
-                            d = null; 
+                        if (markedBBox) {
+                            d = null;
                         }
                     }
 
@@ -294,6 +294,45 @@ class SVGOperations {
 
     }
 
+
+    static __trList = [
+        IDS.TR_BOUNDS_MODE,
+        IDS.TR_SCALE_MODE,
+        IDS.TR_SCALE_FACTOR,
+        IDS.TR_VER_ALIGN,
+        IDS.TR_VER_ALIGN_ANCHOR,
+        IDS.TR_HOR_ALIGN,
+        IDS.TR_HOR_ALIGN_ANCHOR,
+        IDS.TR_WIDTH_SHIFT,
+        IDS.TR_WIDTH_PUSH,
+    ];
+
+    static TryGetTRValues(p_svgString) {
+
+        try {
+
+            let svg = domparser.parseFromString(p_svgString, `image/svg+xml`).getElementsByTagName(`svg`)[0];
+            if (!svg) { return null; }
+
+            let infos = {}, count = 0;
+            for (let i = 0; i < this.__trList.length; i++) {
+                let
+                    id = this.__trList[i],
+                    value = svg.getAttribute(id),
+                    num = Number(value);
+
+                if (!isNaN(num)) { infos[id] = num; count++; }
+            }
+
+            return count == 0 ? null : infos;
+
+        } catch (e) {
+            console.log(e);
+            return null;
+        }
+
+    }
+
     static TranslateBBox(p_bbox, p_trx, p_try = 0) {
         p_bbox.x = p_bbox.x + p_trx;
         p_bbox.y = p_bbox.y + p_try;
@@ -389,6 +428,11 @@ class SVGOperations {
             case ENUMS.VALIGN_ASCENDER:
                 offsetY = p_context.bsl - heightRef - p_context.asc;
                 break;
+            /*
+        case ENUMS.VALIGN_EM:
+            offsetY = p_context.em - heightRef;
+            break;
+            */
         }
 
         switch (p_settings.Get(IDS.TR_VER_ALIGN_ANCHOR)) {

@@ -10,6 +10,8 @@ class ActionCreateGlyph extends actions.Action {
 
     // Expected operation format : { family:FamilyDataBlock, unicode:`abc`, path:pathData, transforms:{} }
 
+    get title(){ return `Create glyph : ${this._operation.glyph.unicodeInfos.char}`; }
+
     _InternalDo(p_operation, p_merge = false) {
 
         let

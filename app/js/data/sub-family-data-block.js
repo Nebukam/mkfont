@@ -49,34 +49,6 @@ class SubFamilyDataBlock extends SimpleDataEx {
             mono: false
         }
 
-        let defaultEm = 1000;
-
-        this._values = {
-            [IDS.WEIGHT_CLASS]: { value: ENUMS.WEIGHTS.At(3).value },
-            [IDS.FONT_STYLE]: { value: `Regular` },
-
-            [IDS.CAP_HEIGHT]: { value: defaultEm * 0.7 },
-            [IDS.X_HEIGHT]: { value: defaultEm * 0.7 * 0.72 },
-
-            [IDS.EM_UNITS]: { value: defaultEm },
-            [IDS.EM_RESAMPLE]: { value: true },
-            [IDS.BASELINE]: { value: defaultEm * 0.8 },
-            [IDS.ASCENT]: { value: defaultEm * 0.8 },
-            [IDS.ASC_RESAMPLE]: { value: false },
-            [IDS.DESCENT]: { value: defaultEm * -0.25 },
-            //[IDS.H_ORIGIN_X]: { value: 0 },
-            //[IDS.H_ORIGIN_Y]: { value: 0 },
-            [IDS.WIDTH]: { value: 1000 },
-            //[IDS.V_ORIGIN_X]: { value: 0 },
-            //[IDS.V_ORIGIN_Y]: { value: 0 },
-            [IDS.HEIGHT]: { value: 1000 },
-            [IDS.MONOSPACE]: { value: false },
-            [IDS.UNDERLINE_POSITION]: { value: null },
-            [IDS.UNDERLINE_THICKNESS]: { value: null },
-            //[IDS.HANGING]: { value: 500 },
-
-        };
-
         this._family = null;
         this._ttfBytes = null;
 
@@ -87,6 +59,36 @@ class SubFamilyDataBlock extends SimpleDataEx {
         this._globalTransforms.Watch(nkm.data.SIGNAL.VALUE_CHANGED, this._OnTransformSettingsUpdated, this);
 
         this._catalogItem = null;
+
+    }
+
+    _ResetValues(p_values) {
+
+        let defaultEm = 1000;
+
+        p_values[IDS.WEIGHT_CLASS] = { value: ENUMS.WEIGHTS.At(3).value };
+        p_values[IDS.FONT_STYLE] = { value: `Regular` };
+
+        p_values[IDS.EM_UNITS] = { value: defaultEm };
+        p_values[IDS.EM_RESAMPLE] = { value: true };
+        p_values[IDS.BASELINE] = { value: defaultEm * 0.8 };
+        p_values[IDS.ASCENT] = { value: defaultEm * 0.8 };
+        p_values[IDS.ASC_RESAMPLE] = { value: false };
+        p_values[IDS.DESCENT] = { value: defaultEm * -0.25 };
+
+        p_values[IDS.CAP_HEIGHT] = { value: defaultEm * 0.7 };
+        p_values[IDS.X_HEIGHT] = { value: defaultEm * 0.7 * 0.72 };
+
+        //p_values[IDS.H_ORIGIN_X] = { value: 0 };
+        //p_values[IDS.H_ORIGIN_Y] = { value: 0 };
+        p_values[IDS.WIDTH] = { value: 1000 };
+        //p_values[IDS.V_ORIGIN_X] = { value: 0 };
+        //p_values[IDS.V_ORIGIN_Y] = { value: 0 };
+        p_values[IDS.HEIGHT] = { value: 1000 };
+        p_values[IDS.MONOSPACE] = { value: false };
+        p_values[IDS.UNDERLINE_POSITION] = { value: null };
+        p_values[IDS.UNDERLINE_THICKNESS] = { value: null };
+        //p_values[IDS.HANGING] = { value: 500 };
 
     }
 

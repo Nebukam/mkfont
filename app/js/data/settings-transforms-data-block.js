@@ -16,20 +16,21 @@ class TransformSettingsDataBlock extends SimpleDataEx {
     _Init() {
 
         super._Init();
-
-        this._values = {
-            [IDS.TR_BOUNDS_MODE]: { value: ENUMS.BOUNDS_MIXED },
-            [IDS.TR_SCALE_MODE]: { value: ENUMS.SCALE_ASCENDER },
-            [IDS.TR_SCALE_FACTOR]: { value: 1 },
-            [IDS.TR_VER_ALIGN]: { value: ENUMS.VALIGN_BASELINE },
-            [IDS.TR_VER_ALIGN_ANCHOR]: { value: ENUMS.VANCHOR_BOTTOM },
-            [IDS.TR_HOR_ALIGN]: { value: ENUMS.HALIGN_XMIN },
-            [IDS.TR_HOR_ALIGN_ANCHOR]: { value: ENUMS.HANCHOR_LEFT },
-            [IDS.TR_WIDTH_SHIFT]: { value: 0, override: true },
-            [IDS.TR_WIDTH_PUSH]: { value: 0, override: true },
-        }
-
         this._glyphVariantOwner = null;
+
+    }
+
+    _ResetValues(p_values) {
+
+        p_values[IDS.TR_BOUNDS_MODE] = { value: ENUMS.BOUNDS_MIXED };
+        p_values[IDS.TR_SCALE_MODE] = { value: ENUMS.SCALE_ASCENDER };
+        p_values[IDS.TR_SCALE_FACTOR] = { value: 1 };
+        p_values[IDS.TR_VER_ALIGN] = { value: ENUMS.VALIGN_BASELINE };
+        p_values[IDS.TR_VER_ALIGN_ANCHOR] = { value: ENUMS.VANCHOR_BOTTOM };
+        p_values[IDS.TR_HOR_ALIGN] = { value: ENUMS.HALIGN_XMIN };
+        p_values[IDS.TR_HOR_ALIGN_ANCHOR] = { value: ENUMS.HANCHOR_LEFT };
+        p_values[IDS.TR_WIDTH_SHIFT] = { value: 0, override: true };
+        p_values[IDS.TR_WIDTH_PUSH] = { value: 0, override: true };
 
     }
 
@@ -62,7 +63,7 @@ class TransformSettingsDataBlock extends SimpleDataEx {
                 path.bbox.bottom > 32000 ||
                 path.bbox.right > 32000);
 
-            if(Math.abs(Math.max(path.bbox.height, path.bbox.width)) > 2000){  }
+        if (Math.abs(Math.max(path.bbox.height, path.bbox.width)) > 2000) { }
 
         if (this.Get(IDS.TR_HOR_ALIGN) == ENUMS.HALIGN_XMIN) {
             w = path.width;

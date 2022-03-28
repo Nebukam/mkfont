@@ -259,7 +259,7 @@ class FamilyDataBlock extends SimpleDataEx {
     }
 
     _Cleanup(){
-
+        //TODO : Cleanup up subFamilies, glyphs, and their variant
         super._CleanUp();
     }
 

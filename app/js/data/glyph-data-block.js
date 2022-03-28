@@ -27,12 +27,6 @@ class GlyphDataBlock extends SimpleDataEx {
 
         super._Init();
 
-        this._values = {
-            [IDS.GLYPH_NAME]: { value: '' },
-            [IDS.UNICODE]: { value: null },
-            [IDS.EXPORT_GLYPH]: { value: true }
-        };
-
         this._family = null;
         this._arabic_form = null;
         this._unicodeInfos = null;
@@ -43,6 +37,12 @@ class GlyphDataBlock extends SimpleDataEx {
         this._glyphVariants = new nkm.collections.List();
         this._subFamiliesMap = new nkm.collections.Dictionary();
 
+    }
+
+    _ResetValues(p_values) {
+        p_values[IDS.GLYPH_NAME] = { value: '' };
+        p_values[IDS.UNICODE] = { value: null };
+        p_values[IDS.EXPORT_GLYPH] = { value: true };
     }
 
     get resolutionFallbacks() { return [this._family]; }
@@ -146,6 +146,7 @@ class GlyphDataBlock extends SimpleDataEx {
     }
 
     _CleanUp() {
+        //TODO : Cleanup variants
         this.family = null;
         this._unicode = null;
         this._unicodeInfos = null;

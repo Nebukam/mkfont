@@ -4,6 +4,7 @@ const ui = nkm.ui;
 
 const mkfData = require(`../../data`);
 const mkfInspectors = require(`../inspectors`);
+const mkfOperations = require(`../../operations`);
 
 class GlyphGroupHeader extends nkm.datacontrols.ControlView {
     constructor() { super(); }
@@ -29,7 +30,9 @@ class GlyphGroupHeader extends nkm.datacontrols.ControlView {
                 'margin-bottom': '10px'
             },
             '.toolbar': {
-
+                'display': 'flex',
+                'flex-flow': 'row nowrap',
+                'justify-content': 'space-between'
             }
         }, super._Style());
     }
@@ -41,12 +44,39 @@ class GlyphGroupHeader extends nkm.datacontrols.ControlView {
         this._title = new ui.manipulators.Text(ui.dom.El("div", { class: "title font-medium" }, this));
         this._title.Set("---");
 
-        this._tagBar = this.Attach(ui.WidgetBar, `tagbar left`);
+        let toolbar = ui.El(`div`, { class: `toolbar` }, this._host);
+
+        this._tagBar = this.Attach(ui.WidgetBar, `tagbar left`, toolbar);
         this._tagBar.options = {
             defaultWidgetClass: nkm.uilib.widgets.Tag,
             size: ui.FLAGS.SIZE_XS
         };
 
+        this._optionsBar = this.Attach(ui.WidgetBar, `right`, toolbar);
+        this._optionsBar.options = {
+            defaultWidgetClass: nkm.uilib.buttons.Tool,
+            size: ui.FLAGS.SIZE_S,
+            handles: [
+                {
+                    icon: `text-unicode-char`, htitle: `Copy current unicodes characters to clipboard.\nEach value is separated by a '\\n' new line.`,
+                    trigger: {
+                        fn: () => {
+                            mkfOperations.commands.ExportUniClipboard.emitter = this;
+                            mkfOperations.commands.ExportUniClipboard.Execute(this._parent);
+                        }
+                    }
+                },
+                {
+                    icon: `text-unicode`, htitle: `Copy current hex values to clipboard.\nEach value is separated by a '\\n' new line.`,
+                    trigger: {
+                        fn: () => {
+                            mkfOperations.commands.ExportUniHexToClipboard.emitter = this;
+                            mkfOperations.commands.ExportUniHexToClipboard.Execute(this._parent);
+                        }
+                    }
+                }
+            ]
+        };
 
         this._typeTag = this._tagBar.CreateHandle();
         this._typeTag.bgColor = `black`;

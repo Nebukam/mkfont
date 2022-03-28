@@ -63,12 +63,14 @@ class ENUMS {
     static VALIGN_BASELINE = 1;
     static VALIGN_DESC = 2;
     static VALIGN_SPREAD = 3;
+    static VALIGN_EM = 4;
 
     static VALIGN = nkm.data.catalogs.CreateFrom({ name: `Vertical anchoring`, autoSort: false }, [
         { name: `Top `, [nkm.com.IDS.VALUE]: this.VALIGN_ASCENDER, icon: 'font-ascender' },
         { name: `Baseline`, [nkm.com.IDS.VALUE]: this.VALIGN_BASELINE, icon: 'font-baseline' },
         { name: `Descender`, [nkm.com.IDS.VALUE]: this.VALIGN_DESC, icon: 'font-descender' },
         { name: `Vertical spread`, [nkm.com.IDS.VALUE]: this.VALIGN_SPREAD, icon: 'center-ver' },
+        { name: `EM (from Metrics)`, [nkm.com.IDS.VALUE]: this.VALIGN_EM, icon: 'text-em' },
         //{ name: `To Value`, [nkm.com.IDS.VALUE]: 2, icon: 'edit' },
     ]);
 

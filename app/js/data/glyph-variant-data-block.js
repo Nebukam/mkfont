@@ -26,23 +26,23 @@ class GlyphVariantDataBlock extends SimpleDataEx {
 
         super._Init();
 
-        this._values = {
-            //[IDS.H_ORIGIN_X]: { value: null },
-            //[IDS.H_ORIGIN_Y]: { value: null },
-            [IDS.WIDTH]: { value: null, override: true },
-            //[IDS.V_ORIGIN_X]: { value: null },
-            //[IDS.V_ORIGIN_Y]: { value: null },
-            [IDS.HEIGHT]: { value: null, override: false },
-            [IDS.PATH]: { value: '' },
-            [IDS.PATH_DATA]: { value: null },
-            [IDS.OUT_OF_BOUNDS]: { value: false }
-        }
-
         this._transformSettings = new TransformSettings();
         this._transformSettings.glyphVariantOwner = this;
 
         this._glyph = null;
 
+    }
+
+    _ResetValues(p_values) {
+        //p_values[IDS.H_ORIGIN_X] = { value: null };
+        //p_values[IDS.H_ORIGIN_Y] = { value: null };
+        p_values[IDS.WIDTH] = { value: null, override: true };
+        //p_values[IDS.V_ORIGIN_X] = { value: null };
+        //p_values[IDS.V_ORIGIN_Y] = { value: null };
+        p_values[IDS.HEIGHT] = { value: null, override: false };
+        p_values[IDS.PATH] = { value: '' };
+        p_values[IDS.PATH_DATA] = { value: null };
+        p_values[IDS.OUT_OF_BOUNDS] = { value: false };
     }
 
     _BuildFontObject() { return svgGlyphRef.cloneNode(true); }

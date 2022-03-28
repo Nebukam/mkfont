@@ -25,3 +25,4 @@ MKFont is under active developement, have a look to the repo [issues](https://gi
 
 ## Kudos
 MKFont wouldn't be possible if not for [@fontello](https://github.com/fontello) folks sharing their magic : the app is primarily built around [svg2ttf](https://github.com/fontello/svg2ttf) & [svgpath](https://github.com/fontello/svgpath).  
+MKFont uses the [Unicode](https://home.unicode.org/) database.  

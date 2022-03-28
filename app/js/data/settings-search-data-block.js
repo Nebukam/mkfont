@@ -23,17 +23,9 @@ class SettingsSearchDataBlock extends SimpleDataEx {
 
         super._Init();
 
-        this._values = {
-            [IDS_EXT.SEARCH_RESULTS]: { value: null },
-            [IDS_EXT.SEARCH_ENABLED]: { value: false },
-            [IDS_EXT.SEARCH_TERM]: { value: `` },
-            [IDS_EXT.CASE_INSENSITIVE]: { value: false },
-            [IDS_EXT.ADD_COMPOSITION]: { value: false },
-            [IDS_EXT.MUST_EXISTS]: { value: false },
-        }
-
         this._searchCount = 0;
         this._searchCovered = 0;
+        this._cachedAdvance = 0;
         this._fetchFn = null;
 
         this._terms = [];
@@ -49,6 +41,17 @@ class SettingsSearchDataBlock extends SimpleDataEx {
         this._delayedAdvance = nkm.com.DelayedCall(this._Bind(this._AdvanceSearch));
 
         this._family = null;
+
+    }
+
+    _ResetValues(p_values) {
+
+        p_values[IDS_EXT.SEARCH_RESULTS] = { value: null };
+        p_values[IDS_EXT.SEARCH_ENABLED] = { value: false };
+        p_values[IDS_EXT.SEARCH_TERM] = { value: `` };
+        p_values[IDS_EXT.CASE_INSENSITIVE] = { value: false };
+        p_values[IDS_EXT.ADD_COMPOSITION] = { value: false };
+        p_values[IDS_EXT.MUST_EXISTS] = { value: false };
 
     }
 
@@ -175,7 +178,7 @@ class SettingsSearchDataBlock extends SimpleDataEx {
             if (char) {
 
                 if (!this._caseSensitive) { char = char.toUpperCase(); }
-                
+
                 if (char.length == 1) {
                     charLoop: for (let i = 0; i < this._terms.length; i++) {
                         if (char == this._terms[i]) { pass = true; break charLoop; }
@@ -208,13 +211,13 @@ class SettingsSearchDataBlock extends SimpleDataEx {
 
         if (this._mustExists) { if (!(p_unicodeInfos.u in this._family._glyphsMap)) { return; } }
 
-        if(this._addComps && p_unicodeInfos.relatives){
-            let relatives =p_unicodeInfos.relatives;
-            for(let i = 0; i < relatives.length; i++){
+        if (this._addComps && p_unicodeInfos.relatives) {
+            let relatives = p_unicodeInfos.relatives;
+            for (let i = 0; i < relatives.length; i++) {
                 let infos = UNICODE.instance._charMap[relatives[i]];
                 if (this._mustExists) { if (!(infos.u in this._family._glyphsMap)) { continue; } }
                 this._results.push(infos);
-                this._resultSet.add(infos);    
+                this._resultSet.add(infos);
             }
         }
 

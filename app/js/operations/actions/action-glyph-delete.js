@@ -8,6 +8,12 @@ const mkfData = require(`../../data`);
 class ActionDeleteGlyph extends actions.Action {
     constructor() { super(); }
 
+    static __deepCleanFn(p_action){
+        p_action._operation.glyph.Release();
+    }
+
+    get title(){ return `Delete glyph : ${this._operation.glyph.unicodeInfos.char}`; }
+
     // Expected operation format : { family:FamilyDataBlock, glyph:GlyphDataBlock, path:pathData }
 
     _InternalDo(p_operation, p_merge = false) {
@@ -21,7 +27,7 @@ class ActionDeleteGlyph extends actions.Action {
     }
 
     _InternalUndo() {
-        
+
         let
             targetGlyph = this._operation.glyph,
             family = this._operation.family;

@@ -22,7 +22,14 @@ class CmdExportToClipboard extends actions.Command {
 
     _InternalExecute() {
         try {
-            let string = `<svg><path d="${this._context.Get(mkfData.IDS.PATH_DATA).path}"></path></svg>`;
+            let
+                inlineTr = ``,
+                tr = this._context._transformSettings,
+                p = this._context.Get(mkfData.IDS.PATH_DATA);
+
+            for(let p in tr._values){ inlineTr += `${p}="${tr._values[p].value}" `; }
+
+            let string = `<svg viewBox="0 0 ${p.width} ${p.height}" ${inlineTr}><path d="${p.path}"></path></svg>`;
             clipboard.writeText(string);
         } catch (e) { }
         this._Success();

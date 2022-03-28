@@ -134,6 +134,7 @@ class FontEditorHeader extends nkm.datacontrols.ControlView {
                     flavor: ui.FLAGS.CTA,
                     group: `create`
                 },*/
+                /*
                 {
                     label: `Liga`, icon: `text-liga`,
                     htitle: `Analyze a text blurb to find and create ligatures`,
@@ -147,6 +148,7 @@ class FontEditorHeader extends nkm.datacontrols.ControlView {
                         }
                     },
                 },
+                */
                 {
                     label: `SVGs`, icon: `directory-download-small`,
                     htitle: `Import multiple SVGs`,
