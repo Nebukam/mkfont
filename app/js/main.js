@@ -34,6 +34,7 @@ class MKFont extends nkm.app.AppBase {
         ];
 
         ui.Preload(mkfWidgets.GlyphSlot, 300);
+        ui.Preload(mkfWidgets.LigaButton, 300);
         //ui.Preload(mkfEditors.FontEditor, 3);
     }
 
@@ -102,16 +103,14 @@ class MKFont extends nkm.app.AppBase {
         //mkfOperations.commands.MakeTTFFont.Enable();
         //nkm.actions.KeystrokeEx.CreateFromString(`Ctrl E`, { fn: this._Bind(this._WriteTTF) }).Enable();
 
-        //this._EmptyFamily();
+        this._EmptyFamily();
         //this._FamilyFromTTF();
 
     }
 
     _EmptyFamily() {
 
-        let family = new mkfData.Family();
-        nkm.actions.Emit(nkm.actions.REQUEST.EDIT, { data: family },
-            this, this._Success, this._Fail);
+        mkfOperations.commands.StartNewMKFont.Execute();
 
     }
 

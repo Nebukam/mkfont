@@ -14,8 +14,27 @@ class EditorLigaImport extends nkm.datacontrols.Editor {
 
     _Init() {
         super._Init();
+
         this._builder = new nkm.datacontrols.helpers.ControlBuilder(this);
+        this._builder._defaultControlClass = mkfWidgets.PropertyControl;
+        this._builder.defaultCSS = `control`;
+
         this.forwardData.To(this._builder);
+
+        this._dataPreProcessor = (p_owner, p_data) => {
+            console.log(p_data);
+            if (nkm.utils.isInstanceOf(p_data, mkfData.Glyph)) { return p_data.family._ligaSettings; }
+            if (nkm.utils.isInstanceOf(p_data, mkfData.GlyphVariant)) { return p_data.glyph.family._ligaSettings; }
+            if (nkm.utils.isInstanceOf(p_data, mkfData.SubFamily)) { return p_data.family._ligaSettings; }
+            if (nkm.utils.isInstanceOf(p_data, mkfData.Family)) { return p_data._ligaSettings; }
+            return p_data;
+        };
+
+        this._btnList = [];
+        this._ligMap = {};
+
+        this._delayedPrintResult = nkm.com.DelayedCall(this._Bind(this._PrintNextResults));
+
     }
 
     _Style() {
@@ -24,132 +43,141 @@ class EditorLigaImport extends nkm.datacontrols.Editor {
                 'display': 'grid',
                 'flex-flow': 'column wrap',
                 'flex': '0 0 auto',
-                'grid-template-columns': 'max-content max-content max-content',
-                'grid-template-rows': '180px auto',
+                'grid-template-columns': 'max-content max-content',
+                'grid-template-rows': '400px',
                 'grid-gap': '10px'
-            },
-            '.item': {
-                'flex': '1 0 auto',
-                'grid-column-start': '1',
             },
             '.list': {
                 'position': 'relative',
-                'height': '0',
-                'width': '300px',
-                'overflow': 'hidden',
+                'width': '500px',
                 //'padding': '10px',
-                'background-color': 'rgba(0,0,0,0.2)',
-                'grid-column-start': '2',
-                'grid-row': '1 / span 2',
                 'overflow': 'auto',
-                'min-height': '100%',
-            },
-            '.settings': {
-                'width': '300px'
-            },
-            '.preview': {
-                'position': 'relative',
-                'width': '400px',
-                'height': '100%',
-                //'aspect-ratio': '1/1',
-                'flex': '0 0 100%',
-                'background-color': '#1b1b1b',
-                'border-radius': '3px',
-                'grid-column-start': '3',
-                'grid-row': '1 / span 2',
-            },
-            '.identity': {
-                'width': '100%'
-            },
-            '.header': {
                 'display': 'flex',
                 'flex-flow': 'row wrap',
-                'flex': '1 1 auto',
-                'min-height': '0',
-                'max-width': '300px',
-                'align-content': 'flex-start',
+                'align-content': 'flex-start'
+            },
+            '.inputs': {
+                'width': '300px'
             },
             '.control': {
-                'flex': '1 1 auto',
-                'margin': '0 2px 5px 2px'
+                'margin-bottom': '5px'
             },
-            '.small': {
-               // 'flex': '1 1 45%'
+            '.liga': {
+                'margin': `4px`
             }
         }, super._Style());
     }
 
     _Render() {
+
+
+        this._inputs = ui.dom.El(`div`, { class: `inputs` }, this._host);
+        this._builder.host = this._inputs;
+
         super._Render();
 
-        this._textInput = this.Attach(nkm.uilib.inputs.Textarea, ``);
+        this._builder.Build([
+            { cl: mkfWidgets.ControlHeader, options: { label: `Text` } },
+            { options: { propertyId: mkfData.IDS_EXT.LIGA_TEXT, inputOnly: true } },
+            { cl: mkfWidgets.ControlHeader, options: { label: `Limits` } },
+            { options: { propertyId: mkfData.IDS_EXT.LIGA_MIN } },
+            { options: { propertyId: mkfData.IDS_EXT.LIGA_MAX } },
+            { options: { propertyId: mkfData.IDS_EXT.LIGA_MIN_OCCURENCE } },
+        ]);
 
+        this._list = ui.El(`div`, { class: `list` }, this);
 
-        this._settingsInspector = this.Attach(mkfInspectors.TransformSettings, `item settings`);
-        this.forwardData.To(this._settingsInspector);
-
-        this._importListBrowser = this.Attach(mkfWidgets.lists.ImportListRoot, `list`, this._host);
-
-        this._glyphRenderer = this.Attach(mkfWidgets.GlyphCanvasRenderer, `preview`, this._host);
-        this._glyphRenderer.options = {
-            drawGuides: true,
-            drawLabels: true,
-            centered: false,
-        };
-
-    }
-
-    set subFamily(p_value) {
-        this._subFamily = p_value;
-    }
-
-    set catalog(p_value) {
-        this._catalog = p_value;
-        this._importListBrowser.data = p_value;
-        this._UpdateUnicodeImportedValues();
-        if(this._catalog){
-            this.Inspect(this._catalog.At(0));
-        }
-    }
-
-    _OnInspectedDataChanged(p_oldData) {
-        super._OnInspectedDataChanged(p_oldData);
-        if (this._inspectedData) { this._UpdatePreview(); }
     }
 
     _OnDataUpdated(p_data) {
         super._OnDataUpdated(p_data);
-        if (this._inspectedData) { this._UpdatePreview(); }
-        this._UpdateUnicodeImportedValues();
+        this._ComputeCandidates();
     }
 
-    _UpdateUnicodeImportedValues() {
-
-        if (!this._catalog) { return; }
-        let list = this._catalog._items;
-
-        for (let i = 0; i < list.length; i++) {
-            let item = list[i],
-                name = item.GetOption(`name`),
-                parsedUnicode = ``,
-                parseArray = this._FindUnicodeStructure(name);
-
-            item.SetOption(`imported-unicode`, parseArray);
+    _ClearBtns() {
+        for (let i = 0; i < this._btnList.length; i++) {
+            this._btnList[i].Release();
         }
-
     }
 
-    _FindUnicodeStructure(p_string) {
+    _AddLiga(p_liga) {
+        let btn = this.Attach(mkfWidgets.LigaButton, `liga`, this._list);
+        btn.SetLiga(p_liga);
+        this._btnList.push(btn);
+    }
+
+    _ComputeCandidates() {
+
+        this._ClearBtns();
 
         let
-            prefix = this._data.Get(mkfData.IDS.IMPORT_PREFIX),
-            separator = this._data.Get(mkfData.IDS.IMPORT_SEPARATOR);
+            input = this._data.Get(mkfData.IDS_EXT.LIGA_TEXT),
+            min = this._data.Get(mkfData.IDS_EXT.LIGA_MIN),
+            max = this._data.Get(mkfData.IDS_EXT.LIGA_MAX),
+            minOcc = this._data.Get(mkfData.IDS_EXT.LIGA_MIN_OCCURENCE),
+            loopCount = Math.max(Math.max(max, min) - Math.min(max, min), 0)+1,
+            startLength = Math.min(min, max),
+            words = input.split(` `);
 
-        let parseArray = p_string.split(prefix);
-        parseArray = parseArray.length > 1 ? parseArray.pop() : parseArray[0];
-        parseArray = this._GetUnicodeStructure(parseArray.split(separator));
-        return parseArray;
+        this._ligMap = {};
+
+        // First pass : find all candidates.
+
+        for (let w = 0; w < words.length; w++) {
+            let word = words[w];
+            word = word.split(`\n`).join(``);
+            word = word.split(`\r`).join(``);
+            word = word.split(`\t`).join(``);
+            word = word.trim();
+            if (word == ``) { words.splice(w, 1); w--; }
+            words[w] = word;
+        }
+
+        wordloop: for (let w = 0; w < words.length; w++) {
+            let word = words[w];
+            substrloop: for (let i = 0; i < loopCount; i++) {
+                let len = startLength + i,
+                    shifts = word.length - len;
+                if (shifts <= 0) { continue wordloop; }
+                for (let s = 0; s < shifts; s++) {
+                    let segment = word.substr(s, len);
+                    if (segment in this._ligMap) { this._ligMap[segment].count++; }
+                    else { this._ligMap[segment] = { export: false, count: 0, ligature: segment }; }
+                }
+            }
+        }
+
+        let results = [];
+
+        for (let segment in this._ligMap) {
+            let liga = this._ligMap[segment];
+            if (liga.count < minOcc) { continue; }
+            results.push(liga);
+        }
+
+        results.sort((a, b) => { return b.count - a.count; });
+        this._OnResultReady(results);
+
     }
+
+
+    _OnResultReady(p_results) {
+        this._delayedPrintResult.Cancel();
+        this._results = p_results;
+        this._covered = 0;
+        this._PrintNextResults();
+    }
+
+    _PrintNextResults() {
+        let len = this._results.length - this._covered;
+        if (len <= 0) { return; }
+        len = Math.min(len, 5);
+        for (let i = 0; i < len; i++) {
+            this._AddLiga(this._results[this._covered++]);
+        }
+        this._delayedPrintResult.Schedule();
+    }
+
 
     _GetUnicodeStructure(p_array) {
 
@@ -176,24 +204,7 @@ class EditorLigaImport extends nkm.datacontrols.Editor {
         return result;
     }
 
-    _UpdatePreview() {
-
-        let subFamily = this._inspectedData.GetOption(`subFamily`),
-            contextInfos = subFamily._contextInfos,
-            pathData = this._inspectedData.GetOption(`svgStats`),
-            transformedPath = SVGOPS.FitPath(
-                this._data,
-                contextInfos,
-                pathData
-            );
-
-        this._glyphRenderer.contextInfos = contextInfos;
-        this._glyphRenderer.glyphWidth = transformedPath.width;
-        this._glyphRenderer.glyphPath = transformedPath.path;
-        this._glyphRenderer.Draw();
-    }
-
-    _CleanUp(){
+    _CleanUp() {
         this.catalog = null;
         super._CleanUp();
     }

@@ -22,6 +22,11 @@ class IDS_EXT {
     static CASE_INSENSITIVE = 'broadSearch';
     static FILTER_CATEGORY = 'categories';
 
+    static LIGA_TEXT = 'ligaSourceText';
+    static LIGA_MIN = 'ligaMin';
+    static LIGA_MAX = 'ligaMax';
+    static LIGA_MIN_OCCURENCE = 'ligaOccMin';
+
     static RANGE_MIXED = 0;
     static RANGE_INLINE = 1;
     static RANGE_PLAIN = 2;
@@ -63,6 +68,37 @@ class IDS_EXT {
             inputOptions: { placeholder: `...`, size:ui.FLAGS.SIZE_XS },
             desc: `Show only glyphs existing within the font.`
         },
+
+
+        
+        [this.LIGA_TEXT]: {
+            recompute:true,
+            inputType: inputs.Textarea,
+            label: `Broad`,
+            inputOptions: { rows:15 },
+        },
+        [this.LIGA_MIN]: {
+            recompute:true,
+            inputType: inputs.Number,
+            label: `Min length`,
+            inputOptions: { size:ui.FLAGS.SIZE_XS, min:2, max:30 },
+            desc: `The minimum number of siblings to look for.`
+        },
+        [this.LIGA_MAX]: {
+            recompute:true,
+            inputType: inputs.Number,
+            label: `Max length`,
+            inputOptions: { size:ui.FLAGS.SIZE_XS, min:3, max:30 },
+            desc: `The maximum number of siblings to look for.`
+        },
+        [this.LIGA_MIN_OCCURENCE]: {
+            recompute:true,
+            inputType: inputs.Number,
+            label: `Min occurences`,
+            inputOptions: { size:ui.FLAGS.SIZE_XS, min:1 },
+            desc: `Minimum amount of time a ligature candidate must've been found to be shown.`
+        },
+
     }
 
     static GetInfos(p_id) {

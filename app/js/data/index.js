@@ -17,6 +17,7 @@ module.exports = {
 
     TransformSettings: require(`./settings-transforms-data-block`),
     ImportSettings: require(`./settings-import-data-block`),
+    LigaImportSettings: require(`./settings-liga-import-data-block`),
 
     TTF: require(`./ttf-import`),
 

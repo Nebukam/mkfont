@@ -62,6 +62,7 @@ class IDS {
     static PREVIEW_SIZE = 'preview-size';
 
     static OUT_OF_BOUNDS = 'out-of-bounds';
+    static EMPTY = 'empty';
     static EXPORT_GLYPH = 'export-glyph';
 
     // Import properties
@@ -422,6 +423,10 @@ class IDS {
         [this.OUT_OF_BOUNDS]: {
             label: `Out-of-bounds`,
             desc: `Separator character in filenames.\nUsed to separate unicode values\ni.e char_U+0000, char_U+0000_U+0000, char_l_i_g_a`
+        },
+        [this.EMPTY]: {
+            label: `Empty`,
+            desc: ``
         },
 
         

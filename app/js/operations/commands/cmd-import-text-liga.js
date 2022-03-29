@@ -18,6 +18,7 @@ class CmdImportTextLiga extends actions.Command {
 
         super._Init();
 
+        this._Bind(this._OnImportContinueAll);
         this._Bind(this._OnImportContinue);
 
         this._importEditor = null;
@@ -30,21 +31,28 @@ class CmdImportTextLiga extends actions.Command {
     _InternalExecute() {
 
         if (!this._importEditor) {
-            this._importEditor = nkm.ui.UI.Rent(`mkfont-list-import-editor`);
+            this._importEditor = nkm.ui.UI.Rent(`mkfont-liga-import-editor`);
         }
+
+        this._importEditor.data = this._context;
 
         nkm.dialog.Push({
             title: `Ligatures finder`,
             //message: `Tweak the imported data to make sure it fits!`,
             content: [{ cl: this._importEditor, donotrelease: true }],
             actions: [
-                { label: `Import`, icon:`load-arrow-small`, flavor: nkm.com.FLAGS.LOADING, trigger: { fn: this._OnImportContinue } }, //variant: nkm.ui.FLAGS.FRAME
+                { label: `Create all`, icon:`load-arrow-small`, flavor: nkm.com.FLAGS.LOADING, trigger: { fn: this._OnImportContinueAll } }, //variant: nkm.ui.FLAGS.FRAME
+                { label: `Create selected`, icon:`load-arrow-small`, flavor: nkm.com.FLAGS.LOADING, variant:nkm.ui.FLAGS.FRAME, trigger: { fn: this._OnImportContinue } }, //variant: nkm.ui.FLAGS.FRAME
                 { label: `Cancel`, trigger: { fn: this._Cancel, thisArg: this } }
             ],
             icon: `font-liga`,
             grow: true,
             origin: this,
         });
+
+    }
+
+    _OnImportContinueAll(){
 
     }
 

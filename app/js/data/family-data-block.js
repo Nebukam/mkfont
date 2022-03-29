@@ -15,6 +15,7 @@ const GlyphVariant = require(`./glyph-variant-data-block`);
 const GlyphVariantMissing = require(`./glyph-missing-data-block`);
 const ImportSettings = require(`./settings-import-data-block`);
 const SearchSettings = require(`./settings-search-data-block`);
+const LigaImportSettings = require(`./settings-liga-import-data-block`);
 
 const ContentUpdater = require(`../content-updater`);
 
@@ -80,6 +81,10 @@ class FamilyDataBlock extends SimpleDataEx {
         this._missingGlyph.defaultGlyph.Set(IDS.PATH_DATA, SVGOPS.EmptySVGStats());
 
         this._selectedSubFamily = this._defaultSubFamily;
+
+        //
+
+        this._ligaSettings = nkm.com.Rent(LigaImportSettings);
 
     }
 

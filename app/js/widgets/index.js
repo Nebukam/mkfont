@@ -12,4 +12,5 @@ module.exports = {
     ControlHeader: require(`./control-header`),
     InspectorHeader: require(`./inspector-header`),
     SearchStatus: require(`./search-status`),
+    LigaButton: require(`./liga-button`),
 }
