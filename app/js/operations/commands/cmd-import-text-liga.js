@@ -41,8 +41,8 @@ class CmdImportTextLiga extends actions.Command {
             //message: `Tweak the imported data to make sure it fits!`,
             content: [{ cl: this._importEditor, donotrelease: true }],
             actions: [
-                { label: `Create all`, icon:`load-arrow-small`, flavor: nkm.com.FLAGS.LOADING, trigger: { fn: this._OnImportContinueAll } }, //variant: nkm.ui.FLAGS.FRAME
-                { label: `Create selected`, icon:`load-arrow-small`, flavor: nkm.com.FLAGS.LOADING, variant:nkm.ui.FLAGS.FRAME, trigger: { fn: this._OnImportContinue } }, //variant: nkm.ui.FLAGS.FRAME
+                { label: `Create all`, icon: `load-arrow-small`, flavor: nkm.com.FLAGS.LOADING, trigger: { fn: this._OnImportContinueAll } }, //variant: nkm.ui.FLAGS.FRAME
+                { label: `Create selected`, icon: `load-arrow-small`, flavor: nkm.com.FLAGS.LOADING, variant: nkm.ui.FLAGS.FRAME, trigger: { fn: this._OnImportContinue } }, //variant: nkm.ui.FLAGS.FRAME
                 { label: `Cancel`, trigger: { fn: this._Cancel, thisArg: this } }
             ],
             icon: `font-liga`,
@@ -52,22 +52,48 @@ class CmdImportTextLiga extends actions.Command {
 
     }
 
-    _OnImportContinueAll(){
-
+    _OnImportContinueAll() {
+        this._ProcessResults(this._importEditor._results);
     }
 
     _OnImportContinue() {
+        let filteredResults = [];
+        for (let i = 0; i < this._importEditor._results.length; i++) {
+            let liga = this._importEditor._results[i];
+            if (liga.export) { filteredResults.push(liga); }
+        }
+        this._ProcessResults(filteredResults);
+    }
 
-        //Go through the catalog
+    _ProcessResults(p_results) {
 
         let
             editor = this._emitter.editor,
-            family = editor.data,
-            list = this._importCatalog._items,
-            trValues = this._importTransformationSettings.Values();
+            family = this._context;
 
-        editor.StartActionGroup({ title: `Create ligatures` });
+        editor.StartActionGroup({ title: `Import SVGs` });
 
+        for (let i = 0; i < p_results.length; i++) {
+            let liga = p_results[i],
+                uniStruct = [];
+
+            for (let c = 0; c < liga.ligature.length; c++) {
+                uniStruct.push(UNICODE.GetAddress(liga.ligature.substr(c, 1)));
+            }
+
+            let
+                unicodeInfos = UNICODE.GetInfos(uniStruct, true),
+                existingGlyph = family.GetGlyph(unicodeInfos.u);
+
+            if (existingGlyph.isNull) {
+                editor.Do(mkfActions.CreateGlyph, {
+                    family: family,
+                    unicode: unicodeInfos,
+                    path: SVGOPS.EmptySVGStats(),
+                });
+            }
+
+        }
 
         editor.EndActionGroup();
 
@@ -79,7 +105,7 @@ class CmdImportTextLiga extends actions.Command {
     }
 
     _End() {
-        if(this._importEditor){ this._importEditor.catalog = null; }
+        if (this._importEditor) { this._importEditor.catalog = null; }
         super._End();
     }
 

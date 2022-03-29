@@ -63,16 +63,21 @@ class LigaButton extends ui.WidgetButton {
         this._liga = p_liga;
         this._title.Set(p_liga.ligature, true);
         this._count.label = `×${p_liga.count}`;
+        this.ToggleLiga(p_liga.export);
     }
 
     Activate(p_evt){
         if(!super.Activate(p_evt)){return false;}
+        this.ToggleLiga();
+        return false;
+    }
 
-        this._liga.export = !this._liga.export;
+    ToggleLiga(p_bool = null){
+        this._liga.export = p_bool != null ? p_bool : !this._liga.export;
         this.Toggle(this._liga.export);
         this._checkBox.Set(`checkbox-${this._liga.export ? 'on' : 'off'}`);
 
-        return false;
+        nkm.datacontrols.FindEditor(this).ToggleLiga(this._liga);
     }
 
 }

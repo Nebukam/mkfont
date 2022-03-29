@@ -170,9 +170,9 @@ class GlyphSlot extends nkm.datacontrols.ControlWidget {
             colCat = `var(--col-error)`;
         }else if (unicodeCharacter.length > 1) {
             colCat = `var(--col-ligature)`;
-        } else {
-            if (`cat` in p_value) { colCat = `var(--col-${p_value.cat.col})`; }
         }
+
+        if (`cat` in p_value) { colCat = `var(--col-${p_value.cat.col})`; }
 
         if (colCat) { this.style.setProperty(`--col-cat`, colCat); }
         else { this.style.removeProperty(`--col-cat`); }

@@ -103,7 +103,7 @@ class MKFont extends nkm.app.AppBase {
         //mkfOperations.commands.MakeTTFFont.Enable();
         //nkm.actions.KeystrokeEx.CreateFromString(`Ctrl E`, { fn: this._Bind(this._WriteTTF) }).Enable();
 
-        this._EmptyFamily();
+        //this._EmptyFamily();
         //this._FamilyFromTTF();
 
     }

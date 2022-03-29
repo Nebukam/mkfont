@@ -22,7 +22,6 @@ class EditorLigaImport extends nkm.datacontrols.Editor {
         this.forwardData.To(this._builder);
 
         this._dataPreProcessor = (p_owner, p_data) => {
-            console.log(p_data);
             if (nkm.utils.isInstanceOf(p_data, mkfData.Glyph)) { return p_data.family._ligaSettings; }
             if (nkm.utils.isInstanceOf(p_data, mkfData.GlyphVariant)) { return p_data.glyph.family._ligaSettings; }
             if (nkm.utils.isInstanceOf(p_data, mkfData.SubFamily)) { return p_data.family._ligaSettings; }
@@ -31,7 +30,8 @@ class EditorLigaImport extends nkm.datacontrols.Editor {
         };
 
         this._btnList = [];
-        this._ligMap = {};
+        this._ligaMap = {};
+        this._cached = new Set();
 
         this._delayedPrintResult = nkm.com.DelayedCall(this._Bind(this._PrintNextResults));
 
@@ -64,6 +64,9 @@ class EditorLigaImport extends nkm.datacontrols.Editor {
             },
             '.liga': {
                 'margin': `4px`
+            },
+            '.msg':{
+                '@':[`absolute-centered`]
             }
         }, super._Style());
     }
@@ -87,6 +90,14 @@ class EditorLigaImport extends nkm.datacontrols.Editor {
 
         this._list = ui.El(`div`, { class: `list` }, this);
 
+        this._msgLabel = new ui.manipulators.Text(ui.dom.El(`div`, {class:`msg label`}, this._list));
+        this._msgLabel.Set(``);
+
+    }
+
+    _OnDataChanged(p_oldData) {
+        super._OnDataChanged(p_oldData);
+        this._cached.clear();
     }
 
     _OnDataUpdated(p_data) {
@@ -114,22 +125,49 @@ class EditorLigaImport extends nkm.datacontrols.Editor {
             input = this._data.Get(mkfData.IDS_EXT.LIGA_TEXT),
             min = this._data.Get(mkfData.IDS_EXT.LIGA_MIN),
             max = this._data.Get(mkfData.IDS_EXT.LIGA_MAX),
+            realMin = Math.min(max, min),
             minOcc = this._data.Get(mkfData.IDS_EXT.LIGA_MIN_OCCURENCE),
-            loopCount = Math.max(Math.max(max, min) - Math.min(max, min), 0)+1,
-            startLength = Math.min(min, max),
+            loopCount = Math.max(Math.max(max, min) - realMin, 0) + 1,
+            startLength = realMin,
             words = input.split(` `);
 
-        this._ligMap = {};
+
+        this._ligaMap = {};
+
+        
+        if(input == ``){
+            this._msgLabel.Set(`Add some text to analyze!`);
+            return;
+        }else{
+            this._msgLabel.Set(``);
+        }
 
         // First pass : find all candidates.
 
         for (let w = 0; w < words.length; w++) {
-            let word = words[w];
-            word = word.split(`\n`).join(``);
-            word = word.split(`\r`).join(``);
-            word = word.split(`\t`).join(``);
+            try { words.push(...words.split(`\n`)); } catch (e) { }
+            try { words.push(...words.split(`\n`)); } catch (e) { }
+        }
+
+        for (let w = 0; w < words.length; w++) {
+            let word = words[w], cuts = 0;
+
+            cuts += this._PushSplit(words, word, `\n`);
+            cuts += this._PushSplit(words, word, `\r`);
+            cuts += this._PushSplit(words, word, `\t`);
+
             word = word.trim();
-            if (word == ``) { words.splice(w, 1); w--; }
+
+            if (word == `` || word.length < realMin) {
+                cuts++;
+            }
+
+            if (cuts > 0) {
+                words.splice(w, 1);
+                w--;
+                continue;
+            }
+
             words[w] = word;
         }
 
@@ -141,25 +179,47 @@ class EditorLigaImport extends nkm.datacontrols.Editor {
                 if (shifts <= 0) { continue wordloop; }
                 for (let s = 0; s < shifts; s++) {
                     let segment = word.substr(s, len);
-                    if (segment in this._ligMap) { this._ligMap[segment].count++; }
-                    else { this._ligMap[segment] = { export: false, count: 0, ligature: segment }; }
+                    if (segment in this._ligaMap) { this._ligaMap[segment].count++; }
+                    else { this._ligaMap[segment] = { export: (this._cached.has(segment) ? true : false), count: 0, ligature: segment }; }
                 }
             }
         }
 
         let results = [];
 
-        for (let segment in this._ligMap) {
-            let liga = this._ligMap[segment];
+        for (let segment in this._ligaMap) {
+            let liga = this._ligaMap[segment];
             if (liga.count < minOcc) { continue; }
             results.push(liga);
         }
 
         results.sort((a, b) => { return b.count - a.count; });
+
+        if(results.length == 0){
+            this._msgLabel.Set(`Current settings yield no results.`);
+        }
+
         this._OnResultReady(results);
 
     }
 
+    _PushSplit(p_words, p_word, p_split) {
+        let split = p_word.split(p_split);
+
+        if (split.length > 1) {
+            p_words.push(...split);
+            return 1;
+        } else {
+            return 0;
+        }
+
+    }
+
+    ToggleLiga(p_liga) {
+        if (p_liga.export) { this._cached.add(p_liga.ligature); }
+        else { this._cached.delete(p_liga.ligature); }
+
+    }
 
     _OnResultReady(p_results) {
         this._delayedPrintResult.Cancel();

@@ -231,7 +231,7 @@ class FontEditor extends nkm.uiworkspace.editors.EditorEx {
         this.SetActiveRange(UNICODE.instance._blockCatalog.At(0));
 
         
-        mkfOperations.commands.ImportTextLiga.Execute(this._data);
+        //mkfOperations.commands.ImportTextLiga.Execute(this._data);
 
     }
 
