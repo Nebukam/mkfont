@@ -10,13 +10,36 @@ const svg2ttf = require('svg2ttf');
 const svgpath = require('svgpath');
 
 const domparser = new DOMParser();
+/*
 const svgopts = {
     multipass: true,
     plugins: [
-        `preset-default`,
-        `convertPathData`,
+        //`preset-default`,
+        //`convertPathData`,
         { name: `convertShapeToPath`, params: { convertArcs: true } },
         { name: `convertPathData`, params: { applyTransforms: true } }
+    ]
+};
+*/
+
+const svgopts = {
+    multipass: true,
+    plugins: [
+        {
+            name: `convertShapeToPath`, params: {
+                convertArcs: true
+            }
+        },
+        {
+            name: `convertPathData`, params: {
+                applyTransforms: true,
+                straightCurves: false,
+                lineShorthands: false,
+                curveSmoothShorthands: false,
+                collapseRepeated: false,
+                noSpaceAfterFlags: false
+            }
+        }
     ]
 };
 
@@ -114,9 +137,11 @@ class SVGOperations {
 
         try {
 
-            //let svg = domparser.parseFromString(optimize(p_input, svgopts).data, `image/svg+xml`).getElementsByTagName(`svg`)[0];
+            let svg = domparser.parseFromString(optimize(p_input, svgopts).data, `image/svg+xml`).getElementsByTagName(`svg`)[0];
 
-            let svg = domparser.parseFromString(p_input, `image/svg+xml`).getElementsByTagName(`svg`)[0];
+            //let svg = domparser.parseFromString(p_input, `image/svg+xml`).getElementsByTagName(`svg`)[0];
+            //console.log(optimize(p_input, svgopts).data, svg);
+
 
             let
                 paths = svg.getElementsByTagName(`path`),
@@ -175,6 +200,7 @@ class SVGOperations {
 
                     result.path = mergedPaths;
                     result.BBox = this.GetBBox(mergedPaths);
+
 
                 } else {
 
@@ -247,7 +273,7 @@ class SVGOperations {
 
         if (!foundRef && inlineStyle) {
             let lwrc = inlineStyle.toLowerCase();
-            if (lwrc.includes(A) || lwrc.includes(B)) { foundRef = true; }
+            if (lwrc.includes(A) || lwrc.includes(B) || lwrc.includes(C)) { foundRef = true; }
             /*
             let inlineObj = css.Rules(inlineStyle);
             for (let c in inlineObj) {
@@ -257,10 +283,12 @@ class SVGOperations {
             */
         }
 
-        if (!foundRef && (fillStyle == A || fillStyle == B)) { foundRef = true; }
-        if (!foundRef && (strokeStyle == A || strokeStyle == B)) { foundRef = true; }
+        if (!foundRef && (fillStyle == A || fillStyle == B || fillStyle == C)) { foundRef = true; }
+        if (!foundRef && (strokeStyle == A || strokeStyle == B || strokeStyle == C)) { foundRef = true; }
 
-        if (foundRef) { return p_path.getBBox(); }
+        if (foundRef) {
+            return this.GetBBox(p_path.getAttribute(`d`));
+        }
 
         return false;
 
