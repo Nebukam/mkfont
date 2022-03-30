@@ -104,6 +104,7 @@ class EditorListImport extends nkm.datacontrols.Editor {
         this._glyphRenderer.options = {
             drawGuides: true,
             drawLabels: true,
+            drawBBox: true,
             centered: false,
         };
 
@@ -200,6 +201,7 @@ class EditorListImport extends nkm.datacontrols.Editor {
         this._glyphRenderer.contextInfos = contextInfos;
         this._glyphRenderer.glyphWidth = transformedPath.width;
         this._glyphRenderer.glyphPath = transformedPath.path;
+        this._glyphRenderer.computedPath = transformedPath;
         this._glyphRenderer.Draw();
     }
 

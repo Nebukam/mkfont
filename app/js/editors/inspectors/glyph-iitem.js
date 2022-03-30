@@ -114,6 +114,7 @@ class GlyphVariantInspectorItem extends nkm.datacontrols.ControlWidget {
         this._glyphRenderer.options = {
             drawGuides: true,
             drawLabels: true,
+            drawBBox:true,
             centered: false,
         };
 

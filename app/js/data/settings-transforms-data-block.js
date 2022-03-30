@@ -71,6 +71,8 @@ class TransformSettingsDataBlock extends SimpleDataEx {
             w = this._glyphVariantOwner.Resolve([IDS.WIDTH]);
         }
 
+        this._glyphVariantOwner._computedPath = path;
+
         this._glyphVariantOwner.BatchSet({
             [IDS.WIDTH]: w,
             [IDS.PATH]: path.path,

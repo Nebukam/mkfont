@@ -19,6 +19,7 @@ class GlyphCanvasRenderer extends ui.helpers.Canvas {
 
         this._zoom = 1;
         this._glyphPath = new Path2D();
+        this._computedPath = null;
 
         this._contextInfos = null;
         this._drawGuides = false;
@@ -26,6 +27,7 @@ class GlyphCanvasRenderer extends ui.helpers.Canvas {
         this._centered = true;
         this._drawHorAxis = false;
         this._drawVerAxis = false;
+        this._drawBBox = false;
 
         this._distribute = new nkm.com.helpers.OptionsDistribute();
         this._distribute
@@ -33,6 +35,7 @@ class GlyphCanvasRenderer extends ui.helpers.Canvas {
             .To(`drawLabels`)
             .To(`drawHorAxis`)
             .To(`drawVerAxis`)
+            .To(`drawBBox`)
             .To(`centered`);
 
     }
@@ -54,6 +57,9 @@ class GlyphCanvasRenderer extends ui.helpers.Canvas {
 
     get drawVerAxis() { return this._drawVerAxis; }
     set drawVerAxis(p_value) { this._drawVerAxis = p_value; }
+
+    get drawBBox() { return this._drawBBox; }
+    set drawBBox(p_value) { this._drawBBox = p_value; }
 
     get centered() { return this._centered; }
     set centered(p_value) { this._centered = p_value; }
@@ -77,6 +83,9 @@ class GlyphCanvasRenderer extends ui.helpers.Canvas {
         this._delayedRedraw.Schedule();
     }
 
+    set computedPath(p_value){
+        this._computedPath = p_value;
+    }
 
     Set(p_glyphVariant) {
 
@@ -84,6 +93,7 @@ class GlyphCanvasRenderer extends ui.helpers.Canvas {
             p_glyphVariant.glyph.isNull) {
             this.Clear();
             this.contextInfos = null;
+            this.computedPath = null;
             this.glyphPath = null;
             return false;
         }
@@ -91,6 +101,7 @@ class GlyphCanvasRenderer extends ui.helpers.Canvas {
         this.contextInfos = p_glyphVariant.subFamily._contextInfos;
         this.glyphWidth = p_glyphVariant.Resolve(IDS.WIDTH);
         this.glyphPath = p_glyphVariant.Get(IDS.PATH);
+        this.computedPath = p_glyphVariant._computedPath;
 
         this.Draw();
 
@@ -126,6 +137,38 @@ class GlyphCanvasRenderer extends ui.helpers.Canvas {
         let col = nkm.style.Get(`--glyph-color`);
         ctx.fillStyle = col;
         ctx.fill(this._glyphPath);
+
+        if (this._drawBBox && this._computedPath) {
+            let fit = this._computedPath.fit, off = 10 * iscale, offw = off * 2;
+            ctx.strokeStyle = nkm.style.Get(`--col-infos`);
+            ctx.lineWidth = iscale;
+
+            ctx.beginPath();
+            ctx.moveTo(0, fit.y + fit.height * 0.5); ctx.lineTo(fit.x, fit.y + fit.height * 0.5);
+            ctx.moveTo(fit.x + fit.width, fit.y + fit.height * 0.5); ctx.lineTo(this._glyphWidth, fit.y + fit.height * 0.5);
+            ctx.stroke();
+
+            ctx.beginPath();
+            ctx.rect(fit.x - off, fit.y - off, offw, offw);
+            ctx.rect(fit.x + fit.width - off, fit.y - off, offw, offw);
+            ctx.rect(fit.x - off, fit.y + fit.height - off, offw, offw);
+            ctx.rect(fit.x + fit.width - off, fit.y + fit.height - off, offw, offw);
+            ctx.save();
+            ctx.clip();
+            ctx.beginPath();
+            ctx.rect(fit.x, fit.y, fit.width, fit.height);
+            ctx.stroke();
+            ctx.restore();
+            ctx.strokeStyle = `rgb(${nkm.style.Get(`--col-infos-rgb`)},0.25)`;
+            ctx.beginPath();
+            ctx.rect(fit.x, fit.y, fit.width, fit.height);
+            ctx.moveTo(fit.x, fit.y); ctx.lineTo(fit.x + fit.width, fit.y + fit.height);
+            ctx.moveTo(fit.x + fit.width, fit.y); ctx.lineTo(fit.x, fit.y + fit.height);
+            ctx.stroke();
+
+
+
+        }
 
         if (this._drawGuides) {
 

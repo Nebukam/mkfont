@@ -352,16 +352,18 @@ class SVGOperations {
             widthRef = p_svgStats.width,
             wOff = p_settings.Get(IDS.TR_WIDTH_PUSH),
             offsetY = 0,
-            offsetX = 0;
+            offsetX = 0,
+            fitH = heightRef,
+            fitW = widthRef;
 
         if (refMode == ENUMS.BOUNDS_INSIDE) {
-            heightRef = bbox.height;
-            widthRef = bbox.width;
+            fitH = heightRef = bbox.height;
+            fitW = widthRef = bbox.width;
             path = svgpath(path)
                 .translate(-bbox.x, -bbox.y)
                 .toString();
         } else if (refMode == ENUMS.BOUNDS_MIXED) {
-            widthRef = bbox.width;
+            fitW = widthRef = bbox.width;
             path = svgpath(path)
                 .translate(-bbox.x, 0)
                 .toString();
@@ -396,6 +398,7 @@ class SVGOperations {
         }
 
         heightRef *= scale; widthRef *= scale;
+        fitH *= scale; fitW *= scale;
 
         // V align
 
@@ -413,11 +416,9 @@ class SVGOperations {
             case ENUMS.VALIGN_ASCENDER:
                 offsetY = p_context.bsl - heightRef - p_context.asc;
                 break;
-            /*
-        case ENUMS.VALIGN_EM:
-            offsetY = p_context.em - heightRef;
-            break;
-            */
+            case ENUMS.VALIGN_EM:
+                offsetY = p_context.em - heightRef;
+                break;
         }
 
         switch (p_settings.Get(IDS.TR_VER_ALIGN_ANCHOR)) {
@@ -481,6 +482,7 @@ class SVGOperations {
         return {
             height: Math.max(heightRef, 0),
             width: Math.max(widthRef, 0),
+            fit: { width: fitW, height: fitH, x: offsetX, y: offsetY },
             path: path,
             bbox: this.GetBBox(path)
         };
