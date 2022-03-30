@@ -83,7 +83,7 @@ class GlyphCanvasRenderer extends ui.helpers.Canvas {
         this._delayedRedraw.Schedule();
     }
 
-    set computedPath(p_value){
+    set computedPath(p_value) {
         this._computedPath = p_value;
     }
 
@@ -139,35 +139,36 @@ class GlyphCanvasRenderer extends ui.helpers.Canvas {
         ctx.fill(this._glyphPath);
 
         if (this._drawBBox && this._computedPath) {
-            let fit = this._computedPath.fit, off = 10 * iscale, offw = off * 2;
-            ctx.strokeStyle = nkm.style.Get(`--col-infos`);
-            ctx.lineWidth = iscale;
+            if (this._computedPath.fit) {
 
-            ctx.beginPath();
-            ctx.moveTo(0, fit.y + fit.height * 0.5); ctx.lineTo(fit.x, fit.y + fit.height * 0.5);
-            ctx.moveTo(fit.x + fit.width, fit.y + fit.height * 0.5); ctx.lineTo(this._glyphWidth, fit.y + fit.height * 0.5);
-            ctx.stroke();
+                let fit = this._computedPath.fit, off = 10 * iscale, offw = off * 2;
+                ctx.strokeStyle = nkm.style.Get(`--col-infos`);
+                ctx.lineWidth = iscale;
 
-            ctx.beginPath();
-            ctx.rect(fit.x - off, fit.y - off, offw, offw);
-            ctx.rect(fit.x + fit.width - off, fit.y - off, offw, offw);
-            ctx.rect(fit.x - off, fit.y + fit.height - off, offw, offw);
-            ctx.rect(fit.x + fit.width - off, fit.y + fit.height - off, offw, offw);
-            ctx.save();
-            ctx.clip();
-            ctx.beginPath();
-            ctx.rect(fit.x, fit.y, fit.width, fit.height);
-            ctx.stroke();
-            ctx.restore();
-            ctx.strokeStyle = `rgb(${nkm.style.Get(`--col-infos-rgb`)},0.25)`;
-            ctx.beginPath();
-            ctx.rect(fit.x, fit.y, fit.width, fit.height);
-            ctx.moveTo(fit.x, fit.y); ctx.lineTo(fit.x + fit.width, fit.y + fit.height);
-            ctx.moveTo(fit.x + fit.width, fit.y); ctx.lineTo(fit.x, fit.y + fit.height);
-            ctx.stroke();
+                ctx.beginPath();
+                ctx.moveTo(0, fit.y + fit.height * 0.5); ctx.lineTo(fit.x, fit.y + fit.height * 0.5);
+                ctx.moveTo(fit.x + fit.width, fit.y + fit.height * 0.5); ctx.lineTo(this._glyphWidth, fit.y + fit.height * 0.5);
+                ctx.stroke();
 
-
-
+                ctx.beginPath();
+                ctx.rect(fit.x - off, fit.y - off, offw, offw);
+                ctx.rect(fit.x + fit.width - off, fit.y - off, offw, offw);
+                ctx.rect(fit.x - off, fit.y + fit.height - off, offw, offw);
+                ctx.rect(fit.x + fit.width - off, fit.y + fit.height - off, offw, offw);
+                ctx.save();
+                ctx.clip();
+                ctx.beginPath();
+                ctx.rect(fit.x, fit.y, fit.width, fit.height);
+                ctx.stroke();
+                ctx.restore();
+                ctx.strokeStyle = `rgb(${nkm.style.Get(`--col-infos-rgb`)},0.25)`;
+                ctx.beginPath();
+                ctx.rect(fit.x, fit.y, fit.width, fit.height);
+                ctx.moveTo(fit.x, fit.y); ctx.lineTo(fit.x + fit.width, fit.y + fit.height);
+                ctx.moveTo(fit.x + fit.width, fit.y); ctx.lineTo(fit.x, fit.y + fit.height);
+                ctx.stroke();
+                
+            }
         }
 
         if (this._drawGuides) {

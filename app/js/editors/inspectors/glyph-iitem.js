@@ -11,15 +11,21 @@ const mkfWidgets = require(`../../widgets`);
 const mkfOperations = require(`../../operations`);
 
 const TransformSettingsInspector = require(`./tr-settings-inspector`);
+const SIGNAL = require("../../signal");
 
 const __nullGlyph = `null-glyph`;
+
+const shouldHideWIDTH = (owner) => {
+    if (!owner.data) { return true; }
+    return owner.data.Get(mkfData.IDS.TR_HOR_ALIGN) != mkfData.ENUMS.HALIGN_XMIN;
+};
 
 class GlyphVariantInspectorItem extends nkm.datacontrols.ControlWidget {
     constructor() { super(); }
 
     static __controls = [
         { cl: mkfWidgets.ControlHeader, options: { label: `Metrics` } },
-        { options: { propertyId: mkfData.IDS.WIDTH } },//, css:'helf'
+        { options: { propertyId: mkfData.IDS.WIDTH }, hideWhen: { fn: shouldHideWIDTH } },//, css:'helf'
         { options: { propertyId: mkfData.IDS.HEIGHT } },//, css:'helf'
         //{ cl: mkfWidgets.ControlHeader, options: { label: `Metadata` } },
         //{ options: { propertyId: mkfData.IDS.GLYPH_NAME } },//, css:'separator' 
@@ -35,6 +41,8 @@ class GlyphVariantInspectorItem extends nkm.datacontrols.ControlWidget {
 
         this._flags.Add(this, __nullGlyph);
 
+        this._dataObserver.Hook(SIGNAL.VARIANT_UPDATED, () => { this._OnDataUpdate(this._data); }, this);
+
     }
 
     _OnPaintChange() {
@@ -42,7 +50,7 @@ class GlyphVariantInspectorItem extends nkm.datacontrols.ControlWidget {
         if (this._isPainted) {
 
         } else {
-            
+
         }
     }
 
@@ -96,8 +104,8 @@ class GlyphVariantInspectorItem extends nkm.datacontrols.ControlWidget {
                 'font-family': 'monospace',
                 'line-height': '100%'
             },
-            '.oob':{
-                '@':['absolute-centered']
+            '.infoTag': {
+                '@': ['absolute-centered']
             }
         }, super._Style());
     }
@@ -114,7 +122,7 @@ class GlyphVariantInspectorItem extends nkm.datacontrols.ControlWidget {
         this._glyphRenderer.options = {
             drawGuides: true,
             drawLabels: true,
-            drawBBox:true,
+            drawBBox: true,
             centered: false,
         };
 
@@ -191,13 +199,21 @@ class GlyphVariantInspectorItem extends nkm.datacontrols.ControlWidget {
 
         this._builder.host = ui.El(`div`, { class: `settings` }, this._host);
 
-        this._oobTag = this.Attach(uilib.widgets.Tag, `oob`, this._previewBox);
+        this._oobTag = this.Attach(uilib.widgets.Tag, `infoTag`, this._previewBox);
         this._oobTag.options = {
-            label:`out of bounds`,
-            flavor:nkm.com.FLAGS.ERROR,
-            htitle:`The glyph is out of bounds and won't be added to the font.\nKeep it within -32000..32000`
+            label: `out of bounds`,
+            flavor: nkm.com.FLAGS.ERROR,
+            htitle: `The glyph is out of bounds and won't be added to the font.\nKeep it within -32000..32000`
         };
         this._oobTag.visible = false;
+
+        this._emptyTag = this.Attach(uilib.widgets.Tag, `infoTag`, this._previewBox);
+        this._emptyTag.options = {
+            label: `empty`,
+            bgColor: nkm.style.Get(`--col-warning-dark`),
+            htitle: `This glyph is void.`
+        };
+        this._emptyTag.visible = false;
 
         super._Render();
 
@@ -230,7 +246,7 @@ class GlyphVariantInspectorItem extends nkm.datacontrols.ControlWidget {
             this._flags.Set(__nullGlyph, isNullGlyph);
             this._writeToClipboardBtn.disabled = isNullGlyph;
             //this._editInPlaceBtn.disabled = isNullGlyph;
-            this._deleteGlyphBtn.disabled = isNullGlyph;            
+            this._deleteGlyphBtn.disabled = isNullGlyph;
         }
     }
 
@@ -239,6 +255,7 @@ class GlyphVariantInspectorItem extends nkm.datacontrols.ControlWidget {
         this._glyphRenderer.Set(p_data);
         this.glyphInfos = p_data.glyph.unicodeInfos;
         this._oobTag.visible = p_data.Get(mkfData.IDS.OUT_OF_BOUNDS);
+        this._emptyTag.visible = p_data.Get(mkfData.IDS.EMPTY);
     }
 
 

@@ -66,9 +66,12 @@ class CmdImportExternalFileMultiple extends actions.Command {
         let subFamily = this._context.selectedSubFamily;
         this._importCatalog.Clear();
 
+        this._PreprocessFileList(list);
+
+
         for (let i = 0; i < list.length; i++) {
 
-            let filePath = nkm.utils.PATH.Sanitize(list[i]);
+            let filePath = list[i];
 
             try {
 
@@ -177,6 +180,46 @@ class CmdImportExternalFileMultiple extends actions.Command {
         editor.EndActionGroup();
 
         this._Success();
+    }
+
+    _PreprocessFileList(p_list) {
+
+        let names = {};
+
+        for (let i = 0; i < p_list.length; i++) {
+            let
+                filePath = nkm.utils.PATH.Sanitize(p_list[i]),
+                filename = nkm.utils.PATH.name(filePath);
+
+            p_list[i] = filePath;
+
+            for (let c = 0; c < filename.length; c++) {
+                if (c < 1) { continue; }
+                let n = filename.substr(0, c);
+                if (n in names) {
+                    names[n].count++;
+                } else {
+                    names[n] = { name: n, count: 1 };
+                }
+            }
+        }
+
+        let maxCount = 0;
+        let foundName = ``;
+
+        for(var n in names){
+            let nin = names[n];
+            if(nin.count == p_list.length){
+                if(nin.name.length > maxCount){
+                    foundName = nin.name;
+                }
+            }
+        }
+
+        if(foundName.length > 0){
+            this._importTransformationSettings.Set(mkfData.IDS.IMPORT_PREFIX, foundName);
+        }
+
     }
 
     _OnImportCancel() {

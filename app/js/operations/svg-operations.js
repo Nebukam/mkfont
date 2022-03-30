@@ -114,8 +114,9 @@ class SVGOperations {
 
         try {
 
-            let svg = domparser.parseFromString(
-                optimize(p_input, svgopts).data, `image/svg+xml`).getElementsByTagName(`svg`)[0];
+            //let svg = domparser.parseFromString(optimize(p_input, svgopts).data, `image/svg+xml`).getElementsByTagName(`svg`)[0];
+
+            let svg = domparser.parseFromString(p_input, `image/svg+xml`).getElementsByTagName(`svg`)[0];
 
             let
                 paths = svg.getElementsByTagName(`path`),
@@ -227,6 +228,7 @@ class SVGOperations {
         let
             A = `#${p_markCol}`,
             B = p_markCol.length == 6 ? `#${p_markCol[0]}${p_markCol[2]}${p_markCol[4]}` : A,
+            C = `#b9529f`, //CMYK magenta -_-
             inlineStyle = p_path.getAttribute(`style`),
             classStyle = `.${p_path.getAttribute(`class`)}`,
             fillStyle = p_path.getAttribute(`fill`),
@@ -236,7 +238,7 @@ class SVGOperations {
         if (classStyle && classStyle in p_style) {
             for (let c in p_style[classStyle]) {
                 let refValue = p_style[classStyle][c];
-                if (refValue == A || refValue == B) {
+                if (refValue == A || refValue == B || refValue == C) {
                     foundRef = true;
                     break;
                 }
