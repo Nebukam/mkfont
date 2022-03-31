@@ -66,7 +66,7 @@ class EditorLigaImport extends nkm.datacontrols.Editor {
                 'margin': `4px`
             },
             '.msg':{
-                '@':[`absolute-centered`]
+                '@':[`absolute-center`]
             }
         }, super._Style());
     }

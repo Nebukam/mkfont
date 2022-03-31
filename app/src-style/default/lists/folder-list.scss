@@ -9,9 +9,7 @@
 @import './folder-list-item';
 
 :host{
-    padding: 0;
-    margin: 0;
-    --half-indent: calc(var(#{$varname_tree_indent}) / 2);
+    
 }
 
 :host(#{$FOCUSED}) {
@@ -29,15 +27,10 @@
 
 .header{
 
-    box-sizing: border-box;
-
     display: flex;
     flex-flow: row nowrap;
     justify-content: flex-start;    
     align-items: center;
-
-    height: var(#{$varname_tree_size});    
-    padding-left: var(--indent);
     
 }
 

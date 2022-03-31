@@ -105,7 +105,7 @@ class GlyphVariantInspectorItem extends nkm.datacontrols.ControlWidget {
                 'line-height': '100%'
             },
             '.infoTag': {
-                '@': ['absolute-centered']
+                '@': ['absolute-center']
             }
         }, super._Style());
     }

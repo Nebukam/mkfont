@@ -8,7 +8,7 @@
 
 :host{
 
-    box-sizing: border-box;
+    
 
     display: flex;
     flex-flow: row nowrap;
@@ -19,13 +19,7 @@
     padding-right: 4px;
 
     border-radius: 2px;
-
-    height: var(#{$varname_folder_size});
-    min-height: var(#{$varname_folder_size});
-
-    --indent: calc(var(--depth) * var(#{$varname_folder_indent}));
-
-    padding-left: var(--indent);
+    
 
 }
 

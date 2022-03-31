@@ -13,10 +13,9 @@ class GlyphSlot extends nkm.datacontrols.ControlWidget {
     constructor() { super(); }
 
     static __usePaintCallback = true;
+    static __defaultSelectOnActivation = true;
 
     _Init() {
-
-        this.default_SelectOnActivation = true;
 
         super._Init();
 
@@ -120,7 +119,7 @@ class GlyphSlot extends nkm.datacontrols.ControlWidget {
             },
             '.oob': {
                 'display': 'none',
-                '@': ['absolute-centered'],
+                '@': ['absolute-center'],
                 'width': '50%'
             },
             ':host(.outofbounds) .oob': {

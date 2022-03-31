@@ -427,7 +427,7 @@ UNI_BLOCKS += `${tabs}]`;
 
 let UNI_CHAR_MAP = `{\n`;
 for (var p in charMap) {
-    let c = charMap[p], catstr = ``;
+    let c = charMap[p], catstr = ``, relstr = ``;
     if (c.category) {
         catstr = ` cat:c.${c.category.id},`;
     }
@@ -438,10 +438,10 @@ for (var p in charMap) {
     }
     */
     if (p in relMap) {
-        catstr = ` relatives:[${relMap[p].join(`, `)}],`
+        relstr = ` relatives:[${relMap[p].join(`, `)}],`;
     }
 
-    UNI_CHAR_MAP += `${tabs}'${p}':{ u:'${p}', i:${c.i}, name:'${c.name}',${catstr} canon:k.${c.canonical}, block:b[${c.block}]`;
+    UNI_CHAR_MAP += `${tabs}'${p}':{ u:'${p}', i:${c.i}, name:'${c.name}',${catstr} ${relstr} canon:k.${c.canonical}, block:b[${c.block}]`;
     if (c.indexed) { UNI_CHAR_MAP += `, indexed:[${c.indexed.join(`,`)}]` }
     UNI_CHAR_MAP += `},`;
 }

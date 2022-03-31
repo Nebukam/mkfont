@@ -1,0 +1,84 @@
+/*-------------------------------*/
+/*<!---- @nkmjs/ui-library ----!>*/
+/*-------------------------------*/
+
+@import '../_constants';
+@import '../_variables';
+@import '../_functions';
+@import '../_mixins';
+
+:host{
+
+    box-sizing: border-box;
+
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: flex-start;    
+    align-items: center;
+
+    padding: 2px;
+    padding-right: 4px;
+
+    border-radius: 2px;
+
+    padding-left: var(--indent, 0px);
+
+    transition: background-color 0.15s ease;
+    
+    background-color:transparent;
+
+    --flavor-color: rgba(0,0,0,0.1);
+
+    --flavor-primary-disabled:rgba(0,0,0,0.1);
+    --flavor-secondary-disabled:rgba(0,0,0,0.1);
+    --flavor-contrast-disabled:rgba(0,0,0,0.5);
+
+    @include state-color-variations( rgba(50,50,50,0.65), rgba(140,140,140,0.5), 0.65, 1) 
+    using ( $index, $st, $p, $s, $c){
+        #{'--flavor-primary-'+$st}: $p;
+        #{'--flavor-secondary-'+$st}: $s;
+        #{'--flavor-contrast-'+$st}: $c;
+    }
+
+}
+
+:host(#{$FOCUSED}){
+
+    cursor: pointer;
+
+    @include box-shadow( 2px, 0px, 3px, -1px, rgba(0,0,0,0.5));
+
+    background-color: var(--flavor-primary-focused);
+    border-color: var(--flavor-secondary-focused);
+
+    & .label{
+        color: var(--flavor-contrast-focused);
+    }
+
+}
+
+:host(#{$SELECTED}){
+
+    background-color: var(--flavor-primary-selected);
+    border-color: var(--flavor-secondary-selected);
+
+    & .label{
+        color: var(--flavor-contrast-selected);
+    }
+
+}
+
+:host(#{$SELECTED+$FOCUSED}){
+
+    background-color: var(--flavor-primary-selected-focused);
+    border-color: var(--flavor-secondary-selected-focused);
+
+    & .label{
+        color: var(--flavor-contrast-selected-focused);
+    }
+
+}
+
+:host(#{$DRAGGED}) {
+    border: 1px dashed #ff0000;
+}

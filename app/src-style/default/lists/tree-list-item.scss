@@ -8,8 +8,6 @@
 
 :host{
 
-    box-sizing: border-box;
-
     display: flex;
     flex-flow: row nowrap;
     justify-content: flex-start;    
@@ -19,13 +17,6 @@
     padding-right: 4px;
 
     border-radius: 2px;
-
-    height: var(#{$varname_tree_size});
-    min-height: var(#{$varname_tree_size});
-
-    --indent: calc(var(--depth) * var(#{$varname_tree_indent}));
-
-    padding-left: var(--indent);
 
 }
 

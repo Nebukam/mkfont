@@ -19,11 +19,6 @@ class GlyphGroupsView extends ui.views.View {
 
     _Init() {
         super._Init();
-        /*
-                nkm.style.STYLE.instance
-                    .Watch(`--preview-width`, this._OnPreviewSizeUpdate, this)
-                    .Watch(`--preview-height`, this._OnPreviewSizeUpdate, this);
-                    */
 
         this._Bind(this._OnIndexRequestMixed);
         this._Bind(this._OnIndexRequestRange);
@@ -41,6 +36,7 @@ class GlyphGroupsView extends ui.views.View {
             .Hook(SIGNAL.GLYPH_REMOVED, this._OnGlyphRemoved, this);
 
         this._searchSettings = null;
+
         this._searchObserver = new nkm.com.signals.Observer();
         this._searchObserver
             .Hook(SIGNAL.SEARCH_TOGGLED, this._OnSearchToggled, this)
@@ -75,7 +71,7 @@ class GlyphGroupsView extends ui.views.View {
                 'overflow': 'auto',
             },
             '.search-status': {
-                '@': ['absolute-centered']
+                '@': ['absolute-center']
             }
         }, super._Style());
     }

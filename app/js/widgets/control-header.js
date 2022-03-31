@@ -6,10 +6,9 @@ class ControlHeader extends ui.Widget {
     constructor() { super(); }
 
     static __usePaintCallback = true;
+    static __defaultSelectOnActivation = true;
 
     _Init() {
-
-        this.default_SelectOnActivation = true;
 
         super._Init();
 
