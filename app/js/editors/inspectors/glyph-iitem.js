@@ -106,7 +106,13 @@ class GlyphVariantInspectorItem extends nkm.datacontrols.ControlWidget {
             },
             '.infoTag': {
                 '@': ['absolute-center']
+            },
+            '.emptyTag': {
+                '@': ['absolute-bottom'],
+                'margin':`5px`
             }
+
+            
         }, super._Style());
     }
 
@@ -207,7 +213,7 @@ class GlyphVariantInspectorItem extends nkm.datacontrols.ControlWidget {
         };
         this._oobTag.visible = false;
 
-        this._emptyTag = this.Attach(uilib.widgets.Tag, `infoTag`, this._previewBox);
+        this._emptyTag = this.Attach(uilib.widgets.Tag, `emptyTag`, this._previewBox);
         this._emptyTag.options = {
             label: `empty`,
             bgColor: nkm.style.Get(`--col-warning-dark`),

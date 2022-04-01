@@ -1,0 +1,24 @@
+/*-------------------------------*/
+/*<!---- @nkmjs/ui-library ----!>*/
+/*-------------------------------*/
+
+@import '../_constants';
+@import '../_variables';
+@import '../_mixins';
+
+:host{
+
+    --flavor-color: rgba(0,0,0,0.1);
+
+    --flavor-primary-disabled:rgba(0,0,0,0.1);
+    --flavor-secondary-disabled:rgba(0,0,0,0.1);
+    --flavor-contrast-disabled:rgba(0,0,0,0.5);
+
+    @include state-color-variations( rgba(50,50,50,0.65), rgba(140,140,140,0.5), 0.65, 1) 
+    using ( $index, $st, $p, $s, $c){
+        #{'--flavor-primary-'+$st}: $p;
+        #{'--flavor-secondary-'+$st}: $s;
+        #{'--flavor-contrast-'+$st}: $c;
+    }
+
+}

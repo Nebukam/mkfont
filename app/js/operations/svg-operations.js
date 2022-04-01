@@ -225,7 +225,10 @@ class SVGOperations {
 
                 result.exists = true;
 
+            } else {
+
             }
+
 
         } catch (e) { console.log(e); }
 
@@ -263,11 +266,13 @@ class SVGOperations {
 
         if (classStyle && classStyle in p_style) {
             for (let c in p_style[classStyle]) {
-                let refValue = p_style[classStyle][c];
-                if (refValue == A || refValue == B || refValue == C) {
-                    foundRef = true;
-                    break;
-                }
+                try {
+                    let refValue = p_style[classStyle][c].toLowerCase();
+                    if (refValue == A || refValue == B || refValue == C) {
+                        foundRef = true;
+                        break;
+                    }
+                } catch (e) { }
             }
         }
 

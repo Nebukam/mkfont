@@ -16,7 +16,7 @@ class LigaImportSettingsDataBlock extends SimpleDataEx {
 
         p_values[IDS_EXT.LIGA_TEXT] = { value: `` };
         p_values[IDS_EXT.LIGA_MIN] = { value: 2 };
-        p_values[IDS_EXT.LIGA_MAX] = { value: 10 };
+        p_values[IDS_EXT.LIGA_MAX] = { value: 3 };
         p_values[IDS_EXT.LIGA_MIN_OCCURENCE] = { value: 2 };
 
     }

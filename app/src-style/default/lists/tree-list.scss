@@ -6,63 +6,34 @@
 @import '../_variables';
 @import '../_mixins';
 
-@import './tree-list-item';
+@import './_list-wrapper';
 
 :host{
     
 }
 
 :host(#{$FOCUSED}) {
-    cursor: pointer;
-    background-color: transparent;
 
-    & .header{
-        background-color: rgba(127,127,127,0.2);
-    }
 }
 
 :host(#{$EXPANDED}) .icon.expand{
-    transform: rotate(90deg);
+
 }
 
 .header{
-
-    display: flex;
-    flex-flow: row nowrap;
-    justify-content: flex-start;    
-    align-items: center;
     
 }
 
 .body{
-
-    flex-flow: column nowrap;
-    justify-content: flex-start;    
-    align-items: stretch;
-
-    padding: 0;
-    margin: 0;
-    min-width: 0;
-
     &::before{
-        content: "";
-        transition: opacity 0.15s ease;
-        position: absolute;
-        left: calc(var(--half-indent) + var(--indent));
-        height: 100%;
-        width: 0;
-        border-left: 1px dotted rgba(127,127,127,1);
-        z-index: 999999;
-        opacity:0.2;
-    }
 
+    }
 }
 
 :host(:hover){
     & .body{    
         &::before{
-            opacity:0.5;
-            border-left: 1px solid rgba(127,127,127,1);
+
         }    
     }
 }

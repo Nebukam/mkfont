@@ -90,6 +90,9 @@ class CmdImportTextLiga extends actions.Command {
                     family: family,
                     unicode: unicodeInfos,
                     path: SVGOPS.EmptySVGStats(),
+                    transforms: {
+                        [mkfData.IDS.TR_WIDTH_SHIFT]: family.selectedSubFamily.Get(mkfData.IDS.EM_UNITS)
+                    }
                 });
             }
 

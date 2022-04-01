@@ -38,6 +38,9 @@ class GlyphCanvasRenderer extends ui.helpers.Canvas {
             .To(`drawBBox`)
             .To(`centered`);
 
+        this._emptyGlyph = false;
+
+
     }
 
     _PostInit() {
@@ -85,6 +88,10 @@ class GlyphCanvasRenderer extends ui.helpers.Canvas {
 
     set computedPath(p_value) {
         this._computedPath = p_value;
+        this._emptyGlyph = false;
+        if (this._computedPath) {
+            if (this._computedPath.path == `M 0 0 L 0 0 z`) { this._emptyGlyph = true; }
+        }
     }
 
     Set(p_glyphVariant) {
@@ -136,7 +143,26 @@ class GlyphCanvasRenderer extends ui.helpers.Canvas {
         // Draw glyph
         let col = nkm.style.Get(`--glyph-color`);
         ctx.fillStyle = col;
-        ctx.fill(this._glyphPath);
+
+        if(this._emptyGlyph){
+            if(this._computedPath){
+                let cw = this._computedPath.width;
+                ctx.lineWidth = iscale;
+                ctx.strokeStyle = `rgba(${nkm.style.Get(`--col-warning-dark-rgb`)},0.8)`;
+                ctx.beginPath();
+                ctx.rect(0, 0, cw, f.em);
+                ctx.stroke();
+
+                ctx.strokeStyle = `rgba(${nkm.style.Get(`--col-warning-dark-rgb`)},0.25)`;
+                ctx.beginPath();
+                ctx.moveTo(0, 0); ctx.lineTo(cw, f.em);
+                ctx.moveTo(cw, 0); ctx.lineTo(0, f.em);
+                ctx.stroke();
+                
+            }
+        }else{
+            ctx.fill(this._glyphPath);
+        }
 
         if (this._drawBBox && this._computedPath) {
             if (this._computedPath.fit) {
@@ -167,7 +193,7 @@ class GlyphCanvasRenderer extends ui.helpers.Canvas {
                 ctx.moveTo(fit.x, fit.y); ctx.lineTo(fit.x + fit.width, fit.y + fit.height);
                 ctx.moveTo(fit.x + fit.width, fit.y); ctx.lineTo(fit.x, fit.y + fit.height);
                 ctx.stroke();
-                
+
             }
         }
 
@@ -218,7 +244,6 @@ class GlyphCanvasRenderer extends ui.helpers.Canvas {
                 ctx.font = `${10 * iscale}px 'Regular'`;
                 ctx.textAlign = 'right';
             }
-
 
             let bsl = f.bsl,
                 ascy = bsl - f.asc;

@@ -14,7 +14,7 @@ const GlyphGroup = require(`./glyph-group`);
 const GlyphGroupHeader = require(`./glyph-group-header`);
 const GlyphGroupSearch = require(`./glyph-group-search`);
 
-class GlyphGroupsView extends ui.views.View {
+class GlyphGroupsView extends nkm.datacontrols.ControlView { //ui.views.View
     constructor() { super(); }
 
     _Init() {
@@ -46,6 +46,10 @@ class GlyphGroupsView extends ui.views.View {
         this._delayedReloadList = nkm.com.DelayedCall(this._Bind(this._ReloadList));
         this._defaultStreamFn = null;
         this._searchActive = false;
+
+        this._InitSelectionStack(false, true);
+        this.selectionStack.dataSelection.dataMember = `_glyphInfos`;
+        this.selectionStack.Watch(com.SIGNAL.ITEM_ADDED, this._OnDataSelected, this);
 
     }
 
@@ -127,11 +131,14 @@ class GlyphGroupsView extends ui.views.View {
     }
 
     set displayRange(p_value) {
+
         if (this._displayRanges == p_value) {
             //TODO: If not ligatures, can just return.
             //otherwise, range is dynamic and should be refreshed.
             return;
         }
+
+        this.selectionStack.Clear();
 
         this._header.displayRange = p_value;
         //this._search.displayRange = p_value;
@@ -339,11 +346,18 @@ class GlyphGroupsView extends ui.views.View {
 
     _OnItemRequestProcessed(p_data, p_streamer, p_index, p_fragment) {
 
-        if(!this._data){ return; }
+        if (!this._data) { return; }
 
         let widget = this.Attach(mkfWidgets.GlyphSlot, 'glyph', p_fragment);
         widget.subFamily = this._data.selectedSubFamily;
         widget.glyphInfos = p_data;
+
+        this.selectionStack.Check(widget);
+        if (this.editor.inspectedData) {
+            if (this.editor.inspectedData.unicodeInfos == p_data) {
+                widget.Select(true);
+            }
+        }
 
         this._unicodeMap.set(p_data, widget);
 
@@ -378,6 +392,32 @@ class GlyphGroupsView extends ui.views.View {
     //#endregion
 
     //#region Preview updates
+
+    _OnDataSelected(p_item, p_firstTimeAdd) {
+        if (!p_firstTimeAdd) { return; }
+
+        let glyphInfos = p_item.glyphInfos;
+        if (glyphInfos) {
+            let glyph = p_item.data;
+            if (glyph) {
+                // Has an existing glyph!
+                if (glyph.isNull) {
+                    glyph.unicodeInfos = glyphInfos;
+                    //glyph.subFamily
+                    glyph.CommitUpdate();//Ensure the data gets refreshed, since it hasn't changed.
+                    glyph.defaultGlyph.CommitUpdate();
+                }
+                this.editor.Inspect(glyph);
+            } else {
+                // No glyph associated... at all??
+                console.error(`Edge case, find why`);
+                this.editor.Inspect(null);
+            }
+        } else {
+            this.editor.Inspect(null);
+        }
+
+    }
 
     _OnGlyphAdded(p_family, p_glyph) {
 

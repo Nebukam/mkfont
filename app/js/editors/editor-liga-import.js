@@ -65,8 +65,8 @@ class EditorLigaImport extends nkm.datacontrols.Editor {
             '.liga': {
                 'margin': `4px`
             },
-            '.msg':{
-                '@':[`absolute-center`]
+            '.msg': {
+                '@': [`absolute-center`]
             }
         }, super._Style());
     }
@@ -82,7 +82,7 @@ class EditorLigaImport extends nkm.datacontrols.Editor {
         this._builder.Build([
             { cl: mkfWidgets.ControlHeader, options: { label: `Text` } },
             { options: { propertyId: mkfData.IDS_EXT.LIGA_TEXT, inputOnly: true } },
-            { cl: mkfWidgets.ControlHeader, options: { label: `Limits` } },
+            { cl: mkfWidgets.ControlHeader, options: { label: `Limits (first 500 results)` } },
             { options: { propertyId: mkfData.IDS_EXT.LIGA_MIN } },
             { options: { propertyId: mkfData.IDS_EXT.LIGA_MAX } },
             { options: { propertyId: mkfData.IDS_EXT.LIGA_MIN_OCCURENCE } },
@@ -90,7 +90,7 @@ class EditorLigaImport extends nkm.datacontrols.Editor {
 
         this._list = ui.El(`div`, { class: `list` }, this);
 
-        this._msgLabel = new ui.manipulators.Text(ui.dom.El(`div`, {class:`msg label`}, this._list));
+        this._msgLabel = new ui.manipulators.Text(ui.dom.El(`div`, { class: `msg label` }, this._list));
         this._msgLabel.Set(``);
 
     }
@@ -134,11 +134,11 @@ class EditorLigaImport extends nkm.datacontrols.Editor {
 
         this._ligaMap = {};
 
-        
-        if(input == ``){
+
+        if (input == ``) {
             this._msgLabel.Set(`Add some text to analyze!`);
             return;
-        }else{
+        } else {
             this._msgLabel.Set(``);
         }
 
@@ -172,17 +172,25 @@ class EditorLigaImport extends nkm.datacontrols.Editor {
         }
 
         wordloop: for (let w = 0; w < words.length; w++) {
+
             let word = words[w];
+
             substrloop: for (let i = 0; i < loopCount; i++) {
+
                 let len = startLength + i,
                     shifts = word.length - len;
+
                 if (shifts <= 0) { continue wordloop; }
-                for (let s = 0; s < shifts; s++) {
+
+                for (let s = 0; s <= shifts; s++) {
                     let segment = word.substr(s, len);
+
                     if (segment in this._ligaMap) { this._ligaMap[segment].count++; }
                     else { this._ligaMap[segment] = { export: (this._cached.has(segment) ? true : false), count: 0, ligature: segment }; }
                 }
+
             }
+
         }
 
         let results = [];
@@ -195,8 +203,10 @@ class EditorLigaImport extends nkm.datacontrols.Editor {
 
         results.sort((a, b) => { return b.count - a.count; });
 
-        if(results.length == 0){
+        if (results.length == 0) {
             this._msgLabel.Set(`Current settings yield no results.`);
+        } else if (results.length > 500) {
+            results.splice(500, results.length - 500);
         }
 
         this._OnResultReady(results);

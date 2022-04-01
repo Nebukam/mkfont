@@ -18,12 +18,14 @@ class ActionCreateGlyph extends actions.Action {
             newGlyph = nkm.com.Rent(mkfData.Glyph),
             glyphVariant = newGlyph._defaultGlyph,
             family = p_operation.family,
-            transforms = p_operation.transforms || family.selectedSubFamily.transformSettings;
+            defaultTr = family.selectedSubFamily.transformSettings,
+            transforms = p_operation.transforms || {};
 
         newGlyph.Set(mkfData.IDS.UNICODE, p_operation.unicode.u);
         newGlyph.unicodeInfos = p_operation.unicode;
 
         glyphVariant.Set(mkfData.IDS.PATH_DATA, p_operation.path);
+        glyphVariant.transformSettings.BatchSet(defaultTr);
         glyphVariant.transformSettings.BatchSet(transforms);
 
         family.AddGlyph(newGlyph);

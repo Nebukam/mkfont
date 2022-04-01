@@ -1,0 +1,88 @@
+/*-------------------------------*/
+/*<!---- @nkmjs/ui-library ----!>*/
+/*-------------------------------*/
+
+@import '../_constants';
+@import '../_variables';
+@import '../_mixins';
+
+@import './_list-shared';
+
+:host{
+    & .header{
+        //background-color: var(--flavor-primary-idle);
+    }
+    
+}
+
+:host(#{$FOCUSED}) {
+    cursor: pointer;
+
+    & .header{
+        background-color: var(--flavor-primary-focused);
+    }
+}
+
+:host(#{$EXPANDED}) .icon.expand{
+    transform: rotate(90deg);
+}
+
+:host(#{$SELECTED}){
+    & .header{
+        background-color: var(--flavor-primary-selected);
+    }
+}
+
+:host(#{$SELECTED+$FOCUSED}){
+
+    & .header{
+        background-color: var(--flavor-primary-selected-focused);
+
+        & .label{
+            color: var(--flavor-contrast-selected-focused);
+        }
+    }
+}
+
+.header{
+
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: flex-start;    
+    align-items: center;
+    
+}
+
+.body{
+
+    flex-flow: column nowrap;
+    justify-content: flex-start;    
+    align-items: stretch;
+
+    padding: 0;
+    margin: 0;
+    min-width: 0;
+
+    &::before{
+        content: "";
+        transition: opacity 0.15s ease;
+        position: absolute;
+        left: calc(var(--half-indent) + var(--indent));
+        height: 100%;
+        width: 0;
+        border-left: 1px dotted rgba(127,127,127,1);
+        z-index: 999999;
+        opacity:0.2;
+    }
+
+}
+
+:host(:hover){
+    & .body{    
+        &::before{
+            opacity:0.5;
+            border-left: 1px solid rgba(127,127,127,1);
+        }    
+    }
+}
+

@@ -129,6 +129,7 @@ class FontEditor extends nkm.uiworkspace.editors.EditorEx {
     }
 
     _OnSelectionStackItemAdded(p_widget) {
+        return;
         let glyphInfos = p_widget.glyphInfos;
         if (glyphInfos) {
             let glyph = p_widget.data;

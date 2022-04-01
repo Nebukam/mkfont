@@ -6,28 +6,16 @@
 @import '../_variables';
 @import '../_mixins';
 
+@import './_list-item';
+
 :host{
-
-    
-
-    display: flex;
-    flex-flow: row nowrap;
-    justify-content: flex-start;    
-    align-items: center;
-
-    padding: 2px;
-    padding-right: 4px;
-
-    border-radius: 2px;
-    
 
 }
 
 :host(#{$FOCUSED}) {
-    cursor: pointer;
-    background-color: rgba(127,127,127,0.2);
+
 }
 
 :host(#{$DRAGGED}) {
-    border: 1px dashed #ff0000;
+
 }

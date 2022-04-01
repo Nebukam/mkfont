@@ -3,6 +3,7 @@ const u = nkm.utils;
 const ui = nkm.ui;
 
 const svgpath = require('svgpath');
+const { ENUMS } = require('../data');
 
 const mkfData = require(`../data`);
 const mkfInspectors = require(`../editors/inspectors`);
@@ -90,8 +91,8 @@ class SingleImportPreview extends ui.views.View {
 
     _OnDataUpdated(p_data) {
         super._OnDataUpdated(p_data);
-        this._glyphRenderer.drawHorAxis = p_data.Get(mkfData.IDS.TR_VER_ALIGN).value == 2;
-        this._glyphRenderer.drawVerAxis = p_data.Get(mkfData.IDS.TR_HOR_ALIGN).value != 0;
+        this._glyphRenderer.drawHorAxis = p_data.Get(mkfData.ENUMS.VALIGN) == ENUMS.VALIGN_EM;
+        this._glyphRenderer.drawVerAxis = p_data.Get(mkfData.ENUMS.HALIGN) != ENUMS.HALIGN_XMIN;
         this._UpdatePathTransforms();
     }
 
