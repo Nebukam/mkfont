@@ -160,6 +160,7 @@ class EditorListImport extends nkm.datacontrols.Editor {
         parseArray = parseArray.length > 1 ? parseArray.pop() : parseArray[0];
         parseArray = this._GetUnicodeStructure(parseArray.split(separator));
         return parseArray;
+        
     }
 
     _GetUnicodeStructure(p_array) {

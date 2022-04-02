@@ -145,21 +145,6 @@
     
 }
 
-/*---------------------------------*/
-/*<!---- @nkmjs/ui-workspace ----!>*/
-/*---------------------------------*/
-
-@import './_mixins';
-@import './_variables';
-
-:host{
-    #{$varname_workspace_bg}: $workspace_bg_dark;
-    #{$varname_workspace_nav_bg}: $workspace_nav_bg_dark;
-
-    #{$varname_tree_indent}: $tree_indent;
-    #{$varname_tree_size}: var(--size-s);
-}
-
 /*-------------------------------------*/
 /*<!---- @nkmjs/ui-data-controls ----!>*/
 /*-------------------------------------*/
@@ -176,4 +161,19 @@
 
     #{$varname_folder_indent}: $folder_indent;
     #{$varname_folder_size}: var(--size-s);
+}
+
+/*---------------------------------*/
+/*<!---- @nkmjs/ui-workspace ----!>*/
+/*---------------------------------*/
+
+@import './_mixins';
+@import './_variables';
+
+:host{
+    #{$varname_workspace_bg}: $workspace_bg_dark;
+    #{$varname_workspace_nav_bg}: $workspace_nav_bg_dark;
+
+    #{$varname_tree_indent}: $tree_indent;
+    #{$varname_tree_size}: var(--size-s);
 }
