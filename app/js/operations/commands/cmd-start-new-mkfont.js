@@ -3,13 +3,19 @@ const nkm = require(`@nkmjs/core`);
 const actions = nkm.actions;
 
 const mkfData = require(`../../data`);
+const mkfDocuments = require(`../../documents`);
 
-class CmdStartNewMKFont extends actions.Command {
+class CmdCreateFamilyDoc extends nkm.documents.commands.DocumentCreate { //actions.Command
     constructor() { super(); }
 
     static __defaultName = `New .mkfont`;
     static __defaultIcon = `new`;
 
+    static __docType = mkfDocuments.Family;
+    static __dataType = mkfData.Family;
+    static __fileInfos = { name: 'MKFont files', extensions: ['mkfont'] };
+
+    /*
     _Init() {
         super._Init();
         this._newFamily = null;
@@ -17,7 +23,14 @@ class CmdStartNewMKFont extends actions.Command {
 
     _InternalExecute() {
 
-        this._newFamily = nkm.com.Rent(mkfData.Family);
+        let document = nkm.documents.DOCUMENTS.Get({
+            data:mkfData.Family,
+            document:mkfDocuments.Family
+        });
+
+        console.log(document);
+
+        this._newFamily = document.currentData;
         this._newFamily.CommitUpdate();
         this._RequestEdit();
 
@@ -44,7 +57,8 @@ class CmdStartNewMKFont extends actions.Command {
         this._newFamily = null;
         super._End();
     }
+    */
 
 }
 
-module.exports = CmdStartNewMKFont;
+module.exports = CmdCreateFamilyDoc;

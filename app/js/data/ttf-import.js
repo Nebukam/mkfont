@@ -93,15 +93,15 @@ class TTFImport {
 
             let
                 svgStats = {
-                    width: bbox.width,
+                    width: gW, //bbox.width,
                     height: baseline, //bsl - bbox.y,
                     BBox: bbox
                 },
                 sShift = bbox.x,
                 sPush = gW - (bbox.width + sShift);
 
-            svgStats.path = svgpath(path).translate(-bbox.x, 0).toString();
-            SVGOPS.TranslateBBox(bbox, -bbox.x, 0);
+            svgStats.path = path;//svgpath(path).translate(-bbox.x, 0).toString();
+            //SVGOPS.TranslateBBox(bbox, -bbox.x, 0);
 
             variant.BatchSet({
                 [IDS.PATH_DATA]: svgStats,

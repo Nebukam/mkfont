@@ -58,8 +58,8 @@ class ControlHeader extends ui.Widget {
 
     }
 
-    _Cleanup() {
-        super._Cleanup();
+    _CleanUp() {
+        super._CleanUp();
     }
 
 }

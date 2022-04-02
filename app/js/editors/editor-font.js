@@ -14,6 +14,8 @@ const mkfOperations = require(`../operations`);
 class FontEditor extends nkm.uiworkspace.editors.EditorEx {
     constructor() { super(); }
 
+    static __registerableEditor = true;
+
     static __default_viewportClass = mkfViewports.GlyphGroupViewport;
     static __default_headerClass = require(`./editor-font-header`);
     static __default_footerClass = require(`./editor-font-footer`);
@@ -51,13 +53,13 @@ class FontEditor extends nkm.uiworkspace.editors.EditorEx {
 
     _OnDisplayGain() {
         super._OnDisplayGain();
-        mkfOperations.commands.IOSaveFamily.emitter = this;
-        mkfOperations.commands.IOSaveFamily.Enable();
+        mkfOperations.commands.SaveFamilyDoc.emitter = this;
+        mkfOperations.commands.SaveFamilyDoc.Enable();
     }
 
     _OnDisplayLost() {
         super._OnDisplayLost();
-        if (mkfOperations.commands.IOSaveFamily.emitter == this) { mkfOperations.commands.IOSaveFamily.Disable(); }
+        if (mkfOperations.commands.SaveFamilyDoc.emitter == this) { mkfOperations.commands.SaveFamilyDoc.Disable(); }
     }
 
     _PostInit() {
@@ -168,12 +170,6 @@ class FontEditor extends nkm.uiworkspace.editors.EditorEx {
 
     }
 
-    set fontCatalog(p_catalog) {
-        this._fontCatalog = p_catalog;
-        this._viewport.catalog = p_catalog;
-    }
-    get fontCatalog() { return this._fontCatalog; }
-
     set selectedSubFamily(p_value) {
         if (this._selectedSubFamily == p_value) { return; }
         let old = this._selectedSubFamily;
@@ -222,14 +218,13 @@ class FontEditor extends nkm.uiworkspace.editors.EditorEx {
 
         if (this._data) {
             this.selectedSubFamily = this._data.defaultSubFamily;
-            this.fontCatalog = this._data.catalog;
             this._OnDataValueChanged(this._data, mkfData.IDS.PREVIEW_SIZE, null);
         } else {
             this.selectedSubFamily = null;
-            this.fontCatalog = null;
         }
         
         this.SetActiveRange(UNICODE.instance._blockCatalog.At(0));
+        this._viewport._RefreshItems();
 
         
         //mkfOperations.commands.ImportTextLiga.Execute(this._data);
@@ -267,11 +262,11 @@ class FontEditor extends nkm.uiworkspace.editors.EditorEx {
                 fW = s;
             }
 
-            nkm.style.Set(`--glyph-color`, p_data.Resolve(mkfData.IDS.COLOR_PREVIEW));
-            nkm.style.Set(`--preview-size`, `${s}px`);
-            nkm.style.Set(`--preview-height`, `${fH * 0.8}px`);
-            nkm.style.Set(`--preview-width`, `${fW * 0.8}px`);
-            nkm.style.Set(`--preview-ratio`, `${rW}/${rH}`);
+            this.style.setProperty(`--glyph-color`, p_data.Resolve(mkfData.IDS.COLOR_PREVIEW));
+            this.style.setProperty(`--preview-size`, `${s}px`);
+            this.style.setProperty(`--preview-height`, `${fH * 0.8}px`);
+            this.style.setProperty(`--preview-width`, `${fW * 0.8}px`);
+            this.style.setProperty(`--preview-ratio`, `${rW}/${rH}`);
 
             this._viewport.SetPreviewSize(fW, fH);
 

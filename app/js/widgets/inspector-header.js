@@ -56,8 +56,8 @@ class InspectorHeader extends ui.Widget {
 
     }
 
-    _Cleanup() {
-        super._Cleanup();
+    _CleanUp() {
+        super._CleanUp();
     }
 
 }

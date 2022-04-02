@@ -68,6 +68,7 @@ class PangramRenderer extends ui.Widget {
         super._Render();
         this._fontEmbed = ui.dom.El(`style`, {}, this._host);
         this._pangramText = new ui.manipulators.Text(ui.dom.El(`div`, { class: `pangram` }, this._host));
+        //this._pangramText._element.setAttribute(`contenteditable`, true);
         this.text = null;
     }
 

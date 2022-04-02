@@ -134,7 +134,6 @@ class EditorLigaImport extends nkm.datacontrols.Editor {
 
         this._ligaMap = {};
 
-
         if (input == ``) {
             this._msgLabel.Set(`Add some text to analyze!`);
             return;
@@ -180,13 +179,14 @@ class EditorLigaImport extends nkm.datacontrols.Editor {
                 let len = startLength + i,
                     shifts = word.length - len;
 
-                if (shifts <= 0) { continue wordloop; }
+                if (shifts < 0) { continue wordloop; }
+                shifts++;
 
-                for (let s = 0; s <= shifts; s++) {
+                for (let s = 0; s < shifts; s++) {
                     let segment = word.substr(s, len);
 
                     if (segment in this._ligaMap) { this._ligaMap[segment].count++; }
-                    else { this._ligaMap[segment] = { export: (this._cached.has(segment) ? true : false), count: 0, ligature: segment }; }
+                    else { this._ligaMap[segment] = { export: (this._cached.has(segment) ? true : false), count: 1, ligature: segment }; }
                 }
 
             }

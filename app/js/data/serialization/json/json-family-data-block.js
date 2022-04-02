@@ -126,7 +126,7 @@ class FamilyDataBlockJSONSerializer extends nkm.data.serialization.json.DataBloc
             if(i == 0){
                 sf = p_data.defaultSubFamily;
             }else{
-                sf = new SubFamily();
+                sf = nkm.com.Rent(SubFamily);
                 p_data.AddSubFamily(sf);
             }
 

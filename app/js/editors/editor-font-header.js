@@ -92,8 +92,7 @@ class FontEditorHeader extends nkm.datacontrols.ControlView {
                     size: ui.FLAGS.SIZE_S, flavor: ui.FLAGS.CTA,// variant:ui.FLAGS.FRAME,
                     trigger: {
                         fn: () => {
-                            //mkfOperations.commands.IOSaveFamily.emitter = this;
-                            mkfOperations.commands.IOSaveFamily.Execute(this._data);
+                            mkfOperations.commands.SaveFamilyDoc.Execute(this._data);
                         }
                     },
                     group: `file-actions`
@@ -108,14 +107,14 @@ class FontEditorHeader extends nkm.datacontrols.ControlView {
                         }
                     },
                     group: `file-actions`
-                },
+                },/*
                 {
                     command: this._modalDisplayOpts,
                     htitle: `Viewport options`,
                     size: ui.FLAGS.SIZE_S,
                     cl: nkm.uilib.buttons.Tool,
                     group: `family`
-                },
+                },*/
                 {
                     command: this._modalFamilyOpts,
                     htitle: `Family name, infos & metadata`,
@@ -142,9 +141,9 @@ class FontEditorHeader extends nkm.datacontrols.ControlView {
                     group: `create`
                 },*/
                 {
-                    label: `Liga`, icon: `text-liga`,
+                    label: `Ligatures`, icon: `text-liga`,
                     htitle: `Analyze a text blurb to find and create ligatures`,
-                    size: ui.FLAGS.SIZE_S, variant: ui.FLAGS.FRAME,
+                    size: ui.FLAGS.SIZE_S, //variant: ui.FLAGS.FRAME,
                     flavor: nkm.com.FLAGS.LOADING,
                     group: `external`,
                     trigger: {
@@ -157,7 +156,7 @@ class FontEditorHeader extends nkm.datacontrols.ControlView {
                 {
                     label: `SVGs`, icon: `directory-download-small`,
                     htitle: `Import multiple SVGs`,
-                    size: ui.FLAGS.SIZE_S, variant: ui.FLAGS.FRAME,
+                    size: ui.FLAGS.SIZE_S, //variant: ui.FLAGS.FRAME,
                     flavor: nkm.com.FLAGS.LOADING,
                     group: `external`,
                     trigger: {
@@ -170,8 +169,8 @@ class FontEditorHeader extends nkm.datacontrols.ControlView {
                 {
                     label: `TTF`, icon: `directory-download-small`,
                     htitle: `Import a TTF file`,
-                    size: ui.FLAGS.SIZE_S, variant: ui.FLAGS.FRAME,
-                    flavor: nkm.com.FLAGS.LOADING,
+                    size: ui.FLAGS.SIZE_S, //variant: ui.FLAGS.FRAME, flavor: nkm.com.FLAGS.LOADING,
+                    
                     group: `external`,
                     trigger: {
                         fn: () => {

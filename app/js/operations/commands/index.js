@@ -1,5 +1,15 @@
 'use strict';
 
+const docCmds = nkm.documents.commands;
+
+const mkfDocuments = require(`../../documents`);
+const mkfData = require(`../../data`);
+
+const
+    fileInfos = { name: 'MKFont files', extensions: ['mkfont'] },
+    docType = mkfDocuments.Family,
+    dataType = mkfData.Family;
+
 module.exports = {
 
     MakeTTFFont: new (require(`./cmd-generate-ttf-font`))(),
@@ -18,18 +28,27 @@ module.exports = {
 
     ExportTTF: new (require(`./cmd-export-ttf`))(),
 
-
     ExportToClipboard: new (require(`./cmd-export-to-clipboard`))(),
     ExportUniClipboard: new (require(`./cmd-export-uni-clipboard`))(),
     ExportUniHexToClipboard: new (require(`./cmd-export-uni-hex-clipboard`))(),
 
-    OpenMKFont: new (require(`./cmd-open-mkfont`))(),
-
-    StartNewMKFont: new (require(`./cmd-start-new-mkfont`))(),
+    CreateFamilyDoc: docCmds.DocumentCreate.Rent({
+        name: `New .mkfont`,
+        docType: docType, dataType: dataType, fileInfos: fileInfos
+    }, true),
     StartNewFromTTF: new (require(`./cmd-start-new-from-ttf`))(),
     StartNewFromSVGS: new (require(`./cmd-start-new-from-svgs`))(),
 
-    IOSaveFamily: new (require(`./cmd-io-save-family`))(),
-    IOLoadFamily: new (require(`./cmd-io-load-family`))(),
+    SaveFamilyDoc: docCmds.DocumentSave.Rent({
+        name: `Save .mkfont`,
+        docType: docType, dataType: dataType, fileInfos: fileInfos
+    }, true),
+    LoadFamilyDoc: docCmds.DocumentLoad.Rent({
+        name: `Load .mkfont`,
+        docType: docType, dataType: dataType, fileInfos: fileInfos
+    }, true),
+    ReleaseFamilyDoc: docCmds.DocumentRelease.Rent({
+        docType: docType, dataType: dataType
+    }, true),
 
 }

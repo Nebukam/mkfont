@@ -28,6 +28,7 @@ class GlyphCanvasRenderer extends ui.helpers.Canvas {
         this._drawHorAxis = false;
         this._drawVerAxis = false;
         this._drawBBox = false;
+        this._nrm = false;
 
         this._distribute = new nkm.com.helpers.OptionsDistribute();
         this._distribute
@@ -36,6 +37,7 @@ class GlyphCanvasRenderer extends ui.helpers.Canvas {
             .To(`drawHorAxis`)
             .To(`drawVerAxis`)
             .To(`drawBBox`)
+            .To(`normalize`)
             .To(`centered`);
 
         this._emptyGlyph = false;
@@ -66,6 +68,9 @@ class GlyphCanvasRenderer extends ui.helpers.Canvas {
 
     get centered() { return this._centered; }
     set centered(p_value) { this._centered = p_value; }
+
+    get normalize() { return this._nrm; }
+    set normalize(p_value) { this._nrm = p_value; }
 
     set zoom(p_value) {
         this._zoom = p_value;
@@ -129,7 +134,7 @@ class GlyphCanvasRenderer extends ui.helpers.Canvas {
             h = this.height,
             ref = Math.min(w, h),
             os = 0.5, ros = (1 - os) * 0.5,
-            scale = (ref / f.ref) * z * os,
+            scale = (ref / (this._nrm ? Math.max(f.ref, this._glyphWidth) : f.ref)) * z * os,
             iscale = 1 / scale;
 
         ctx.setTransform(scale, 0, 0, scale, 0, 0);
@@ -144,8 +149,8 @@ class GlyphCanvasRenderer extends ui.helpers.Canvas {
         let col = nkm.style.Get(`--glyph-color`);
         ctx.fillStyle = col;
 
-        if(this._emptyGlyph){
-            if(this._computedPath){
+        if (this._emptyGlyph) {
+            if (this._computedPath) {
                 let cw = this._computedPath.width;
                 ctx.lineWidth = iscale;
                 ctx.strokeStyle = `rgba(${nkm.style.Get(`--col-warning-dark-rgb`)},0.8)`;
@@ -158,9 +163,9 @@ class GlyphCanvasRenderer extends ui.helpers.Canvas {
                 ctx.moveTo(0, 0); ctx.lineTo(cw, f.em);
                 ctx.moveTo(cw, 0); ctx.lineTo(0, f.em);
                 ctx.stroke();
-                
+
             }
-        }else{
+        } else {
             ctx.fill(this._glyphPath);
         }
 
@@ -369,9 +374,9 @@ class GlyphCanvasRenderer extends ui.helpers.Canvas {
 
     }
 
-    _Cleanup() {
+    _CleanUp() {
         this._contextInfos = null;
-        super._Cleanup();
+        super._CleanUp();
     }
 
 }

@@ -39,9 +39,9 @@ class ImportListRoot extends lists.FolderListRoot {
         super._Render();
     }
 
-    _Cleanup() {
+    _CleanUp() {
         this._cmd = null;
-        super._Cleanup();
+        super._CleanUp();
     }
 
 }

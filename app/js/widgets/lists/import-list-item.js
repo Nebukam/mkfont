@@ -190,9 +190,9 @@ class ImportListItem extends lists.FolderListItem {
         this._data.SetOption(`unicode-user-input`, p_value);
     }
 
-    _Cleanup() {
+    _CleanUp() {
         this._cmd = null;
-        super._Cleanup();
+        super._CleanUp();
     }
 
 }

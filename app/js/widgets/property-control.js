@@ -266,10 +266,10 @@ class PropertyControl extends nkm.datacontrols.ControlWidget {
         navigator.clipboard.writeText(this._data._options.glyph);
     }
 
-    _Cleanup() {
+    _CleanUp() {
         this._onSubmitFn = null;
         this._cmd = null;
-        super._Cleanup();
+        super._CleanUp();
     }
 
 }

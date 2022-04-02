@@ -43,9 +43,9 @@ class FamilyItem extends lists.FolderListItem {
         return true;
     }
 
-    _Cleanup() {
+    _CleanUp() {
         this._cmd = null;
-        super._Cleanup();
+        super._CleanUp();
     }
 
 }

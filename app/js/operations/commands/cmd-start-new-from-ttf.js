@@ -6,9 +6,9 @@ const fs = require('fs');
 
 const mkfData = require(`../../data`);
 
-const CmdStartNewMKFont = require(`./cmd-start-new-mkfont`);
+const CmdCreateFamilyDoc = require(`./cmd-start-new-mkfont`);
 
-class CmdStartNewMKFontFromTTF extends CmdStartNewMKFont {
+class CmdCreateFamilyDocFromTTF extends CmdCreateFamilyDoc {
     constructor() { super(); }
 
     static __defaultName = `New .mkfont from TTF`;
@@ -53,4 +53,4 @@ class CmdStartNewMKFontFromTTF extends CmdStartNewMKFont {
 
 }
 
-module.exports = CmdStartNewMKFontFromTTF;
+module.exports = CmdCreateFamilyDocFromTTF;

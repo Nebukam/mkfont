@@ -36,6 +36,9 @@ class MKFont extends nkm.app.AppBase {
         ui.Preload(mkfWidgets.GlyphSlot, 300);
         ui.Preload(mkfWidgets.LigaButton, 300);
         //ui.Preload(mkfEditors.FontEditor, 3);
+
+        nkm.documents.DOCUMENTS.Watch(nkm.data.SIGNAL.NO_ACTIVE_EDITOR, this._OnDocDataRoaming, this);
+
     }
 
     AppReady() {
@@ -95,7 +98,7 @@ class MKFont extends nkm.app.AppBase {
         }
 
         if(openPath != null && !nkm.utils.isVoid(openPath)){
-            mkfOperations.commands.IOLoadFamily.Execute(openPath);
+            mkfOperations.commands.LoadFamilyDoc.Execute(openPath);
         }else{
             this._welcomeView._options.view.RequestDisplay();
         }
@@ -108,9 +111,13 @@ class MKFont extends nkm.app.AppBase {
 
     }
 
+    _OnDocDataRoaming(p_document){
+        mkfOperations.commands.ReleaseFamilyDoc.Execute(p_document.currentData);
+    }
+
     _EmptyFamily() {
 
-        mkfOperations.commands.StartNewMKFont.Execute();
+        mkfOperations.commands.CreateFamilyDoc.Execute();
 
     }
 

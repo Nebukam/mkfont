@@ -35,8 +35,6 @@ class FamilyDataBlock extends SimpleDataEx {
         this._Bind(this._OnGlyphVariantUpdated);
         this._Bind(this._OnGlyphUpdated);
 
-        this._filepath = null;
-
         this._values = {
             [IDS.FAMILY]: { value: `Font Family Name` },
             [IDS.COPYRIGHT]: { value: `(c) mkfont 2022` },
@@ -238,6 +236,7 @@ class FamilyDataBlock extends SimpleDataEx {
         this._glyphsMap[p_valueObj.value] = p_glyph;
         if (p_glyph.isLigature) { this._ligatureSet.add(p_glyph); }
         else { this._ligatureSet.delete(p_glyph); }
+
     }
 
     _OnGlyphUpdated() {
@@ -264,12 +263,18 @@ class FamilyDataBlock extends SimpleDataEx {
         super.CommitUpdate();
     }
 
-    _Cleanup(){
-        this._filepath = null;
+    _CleanUp(){
+
         //TODO : Cleanup up subFamilies, glyphs, and their variant
+
+        /////
+        this._glyphs.Clear();
+        this._glyphsMap = {};
+        this._ligatureSet.clear();
+        this._glyphUnicodeCache.length = 0;
+
         super._CleanUp();
     }
-
 
 }
 

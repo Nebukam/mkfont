@@ -19,6 +19,8 @@ module.exports = {
     ImportSettings: require(`./settings-import-data-block`),
     LigaImportSettings: require(`./settings-liga-import-data-block`),
 
+    RangeContent : require(`./range-content`),
+
     TTF: require(`./ttf-import`),
 
 }

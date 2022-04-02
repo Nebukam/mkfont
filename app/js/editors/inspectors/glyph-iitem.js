@@ -109,10 +109,10 @@ class GlyphVariantInspectorItem extends nkm.datacontrols.ControlWidget {
             },
             '.emptyTag': {
                 '@': ['absolute-bottom'],
-                'margin':`5px`
+                'margin': `5px`
             }
 
-            
+
         }, super._Style());
     }
 
@@ -130,6 +130,7 @@ class GlyphVariantInspectorItem extends nkm.datacontrols.ControlWidget {
             drawLabels: true,
             drawBBox: true,
             centered: false,
+            normalize: true
         };
 
 

@@ -219,10 +219,11 @@ class GlyphSlot extends nkm.datacontrols.ControlWidget {
         navigator.clipboard.writeText(this._data._options.glyph);
     }
 
-    _Cleanup() {
+    _CleanUp() {
         this._flags.Set(mkfData.IDS.OUT_OF_BOUNDS, false);
         this._flags.Set(mkfData.IDS.EMPTY, false);
-        super._Cleanup();
+        this._glyphRenderer.Clear();
+        super._CleanUp();
     }
 
 }

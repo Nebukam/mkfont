@@ -23,13 +23,13 @@ class SettingsSearchDataBlock extends SimpleDataEx {
 
         super._Init();
 
-        this._searchCount = 0;
         this._searchCovered = 0;
         this._cachedAdvance = 0;
         this._fetchFn = null;
 
         this._terms = [];
 
+        this._rangeContent = null;
         this._displayRange = null;
         this._rangeInfos = null;
         this._ready = false;
@@ -71,22 +71,23 @@ class SettingsSearchDataBlock extends SimpleDataEx {
         let infos = IDS_EXT.GetInfos(p_id);
 
         if (!infos ||
-            !this._displayRange ||
-            !this._rangeInfos)
+            !this._rangeContent)
             return;
 
         if (!infos.recompute)
             return;
 
-        this._UpdateSearchData(this._displayRange, this._rangeInfos);
+        this._UpdateSearchData(this._rangeContent);
 
     }
 
-    _UpdateSearchData(p_displayRange, p_rangeInfos) {
+    _UpdateSearchData(p_rangeContent) {
+
+        this._rangeContent = p_rangeContent;
+        this._content = this._rangeContent ? this._rangeContent._content : [];
 
         this._running = true;
         this._ready = false;
-        this._searchCount = 0;
         this._searchCovered = 0;
 
         this._caseSensitive = !this.Get(IDS_EXT.CASE_INSENSITIVE);
@@ -109,26 +110,6 @@ class SettingsSearchDataBlock extends SimpleDataEx {
         this._results.length = 0;
         this._resultSet.clear();
 
-        this._displayRange = p_displayRange;
-        this._rangeInfos = p_rangeInfos;
-
-
-        //console.log(`Search data updated`, p_displayRange, p_rangeInfos, this._terms);
-
-        switch (this._rangeInfos.type) {
-            case IDS_EXT.RANGE_MIXED:
-                this._cachedLoopStart = 0;
-                this._cachedAdvance = 0;
-                this._fetchFn = this._SearchMixed;
-                break;
-            case IDS_EXT.RANGE_INLINE:
-                this._fetchFn = this._SearchInBlock;
-                break;
-            case IDS_EXT.RANGE_PLAIN:
-                this._fetchFn = this._SearchPlain;
-                break;
-        }
-
         this._AdvanceSearch();
 
         this.Broadcast(SIGNAL.SEARCH_STARTED, this);
@@ -139,8 +120,8 @@ class SettingsSearchDataBlock extends SimpleDataEx {
 
         let length = 5000;
 
-        if (this._searchCovered + length > this._rangeInfos.indexCount) {
-            length = this._rangeInfos.indexCount - this._searchCovered;
+        if (this._searchCovered + length > this._content.length) {
+            length = this._content.length - this._searchCovered;
         }
 
         if (length <= 0) {
@@ -155,17 +136,20 @@ class SettingsSearchDataBlock extends SimpleDataEx {
 
         } else {
 
-            this._fetchFn(this._searchCovered, length);
+            for (let i = this._searchCovered, n = this._searchCovered + length; i < n; i++) {
+                this._Check(this._content[i]);
+            }
+
             this._searchCovered += length;
 
-            this.Broadcast(SIGNAL.SEARCH_PROGRESS, this._searchCovered / this._rangeInfos.indexCount);
+            this.Broadcast(SIGNAL.SEARCH_PROGRESS, this._searchCovered / this._content.length);
 
             this._delayedAdvance.Schedule();
 
         }
     }
 
-    _ProcessInfos(p_unicodeInfos) {
+    _Check(p_unicodeInfos) {
 
         let pass = false;
         if (this._resultSet.has(p_unicodeInfos)) { return; }
@@ -227,103 +211,6 @@ class SettingsSearchDataBlock extends SimpleDataEx {
         }
 
     }
-
-    //#region fetch methods
-
-    _SearchMixed(p_start, p_count) {
-
-        let
-            index,
-            unicodeInfos;
-
-        for (let i = p_start, n = p_start + p_count; i < n; i++) {
-
-            index = this._GetMixedIndex(i);
-            if (index == -1) { continue; }
-            unicodeInfos = UNICODE.instance._charList[index];
-            if (!unicodeInfos) { continue; }
-            this._ProcessInfos(unicodeInfos);
-
-        }
-    }
-
-    _GetMixedIndex(p_index) {
-
-        let
-            list = this._rangeInfos.list,
-            advance = this._cachedAdvance;
-
-        for (let i = this._cachedLoopStart, n = list.length; i < n; i++) {
-            let range = list[i];
-
-            if (u.isArray(range)) {
-
-                let
-                    start = range[0],
-                    end = range[1],
-                    coverage = end - start + 1,
-                    target = start + (p_index - advance); //+1 as range is inclusive
-
-                if (p_index >= advance &&
-                    target <= end) {
-                    this._cachedLoopStart = i;
-                    this._cachedAdvance = advance;
-                    return target;
-                }
-
-                advance += coverage;
-
-            } else {
-                if (p_index == advance) {
-                    this._cachedLoopStart = i;
-                    this._cachedAdvance = advance;
-                    return range;
-                }
-                advance++;
-            }
-
-        }
-
-        return -1;
-    }
-
-    _SearchInBlock(p_start, p_count) {
-
-        let
-            unicodeInfos,
-            start = this._rangeInfos.indexOffset + p_start,
-            end = start + p_count;
-
-        for (let i = start; i < end; i++) {
-            unicodeInfos = UNICODE.GetSingle(i);
-            if (!unicodeInfos) { continue; }
-            this._ProcessInfos(unicodeInfos);
-        }
-
-    }
-
-    _SearchPlain(p_start, p_count) {
-
-        let
-            unicodeInfos;
-
-        for (let i = p_start, n = p_start + p_count; i < n; i++) {
-            let lookup = this._rangeInfos.list[i];
-            if (u.isObject(lookup)) {
-                this._ProcessInfos(lookup);
-            } else {
-                unicodeInfos = UNICODE.GetInfos(lookup);
-                if (!unicodeInfos) { continue; }
-                this._ProcessInfos(unicodeInfos);
-            }
-
-        }
-
-    }
-
-    //#endregion
-
-
 
 }
 

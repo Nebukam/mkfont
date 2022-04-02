@@ -8,11 +8,14 @@ const UNICODE = require(`../../unicode`);
 const SIGNAL = require(`../../signal`);
 const IDS_EXT = require(`../../data/ids-ext`);
 const UTILS = require(`../../data/utils`);
+const RangeContent = require(`../../data/range-content`);
 const ContentUpdater = require("../../content-updater");
 const mkfWidgets = require(`../../widgets`);
 const GlyphGroup = require(`./glyph-group`);
 const GlyphGroupHeader = require(`./glyph-group-header`);
+const GlyphGroupFooter = require(`./glyph-group-footer`);
 const GlyphGroupSearch = require(`./glyph-group-search`);
+
 
 class GlyphGroupsView extends nkm.datacontrols.ControlView { //ui.views.View
     constructor() { super(); }
@@ -20,16 +23,9 @@ class GlyphGroupsView extends nkm.datacontrols.ControlView { //ui.views.View
     _Init() {
         super._Init();
 
-        this._Bind(this._OnIndexRequestMixed);
-        this._Bind(this._OnIndexRequestRange);
-        this._Bind(this._OnIndexRequestUnicodes);
-        this._Bind(this._OnIndexRequestSearchResult);
-
-        this._streamRequestFn = this._OnIndexRequestUnicodes;
         this._domStreamer = null;
         this._unicodeMap = new Map();
-        this._rangeInfos = null;
-        this._displayRanges = null;
+        this._displayRange = null;
 
         this._dataObserver
             .Hook(SIGNAL.GLYPH_ADDED, this._OnGlyphAdded, this)
@@ -43,13 +39,19 @@ class GlyphGroupsView extends nkm.datacontrols.ControlView { //ui.views.View
             .Hook(SIGNAL.SEARCH_STARTED, this._OnSearchStarted, this)
             .Hook(SIGNAL.SEARCH_COMPLETE, this._OnSearchComplete, this);
 
-        this._delayedReloadList = nkm.com.DelayedCall(this._Bind(this._ReloadList));
-        this._defaultStreamFn = null;
         this._searchActive = false;
 
         this._InitSelectionStack(false, true);
         this.selectionStack.dataSelection.dataMember = `_glyphInfos`;
         this.selectionStack.Watch(com.SIGNAL.ITEM_ADDED, this._OnDataSelected, this);
+
+        this._contentRange = new RangeContent();
+        this._contentRange.Watch(nkm.com.SIGNAL.READY, this._OnRangeReady, this);
+        this.forwardData
+            .To(this._contentRange, { mapping: `family` })
+            .To(this, { dataMember: `searchSettings`, mapping: `searchSettings` });
+
+        this._content = null;
 
     }
 
@@ -66,13 +68,16 @@ class GlyphGroupsView extends nkm.datacontrols.ControlView { //ui.views.View
                 '--streamer-gap': '10px',
                 'overflow': 'clip'
             },
-            '.header, .search': {
+            '.header, .search, .footer': {
                 'flex': '0 0 auto',
             },
             '.dom-stream': {
                 'position': 'relative',
                 'flex': '1 1 auto',
                 'overflow': 'auto',
+            },
+            '.dom-stream.empty':{
+                'display':'block !important'
             },
             '.search-status': {
                 '@': ['absolute-center']
@@ -84,17 +89,16 @@ class GlyphGroupsView extends nkm.datacontrols.ControlView { //ui.views.View
         super._Render();
 
         this._header = this.Attach(GlyphGroupHeader, `header`);
-        this.forwardData.To(this._header);
 
         this._searchStatus = this.Attach(mkfWidgets.SearchStatus, `search-status`);
         this._search = this.Attach(GlyphGroupSearch, `search`);
         this._search.status = this._searchStatus;
 
-
         this._domStreamer = this.Attach(ui.helpers.DOMStreamer, 'dom-stream');
         this._domStreamer
             .Watch(ui.SIGNAL.ITEM_CLEARED, this._OnItemCleared, this)
-            .Watch(ui.SIGNAL.ITEM_REQUEST_RANGE_UPDATE, this._OnItemRequestRangeUpdate, this);
+            .Watch(ui.SIGNAL.ITEM_REQUEST_RANGE_UPDATE, this._OnItemRequestRangeUpdate, this)
+            .Watch(ui.SIGNAL.ITEM_REQUESTED, this._OnItemRequested, this);
 
         this._domStreamer.options = {
             layout: {
@@ -104,6 +108,12 @@ class GlyphGroupsView extends nkm.datacontrols.ControlView { //ui.views.View
                 gap: 10
             }
         };
+
+        this._footer = this.Attach(GlyphGroupFooter, `footer`);
+
+        this.forwardData
+            .To(this._header)
+            .To(this._footer);
 
     }
 
@@ -117,13 +127,9 @@ class GlyphGroupsView extends nkm.datacontrols.ControlView { //ui.views.View
         };
     }
 
-    _OnDataChanged(p_oldData) {
-        super._OnDataChanged(p_oldData);
-        this.searchSettings = this._data ? this._data.searchSettings : null;
-    }
-
     set searchSettings(p_value) {
         if (this._searchSettings == p_value) { return; }
+
         this._searchSettings = p_value;
         this._searchObserver.ObserveOnly(p_value);
         this._search.data = p_value;
@@ -132,73 +138,29 @@ class GlyphGroupsView extends nkm.datacontrols.ControlView { //ui.views.View
 
     set displayRange(p_value) {
 
-        if (this._displayRanges == p_value) {
-            //TODO: If not ligatures, can just return.
-            //otherwise, range is dynamic and should be refreshed.
-            return;
-        }
+        if (this._displayRange == p_value) { return; }
+
+        this._displayRange = p_value;
 
         this.selectionStack.Clear();
 
+        this._contentRange.displayRange = p_value;
         this._header.displayRange = p_value;
-        //this._search.displayRange = p_value;
-
-        this._displayRanges = p_value;
-        this._rangeInfos = null;
-        this._individualFetchGlyphFn = null;
-
-        this._dynamicRange = p_value.isDynamic;
-        if (this._dynamicRange) { this._cachedRange = p_value; }
-
-        if (!p_value) {
-            // TODO: Clear streamer
-            return;
-        }
-
-        this._rangeInfos = UTILS.GetRangeInfos(this._data, p_value);
-
-        switch (this._rangeInfos.type) {
-            case IDS_EXT.RANGE_MIXED:
-                this._defaultStreamFn = this._OnIndexRequestMixed;
-                break;
-            case IDS_EXT.RANGE_INLINE:
-                this._defaultStreamFn = this._OnIndexRequestRange;
-                break;
-            case IDS_EXT.RANGE_PLAIN:
-                this._individualFetchGlyphFn = p_value.fetchGlyph || null;
-                this._defaultStreamFn = this._OnIndexRequestUnicodes;
-                break;
-        }
-
-        if (this._searchSettings) { this._searchSettings._UpdateSearchData(this._displayRanges, this._rangeInfos); }
-        if (this._searchActive) { this._StartSearch(); }
-        else { this._DisplaySelectedRange(); }
 
     }
 
-    _DisplaySelectedRange() {
+    _OnRangeReady(p_range) {
 
-        this._domStreamer.Unwatch(ui.SIGNAL.ITEM_REQUESTED, this._streamRequestFn, this);
-        this._streamRequestFn = this._defaultStreamFn;
-        this._domStreamer.Watch(ui.SIGNAL.ITEM_REQUESTED, this._streamRequestFn, this);
+        //Active range content is ready
 
-        this._domStreamer.itemCount = this._rangeInfos.indexCount;
-        this._domStreamer.scroll({ top: 0 });
+        if (this._searchActive) { this._SetContentSource(null); }
+        else { this._SetContentSource(this._contentRange._content); }
+
+        this._searchSettings._UpdateSearchData(p_range);
 
     }
 
     //#region search
-
-    _DisplaySearch() {
-
-        this._domStreamer.Unwatch(ui.SIGNAL.ITEM_REQUESTED, this._streamRequestFn, this);
-        this._streamRequestFn = this._OnIndexRequestSearchResult;
-        this._domStreamer.Watch(ui.SIGNAL.ITEM_REQUESTED, this._streamRequestFn, this);
-
-        this._domStreamer.itemCount = this._searchSettings._results.length;
-        this._domStreamer.scroll({ top: 0 });
-
-    }
 
     _OnSearchToggled() {
 
@@ -208,158 +170,51 @@ class GlyphGroupsView extends nkm.datacontrols.ControlView { //ui.views.View
         if (oldValue == this._searchActive) { return; }
 
         if (!this._searchActive) {
-            this._DisplaySelectedRange();
+            this._SetContentSource(this._contentRange._content);
         } else {
-            if (this._searchSettings.ready) {
-                this._DisplaySearch();
-            } else {
-                // Wait for results to be ready
-                this._OnSearchStarted();
-            }
+            if (this._searchSettings.ready) { this._OnSearchComplete(); }
+            else { this._OnSearchStarted(); }
         }
-
-    }
-
-    _StartSearch() {
-
-        this._domStreamer.Unwatch(ui.SIGNAL.ITEM_REQUESTED, this._streamRequestFn, this);
-
-        this._domStreamer.itemCount = 0;
-        this._domStreamer.scroll({ top: 0 });
-
-        // Reset search
-        this._searchSettings._UpdateSearchData(this._displayRanges, this._rangeInfos);
 
     }
 
     _OnSearchStarted() {
-
-        if (!this._searchActive) { return; }
-
-        this._domStreamer.itemCount = 0;
-        this._domStreamer.scroll({ top: 0 });
-
+        if (this._searchActive) { this._SetContentSource(null); }
     }
 
     _OnSearchComplete() {
+        if (this._searchActive) { this._SetContentSource(this._searchSettings._results); }
+    }
 
+    //#endregion
 
-        if (!this._searchActive) { return; }
+    //#region DOM Streamer handling
 
-        this._domStreamer.Unwatch(ui.SIGNAL.ITEM_REQUESTED, this._streamRequestFn, this);
-        this._streamRequestFn = this._OnIndexRequestSearchResult;
-        this._domStreamer.Watch(ui.SIGNAL.ITEM_REQUESTED, this._streamRequestFn, this);
-
-        this._domStreamer.itemCount = this._searchSettings._results.length;
+    _SetContentSource(p_array) {
+        this._content = p_array;
+        this._domStreamer.itemCount = p_array ? p_array.length : 0;
         this._domStreamer.scroll({ top: 0 });
-
     }
 
-    _OnIndexRequestSearchResult(p_streamer, p_index, p_fragment) {
+    _OnItemRequested(p_streamer, p_index, p_fragment) {
 
-        let unicode = this._searchSettings._results[p_index];
-        if (unicode) { this._OnItemRequestProcessed(unicode, p_streamer, p_index, p_fragment); }
+        let unicode = this._content ? this._content[p_index] : null;
 
-    }
-
-    //#endregion
-
-    //#region Index request handler
-
-    _OnIndexRequestMixed(p_streamer, p_index, p_fragment) {
-        let index = this._GetMixedIndex(p_index);
-        if (index == -1) { return; }
-        let data = UNICODE.instance._charList[index];
-        if (data) { this._OnItemRequestProcessed(data, p_streamer, p_index, p_fragment); }
-    }
-
-    _GetMixedIndex(p_index) {
-
-        let
-            list = this._rangeInfos.list,
-            advance = this._cachedAdvance;
-
-        for (let i = this._cachedLoopStart, n = list.length; i < n; i++) {
-            let range = list[i];
-
-            if (u.isArray(range)) {
-
-                let
-                    start = range[0],
-                    end = range[1],
-                    coverage = end - start + 1,
-                    target = start + (p_index - advance); //+1 as range is inclusive
-
-                if (p_index >= advance &&
-                    target <= end) {
-                    this._cachedLoopStart = i;
-                    this._cachedAdvance = advance;
-                    return target;
-                }
-
-                advance += coverage;
-
-            } else {
-                if (p_index == advance) {
-                    this._cachedLoopStart = i;
-                    this._cachedAdvance = advance;
-                    return range;
-                }
-                advance++;
-            }
-
-        }
-
-        return -1;
-    }
-
-    _OnIndexRequestRange(p_streamer, p_index, p_fragment) {
-        let
-            index = p_index + this._rangeInfos.indexOffset;
-        //hex = index.toString(16).padStart(4, `0`);
-        let data = UNICODE.GetSingle(index);
-
-        this._OnItemRequestProcessed(data, p_streamer, p_index, p_fragment);
-        //if (data) { this._OnItemRequestProcessed(data, p_streamer, p_index, p_fragment); }
-        //else { this._OnItemRequestProcessed(index, p_streamer, p_index, p_fragment); }
-    }
-
-    _OnIndexRequestUnicodes(p_streamer, p_index, p_fragment) {
-
-        let
-            unicode = this._rangeInfos.list[p_index],
-            data;
-
-        if (u.isObject(unicode)) {
-            this._OnItemRequestProcessed(unicode, p_streamer, p_index, p_fragment);
-            return;
-        }
-
-        if (this._individualFetchGlyphFn) { data = this._individualFetchGlyphFn(this._data, unicode); }
-        else { data = UNICODE.GetInfos(unicode); }
-
-        if (data) { this._OnItemRequestProcessed(data, p_streamer, p_index, p_fragment); }
-
-    }
-
-    //#endregion
-
-    _OnItemRequestProcessed(p_data, p_streamer, p_index, p_fragment) {
-
-        if (!this._data) { return; }
+        if (!unicode || !this._data) { return; }
 
         let widget = this.Attach(mkfWidgets.GlyphSlot, 'glyph', p_fragment);
         widget.subFamily = this._data.selectedSubFamily;
-        widget.glyphInfos = p_data;
+        widget.glyphInfos = unicode;
 
         this.selectionStack.Check(widget);
+
         if (this.editor.inspectedData) {
-            if (this.editor.inspectedData.unicodeInfos == p_data) {
+            if (this.editor.inspectedData.unicodeInfos == unicode) {
                 widget.Select(true);
             }
         }
 
-        this._unicodeMap.set(p_data, widget);
+        this._unicodeMap.set(unicode, widget);
 
         p_streamer.ItemRequestAnswer(p_index, widget);
 
@@ -370,23 +225,27 @@ class GlyphGroupsView extends nkm.datacontrols.ControlView { //ui.views.View
     }
 
     _OnItemRequestRangeUpdate() {
-        this._cachedLoopStart = 0;
-        this._cachedAdvance = 0;
+
     }
+
+    //#endregion
 
     //#region Catalog Management
 
     _OnDataUpdated(p_data) {
         super._OnDataUpdated(p_data);
-        this._RefreshItems();
+        //this._RefreshItems();
     }
 
 
     _RefreshItems() {
+        this._domStreamer._Stream(null,null,true);
+        /*
         for (let i = 0; i < this._displayList.count; i++) {
             let item = this._displayList.At(i);
-            //if (`_UpdateGlyphPreview` in item) { item._UpdateGlyphPreview(); }
+            if (`_UpdateGlyphPreview` in item) { item._UpdateGlyphPreview(); }
         }
+        */
     }
 
     //#endregion
@@ -394,6 +253,7 @@ class GlyphGroupsView extends nkm.datacontrols.ControlView { //ui.views.View
     //#region Preview updates
 
     _OnDataSelected(p_item, p_firstTimeAdd) {
+
         if (!p_firstTimeAdd) { return; }
 
         let glyphInfos = p_item.glyphInfos;
@@ -429,8 +289,6 @@ class GlyphGroupsView extends nkm.datacontrols.ControlView { //ui.views.View
             widget.data = p_glyph;
         }
 
-        if (this._dynamicRange) { this._delayedReloadList.Schedule(); }
-
     }
 
     _OnGlyphRemoved(p_family, p_glyph) {
@@ -443,13 +301,12 @@ class GlyphGroupsView extends nkm.datacontrols.ControlView { //ui.views.View
             widget.data = p_family.nullGlyph;
         }
 
-        if (this._dynamicRange) { this._delayedReloadList.Schedule(); }
-
     }
 
     _ReloadList() {
-        this._displayRanges = null;
-        this.displayRange = this._cachedRange;
+        let range = this._displayRange;
+        this._displayRange = null;
+        this.displayRange = range;
     }
 
     _OnGlyphVariantRemoved(p_subFamily, p_glyphVariant) {

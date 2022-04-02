@@ -35,22 +35,13 @@ class CmdExportToClipboard extends actions.Command {
         }
 
         this._context = this._emitter.data;
-        if (u.isInstanceOf(this._context, mkfData.Glyph)) { this._context = this._context.GetVariant(this._context.family.selectedSubFamily); }
+
+        if (u.isInstanceOf(this._context, mkfData.Glyph)) {
+            this._context = this._context.GetVariant(this._context.family.selectedSubFamily);
+        }
 
         try {
-
-            let
-                inlineTr = ``,
-                markedPath = ``,
-                tr = this._context._transformSettings,
-                p = this._context.Get(mkfData.IDS.PATH_DATA);
-
-            for (let p in tr._values) { inlineTr += `${p}="${tr._values[p].value}" `; }
-
-            markedPath = `<path style="stroke:#FF00FF;fill:none" d="M 0 0 L ${p.width} 0 L ${p.width} ${p.height} L 0 ${p.height} z"></path>`;
-
-            let string = `<svg viewBox="0 0 ${p.width} ${p.height}" ${inlineTr}><path d="${p.path}"></path>${markedPath}</svg>`;
-            clipboard.writeText(string);
+            clipboard.writeText(SVGOPS.SVGFromGlyphVariant(this._context, true));
         } catch (e) { console.log(e); }
 
         this._Success();

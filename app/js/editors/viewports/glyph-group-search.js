@@ -123,10 +123,12 @@ class GlyphGroupSearch extends nkm.datacontrols.ControlView {
         }
     }
 
-    _OnSearchToggle(){
-        if(this.activeSearch){
-            if(this._data.running){ this._status.visible = false; }
-            else{ this._OnSearchComplete(); }
+    _OnSearchToggle() {
+        if (this.activeSearch) {
+            if (this._data.running) { this._status.visible = false; }
+            else { this._OnSearchComplete(); }
+        } else {
+            this._status.visible = false;
         }
     }
 

@@ -9,49 +9,37 @@ const mkfCatalog = require(`../../catalogs`);
 
 // Manages what is shown & selectable in the viewport.
 
-const CountGlyphs = (p_family) => {
-    return p_family._glyphs.count;
-};
 
-const CountLigatures = (p_family) => {
-    return p_family._ligatureSet.size;
-}
-
-const CountComponents = (p_family) => {
-    return 0;
-}
-
-const CountAll = (p_family) => {
-    return UNICODE.instance._charList.length;
-}
 
 class FamilyContentInspector extends nkm.datacontrols.InspectorView {
     constructor() { super(); }
 
     _Init() {
+        
         super._Init();
+
         this._specialCatalog = nkm.data.catalogs.CreateFrom(
-            { name: 'Family content', localItemClass: mkfCatalog.UniFamily, expanded: true, autoSort:false },
+            { name: 'Quick access', localItemClass: mkfCatalog.UniFamily, expanded: true, autoSort:false },
             [
                 {
-                    name: 'Glyphs', typeTag: `Custom`, count: CountGlyphs,
+                    name: 'Glyphs', typeTag: `Custom`, count: mkfData.RangeContent.CountGlyphs,
                     icon: 'text-style', isDynamic: true,
-                    fetchList: mkfData.UTILS.GetFamilyUArray
+                    fetchList: mkfData.RangeContent.FetchFamilyGlyphAll
                 },
                 {
-                    name: 'Ligatures', typeTag: `Custom`, count: CountLigatures,
+                    name: 'Ligatures', typeTag: `Custom`, count: mkfData.RangeContent.CountLiga,
                     icon: 'text-liga', isDynamic: true,
-                    fetchList: mkfData.UTILS.GetFamilyLigaUArray
+                    fetchList: mkfData.RangeContent.FetchFamilyGlyphLiga
                 },
                 {
-                    name: 'Components', typeTag: `Custom`, count: CountComponents,
+                    name: 'Components', typeTag: `Custom`, count: mkfData.RangeContent.CountComponents,
                     icon: 'icon', isDynamic: true,
-                    fetchList: mkfData.UTILS.GetFamilyComponents
+                    fetchList: mkfData.RangeContent.FetchFamilyComponents
                 },
                 {//TODO : All glyph for full search opportunities
-                    name: 'All', typeTag: `Custom`, count: CountAll,
+                    name: 'All glyphs', typeTag: `Custom`, count: mkfData.RangeContent.CountAll,
                     icon: 'text', isDynamic: true,
-                    fetchList: mkfData.UTILS.GetAllKnownUArray
+                    fetchList: mkfData.RangeContent.FetchAllKnowGlyphs
                 }
             ]);
 

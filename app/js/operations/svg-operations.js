@@ -385,7 +385,6 @@ class SVGOperations {
             scale = 1,
             heightRef = p_svgStats.height,
             widthRef = p_svgStats.width,
-            wOff = p_settings.Get(IDS.TR_WIDTH_PUSH),
             offsetY = 0,
             offsetX = 0,
             fitH = heightRef,
@@ -474,8 +473,8 @@ class SVGOperations {
 
         let hAlign = p_settings.Get(IDS.TR_HOR_ALIGN);
         if (hAlign == ENUMS.HALIGN_XMIN) {
-            if (Math.abs(wOff) < 1.00001) { widthRef += widthRef * wOff; }
-            else { widthRef += wOff; }
+            if (Math.abs(sShift) < 0.99) { sShift = widthRef * sShift; }
+            if (Math.abs(sPush) < 0.99) { sPush = widthRef * sPush; }
         }
 
         switch (p_settings.Get(IDS.TR_HOR_ALIGN_ANCHOR)) {
@@ -540,6 +539,24 @@ class SVGOperations {
     }
 
     //#endregion
+
+    static SVGFromGlyphVariant(p_variant, p_includeMark = true) {
+
+        let
+            inlineTr = ``,
+            markedPath = ``,
+            tr = p_variant._transformSettings,
+            p = p_variant.Get(IDS.PATH_DATA);
+
+        for (let p in tr._values) { inlineTr += `${p}="${tr._values[p].value}" `; }
+
+        if (p_includeMark) {
+            markedPath = `<path style="stroke:#FF00FF;fill:none" d="M 0 0 L ${p.width} 0 L ${p.width} ${p.height} L 0 ${p.height} z"></path>`;
+        }
+
+        return `<svg viewBox="0 0 ${p.width} ${p.height}" ${inlineTr}><path d="${p.path}"></path>${markedPath}</svg>`;
+
+    }
 
 }
 

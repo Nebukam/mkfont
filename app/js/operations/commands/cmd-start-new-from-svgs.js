@@ -9,9 +9,9 @@ const mkfData = require(`../../data`);
 const mkfCatalog = require(`../../catalogs`);
 const mkfActions = require(`../actions`);
 
-const CmdStartNewMKFont = require(`./cmd-start-new-mkfont`);
+const CmdCreateFamilyDoc = require(`./cmd-start-new-mkfont`);
 
-class CmdStartNewMKFontFromSVGs extends CmdStartNewMKFont {
+class CmdCreateFamilyDocFromSVGs extends CmdCreateFamilyDoc {
     constructor() { super(); }
 
     static __defaultName = `New .mkfont from SVGs`;
@@ -168,4 +168,4 @@ class CmdStartNewMKFontFromSVGs extends CmdStartNewMKFont {
 
 }
 
-module.exports = CmdStartNewMKFontFromSVGs;
+module.exports = CmdCreateFamilyDocFromSVGs;

@@ -1,19 +1,16 @@
 'use strict';
 
-class FamilyDocument extends nkm.documents.DocumentEx{
-    constructor(){super();}
+const doc = nkm.documents;
+
+class FamilyDocument extends doc.DocumentEx {
+    constructor() { super(); }
 
     static __NFO__ = nkm.com.NFOS.Ext({
-        resource: nkm.io.resources.JSONResource,
-        serializationContext: data.serialization.CONTEXT.JSON
-        }, nkm.documents.DocumentEx.__NFO__);
+        [doc.IDS.TYPE_RSC]: nkm.io.resources.JSONResource,
+        [doc.IDS.SERIAL_CTX]: nkm.data.serialization.CONTEXT.JSON,
+        [doc.IDS.DATA_BOUND]: true,
+    }, doc.DocumentEx);
 
-    _CheckOptions( p_options = null ){
-        p_options = p_options ? p_options : {};
-        p_options.io = env.ENV.IF_NODE(nkm.io.IO_TYPE.FILE_SYSTEM, nkm.io.IO_TYPE.LOCAL_STORAGE);
-        return p_options;
-    }
-    
 }
 
 module.exports = FamilyDocument;

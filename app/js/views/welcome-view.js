@@ -79,7 +79,7 @@ class WelcomeView extends ui.views.View {
             defaultWidgetClass: nkm.uilib.buttons.Button,
             handles: [
                 {
-                    command: mkfOperations.commands.StartNewMKFont,
+                    command: mkfOperations.commands.CreateFamilyDoc,
                     variant: ui.FLAGS.MINIMAL, flavor: ui.FLAGS.CTA,
                     group:`n`
                 },
@@ -92,7 +92,7 @@ class WelcomeView extends ui.views.View {
                     variant: ui.FLAGS.MINIMAL, flavor: nkm.com.FLAGS.LOADING
                 },
                 {
-                    command: mkfOperations.commands.IOLoadFamily,
+                    command: mkfOperations.commands.LoadFamilyDoc,
                     variant: ui.FLAGS.MINIMAL, flavor: nkm.com.FLAGS.LOADING,
                     group:`plop`
                 },
@@ -112,7 +112,7 @@ class WelcomeView extends ui.views.View {
             defaultWidgetClass: nkm.uilib.buttons.Button,
             handles: [
                 {
-                    label: `beta`,
+                    label: `0.0.1-beta.3`,
                     cl:nkm.uilib.widgets.Tag,
                     group: `Version`
                 },
