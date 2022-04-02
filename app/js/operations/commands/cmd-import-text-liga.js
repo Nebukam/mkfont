@@ -89,10 +89,7 @@ class CmdImportTextLiga extends actions.Command {
                 editor.Do(mkfActions.CreateGlyph, {
                     family: family,
                     unicode: unicodeInfos,
-                    path: SVGOPS.EmptySVGStats(),
-                    transforms: {
-                        [mkfData.IDS.TR_WIDTH_SHIFT]: family.selectedSubFamily.Get(mkfData.IDS.EM_UNITS)
-                    }
+                    path: SVGOPS.EmptySVGStats()
                 });
             }
 
