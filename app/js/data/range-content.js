@@ -8,6 +8,7 @@ const io = nkm.io;
 const UNICODE = require(`../unicode`);
 const SIGNAL = require(`../signal`);
 const GlyphVariant = require(`./glyph-variant-data-block`);
+const IDS = require(`./ids`);
 const IDS_EXT = require(`./ids-ext`);
 const UTILS = require(`./utils`);
 
@@ -72,6 +73,7 @@ class RangeContent extends nkm.com.pool.DisposableObjectEx {
             .Hook(SIGNAL.GLYPH_REMOVED, this._OnGlyphRemoved, this);
 
         this._delayedRecompute = nkm.com.DelayedCall(this._Bind(this.RecomputeContent));
+        this._delayedDynamicRecompute = nkm.com.DelayedCall(this._Bind(this._DynamicRecompute));
 
     }
 
@@ -85,7 +87,7 @@ class RangeContent extends nkm.com.pool.DisposableObjectEx {
     set displayRange(p_value) {
 
         if (this._displayRange == p_value) { return; }
-        
+
         this._content.length = 0;
 
         this._displayRange = p_value;
@@ -141,13 +143,13 @@ class RangeContent extends nkm.com.pool.DisposableObjectEx {
 
     _OnGlyphAdded() {
         if (this._displayRange.isDynamic) {
-            this._delayedRecompute.Schedule();
+            this._delayedDynamicRecompute.Schedule();
         }
     }
 
     _OnGlyphRemoved() {
         if (this._displayRange.isDynamic) {
-            this._delayedRecompute.Schedule();
+            this._delayedDynamicRecompute.Schedule();
         }
     }
 
@@ -168,6 +170,12 @@ class RangeContent extends nkm.com.pool.DisposableObjectEx {
         this._ready = true;
         this.Broadcast(nkm.com.SIGNAL.READY, this);
 
+    }
+
+    _DynamicRecompute() {
+        let dr = this._displayRange;
+        this._displayRange = null;
+        this.displayRange = dr;
     }
 
     //#region fetch methods
