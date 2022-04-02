@@ -21,6 +21,7 @@ class CmdCreateFamilyDocFromSVGs extends CmdCreateFamilyDoc {
         super._Init();
 
         this._Bind(this._OnPicked);
+        this._Bind(this._OnImportContinue);
 
         this._importCatalog = nkm.data.catalogs.CreateFrom({
             name: `Import list`,
@@ -61,7 +62,9 @@ class CmdCreateFamilyDocFromSVGs extends CmdCreateFamilyDoc {
             return;
         }
 
-        this._newFamily = nkm.com.Rent(mkfData.Family);
+        let document = this._GetDoc(true);
+
+        this._newFamily = document.currentData;
         this._newFamily.defaultSubFamily._UpdateDisplayValues();
 
         let subFamily = this._newFamily.selectedSubFamily;

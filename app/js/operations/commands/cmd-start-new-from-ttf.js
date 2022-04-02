@@ -14,7 +14,7 @@ class CmdCreateFamilyDocFromTTF extends CmdCreateFamilyDoc {
     static __defaultName = `New .mkfont from TTF`;
     static __defaultIcon = `directory-download-small`;
 
-    _Init(){
+    _Init() {
         super._Init();
         this._Bind(this._OnPicked);
     }
@@ -41,7 +41,15 @@ class CmdCreateFamilyDocFromTTF extends CmdCreateFamilyDoc {
 
         let p = p_response.filePaths[0];;
 
-        try { this._newFamily = mkfData.TTF.FamilyFromTTF(fs.readFileSync(p)); }
+        try {
+            this._newFamily = mkfData.TTF.FamilyFromTTF(fs.readFileSync(p));
+            let document = this._GetDoc(true),
+                deprecatedData = document.currentData;
+                
+            document.currentData = this._newFamily;
+            deprecatedData.Release();
+
+        }
         catch (e) {
             this._Fail(e);
             return;
