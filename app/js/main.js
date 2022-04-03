@@ -97,11 +97,8 @@ class MKFont extends nkm.app.AppBase {
             }
         }
 
-        if(openPath != null && !nkm.utils.isVoid(openPath)){
-            mkfOperations.commands.LoadFamilyDoc.Execute(openPath);
-        }else{
-            this._welcomeView._options.view.RequestDisplay();
-        }
+        this._welcomeView._options.view.RequestDisplay();
+        this._OnOpenPathRequest(openPath);
 
         //mkfOperations.commands.MakeTTFFont.Enable();
         //nkm.actions.KeystrokeEx.CreateFromString(`Ctrl E`, { fn: this._Bind(this._WriteTTF) }).Enable();
@@ -111,7 +108,25 @@ class MKFont extends nkm.app.AppBase {
 
     }
 
-    _OnDocDataRoaming(p_document){
+    _OnOpenPathRequest(p_path) {
+
+        console.log(`_OnOpenPathRequest -> `, p_path);
+        if (p_path == null || nkm.utils.isVoid(p_path)) { return; }
+
+        if (nkm.utils.isArray(p_path)) {
+            let finalPath = null;
+            p_path.forEach((item) => { if (item.includes(`.mkfont`)) { finalPath = item; } });
+            if (!finalPath) { return; }
+            p_path = finalPath;
+        }
+
+        if (!p_path.includes(`.mkfont`)) { return; }
+
+        mkfOperations.commands.LoadFamilyDoc.Execute(p_path);
+
+    }
+
+    _OnDocDataRoaming(p_document) {
         mkfOperations.commands.ReleaseFamilyDoc.Execute(p_document.currentData);
     }
 

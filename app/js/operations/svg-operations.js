@@ -27,17 +27,24 @@ const svgopts = {
     plugins: [
         {
             name: `convertShapeToPath`, params: {
-                convertArcs: true
+                convertArcs: true,
+                precision:100,
             }
         },
         {
-            name: `convertPathData`, params: {
+            name: `convertPathData`, params: {/*
                 applyTransforms: true,
                 straightCurves: false,
                 lineShorthands: false,
                 curveSmoothShorthands: false,
                 collapseRepeated: false,
-                noSpaceAfterFlags: false
+                noSpaceAfterFlags: false,
+                leadingZero:false,
+                negativeExtraSpace:false,
+                collapseRepeated:false,
+                utilizeAbsolute:false,*/
+                floatPrecision:100,
+                transformPrecision:100,
             }
         }
     ]
