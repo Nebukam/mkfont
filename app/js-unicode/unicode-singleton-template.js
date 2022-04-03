@@ -6,6 +6,8 @@ const mkfData = require(`./data`);
 const CmdSetDisplay = require(`./operations/commands/cmd-set-display-list`);
 const UniBlock = require(`./catalogs/definition-uni-block`);
 const UniCategory = require(`./catalogs/definition-uni-cat`);
+const UniCategoryGroup = require(`./catalogs/definition-uni-cat-group`);
+
 
 class UNICODE extends nkm.com.helpers.Singleton {
     constructor() { super(); }
@@ -25,7 +27,7 @@ class UNICODE extends nkm.com.helpers.Singleton {
         let mgc = [];
         for (let p in gc) {
             let lgc = gc[p], subs = lgc.subs,
-                cgc = { name: lgc.name, content: [] };
+                cgc = { name: lgc.name, itemClass:UniCategoryGroup, content: [] };
             for (let i = 0; i < subs.length; i++) {
                 let lcgc = subs[i];
                 lcgc.parent = lgc;
@@ -196,6 +198,16 @@ class UNICODE extends nkm.com.helpers.Singleton {
         }
 
         return lookup;
+    }
+
+    static UUni(p_infos) {
+        if (p_infos.ligature) {
+            let ulist = p_infos.u.split(`+`);
+            for (let i = 0; i < ulist.length; i++) { ulist[i] = `U+${ulist[i]}`; }
+            return ulist.join(`_`);
+        } else {
+            return `U+${p_infos.u}`;
+        }
     }
 
 }

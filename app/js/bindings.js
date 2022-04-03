@@ -23,9 +23,17 @@ class Bindings extends nkm.com.helpers.BindingKit {
                 ]
             },
             {
-                context: nkm.uilib.lists.FolderList,
+                context: mkfWidgets.lists.UniCategoryGroup,
                 kvps: [
                     { key: mkfCatalogs.UniCategory, binding: mkfWidgets.lists.UniCategory },
+                    { key: mkfCatalogs.UniCategoryGroup, binding: mkfWidgets.lists.UniCategoryGroup },
+                ]
+            },
+            {
+                context: nkm.uilib.lists.FolderListRoot,
+                kvps: [
+                    { key: mkfCatalogs.UniCategory, binding: mkfWidgets.lists.UniCategory },
+                    { key: mkfCatalogs.UniCategoryGroup, binding: mkfWidgets.lists.UniCategoryGroup },
                 ]
             },
             {

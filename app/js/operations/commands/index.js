@@ -31,6 +31,7 @@ module.exports = {
     ExportToClipboard: new (require(`./cmd-export-to-clipboard`))(),
     ExportUniClipboard: new (require(`./cmd-export-uni-clipboard`))(),
     ExportUniHexToClipboard: new (require(`./cmd-export-uni-hex-clipboard`))(),
+    ExportUniHexSingleToClipboard: new (require(`./cmd-export-uni-hex-single-clipboard`))(),
 
     CreateFamilyDoc: docCmds.DocumentCreate.Rent({
         name: `New .mkfont`,

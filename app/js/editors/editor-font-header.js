@@ -5,6 +5,7 @@ const ui = nkm.ui;
 const mkfData = require(`../data`);
 const mkfInspectors = require(`./inspectors`);
 const mkfOperations = require(`../operations`);
+const mkfCmds = mkfOperations.commands;
 
 class FontEditorHeader extends nkm.datacontrols.ControlView {
     constructor() { super(); }
@@ -92,7 +93,7 @@ class FontEditorHeader extends nkm.datacontrols.ControlView {
                     size: ui.FLAGS.SIZE_S, flavor: ui.FLAGS.CTA,// variant:ui.FLAGS.FRAME,
                     trigger: {
                         fn: () => {
-                            mkfOperations.commands.SaveFamilyDoc.Execute(this._data);
+                            mkfCmds.SaveFamilyDoc.Execute(this._data);
                         }
                     },
                     group: `file-actions`
@@ -102,8 +103,8 @@ class FontEditorHeader extends nkm.datacontrols.ControlView {
                     size: ui.FLAGS.SIZE_S, flavor: ui.FLAGS.CTA, variant: ui.FLAGS.FRAME,
                     trigger: {
                         fn: () => {
-                            mkfOperations.commands.ExportTTF.emitter = this;
-                            mkfOperations.commands.ExportTTF.Execute(this._data);
+                            mkfCmds.ExportTTF.emitter = this;
+                            mkfCmds.ExportTTF.Execute(this._data);
                         }
                     },
                     group: `file-actions`
@@ -148,8 +149,8 @@ class FontEditorHeader extends nkm.datacontrols.ControlView {
                     group: `external`,
                     trigger: {
                         fn: () => {
-                            mkfOperations.commands.ImportTextLiga.emitter = this;
-                            mkfOperations.commands.ImportTextLiga.Execute(this._data);
+                            mkfCmds.ImportTextLiga.emitter = this;
+                            mkfCmds.ImportTextLiga.Execute(this._data);
                         }
                     },
                 },
@@ -161,8 +162,8 @@ class FontEditorHeader extends nkm.datacontrols.ControlView {
                     group: `external`,
                     trigger: {
                         fn: () => {
-                            mkfOperations.commands.ImportExternalFileMultiple.emitter = this;
-                            mkfOperations.commands.ImportExternalFileMultiple.Execute(this._data);
+                            mkfCmds.ImportExternalFileMultiple.emitter = this;
+                            mkfCmds.ImportExternalFileMultiple.Execute(this._data);
                         }
                     },
                 },
@@ -174,8 +175,8 @@ class FontEditorHeader extends nkm.datacontrols.ControlView {
                     group: `external`,
                     trigger: {
                         fn: () => {
-                            mkfOperations.commands.ImportTTF.emitter = this;
-                            mkfOperations.commands.ImportTTF.Execute(this._data);
+                            mkfCmds.ImportTTF.emitter = this;
+                            mkfCmds.ImportTTF.Execute(this._data);
                         }
                     },
                 }

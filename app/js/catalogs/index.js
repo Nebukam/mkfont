@@ -8,6 +8,7 @@ module.exports = {
 
     UniBlock: require(`./definition-uni-block`),
     UniCategory: require(`./definition-uni-cat`),
+    UniCategoryGroup: require(`./definition-uni-cat-group`),
     UniFamily: require(`./definition-uni-family`),
 
 }

@@ -43,7 +43,7 @@ $hint_size: 4px;
         content:"";
         position: absolute;
         box-sizing: border-box;
-        background-color: var(--flavor-primary-idle);
+        background-color: var(--flavor-secondary-idle);
     }
 
 }
@@ -101,7 +101,7 @@ $hint_size: 4px;
 :host(#{$FOCUSED}){
     
     &::before{
-        background-color: var(--flavor-primary-focused);
+        background-color: var(--flavor-secondary-focused);
     }
 
 }
@@ -110,7 +110,7 @@ $hint_size: 4px;
     background-color: var(#{$varname_workspace_bg});
 
     &::before{
-        background-color: var(--flavor-primary-selected);
+        background-color: var(--flavor-secondary-selected);
     }
 
 }

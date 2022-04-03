@@ -36,6 +36,13 @@ class CmdCreateFamilyDocFromSVGs extends CmdCreateFamilyDoc {
 
     _InternalExecute() {
 
+        this._blockingDialog = nkm.dialog.Push({
+            title: `Processing`,
+            message: `Please wait...`,
+            icon: `load-arrow-small`,
+            origin: this,
+        });
+
         if (nkm.env.isNodeEnabled) {
             nkm.actions.RELAY.ShowOpenDialog({
                 //defaultPath: this._currentValue ? this._currentValue : ``,
@@ -115,6 +122,9 @@ class CmdCreateFamilyDocFromSVGs extends CmdCreateFamilyDoc {
         this._importEditor.data = this._importTransformationSettings;
         this._importEditor.catalog = this._importCatalog;
 
+        this._blockingDialog.Consume();
+        this._blockingDialog = null;
+
         nkm.dialog.Push({
             title: `List import`,
             //message: `Tweak the imported data to make sure it fits!`,
@@ -167,6 +177,11 @@ class CmdCreateFamilyDocFromSVGs extends CmdCreateFamilyDoc {
 
         this._RequestEdit();
 
+    }
+
+    _End(){
+        if(this._blockingDialog){ this._blockingDialog.Consume(); }
+        super._End();
     }
 
 }

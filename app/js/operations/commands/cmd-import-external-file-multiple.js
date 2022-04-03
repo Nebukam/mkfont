@@ -37,6 +37,13 @@ class CmdImportExternalFileMultiple extends actions.Command {
 
     _InternalExecute() {
 
+        this._blockingDialog = nkm.dialog.Push({
+            title: `Processing`,
+            message: `Please wait...`,
+            icon: `load-arrow-small`,
+            origin: this,
+        });
+
         if (nkm.env.isNodeEnabled) {
             nkm.actions.RELAY.ShowOpenDialog({
                 //defaultPath: this._currentValue ? this._currentValue : ``,
@@ -113,6 +120,9 @@ class CmdImportExternalFileMultiple extends actions.Command {
         this._importEditor.subFamily = subFamily;
         this._importEditor.data = this._importTransformationSettings;
         this._importEditor.catalog = this._importCatalog;
+
+        this._blockingDialog.Consume();
+        this._blockingDialog = null;
 
         nkm.dialog.Push({
             title: `List import`,
@@ -231,6 +241,7 @@ class CmdImportExternalFileMultiple extends actions.Command {
     }
 
     _End() {
+        if(this._blockingDialog){ this._blockingDialog.Consume(); }
         if (this._importEditor) { this._importEditor.catalog = null; }
         super._End();
     }

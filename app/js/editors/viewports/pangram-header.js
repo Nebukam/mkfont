@@ -7,7 +7,7 @@ const mkfInspectors = require(`../inspectors`);
 const mkfOperations = require(`../../operations`);
 const mkfCmds = mkfOperations.commands;
 
-class GlyphGroupHeader extends nkm.datacontrols.ControlView {
+class PangramHeader extends nkm.datacontrols.ControlView {
     constructor() { super(); }
 
     _Init() {
@@ -61,15 +61,19 @@ class GlyphGroupHeader extends nkm.datacontrols.ControlView {
                 {
                     icon: `text-unicode-char`, htitle: `Copy current unicodes characters to clipboard.\nEach value is separated by a '\\n' new line.`,
                     trigger: {
-                        fn: () => { mkfCmds.ExportUniClipboard.Execute(this._parent._content); },
-                        thisArg: this
+                        fn: () => {
+                            mkfCmds.ExportUniClipboard.emitter = this;
+                            mkfCmds.ExportUniClipboard.Execute(this._parent);
+                        }
                     }
                 },
                 {
                     icon: `text-unicode`, htitle: `Copy current hex values to clipboard.\nEach value is separated by a '\\n' new line.`,
                     trigger: {
-                        fn: () => { mkfCmds.ExportUniHexToClipboard.Execute(this._parent._content); },
-                        thisArg: this
+                        fn: () => {
+                            mkfCmds.ExportUniHexToClipboard.emitter = this;
+                            mkfCmds.ExportUniHexToClipboard.Execute(this._parent);
+                        }
                     }
                 }
             ]
@@ -128,5 +132,5 @@ class GlyphGroupHeader extends nkm.datacontrols.ControlView {
 
 }
 
-module.exports = GlyphGroupHeader;
-ui.Register(`mkfont-glyph-group-header`, GlyphGroupHeader);
+module.exports = PangramHeader;
+ui.Register(`mkfont-pangram-header`, PangramHeader);

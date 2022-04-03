@@ -37,7 +37,7 @@ class FamilyContentInspector extends nkm.datacontrols.InspectorView {
                     fetchList: mkfData.RangeContent.FetchFamilyComponents
                 },
                 {//TODO : All glyph for full search opportunities
-                    name: 'All glyphs', typeTag: `Custom`, count: mkfData.RangeContent.CountAll,
+                    name: 'All Unicodes', typeTag: `Custom`, count: mkfData.RangeContent.CountAll,
                     icon: 'text', isDynamic: true,
                     fetchList: mkfData.RangeContent.FetchAllKnowGlyphs
                 }

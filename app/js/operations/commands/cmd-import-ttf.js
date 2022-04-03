@@ -25,6 +25,13 @@ class CmdImportTTF extends actions.Command {
         // - If dialog confirms import, then move on to next step
         // - If dialog is cancelled, then fail this command.
 
+        this._blockingDialog = nkm.dialog.Push({
+            title: `Processing`,
+            message: `Please wait...`,
+            icon: `load-arrow-small`,
+            origin: this,
+        });
+
         if (nkm.env.isNodeEnabled) {
             nkm.actions.RELAY.ShowOpenDialog({
                 //defaultPath: this._currentValue ? this._currentValue : ``,
@@ -117,6 +124,11 @@ class CmdImportTTF extends actions.Command {
 
     _OnImportCancel() {
         this._Cancel();
+    }
+
+    _End(){
+        this._blockingDialog.Consume();
+        super._End();
     }
 
 }

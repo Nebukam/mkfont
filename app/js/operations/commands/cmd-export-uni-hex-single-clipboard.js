@@ -6,13 +6,11 @@ const u = nkm.utils;
 const { clipboard } = require('electron');
 const fs = require('fs');
 
-const CmdViewportContent = require(`./cmd-viewport-content`);
-
 const UNICODE = require(`../../unicode`);
 const mkfData = require(`../../data`);
 const mkfActions = require(`../actions`);
 
-class CmdExportUniToClipboard extends CmdViewportContent {
+class CmdExportUniHexSingleToClipboard extends actions.Command {
     constructor() { super(); }
 
     _Init() {
@@ -20,19 +18,11 @@ class CmdExportUniToClipboard extends CmdViewportContent {
     }
 
     _InternalExecute() {
-
-        let list = super._InternalExecute();
-
-        let val = list.join(`\n`);
-        navigator.clipboard.writeText(val);
+        let val = UNICODE.UUni(this._context);
+        navigator.clipboard.writeText(val.toUpperCase());
         this._Success();
-
-    }
-
-    _ProcessInfo(p_unicodeInfos) {
-        return p_unicodeInfos.char;
     }
 
 }
 
-module.exports = CmdExportUniToClipboard;
+module.exports = CmdExportUniHexSingleToClipboard;

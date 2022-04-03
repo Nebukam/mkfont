@@ -5,6 +5,7 @@ const inputs = nkm.uilib.inputs;
 
 const mkfData = require(`../data`);
 const mkfOperations = require(`../operations`);
+const mkfCmds = mkfOperations.commands;
 
 const __flag_inherited = `inherited`;
 
@@ -41,7 +42,7 @@ class PropertyControl extends nkm.datacontrols.ControlWidget {
             .To(`inputOnly`, null, null)
             .To(`onSubmit`, `_onSubmitFn`, null)
             .To(`invertInputOrder`, null, false)
-            .To(`command`, null, mkfOperations.commands.SetProperty);
+            .To(`command`, null, mkfCmds.SetProperty);
 
         this._dataPreProcessor = this.constructor.__ppdata;
         this._inputOrder = 1;

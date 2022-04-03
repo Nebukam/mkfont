@@ -21,6 +21,13 @@ class CmdCreateFamilyDocFromTTF extends CmdCreateFamilyDoc {
 
     _InternalExecute() {
 
+        this._blockingDialog = nkm.dialog.Push({
+            title: `Processing`,
+            message: `Please wait...`,
+            icon: `load-arrow-small`,
+            origin: this,
+        });
+
         if (nkm.env.isNodeEnabled) {
             nkm.actions.RELAY.ShowOpenDialog({
                 filters: [{ name: 'TrueType files', extensions: ['ttf'] }],
@@ -57,6 +64,11 @@ class CmdCreateFamilyDocFromTTF extends CmdCreateFamilyDoc {
 
         this._RequestEdit();
 
+    }
+
+    _End(){
+        this._blockingDialog.Consume();
+        super._End();
     }
 
 }

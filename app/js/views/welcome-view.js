@@ -4,6 +4,7 @@ const ui = nkm.ui;
 const { shell } = require(`electron`);
 
 const mkfOperations = require(`../operations`);
+const mkfCmds = mkfOperations.commands;
 
 class WelcomeView extends ui.views.View {
     constructor() { super(); }
@@ -79,20 +80,20 @@ class WelcomeView extends ui.views.View {
             defaultWidgetClass: nkm.uilib.buttons.Button,
             handles: [
                 {
-                    command: mkfOperations.commands.CreateFamilyDoc,
+                    command: mkfCmds.CreateFamilyDoc,
                     variant: ui.FLAGS.MINIMAL, flavor: ui.FLAGS.CTA,
                     group:`n`
                 },
                 {
-                    command: mkfOperations.commands.StartNewFromTTF,
+                    command: mkfCmds.StartNewFromTTF,
                     variant: ui.FLAGS.MINIMAL, flavor: nkm.com.FLAGS.LOADING
                 },
                 {
-                    command: mkfOperations.commands.StartNewFromSVGS,
+                    command: mkfCmds.StartNewFromSVGS,
                     variant: ui.FLAGS.MINIMAL, flavor: nkm.com.FLAGS.LOADING
                 },
                 {
-                    command: mkfOperations.commands.LoadFamilyDoc,
+                    command: mkfCmds.LoadFamilyDoc,
                     variant: ui.FLAGS.MINIMAL, flavor: nkm.com.FLAGS.LOADING,
                     group:`plop`
                 },
@@ -112,7 +113,7 @@ class WelcomeView extends ui.views.View {
             defaultWidgetClass: nkm.uilib.buttons.Button,
             handles: [
                 {
-                    label: `0.0.1-beta.4`,
+                    label: `${nkm.env.CONF.version}`,
                     cl:nkm.uilib.widgets.Tag,
                     group: `Version`
                 },

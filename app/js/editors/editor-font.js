@@ -10,13 +10,14 @@ const mkfViewports = require(`./viewports`);
 const mkfViews = require(`../views`);
 const mkfData = require(`../data`);
 const mkfOperations = require(`../operations`);
+const mkfCmds = mkfOperations.commands;
 
 class FontEditor extends nkm.uiworkspace.editors.EditorEx {
     constructor() { super(); }
 
     static __registerableEditor = true;
 
-    static __default_viewportClass = mkfViewports.GlyphGroupViewport;
+    static __default_viewportClass = mkfViewports.GlyphGroup;
     static __default_headerClass = require(`./editor-font-header`);
     static __default_footerClass = require(`./editor-font-footer`);
 
@@ -32,6 +33,8 @@ class FontEditor extends nkm.uiworkspace.editors.EditorEx {
         // somewhere else
 
         this._Bind(this._ConfirmClose);
+
+        this._pangramViewport = null;
 
         this._leftShelfList = [];
         this._leftShelfCatalog = new nkm.data.catalogs.Catalog(false);
@@ -53,13 +56,13 @@ class FontEditor extends nkm.uiworkspace.editors.EditorEx {
 
     _OnDisplayGain() {
         super._OnDisplayGain();
-        mkfOperations.commands.SaveFamilyDoc.emitter = this;
-        mkfOperations.commands.SaveFamilyDoc.Enable();
+        mkfCmds.SaveFamilyDoc.emitter = this;
+        mkfCmds.SaveFamilyDoc.Enable();
     }
 
     _OnDisplayLost() {
         super._OnDisplayLost();
-        if (mkfOperations.commands.SaveFamilyDoc.emitter == this) { mkfOperations.commands.SaveFamilyDoc.Disable(); }
+        if (mkfCmds.SaveFamilyDoc.emitter == this) { mkfCmds.SaveFamilyDoc.Disable(); }
     }
 
     _PostInit() {
@@ -108,6 +111,9 @@ class FontEditor extends nkm.uiworkspace.editors.EditorEx {
 
         super._RegisterEditorBits();
 
+        this._leftShelf
+            .Watch(nkm.uilib.SIGNAL.CURRENT_HANDLE_CHANGED, this._OnLeftShelfHandleChanged, this);
+
         this._leftShelf.catalog = this._leftShelfCatalog;
 
         let confs = this._leftShelfList;
@@ -128,34 +134,6 @@ class FontEditor extends nkm.uiworkspace.editors.EditorEx {
 
         }
 
-    }
-
-    _OnSelectionStackItemAdded(p_widget) {
-        return;
-        let glyphInfos = p_widget.glyphInfos;
-        if (glyphInfos) {
-            let glyph = p_widget.data;
-            if (glyph) {
-                // Has an existing glyph!
-                if (glyph.isNull) {
-                    glyph.unicodeInfos = glyphInfos;
-                    //glyph.subFamily
-                    glyph.CommitUpdate();//Ensure the data gets refreshed, since it hasn't changed.
-                    glyph.defaultGlyph.CommitUpdate();
-                }
-                this.Inspect(glyph);
-            } else {
-                // No glyph associated... at all??
-                console.error(`Edge case, find why`);
-                this.Inspect(null);
-            }
-        } else {
-            this.Inspect(null);
-        }
-    }
-
-    _OnSelectionStackItemRemoved(p_widget) {
-        //if (this._inspectedData == p_widget.data) { this.Inspect(null); }
     }
 
     _PostInit() {
@@ -205,12 +183,36 @@ class FontEditor extends nkm.uiworkspace.editors.EditorEx {
         this._shelf.orientation = ui.FLAGS.HORIZONTAL;
         this._shelf.navPlacement = ui.FLAGS.TOP;
 
+        this._pangramViewport = this.Attach(mkfViewports.Pangram, `horizontal viewport`, this._body);
+        this._pangramViewport.visible = false;
+
+        ui.dom.AttachFirst(this._pangramViewport, this._body, false);
         ui.dom.AttachFirst(this._leftShelf, this._body, false);
 
     }
 
     SetActiveRange(p_rangeData) {
         this._viewport.displayRange = p_rangeData ? p_rangeData.options : null;
+    }
+
+    _OnLeftShelfHandleChanged(p_shelf, p_newHandle, p_oldHandle) {
+
+        return;
+
+        if (!p_newHandle) { return; }
+        let assign = p_newHandle.GetOption(`assign`, null);
+
+        switch (assign) {
+            case `_contentInspector`:
+                this._viewport.visible = true;
+                this._pangramViewport.visible = false;
+                break;
+            case `_pangramInspector`:
+                this._viewport.visible = false;
+                this._pangramViewport.visible = true;
+                break;
+        }
+
     }
 
     _OnDataChanged(p_oldData) {
@@ -222,19 +224,19 @@ class FontEditor extends nkm.uiworkspace.editors.EditorEx {
         } else {
             this.selectedSubFamily = null;
         }
-        
+
         this.SetActiveRange(UNICODE.instance._blockCatalog.At(0));
         this._viewport._RefreshItems();
 
-        
-        //mkfOperations.commands.ImportTextLiga.Execute(this._data);
+
+        //mkfCmds.ImportTextLiga.Execute(this._data);
 
     }
 
     _OnDataValueChanged(p_data, p_id, p_valueObj) {
 
         let infos = mkfData.IDS.GetInfos(p_id);
-        
+
         if (!infos) { return; }
 
         if (infos.recompute) {
@@ -292,27 +294,27 @@ class FontEditor extends nkm.uiworkspace.editors.EditorEx {
 
     RequestClose() {
         // TODO : Check if unsaved changes
-        if(this._data.isDirty){
+        if (this._data.isDirty) {
             nkm.dialog.Push({
                 title: `Close editor`,
                 message: `Unsaved changes will be lost, are you sure?`,
                 actions: [
-                    { label: `Close`, icon:`warning`, flavor: nkm.com.FLAGS.WARNING, trigger: { fn: this._ConfirmClose } }, //variant: nkm.ui.FLAGS.FRAME
+                    { label: `Close`, icon: `warning`, flavor: nkm.com.FLAGS.WARNING, trigger: { fn: this._ConfirmClose } }, //variant: nkm.ui.FLAGS.FRAME
                     { label: `Cancel` }
                 ],
                 icon: `warning`,
                 flavor: nkm.com.FLAGS.WARNING,
                 origin: this,
             });
-        }else{
+        } else {
             super.RequestClose();
         }
     }
 
-    _ConfirmClose(){
+    _ConfirmClose() {
         super.RequestClose();
     }
-    
+
 
 }
 

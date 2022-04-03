@@ -24,14 +24,13 @@ class CmdExportUniHexToClipboard extends CmdViewportContent {
         let list = super._InternalExecute();
 
         let val = list.join(`\n`);
-        clipboard.writeText(val);
+        navigator.clipboard.writeText(val);
         this._Success();
 
     }
 
     _ProcessInfo(p_unicodeInfos) {
-        if (p_unicodeInfos.ligature) { return `${p_unicodeInfos.u}`; }
-        else { return `U+${p_unicodeInfos.u}`; }
+        return UNICODE.UUni(p_unicodeInfos);
     }
 
 }

@@ -10,6 +10,7 @@ const mkfViews = require(`./views`);
 const mkfEditors = require(`./editors`);
 const mkfExplorers = require(`./explorers`);
 const mkfOperations = require(`./operations`);
+const mkfCmds = mkfOperations.commands;
 const mkfWidgets = require(`./widgets`);
 
 const UNICODE = require(`./unicode`);
@@ -50,13 +51,13 @@ class MKFont extends nkm.app.AppBase {
             letter: `#00ff96`,
             mark: `#ffea00`,
             number: `#00a2ff`,
-            separator: `#ba00ff`,
+            separator: `#686868`,
             control: `#ff0000`,
             other: `#c5c5c5`,
-            modifier: `#7259a6`,
-            punctuation: `#a6932d`,
+            modifier: `#ff0898`,
+            punctuation: `#a77415`,
             symbol: `#4d638e`,
-            ligature: `#72d300`,
+            ligature: `#8aff00`,
         };
 
         for (var p in cols) { nkm.style.Set(`--col-${p}`, cols[p]); }
@@ -100,10 +101,10 @@ class MKFont extends nkm.app.AppBase {
         this._welcomeView._options.view.RequestDisplay();
         this._OnOpenPathRequest(openPath);
 
-        //mkfOperations.commands.MakeTTFFont.Enable();
+        //mkfCmds.MakeTTFFont.Enable();
         //nkm.actions.KeystrokeEx.CreateFromString(`Ctrl E`, { fn: this._Bind(this._WriteTTF) }).Enable();
 
-        //this._EmptyFamily();
+        this._EmptyFamily();
         //this._FamilyFromTTF();
 
     }
@@ -122,17 +123,17 @@ class MKFont extends nkm.app.AppBase {
 
         if (!p_path.includes(`.mkfont`)) { return; }
 
-        mkfOperations.commands.LoadFamilyDoc.Execute(p_path);
+        mkfCmds.LoadFamilyDoc.Execute(p_path);
 
     }
 
     _OnDocDataRoaming(p_document) {
-        mkfOperations.commands.ReleaseFamilyDoc.Execute(p_document.currentData);
+        mkfCmds.ReleaseFamilyDoc.Execute(p_document.currentData);
     }
 
     _EmptyFamily() {
 
-        mkfOperations.commands.CreateFamilyDoc.Execute();
+        mkfCmds.CreateFamilyDoc.Execute();
 
     }
 
@@ -159,7 +160,7 @@ class MKFont extends nkm.app.AppBase {
     }
 
     _WriteTTF() {
-        mkfOperations.commands.MakeTTFFont.Execute(this._tempFontData);
+        mkfCmds.MakeTTFFont.Execute(this._tempFontData);
     }
 
 }

@@ -17,7 +17,7 @@ const GlyphGroupFooter = require(`./glyph-group-footer`);
 const GlyphGroupSearch = require(`./glyph-group-search`);
 
 
-class GlyphGroupsView extends nkm.datacontrols.ControlView { //ui.views.View
+class GlyphGroupViewport extends nkm.datacontrols.ControlView { //ui.views.View
     constructor() { super(); }
 
     _Init() {
@@ -42,7 +42,7 @@ class GlyphGroupsView extends nkm.datacontrols.ControlView { //ui.views.View
         this._searchActive = false;
 
         this._InitSelectionStack(false, true);
-        this.selectionStack.dataSelection.dataMember = `_glyphInfos`;
+        this.selectionStack.data.dataMember = `_glyphInfos`;
         this.selectionStack.Watch(com.SIGNAL.ITEM_ADDED, this._OnDataSelected, this);
 
         this._contentRange = new RangeContent();
@@ -98,14 +98,16 @@ class GlyphGroupsView extends nkm.datacontrols.ControlView { //ui.views.View
         this._domStreamer
             .Watch(ui.SIGNAL.ITEM_CLEARED, this._OnItemCleared, this)
             .Watch(ui.SIGNAL.ITEM_REQUEST_RANGE_UPDATE, this._OnItemRequestRangeUpdate, this)
-            .Watch(ui.SIGNAL.ITEM_REQUESTED, this._OnItemRequested, this);
+            .Watch(ui.SIGNAL.ITEM_REQUESTED, this._OnItemRequested, this)
+            .Watch(ui.SIGNAL.RESIZE, this._OnStreamerResized, this);
 
         this._domStreamer.options = {
             layout: {
                 itemWidth: 200,
                 itemHeight: 200,
                 itemCount: 0,
-                gap: 10
+                gap: 5,
+                //customArea:{ start:0, size:200 }
             }
         };
 
@@ -118,6 +120,7 @@ class GlyphGroupsView extends nkm.datacontrols.ControlView { //ui.views.View
     }
 
     SetPreviewSize(p_width, p_height) {
+
         this._domStreamer.options = {
             layout: {
                 itemWidth: p_width,
@@ -125,6 +128,11 @@ class GlyphGroupsView extends nkm.datacontrols.ControlView { //ui.views.View
                 gap: 5
             }
         };
+
+    }
+
+    _OnStreamerResized() {
+
     }
 
     set searchSettings(p_value) {
@@ -141,8 +149,9 @@ class GlyphGroupsView extends nkm.datacontrols.ControlView { //ui.views.View
         if (this._displayRange == p_value) { return; }
 
         this._displayRange = p_value;
-
         this.selectionStack.Clear();
+
+        this._domStreamer.SetFocusIndex(-1);
 
         this._contentRange.displayRange = p_value;
         this._header.displayRange = p_value;
@@ -192,7 +201,15 @@ class GlyphGroupsView extends nkm.datacontrols.ControlView { //ui.views.View
     _SetContentSource(p_array) {
         this._content = p_array;
         this._domStreamer.itemCount = p_array ? p_array.length : 0;
-        this._domStreamer.scroll({ top: 0 });
+
+        if (p_array != null) {
+            if (this.editor.inspectedData) {
+                let uInfos = this.editor.inspectedData.unicodeInfos,
+                    index = p_array.indexOf(uInfos);
+
+                if (index != -1) { this._domStreamer.SetFocusIndex(index); }
+            }
+        }
     }
 
     _OnItemRequested(p_streamer, p_index, p_fragment) {
@@ -205,6 +222,10 @@ class GlyphGroupsView extends nkm.datacontrols.ControlView { //ui.views.View
         widget.subFamily = this._data.selectedSubFamily;
         widget.glyphInfos = unicode;
 
+        this._unicodeMap.set(unicode, widget);
+
+        p_streamer.ItemRequestAnswer(p_index, widget);
+
         this.selectionStack.Check(widget);
 
         if (this.editor.inspectedData) {
@@ -213,17 +234,13 @@ class GlyphGroupsView extends nkm.datacontrols.ControlView { //ui.views.View
             }
         }
 
-        this._unicodeMap.set(unicode, widget);
-
-        p_streamer.ItemRequestAnswer(p_index, widget);
-
     }
 
     _OnItemCleared(p_item) {
         this._unicodeMap.delete(p_item.glyphInfos);
     }
 
-    _OnItemRequestRangeUpdate() {
+    _OnItemRequestRangeUpdate(p_Streamer, p_indices) {
 
     }
 
@@ -254,6 +271,8 @@ class GlyphGroupsView extends nkm.datacontrols.ControlView { //ui.views.View
     _OnDataSelected(p_item, p_firstTimeAdd) {
 
         if (!p_firstTimeAdd) { return; }
+
+        this._domStreamer.focusIndex = p_item.__streamIndex;
 
         let glyphInfos = p_item.glyphInfos;
         if (glyphInfos) {
@@ -316,5 +335,5 @@ class GlyphGroupsView extends nkm.datacontrols.ControlView { //ui.views.View
 
 }
 
-module.exports = GlyphGroupsView;
-ui.Register(`mkfont-glyph-group-viewport`, GlyphGroupsView);
+module.exports = GlyphGroupViewport;
+ui.Register(`mkfont-glyph-group-viewport`, GlyphGroupViewport);

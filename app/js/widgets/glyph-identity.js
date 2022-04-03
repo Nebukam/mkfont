@@ -2,6 +2,10 @@ const nkm = require(`@nkmjs/core`);
 const u = nkm.utils;
 const ui = nkm.ui;
 
+const UNICODE = require(`../unicode`);
+
+const mkfOperations = require(`../operations`);
+const mkfCmds = mkfOperations.commands;
 
 class GlyphIdentity extends ui.Widget {
     constructor() { super(); }
@@ -55,7 +59,11 @@ class GlyphIdentity extends ui.Widget {
         let hexCtnr = this._tagBar.CreateHandle({ cl: ui.WidgetButton });
         hexCtnr.options = {
             htitle: `Copy value to clipboard`,
-            trigger: { fn: () => { navigator.clipboard.writeText((this._GetUni(this._glyphInfos)).toUpperCase()); }, thisArg: this }
+            trigger: {
+                fn: () => {
+                    mkfCmds.ExportUniHexSingleToClipboard.Execute(this._glyphInfos);
+                }, thisArg: this
+            }
         }
         this._hexTag = hexCtnr.Attach(nkm.uilib.widgets.Tag, `tag`);
         this._hexTag.bgColor = `rgba(var(--col-cta-rgb),0.5)`;
@@ -86,7 +94,7 @@ class GlyphIdentity extends ui.Widget {
 
         this._title.Set((p_infos.name || `U+${p_infos.u}`).substr(0, 80));
 
-        this._hexTag.label = this._GetUni(p_infos);
+        this._hexTag.label = UNICODE.UUni(p_infos);
 
         if (p_infos.block) {
             this._blockTag.label = p_infos.block.name;
@@ -101,16 +109,6 @@ class GlyphIdentity extends ui.Widget {
             this._catTag.visible = true;
         } else {
             this._catTag.visible = false;
-        }
-    }
-
-    _GetUni(p_infos) {
-        if (p_infos.ligature) {
-            let ulist = p_infos.u.split(`+`);
-            for (let i = 0; i < ulist.length; i++) { ulist[i] = `U+${ulist[i]}`; }
-            return ulist.join(`_`);
-        } else {
-            return `U+${p_infos.u}`;
         }
     }
 

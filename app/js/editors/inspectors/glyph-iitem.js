@@ -9,6 +9,7 @@ const UNICODE = require(`../../unicode`);
 const mkfData = require(`../../data`);
 const mkfWidgets = require(`../../widgets`);
 const mkfOperations = require(`../../operations`);
+const mkfCmds = mkfOperations.commands;
 
 const TransformSettingsInspector = require(`./tr-settings-inspector`);
 const SIGNAL = require("../../signal");
@@ -83,6 +84,9 @@ class GlyphVariantInspectorItem extends nkm.datacontrols.ControlWidget {
                 //'border-top': `1px solid rgba(127, 127, 127, 0.1)`,
                 'margin-bottom': '5px',
                 'margin-top': '5px',
+                'padding': '4px',
+                'border-radius': '4px',
+                'background-color':`rgba(19, 19, 19, 0.25)`
             },
             '.settings': {
                 'flex': '1 1 auto',
@@ -133,7 +137,6 @@ class GlyphVariantInspectorItem extends nkm.datacontrols.ControlWidget {
             normalize: true
         };
 
-
         this._importToolbar.options = {
             inline: true,
             defaultWidgetClass: nkm.uilib.buttons.Tool,
@@ -143,8 +146,8 @@ class GlyphVariantInspectorItem extends nkm.datacontrols.ControlWidget {
                     flavor: nkm.com.FLAGS.LOADING, variant: ui.FLAGS.MINIMAL,
                     trigger: {
                         fn: () => {
-                            mkfOperations.commands.ImportExternalFile.emitter = this;
-                            mkfOperations.commands.ImportExternalFile.Execute(this._data);
+                            mkfCmds.ImportExternalFile.emitter = this;
+                            mkfCmds.ImportExternalFile.Execute(this._data);
                         }
                     },
                     group: `read`
@@ -154,8 +157,8 @@ class GlyphVariantInspectorItem extends nkm.datacontrols.ControlWidget {
                     flavor: nkm.com.FLAGS.LOADING, variant: ui.FLAGS.MINIMAL,
                     trigger: {
                         fn: () => {
-                            //mkfOperations.commands.ImportClipboard.emitter = this;
-                            mkfOperations.commands.ImportClipboard.Execute(this._data);
+                            //mkfCmds.ImportClipboard.emitter = this;
+                            mkfCmds.ImportClipboard.Execute(this._data);
                         }
                     },
                     group: `read`
@@ -165,8 +168,8 @@ class GlyphVariantInspectorItem extends nkm.datacontrols.ControlWidget {
                     variant: ui.FLAGS.MINIMAL,
                     trigger: {
                         fn: () => {
-                            mkfOperations.commands.ImportEmpty.emitter = this;
-                            mkfOperations.commands.ImportEmpty.Execute(this._data);
+                            mkfCmds.ImportEmpty.emitter = this;
+                            mkfCmds.ImportEmpty.Execute(this._data);
                         }
                     },
                     group: `read`
@@ -181,19 +184,20 @@ class GlyphVariantInspectorItem extends nkm.datacontrols.ControlWidget {
                     variant: ui.FLAGS.MINIMAL,
                     trigger: {
                         fn: () => {
-                            //mkfOperations.commands.ExportToClipboard.emitter = this;
-                            mkfOperations.commands.ExportToClipboard.Execute(this._data);
+                            //mkfCmds.ExportToClipboard.emitter = this;
+                            mkfCmds.ExportToClipboard.Execute(this._data);
                         }
                     },
                     group: `write`, member: { owner: this, id: `_writeToClipboardBtn` }
                 },
                 {
-                    icon: `delete`, htitle: `Delete Glyph from font`,
-                    variant: ui.FLAGS.MINIMAL,
+                    icon: `remove`, htitle: `Delete Glyph from font`,
+                    variant: ui.FLAGS.MINIMAL, 
+                    flavor:nkm.com.FLAGS.ERROR,
                     trigger: {
                         fn: () => {
-                            mkfOperations.commands.DeleteGlyph.emitter = this;
-                            mkfOperations.commands.DeleteGlyph.Execute(this._data);
+                            mkfCmds.DeleteGlyph.emitter = this;
+                            mkfCmds.DeleteGlyph.Execute(this._data);
                         }
                     },
                     group: `delete`, member: { owner: this, id: `_deleteGlyphBtn` }

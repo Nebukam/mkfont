@@ -10,6 +10,7 @@ const SIGNAL = require(`../../signal`);
 const mkfData = require(`../../data`);
 const mkfWidgets = require(`../../widgets`);
 const mkfOperations = require(`../../operations`);
+const mkfCmds = mkfOperations.commands;
 
 const GlyphVariantInspector = require(`./glyph-iitem`);
 
@@ -22,12 +23,12 @@ class SubFamilyInspector extends nkm.datacontrols.InspectorView {
         //{ options:{ propertyId:mkfData.IDS.WEIGHT_CLASS } },
 
         { cl:mkfWidgets.ControlHeader, options:{ label:`Resolution` } },
-        { options:{ propertyId:mkfData.IDS.EM_UNITS, command:mkfOperations.commands.SetEM } },
+        { options:{ propertyId:mkfData.IDS.EM_UNITS, command:mkfCmds.SetEM } },
         { options:{ propertyId:mkfData.IDS.EM_RESAMPLE } },
         
         { cl:mkfWidgets.ControlHeader, options:{ label:`Metrics` } },
         { options:{ propertyId:mkfData.IDS.BASELINE } },
-        { options:{ propertyId:mkfData.IDS.ASCENT, command:mkfOperations.commands.SetAscent } },
+        { options:{ propertyId:mkfData.IDS.ASCENT, command:mkfCmds.SetAscent } },
         { options:{ propertyId:mkfData.IDS.ASC_RESAMPLE } },
         { options:{ propertyId:mkfData.IDS.DESCENT } },
         

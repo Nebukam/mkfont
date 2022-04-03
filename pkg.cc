@@ -7,7 +7,7 @@
     },
     "license": "none",
     "dependencies": {
-        "@nkmjs/core": "^0.1.52",
+        "@nkmjs/core": "^0.1.53",
         "svg2ttf": "^6.0.3",
         "svgo": "^2.8.0",
         "svgpath": "^2.5.0",
@@ -18,7 +18,7 @@
         "processor": "node app/js-unicode/unicode-processor.js"
     },
     "devDependencies": {
-        "@nkmjs/core-dev": "^0.1.64",
+        "@nkmjs/core-dev": "^0.1.65",
         "electron": "^17.1.0"
     }
 }

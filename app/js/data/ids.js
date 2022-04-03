@@ -303,7 +303,7 @@ class IDS {
             recompute: true,
             inputType: inputs.SliderOnly,
             label: `Preview size`,
-            inputOptions: { changeOnInput: true, step: 1, min: 50, max: 250, size: ui.FLAGS.SIZE_XXS },
+            inputOptions: { changeOnInput: true, step: 1, min: 70, max: 250, size: ui.FLAGS.SIZE_XXS },
             desc: `Define the size of individual items in the list.`
         },
 
@@ -329,7 +329,7 @@ class IDS {
             transform:true,
             inputType: inputs.Slider,
             label: `Scale factor`,
-            inputOptions: { changeOnInput: true, step: 1, min: 0.01, max: 100, size: ui.FLAGS.SIZE_XXS },
+            inputOptions: { changeOnInput: true, step: 1, min: 0.01, max: 100, step:0.01, size: ui.FLAGS.SIZE_XXS },
             desc: `Factor by which the input vector will be scaled.`
         },
 

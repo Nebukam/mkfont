@@ -41,7 +41,7 @@ class CmdExportToClipboard extends actions.Command {
         }
 
         try {
-            clipboard.writeText(SVGOPS.SVGFromGlyphVariant(this._context, true));
+            navigator.clipboard.writeText(SVGOPS.SVGFromGlyphVariant(this._context, true));
         } catch (e) { console.log(e); }
 
         this._Success();

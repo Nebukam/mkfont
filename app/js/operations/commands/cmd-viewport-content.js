@@ -18,10 +18,9 @@ class CmdViewportContent extends actions.Command {
 
         this._results.length = 0;
 
-        let content = this._emitter._content;
+        let content = this._context;
 
-        for (let i = 0, n = content; i < n; i++) { this._PushInfos(content[i]); }
-
+        for (let i = 0, n = content.length; i < n; i++) { this._PushInfos(content[i]); }
         return this._results;
 
     }

@@ -2,5 +2,6 @@
 
 module.exports = {
 
-    GlyphGroupViewport: require(`./glyph-group-viewport`),
+    GlyphGroup: require(`./glyph-group-viewport`),
+    Pangram: require(`./pangram-viewport`),
 }

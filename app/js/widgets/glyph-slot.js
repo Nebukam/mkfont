@@ -14,6 +14,7 @@ class GlyphSlot extends nkm.datacontrols.ControlWidget {
 
     static __usePaintCallback = true;
     static __defaultSelectOnActivation = true;
+    static __quickMenu = null;
 
     _Init() {
 
@@ -57,7 +58,7 @@ class GlyphSlot extends nkm.datacontrols.ControlWidget {
                 'border-radius': '5px',
                 'background-color': '#161616',
                 'align-items': 'center',
-                'overflow': 'clip',
+                //'overflow': 'clip',
             },
             ':host(:hover)': {
                 'box-shadow': `0 12px 20px -10px #131313`,
@@ -125,11 +126,15 @@ class GlyphSlot extends nkm.datacontrols.ControlWidget {
             ':host(.empty) .preview': {
                 //'border':`1px rgba(var(--col-warning-dark-rgb),0.5) solid`
             },
-            ':host(.outofbounds) .oob': {
+            ':host(.out-of-bounds) .oob': {
                 'display': 'block !important'
             },
-            ':host(.outofbounds)': {
+            ':host(.out-of-bounds)': {
                 'background-color': 'rgba(var(--col-error-rgb), 0.5) !important'
+            },
+            '.quick-menu': {
+                '@': ['absolute-top-left'],
+                'margin':'5px'
             }
         }, super._Style());
     }
@@ -167,10 +172,10 @@ class GlyphSlot extends nkm.datacontrols.ControlWidget {
         let glyphData = this._subFamily.family.TryGetGlyph(p_value),
             colCat = null;
 
-        if(!unicodeCharacter){
+        if (!unicodeCharacter) {
             unicodeCharacter = ` `;
             colCat = `var(--col-error)`;
-        }else if (unicodeCharacter.length > 1) {
+        } else if (unicodeCharacter.length > 1) {
             colCat = `var(--col-ligature)`;
         }
 
@@ -193,6 +198,11 @@ class GlyphSlot extends nkm.datacontrols.ControlWidget {
 
     _UpdateGlyphPreview() {
 
+        let qMenu = this.constructor.__quickMenu;
+        if(qMenu){
+            if (qMenu.parent == this) { qMenu.data = this._data.defaultGlyph; }
+        }
+
         if (!this._data || this._data.isNull) {
             this._glyphRenderer.Set(null);
             this._glyphPlaceholder._element.style.removeProperty(`display`);
@@ -213,7 +223,41 @@ class GlyphSlot extends nkm.datacontrols.ControlWidget {
             this._flags.Set(mkfData.IDS.EMPTY, false);
             this.classList.remove(`exists`);
         }
+
+        
     }
+
+    _Highlight(p_toggle) {
+        super._Highlight(p_toggle);
+        if (this._isSelected && this._isFocused) {
+
+            let qMenu = this.constructor.__quickMenu;
+            if (!qMenu) {
+                qMenu = this.Attach(require(`./glyph-slot-quick-menu`), `quick-menu`, this._host);
+                this.constructor.__quickMenu = qMenu;
+            }
+
+            qMenu.editor = this.editor;
+            qMenu.data = this._data.defaultGlyph;
+            qMenu.glyphInfos = this._glyphInfos;
+
+            this.Attach(qMenu, `quick-menu`, this._host);
+
+        }
+    }
+
+    /**
+     * @access protected
+     * @description TODO
+     * @customtag override-me
+     * @group Interactivity.Focus
+     */
+    _FocusLost() {
+        let qMenu = this.constructor.__quickMenu;
+        if (!qMenu) { return; }
+        if (qMenu.parent == this) { this.Detach(qMenu); }
+    }
+
 
     _ToClipboard() {
         navigator.clipboard.writeText(this._data._options.glyph);
