@@ -28,23 +28,29 @@ const svgopts = {
         {
             name: `convertShapeToPath`, params: {
                 convertArcs: true,
-                precision:100,
+                precision:6,
             }
         },
         {
-            name: `convertPathData`, params: {/*
+            name: `convertPathData`, params: {
                 applyTransforms: true,
-                straightCurves: false,
-                lineShorthands: false,
-                curveSmoothShorthands: false,
-                collapseRepeated: false,
-                noSpaceAfterFlags: false,
-                leadingZero:false,
-                negativeExtraSpace:false,
-                collapseRepeated:false,
-                utilizeAbsolute:false,*/
-                floatPrecision:100,
-                transformPrecision:100,
+                applyTransformsStroked: true,
+                makeArcs: {
+                    threshold: 2.5, // coefficient of rounding error
+                    tolerance: 0.01, // percentage of radius
+                },
+                straightCurves: false, //true
+                lineShorthands: false, //true
+                curveSmoothShorthands: false, //true
+                floatPrecision: 6,
+                transformPrecision: 10,
+                removeUseless: false, //true
+                collapseRepeated: false, //true
+                utilizeAbsolute: false, //true
+                leadingZero: false, //true
+                negativeExtraSpace: false, //true
+                noSpaceAfterFlags: false, // a20 60 45 0 1 30 20 → a20 60 45 0130 20
+                forceAbsolutePath: false,
             }
         }
     ]
