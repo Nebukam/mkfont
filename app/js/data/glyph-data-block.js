@@ -58,7 +58,7 @@ class GlyphDataBlock extends SimpleDataEx {
     get family() { return this._family; }
 
     get unicodeInfos() {
-        if (!this._unicodeInfos) { return UNICODE.GetSingle(this.Get(IDS.UNICODE)); }
+        if (!this._unicodeInfos) { return UNICODE.GetInfos(this.Get(IDS.UNICODE), true); }
         return this._unicodeInfos;
     }
     set unicodeInfos(p_value) { this._unicodeInfos = p_value; }

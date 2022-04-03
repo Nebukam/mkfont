@@ -112,7 +112,7 @@ class WelcomeView extends ui.views.View {
             defaultWidgetClass: nkm.uilib.buttons.Button,
             handles: [
                 {
-                    label: `0.0.1-beta.3`,
+                    label: `0.0.1-beta.4`,
                     cl:nkm.uilib.widgets.Tag,
                     group: `Version`
                 },

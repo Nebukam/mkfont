@@ -153,7 +153,7 @@ class FamilyDataBlock extends SimpleDataEx {
 
         if (unicode) {
             this._glyphsMap[unicode] = p_glyph;
-            if (p_glyph.isLigature) { this._ligatureSet.add(p_glyph); }
+            if(p_glyph.isLigature){ this._ligatureSet.add(p_glyph); }
             this._glyphUnicodeCache.push(unicode);
         }
 

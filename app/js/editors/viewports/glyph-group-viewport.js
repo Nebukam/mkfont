@@ -76,8 +76,8 @@ class GlyphGroupsView extends nkm.datacontrols.ControlView { //ui.views.View
                 'flex': '1 1 auto',
                 'overflow': 'auto',
             },
-            '.dom-stream.empty':{
-                'display':'block !important'
+            '.dom-stream.empty': {
+                'display': 'block !important'
             },
             '.search-status': {
                 '@': ['absolute-center']
@@ -152,7 +152,6 @@ class GlyphGroupsView extends nkm.datacontrols.ControlView { //ui.views.View
     _OnRangeReady(p_range) {
 
         //Active range content is ready
-
         if (this._searchActive) { this._SetContentSource(null); }
         else { this._SetContentSource(this._contentRange._content); }
 
@@ -239,7 +238,7 @@ class GlyphGroupsView extends nkm.datacontrols.ControlView { //ui.views.View
 
 
     _RefreshItems() {
-        this._domStreamer._Stream(null,null,true);
+        this._domStreamer._Stream(null, null, true);
         /*
         for (let i = 0; i < this._displayList.count; i++) {
             let item = this._displayList.At(i);
