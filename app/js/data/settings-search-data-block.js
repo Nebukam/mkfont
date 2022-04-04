@@ -205,7 +205,7 @@ class SettingsSearchDataBlock extends SimpleDataEx {
             }
         }
 
-        if (pass) {
+        if (pass && !this._resultSet.has(p_unicodeInfos)) {
             this._results.push(p_unicodeInfos);
             this._resultSet.add(p_unicodeInfos);
         }
