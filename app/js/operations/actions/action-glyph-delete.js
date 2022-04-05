@@ -12,8 +12,6 @@ class ActionDeleteGlyph extends actions.Action {
         p_action._operation.glyph.Release();
     }
 
-    get title(){ return `Delete glyph : ${this._operation.glyph.unicodeInfos.char}`; }
-
     // Expected operation format : { family:FamilyDataBlock, glyph:GlyphDataBlock, path:pathData }
 
     _InternalDo(p_operation, p_merge = false) {
@@ -24,6 +22,14 @@ class ActionDeleteGlyph extends actions.Action {
 
         family.RemoveGlyph(targetGlyph);
 
+    }
+
+    _UpdateDisplayInfos(){
+        this.displayInfos = {
+            icon:`remove`,
+            name:`Delete: ${this._operation.glyph.unicodeInfos.char}`,
+            title:`Delete glyph : ${this._operation.glyph.unicodeInfos.char}`
+        };
     }
 
     _InternalUndo() {

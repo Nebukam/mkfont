@@ -22,6 +22,15 @@ class ActionSetPropertyValueMultiple extends actions.Action {
         this._UpdateValues(target, values, oldValues);
         target.CommitUpdate();
 
+        
+
+    }
+
+    _UpdateDisplayInfos(){
+        this.displayInfos = {
+            name: `Set multiple values`,
+            title: `Setting multiples values on ${this._operation.target}'s`
+        };
     }
 
     _UpdateValues(p_target, p_from, p_to) {

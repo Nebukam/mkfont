@@ -71,7 +71,11 @@ class CmdImportTextLiga extends actions.Command {
             editor = this._emitter.editor,
             family = this._context;
 
-        editor.StartActionGroup({ title: `Import SVGs` });
+        editor.StartActionGroup({ 
+            icon:`text-liga`,
+            name: `Ligatures creation`, 
+            title: `Created ligature glyphs` 
+        });
 
         for (let i = 0; i < p_results.length; i++) {
             let liga = p_results[i],

@@ -149,7 +149,11 @@ class CmdImportExternalFileMultiple extends actions.Command {
             list = this._importCatalog._items,
             trValues = this._importTransformationSettings.Values();
 
-        editor.StartActionGroup({ title: `Import SVGs` });
+        editor.StartActionGroup({ 
+            icon:`directory-download`,
+            name: `Import SVGs`, 
+            title: `Imported SVGs as glyph` 
+        });
 
         for (let i = 0; i < list.length; i++) {
             let item = list[i],

@@ -17,6 +17,74 @@
     align-items: center;
 }
 
+.hint{
+    position: relative;
+    aspect-ratio: 1/1;
+    height: 100%;
+    &::before{
+        content:"";
+        position: absolute;
+        width:1px;
+        height: 120%;
+        left:50%;
+        border-left-color: gray;
+        border-left-style: solid;
+        border-left-width: 1px;
+    }
+
+    &::after{
+        position: absolute;
+        content:"";
+        width:7px;
+        height:7px;
+        border-radius: 100%;
+        left:calc(50% - 3px);
+        top:calc(50% - 3px);
+        background-color: rgb(172, 172, 172);
+    }
+}
+
+:host(.done){
+
+}
+
+:host(.undone){
+    filter: grayscale(1);
+
+    & .hint{
+        &::before{            
+            border-left-style: dashed;
+        }
+        &::after{            
+            display: none;
+        }
+    }
+
+    & .label{
+        text-decoration: line-through;
+    }
+
+}
+
+
+:host(.done:first-of-type), :host(.undone:first-of-type){
+    & .hint{
+        &::before{
+            height: 70%;
+            top:50%;
+        }
+    }
+}
+
+:host(.done:last-of-type), :host(.undone:last-of-type){
+    & .hint{
+        &::before{
+            height: 50%;
+            top:0;
+        }
+    }
+}
+
 .label{
 
 }

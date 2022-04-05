@@ -52,7 +52,7 @@ class FontEditor extends nkm.uiworkspace.editors.EditorEx {
             return u.isInstanceOf(p_data, mkfData.Family) ? p_data : null;
         };
 
-        this._editInPlace = nkm.actions.Command.Rent(mkfCmds.EditInPlace);
+        this._editInPlace = nkm.actions.Command.Rent(mkfCmds.EditInExternalEditor);
 
     }
 

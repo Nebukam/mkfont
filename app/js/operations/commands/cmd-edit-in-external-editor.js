@@ -24,15 +24,28 @@ class CmdEditInPlace extends actions.Command {
         this._Bind(this._OnPicked);
         this._Bind(this._OnWriteSuccess);
         this._Bind(this._OnWriteFail);
-        
-        
+
+        this._cachedEditor = null;
+        this._cachedContext = null;
+
         this._tmpRsc = new nkmElectron.io.helpers.TempResourceWatcher();
         this._tmpRsc.Hook(nkm.io.IO_SIGNAL.READ_COMPLETE, this._OnReadComplete, this);
         this._tmpRsc.readOnChange = true;
-        
+
     }
 
     _InternalExecute() {
+
+        if (this._cachedEditor == this._emitter.editor
+            && this._cachedContext == this._context) {
+            this._Launch();
+            this._Success();
+            return;
+        }
+
+        this._cachedEditor = null;
+        this._cachedContext = null;
+
         this._tmpRsc.Flush();
         this._Kickstart();
     }
@@ -57,10 +70,13 @@ class CmdEditInPlace extends actions.Command {
             return;
         }
 
+        this._cachedEditor = this._emitter.editor;
+        this._cachedContext = this._context;
+
         this._tmpRsc.Create({
             ext: `.svg`,
             cl: nkm.io.resources.TextResource
-        }, { discardDescriptor:true });
+        }, { discardDescriptor: true });
 
         this._tmpRsc.Write(
             SVGOPS.SVGFromGlyphVariant(this._context, true),
@@ -79,12 +95,7 @@ class CmdEditInPlace extends actions.Command {
     }
 
     _OnWriteSuccess(p_rsc) {
-        let
-            prefs = nkm.env.APP._prefDataObject,
-            defaultEditorPath = prefs.Get(mkfData.IDS_PREFS.SVG_EDITOR_PATH);
-            
-        nkmElectron.io.LaunchExternalEditor(defaultEditorPath[0], this._tmpRsc.path);
-        this._tmpRsc.Enable();
+        this._Launch();
     }
 
     _OnReadComplete(p_rsc) {
@@ -98,9 +109,8 @@ class CmdEditInPlace extends actions.Command {
 
         if (!svgStats.exists) { return; }
 
-
-        this._emitter.editor.Do(mkfActions.SetProperty, {
-            target: this._context,
+        this._cachedEditor.Do(mkfActions.SetProperty, {
+            target: this._cachedContext,
             id: mkfData.IDS.PATH_DATA,
             value: svgStats
         });
@@ -108,7 +118,7 @@ class CmdEditInPlace extends actions.Command {
     }
 
     _OnWriteFail(p_err) {
-        this._tmpRsc.Disable();
+        this._tmpRsc.Flush();
         this._Fail(p_err);
     }
 
@@ -124,6 +134,16 @@ class CmdEditInPlace extends actions.Command {
 
         this._Kickstart();
 
+    }
+
+    _Launch() {
+
+        let
+            prefs = nkm.env.APP._prefDataObject,
+            defaultEditorPath = prefs.Get(mkfData.IDS_PREFS.SVG_EDITOR_PATH);
+
+        nkmElectron.io.LaunchExternalEditor(defaultEditorPath[0], this._tmpRsc.path);
+        this._tmpRsc.Enable();
     }
 
 }

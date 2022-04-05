@@ -18,14 +18,37 @@ class IDS_EXT {
     static SVG_EDITOR_PATH = 'svgEditorPath';
     static ILLU_PATH = 'illustratorPath';
 
+    static AUTOSAVE = 'doAutoSave';
+    static AUTOSAVE_TIMER = 'autosaveTimer';
+
+    static MANUAL_PREVIEW_REFRESH_THRESHOLD = 'manPrevRefresh';
+
     static infos = {
 
         // General 
         [this.MARK_COLOR]: {
             inputType: inputs.Color,
             label: `Mark Color`,
-            inputOptions: { size: ui.FLAGS.SIZE_XS },
+            inputOptions: { size: ui.FLAGS.SIZE_XXS },
             desc: `Color used to find custom glyph boundaries when importing SVGs`
+        },
+        [this.AUTOSAVE]: {
+            inputType: inputs.Boolean,
+            inputOptions: { size: ui.FLAGS.SIZE_XS },
+            label: `Autosave`,
+            desc: `Toggle auto-save feature on/off`
+        },
+        [this.AUTOSAVE_TIMER]: {
+            inputType: inputs.SliderOnly,
+            label: `Autosave interval`,
+            inputOptions: { min:1, max:60, size: ui.FLAGS.SIZE_XXS },
+            desc: `Interval at which the autosave triggers (in minutes).\nMin 1min, max 60min.`
+        },
+        [this.MANUAL_PREVIEW_REFRESH_THRESHOLD]: {
+            inputType: inputs.SliderOnly,
+            label: `Pangram max glyph`,
+            inputOptions: { min:0, max:65535, size: ui.FLAGS.SIZE_XXS },
+            desc: `Number of glyphs within the font after which the pangram stops automatically updating the preview.\nMassive font auto-refresh can cause a serious performance hit, or simply crash the app.\nMin 0, max 65535.`
         },
 
         //Third parties

@@ -107,10 +107,21 @@ class PangramRenderer extends ui.Widget {
         this._scheduledDraw.Schedule();
     }
 
-    Draw() {
+    Draw(p_delta = 0, p_manual = false) {
 
         if (!ContentUpdater.ready) {
             this._scheduledDraw.Schedule();
+            return;
+        }
+
+        let
+            prefs = nkm.env.APP._prefDataObject,
+            glyphCount = this._data.family._glyphs.count,
+            threshold = prefs.Get(mkfData.IDS_PREFS.MANUAL_PREVIEW_REFRESH_THRESHOLD);
+
+        console.log(`${glyphCount} | ${threshold} | ${p_manual}`);
+
+        if (!p_manual && glyphCount > threshold) {
             return;
         }
 

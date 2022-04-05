@@ -66,7 +66,7 @@ class ActionSetEM extends ActionSetPropertyValue {
                     transform = variant._transformSettings,
                     pathData = variant.Get(mkfData.IDS.PATH_DATA);
 
-                if (pathData) {
+                if (pathData && !variant.Get(mkfData.IDS.EMPTY)) {
                     SVGOPS.ScalePathData(pathData, scaleFactor);
                 }
 

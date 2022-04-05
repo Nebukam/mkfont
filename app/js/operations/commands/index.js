@@ -55,6 +55,6 @@ module.exports = {
         docType: docType, dataType: dataType
     }, true),
 
-    EditInPlace: require(`./cmd-edit-in-place`),
+    EditInExternalEditor: require(`./cmd-edit-in-external-editor`),
 
 }

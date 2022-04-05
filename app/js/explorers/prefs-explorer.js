@@ -5,16 +5,31 @@ const uilib = nkm.uilib;
 const mkfData = require(`../data`);
 const mkfWidgets = require(`../widgets`);
 
+const isAutoSave = (owner) => { return owner.data ? owner.data.Get(mkfData.IDS_PREFS.AUTOSAVE) : true; };
+
 class PrefsExplorer extends uilib.overlays.ControlDrawer {
     constructor() { super(); }
 
     static __controls = [
+        
+        { cl:mkfWidgets.ControlHeader, options:{ label:`-` }, css:`separator` },
+        { cl:mkfWidgets.ControlHeader, options:{ label:`Autosave` }, css:`separator` },
+        { options: { propertyId: mkfData.IDS_PREFS.AUTOSAVE } },
+        { options: { propertyId: mkfData.IDS_PREFS.AUTOSAVE_TIMER }, disableWhen: { fn: isAutoSave } },
+
+        { cl:mkfWidgets.ControlHeader, options:{ label:`-` }, css:`separator` },
+        { cl:mkfWidgets.ControlHeader, options:{ label:`Performance & display` }, css:`separator` },
+        { options: { propertyId: mkfData.IDS_PREFS.MANUAL_PREVIEW_REFRESH_THRESHOLD } },
+
+        { cl:mkfWidgets.ControlHeader, options:{ label:`-` }, css:`separator` },
         { cl:mkfWidgets.ControlHeader, options:{ label:`Import` }, css:`separator` },
         { options: { propertyId: mkfData.IDS_PREFS.MARK_COLOR } },
+
         { cl:mkfWidgets.ControlHeader, options:{ label:`-` }, css:`separator` },
         { cl:mkfWidgets.ControlHeader, options:{ label:`Third parties` }, css:`separator` },
         { options: { propertyId: mkfData.IDS_PREFS.SVG_EDITOR_PATH } },
         { options: { propertyId: mkfData.IDS_PREFS.ILLU_PATH } },
+
         { cl:mkfWidgets.ControlHeader, options:{ label:`-` }, css:`separator` },
         { cl:mkfWidgets.ControlHeader, options:{ label:`Family Defaults` }, css:`separator` },
         { options: { propertyId: mkfData.IDS.FAMILY } },

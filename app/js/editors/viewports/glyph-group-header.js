@@ -88,7 +88,19 @@ class GlyphGroupHeader extends nkm.datacontrols.ControlView {
                         thisArg: this
                     }
                 },
+                {
+                    icon: `app-illustrator`, htitle: `Create a new Adobe© Illustrator template document with the active selection.`,
+                    trigger: {
+                        fn: () => {
+                            //mkfCmds.ExportUniHexToClipboard.emitter = this;
+                            //mkfCmds.ExportUniHexToClipboard.Execute(this._parent._content);
+                        },
+                        thisArg: this
+                    }
+                },
             ]
+
+            
         };
 
         this._typeTag = this._tagBar.CreateHandle();

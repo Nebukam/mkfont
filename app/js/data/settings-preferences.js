@@ -31,6 +31,10 @@ class PreferencesSettingsDataBlock extends SimpleDataEx {
         p_values[IDS_PREFS.SVG_EDITOR_PATH] = { value: `` };
         p_values[IDS_PREFS.ILLU_PATH] = { value: `` };
 
+        p_values[IDS_PREFS.AUTOSAVE] = { value: false };
+        p_values[IDS_PREFS.AUTOSAVE_TIMER] = { value: 10 };
+        p_values[IDS_PREFS.MANUAL_PREVIEW_REFRESH_THRESHOLD] = { value: 5000 };
+
         p_values[IDS.FAMILY] = { value: `New MKFont` };
         p_values[IDS.COPYRIGHT] = { value: `(c) mkfont 2022` };
         p_values[IDS.DESCRIPTION] = { value: `Made with mkfont` };

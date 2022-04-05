@@ -17,17 +17,6 @@ class ActionSetPropertyValue extends actions.Action {
 
     // Expected operation format : { target:SimpleDataBlock, id:`ID`, value:* }
 
-    get title(){ return `${this._operation.id}`; }
-    get htitle() {
-
-        let infos =
-            `${this._operation.target}'s ${this._operation.id}\n` +
-            `from : ${this._operation.oldValue}\n` +
-            `to: ${this._operation.value}`;
-
-        return infos;
-    }
-
     _InternalDo(p_operation, p_merge = false) {
 
         let
@@ -43,6 +32,16 @@ class ActionSetPropertyValue extends actions.Action {
         this._UpdateValue(target, newValue, oldValue);
         target.CommitUpdate();
 
+
+    }
+
+    _UpdateDisplayInfos() {
+        this.displayInfos = {
+            name: `Set ${this._operation.id}`,
+            title: `${this._operation.target}'s ${this._operation.id}\n` +
+                `from : ${this._operation.oldValue}\n` +
+                `to: ${this._operation.value}`
+        };
     }
 
     _UpdateValue(p_target, p_from, p_to) {

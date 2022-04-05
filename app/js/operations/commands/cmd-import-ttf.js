@@ -75,7 +75,11 @@ class CmdImportTTF extends actions.Command {
             editor = this._emitter.editor,
             family = editor.data;
 
-        editor.StartActionGroup({ title:`TTF Import` });
+        editor.StartActionGroup({ 
+            icon:`document-download`,
+            name: `TTF Import`, 
+            title: `Created glyphs from TTF file` 
+        });
 
         for (let i = 0; i < importedGlyphs.length; i++) {
             let
