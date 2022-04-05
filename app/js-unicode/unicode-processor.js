@@ -1,7 +1,7 @@
 const fs = require(`fs`);
-let characterFile = fs.readFileSync(`./assets/unicode-data.txt`, `utf8`);
+let characterFile = fs.readFileSync(`./assets-dev/unicode-data.txt`, `utf8`);
 let characterLines = characterFile.split(`\r\n`);
-let blockFile = fs.readFileSync(`./assets/unicode-blocks.txt`, `utf8`);
+let blockFile = fs.readFileSync(`./assets-dev/unicode-blocks.txt`, `utf8`);
 let blockLines = blockFile.split(`\r\n`);
 
 //#region Blocks

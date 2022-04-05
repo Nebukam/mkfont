@@ -160,7 +160,7 @@ class MKFont extends nkm.app.AppBase {
 
     _FamilyFromTTF() {
 
-        let family = mkfData.TTF.FamilyFromTTF(fs.readFileSync(`./assets/${__fontName}.ttf`));
+        let family = mkfData.TTF.FamilyFromTTF(fs.readFileSync(`./assets-dev/${__fontName}.ttf`));
         nkm.actions.Emit(nkm.actions.REQUEST.EDIT, { data: family },
             this, this._Success, this._Fail);
 
