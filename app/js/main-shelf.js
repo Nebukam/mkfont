@@ -1,5 +1,5 @@
 const nkm = require(`@nkmjs/core`);
-const u = nkm.utils;
+const u = nkm.u;
 const ui = nkm.ui;
 
 class MainShelf extends nkm.uilib.views.Shelf {

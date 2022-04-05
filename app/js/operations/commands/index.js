@@ -12,6 +12,8 @@ const
 
 module.exports = {
 
+    OpenPrefs: new (require(`./cmd-open-prefs`))(),
+
     MakeTTFFont: new (require(`./cmd-generate-ttf-font`))(),
     SetProperty: new (require(`./cmd-action-set-property`))(),
     SetEM: new (require(`./cmd-action-set-em`))(),
@@ -21,6 +23,7 @@ module.exports = {
 
     ImportTTF: new (require(`./cmd-import-ttf`))(),
     ImportEmpty: new (require(`./cmd-import-empty`))(),
+    ImportViewportEmpty: new (require(`./cmd-import-viewport-empty`))(),
     ImportExternalFile: new (require(`./cmd-import-external-file`))(),
     ImportExternalFileMultiple: new (require(`./cmd-import-external-file-multiple`))(),
     ImportClipboard: new (require(`./cmd-import-clipboard`))(),
@@ -51,5 +54,7 @@ module.exports = {
     ReleaseFamilyDoc: docCmds.DocumentRelease.Rent({
         docType: docType, dataType: dataType
     }, true),
+
+    EditInPlace: require(`./cmd-edit-in-place`),
 
 }

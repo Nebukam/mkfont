@@ -1,7 +1,7 @@
 //
 const nkm = require(`@nkmjs/core`);
 const actions = nkm.actions;
-const u = nkm.utils;
+const u = nkm.u;
 
 const fs = require('fs');
 const svg2ttf = require('svg2ttf');

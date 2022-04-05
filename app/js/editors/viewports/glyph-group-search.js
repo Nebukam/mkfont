@@ -1,5 +1,5 @@
 const nkm = require(`@nkmjs/core`);
-const u = nkm.utils;
+const u = nkm.u;
 const ui = nkm.ui;
 
 const SIGNAL = require(`../../signal`);
@@ -25,10 +25,10 @@ class GlyphGroupSearch extends nkm.datacontrols.ControlView {
         this._displayRange = null;
 
         this._dataPreProcessor = (p_owner, p_data) => {
-            if (nkm.utils.isInstanceOf(p_data, mkfData.Glyph)) { return p_data.family.searchSettings; }
-            if (nkm.utils.isInstanceOf(p_data, mkfData.GlyphVariant)) { return p_data.glyph.family.searchSettings; }
-            if (nkm.utils.isInstanceOf(p_data, mkfData.SubFamily)) { return p_data.family.searchSettings; }
-            if (nkm.utils.isInstanceOf(p_data, mkfData.Family)) { return p_data.searchSettings; }
+            if (nkm.u.isInstanceOf(p_data, mkfData.Glyph)) { return p_data.family.searchSettings; }
+            if (nkm.u.isInstanceOf(p_data, mkfData.GlyphVariant)) { return p_data.glyph.family.searchSettings; }
+            if (nkm.u.isInstanceOf(p_data, mkfData.SubFamily)) { return p_data.family.searchSettings; }
+            if (nkm.u.isInstanceOf(p_data, mkfData.Family)) { return p_data.searchSettings; }
             return p_data;
         };
 

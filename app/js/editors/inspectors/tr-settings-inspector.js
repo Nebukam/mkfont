@@ -38,10 +38,10 @@ class TransformSettingsInspector extends nkm.datacontrols.InspectorView {
         this._builder.defaultCSS = `control`;
 
         this._dataPreProcessor = (p_owner, p_data) => {
-            if (nkm.utils.isInstanceOf(p_data, mkfData.Glyph)) { return p_data.family.transformSettings; }
-            if (nkm.utils.isInstanceOf(p_data, mkfData.GlyphVariant)) { return p_data.glyph.family.transformSettings; }
-            if (nkm.utils.isInstanceOf(p_data, mkfData.SubFamily)) { return p_data.family.transformSettings; }
-            if (nkm.utils.isInstanceOf(p_data, mkfData.Family)) { return p_data.transformSettings; }
+            if (nkm.u.isInstanceOf(p_data, mkfData.Glyph)) { return p_data.family.transformSettings; }
+            if (nkm.u.isInstanceOf(p_data, mkfData.GlyphVariant)) { return p_data.glyph.family.transformSettings; }
+            if (nkm.u.isInstanceOf(p_data, mkfData.SubFamily)) { return p_data.family.transformSettings; }
+            if (nkm.u.isInstanceOf(p_data, mkfData.Family)) { return p_data.transformSettings; }
             return p_data;
         };
     }

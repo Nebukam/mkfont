@@ -2,7 +2,7 @@
 
 const nkm = require(`@nkmjs/core`);
 const com = nkm.com;
-const u = nkm.utils;
+const u = nkm.u;
 const io = nkm.io;
 
 const UNICODE = require(`../unicode`);

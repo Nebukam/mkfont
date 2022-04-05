@@ -1,5 +1,5 @@
 const nkm = require(`@nkmjs/core`);
-const u = nkm.utils;
+const u = nkm.u;
 const ui = nkm.ui;
 
 const UNICODE = require(`../unicode`);
@@ -51,6 +51,8 @@ class FontEditor extends nkm.uiworkspace.editors.EditorEx {
         this._dataPreProcessor = (p_owner, p_data) => {
             return u.isInstanceOf(p_data, mkfData.Family) ? p_data : null;
         };
+
+        this._editInPlace = nkm.actions.Command.Rent(mkfCmds.EditInPlace);
 
     }
 

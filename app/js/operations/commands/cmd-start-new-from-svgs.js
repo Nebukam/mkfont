@@ -79,7 +79,7 @@ class CmdCreateFamilyDocFromSVGs extends CmdCreateFamilyDoc {
 
         for (let i = 0; i < list.length; i++) {
 
-            let filePath = nkm.utils.PATH.Sanitize(list[i]);
+            let filePath = nkm.u.PATH.Sanitize(list[i]);
 
             try {
 
@@ -91,9 +91,9 @@ class CmdCreateFamilyDocFromSVGs extends CmdCreateFamilyDoc {
 
                 let entryOptions = {
                     filePath: filePath,
-                    name: nkm.utils.PATH.name(filePath),
+                    name: nkm.u.PATH.name(filePath),
                     ['use-custom-unicode']: false,
-                    ['unicode-user-input']: nkm.utils.PATH.name(filePath),
+                    ['unicode-user-input']: nkm.u.PATH.name(filePath),
                     svgStats: svgStats,
                     subFamily: subFamily,
                     transforms: this._importTransformationSettings

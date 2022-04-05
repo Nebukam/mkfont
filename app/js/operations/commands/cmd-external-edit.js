@@ -19,7 +19,7 @@ class CmdExternalEdit extends actions.Command {
 
     _FetchContext() {
 
-        if (nkm.utils.isInstanceOf(this._emitter.data, mkfData.Family)) {
+        if (nkm.u.isInstanceOf(this._emitter.data, mkfData.Family)) {
             return this._emitter.data;
         }
 

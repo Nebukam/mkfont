@@ -1,5 +1,5 @@
 const nkm = require(`@nkmjs/core`);
-const u = nkm.utils;
+const u = nkm.u;
 const ui = nkm.ui;
 
 const MainShelf = require(`./main-shelf`);

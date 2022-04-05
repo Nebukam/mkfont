@@ -1,5 +1,5 @@
 const nkm = require(`@nkmjs/core`);
-const u = nkm.utils;
+const u = nkm.u;
 const ui = nkm.ui;
 
 const mkfData = require(`../../data`);
@@ -57,21 +57,37 @@ class GlyphGroupHeader extends nkm.datacontrols.ControlView {
         this._optionsBar.options = {
             defaultWidgetClass: nkm.uilib.buttons.Tool,
             size: ui.FLAGS.SIZE_S,
-            handles: [
+            handles: [                
+                {
+                    icon: `new`, htitle: `Add all characters in font (will create empty glyphs)`,
+                    trigger: {
+                        fn: () => {
+                            mkfCmds.ImportViewportEmpty.emitter = this;
+                            mkfCmds.ImportViewportEmpty.Execute(this._parent._content);
+                        },
+                        thisArg: this
+                    }
+                },
                 {
                     icon: `text-unicode-char`, htitle: `Copy current unicodes characters to clipboard.\nEach value is separated by a '\\n' new line.`,
                     trigger: {
-                        fn: () => { mkfCmds.ExportUniClipboard.Execute(this._parent._content); },
+                        fn: () => {
+                            mkfCmds.ExportUniClipboard.emitter = this;
+                            mkfCmds.ExportUniClipboard.Execute(this._parent._content);
+                        },
                         thisArg: this
                     }
                 },
                 {
                     icon: `text-unicode`, htitle: `Copy current hex values to clipboard.\nEach value is separated by a '\\n' new line.`,
                     trigger: {
-                        fn: () => { mkfCmds.ExportUniHexToClipboard.Execute(this._parent._content); },
+                        fn: () => {
+                            mkfCmds.ExportUniHexToClipboard.emitter = this;
+                            mkfCmds.ExportUniHexToClipboard.Execute(this._parent._content);
+                        },
                         thisArg: this
                     }
-                }
+                },
             ]
         };
 

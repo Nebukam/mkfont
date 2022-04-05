@@ -1,5 +1,5 @@
 const nkm = require(`@nkmjs/core`);
-const u = nkm.utils;
+const u = nkm.u;
 const ui = nkm.ui;
 const { shell } = require(`electron`);
 
@@ -109,12 +109,13 @@ class WelcomeView extends ui.views.View {
 
         this._footer = this.Attach(ui.WidgetBar, `footer`, this._body);
         this._footer.options = {
-            size:ui.FLAGS.SIZE_XS,
+            //size:ui.FLAGS.SIZE_L,
             defaultWidgetClass: nkm.uilib.buttons.Button,
             handles: [
                 {
                     label: `${nkm.env.CONF.version}`,
                     cl:nkm.uilib.widgets.Tag,
+                    size:ui.FLAGS.SIZE_XS,
                     group: `Version`
                 },
                 {
@@ -132,6 +133,12 @@ class WelcomeView extends ui.views.View {
                     trigger:{
                         fn:()=>{ shell.openExternal("https://github.com/Nebukam/mkfont/wiki") }
                     }
+                },
+                {
+                    label: `Settings`,
+                    variant: ui.FLAGS.FRAME,
+                    group: `settings`,
+                    command:mkfCmds.OpenPrefs
                 }
             ]
         };

@@ -2,7 +2,7 @@
 
 const nkm = require(`@nkmjs/core`);
 const dom = nkm.ui.dom;
-const u = nkm.utils;
+const u = nkm.u;
 const io = nkm.io;
 
 const GlyphVariant = require(`./glyph-variant-data-block`);

@@ -28,7 +28,7 @@ const svgopts = {
         {
             name: `convertShapeToPath`, params: {
                 convertArcs: true,
-                precision:6,
+                precision: 6,
             }
         },
         {
@@ -184,8 +184,11 @@ class SVGOperations {
                     //Attempt to apply transforms that can be applied
                     if (tr) { p.setAttribute(`d`, svgpath(d).transform(tr).toString()); }
 
+                    let tbb = this.GetBBox(d);
+                    if (tbb.width == 0 && tbb.height == 0) { d = null; }
+
                     //Check if path is mark (if so ignore it)
-                    if (!markedBBox) {
+                    if (d && !markedBBox) {
                         markedBBox = this._FindMarkedBBox(p, styleObject, markCol);
                         if (markedBBox) {
                             d = null;

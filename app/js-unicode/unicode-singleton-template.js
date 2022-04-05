@@ -1,7 +1,7 @@
 'use strict';
 
 const nkm = require(`@nkmjs/core`);
-const u = nkm.utils;
+const u = nkm.u;
 const mkfData = require(`./data`);
 const CmdSetDisplay = require(`./operations/commands/cmd-set-display-list`);
 const UniBlock = require(`./catalogs/definition-uni-block`);

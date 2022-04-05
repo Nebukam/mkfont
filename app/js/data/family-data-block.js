@@ -1,7 +1,7 @@
 'use strict';
 
 const nkm = require(`@nkmjs/core`);
-const u = nkm.utils;
+const u = nkm.u;
 const io = nkm.io;
 
 const UNICODE = require(`../unicode`);
@@ -34,21 +34,6 @@ class FamilyDataBlock extends SimpleDataEx {
         this._Bind(this._OnGlyphUnicodeChanged);
         this._Bind(this._OnGlyphVariantUpdated);
         this._Bind(this._OnGlyphUpdated);
-
-        this._values = {
-            [IDS.FAMILY]: { value: `Font Family Name` },
-            [IDS.COPYRIGHT]: { value: `(c) mkfont 2022` },
-            [IDS.DESCRIPTION]: { value: `Made with mkfont` },
-            [IDS.URL]: { value: `https://github.com/Nebukam/mkfont` },
-            [IDS.VERSION]: { value: `1.0` },
-            [IDS.COLOR_PREVIEW]: { value: `#f5f5f5` },
-
-            //[IDS.ALPHABETIC]: { value: 0 },
-            //[IDS.MATHEMATICAL]: { value: 350 },
-            //[IDS.IDEOGRAPHIC]: { value: 400 },
-
-            [IDS.PREVIEW_SIZE]: { value: 70 },
-        };
 
         this._transformSettings = nkm.com.Rent(ImportSettings);
         this._searchSettings = nkm.com.Rent(SearchSettings);
@@ -83,6 +68,25 @@ class FamilyDataBlock extends SimpleDataEx {
         //
 
         this._ligaSettings = nkm.com.Rent(LigaImportSettings);
+
+    }
+
+    _ResetValues(p_values) {
+
+        let defaults = nkm.env.APP._prefDataObject;
+
+        p_values[IDS.FAMILY] = { value: defaults.Get(IDS.FAMILY)};
+        p_values[IDS.COPYRIGHT] = { value: defaults.Get(IDS.COPYRIGHT) };
+        p_values[IDS.DESCRIPTION] = { value: defaults.Get(IDS.DESCRIPTION) };
+        p_values[IDS.URL] = { value: defaults.Get(IDS.URL) };
+        p_values[IDS.VERSION] = { value: `1.0` };
+        p_values[IDS.COLOR_PREVIEW] = { value: defaults.Get(IDS.COLOR_PREVIEW) };
+
+        //p_values[IDS.ALPHABETIC] = { value: 0 };
+        //p_values[IDS.MATHEMATICAL] = { value: 350 };
+        //p_values[IDS.IDEOGRAPHIC] = { value: 400 };
+
+        p_values[IDS.PREVIEW_SIZE] = { value: defaults.Get(IDS.PREVIEW_SIZE) };
 
     }
 

@@ -143,7 +143,7 @@ class PropertyControl extends nkm.datacontrols.ControlWidget {
     set propertyId(p_id) {
 
         this._valueID = p_id;
-        this._valueInfos = mkfData.IDS.GetInfos(p_id) || mkfData.IDS_EXT.GetInfos(p_id);
+        this._valueInfos = mkfData.IDS.GetInfos(p_id) || mkfData.IDS_EXT.GetInfos(p_id) || mkfData.IDS_PREFS.GetInfos(p_id);
 
         if (this._input) {
             this._input.order = null;

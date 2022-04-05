@@ -1,7 +1,7 @@
 //
 const nkm = require(`@nkmjs/core`);
 const actions = nkm.actions;
-const u = nkm.utils;
+const u = nkm.u;
 
 const { clipboard } = require('electron');
 const fs = require('fs');
@@ -58,7 +58,7 @@ class CmdImportExternalFile extends actions.Command {
 
         svgStats = SVGOPS.SVGStats(svgString);
         svgStats.filepath = p;
-        svgStats.name = nkm.utils.PATH.name(p);
+        svgStats.name = nkm.u.PATH.name(p);
 
         if (!svgStats.exists) {
             nkm.dialog.Push({

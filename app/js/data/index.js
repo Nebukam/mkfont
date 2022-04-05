@@ -7,6 +7,7 @@ module.exports = {
     ENUMS: require(`./enums`),
     IDS: require(`./ids`),
     IDS_EXT: require(`./ids-ext`),
+    IDS_PREFS: require(`./ids-prefs`),
     UTILS: require(`./utils`),
 
     SubFamily: require(`./sub-family-data-block`),
@@ -18,6 +19,7 @@ module.exports = {
     TransformSettings: require(`./settings-transforms-data-block`),
     ImportSettings: require(`./settings-import-data-block`),
     LigaImportSettings: require(`./settings-liga-import-data-block`),
+    Prefs: require(`./settings-preferences`),
 
     RangeContent : require(`./range-content`),
 

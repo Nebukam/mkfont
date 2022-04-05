@@ -29,9 +29,7 @@ $bg: rgb(70, 70, 70);
     align-items: center;
     align-content: center;
 
-    padding: $padding;
-    padding-left: $padding*2;
-    padding-right: $padding*2;
+    padding: $padding calc(var(--size) * 0.33);
 
     --flavor-color: #{$bg};
     --flavor-contrast: #{ contrast-color($bg) }; 

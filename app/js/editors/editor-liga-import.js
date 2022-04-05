@@ -1,5 +1,5 @@
 const nkm = require(`@nkmjs/core`);
-const u = nkm.utils;
+const u = nkm.u;
 const ui = nkm.ui;
 
 const svgpath = require('svgpath');
@@ -22,10 +22,10 @@ class EditorLigaImport extends nkm.datacontrols.Editor {
         this.forwardData.To(this._builder);
 
         this._dataPreProcessor = (p_owner, p_data) => {
-            if (nkm.utils.isInstanceOf(p_data, mkfData.Glyph)) { return p_data.family._ligaSettings; }
-            if (nkm.utils.isInstanceOf(p_data, mkfData.GlyphVariant)) { return p_data.glyph.family._ligaSettings; }
-            if (nkm.utils.isInstanceOf(p_data, mkfData.SubFamily)) { return p_data.family._ligaSettings; }
-            if (nkm.utils.isInstanceOf(p_data, mkfData.Family)) { return p_data._ligaSettings; }
+            if (nkm.u.isInstanceOf(p_data, mkfData.Glyph)) { return p_data.family._ligaSettings; }
+            if (nkm.u.isInstanceOf(p_data, mkfData.GlyphVariant)) { return p_data.glyph.family._ligaSettings; }
+            if (nkm.u.isInstanceOf(p_data, mkfData.SubFamily)) { return p_data.family._ligaSettings; }
+            if (nkm.u.isInstanceOf(p_data, mkfData.Family)) { return p_data._ligaSettings; }
             return p_data;
         };
 

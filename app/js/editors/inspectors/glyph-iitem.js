@@ -173,12 +173,18 @@ class GlyphVariantInspectorItem extends nkm.datacontrols.ControlWidget {
                         }
                     },
                     group: `read`
-                },/*
+                },
                 {
-                    icon: `edit`, htitle: `Edit using default SVG editor`,
+                    icon: `document-edit`, htitle: `Edit using default SVG editor`,
                     variant: ui.FLAGS.MINIMAL,
-                    group: `read`, member: { owner: this, id: `_editInPlaceBtn` }
-                },*/
+                    trigger: {
+                        fn: () => {
+                            this.editor._editInPlace.emitter = this;
+                            this.editor._editInPlace.Execute(this._data);
+                        }
+                    },
+                    group: `write`, member: { owner: this, id: `_editInPlaceBtn` }
+                },
                 {
                     icon: `clipboard-write`, htitle: `Copy glyph to clipboard`,
                     variant: ui.FLAGS.MINIMAL,
@@ -238,9 +244,9 @@ class GlyphVariantInspectorItem extends nkm.datacontrols.ControlWidget {
 
         let unicodeCharacter = ``;
 
-        if (nkm.utils.isNumber(this._glyphInfos)) {
+        if (nkm.u.isNumber(this._glyphInfos)) {
             unicodeCharacter = UNICODE.GetUnicodeCharacter(this._glyphInfos);
-        } else if (nkm.utils.isString(this._glyphInfos)) {
+        } else if (nkm.u.isString(this._glyphInfos)) {
             unicodeCharacter = this._glyphInfos;
         } else {
             unicodeCharacter = UNICODE.GetUnicodeCharacter(parseInt(this._glyphInfos.u, 16));
@@ -256,7 +262,7 @@ class GlyphVariantInspectorItem extends nkm.datacontrols.ControlWidget {
             let isNullGlyph = this._data.glyph.isNull;
             this._flags.Set(__nullGlyph, isNullGlyph);
             this._writeToClipboardBtn.disabled = isNullGlyph;
-            //this._editInPlaceBtn.disabled = isNullGlyph;
+            this._editInPlaceBtn.disabled = isNullGlyph;
             this._deleteGlyphBtn.disabled = isNullGlyph;
         }
     }

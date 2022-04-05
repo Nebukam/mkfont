@@ -1,7 +1,7 @@
 //
 const nkm = require(`@nkmjs/core`);
 const actions = nkm.actions;
-const u = nkm.utils;
+const u = nkm.u;
 
 const { clipboard } = require('electron');
 const fs = require('fs');
@@ -90,9 +90,9 @@ class CmdImportExternalFileMultiple extends actions.Command {
 
                 let entryOptions = {
                     filePath: filePath,
-                    name: nkm.utils.PATH.name(filePath),
+                    name: nkm.u.PATH.name(filePath),
                     ['use-custom-unicode']: false,
-                    ['unicode-user-input']: nkm.utils.PATH.name(filePath),
+                    ['unicode-user-input']: nkm.u.PATH.name(filePath),
                     svgStats: svgStats,
                     subFamily: subFamily,
                     transforms: this._importTransformationSettings
@@ -198,8 +198,8 @@ class CmdImportExternalFileMultiple extends actions.Command {
 
         searchloop: for (let i = 0; i < p_list.length; i++) {
             let
-                filePath = nkm.utils.PATH.Sanitize(p_list[i]),
-                filename = nkm.utils.PATH.name(filePath);
+                filePath = nkm.u.PATH.Sanitize(p_list[i]),
+                filename = nkm.u.PATH.name(filePath);
 
             p_list[i] = filePath;
 

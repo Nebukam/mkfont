@@ -1,6 +1,6 @@
 const nkm = require(`@nkmjs/core`);
 const com = nkm.com;
-const u = nkm.utils;
+const u = nkm.u;
 const ui = nkm.ui;
 
 const mkfData = require(`../data`);

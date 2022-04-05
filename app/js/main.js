@@ -40,6 +40,26 @@ class MKFont extends nkm.app.AppBase {
 
         nkm.documents.DOCUMENTS.Watch(nkm.data.SIGNAL.NO_ACTIVE_EDITOR, this._OnDocDataRoaming, this);
 
+        this._prefDataObject = com.Rent(mkfData.Prefs);
+        this._defaultUserPreferences = { 
+            'mkf:prefs':JSON.stringify(nkm.data.serialization.JSONSerializer.Serialize(this._prefDataObject))
+        };
+
+    }
+
+    _OnPrefsObjectUpdated(p_data){
+        //TODO : Stringify and set to prefs
+        let json = nkm.data.serialization.JSONSerializer.Serialize(this._prefDataObject);
+        this._userPreferences.Set(`mkf:prefs`, JSON.stringify(json));
+    }
+
+    _OnAppReadyInternal(p_data){
+        
+        console.log(p_data.Get(`mkf:prefs`));
+        nkm.data.serialization.JSONSerializer.Deserialize(JSON.parse(p_data.Get(`mkf:prefs`)), this._prefDataObject);
+        this._prefDataObject.Watch(com.SIGNAL.UPDATED, this._OnPrefsObjectUpdated, this);
+
+        super._OnAppReadyInternal(p_data);
     }
 
     AppReady() {
@@ -104,17 +124,18 @@ class MKFont extends nkm.app.AppBase {
         //mkfCmds.MakeTTFFont.Enable();
         //nkm.actions.KeystrokeEx.CreateFromString(`Ctrl E`, { fn: this._Bind(this._WriteTTF) }).Enable();
 
-        //this._EmptyFamily();
+        this._EmptyFamily();
         //this._FamilyFromTTF();
+        //mkfCmds.OpenPrefs.Execute();
 
     }
 
     _OnOpenPathRequest(p_path) {
 
         console.log(`_OnOpenPathRequest -> `, p_path);
-        if (p_path == null || nkm.utils.isVoid(p_path)) { return; }
+        if (p_path == null || nkm.u.isVoid(p_path)) { return; }
 
-        if (nkm.utils.isArray(p_path)) {
+        if (nkm.u.isArray(p_path)) {
             let finalPath = null;
             p_path.forEach((item) => { if (item.includes(`.mkfont`)) { finalPath = item; } });
             if (!finalPath) { return; }

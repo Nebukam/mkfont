@@ -1,7 +1,7 @@
 //
 const nkm = require(`@nkmjs/core`);
 const actions = nkm.actions;
-const u = nkm.utils;
+const u = nkm.u;
 
 const { clipboard } = require('electron');
 const fs = require('fs');
@@ -40,7 +40,6 @@ class CmdImportClipboard extends actions.Command {
             svgString = clipboard.readText();
 
         try {
-
             svgStats = SVGOPS.SVGStats(svgString);
         } catch (e) { console.log(e); }
 

@@ -1,7 +1,7 @@
 //
 const nkm = require(`@nkmjs/core`);
 const actions = nkm.actions;
-const u = nkm.utils;
+const u = nkm.u;
 
 const UNICODE = require(`../../unicode`);
 const IDS_EXT = require(`../../data/ids-ext`);

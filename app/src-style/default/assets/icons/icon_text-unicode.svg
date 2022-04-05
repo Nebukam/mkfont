@@ -2,6 +2,6 @@
   <g id="main">
     <rect x="10.85" y="10" width="79.87" height="79.87" fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-width="5" opacity="0.5"/>
     <path d="M60.55,28.11V57.65a15.3,15.3,0,0,1-30.6,0V28.11" fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-width="10"/>
-    <path d="M74.54,42.89h-28" fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-width="10"/>
+    <line x1="74.54" y1="42.89" x2="46.56" y2="42.89" fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-width="10"/>
   </g>
 </svg>
