@@ -115,9 +115,8 @@ class PangramRenderer extends ui.Widget {
         }
 
         let
-            prefs = nkm.env.APP._prefDataObject,
             glyphCount = this._data.family._glyphs.count,
-            threshold = prefs.Get(mkfData.IDS_PREFS.MANUAL_PREVIEW_REFRESH_THRESHOLD);
+            threshold = nkm.env.APP.PGet(mkfData.IDS_PREFS.MANUAL_PREVIEW_REFRESH_THRESHOLD);
 
         console.log(`${glyphCount} | ${threshold} | ${p_manual}`);
 

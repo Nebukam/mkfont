@@ -164,7 +164,9 @@ class PropertyControl extends nkm.datacontrols.ControlWidget {
             size: nkm.ui.FLAGS.SIZE_S,
             onSubmit: { fn: this._OnValueSubmit },
             ...this._valueInfos.inputOptions
-        }
+        };
+
+        this._input.setAttribute(`title`, this._valueInfos.desc);
 
         this._input.order = this._inputOrder;
 

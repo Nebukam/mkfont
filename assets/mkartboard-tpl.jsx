@@ -22,12 +22,6 @@ function substring(str, start, length) {
 
 function ParseList() {
 
-    var uinput = uList.text;
-    if (uinput == "" || !uinput) { return false; }
-    unicodeList = uinput.split("\n");
-    if (unicodeList.length <= 1) { unicodeList = uinput.split(","); }
-    if (unicodeList.length <= 1) { return false; }
-
     for (var i = 0; i < unicodeList.length; i++) {
         var u = trim(unicodeList[i]);
         unicodeList[i] = u;

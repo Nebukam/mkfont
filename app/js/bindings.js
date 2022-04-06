@@ -56,6 +56,12 @@ class Bindings extends nkm.com.helpers.BindingKit {
                     { key: mkfData.Family, binding: mkfData.serialization.json.Family },
                     { key: mkfData.Prefs, binding: mkfData.serialization.json.SimpleDataEx }
                 ]
+            },
+            {
+                context: nkm.documents.CONTEXT.DOCUMENT,
+                kvps: [
+                    { key: mkfData.Family, binding: nkm.documents.bound.JSONDocument }
+                ]
             });
 
     }

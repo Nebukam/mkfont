@@ -13,6 +13,11 @@ const ENUMS = require(`./enums`);
 class PreferencesSettingsDataBlock extends SimpleDataEx {
     constructor() { super(); }
 
+    static __signalValueMap = {
+        [IDS_PREFS.AUTOSAVE]: IDS_PREFS.AUTOSAVE,
+        [IDS_PREFS.AUTOSAVE_TIMER]: IDS_PREFS.AUTOSAVE_TIMER,
+    };
+
     static __NFO__ = {
         [nkm.com.IDS.UID]: `@mkf:prefs-data-block`,
         [nkm.com.IDS.ICON]: `gear`

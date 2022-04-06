@@ -5,6 +5,8 @@ const nkm = require(`@nkmjs/core`);
 const com = nkm.com;
 const ui = nkm.ui;
 
+com.BINDINGS.Expand(require(`./bindings`)); //!important
+
 const mkfData = require(`./data`);
 const mkfViews = require(`./views`);
 const mkfEditors = require(`./editors`);
@@ -15,8 +17,6 @@ const mkfWidgets = require(`./widgets`);
 
 const UNICODE = require(`./unicode`);
 const fs = require('fs');
-
-com.BINDINGS.Expand(require(`./bindings`)); //!important
 
 const __fontName = `Basement-Medium`;// `Basement-Medium`;// `Meticula`; //`Inter-Regular`
 
@@ -41,26 +41,40 @@ class MKFont extends nkm.app.AppBase {
         nkm.documents.DOCUMENTS.Watch(nkm.data.SIGNAL.NO_ACTIVE_EDITOR, this._OnDocDataRoaming, this);
 
         this._prefDataObject = com.Rent(mkfData.Prefs);
-        this._defaultUserPreferences = { 
-            'mkf:prefs':JSON.stringify(nkm.data.serialization.JSONSerializer.Serialize(this._prefDataObject))
+        this._prefDataObject
+            .Watch(mkfData.IDS_PREFS.AUTOSAVE, () => {
+                nkm.documents.ToggleAutoSave(nkm.env.APP.PGet(mkfData.IDS_PREFS.AUTOSAVE));
+            })
+            .Watch(mkfData.IDS_PREFS.AUTOSAVE_TIMER, () => {
+                nkm.documents.ToggleAutoSave(
+                    nkm.env.APP.PGet(mkfData.IDS_PREFS.AUTOSAVE),
+                     nkm.env.APP.PGet(mkfData.IDS_PREFS.AUTOSAVE_TIMER) * 1000 * 60 );
+            })
+
+        this._defaultUserPreferences = {
+            'mkf:prefs': JSON.stringify(nkm.data.serialization.JSONSerializer.Serialize(this._prefDataObject))
         };
 
     }
 
-    _OnPrefsObjectUpdated(p_data){
+    _OnPrefsObjectUpdated(p_data) {
         //TODO : Stringify and set to prefs
         let json = nkm.data.serialization.JSONSerializer.Serialize(this._prefDataObject);
         this._userPreferences.Set(`mkf:prefs`, JSON.stringify(json));
     }
 
-    _OnAppReadyInternal(p_data){
-        
+    _OnAppReadyInternal(p_data) {
+
         console.log(p_data.Get(`mkf:prefs`));
         nkm.data.serialization.JSONSerializer.Deserialize(JSON.parse(p_data.Get(`mkf:prefs`)), this._prefDataObject);
         this._prefDataObject.Watch(com.SIGNAL.UPDATED, this._OnPrefsObjectUpdated, this);
 
         super._OnAppReadyInternal(p_data);
     }
+
+    get mkfPrefs() { return this._prefDataObject; }
+    PGet(p_id, p_fallback = null, p_fallbackIfNullValue = false) { return this._prefDataObject.Get(p_id, p_fallback, p_fallbackIfNullValue); }
+    PSet(p_id, p_value, p_silent = false) { return this._prefDataObject.Set(p_id, p_value, p_silent); }
 
     AppReady() {
 
@@ -124,7 +138,7 @@ class MKFont extends nkm.app.AppBase {
         //mkfCmds.MakeTTFFont.Enable();
         //nkm.actions.KeystrokeEx.CreateFromString(`Ctrl E`, { fn: this._Bind(this._WriteTTF) }).Enable();
 
-        this._EmptyFamily();
+        //this._EmptyFamily();
         //this._FamilyFromTTF();
         //mkfCmds.OpenPrefs.Execute();
 

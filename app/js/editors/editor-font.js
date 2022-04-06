@@ -54,17 +54,15 @@ class FontEditor extends nkm.uiworkspace.editors.EditorEx {
 
         this._editInPlace = nkm.actions.Command.Rent(mkfCmds.EditInExternalEditor);
 
+        this._shortcuts.CreateFromString("Ctrl S", {
+            fn: () => { mkfCmds.SaveFamilyDoc.Execute(this._data); }, thisArg: this
+        });
+
     }
 
     _OnDisplayGain() {
         super._OnDisplayGain();
         mkfCmds.SaveFamilyDoc.emitter = this;
-        mkfCmds.SaveFamilyDoc.Enable();
-    }
-
-    _OnDisplayLost() {
-        super._OnDisplayLost();
-        if (mkfCmds.SaveFamilyDoc.emitter == this) { mkfCmds.SaveFamilyDoc.Disable(); }
     }
 
     _PostInit() {
@@ -317,6 +315,9 @@ class FontEditor extends nkm.uiworkspace.editors.EditorEx {
         super.RequestClose();
     }
 
+    _CleanUp() {
+        super._CleanUp();
+    }
 
 }
 

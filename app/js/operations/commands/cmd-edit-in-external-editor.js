@@ -53,8 +53,7 @@ class CmdEditInPlace extends actions.Command {
     _Kickstart() {
 
         let
-            prefs = nkm.env.APP._prefDataObject,
-            defaultEditorPath = prefs.Get(mkfData.IDS_PREFS.SVG_EDITOR_PATH);
+            defaultEditorPath = nkm.env.APP.PGet(mkfData.IDS_PREFS.SVG_EDITOR_PATH);
 
         try {
             let stats = fs.statSync(defaultEditorPath[0]);
@@ -130,7 +129,7 @@ class CmdEditInPlace extends actions.Command {
         }
 
         let filePath = p_response.filePaths[0];
-        nkm.env.APP._prefDataObject.Set(mkfData.IDS_PREFS.SVG_EDITOR_PATH, [filePath]);
+        nkm.env.APP.PSet(mkfData.IDS_PREFS.SVG_EDITOR_PATH, [filePath]);
 
         this._Kickstart();
 
@@ -139,8 +138,7 @@ class CmdEditInPlace extends actions.Command {
     _Launch() {
 
         let
-            prefs = nkm.env.APP._prefDataObject,
-            defaultEditorPath = prefs.Get(mkfData.IDS_PREFS.SVG_EDITOR_PATH);
+            defaultEditorPath = nkm.env.APP.PGet(mkfData.IDS_PREFS.SVG_EDITOR_PATH);
 
         nkmElectron.io.LaunchExternalEditor(defaultEditorPath[0], this._tmpRsc.path);
         this._tmpRsc.Enable();
