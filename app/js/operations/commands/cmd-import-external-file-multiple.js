@@ -183,6 +183,8 @@ class CmdImportExternalFileMultiple extends actions.Command {
                     id: mkfData.IDS.PATH_DATA,
                     value: svgStats
                 });
+                //TODO : Keep Shift & push values? Need more control at time of import :(
+                    
                 editor.Do(mkfActions.SetPropertyMultiple, {
                     target: variant.transformSettings,
                     values: trValues

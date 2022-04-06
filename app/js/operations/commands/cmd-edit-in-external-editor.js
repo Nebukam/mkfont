@@ -72,6 +72,9 @@ class CmdEditInPlace extends actions.Command {
         this._cachedEditor = this._emitter.editor;
         this._cachedContext = this._context;
 
+        //TODO : Option to "bind to file" for the session
+        //TODO : Here, check if a resource is currently bound before using a temp file
+
         this._tmpRsc.Create({
             ext: `.svg`,
             cl: nkm.io.resources.TextResource
