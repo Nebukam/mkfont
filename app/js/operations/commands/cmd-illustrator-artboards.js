@@ -4,7 +4,7 @@ const actions = nkm.actions;
 const u = nkm.u;
 const path = require(`path`);
 
-const { clipboard } = require('electron');
+const { app, clipboard } = require('electron');
 const fs = require('fs');
 
 const nkmElectron = require('@nkmjs/core/electron');
@@ -14,6 +14,7 @@ const CmdViewportContent = require(`./cmd-viewport-content`);
 const UNICODE = require(`../../unicode`);
 const mkfData = require(`../../data`);
 const mkfActions = require(`../actions`);
+const { join } = require('path');
 
 class CmdIllustratorArtboard extends CmdViewportContent {
     constructor() { super(); }
@@ -62,9 +63,29 @@ class CmdIllustratorArtboard extends CmdViewportContent {
 
         let
             list = super._InternalExecute(),
-            jsxContent = fs.readFileSync(path.resolve(`assets`, `mkartboard-tpl.jsx`), 'utf8');
+            jsxContent;
 
-        for (let i = 0; i < list.length; i++) { list[i] = `"${list[i]}"`; }
+        try {
+            jsxContent = fs.readFileSync(path.join(...u.FULL(`%APP%`).split(u.tils.DELIM_DIR), `assets`, `mkartboard-tpl.jsx`), 'utf8');
+        } catch (e) {
+            jsxContent = fs.readFileSync(path.resolve(`assets`, `mkartboard-tpl.jsx`), 'utf8');
+        }
+
+        if (list.length > 1000) {
+            list.length = 1000;
+            nkm.dialog.Push({
+                title: `Illustrator limitations`,
+                message: `Illustrator limits the number of artboard to 1,000, and your selection has ${list.length} glyphs.<br>Only the first 1,000 glyphs will handled :(`,
+                actions: [
+                    { label: `Okay` }
+                ],
+                icon: `app-illustrator`,
+                flavor: nkm.com.FLAGS.WARNING,
+                origin: this,
+            });
+        }
+
+        for (let i = 0; i < Math.min(list.length, 1000); i++) { list[i] = `"${list[i]}"`; }
 
         jsxContent = jsxContent.split(`%unicodeList%`).join(list.join(`,`));
 
@@ -80,8 +101,6 @@ class CmdIllustratorArtboard extends CmdViewportContent {
                 fail: this._OnWriteFail
             }
         );
-
-        console.log(`uuuh okay ?`,jsxContent);
 
     }
 

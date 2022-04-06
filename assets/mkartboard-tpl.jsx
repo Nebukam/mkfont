@@ -44,7 +44,7 @@ function GenerateArtboards() {
     var w = 100;
     var h = 100;
     var sp = 50;
-    var perRow = Math.min(16383 / (w + sp), 20);
+    var perRow = Math.min(Math.floor(Math.sqrt(Math.min(codes.length, 1000))), 16383 / (w + sp));
 
     var docRef = app.documents.add(DocumentColorSpace.RGB, w, h, codes.length, DocumentArtboardLayout.GridByRow, sp, perRow);
     var layerLabels = docRef.layers.add();
@@ -101,7 +101,7 @@ function AddOutline(text, layer, artbrd, h) {
     outline.paragraphs.add(text);
 
     var _o = 0.25;
-    var _r = (1/(1-_o));
+    var _r = (1 / (1 - _o));
     var _h = h * _r;
 
     var tt = outline.textRange.characters.length;

@@ -36,7 +36,7 @@
             "enabled": true,
             "platform": "windows",
             "arch": "x64",
-            "asar": false,
+            "asar": true,
             "build": {
                 "target": "nsis",
                 "nsis": {

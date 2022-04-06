@@ -135,7 +135,6 @@ class MKFont extends nkm.app.AppBase {
         this._welcomeView._options.view.RequestDisplay();
         this._OnOpenPathRequest(openPath);
 
-        //mkfCmds.MakeTTFFont.Enable();
         //nkm.actions.KeystrokeEx.CreateFromString(`Ctrl E`, { fn: this._Bind(this._WriteTTF) }).Enable();
 
         //this._EmptyFamily();
@@ -192,10 +191,6 @@ class MKFont extends nkm.app.AppBase {
         this._anotherFamily = nkm.data.serialization.JSONSerializer.Deserialize(JSON.parse(outputStr));
         //console.log(this._anotherFamily);
 
-    }
-
-    _WriteTTF() {
-        mkfCmds.MakeTTFFont.Execute(this._tempFontData);
     }
 
 }

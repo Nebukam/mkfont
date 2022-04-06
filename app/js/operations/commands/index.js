@@ -18,7 +18,6 @@ module.exports = {
 
     OpenPrefs: new (require(`./cmd-open-prefs`))(),
 
-    MakeTTFFont: new (require(`./cmd-generate-ttf-font`))(),
     SetProperty: new (require(`./cmd-action-set-property`))(),
     SetEM: new (require(`./cmd-action-set-em`))(),
     SetAscent: new (require(`./cmd-action-set-ascent`))(),
