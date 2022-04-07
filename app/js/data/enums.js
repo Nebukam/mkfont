@@ -119,6 +119,15 @@ class ENUMS {
         { name: `RTL`, [nkm.com.IDS.VALUE]: `rtl`, icon: 'text-direction-rtl' },
     ]);
 
+    static OVERLAP_OVERWRITE = 0;
+    static OVERLAP_KEEP = 1;
+    static OVERLAP_INDIVIDUAL = 2;
+
+    static OVERLAP = nkm.data.catalogs.CreateFrom({ name: `Transform reference`, autoSort: false }, [
+        { name: `Overwrite`, [nkm.com.IDS.VALUE]: this.OVERLAP_OVERWRITE },
+        //{ name: `Keep existing`, [nkm.com.IDS.VALUE]: this.OVERLAP_KEEP },
+        { name: `Individual`, [nkm.com.IDS.VALUE]: this.OVERLAP_INDIVIDUAL },
+    ]);
 
 }
 

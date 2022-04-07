@@ -41,7 +41,22 @@ class GlyphGroupViewport extends nkm.datacontrols.ControlView { //ui.views.View
 
         this._searchActive = false;
 
-        this._InitSelectionStack(false, true);
+        this._InitSelectionStack(true, true, {
+            add: {
+                fn: (p_sel, p_index) => {
+                    let widget = this._domStreamer.GetItemAt(p_index);
+                    if (widget) { widget.Select(true); }
+                    else { p_sel.Add(this._content[p_index]); }
+                }, thisArg: this
+            },
+            remove: {
+                fn: (p_sel, p_index, p_data) => {
+                    let widget = this._domStreamer.GetItemAt(p_index);
+                    if (widget) { widget.Select(false); }
+                    else { p_sel.Remove(this._content[p_index]); }
+                }, thisArg: this
+            },
+        });
         this.selectionStack.data.dataMember = `_glyphInfos`;
         this.selectionStack.Watch(com.SIGNAL.ITEM_ADDED, this._OnDataSelected, this);
 
@@ -212,7 +227,7 @@ class GlyphGroupViewport extends nkm.datacontrols.ControlView { //ui.views.View
         }
     }
 
-    _OnItemRequested(p_streamer, p_index, p_fragment) {
+    _OnItemRequested(p_streamer, p_index, p_fragment, p_returnFn) {
 
         let unicode = this._content ? this._content[p_index] : null;
 
@@ -224,13 +239,15 @@ class GlyphGroupViewport extends nkm.datacontrols.ControlView { //ui.views.View
 
         this._unicodeMap.set(unicode, widget);
 
-        p_streamer.ItemRequestAnswer(p_index, widget);
+        p_returnFn(p_index, widget);
 
         this.selectionStack.Check(widget);
 
-        if (this.editor.inspectedData) {
-            if (this.editor.inspectedData.unicodeInfos == unicode) {
-                widget.Select(true);
+        if (this.selectionStack.data.isEmpty) {
+            if (this.editor.inspectedData) {
+                if (this.editor.inspectedData.unicodeInfos == unicode) {
+                    widget.Select(true);
+                }
             }
         }
 
