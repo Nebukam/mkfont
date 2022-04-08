@@ -8,6 +8,7 @@ const operations = require(`../../operations/index`);
 const mkfData = require(`../../data`);
 const mkfWidgets = require(`../../widgets`);
 
+const SIGNAL = require(`../../signal`);
 const UNICODE = require(`../../unicode`);
 
 const GlyphIItem = require(`./glyph-iitem`);
@@ -35,12 +36,12 @@ class GlyphInspector extends nkm.datacontrols.InspectorView {
         this._variantCtrl = null;
         this._variantNoneCtrl = null;
 
-        this._dataObserver
-            .Hook(nkm.com.SIGNAL.ITEM_ADDED, this._OnVariantAdded, this)
-            .Hook(nkm.com.SIGNAL.ITEM_REMOVED, this._OnVariantRemoved, this);
-
         this._builder.defaultControlClass = mkfWidgets.PropertyControl;
         this._builder.defaultCSS = `control`;
+
+        this._contextObserver
+            .Watch(SIGNAL.GLYPH_ADDED, this._OnGlyphAdded, this)
+            .Watch(SIGNAL.GLYPH_REMOVED, this._OnGlyphRemoved, this);
 
     }
 
@@ -76,7 +77,9 @@ class GlyphInspector extends nkm.datacontrols.InspectorView {
         this._glyphIdentity = this.Attach(mkfWidgets.GlyphIdentity, `identity`, this._host);
         //this._body = ui.El(`div`, { class: `body` }, this._host);
         this._variantCtrl = this.Attach(GlyphIItem, `variant`, this._host);
+
         this.forwardData.To(this._variantCtrl, { dataMember: `defaultGlyph` });
+        this.forwardContext.To(this._variantCtrl);
 
         this._builder.host = ui.El(`div`, { class: `settings` }, this._host);
 
@@ -96,7 +99,6 @@ class GlyphInspector extends nkm.datacontrols.InspectorView {
             } else {
                 this._builder.host.style.removeProperty(`display`);
             }
-
         }
     }
 
@@ -105,24 +107,12 @@ class GlyphInspector extends nkm.datacontrols.InspectorView {
         if (p_data.isNull) { this._glyphIdentity.glyphInfos = p_data.unicodeInfos; }
     }
 
-    _OnVariantAdded(p_glyph, p_glyphVariant) {
-        /*
-        let variantCtrl = this.Attach(GlyphIItem, `variant`, this._body);
-
-        this._variantCtrls.Attach(variantCtrl);
-        this._variantMap.Set(p_glyphVariant, variantCtrl);
-
-        variantCtrl.data = p_glyphVariant;
-        */
+    _OnGlyphAdded(p_glyph) {
+        
     }
 
-    _OnVariantRemoved(p_glyph, p_glyphVariant) {
-        /*
-        let variantCtrl = this._variantMap.Get(p_glyphVariant);
-        this._variantCtrls.Remove(variantCtrl);
-        this._variantMap.Remove(p_glyphVariant);
-        variantCtrl.Release();
-        */
+    _OnGlyphRemoved(p_glyph) {
+
     }
 
     _OnDisplayGain() {

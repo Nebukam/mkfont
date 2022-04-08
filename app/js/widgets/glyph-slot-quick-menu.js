@@ -28,7 +28,7 @@ class GlyphSlotQuickmenu extends ui.WidgetBar {
                     trigger: {
                         fn: () => {
                             mkfCmds.ImportEmpty.emitter = this;
-                            mkfCmds.ImportEmpty.Execute(this._data);
+                            mkfCmds.ImportEmpty.Execute(this._SecureData());
                         }
                     },
                     member: { owner: this, id: `_newBtn` }
@@ -55,7 +55,7 @@ class GlyphSlotQuickmenu extends ui.WidgetBar {
                     trigger: {
                         fn: () => {
                             mkfCmds.DeleteGlyph.emitter = this;
-                            mkfCmds.DeleteGlyph.Execute(this._data);
+                            mkfCmds.DeleteGlyph.Execute(this._SecureData());
                         }
                     },
                     member: { owner: this, id: `_deleteGlyphBtn` }
@@ -97,6 +97,12 @@ class GlyphSlotQuickmenu extends ui.WidgetBar {
 
         this._deleteGlyphBtn.visible = !this._data.glyph.isNull;
         this._newBtn.visible = (this._data.glyph.isNull && !this._data.Get(mkfData.IDS.EMPTY));
+    }
+
+    _SecureData(){
+        console.log(this._glyphInfos);
+        if(this._data.glyph.isNull){this._data.glyph.unicodeInfos = this._glyphInfos;}
+        return this._data;
     }
 
     set glyphInfos(p_infos) {

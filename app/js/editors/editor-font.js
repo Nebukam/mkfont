@@ -143,7 +143,7 @@ class FontEditor extends nkm.uiworkspace.editors.EditorEx {
 
         this._inspectorShell.header.style.display = `none`;
         this._shelf._nav.visible = false;
-
+        
         this.Inspect(null);
 
     }

@@ -253,7 +253,6 @@ class GlyphVariantInspectorItem extends nkm.datacontrols.ControlWidget {
         }
 
         this._svgPlaceholder.Set(unicodeCharacter);
-
     }
 
     _OnDataChanged(p_oldData) {

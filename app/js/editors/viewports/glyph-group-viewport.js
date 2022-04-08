@@ -56,9 +56,14 @@ class GlyphGroupViewport extends nkm.datacontrols.ControlView { //ui.views.View
                     else { p_sel.Remove(this._content[p_index]); }
                 }, thisArg: this
             },
+            count: {
+                fn: (p_sel) => { return this._content.length; }, thisArg: this
+            },
         });
         this.selectionStack.data.dataMember = `_glyphInfos`;
-        this.selectionStack.Watch(com.SIGNAL.ITEM_ADDED, this._OnDataSelected, this);
+        this.selectionStack
+            .Watch(com.SIGNAL.ITEM_ADDED, this._OnDataSelected, this)
+            .Watch(com.SIGNAL.ITEM_BUMPED, this._OnDataBumped, this);
 
         this._contentRange = new RangeContent();
         this._contentRange.Watch(nkm.com.SIGNAL.READY, this._OnRangeReady, this);
@@ -284,6 +289,10 @@ class GlyphGroupViewport extends nkm.datacontrols.ControlView { //ui.views.View
     //#endregion
 
     //#region Preview updates
+
+    _OnDataBumped(p_item){
+        this._OnDataSelected(p_item, true);
+    }
 
     _OnDataSelected(p_item, p_firstTimeAdd) {
 
