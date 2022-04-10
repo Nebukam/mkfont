@@ -26,6 +26,7 @@ class GlyphSlot extends nkm.datacontrols.ControlWidget {
         this._notifiesSelectionStack = true;
 
         this._subFamily = null;
+        this._glyhpVariant = null;
         this._glyphInfos = null;
 
         this._flags.Add(this, mkfData.IDS.OUT_OF_BOUNDS, mkfData.IDS.EMPTY);
@@ -134,7 +135,7 @@ class GlyphSlot extends nkm.datacontrols.ControlWidget {
             },
             '.quick-menu': {
                 '@': ['absolute-top-left'],
-                'margin':'5px'
+                'margin': '5px'
             }
         }, super._Style());
     }
@@ -162,14 +163,16 @@ class GlyphSlot extends nkm.datacontrols.ControlWidget {
         this._subFamily = p_value;
     }
 
-    get glyphInfos() { return this._glyphInfos; }
-    set glyphInfos(p_value) {
-        //if (this._glyphInfos == p_value) { return; }
+    _OnDataChanged(p_oldData) {
+        super._OnDataChanged(p_oldData);
+        this._UpdateGlyph();
+    }
 
-        this._glyphInfos = p_value;
+    _OnDataUpdated(p_data) {
+        super._OnDataUpdated(p_data);
 
-        let unicodeCharacter = p_value.char;
-        let glyphData = this._subFamily.family.TryGetGlyph(p_value),
+        let
+            unicodeCharacter = p_data.char,
             colCat = null;
 
         if (!unicodeCharacter) {
@@ -179,7 +182,7 @@ class GlyphSlot extends nkm.datacontrols.ControlWidget {
             colCat = `var(--col-ligature)`;
         }
 
-        if (`cat` in p_value) { colCat = `var(--col-${p_value.cat.col})`; }
+        if (`cat` in p_data) { colCat = `var(--col-${p_data.cat.col})`; }
 
         if (colCat) { this.style.setProperty(`--col-cat`, colCat); }
         else { this.style.removeProperty(`--col-cat`); }
@@ -187,36 +190,51 @@ class GlyphSlot extends nkm.datacontrols.ControlWidget {
         this._label.Set(`${unicodeCharacter}`, true);
         this._glyphPlaceholder.Set(unicodeCharacter, true);
 
-        this.data = glyphData;
-
     }
 
-    _OnDataUpdated(p_data) {
-        super._OnDataUpdated(p_data);
-        this._UpdateGlyphPreview();
+    _UpdateGlyph() {
+
+        let variant = null;
+        if (this._data && this._subFamily) {
+            variant = this._subFamily.family.GetGlyph(this._data.u).GetVariant(this._subFamily);
+        }
+
+        if (this._glyhpVariant == variant) { return; }
+
+        if (this._glyhpVariant) {
+            this._glyhpVariant.Unwatch(nkm.com.SIGNAL.UPDATED, this._UpdateGlyphPreview, this);
+        }
+
+        this._glyhpVariant = variant;
+
+        if (this._glyhpVariant) {
+            if (!this._glyhpVariant.glyph.isNull) {
+                this._glyhpVariant.Watch(nkm.com.SIGNAL.UPDATED, this._UpdateGlyphPreview, this);
+            }
+            this._UpdateGlyphPreview();
+        }
+
     }
 
     _UpdateGlyphPreview() {
 
         let qMenu = this.constructor.__quickMenu;
-        if(qMenu){
-            if (qMenu.parent == this) { qMenu.data = this._data.defaultGlyph; }
+        if (qMenu) {
+            if (qMenu.parent == this) { qMenu.data = this._glyhpVariant; }
         }
 
-        if (!this._data || this._data.isNull) {
+        if (!this._glyhpVariant || this._glyhpVariant.glyph.isNull) {
             this._glyphRenderer.Set(null);
             this._glyphPlaceholder._element.style.removeProperty(`display`);
             this.classList.remove(`exists`);
             return;
         }
 
-        let glyphVariant = this._data.GetVariant(this._subFamily);
-
-        if (this._glyphRenderer.Set(glyphVariant)) {
+        if (this._glyphRenderer.Set(this._glyhpVariant)) {
             this._glyphPlaceholder._element.style.display = `none`;
             this.classList.add(`exists`);
-            this._flags.Set(mkfData.IDS.OUT_OF_BOUNDS, glyphVariant.Get(mkfData.IDS.OUT_OF_BOUNDS));
-            this._flags.Set(mkfData.IDS.EMPTY, glyphVariant.Get(mkfData.IDS.EMPTY));
+            this._flags.Set(mkfData.IDS.OUT_OF_BOUNDS, this._glyhpVariant.Get(mkfData.IDS.OUT_OF_BOUNDS));
+            this._flags.Set(mkfData.IDS.EMPTY, this._glyhpVariant.Get(mkfData.IDS.EMPTY));
         } else {
             delete this._glyphPlaceholder._element.style.display;
             this._flags.Set(mkfData.IDS.OUT_OF_BOUNDS, false);
@@ -224,7 +242,7 @@ class GlyphSlot extends nkm.datacontrols.ControlWidget {
             this.classList.remove(`exists`);
         }
 
-        
+
     }
 
     _Highlight(p_toggle) {
@@ -238,8 +256,8 @@ class GlyphSlot extends nkm.datacontrols.ControlWidget {
             }
 
             qMenu.editor = this.editor;
-            qMenu.data = this._data.defaultGlyph;
-            qMenu.glyphInfos = this._glyphInfos;
+            qMenu.data = this._glyhpVariant;
+            qMenu.glyphInfos = this._data;
 
             this.Attach(qMenu, `quick-menu`, this._host);
 
@@ -256,11 +274,6 @@ class GlyphSlot extends nkm.datacontrols.ControlWidget {
         let qMenu = this.constructor.__quickMenu;
         if (!qMenu) { return; }
         if (qMenu.parent == this) { this.Detach(qMenu); }
-    }
-
-
-    _ToClipboard() {
-        navigator.clipboard.writeText(this._data._options.glyph);
     }
 
     _CleanUp() {

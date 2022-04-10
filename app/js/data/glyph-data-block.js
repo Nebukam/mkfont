@@ -118,6 +118,12 @@ class GlyphDataBlock extends SimpleDataEx {
         return variant;
     }
 
+    GetActiveVariant() {
+        let variant = this._subFamiliesMap.Get(this._family._selectedSubFamily);
+        if (!variant) { variant = this._defaultGlyph; }
+        return variant;
+    }
+
     //
 
     //

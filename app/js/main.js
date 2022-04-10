@@ -65,7 +65,6 @@ class MKFont extends nkm.app.AppBase {
 
     _OnAppReadyInternal(p_data) {
 
-        console.log(p_data.Get(`mkf:prefs`));
         nkm.data.serialization.JSONSerializer.Deserialize(JSON.parse(p_data.Get(`mkf:prefs`)), this._prefDataObject);
         this._prefDataObject.Watch(com.SIGNAL.UPDATED, this._OnPrefsObjectUpdated, this);
 

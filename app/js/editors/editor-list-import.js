@@ -73,7 +73,7 @@ class EditorListImport extends nkm.datacontrols.Editor {
                 'margin': '0 2px 5px 2px'
             },
             '.small': {
-               // 'flex': '1 1 45%'
+                // 'flex': '1 1 45%'
             }
         }, super._Style());
     }
@@ -118,19 +118,17 @@ class EditorListImport extends nkm.datacontrols.Editor {
         this._catalog = p_value;
         this._importListBrowser.data = p_value;
         this._UpdateUnicodeImportedValues();
-        if(this._catalog){
-            this.Inspect(this._catalog.At(0));
-        }
+        if (this._catalog) { this.inspectedData.Set(this._catalog.At(0)); }
     }
 
-    _OnInspectedDataChanged(p_oldData) {
-        super._OnInspectedDataChanged(p_oldData);
-        if (this._inspectedData) { this._UpdatePreview(); }
+    _OnInspectableItemBumped(p_selection, p_data) {
+        super._OnInspectableItemBumped(p_selection, p_data);
+        this._UpdatePreview(p_data);
     }
 
     _OnDataUpdated(p_data) {
         super._OnDataUpdated(p_data);
-        if (this._inspectedData) { this._UpdatePreview(); }
+        this._UpdatePreview(this._inspectedData.lastItem);
         this._UpdateUnicodeImportedValues();
     }
 
@@ -160,7 +158,7 @@ class EditorListImport extends nkm.datacontrols.Editor {
         parseArray = parseArray.length > 1 ? parseArray.pop() : parseArray[0];
         parseArray = this._GetUnicodeStructure(parseArray.split(separator));
         return parseArray;
-        
+
     }
 
     _GetUnicodeStructure(p_array) {
@@ -188,11 +186,14 @@ class EditorListImport extends nkm.datacontrols.Editor {
         return result;
     }
 
-    _UpdatePreview() {
+    _UpdatePreview(p_data) {
 
-        let subFamily = this._inspectedData.GetOption(`subFamily`),
+        if (!p_data) { return; }
+        
+        let
+            subFamily = p_data.GetOption(`subFamily`),
             contextInfos = subFamily._contextInfos,
-            pathData = this._inspectedData.GetOption(`svgStats`),
+            pathData = p_data.GetOption(`svgStats`),
             transformedPath = SVGOPS.FitPath(
                 this._data,
                 contextInfos,
@@ -204,9 +205,10 @@ class EditorListImport extends nkm.datacontrols.Editor {
         this._glyphRenderer.glyphPath = transformedPath.path;
         this._glyphRenderer.computedPath = transformedPath;
         this._glyphRenderer.Draw();
+
     }
 
-    _CleanUp(){
+    _CleanUp() {
         this.catalog = null;
         super._CleanUp();
     }

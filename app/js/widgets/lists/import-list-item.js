@@ -116,7 +116,7 @@ class ImportListItem extends lists.FolderListItem {
         if (!super.Activate(p_evt)) { return false; }
 
         let editor = nkm.datacontrols.FindEditor(this);
-        if (editor) { editor.Inspect(this._data); }
+        if (editor) { editor.inspectedData.Set(this._data); }
 
         return true;
     }

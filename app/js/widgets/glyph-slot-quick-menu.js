@@ -100,7 +100,6 @@ class GlyphSlotQuickmenu extends ui.WidgetBar {
     }
 
     _SecureData(){
-        console.log(this._glyphInfos);
         if(this._data.glyph.isNull){this._data.glyph.unicodeInfos = this._glyphInfos;}
         return this._data;
     }

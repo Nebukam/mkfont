@@ -5,6 +5,7 @@ module.exports = {
     Family: require(`./family-inspector`),
     SubFamily: require(`./subfamily-inspector`),
     Glyph: require(`./glyph-inspector`),
+    GlyphList: require(`./glyph-list-inspector`),
     Pangram: require(`./pangram-inspector`),
     FamilyContent:require(`./family-content-inspector`),
     TransformSettings:require(`./tr-settings-inspector`),

@@ -1,5 +1,5 @@
 const nkm = require(`@nkmjs/core`);
-const u = nkm.u;
+const u = nkm.utils;
 const ui = nkm.ui;
 
 const UNICODE = require(`../unicode`);
@@ -61,7 +61,7 @@ class GlyphIdentity extends ui.Widget {
             htitle: `Copy value to clipboard`,
             trigger: {
                 fn: () => {
-                    mkfCmds.ExportUniHexSingleToClipboard.Execute(this._glyphInfos);
+                    mkfCmds.ExportUniHexSingleToClipboard.Execute(this._data);
                 }, thisArg: this
             }
         }
@@ -79,11 +79,9 @@ class GlyphIdentity extends ui.Widget {
 
     }
 
-    set glyphInfos(p_infos) {
+    _OnDataUpdated(p_data) {
 
-        this._glyphInfos = p_infos;
-
-        if (!p_infos) {
+        if (!p_data) {
             this._title.Set(`---`);
             this._blockTag.label = `---`; this._blockTag.htitle = null;
             this._catTag.label = `---`;
@@ -92,20 +90,20 @@ class GlyphIdentity extends ui.Widget {
             return;
         }
 
-        this._title.Set((p_infos.name || `U+${p_infos.u}`).substr(0, 80));
+        this._title.Set((p_data.name || `U+${p_data.u}`).substr(0, 80));
 
-        this._hexTag.label = UNICODE.UUni(p_infos);
+        this._hexTag.label = UNICODE.UUni(p_data);
 
-        if (p_infos.block) {
-            this._blockTag.label = p_infos.block.name;
-            this._blockTag.htitle = p_infos.block.name;
+        if (p_data.block) {
+            this._blockTag.label = p_data.block.name;
+            this._blockTag.htitle = p_data.block.name;
         } else {
             this._blockTag.label = `unknown block`;
         }
 
-        if (p_infos.cat) {
-            this._catTag.label = p_infos.cat.name;
-            this._catTag.textColor = `var(--col-${p_infos.cat.col})`;
+        if (p_data.cat) {
+            this._catTag.label = p_data.cat.name;
+            this._catTag.textColor = `var(--col-${p_data.cat.col})`;
             this._catTag.visible = true;
         } else {
             this._catTag.visible = false;

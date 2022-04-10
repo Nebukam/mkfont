@@ -1,4 +1,4 @@
-const { uilib } = require("@nkmjs/core");
+const { uilib, datacontrols } = require("@nkmjs/core");
 const nkm = require(`@nkmjs/core`);
 const com = nkm.com;
 const u = nkm.u;
@@ -27,6 +27,10 @@ class GlyphGroupViewport extends nkm.datacontrols.ControlView { //ui.views.View
         this._unicodeMap = new Map();
         this._displayRange = null;
 
+
+        this._inspectionDataForward = new datacontrols.helpers.InspectionDataForward(this);
+        this.forwardEditor.To(this._inspectionDataForward);
+
         this._dataObserver
             .Hook(SIGNAL.GLYPH_ADDED, this._OnGlyphAdded, this)
             .Hook(SIGNAL.GLYPH_REMOVED, this._OnGlyphRemoved, this);
@@ -41,7 +45,7 @@ class GlyphGroupViewport extends nkm.datacontrols.ControlView { //ui.views.View
 
         this._searchActive = false;
 
-        this._InitSelectionStack(true, true, {
+        let dataSel = this._InitSelectionStack(true, true, {
             add: {
                 fn: (p_sel, p_index) => {
                     let widget = this._domStreamer.GetItemAt(p_index);
@@ -59,11 +63,13 @@ class GlyphGroupViewport extends nkm.datacontrols.ControlView { //ui.views.View
             count: {
                 fn: (p_sel) => { return this._content.length; }, thisArg: this
             },
-        });
-        this.selectionStack.data.dataMember = `_glyphInfos`;
-        this.selectionStack
-            .Watch(com.SIGNAL.ITEM_ADDED, this._OnDataSelected, this)
-            .Watch(com.SIGNAL.ITEM_BUMPED, this._OnDataBumped, this);
+        }).data;
+
+        //dataSel.autoBump = true;
+
+        this._inspectionDataForward.dataSelection = dataSel;
+        this._dataSelectionObserver
+            .Hook(com.SIGNAL.ITEM_BUMPED, this._OnSelectionStackBump, this);
 
         this._contentRange = new RangeContent();
         this._contentRange.Watch(nkm.com.SIGNAL.READY, this._OnRangeReady, this);
@@ -117,7 +123,7 @@ class GlyphGroupViewport extends nkm.datacontrols.ControlView { //ui.views.View
         this._domStreamer = this.Attach(ui.helpers.DOMStreamer, 'dom-stream');
         this._domStreamer
             .Watch(ui.SIGNAL.ITEM_CLEARED, this._OnItemCleared, this)
-            .Watch(ui.SIGNAL.ITEM_REQUEST_RANGE_UPDATE, this._OnItemRequestRangeUpdate, this)
+            //.Watch(ui.SIGNAL.ITEM_REQUEST_RANGE_UPDATE, this._OnItemRequestRangeUpdate, this)
             .Watch(ui.SIGNAL.ITEM_REQUESTED, this._OnItemRequested, this)
             .Watch(ui.SIGNAL.RESIZE, this._OnStreamerResized, this);
 
@@ -134,6 +140,10 @@ class GlyphGroupViewport extends nkm.datacontrols.ControlView { //ui.views.View
         this._footer = this.Attach(GlyphGroupFooter, `footer`);
 
         this.forwardData
+            .To(this._header)
+            .To(this._footer);
+
+        this.forwardContext
             .To(this._header)
             .To(this._footer);
 
@@ -223,34 +233,35 @@ class GlyphGroupViewport extends nkm.datacontrols.ControlView { //ui.views.View
         this._domStreamer.itemCount = p_array ? p_array.length : 0;
 
         if (p_array != null) {
-            if (this.editor.inspectedData) {
-                let uInfos = this.editor.inspectedData.unicodeInfos,
-                    index = p_array.indexOf(uInfos);
+            let index = p_array.indexOf(this.editor.inspectedData.lastItem);
+            if (index != -1) { this._domStreamer.SetFocusIndex(index); }
 
-                if (index != -1) { this._domStreamer.SetFocusIndex(index); }
-            }
         }
+    }
+
+    _OnSelectionStackBump(p_data) {
+        this._domStreamer.SetFocusIndex(this._content.indexOf(p_data), false);
     }
 
     _OnItemRequested(p_streamer, p_index, p_fragment, p_returnFn) {
 
-        let unicode = this._content ? this._content[p_index] : null;
+        let unicodeInfos = this._content ? this._content[p_index] : null;
 
-        if (!unicode || !this._data) { return; }
+        if (!unicodeInfos || !this._data) { return; }
 
         let widget = this.Attach(mkfWidgets.GlyphSlot, 'glyph', p_fragment);
         widget.subFamily = this._data.selectedSubFamily;
-        widget.glyphInfos = unicode;
+        widget.data = unicodeInfos;
 
-        this._unicodeMap.set(unicode, widget);
+        this._unicodeMap.set(unicodeInfos, widget);
 
         p_returnFn(p_index, widget);
 
         this.selectionStack.Check(widget);
 
         if (this.selectionStack.data.isEmpty) {
-            if (this.editor.inspectedData) {
-                if (this.editor.inspectedData.unicodeInfos == unicode) {
+            if (!this.editor.inspectedData.isEmpty) {
+                if (this.editor.inspectedData.Contains(unicodeInfos)) {
                     widget.Select(true);
                 }
             }
@@ -259,11 +270,7 @@ class GlyphGroupViewport extends nkm.datacontrols.ControlView { //ui.views.View
     }
 
     _OnItemCleared(p_item) {
-        this._unicodeMap.delete(p_item.glyphInfos);
-    }
-
-    _OnItemRequestRangeUpdate(p_Streamer, p_indices) {
-
+        this._unicodeMap.delete(p_item.data);
     }
 
     //#endregion
@@ -290,48 +297,13 @@ class GlyphGroupViewport extends nkm.datacontrols.ControlView { //ui.views.View
 
     //#region Preview updates
 
-    _OnDataBumped(p_item){
-        this._OnDataSelected(p_item, true);
-    }
-
-    _OnDataSelected(p_item, p_firstTimeAdd) {
-
-        if (!p_firstTimeAdd) { return; }
-
-        this._domStreamer.focusIndex = p_item.__streamIndex;
-
-        let glyphInfos = p_item.glyphInfos;
-        if (glyphInfos) {
-            let glyph = p_item.data;
-            if (glyph) {
-                // Has an existing glyph!
-                if (glyph.isNull) {
-                    glyph.unicodeInfos = glyphInfos;
-                    //glyph.subFamily
-                    glyph.CommitUpdate();//Ensure the data gets refreshed, since it hasn't changed.
-                    glyph.defaultGlyph.CommitUpdate();
-                }
-                this.editor.Inspect(glyph);
-            } else {
-                // No glyph associated... at all??
-                console.error(`Edge case, find why`);
-                this.editor.Inspect(null);
-            }
-        } else {
-            this.editor.Inspect(null);
-        }
-
-    }
-
     _OnGlyphAdded(p_family, p_glyph) {
 
         let
             uInfos = p_glyph.unicodeInfos,
             widget = this._unicodeMap.get(uInfos);
 
-        if (widget) {
-            widget.data = p_glyph;
-        }
+        if (widget) { widget._UpdateGlyph(); }
 
     }
 
@@ -341,9 +313,7 @@ class GlyphGroupViewport extends nkm.datacontrols.ControlView { //ui.views.View
             uInfos = p_glyph.unicodeInfos,
             widget = this._unicodeMap.get(uInfos);
 
-        if (widget) {
-            widget.data = p_family.nullGlyph;
-        }
+        if (widget) { widget._UpdateGlyph(); }
 
     }
 

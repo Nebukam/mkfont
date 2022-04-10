@@ -38,10 +38,11 @@ class GlyphInspector extends nkm.datacontrols.InspectorView {
 
         this._builder.defaultControlClass = mkfWidgets.PropertyControl;
         this._builder.defaultCSS = `control`;
+        this._builder.preProcessDataFn = { fn: this._GetGlyph, thisArg: this };
 
         this._contextObserver
-            .Watch(SIGNAL.GLYPH_ADDED, this._OnGlyphAdded, this)
-            .Watch(SIGNAL.GLYPH_REMOVED, this._OnGlyphRemoved, this);
+            .Hook(SIGNAL.GLYPH_ADDED, this._OnGlyphAdded, this)
+            .Hook(SIGNAL.GLYPH_REMOVED, this._OnGlyphRemoved, this);
 
     }
 
@@ -77,8 +78,6 @@ class GlyphInspector extends nkm.datacontrols.InspectorView {
         this._glyphIdentity = this.Attach(mkfWidgets.GlyphIdentity, `identity`, this._host);
         //this._body = ui.El(`div`, { class: `body` }, this._host);
         this._variantCtrl = this.Attach(GlyphIItem, `variant`, this._host);
-
-        this.forwardData.To(this._variantCtrl, { dataMember: `defaultGlyph` });
         this.forwardContext.To(this._variantCtrl);
 
         this._builder.host = ui.El(`div`, { class: `settings` }, this._host);
@@ -88,31 +87,49 @@ class GlyphInspector extends nkm.datacontrols.InspectorView {
     }
 
     _OnDataChanged(p_oldData) {
+
         super._OnDataChanged(p_oldData);
+
         if (!this._data) {
-
+            this._variantCtrl.data = null;
         } else {
-            this._glyphIdentity.glyphInfos = this._data.unicodeInfos;
+            this._glyphIdentity.data = this._data;
+            let glyph = this._GetGlyph(this._data);
 
-            if (this._data.isNull) {
+            if (glyph.isNull) {
+                glyph.unicodeInfos = this._data;
                 this._builder.host.style.setProperty(`display`, `none`);
+                this._variantCtrl.data = null; // Ensure refresh
             } else {
                 this._builder.host.style.removeProperty(`display`);
             }
+
+            this._variantCtrl.glyphInfos = this._data;
+            this._variantCtrl.data = glyph.GetVariant(this._context.selectedSubFamily);
+
         }
     }
 
-    _OnDataUpdated(p_data) {
-        super._OnDataUpdated(p_data);
-        if (p_data.isNull) { this._glyphIdentity.glyphInfos = p_data.unicodeInfos; }
+    _GetGlyph(p_unicodeInfos) {
+        if (!this._context || !p_unicodeInfos) { return null; }
+        return this._context.GetGlyph(p_unicodeInfos.u);
     }
 
-    _OnGlyphAdded(p_glyph) {
-        
+    _GetActiveVariant() {
+        if (!this._context || !this._data) { return null; }
+        return this._context.GetGlyph(this._data.u).GetVariant(this._context.selectedSubFamily);
     }
 
-    _OnGlyphRemoved(p_glyph) {
+    _OnGlyphAdded(p_family, p_glyph) {
+        if (p_glyph.unicodeInfos == this._data) {
+            this._variantCtrl.data = this._GetActiveVariant();
+        }
+    }
 
+    _OnGlyphRemoved(p_family, p_glyph) {
+        if (p_glyph.unicodeInfos == this._data) {
+            this._variantCtrl.data = this._GetActiveVariant();
+        }
     }
 
     _OnDisplayGain() {

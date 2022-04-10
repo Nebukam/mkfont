@@ -15,6 +15,8 @@ class Bindings extends nkm.com.helpers.BindingKit {
             mkfData.Family
         );
 
+        let unicodeInfos = { name: 1, u: 1, char: 1 };
+
         this.Add(
             {
                 context: nkm.data.catalogs.Catalog,
@@ -43,11 +45,22 @@ class Bindings extends nkm.com.helpers.BindingKit {
                 ]
             },
             {
-                context: nkm.datacontrols.CONTEXT.INSPECTOR,
+                context: nkm.datacontrols.CONTEXT.DEFAULT_INSPECTOR,
                 kvps: [
-                    { key: mkfData.Glyph, binding: mkfEditors.inspectors.Glyph },
-                    { key: mkfData.Slot, binding: mkfEditors.inspectors.Glyph },
+                    {
+                        key: mkfData.Glyph, keys: unicodeInfos,
+                        binding: mkfEditors.inspectors.Glyph
+                    },
                     { key: mkfData.SubFamily, binding: mkfEditors.inspectors.SubFamily },
+                ]
+            },
+            {
+                context: nkm.datacontrols.CONTEXT.DEFAULT_LIST_INSPECTOR,
+                kvps: [
+                    {
+                        key: mkfData.Glyph, keys: unicodeInfos,
+                        binding: mkfEditors.inspectors.GlyphList
+                    },
                 ]
             },
             {

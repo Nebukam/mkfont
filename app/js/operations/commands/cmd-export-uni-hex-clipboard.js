@@ -15,6 +15,9 @@ const mkfActions = require(`../actions`);
 class CmdExportUniHexToClipboard extends CmdViewportContent {
     constructor() { super(); }
 
+    static __defaultName = `Unicodes to clipboard`;
+    static __defaultIcon = `text-unicode`;
+
     _Init() {
         super._Init();
     }

@@ -12,6 +12,8 @@ class ActionSetPropertyValue extends actions.Action {
     static get mergeable() { return true; }
 
     CanMerge(p_operation) {
+        //Also check if operation target is array, this mean it's a group op
+        //if group of, make sure arrays have same length and content, order doesn't matter.
         return (this._operation.target == p_operation.target && this._operation.id == p_operation.id)
     }
 

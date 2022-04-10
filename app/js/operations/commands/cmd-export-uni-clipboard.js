@@ -15,6 +15,9 @@ const mkfActions = require(`../actions`);
 class CmdExportUniToClipboard extends CmdViewportContent {
     constructor() { super(); }
 
+    static __defaultName = `Characters to clipboard`;
+    static __defaultIcon = `text-unicode-char`;
+
     _Init() {
         super._Init();
     }

@@ -57,50 +57,60 @@ class GlyphGroupHeader extends nkm.datacontrols.ControlView {
         this._optionsBar.options = {
             defaultWidgetClass: nkm.uilib.buttons.Tool,
             size: ui.FLAGS.SIZE_S,
-            handles: [                
+            handles: [
                 {
-                    icon: `new`, htitle: `Add all characters in font (will create empty glyphs)`,
+                    icon: `new`, htitle: `Add all selected glyphs in font.\nWill create empty glyphs where none exists.`,
                     trigger: {
                         fn: () => {
                             mkfCmds.ImportViewportEmpty.emitter = this;
-                            mkfCmds.ImportViewportEmpty.Execute(this._parent._content);
+                            mkfCmds.ImportViewportEmpty.Execute(this._cmdContent());
                         },
                         thisArg: this
-                    }
+                    },group:`new`
                 },
                 {
-                    icon: `text-unicode-char`, htitle: `Copy current unicodes characters to clipboard.\nEach value is separated by a '\\n' new line.`,
+                    icon: `text-unicode-char`, htitle: `Copy current selection as unicodes characters to clipboard.\nEach value is separated by a '\\n' new line.`,
                     trigger: {
                         fn: () => {
                             mkfCmds.ExportUniClipboard.emitter = this;
-                            mkfCmds.ExportUniClipboard.Execute(this._parent._content);
+                            mkfCmds.ExportUniClipboard.Execute(this._cmdContent());
                         },
                         thisArg: this
-                    }
+                    },group:`export`
                 },
                 {
-                    icon: `text-unicode`, htitle: `Copy current hex values to clipboard.\nEach value is separated by a '\\n' new line.`,
+                    icon: `text-unicode`, htitle: `Copy current selection as hex values to clipboard.\nEach value is separated by a '\\n' new line.`,
                     trigger: {
                         fn: () => {
                             mkfCmds.ExportUniHexToClipboard.emitter = this;
-                            mkfCmds.ExportUniHexToClipboard.Execute(this._parent._content);
+                            mkfCmds.ExportUniHexToClipboard.Execute(this._cmdContent());
                         },
                         thisArg: this
-                    }
+                    },group:`export`
                 },
                 {
                     icon: `app-illustrator`, htitle: `Create a new Adobe© Illustrator template document with the active selection.`,
                     trigger: {
                         fn: () => {
                             mkfCmds.IllustratorArtboards.emitter = this;
-                            mkfCmds.IllustratorArtboards.Execute(this._parent._content);
+                            mkfCmds.IllustratorArtboards.Execute(this._cmdContent());
                         },
                         thisArg: this
-                    }
+                    },group:`export`
                 },
+                {
+                    icon: `remove`, htitle: `Delete all selected glyphs.`,
+                    trigger: {
+                        fn: () => {
+                            mkfCmds.DeleteGlyph.emitter = this;
+                            mkfCmds.DeleteGlyph.Execute(this._cmdContent());
+                        },
+                        thisArg: this
+                    },group:`remove`
+                }
             ]
 
-            
+
         };
 
         this._typeTag = this._tagBar.CreateHandle();
@@ -111,6 +121,11 @@ class GlyphGroupHeader extends nkm.datacontrols.ControlView {
         this._subTags = this._tagBar.CreateHandle({ cl: ui.WidgetBar, group: `categories` });
         this._subTags._defaultWidgetClass = nkm.uilib.widgets.Tag;
 
+    }
+
+    _cmdContent() {
+        if (ui.INPUT.alt) { return this._parent._content }
+        return this.editor.inspectedData.stack._array;
     }
 
     _OnEditorChanged(p_oldEditor) {

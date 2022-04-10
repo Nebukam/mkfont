@@ -38,8 +38,6 @@ class GlyphVariantInspectorItem extends nkm.datacontrols.ControlWidget {
         this._builder.defaultControlClass = mkfWidgets.PropertyControl;
         this._builder.defaultCSS = `control`;
 
-        this._subFamily = null;
-
         this._flags.Add(this, __nullGlyph);
 
         this._dataObserver.Hook(SIGNAL.VARIANT_UPDATED, () => { this._OnDataUpdate(this._data); }, this);
@@ -257,6 +255,7 @@ class GlyphVariantInspectorItem extends nkm.datacontrols.ControlWidget {
 
     _OnDataChanged(p_oldData) {
         super._OnDataChanged(p_oldData);
+        
         if (this._data) {
             let isNullGlyph = this._data.glyph.isNull;
             this._flags.Set(__nullGlyph, isNullGlyph);
@@ -269,7 +268,6 @@ class GlyphVariantInspectorItem extends nkm.datacontrols.ControlWidget {
     _OnDataUpdated(p_data) {
         super._OnDataUpdated(p_data);
         this._glyphRenderer.Set(p_data);
-        this.glyphInfos = p_data.glyph.unicodeInfos;
         this._oobTag.visible = p_data.Get(mkfData.IDS.OUT_OF_BOUNDS);
         this._emptyTag.visible = p_data.Get(mkfData.IDS.EMPTY);
     }

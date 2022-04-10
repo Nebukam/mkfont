@@ -101,7 +101,7 @@ class FontEditor extends nkm.uiworkspace.editors.EditorEx {
                 [ui.IDS.VIEW_CLASS]: nkm.uiworkspace.inspectors.ActionStack,
                 assign: `_actionStackInspector`,
                 [ui.IDS.DATA]: this._actionStack,
-                ignoreData: true
+                forwardData: false
             }
         );
 
@@ -127,9 +127,14 @@ class FontEditor extends nkm.uiworkspace.editors.EditorEx {
                 assign = u.tils.Get(conf, `assign`, null);
 
             if (view) {
-                if (conf.isInspector) { this.forwardInspected.To(view); }
-                else if (!conf.ignoreData) { this.forwardData.To(view); }
+
+                if (`forwardData` in conf && !conf.forwardData) { }
+                else { this.forwardData.To(view); }
+
+                this._forwardContext.To(view);
+
                 if (assign) { this[assign] = view; }
+
             }
 
         }
@@ -143,8 +148,8 @@ class FontEditor extends nkm.uiworkspace.editors.EditorEx {
 
         this._inspectorShell.header.style.display = `none`;
         this._shelf._nav.visible = false;
-        
-        this.Inspect(null);
+
+        this.inspectedData.Clear();
 
     }
 
@@ -276,18 +281,11 @@ class FontEditor extends nkm.uiworkspace.editors.EditorEx {
     }
 
     _OnGlyphAdded(p_family, p_glyph) {
-        if (this._inspectedData) {
-            if (this._inspectedData.unicodeInfos == p_glyph.unicodeInfos) {
-                this.Inspect(p_glyph);
-            }
-        }
+        this._inspectedData.DelayedUpdate();
     }
 
     _OnGlyphRemoved(p_family, p_glyph) {
-        if (this._inspectedData == p_glyph) {
-            p_family.nullGlyph.unicodeInfos = p_glyph.unicodeInfos;
-            this.Inspect(p_family.nullGlyph);
-        }
+        this._inspectedData.DelayedUpdate();
     }
 
     //
