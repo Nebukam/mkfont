@@ -58,6 +58,21 @@ class FontEditor extends nkm.uiworkspace.editors.EditorEx {
             fn: () => { mkfCmds.SaveFamilyDoc.Execute(this._data); }, thisArg: this
         });
 
+        this._inspectedData.SetupAnalytics(
+            {
+                nullGlyphs: 0, existingGlyphs: 0,
+                existing: [], uuni: ``, existingInfos: []
+            },
+            { fn: this._AnalyizeGlyphInfos, thisArg: this },
+            {
+                fn: (an) => {
+                    an.nullGlyphs = 0; an.existingGlyphs = 0;
+                    an.existing.length = 0; an.uuni = ``;
+                    an.existingInfos.length = 0;
+                }
+            },
+        )
+
     }
 
     _OnDisplayGain() {
@@ -72,11 +87,14 @@ class FontEditor extends nkm.uiworkspace.editors.EditorEx {
 
     _InitShelfCatalog(p_configList) {
 
+        let shellClass = this.constructor.__default_inspectorShellClass;
+        shellClass.__placeholderViewClass = mkfInspectors.GlyphInspectorPlaceholder;
+
         p_configList.push(
             {
                 [ui.IDS.NAME]: `Inspector`,
                 [ui.IDS.ICON]: `text`,
-                [ui.IDS.VIEW_CLASS]: this.constructor.__default_inspectorShellClass,
+                [ui.IDS.VIEW_CLASS]: shellClass,
                 assign: `_inspectorShell`
             },
 
@@ -281,11 +299,27 @@ class FontEditor extends nkm.uiworkspace.editors.EditorEx {
     }
 
     _OnGlyphAdded(p_family, p_glyph) {
-        this._inspectedData.DelayedUpdate();
+        this._inspectedData.DelayedUpdate(true);
     }
 
     _OnGlyphRemoved(p_family, p_glyph) {
-        this._inspectedData.DelayedUpdate();
+        this._inspectedData.DelayedUpdate(true);
+    }
+
+    _AnalyizeGlyphInfos(p_infos, p_analytics, index, total) {
+
+        let glyph = this._data.GetGlyph(p_infos.u);
+
+        if (glyph.isNull) {
+            p_analytics.nullGlyphs++;
+        } else {
+            p_analytics.existingGlyphs++;
+            p_analytics.existing.push(glyph.GetVariant(this._data.selectedSubFamily));
+            p_analytics.existingInfos.push(p_infos);
+        }
+
+        p_analytics.uuni += `${UNICODE.UUni(p_infos)}${index < total - 1 ? ', ' : ''}`;
+
     }
 
     //

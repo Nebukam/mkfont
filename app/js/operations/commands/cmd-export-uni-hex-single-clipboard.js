@@ -18,7 +18,7 @@ class CmdExportUniHexSingleToClipboard extends actions.Command {
     }
 
     _InternalExecute() {
-        let val = UNICODE.UUni(this._context);
+        let val = u.isString(this._context) ? this._context : UNICODE.UUni(this._context);
         navigator.clipboard.writeText(val.toUpperCase());
         this._Success();
     }

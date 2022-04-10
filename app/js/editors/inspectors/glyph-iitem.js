@@ -76,10 +76,8 @@ class GlyphVariantInspectorItem extends nkm.datacontrols.ControlWidget {
                 'aspect-ratio': '1/1',
             },
             '.toolbar': {
-                //'margin-bottom': '10px',
                 'flex': `1 1 auto`,
                 'justify-content': `center`,
-                //'border-top': `1px solid rgba(127, 127, 127, 0.1)`,
                 'margin-bottom': '5px',
                 'margin-top': '5px',
                 'padding': '4px',

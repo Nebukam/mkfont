@@ -12,6 +12,7 @@ class GlyphIdentity extends ui.Widget {
 
     _Init() {
         super._Init();
+        this._multi = null;
     }
 
     _Style() {
@@ -61,7 +62,7 @@ class GlyphIdentity extends ui.Widget {
             htitle: `Copy value to clipboard`,
             trigger: {
                 fn: () => {
-                    mkfCmds.ExportUniHexSingleToClipboard.Execute(this._data);
+                    mkfCmds.ExportUniHexSingleToClipboard.Execute(this._multi ? this._multi : this._data);
                 }, thisArg: this
             }
         }
@@ -108,6 +109,17 @@ class GlyphIdentity extends ui.Widget {
         } else {
             this._catTag.visible = false;
         }
+    }
+
+    Multi(p_title, p_uni) {
+
+        this._multi = p_uni;
+
+        this._title.Set(p_title);
+        this._blockTag.visible = false; this._blockTag.htitle = null;
+        this._catTag.visible = false;
+        this._hexTag.label = `${p_uni}`;
+        this._catTag.textColor = `var(--col-cta)`;
     }
 
 }

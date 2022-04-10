@@ -27,7 +27,6 @@ class GlyphGroupViewport extends nkm.datacontrols.ControlView { //ui.views.View
         this._unicodeMap = new Map();
         this._displayRange = null;
 
-
         this._inspectionDataForward = new datacontrols.helpers.InspectionDataForward(this);
         this.forwardEditor.To(this._inspectionDataForward);
 
@@ -69,6 +68,7 @@ class GlyphGroupViewport extends nkm.datacontrols.ControlView { //ui.views.View
 
         this._inspectionDataForward.dataSelection = dataSel;
         this._dataSelectionObserver
+            .Hook(com.SIGNAL.ITEM_ADDED, this._OnSelectionStackBump, this)
             .Hook(com.SIGNAL.ITEM_BUMPED, this._OnSelectionStackBump, this);
 
         this._contentRange = new RangeContent();

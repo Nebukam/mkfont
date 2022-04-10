@@ -15,45 +15,63 @@ class CmdImportEmpty extends actions.Command {
 
     _Init() {
         super._Init();
-
-        this._glyphInfos = null;
     }
 
-    set glyphInfos(p_value) { this._glyphInfos = p_value; }
-    get glyphInfos() { return this._glyphInfos; }
-
     _InternalExecute() {
-
-        let svgStats = SVGOPS.EmptySVGStats();
 
         let
             editor = this._emitter.editor,
             family = editor.data;
 
-        // Check if glyph exists
+        if (u.isArray(this._context)) {
+
+            editor.StartActionGroup({
+                icon: `new`,
+                name: `Batch empty glyph`,
+                title: `Emptied selected glyphs`
+            });
+
+            for (let i = 0; i < this._context.length; i++) {
+
+                let infos = this._context[i],
+                    variant = family.GetGlyph(infos.u).GetVariant(family.selectedSubFamily);
+
+                this._Empty(editor, family, variant, infos);
+            }
+
+            editor.EndActionGroup();
+
+        } else {
+            // Check if glyph exists
+            this._Empty(editor, family, this._context, this._context.glyph.unicodeInfos);
+        }
+
+        this._Success();
+
+    }
+
+    _Empty(p_editor, p_family, p_variant, p_infos) {
+
         let
-            variant = this._context,
-            glyph = variant.glyph,
-            unicodeInfos;
+            glyph = p_variant.glyph,
+            svgStats = SVGOPS.EmptySVGStats();
 
         if (glyph.isNull) {
             // Need to create a new glyph!
-            unicodeInfos = glyph.unicodeInfos;
-            editor.Do(mkfActions.CreateGlyph, {
-                family: family,
-                unicode: unicodeInfos,
+            p_editor.Do(mkfActions.CreateGlyph, {
+                family: p_family,
+                unicode: p_infos,
                 path: svgStats
             });
         } else {
-            editor.Do(mkfActions.SetProperty, {
-                target: variant,
+            p_editor.Do(mkfActions.SetProperty, {
+                target: p_variant,
                 id: mkfData.IDS.PATH_DATA,
                 value: svgStats
             });
         }
 
         glyph.CommitUpdate();
-        this._Success();
 
     }
 
