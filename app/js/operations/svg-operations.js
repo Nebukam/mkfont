@@ -489,8 +489,8 @@ class SVGOperations {
 
         let hAlign = p_settings.Get(IDS.TR_HOR_ALIGN);
         if (hAlign == ENUMS.HALIGN_XMIN) {
-            if (Math.abs(sShift) < 0.99) { sShift = widthRef * sShift; }
-            if (Math.abs(sPush) < 0.99) { sPush = widthRef * sPush; }
+            //if (Math.abs(sShift) < 0.99) { sShift = widthRef * sShift; }
+            //if (Math.abs(sPush) < 0.99) { sPush = widthRef * sPush; }
         }
 
         switch (p_settings.Get(IDS.TR_HOR_ALIGN_ANCHOR)) {

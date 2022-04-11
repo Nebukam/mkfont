@@ -46,6 +46,7 @@ class PangramRenderer extends ui.Widget {
                 'padding': '20px',
                 'overflow': 'clip',
                 '--font-size': '40px',
+                '--case':'none',
                 'background-color': '#1e1e1e',
                 'border-radius': '5px'
             },
@@ -53,7 +54,8 @@ class PangramRenderer extends ui.Widget {
                 'font-family': `'tempFont'`,
                 'text-align': 'var(--font-align)',
                 'font-size': 'var(--font-size)',
-                'color': 'var(--glyph-color)'
+                'color': 'var(--glyph-color)',
+                'text-transform':'var(--case)'
             },
             '.paninput': {
                 '-webkit-appearance': `none`,
@@ -96,6 +98,10 @@ class PangramRenderer extends ui.Widget {
 
     set fontSize(p_value) {
         this.style.setProperty(`--font-size`, `${p_value}px`);
+    }
+
+    set case(p_value){
+        this.style.setProperty(`--case`, `${p_value}`);
     }
 
     _OnDataUpdated(p_data) {

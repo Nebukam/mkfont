@@ -119,7 +119,7 @@ class FamilyDataBlock extends SimpleDataEx {
         if (!this._subFamilies.Add(p_subFamily)) { return; }
 
         p_subFamily.family = this;
-        p_subFamily.Watch(nkm.data.SIGNAL.VALUE_CHANGED, this._OnSubFamilyValueUpdated, this);
+        p_subFamily.Watch(nkm.com.SIGNAL.VALUE_CHANGED, this._OnSubFamilyValueUpdated, this);
 
         for (let i = 0, n = this._glyphs.count; i < n; i++) {
             let g = this._glyphs.At(i);
@@ -133,7 +133,7 @@ class FamilyDataBlock extends SimpleDataEx {
     RemoveSubFamily(p_subFamily) {
         if (!this._subFamilies.Remove(p_subFamily)) { return; }
 
-        p_subFamily.Unwatch(nkm.data.SIGNAL.VALUE_CHANGED, this._OnSubFamilyValueUpdated, this);
+        p_subFamily.Unwatch(nkm.com.SIGNAL.VALUE_CHANGED, this._OnSubFamilyValueUpdated, this);
 
         for (let i = 0, n = this._glyphs.count; i < n; i++) {
             let g = this._glyphs.At(i);

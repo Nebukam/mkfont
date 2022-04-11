@@ -13,8 +13,8 @@ const mkfOperations = require(`../../operations`);
 
 const GlyphVariantInspector = require(`./glyph-iitem`);
 
-const longPangram = 
-`Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.
+const longPangram =
+    `Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.
 
 Ut wisi enim ad minim veniam, quis nostrud exercitation ulliam corper suscipit lobortis nisl ut aliquip ex ea commodo consequat.`;
 
@@ -54,6 +54,7 @@ class SubFamilyInspector extends nkm.datacontrols.InspectorView {
     _Style() {
         return nkm.style.Extends({
             ':host': {
+                'position':'relative',
                 'display': 'flex',
                 'flex-flow': 'column nowrap',
             },
@@ -86,7 +87,7 @@ class SubFamilyInspector extends nkm.datacontrols.InspectorView {
     _Render() {
 
         this._header = this.Attach(mkfWidgets.InspectorHeader, `header`, this._host);
-        this._header.options = { title:`Text preview`, icon:`text` };
+        this._header.options = { title: `Text preview`, icon: `text` };
 
         this._body = ui.dom.El(`div`, { class: `body` }, this._host);
         this._footer = ui.dom.El(`div`, { class: `footer` }, this._host);
@@ -98,14 +99,30 @@ class SubFamilyInspector extends nkm.datacontrols.InspectorView {
         this._toolbar.options = {
             defaultWidgetClass: nkm.uilib.inputs.InlineSelect,
             size: ui.FLAGS.SIZE_S,
+            stretch: ui.WidgetBar.FLAG_STRETCH,
+            inline:true,
             handles: [
                 {
-                    catalog:mkfData.ENUMS.PANGRAM_DIR,
+                    catalog: mkfData.ENUMS.PANGRAM_DIR,
                     onSubmit: { fn: (p_input, p_value) => { this._pangramRenderer.direction = p_value.value; } },
                 },
                 {
-                    catalog:mkfData.ENUMS.PANGRAM_ALIGN,
+                    catalog: mkfData.ENUMS.PANGRAM_ALIGN,
                     onSubmit: { fn: (p_input, p_value) => { this._pangramRenderer.align = p_value.value; } },
+                }
+            ]
+        };
+
+        this._toolbar2 = this.Attach(ui.WidgetBar, `toolbar`, this._footer);
+        this._toolbar2.options = {
+            defaultWidgetClass: nkm.uilib.inputs.InlineSelect,
+            size: ui.FLAGS.SIZE_S,
+            stretch: ui.WidgetBar.FLAG_STRETCH,
+            inline:true,
+            handles: [
+                {
+                    catalog: mkfData.ENUMS.PANGRAM_TEXT_TRANSFORM,
+                    onSubmit: { fn: (p_input, p_value) => { this._pangramRenderer.case = p_value.value; } },
                 }
             ]
         };

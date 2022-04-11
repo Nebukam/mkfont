@@ -119,6 +119,13 @@ class ENUMS {
         { name: `RTL`, [nkm.com.IDS.VALUE]: `rtl`, icon: 'text-direction-rtl' },
     ]);
 
+    static PANGRAM_TEXT_TRANSFORM = nkm.data.catalogs.CreateFrom({ name: `Case`, autoSort: false }, [
+        { name: `no`, [nkm.com.IDS.VALUE]: `none`, icon: 'case-sentence' },
+        { name: `up`, [nkm.com.IDS.VALUE]: `uppercase`, icon: 'case-uppercase' },
+        { name: `lw`, [nkm.com.IDS.VALUE]: `lowercase`, icon: 'case-lowercase' },
+        { name: `cp`, [nkm.com.IDS.VALUE]: `capitalize`, icon: 'case-capitalize' },
+    ]);
+
     static OVERLAP_OVERWRITE = 0;
     static OVERLAP_KEEP = 1;
     static OVERLAP_INDIVIDUAL = 2;

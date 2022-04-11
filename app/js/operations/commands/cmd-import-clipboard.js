@@ -27,15 +27,15 @@ class CmdImportClipboard extends actions.Command {
 
     _InternalExecute() {
 
-        if (nkm.ui.dom.isTextHighlighted) {
+        if (nkm.ui.dom.isTextHighlighted || !this._emitter) {
             this._Cancel();
             return;
         }
 
-        this._context = this._emitter.data;
-        if (u.isInstanceOf(this._context, mkfData.Glyph)) { this._context = this._context.GetVariant(this._context.family.selectedSubFamily); }
-
         let
+            editor = nkm.datacontrols.FindEditor(this._emitter),
+            family = editor.data,
+            variant = family.GetGlyph(this._context?.u || editor.inspectedData.lastItem?.u).GetVariant(family.selectedSubFamily),
             svgStats = { exists: false },
             svgString = clipboard.readText();
 
@@ -59,12 +59,6 @@ class CmdImportClipboard extends actions.Command {
         }
 
         let
-            editor = nkm.datacontrols.FindEditor(this._emitter),
-            family = editor.data;
-
-        // Check if glyph exists
-        let
-            variant = this._context,
             glyph = variant.glyph,
             trValues = variant._transformSettings.Values(),
             unicodeInfos;

@@ -2,7 +2,7 @@
 
 const nkm = require(`@nkmjs/core`);
 const dom = nkm.ui.dom;
-const u = nkm.u;
+const u = nkm.utils;
 const io = nkm.io;
 
 const SimpleDataEx = require(`./simple-data-ex`);
@@ -53,10 +53,10 @@ class SubFamilyDataBlock extends SimpleDataEx {
         this._ttfBytes = null;
 
         this._transformSettings = new ImportSettings();
-        this._transformSettings.Watch(nkm.data.SIGNAL.VALUE_CHANGED, this._OnTransformSettingsUpdated, this);
+        this._transformSettings.Watch(nkm.com.SIGNAL.VALUE_CHANGED, this._OnTransformSettingsUpdated, this);
 
         this._globalTransforms = new ImportSettings();
-        this._globalTransforms.Watch(nkm.data.SIGNAL.VALUE_CHANGED, this._OnTransformSettingsUpdated, this);
+        this._globalTransforms.Watch(nkm.com.SIGNAL.VALUE_CHANGED, this._OnTransformSettingsUpdated, this);
 
         this._catalogItem = null;
 
@@ -106,8 +106,8 @@ class SubFamilyDataBlock extends SimpleDataEx {
         let oldFamily = this._family;
         this._family = p_value;
 
-        if (oldFamily) { oldFamily.Unwatch(nkm.data.SIGNAL.VALUE_CHANGED, this._OnFamilyValueChanged, this); }
-        if (this._family) { this._family.Watch(nkm.data.SIGNAL.VALUE_CHANGED, this._OnFamilyValueChanged, this); }
+        if (oldFamily) { oldFamily.Unwatch(nkm.com.SIGNAL.VALUE_CHANGED, this._OnFamilyValueChanged, this); }
+        if (this._family) { this._family.Watch(nkm.com.SIGNAL.VALUE_CHANGED, this._OnFamilyValueChanged, this); }
 
     }
 

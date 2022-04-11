@@ -58,6 +58,14 @@ class FontEditor extends nkm.uiworkspace.editors.EditorEx {
             fn: () => { mkfCmds.SaveFamilyDoc.Execute(this._data); }, thisArg: this
         });
 
+        this._shortcuts.CreateFromString("Ctrl Z", {
+            fn: () => { this._actionStack.Undo(); }, thisArg: this
+        });
+
+        this._shortcuts.CreateFromString("Ctrl Y", {
+            fn: () => { this._actionStack.Redo(); }, thisArg: this
+        });
+
         this._inspectedData.SetupAnalytics(
             {
                 nullGlyphs: 0, existingGlyphs: 0,
@@ -71,7 +79,8 @@ class FontEditor extends nkm.uiworkspace.editors.EditorEx {
                     an.existingInfos.length = 0;
                 }
             },
-        )
+        );
+        this._inspectedData.invalidateAnalyticsOnBump = true;
 
     }
 
@@ -175,8 +184,8 @@ class FontEditor extends nkm.uiworkspace.editors.EditorEx {
         if (this._selectedSubFamily == p_value) { return; }
         let old = this._selectedSubFamily;
         this._selectedSubFamily = p_value;
-        if (old) { old.Unwatch(nkm.data.SIGNAL.VALUE_CHANGED, this._OnDataValueChanged, this); }
-        if (p_value) { p_value.Watch(nkm.data.SIGNAL.VALUE_CHANGED, this._OnDataValueChanged, this); }
+        if (old) { old.Unwatch(nkm.com.SIGNAL.VALUE_CHANGED, this._OnDataValueChanged, this); }
+        if (p_value) { p_value.Watch(nkm.com.SIGNAL.VALUE_CHANGED, this._OnDataValueChanged, this); }
     }
 
     _Style() {

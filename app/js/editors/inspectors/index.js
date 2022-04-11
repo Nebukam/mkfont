@@ -10,4 +10,5 @@ module.exports = {
     Pangram: require(`./pangram-inspector`),
     FamilyContent:require(`./family-content-inspector`),
     TransformSettings:require(`./tr-settings-inspector`),
+    TransformSettingsSilent:require(`./tr-settings-silent-inspector`),
 }

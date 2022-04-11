@@ -28,20 +28,23 @@ class CmdExportToClipboard extends actions.Command {
 
     _InternalExecute() {
 
-        if (nkm.ui.dom.isTextHighlighted) {
-            console.log(`text is highlighted : ${nkm.ui.dom.highlightedText}`);
+        if (nkm.ui.dom.isTextHighlighted || !this._emitter) {
             this._Cancel();
             return;
         }
 
-        this._context = this._emitter.data;
+        let
+            editor = nkm.datacontrols.FindEditor(this._emitter),
+            family = editor.data,
+            variant = family.GetGlyph(this._context?.u || editor.inspectedData.lastItem?.u).GetVariant(family.selectedSubFamily);
 
-        if (u.isInstanceOf(this._context, mkfData.Glyph)) {
-            this._context = this._context.GetVariant(this._context.family.selectedSubFamily);
+        if (variant.glyph.isNull) {
+            this._Cancel();
+            return;
         }
 
         try {
-            navigator.clipboard.writeText(SVGOPS.SVGFromGlyphVariant(this._context, true));
+            navigator.clipboard.writeText(SVGOPS.SVGFromGlyphVariant(variant, true));
         } catch (e) { console.log(e); }
 
         this._Success();

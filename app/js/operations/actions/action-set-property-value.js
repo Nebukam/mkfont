@@ -13,7 +13,6 @@ class ActionSetPropertyValue extends actions.Action {
 
     CanMerge(p_operation) {
         //Also check if operation target is array, this mean it's a group op
-        //if group of, make sure arrays have same length and content, order doesn't matter.
         return (this._operation.target == p_operation.target && this._operation.id == p_operation.id)
     }
 
@@ -24,15 +23,32 @@ class ActionSetPropertyValue extends actions.Action {
         let
             target = p_operation.target,
             propertyId = p_operation.id,
-            oldValue = target.Get(propertyId),
+            oldValue,
             newValue = p_operation.value;
+
+        if (nkm.u.isArray(target)) {
+            oldValue = [];
+            for (let i = 0; i < target.length; i++) { oldValue.push(target[i].Get(propertyId)); }
+        } else {
+            oldValue = target.Get(propertyId);
+        }
 
         if (!p_merge) { p_operation.oldValue = oldValue; }
         else { this._operation.value = newValue; }
 
-        target.Set(propertyId, newValue, true);
-        this._UpdateValue(target, newValue, oldValue);
-        target.CommitUpdate();
+        if (nkm.u.isArray(target)) {
+            for (let i = 0; i < target.length; i++) {
+                let tgt = target[i];
+                tgt.Set(propertyId, newValue, true);
+                this._UpdateValue(tgt, newValue, oldValue[i]);
+                tgt.CommitUpdate();
+            }
+        } else {
+            target.Set(propertyId, newValue, true);
+            this._UpdateValue(target, newValue, oldValue);
+            target.CommitUpdate();
+        }
+
 
 
     }
@@ -40,15 +56,13 @@ class ActionSetPropertyValue extends actions.Action {
     _UpdateDisplayInfos() {
         this.displayInfos = {
             name: `Set ${this._operation.id}`,
-            title: `${this._operation.target}'s ${this._operation.id}\n` +
+            title: `${nkm.u.isArray(this._operation.target) ? 'Multiple' : this._operation.target + `'s`} ${this._operation.id}\n` +
                 `from : ${this._operation.oldValue}\n` +
                 `to: ${this._operation.value}`
         };
     }
 
-    _UpdateValue(p_target, p_from, p_to) {
-
-    }
+    _UpdateValue(p_target, p_from, p_to) { }
 
     _InternalUndo() {
         let
@@ -56,9 +70,19 @@ class ActionSetPropertyValue extends actions.Action {
             oldValue = this._operation.oldValue,
             newValue = this._operation.value;
 
-        target.Set(this._operation.id, oldValue, true);
-        this._UpdateValue(target, oldValue, newValue);
-        target.CommitUpdate();
+        if (nkm.u.isArray(target)) {
+            for (let i = 0; i < target.length; i++) {
+                let tgt = target[i];
+                tgt.Set(this._operation.id, oldValue[i], true);
+                this._UpdateValue(tgt, oldValue[i], newValue);
+                tgt.CommitUpdate();
+            }
+        } else {
+            target.Set(this._operation.id, oldValue, true);
+            this._UpdateValue(target, oldValue, newValue);
+            target.CommitUpdate();
+        }
+
     }
 
     _InternalRedo() {
@@ -68,9 +92,18 @@ class ActionSetPropertyValue extends actions.Action {
             oldValue = this._operation.oldValue,
             newValue = this._operation.value;
 
-        target.Set(this._operation.id, newValue, true);
-        this._UpdateValue(target, newValue, oldValue);
-        target.CommitUpdate();
+        if (nkm.u.isArray(target)) {
+            for (let i = 0; i < target.length; i++) {
+                let tgt = target[i];
+                tgt.Set(this._operation.id, newValue, true);
+                this._UpdateValue(tgt, newValue, oldValue[i]);
+                tgt.CommitUpdate();
+            }
+        } else {
+            target.Set(this._operation.id, newValue, true);
+            this._UpdateValue(target, newValue, oldValue);
+            target.CommitUpdate();
+        }
 
     }
 

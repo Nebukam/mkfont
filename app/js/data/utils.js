@@ -38,6 +38,67 @@ class UTILS {
 
     }
 
+    static FindCommonValues(p_reference, p_dataList, p_dataMember = null) {
+
+        let
+            refValues = p_reference._values,
+            commonValues = {},
+            dataCount = p_dataList.length,
+            valCount = 0,
+            ignoreCount = 0,
+            searchState = 0;
+
+        for (var v in refValues) {
+            refValues[v].value = null;
+        }
+
+        compareloop: for (let i = 0; i < dataCount; i++) {
+
+            let data = p_dataList[i];
+            if (p_dataMember) { data = data[p_dataMember]; }
+
+            if (searchState == 0) {
+                // Establish baseline values
+                for (var v in refValues) {
+                    commonValues[v] = data.Get(v);
+                    valCount++;
+                }
+                searchState = 1;
+            } else {
+                // Reach comparison
+                searchState = 2;
+                for (var v in commonValues) {
+
+                    let
+                        gVal = data.Get(v),
+                        cVal = commonValues[v];
+
+                    if (gVal == null || gVal == cVal) {
+                        // Equals baseline, keep going
+                        continue;
+                    } else {
+                        // Mismatch, delete value from common
+                        delete commonValues[v];
+                        ignoreCount++;
+                        if (ignoreCount == valCount) { break compareloop; }
+                    }
+                }
+            }
+        }
+
+        if (searchState == 2) {
+            if (ignoreCount == valCount) { return false; }
+
+            for (var v in commonValues) {
+                refValues[v].value = commonValues[v];
+            }
+
+            return true;
+        }
+        return false;
+
+    }
+
 }
 
 module.exports = UTILS;

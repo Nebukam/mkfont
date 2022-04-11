@@ -13,7 +13,7 @@ const mkfCmds = mkfOperations.commands;
 const SIGNAL = require(`../../signal`);
 const UNICODE = require(`../../unicode`);
 
-const TransformSettingsInspector = require(`./tr-settings-inspector`);
+const TransformSettingsSilent = require(`./tr-settings-silent-inspector`);
 
 const __invalidSelection = `sel-invalid`;
 
@@ -41,6 +41,9 @@ class GlyphListInspector extends nkm.datacontrols.ListInspectorView {
         this._builder.defaultControlClass = mkfWidgets.PropertyControl;
         this._builder.defaultCSS = `control`;
 
+        this._dataObserver
+            .Hook(nkm.com.SIGNAL.ITEM_BUMPED, this._OnGlyphBumped, this);
+
         this._contextObserver
             .Hook(SIGNAL.GLYPH_ADDED, this._OnGlyphAdded, this)
             .Hook(SIGNAL.GLYPH_REMOVED, this._OnGlyphRemoved, this)
@@ -48,13 +51,13 @@ class GlyphListInspector extends nkm.datacontrols.ListInspectorView {
 
         this._flags.Add(this, __invalidSelection);
 
-        this._transformReference = new mkfData.TransformSettings();
-        this._transformReference.Watch(nkm.data.SIGNAL.VALUE_CHANGED, this._OnTransformValueChanged, this);
+        this._transformReference = nkm.com.Rent(mkfData.TransformSettings);
+        this._transformReference.Watch(nkm.com.SIGNAL.VALUE_CHANGED, this._OnTransformValueChanged, this);
 
-        this._ignoreTransformUpdates = false;
         this._delayedInspectorRefresh = nkm.com.DelayedCall(this._Bind(this._RefreshTransformInspector));
 
         this._previews = [];
+        this._cachedTransforms = null;
 
     }
 
@@ -144,7 +147,7 @@ class GlyphListInspector extends nkm.datacontrols.ListInspectorView {
         this._counter.label = `+50`;
         this._counter.bgColor = `var(--col-cta-dark)`;
 
-        this._transformInspector = this.Attach(TransformSettingsInspector, `inspector`, this._editBody);
+        this._transformInspector = this.Attach(TransformSettingsSilent, `inspector`, this._editBody);
 
         //
 
@@ -165,8 +168,8 @@ class GlyphListInspector extends nkm.datacontrols.ListInspectorView {
                 },
                 {
                     icon: `remove`, htitle: `Delete selection from font`,
-                    variant: ui.FLAGS.MINIMAL, 
-                    flavor:nkm.com.FLAGS.ERROR,
+                    variant: ui.FLAGS.MINIMAL,
+                    flavor: nkm.com.FLAGS.ERROR,
                     trigger: {
                         fn: () => {
                             mkfCmds.DeleteGlyph.emitter = this;
@@ -197,8 +200,17 @@ class GlyphListInspector extends nkm.datacontrols.ListInspectorView {
     _OnContextUpdated(p_family) { this._delayedInspectorRefresh.Schedule(); }
 
     _OnTransformValueChanged(p_data, p_id, p_valueObj, p_oldValue) {
-        if (this._ignoreTransformUpdates) { return; }
         // Apply new value to all glyphs within active selection
+        let editor = this.editor;
+        if (!editor) { return; }
+
+        editor.Do(
+            mkfOperations.actions.SetProperty, {
+            target: this._cachedTransforms,
+            id: p_id,
+            value: p_valueObj.value
+        });
+
     }
 
     _RefreshTransformInspector() {
@@ -212,23 +224,12 @@ class GlyphListInspector extends nkm.datacontrols.ListInspectorView {
 
             this._flags.Set(__invalidSelection, false);
 
+            this._RefreshCachedTransforms();
+
             this._transformInspector.data = this._transformReference;
             this._transformInspector.visible = true;
 
-            if (an.existingGlyphs < 4) { for (let i = 0; i < 4; i++) { this._previews[i].visible = false; } }
-
-            if (an.existingGlyphs > 4) {
-                this._counter.visible = true;
-                this._counter.label = `+${an.existingGlyphs - 4}`;
-            } else {
-                this._counter.visible = false;
-            }
-
-            for (let i = 0; i < Math.min(an.existingGlyphs, 4); i++) {
-                let sqr = this._previews[i];
-                sqr.visible = true;
-                sqr.Set(an.existing[i]);
-            }
+            this._UpdatePreviews();
 
         } else {
 
@@ -242,69 +243,76 @@ class GlyphListInspector extends nkm.datacontrols.ListInspectorView {
             this._tempLabel.Set(label);
 
             this._transformInspector.visible = false;
+            this._cachedTransforms = null;
+
         }
 
-        this._glyphIdentity.Multi(`MULTIPLE SELECTION<br>${this._data.stack.count} Glyphs`, an.uuni);
+        this._glyphIdentity.Multi(`MULTIPLE SELECTION<br><b>${this._data.stack.count} Glyphs</b>`, an.uuni);
+        this._deleteGlyphBtn.disabled = !(an.existingGlyphs > 0);
 
+    }
+
+    _RefreshCachedTransforms() {
+
+        let recompute = this._cachedTransforms ? false : true;
+
+        let existing = this._data.analytics.existing;
+
+        if (!recompute) {
+            if (existing.length == this._cachedTransforms.length) {
+                checkloop: for (let i = 0; i < existing.length; i++) {
+                    if (!this._cachedTransforms.includes(existing[i]._transformSettings)) {
+                        recompute = true;
+                        break checkloop;
+                    }
+                }
+            } else { recompute = true; }
+        }
+
+        if (recompute) {
+            this._cachedTransforms = [];
+            for (let i = 0; i < existing.length; i++) {
+                this._cachedTransforms.push(existing[i]._transformSettings);
+            }
+        }
     }
 
     _FindCommonValues() {
 
-        let
-            trValues = this._transformReference._values,
-            an = this._data.analytics;
+        let analytics = this._data.analytics;
+        if (analytics.existingGlyphs == 0) { return false; }
 
-        if (an.existingGlyphs == 0) { return false; }
+        return mkfData.UTILS.FindCommonValues(
+            this._transformReference,
+            analytics.existing,
+            `_transformSettings`
+        );
 
-        this._ignoreTransformUpdates = true;
+    }
 
-        let
-            ignore = new Set(),
-            trCount = 0,
-            searchState = 0;
+    _UpdatePreviews() {
 
-        for (var v in trValues) {
-            trValues[v].value = null;
-            trCount++;
+        let an = this._data.analytics;
+
+        if (an.existingGlyphs < 4) { for (let i = 0; i < 4; i++) { this._previews[i].visible = false; } }
+
+        if (an.existingGlyphs > 4) {
+            this._counter.visible = true;
+            this._counter.label = `+${an.existingGlyphs - 4}`;
+        } else {
+            this._counter.visible = false;
         }
 
-        compareloop: for (let i = 0; i < an.existingGlyphs; i++) {
-
-            let g = an.existing[i];
-
-            if (searchState == 0) {
-                // Establish baseline values
-                for (var v in trValues) { this._transformReference.Set(v, g._transformSettings.Get(v)); }
-                searchState = 1;
-            } else {
-                // Reach comparison
-                searchState = 2;
-                for (var v in trValues) {
-
-                    if (ignore.has(v)) { continue; }
-
-                    let
-                        gVal = g._transformSettings.Get(v),
-                        val = this._transformReference.Get(v);
-
-                    if (gVal == null || gVal == val) {
-                        // Equals baseline, keep going
-                        continue;
-                    } else {
-                        // Mismatch, reset & ignore from now on
-                        this._transformReference.Set(v, null);
-                        ignore.add(v);
-                        if (ignore.size == trCount) { break compareloop; }
-                    }
-                }
-            }
+        for (let i = 0; i < Math.min(an.existingGlyphs, 4); i++) {
+            let sqr = this._previews[i];
+            sqr.visible = true;
+            sqr.Set(an.existing[an.existingGlyphs - (i + 1)]);
         }
 
-        this._ignoreTransformUpdates = false;
+    }
 
-        if (searchState == 2) { return true; }
-        return false;
-
+    _OnGlyphBumped(p_data, p_infos) {
+        this._UpdatePreviews();
     }
 
 }
