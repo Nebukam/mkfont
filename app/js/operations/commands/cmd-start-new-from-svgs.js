@@ -14,8 +14,8 @@ const CmdCreateFamilyDoc = require(`./cmd-start-new-mkfont`);
 class CmdCreateFamilyDocFromSVGs extends CmdCreateFamilyDoc {
     constructor() { super(); }
 
-    static __defaultName = `New .mkfont from SVGs`;
-    static __defaultIcon = `directory-download-small`;
+    static __displayName = `New .mkfont from SVGs`;
+    static __displayIcon = `directory-download-small`;
 
     _Init() {
         super._Init();

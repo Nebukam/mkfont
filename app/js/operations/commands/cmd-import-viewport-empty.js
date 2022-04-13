@@ -15,8 +15,8 @@ const mkfActions = require(`../actions`);
 class CmdImportViewportEmpty extends CmdViewportContent {
     constructor() { super(); }
 
-    static __defaultName = `Create empty glyphs`;
-    static __defaultIcon = `new`;
+    static __displayName = `Create empty glyphs`;
+    static __displayIcon = `new`;
 
     _Init() {
         super._Init();

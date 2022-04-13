@@ -52,20 +52,6 @@ class FontEditor extends nkm.uiworkspace.editors.EditorEx {
             return u.isInstanceOf(p_data, mkfData.Family) ? p_data : null;
         };
 
-        this._editInPlace = nkm.actions.Command.Rent(mkfCmds.EditInExternalEditor);
-
-        this._shortcuts.CreateFromString("Ctrl S", {
-            fn: () => { mkfCmds.SaveFamilyDoc.Execute(this._data); }, thisArg: this
-        });
-
-        this._shortcuts.CreateFromString("Ctrl Z", {
-            fn: () => { this._actionStack.Undo(); }, thisArg: this
-        });
-
-        this._shortcuts.CreateFromString("Ctrl Y", {
-            fn: () => { this._actionStack.Redo(); }, thisArg: this
-        });
-
         this._inspectedData.SetupAnalytics(
             {
                 nullGlyphs: 0, existingGlyphs: 0,
@@ -82,11 +68,19 @@ class FontEditor extends nkm.uiworkspace.editors.EditorEx {
         );
         this._inspectedData.invalidateAnalyticsOnBump = true;
 
+        // Commands
+        this.cmdSave = this._commands.Create(mkfCmds.SaveFamilyDoc, { shortcut: this.shortcuts.Create("Ctrl S") });
+        this.cmdExport = this._commands.Create(mkfCmds.ExportTTF, { shortcut: this.shortcuts.Create("Ctrl E") });
+        this.cmdEditInPlace = this._commands.Create(mkfCmds.EditInExternalEditor);
+        this.cmdImportEmpty = this._commands.Create(mkfCmds.ImportEmpty);
+
+        this.shortcuts.Create("Ctrl Z", this._actionStack.Undo);
+        this.shortcuts.Create("Ctrl Y", this._actionStack.Redo);
+
     }
 
     _OnDisplayGain() {
         super._OnDisplayGain();
-        mkfCmds.SaveFamilyDoc.emitter = this;
     }
 
     _PostInit() {

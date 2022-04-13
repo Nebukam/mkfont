@@ -11,8 +11,8 @@ const mkfActions = require(`../actions`);
 class CmdOpenPrefs extends actions.Command {
     constructor() { super(); }
 
-    static __defaultName = `App settings`;
-    static __defaultIcon = `gear`;
+    static __displayName = `App settings`;
+    static __displayIcon = `gear`;
 
     _Init() {
         super._Init();

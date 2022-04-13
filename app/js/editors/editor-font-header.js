@@ -13,33 +13,16 @@ class FontEditorHeader extends nkm.datacontrols.ControlView {
     _Init() {
         super._Init();
 
-        let fn = () => { return { editor: this.editor, data: this._data }; };
         let margins = { x: 0, y: 5 };
 
-        this._displayInspector = ui.UI.Rent(mkfInspectors.Display);
-        this._modalDisplayOpts = this._commands.Create(ui.commands.Modal, 'Display', 'gear');
-        this._modalDisplayOpts.options = {
-            content: this._displayInspector,
-            anchorToEmitter: true, margins: margins,
-            placement: ui.ANCHORING.BOTTOM_LEFT,
-            contentOptionsGetter: { fn: fn, thisArg: this }
-        };
+        this._modalDisplayOpts = this._CmdModal({ name: 'Display', icon: 'gear' },
+            { content: mkfInspectors.Display, margins: margins });
 
-        this._modalFamilyOpts = this._commands.Create(ui.commands.Modal, 'Infos', 'font');
-        this._modalFamilyOpts.options = {
-            content: mkfInspectors.Family,
-            anchorToEmitter: true, margins: margins,
-            placement: ui.ANCHORING.BOTTOM_LEFT,
-            contentOptionsGetter: { fn: fn, thisArg: this }
-        };
+        this._modalFamilyOpts = this._CmdModal({ name: 'Infos', icon: 'font' },
+            { content: mkfInspectors.Family, margins: margins });
 
-        this._modalSubFamilyOpts = this._commands.Create(ui.commands.Modal, 'Metrics', 'layout');
-        this._modalSubFamilyOpts.options = {
-            content: mkfInspectors.SubFamily,
-            anchorToEmitter: true, margins: margins,
-            placement: ui.ANCHORING.BOTTOM_LEFT,
-            contentOptionsGetter: { fn: fn, thisArg: this }
-        };
+        this._modalSubFamilyOpts = this._CmdModal({ name: 'Metrics', icon: 'layout' },
+            { content: mkfInspectors.SubFamily, margins: margins });
 
         this._menuHah = this._commands.Create(ui.commands.Menu, 'Menu test', 'layout');
         this._menuHah.options = {
@@ -71,7 +54,7 @@ class FontEditorHeader extends nkm.datacontrols.ControlView {
             },
             '.title': {
                 'opacity': '0.2',
-                'pointer-events':'none'
+                'pointer-events': 'none'
             },
             '.toolbar': {
 
@@ -87,37 +70,28 @@ class FontEditorHeader extends nkm.datacontrols.ControlView {
         this._toolbarLeft.options = {
             inline: true,
             defaultWidgetClass: nkm.uilib.buttons.Button,
-            handles: [    
+            handles: [
                 {
                     label: `Save`, icon: `save`, htitle: `Save`,
                     size: ui.FLAGS.SIZE_S, flavor: ui.FLAGS.CTA,// variant:ui.FLAGS.FRAME,
-                    trigger: {
-                        fn: () => {
-                            mkfCmds.SaveFamilyDoc.Execute(this._data);
-                        }
-                    },
+                    trigger: { fn: () => { this.editor.cmdSave.Execute(); } },
                     group: `file-actions`
                 },
                 {
                     label: `Export`, icon: `upload`, htitle: `Export as TTF file`,
                     size: ui.FLAGS.SIZE_S, flavor: ui.FLAGS.CTA, variant: ui.FLAGS.FRAME,
-                    trigger: {
-                        fn: () => {
-                            mkfCmds.ExportTTF.emitter = this;
-                            mkfCmds.ExportTTF.Execute(this._data);
-                        }
-                    },
+                    trigger: { fn: () => { this.editor.cmdExport.Execute(); } },
                     group: `file-actions`
                 },/*
                 {
-                    command: this._modalDisplayOpts,
+                    command: this._modalDisplayOpts, isCmdEmitter:true,
                     htitle: `Viewport options`,
                     size: ui.FLAGS.SIZE_S,
                     cl: nkm.uilib.buttons.Tool,
                     group: `family`
                 },*/
                 {
-                    command: this._modalFamilyOpts,
+                    command: this._modalFamilyOpts, isCmdEmitter: true,
                     htitle: `Family name, infos & metadata`,
                     size: ui.FLAGS.SIZE_S,
                     group: `family`
@@ -128,7 +102,7 @@ class FontEditorHeader extends nkm.datacontrols.ControlView {
                     group: `family`
                 },
                 {
-                    command: this._modalSubFamilyOpts,
+                    command: this._modalSubFamilyOpts, isCmdEmitter: true,
                     htitle: `Global metrics (affect all glyphs)`,
                     size: ui.FLAGS.SIZE_S,
                     group: `family`
@@ -171,7 +145,7 @@ class FontEditorHeader extends nkm.datacontrols.ControlView {
                     label: `TTF`, icon: `directory-download-small`,
                     htitle: `Import a TTF file`,
                     size: ui.FLAGS.SIZE_S, //variant: ui.FLAGS.FRAME, flavor: nkm.com.FLAGS.LOADING,
-                    
+
                     group: `external`,
                     trigger: {
                         fn: () => {
@@ -190,10 +164,6 @@ class FontEditorHeader extends nkm.datacontrols.ControlView {
         this._title.ellipsis = true;
         this._title.Set("---");
 
-    }
-
-    _OnEditorChanged(p_oldEditor) {
-        this._displayInspector.editor = this._editor;
     }
 
     _OnDataUpdated(p_data) {

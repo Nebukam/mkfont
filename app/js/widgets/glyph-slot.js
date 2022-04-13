@@ -220,7 +220,10 @@ class GlyphSlot extends nkm.datacontrols.ControlWidget {
 
         let qMenu = this.constructor.__quickMenu;
         if (qMenu) {
-            if (qMenu.parent == this) { qMenu.data = this._glyhpVariant; }
+            if (qMenu.parent == this) { 
+                qMenu.editor = this.editor;
+                qMenu.data = this._glyhpVariant; 
+            }
         }
 
         if (!this._glyhpVariant || this._glyhpVariant.glyph.isNull) {

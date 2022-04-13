@@ -20,6 +20,15 @@ class PropertyControl extends nkm.datacontrols.ControlWidget {
         return p_data;
     };
 
+    static __distribute = nkm.datacontrols.ControlWidget.__distribute.Ext()
+        .To(`propertyId`)
+        .To(`hideOverride`)
+        .To(`subData`, null, null)
+        .To(`inputOnly`, null, null)
+        .To(`onSubmit`, `_onSubmitFn`, null)
+        .To(`invertInputOrder`, null, false)
+        .To(`command`, null, mkfCmds.SetProperty);
+
     _Init() {
         super._Init();
         this._fallbackData = null;
@@ -34,15 +43,6 @@ class PropertyControl extends nkm.datacontrols.ControlWidget {
         this._onSubmitFn = null;
         this._inherited = false;
         this._inputOnly = false;
-
-        this._distribute
-            .To(`propertyId`)
-            .To(`hideOverride`)
-            .To(`subData`, null, null)
-            .To(`inputOnly`, null, null)
-            .To(`onSubmit`, `_onSubmitFn`, null)
-            .To(`invertInputOrder`, null, false)
-            .To(`command`, null, mkfCmds.SetProperty);
 
         this._dataPreProcessor = this.constructor.__ppdata;
         this._inputOrder = 1;

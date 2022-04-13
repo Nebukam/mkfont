@@ -158,12 +158,7 @@ class GlyphListInspector extends nkm.datacontrols.ListInspectorView {
                 {
                     icon: `new`, htitle: `Empty selected glyph.\nClears existing data, or create an empty glyph in place of an empty unicode slot.`,
                     variant: ui.FLAGS.MINIMAL,
-                    trigger: {
-                        fn: () => {
-                            mkfCmds.ImportEmpty.emitter = this;
-                            mkfCmds.ImportEmpty.Execute(this._data.stack._array);
-                        }
-                    },
+                    trigger: { fn: () => { this.editor.cmdImportEmpty.Execute(this._data.stack._array); } },
                     group: `read`
                 },
                 {

@@ -7,24 +7,18 @@ class ControlHeader extends ui.Widget {
 
     static __usePaintCallback = true;
     static __defaultSelectOnActivation = true;
+    static __distribute = nkm.com.helpers.OptionsDistribute.Ext()
+        .To(`label`, (p_target, p_value) => { p_target._label.Set(p_value); })
+        .To(`htitle`, (p_target, p_value) => { p_target.htitle = p_value; });
+
 
     _Init() {
-
         super._Init();
-
         this._extensions.Remove(this._extDrag);
         this._notifiesSelectionStack = true;
-
-        this._distribute = new nkm.com.helpers.OptionsDistribute();
-        this._distribute.Setup(this);
-
-        this._distribute
-            .To(`label`, (p_value) => { this._label.Set(p_value); })
-            .To(`htitle`, (p_value) => { this.htitle = p_value; });
-
     }
 
-    set options(p_value) { this._distribute.Update(this, p_value); }
+    set options(p_value) { this.constructor.__distribute.Update(this, p_value); }
 
     get editor() {
         if (this._editor) { return this._editor; }

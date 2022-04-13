@@ -9,7 +9,7 @@ const mkfCmds = mkfOperations.commands;
 class GlyphSlotQuickmenu extends ui.WidgetBar {
     constructor() { super(); }
 
-    static __default_orientation = ui.FLAGS.VERTICAL;
+    static __defaultOrientation = ui.FLAGS.VERTICAL;
 
     _Init() {
         super._Init();
@@ -25,12 +25,7 @@ class GlyphSlotQuickmenu extends ui.WidgetBar {
                 {
                     icon: `new`, htitle: `Empty glyph.\nClears existing data, or create an empty glyph in place of an empty unicode slot.`,
                     flavor: ui.FLAGS.CTA, // variant: ui.FLAGS.MINIMAL,
-                    trigger: {
-                        fn: () => {
-                            mkfCmds.ImportEmpty.emitter = this;
-                            mkfCmds.ImportEmpty.Execute(this._SecureData());
-                        }
-                    },
+                    trigger: { fn: () => { this.editor.cmdImportEmpty.Execute(this._SecureData()); } },
                     member: { owner: this, id: `_newBtn` }
                 },/*
                 {
@@ -99,8 +94,8 @@ class GlyphSlotQuickmenu extends ui.WidgetBar {
         this._newBtn.visible = (this._data.glyph.isNull && !this._data.Get(mkfData.IDS.EMPTY));
     }
 
-    _SecureData(){
-        if(this._data.glyph.isNull){this._data.glyph.unicodeInfos = this._glyphInfos;}
+    _SecureData() {
+        if (this._data.glyph.isNull) { this._data.glyph.unicodeInfos = this._glyphInfos; }
         return this._data;
     }
 

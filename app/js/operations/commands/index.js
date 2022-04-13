@@ -6,7 +6,7 @@ const mkfData = require(`../../data`);
 
 const
     fileInfos = { name: 'MKFont files', extensions: ['mkfont'] },
-    mkDocInfos = { docType:nkm.documents.bound.JSONDocument, dataType: mkfData.Family, fileInfos: fileInfos };
+    mkDocInfos = { docType: nkm.documents.bound.JSONDocument, dataType: mkfData.Family, fileInfos: fileInfos };
 
 // Register defaults commands (will be used by autosave)
 docCmds.DocumentCreate.Rent(mkDocInfos, true);
@@ -25,14 +25,14 @@ module.exports = {
     DeleteGlyph: new (require(`./cmd-glyph-delete`))(),
 
     ImportTTF: new (require(`./cmd-import-ttf`))(),
-    ImportEmpty: new (require(`./cmd-import-empty`))(),
+    ImportEmpty: require(`./cmd-import-empty`),
     ImportViewportEmpty: new (require(`./cmd-import-viewport-empty`))(),
     ImportExternalFile: new (require(`./cmd-import-external-file`))(),
     ImportExternalFileMultiple: new (require(`./cmd-import-external-file-multiple`))(),
     ImportClipboard: new (require(`./cmd-import-clipboard`))(),
     ImportTextLiga: new (require(`./cmd-import-text-liga`))(),
 
-    ExportTTF: new (require(`./cmd-export-ttf`))(),
+    ExportTTF: require(`./cmd-export-ttf`),
 
     ExportToClipboard: new (require(`./cmd-export-to-clipboard`))(),
     ExportUniClipboard: new (require(`./cmd-export-uni-clipboard`))(),
@@ -42,11 +42,11 @@ module.exports = {
     StartNewFromTTF: new (require(`./cmd-start-new-from-ttf`))(),
     StartNewFromSVGS: new (require(`./cmd-start-new-from-svgs`))(),
 
-    CreateFamilyDoc: docCmds.DocumentCreate.Rent({ name: `New .mkfont`, ...mkDocInfos }),
-    SaveFamilyDoc: docCmds.DocumentSave.Rent({ name: `Save .mkfont`, ...mkDocInfos }),
-    LoadFamilyDoc: docCmds.DocumentLoad.Rent({ name: `Load .mkfont`, ...mkDocInfos }),
-    ReleaseFamilyDoc: docCmds.DocumentRelease.Rent({ ...mkDocInfos }),
+    get CreateFamilyDoc() { return docCmds.DocumentCreate.Rent({ name: `New .mkfont`, ...mkDocInfos }) },
+    get SaveFamilyDoc() { return docCmds.DocumentSave.Rent({ name: `Save .mkfont`, ...mkDocInfos }) },
+    get LoadFamilyDoc() { return docCmds.DocumentLoad.Rent({ name: `Load .mkfont`, ...mkDocInfos }) },
+    get ReleaseFamilyDoc() { return docCmds.DocumentRelease.Rent({ ...mkDocInfos }) },
 
     EditInExternalEditor: require(`./cmd-edit-in-external-editor`),
-    IllustratorArtboards:new (require(`./cmd-illustrator-artboards`))(),
+    IllustratorArtboards: new (require(`./cmd-illustrator-artboards`))(),
 }

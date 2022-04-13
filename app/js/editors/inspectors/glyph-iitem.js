@@ -82,7 +82,7 @@ class GlyphVariantInspectorItem extends nkm.datacontrols.ControlWidget {
                 'margin-top': '5px',
                 'padding': '4px',
                 'border-radius': '4px',
-                'background-color':`rgba(19, 19, 19, 0.25)`
+                'background-color': `rgba(19, 19, 19, 0.25)`
             },
             '.settings': {
                 'flex': '1 1 auto',
@@ -162,23 +162,13 @@ class GlyphVariantInspectorItem extends nkm.datacontrols.ControlWidget {
                 {
                     icon: `new`, htitle: `Empty glyph.\nClears existing data, or create an empty glyph in place of an empty unicode slot.`,
                     variant: ui.FLAGS.MINIMAL,
-                    trigger: {
-                        fn: () => {
-                            mkfCmds.ImportEmpty.emitter = this;
-                            mkfCmds.ImportEmpty.Execute(this._data);
-                        }
-                    },
+                    trigger: { fn: () => { this.editor.cmdImportEmpty.Execute(this._data); } },
                     group: `read`
                 },
                 {
                     icon: `document-edit`, htitle: `Edit using default SVG editor`,
                     variant: ui.FLAGS.MINIMAL,
-                    trigger: {
-                        fn: () => {
-                            this.editor._editInPlace.emitter = this;
-                            this.editor._editInPlace.Execute(this._data);
-                        }
-                    },
+                    trigger: { fn: () => { this.editor.cmdEditInPlace.Execute(this._data); } },
                     group: `write`, member: { owner: this, id: `_editInPlaceBtn` }
                 },
                 {
@@ -194,8 +184,8 @@ class GlyphVariantInspectorItem extends nkm.datacontrols.ControlWidget {
                 },
                 {
                     icon: `remove`, htitle: `Delete Glyph from font`,
-                    variant: ui.FLAGS.MINIMAL, 
-                    flavor:nkm.com.FLAGS.ERROR,
+                    variant: ui.FLAGS.MINIMAL,
+                    flavor: nkm.com.FLAGS.ERROR,
                     trigger: {
                         fn: () => {
                             mkfCmds.DeleteGlyph.emitter = this;
@@ -253,7 +243,7 @@ class GlyphVariantInspectorItem extends nkm.datacontrols.ControlWidget {
 
     _OnDataChanged(p_oldData) {
         super._OnDataChanged(p_oldData);
-        
+
         if (this._data) {
             let isNullGlyph = this._data.glyph.isNull;
             this._flags.Set(__nullGlyph, isNullGlyph);

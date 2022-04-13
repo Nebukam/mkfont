@@ -16,8 +16,8 @@ const mkfActions = require(`../actions`);
 class CmdEditInPlace extends actions.Command {
     constructor() { super(); }
 
-    static __defaultName = `Edit in place`;
-    static __defaultIcon = `document-edit`;
+    static __displayName = `Edit in place`;
+    static __displayIcon = `document-edit`;
 
     _Init() {
         super._Init();
@@ -25,7 +25,6 @@ class CmdEditInPlace extends actions.Command {
         this._Bind(this._OnWriteSuccess);
         this._Bind(this._OnWriteFail);
 
-        this._cachedEditor = null;
         this._cachedContext = null;
 
         this._tmpRsc = new nkmElectron.io.helpers.TempResourceWatcher();
@@ -36,14 +35,12 @@ class CmdEditInPlace extends actions.Command {
 
     _InternalExecute() {
 
-        if (this._cachedEditor == this._emitter.editor
-            && this._cachedContext == this._context) {
+        if (this._cachedContext == this._context) {
             this._Launch();
             this._Success();
             return;
         }
 
-        this._cachedEditor = null;
         this._cachedContext = null;
 
         this._tmpRsc.Flush();
@@ -69,7 +66,6 @@ class CmdEditInPlace extends actions.Command {
             return;
         }
 
-        this._cachedEditor = this._emitter.editor;
         this._cachedContext = this._context;
 
         //TODO : Option to "bind to file" for the session
@@ -111,7 +107,7 @@ class CmdEditInPlace extends actions.Command {
 
         if (!svgStats.exists) { return; }
 
-        this._cachedEditor.Do(mkfActions.SetProperty, {
+        this._emitter.Do(mkfActions.SetProperty, {
             target: this._cachedContext,
             id: mkfData.IDS.PATH_DATA,
             value: svgStats

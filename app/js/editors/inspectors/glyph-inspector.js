@@ -136,14 +136,15 @@ class GlyphInspector extends nkm.datacontrols.InspectorView {
         super._OnDisplayGain();
         this._svgPaste.emitter = this;
         this._svgPaste.Enable();
+        
         this._svgCopy.emitter = this;
         this._svgCopy.Enable();
     }
 
     _OnDisplayLost() {
         super._OnDisplayLost();
-        if (this._svgPaste.emitter == this) { this._svgPaste.Disable(); }
-        if (this._svgCopy.emitter == this) { this._svgCopy.Disable(); }
+        this._svgPaste.Disable();
+        this._svgCopy.Disable();
     }
 
 }

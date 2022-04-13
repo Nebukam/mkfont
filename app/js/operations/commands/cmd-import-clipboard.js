@@ -39,6 +39,8 @@ class CmdImportClipboard extends actions.Command {
             svgStats = { exists: false },
             svgString = clipboard.readText();
 
+        console.log(`active editor : ${editor} | ${family}`);
+
         try {
             svgStats = SVGOPS.SVGStats(svgString);
         } catch (e) { console.log(e); }

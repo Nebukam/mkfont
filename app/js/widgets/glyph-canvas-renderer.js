@@ -9,6 +9,15 @@ var __patternImg;
 class GlyphCanvasRenderer extends ui.helpers.Canvas {
     constructor() { super(); }
 
+    static __distribute = nkm.com.helpers.OptionsDistribute.Ext()
+        .To(`drawGuides`)
+        .To(`drawLabels`)
+        .To(`drawHorAxis`)
+        .To(`drawVerAxis`)
+        .To(`drawBBox`)
+        .To(`normalize`)
+        .To(`centered`);
+
     _Init() {
         super._Init();
 
@@ -30,16 +39,6 @@ class GlyphCanvasRenderer extends ui.helpers.Canvas {
         this._drawBBox = false;
         this._nrm = false;
 
-        this._distribute = new nkm.com.helpers.OptionsDistribute();
-        this._distribute
-            .To(`drawGuides`)
-            .To(`drawLabels`)
-            .To(`drawHorAxis`)
-            .To(`drawVerAxis`)
-            .To(`drawBBox`)
-            .To(`normalize`)
-            .To(`centered`);
-
         this._emptyGlyph = false;
 
 
@@ -49,7 +48,7 @@ class GlyphCanvasRenderer extends ui.helpers.Canvas {
         super._PostInit();
     }
 
-    set options(p_value) { this._distribute.Update(this, p_value); }
+    set options(p_value) { this.constructor.__distribute.Update(this, p_value); }
 
     get drawGuides() { return this._drawGuides; }
     set drawGuides(p_value) { this._drawGuides = p_value; }
