@@ -65,6 +65,14 @@ class CmdGlyphPaste extends actions.Command {
                 transforms: trValues
             });
         } else {
+
+            this._emitter.StartActionGroup({
+                icon: `clipboard-read`,
+                name: `Pasted glyph`,
+                title: `Pasted an glyph with its transforms`
+            });
+
+
             this._emitter.Do(mkfActions.SetProperty, {
                 target: variant,
                 id: mkfData.IDS.PATH_DATA,
@@ -76,6 +84,9 @@ class CmdGlyphPaste extends actions.Command {
                     values: trValues
                 });
             }
+
+            this._emitter.EndActionGroup();
+
         }
 
         glyph.CommitUpdate();
