@@ -43,7 +43,7 @@ class FamilyContentInspector extends nkm.datacontrols.InspectorView {
                 }
             ]);
 
-        this._specialCatalog._items.forEach((item) => { item.primaryCommand = UNICODE.SetDisplayCmd; })
+        this._specialCatalog._items.forEach((item) => { item.primaryCommand = UNICODE.SetActiveRange; })
 
         this._InitSelectionStack(false, true);
 

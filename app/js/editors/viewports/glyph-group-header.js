@@ -60,53 +60,33 @@ class GlyphGroupHeader extends nkm.datacontrols.ControlView {
             handles: [
                 {
                     icon: `new`, htitle: `Add all selected glyphs in font.\nWill create empty glyphs where none exists.`,
-                    trigger: {
-                        fn: () => {
-                            mkfCmds.ImportViewportEmpty.emitter = this;
-                            mkfCmds.ImportViewportEmpty.Execute(this._cmdContent());
-                        },
-                        thisArg: this
-                    },group:`new`
+                    trigger: { fn: () => { this.editor.cmdListImportMissing.Execute(this.cmdContent); } },
+                    group: `new`
                 },
                 {
                     icon: `text-unicode-char`, htitle: `Copy current selection as unicodes characters to clipboard.\nEach value is separated by a '\\n' new line.`,
-                    trigger: {
-                        fn: () => {
-                            mkfCmds.ExportUniClipboard.emitter = this;
-                            mkfCmds.ExportUniClipboard.Execute(this._cmdContent());
-                        },
-                        thisArg: this
-                    },group:`export`
+                    trigger: { fn: () => { this.editor.cmdListExportUni.Execute(this.cmdContent); } },
+                    group: `export`
                 },
                 {
                     icon: `text-unicode`, htitle: `Copy current selection as hex values to clipboard.\nEach value is separated by a '\\n' new line.`,
-                    trigger: {
-                        fn: () => {
-                            mkfCmds.ExportUniHexToClipboard.emitter = this;
-                            mkfCmds.ExportUniHexToClipboard.Execute(this._cmdContent());
-                        },
-                        thisArg: this
-                    },group:`export`
+                    trigger: { fn: () => { this.editor.cmdListExportUniHex.Execute(this.cmdContent); } },
+                    group: `export`
                 },
                 {
                     icon: `app-illustrator`, htitle: `Create a new Adobe© Illustrator template document with the active selection.`,
                     trigger: {
                         fn: () => {
                             mkfCmds.IllustratorArtboards.emitter = this;
-                            mkfCmds.IllustratorArtboards.Execute(this._cmdContent());
+                            mkfCmds.IllustratorArtboards.Execute(this.cmdContent);
                         },
                         thisArg: this
-                    },group:`export`
+                    }, group: `export`
                 },
                 {
                     icon: `remove`, htitle: `Delete all selected glyphs.`,
-                    trigger: {
-                        fn: () => {
-                            mkfCmds.DeleteGlyph.emitter = this;
-                            mkfCmds.DeleteGlyph.Execute(this._cmdContent());
-                        },
-                        thisArg: this
-                    },group:`remove`
+                    trigger: { fn: () => { this.editor.cmdGlyphDelete.Execute(this.cmdContent); } },
+                    group: `remove`
                 }
             ]
 
@@ -123,10 +103,7 @@ class GlyphGroupHeader extends nkm.datacontrols.ControlView {
 
     }
 
-    _cmdContent() {
-        if (ui.INPUT.alt) { return this._parent._content }
-        return this.editor.inspectedData.stack._array;
-    }
+    get cmdContent() { return ui.INPUT.alt ? this._parent._content : null; }
 
     _OnEditorChanged(p_oldEditor) {
         this._displayInspector.editor = this._editor;

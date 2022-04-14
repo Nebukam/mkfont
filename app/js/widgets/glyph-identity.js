@@ -62,7 +62,7 @@ class GlyphIdentity extends ui.Widget {
             htitle: `Copy value to clipboard`,
             trigger: {
                 fn: () => {
-                    mkfCmds.ExportUniHexSingleToClipboard.Execute(this._multi ? this._multi : this._data);
+                    mkfCmds.ExportSingleUniHex.Execute(this._multi ? this._multi : this._data);
                 }, thisArg: this
             }
         }

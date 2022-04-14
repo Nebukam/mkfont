@@ -13,7 +13,7 @@ const PangramHeader = require(`./pangram-header`);
 const PangramFooter = require(`./pangram-footer`);
 
 
-class PangramViewport extends nkm.datacontrols.ControlView { //ui.views.View
+class PangramViewport extends nkm.datacontrols.ControlView {
     constructor() { super(); }
 
     _Init() {
@@ -51,18 +51,13 @@ class PangramViewport extends nkm.datacontrols.ControlView { //ui.views.View
         }, super._Style());
     }
 
-    _Render() {
-        
+    _Render() {        
         super._Render();
-
         this._header = this.Attach(PangramHeader, `header`);
-
         this._footer = this.Attach(PangramFooter, `footer`);
-
         this.forwardData
             .To(this._header)
             .To(this._footer);
-
     }
 
     //#endregion

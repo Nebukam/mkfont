@@ -6,13 +6,13 @@ const u = nkm.u;
 const { clipboard } = require('electron');
 const fs = require('fs');
 
-const CmdViewportContent = require(`./cmd-viewport-content`);
+const CmdListProcessor = require(`./cmd-list-processor`);
 
 const UNICODE = require(`../../unicode`);
 const mkfData = require(`../../data`);
 const mkfActions = require(`../actions`);
 
-class CmdExportUniHexToClipboard extends CmdViewportContent {
+class CmdExportListUniHex extends CmdListProcessor {
     constructor() { super(); }
 
     static __displayName = `Unicodes to clipboard`;
@@ -38,4 +38,4 @@ class CmdExportUniHexToClipboard extends CmdViewportContent {
 
 }
 
-module.exports = CmdExportUniHexToClipboard;
+module.exports = CmdExportListUniHex;

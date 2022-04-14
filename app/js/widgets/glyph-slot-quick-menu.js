@@ -13,7 +13,11 @@ class GlyphSlotQuickmenu extends ui.WidgetBar {
 
     _Init() {
         super._Init();
+        this._editor = null;
     }
+
+    get editor() { return this._editor; }
+    set editor(p_value) { this._editor = p_value; }
 
     _PostInit() {
         super._PostInit();
@@ -25,34 +29,13 @@ class GlyphSlotQuickmenu extends ui.WidgetBar {
                 {
                     icon: `new`, htitle: `Empty glyph.\nClears existing data, or create an empty glyph in place of an empty unicode slot.`,
                     flavor: ui.FLAGS.CTA, // variant: ui.FLAGS.MINIMAL,
-                    trigger: { fn: () => { this.editor.cmdImportEmpty.Execute(this._SecureData()); } },
+                    trigger: { fn: () => { this.editor.cmdGlyphClear.Execute(this._SecureData()); } },
                     member: { owner: this, id: `_newBtn` }
-                },/*
-                {
-                    icon: `edit`, htitle: `Edit using default SVG editor`,
-                    variant: ui.FLAGS.MINIMAL,
-                    group: `read`, member: { owner: this, id: `_editInPlaceBtn` }
                 },
-                {
-                    icon: `clipboard-write`, htitle: `Copy glyph to clipboard`,
-                    variant: ui.FLAGS.MINIMAL,
-                    trigger: {
-                        fn: () => {
-                            //mkfCmds.ExportToClipboard.emitter = this;
-                            mkfCmds.ExportToClipboard.Execute(this._data);
-                        }
-                    },
-                    member: { owner: this, id: `_writeToClipboardBtn` }
-                },*/
                 {
                     icon: `remove`, htitle: `Delete Glyph from font`,
                     flavor: nkm.com.FLAGS.ERROR, //variant: ui.FLAGS.FRAME,
-                    trigger: {
-                        fn: () => {
-                            mkfCmds.DeleteGlyph.emitter = this;
-                            mkfCmds.DeleteGlyph.Execute(this._SecureData());
-                        }
-                    },
+                    trigger: { fn: () => { this.editor.cmdGlyphDelete.Execute(this._SecureData()); } },
                     member: { owner: this, id: `_deleteGlyphBtn` }
                 },
                 {
@@ -60,7 +43,7 @@ class GlyphSlotQuickmenu extends ui.WidgetBar {
                     variant: ui.FLAGS.MINIMAL,
                     trigger: {
                         fn: () => {
-                            mkfCmds.ExportUniHexSingleToClipboard.Execute(this._data.glyph.unicodeInfos);
+                            mkfCmds.ExportSingleUniHex.Execute(this._data.glyph.unicodeInfos);
                         }
                     },
                     member: { owner: this, id: `_copyUniBtn` }

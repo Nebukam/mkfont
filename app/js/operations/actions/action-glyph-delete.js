@@ -5,7 +5,7 @@ const nkm = require(`@nkmjs/core`);
 const actions = nkm.actions;
 const mkfData = require(`../../data`);
 
-class ActionDeleteGlyph extends actions.Action {
+class ActionGlyphDelete extends actions.Action {
     constructor() { super(); }
 
     static __deepCleanFn(p_action){
@@ -54,4 +54,4 @@ class ActionDeleteGlyph extends actions.Action {
 
 }
 
-module.exports = ActionDeleteGlyph;
+module.exports = ActionGlyphDelete;

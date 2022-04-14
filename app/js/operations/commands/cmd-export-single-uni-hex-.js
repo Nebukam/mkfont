@@ -10,7 +10,7 @@ const UNICODE = require(`../../unicode`);
 const mkfData = require(`../../data`);
 const mkfActions = require(`../actions`);
 
-class CmdExportUniHexSingleToClipboard extends actions.Command {
+class CmdExportSingleUniHex extends actions.Command {
     constructor() { super(); }
 
     _Init() {
@@ -25,4 +25,4 @@ class CmdExportUniHexSingleToClipboard extends actions.Command {
 
 }
 
-module.exports = CmdExportUniHexSingleToClipboard;
+module.exports = CmdExportSingleUniHex;

@@ -18,6 +18,7 @@ const SearchSettings = require(`./settings-search-data-block`);
 const LigaImportSettings = require(`./settings-liga-import-data-block`);
 
 const ContentUpdater = require(`../content-updater`);
+const FamilyFontCache = require(`./family-font-cache`);
 
 class FamilyDataBlock extends SimpleDataEx {
     constructor() { super(); }
@@ -69,13 +70,17 @@ class FamilyDataBlock extends SimpleDataEx {
 
         this._ligaSettings = nkm.com.Rent(LigaImportSettings);
 
+        //
+
+        this._fontCache = new FamilyFontCache(this);
+
     }
 
     _ResetValues(p_values) {
 
         let defaults = nkm.env.APP._prefDataObject;
 
-        p_values[IDS.FAMILY] = { value: defaults.Get(IDS.FAMILY)};
+        p_values[IDS.FAMILY] = { value: defaults.Get(IDS.FAMILY) };
         p_values[IDS.COPYRIGHT] = { value: defaults.Get(IDS.COPYRIGHT) };
         p_values[IDS.DESCRIPTION] = { value: defaults.Get(IDS.DESCRIPTION) };
         p_values[IDS.URL] = { value: defaults.Get(IDS.URL) };
@@ -90,7 +95,7 @@ class FamilyDataBlock extends SimpleDataEx {
 
     }
 
-    Wake(){
+    Wake() {
         this._id = nkm.data.ID.New(`New MKFont`);
     }
 
@@ -157,7 +162,7 @@ class FamilyDataBlock extends SimpleDataEx {
 
         if (unicode) {
             this._glyphsMap[unicode] = p_glyph;
-            if(p_glyph.isLigature){ this._ligatureSet.add(p_glyph); }
+            if (p_glyph.isLigature) { this._ligatureSet.add(p_glyph); }
             this._glyphUnicodeCache.push(unicode);
         }
 
@@ -262,12 +267,12 @@ class FamilyDataBlock extends SimpleDataEx {
         this._scheduledUpdate.Schedule();
     }
 
-    CommitUpdate(){
+    CommitUpdate() {
         this._id.name = this._selectedSubFamily ? `${this.Get(IDS.FAMILY)}-${this._selectedSubFamily.Get(IDS.FONT_STYLE)}` : this.Get(IDS.FAMILY);
         super.CommitUpdate();
     }
 
-    _CleanUp(){
+    _CleanUp() {
 
         //TODO : Cleanup up subFamilies, glyphs, and their variant
 

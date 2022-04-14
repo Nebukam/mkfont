@@ -109,21 +109,21 @@ class ENUMS {
     ]);
 
     static PANGRAM_ALIGN = nkm.data.catalogs.CreateFrom({ name: `Align`, autoSort: false }, [
-        { name: `Left`, [nkm.com.IDS.VALUE]: `left`, icon: 'text-align-left' },
-        { name: `Center`, [nkm.com.IDS.VALUE]: `center`, icon: 'text-align-center' },
-        { name: `Right`, [nkm.com.IDS.VALUE]: `right`, icon: 'text-align-right' },
+        { name: `Align left`, [nkm.com.IDS.VALUE]: `left`, icon: 'text-align-left' },
+        { name: `Align center`, [nkm.com.IDS.VALUE]: `center`, icon: 'text-align-center' },
+        { name: `Align right`, [nkm.com.IDS.VALUE]: `right`, icon: 'text-align-right' },
     ]);
 
     static PANGRAM_DIR = nkm.data.catalogs.CreateFrom({ name: `Direction`, autoSort: false }, [
-        { name: `LTR`, [nkm.com.IDS.VALUE]: `ltr`, icon: 'text-direction-ltr' },
-        { name: `RTL`, [nkm.com.IDS.VALUE]: `rtl`, icon: 'text-direction-rtl' },
+        { name: `LTR (Left to Right)`, [nkm.com.IDS.VALUE]: `ltr`, icon: 'text-direction-ltr' },
+        { name: `RTL (Right to Left)`, [nkm.com.IDS.VALUE]: `rtl`, icon: 'text-direction-rtl' },
     ]);
 
     static PANGRAM_TEXT_TRANSFORM = nkm.data.catalogs.CreateFrom({ name: `Case`, autoSort: false }, [
-        { name: `no`, [nkm.com.IDS.VALUE]: `none`, icon: 'case-sentence' },
-        { name: `up`, [nkm.com.IDS.VALUE]: `uppercase`, icon: 'case-uppercase' },
-        { name: `lw`, [nkm.com.IDS.VALUE]: `lowercase`, icon: 'case-lowercase' },
-        { name: `cp`, [nkm.com.IDS.VALUE]: `capitalize`, icon: 'case-capitalize' },
+        { name: `Sentence case`, [nkm.com.IDS.VALUE]: `none`, icon: 'case-sentence' },
+        { name: `Uppercase`, [nkm.com.IDS.VALUE]: `uppercase`, icon: 'case-uppercase' },
+        { name: `Lowercase`, [nkm.com.IDS.VALUE]: `lowercase`, icon: 'case-lowercase' },
+        { name: `Capitalize`, [nkm.com.IDS.VALUE]: `capitalize`, icon: 'case-capitalize' },
     ]);
 
     static OVERLAP_OVERWRITE = 0;

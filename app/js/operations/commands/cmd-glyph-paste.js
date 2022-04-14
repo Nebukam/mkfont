@@ -10,36 +10,22 @@ const UNICODE = require(`../../unicode`);
 const mkfData = require(`../../data`);
 const mkfActions = require(`../actions`);
 
-class CmdImportClipboard extends actions.Command {
+class CmdGlyphPaste extends actions.Command {
     constructor() { super(); }
-
-    _Init() {
-        super._Init();
-
-        this._shortcut = actions.Keystroke.CreateFromString("Ctrl V");
-        this._glyphInfos = null;
-
-        this.Disable();
-    }
-
-    set glyphInfos(p_value) { this._glyphInfos = p_value; }
-    get glyphInfos() { return this._glyphInfos; }
 
     _InternalExecute() {
 
-        if (nkm.ui.dom.isTextHighlighted || !this._emitter) {
+        if (this._shortcutActivated &&
+            nkm.ui.dom.isTextHighlighted) {
             this._Cancel();
             return;
         }
 
         let
-            editor = nkm.datacontrols.FindEditor(this._emitter),
-            family = editor.data,
-            variant = family.GetGlyph(this._context?.u || editor.inspectedData.lastItem?.u).GetVariant(family.selectedSubFamily),
+            family = this._emitter.data,
+            variant = family.GetGlyph(this._context?.u || this._emitter.inspectedData.lastItem?.u).GetVariant(family.selectedSubFamily),
             svgStats = { exists: false },
             svgString = clipboard.readText();
-
-        console.log(`active editor : ${editor} | ${family}`);
 
         try {
             svgStats = SVGOPS.SVGStats(svgString);
@@ -72,20 +58,20 @@ class CmdImportClipboard extends actions.Command {
         if (glyph.isNull) {
             // Need to create a new glyph!
             unicodeInfos = glyph.unicodeInfos;
-            editor.Do(mkfActions.CreateGlyph, {
+            this._emitter.Do(mkfActions.CreateGlyph, {
                 family: family,
                 unicode: unicodeInfos,
                 path: svgStats,
                 transforms: trValues
             });
         } else {
-            editor.Do(mkfActions.SetProperty, {
+            this._emitter.Do(mkfActions.SetProperty, {
                 target: variant,
                 id: mkfData.IDS.PATH_DATA,
                 value: svgStats
             });
             if (trValues) {
-                editor.Do(mkfActions.SetPropertyMultiple, {
+                this._emitter.Do(mkfActions.SetPropertyMultiple, {
                     target: variant.transformSettings,
                     values: trValues
                 });
@@ -99,4 +85,4 @@ class CmdImportClipboard extends actions.Command {
 
 }
 
-module.exports = CmdImportClipboard;
+module.exports = CmdGlyphPaste;

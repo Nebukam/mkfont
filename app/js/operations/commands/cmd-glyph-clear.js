@@ -10,7 +10,7 @@ const UNICODE = require(`../../unicode`);
 const mkfData = require(`../../data`);
 const mkfActions = require(`../actions`);
 
-class CmdImportEmpty extends actions.Command {
+class CmdGlyphClear extends actions.Command {
     constructor() { super(); }
 
     _Init() {
@@ -25,8 +25,8 @@ class CmdImportEmpty extends actions.Command {
 
             this._emitter.StartActionGroup({
                 icon: `new`,
-                name: `Batch empty glyph`,
-                title: `Emptied selected glyphs`
+                name: `Batch clear glyph`,
+                title: `Clears selected glyphs data`
             });
 
             for (let i = 0; i < this._context.length; i++) {
@@ -75,4 +75,4 @@ class CmdImportEmpty extends actions.Command {
 
 }
 
-module.exports = CmdImportEmpty;
+module.exports = CmdGlyphClear;

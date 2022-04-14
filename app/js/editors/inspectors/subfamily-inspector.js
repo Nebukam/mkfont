@@ -55,7 +55,6 @@ class SubFamilyInspector extends nkm.datacontrols.InspectorView {
     _Init() {
         super._Init();
 
-        this._svgPaste = operations.commands.ImportClipboard;
         //this._builder.preProcessDataFn = this._Bind(this._PreprocessControlData);
         //TODO ::: IDS.ASCENT => this._Bind(this._SetAscent)
 
@@ -133,17 +132,6 @@ class SubFamilyInspector extends nkm.datacontrols.InspectorView {
         this._builder.data = p_selectedSubFamily;
         this._trBuilder.data =  p_selectedSubFamily.transformSettings;
 
-    }
-
-    _OnDisplayGain() {
-        super._OnDisplayGain();
-        this._svgPaste.emitter = this;
-        this._svgPaste.Enable();
-    }
-
-    _OnDisplayLost() {
-        super._OnDisplayLost();
-        if (this._svgPaste.emitter == this) { this._svgPaste.Disable(); }
     }
 
     // Special actions

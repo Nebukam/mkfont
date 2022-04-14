@@ -151,19 +151,14 @@ class GlyphVariantInspectorItem extends nkm.datacontrols.ControlWidget {
                 {
                     icon: `clipboard-read`, htitle: `Import clipboard content`,
                     flavor: nkm.com.FLAGS.LOADING, variant: ui.FLAGS.MINIMAL,
-                    trigger: {
-                        fn: () => {
-                            //mkfCmds.ImportClipboard.emitter = this;
-                            mkfCmds.ImportClipboard.Execute(this._data);
-                        }
-                    },
+                    trigger: { fn: () => { this.editor.cmdGlyphPaste.Execute(this._glyphInfos); } },
                     group: `read`
                 },
                 {
-                    icon: `new`, htitle: `Empty glyph.\nClears existing data, or create an empty glyph in place of an empty unicode slot.`,
+                    icon: `reset`, htitle: `Reset existing glyph or create an empty one if it doesn't exists.`,
                     variant: ui.FLAGS.MINIMAL,
-                    trigger: { fn: () => { this.editor.cmdImportEmpty.Execute(this._data); } },
-                    group: `read`
+                    trigger: { fn: () => { this.editor.cmdGlyphClear.Execute(this._data); } },
+                    group: `read`, member: { owner: this, id: `_glyphClearBtn` }
                 },
                 {
                     icon: `document-edit`, htitle: `Edit using default SVG editor`,
@@ -172,27 +167,16 @@ class GlyphVariantInspectorItem extends nkm.datacontrols.ControlWidget {
                     group: `write`, member: { owner: this, id: `_editInPlaceBtn` }
                 },
                 {
-                    icon: `clipboard-write`, htitle: `Copy glyph to clipboard`,
+                    icon: `clipboard-write`, htitle: `Copy glyph to clipboard (ctrl+c)`,
                     variant: ui.FLAGS.MINIMAL,
-                    trigger: {
-                        fn: () => {
-                            //mkfCmds.ExportToClipboard.emitter = this;
-                            mkfCmds.ExportToClipboard.Execute(this._data);
-                        }
-                    },
-                    group: `write`, member: { owner: this, id: `_writeToClipboardBtn` }
+                    trigger: { fn: () => { this.editor.cmdGlyphCopy.Execute(this._glyphInfos); } },
+                    group: `write`, member: { owner: this, id: `_copyPathBtn` }
                 },
                 {
                     icon: `remove`, htitle: `Delete Glyph from font`,
-                    variant: ui.FLAGS.MINIMAL,
-                    flavor: nkm.com.FLAGS.ERROR,
-                    trigger: {
-                        fn: () => {
-                            mkfCmds.DeleteGlyph.emitter = this;
-                            mkfCmds.DeleteGlyph.Execute(this._data);
-                        }
-                    },
-                    group: `delete`, member: { owner: this, id: `_deleteGlyphBtn` }
+                    variant: ui.FLAGS.MINIMAL, flavor: nkm.com.FLAGS.ERROR,
+                    trigger: { fn: () => { this.editor.cmdGlyphDelete.Execute(this._data); } },
+                    group: `delete`, member: { owner: this, id: `_glyphDeleteBtn` }
                 },
             ]
         };
@@ -247,9 +231,10 @@ class GlyphVariantInspectorItem extends nkm.datacontrols.ControlWidget {
         if (this._data) {
             let isNullGlyph = this._data.glyph.isNull;
             this._flags.Set(__nullGlyph, isNullGlyph);
-            this._writeToClipboardBtn.disabled = isNullGlyph;
+            this._copyPathBtn.disabled = isNullGlyph;
             this._editInPlaceBtn.disabled = isNullGlyph;
-            this._deleteGlyphBtn.disabled = isNullGlyph;
+            this._glyphDeleteBtn.disabled = isNullGlyph;
+
         }
     }
 

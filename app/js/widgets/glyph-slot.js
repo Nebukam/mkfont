@@ -249,7 +249,9 @@ class GlyphSlot extends nkm.datacontrols.ControlWidget {
     }
 
     _Highlight(p_toggle) {
+
         super._Highlight(p_toggle);
+
         if (this._isSelected && this._isFocused) {
 
             let qMenu = this.constructor.__quickMenu;
@@ -265,6 +267,7 @@ class GlyphSlot extends nkm.datacontrols.ControlWidget {
             this.Attach(qMenu, `quick-menu`, this._host);
 
         }
+        
     }
 
     /**

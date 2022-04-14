@@ -9,14 +9,14 @@ const fs = require('fs');
 
 const nkmElectron = require('@nkmjs/core/electron');
 
-const CmdViewportContent = require(`./cmd-viewport-content`);
+const CmdListProcessor = require(`./cmd-list-processor`);
 
 const UNICODE = require(`../../unicode`);
 const mkfData = require(`../../data`);
 const mkfActions = require(`../actions`);
 const { join } = require('path');
 
-class CmdIllustratorArtboard extends CmdViewportContent {
+class CmdIllustratorArtboard extends CmdListProcessor {
     constructor() { super(); }
 
     _Init() {

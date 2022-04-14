@@ -3,7 +3,7 @@ const nkm = require(`@nkmjs/core`);
 const actions = nkm.actions;
 
 
-class CmdSetDisplayList extends actions.Command {
+class CmdSetActiveRange extends actions.Command {
     constructor() { super(); }
 
     _Init() {
@@ -21,4 +21,4 @@ class CmdSetDisplayList extends actions.Command {
 
 }
 
-module.exports = CmdSetDisplayList;
+module.exports = CmdSetActiveRange;

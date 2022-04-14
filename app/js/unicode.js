@@ -2,8 +2,7 @@
 
 const nkm = require(`@nkmjs/core`);
 const u = nkm.u;
-const mkfData = require(`./data`);
-const CmdSetDisplay = require(`./operations/commands/cmd-set-display-list`);
+const CmdSetActiveRange = require(`./operations/commands/cmd-set-active-range`);
 const UniBlock = require(`./catalogs/definition-uni-block`);
 const UniCategory = require(`./catalogs/definition-uni-cat`);
 const UniCategoryGroup = require(`./catalogs/definition-uni-cat-group`);
@@ -12,7 +11,7 @@ const UniCategoryGroup = require(`./catalogs/definition-uni-cat-group`);
 class UNICODE extends nkm.com.helpers.Singleton {
     constructor() { super(); }
 
-    static SetDisplayCmd = new CmdSetDisplay();
+    static SetActiveRange = new CmdSetActiveRange();
 
     _Init() {
 
@@ -72,7 +71,7 @@ class UNICODE extends nkm.com.helpers.Singleton {
             for (let i = 0; i < subs.length; i++) {
                 let lcgc = subs[i];
                 lcgc.parent = lgc;
-                lcgc.primaryCommand = this.constructor.SetDisplayCmd;
+                lcgc.primaryCommand = this.constructor.SetActiveRange;
                 lcgc.itemClass = UniCategory;
                 cgc.content.push(lcgc);
             }
@@ -405,7 +404,7 @@ class UNICODE extends nkm.com.helpers.Singleton {
 
         b.forEach((obj) => {
             obj.itemClass = UniBlock;
-            obj.primaryCommand = this.constructor.SetDisplayCmd;
+            obj.primaryCommand = this.constructor.SetActiveRange;
         });
 
         this._blocks = b;

@@ -72,7 +72,15 @@ class FontEditor extends nkm.uiworkspace.editors.EditorEx {
         this.cmdSave = this._commands.Create(mkfCmds.SaveFamilyDoc, { shortcut: this.shortcuts.Create("Ctrl S") });
         this.cmdExport = this._commands.Create(mkfCmds.ExportTTF, { shortcut: this.shortcuts.Create("Ctrl E") });
         this.cmdEditInPlace = this._commands.Create(mkfCmds.EditInExternalEditor);
-        this.cmdImportEmpty = this._commands.Create(mkfCmds.ImportEmpty);
+
+        this.cmdGlyphClear = this._commands.Create(mkfCmds.GlyphClear);
+        this.cmdGlyphDelete = this._commands.Create(mkfCmds.GlyphDelete);
+        this.cmdGlyphCopy = this._commands.Create(mkfCmds.GlyphCopy, { shortcut: this.shortcuts.Create("Ctrl C") });
+        this.cmdGlyphPaste = this._commands.Create(mkfCmds.GlyphPaste, { shortcut: this.shortcuts.Create("Ctrl V") });
+
+        this.cmdListImportMissing = this._commands.Create(mkfCmds.ImportListMissingGlyphs);
+        this.cmdListExportUni = this._commands.Create(mkfCmds.ExportListUni);
+        this.cmdListExportUniHex = this._commands.Create(mkfCmds.ExportListUniHex);
 
         this.shortcuts.Create("Ctrl Z", this._actionStack.Undo);
         this.shortcuts.Create("Ctrl Y", this._actionStack.Redo);

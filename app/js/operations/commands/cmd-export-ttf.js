@@ -25,6 +25,14 @@ class CmdExportTTF extends actions.Command {
         }
 
         if (!ContentUpdater.ready) {
+            
+            this._blockingDialog = nkm.dialog.Push({
+                title: `Processing`,
+                message: `Please wait...`,
+                icon: `load-arrow-small`,
+                origin: this,
+            });
+
             ContentUpdater.Watch(nkm.com.SIGNAL.READY, this._OnContentReady);
         } else {
             this._OnContentReady();
@@ -41,8 +49,8 @@ class CmdExportTTF extends actions.Command {
                 family = this._context,
                 subFamily = family.selectedSubFamily,
                 ttf = svg2ttf(subFamily.fontObject.outerHTML, {
-                    familyname: subFamily.Resolve(IDS.FAMILY),
-                    subfamilyname: subFamily.Resolve(IDS.FONT_STYLE),
+                    familyname: subFamily.Resolve(IDS.FAMILY) || `unamed-mkfont`,
+                    subfamilyname: subFamily.Resolve(IDS.FONT_STYLE) || `regular`,
                     copyright: subFamily.Resolve(IDS.COPYRIGHT) || `mkfont`,
                     description: subFamily.Resolve(IDS.DESCRIPTION) || `Made with mkfont`,
                     url: subFamily.Resolve(IDS.URL) || `https://github.com/Nebukam/mkfont`,
@@ -55,6 +63,11 @@ class CmdExportTTF extends actions.Command {
         } catch (e) {
             this._Fail(e);
         }
+    }
+
+    _End() {
+        if(this._blockingDialog){ this._blockingDialog.Consume(); }
+        super._End();
     }
 
 }

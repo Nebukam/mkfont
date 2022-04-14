@@ -156,21 +156,16 @@ class GlyphListInspector extends nkm.datacontrols.ListInspectorView {
             defaultWidgetClass: nkm.uilib.buttons.Tool,
             handles: [
                 {
-                    icon: `new`, htitle: `Empty selected glyph.\nClears existing data, or create an empty glyph in place of an empty unicode slot.`,
+                    icon: `reset`, htitle: `Reset existing glyphs & create missing ones.`,
                     variant: ui.FLAGS.MINIMAL,
-                    trigger: { fn: () => { this.editor.cmdImportEmpty.Execute(this._data.stack._array); } },
+                    trigger: { fn: () => { this.editor.cmdGlyphClear.Execute(this._data.stack._array); } },
                     group: `read`
                 },
                 {
                     icon: `remove`, htitle: `Delete selection from font`,
                     variant: ui.FLAGS.MINIMAL,
                     flavor: nkm.com.FLAGS.ERROR,
-                    trigger: {
-                        fn: () => {
-                            mkfCmds.DeleteGlyph.emitter = this;
-                            mkfCmds.DeleteGlyph.Execute(this._data.analytics.existingInfos);
-                        }
-                    },
+                    trigger: { fn: () => { this.editor.cmdGlyphDelete.Execute(this._data.analytics.existingInfos); } },
                     group: `delete`, member: { owner: this, id: `_deleteGlyphBtn` }
                 },
             ]

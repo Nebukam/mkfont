@@ -6,13 +6,13 @@ const u = nkm.u;
 const { clipboard } = require('electron');
 const fs = require('fs');
 
-const CmdViewportContent = require(`./cmd-viewport-content`);
+const CmdListProcessor = require(`./cmd-list-processor`);
 
 const UNICODE = require(`../../unicode`);
 const mkfData = require(`../../data`);
 const mkfActions = require(`../actions`);
 
-class CmdExportUniToClipboard extends CmdViewportContent {
+class CmdExportUniToClipboard extends CmdListProcessor {
     constructor() { super(); }
 
     static __displayName = `Characters to clipboard`;

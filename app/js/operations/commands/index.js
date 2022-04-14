@@ -18,26 +18,27 @@ module.exports = {
 
     OpenPrefs: new (require(`./cmd-open-prefs`))(),
 
-    SetProperty: new (require(`./cmd-action-set-property`))(),
-    SetEM: new (require(`./cmd-action-set-em`))(),
-    SetAscent: new (require(`./cmd-action-set-ascent`))(),
+    SetProperty: new (require(`./cmd-action-set-property`))(), //Single instance
+    SetEM: new (require(`./cmd-action-set-em`))(), //Single instance
+    SetAscent: new (require(`./cmd-action-set-ascent`))(), //Single instance
 
-    DeleteGlyph: new (require(`./cmd-glyph-delete`))(),
+    GlyphDelete: require(`./cmd-glyph-delete`),
+    GlyphClear: require(`./cmd-glyph-clear`),
+    GlyphCopy: require(`./cmd-glyph-copy`),
+    GlyphPaste: require(`./cmd-glyph-paste`),
 
     ImportTTF: new (require(`./cmd-import-ttf`))(),
-    ImportEmpty: require(`./cmd-import-empty`),
-    ImportViewportEmpty: new (require(`./cmd-import-viewport-empty`))(),
+
+    ImportListMissingGlyphs: require(`./cmd-import-list-missing-glyphs`),
     ImportExternalFile: new (require(`./cmd-import-external-file`))(),
     ImportExternalFileMultiple: new (require(`./cmd-import-external-file-multiple`))(),
-    ImportClipboard: new (require(`./cmd-import-clipboard`))(),
     ImportTextLiga: new (require(`./cmd-import-text-liga`))(),
 
     ExportTTF: require(`./cmd-export-ttf`),
 
-    ExportToClipboard: new (require(`./cmd-export-to-clipboard`))(),
-    ExportUniClipboard: new (require(`./cmd-export-uni-clipboard`))(),
-    ExportUniHexToClipboard: new (require(`./cmd-export-uni-hex-clipboard`))(),
-    ExportUniHexSingleToClipboard: new (require(`./cmd-export-uni-hex-single-clipboard`))(),
+    ExportListUni: require(`./cmd-export-list-uni`),
+    ExportListUniHex: require(`./cmd-export-list-uni-hex`),
+    ExportSingleUniHex: new (require(`./cmd-export-single-uni-hex-`))(),
 
     StartNewFromTTF: new (require(`./cmd-start-new-from-ttf`))(),
     StartNewFromSVGS: new (require(`./cmd-start-new-from-svgs`))(),

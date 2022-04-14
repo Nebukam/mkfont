@@ -6,13 +6,13 @@ const u = nkm.u;
 const { clipboard } = require('electron');
 const fs = require('fs');
 
-const CmdViewportContent = require(`./cmd-viewport-content`);
+const CmdListProcessor = require(`./cmd-list-processor`);
 
 const UNICODE = require(`../../unicode`);
 const mkfData = require(`../../data`);
 const mkfActions = require(`../actions`);
 
-class CmdImportViewportEmpty extends CmdViewportContent {
+class CmdImportListMissingGlyphs extends CmdListProcessor {
     constructor() { super(); }
 
     static __displayName = `Create empty glyphs`;
@@ -73,24 +73,21 @@ class CmdImportViewportEmpty extends CmdViewportContent {
 
         let list = this._results;
 
-        let editor = this._emitter.editor,
-            svgStats = SVGOPS.EmptySVGStats();
-
-        editor.StartActionGroup({
+        this._emitter.StartActionGroup({
             icon: `new`,
             name: `Batch glyph creation`,
             title: `Created new glyphs from viewport selection`
         });
 
         for (let i = 0; i < list.length; i++) {
-            editor.Do(mkfActions.CreateGlyph, {
+            this._emitter.Do(mkfActions.CreateGlyph, {
                 family: this._family,
                 unicode: list[i],
-                path: svgStats
+                path: SVGOPS.EmptySVGStats()
             });
         }
 
-        editor.EndActionGroup();
+        this._emitter.EndActionGroup();
 
         this._Success();
 
@@ -98,4 +95,4 @@ class CmdImportViewportEmpty extends CmdViewportContent {
 
 }
 
-module.exports = CmdImportViewportEmpty;
+module.exports = CmdImportListMissingGlyphs;

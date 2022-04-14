@@ -62,8 +62,8 @@ class PangramHeader extends nkm.datacontrols.ControlView {
                     icon: `text-unicode-char`, htitle: `Copy current unicodes characters to clipboard.\nEach value is separated by a '\\n' new line.`,
                     trigger: {
                         fn: () => {
-                            mkfCmds.ExportUniClipboard.emitter = this;
-                            mkfCmds.ExportUniClipboard.Execute(this._parent);
+                            mkfCmds.ExportListUni.emitter = this;
+                            mkfCmds.ExportListUni.Execute(this._parent);
                         }
                     }
                 },
@@ -71,8 +71,8 @@ class PangramHeader extends nkm.datacontrols.ControlView {
                     icon: `text-unicode`, htitle: `Copy current hex values to clipboard.\nEach value is separated by a '\\n' new line.`,
                     trigger: {
                         fn: () => {
-                            mkfCmds.ExportUniHexToClipboard.emitter = this;
-                            mkfCmds.ExportUniHexToClipboard.Execute(this._parent);
+                            mkfCmds.ExportListUniHex.emitter = this;
+                            mkfCmds.ExportListUniHex.Execute(this._parent);
                         }
                     }
                 }
