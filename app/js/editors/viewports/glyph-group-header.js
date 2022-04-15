@@ -75,13 +75,8 @@ class GlyphGroupHeader extends nkm.datacontrols.ControlView {
                 },
                 {
                     icon: `app-illustrator`, htitle: `Create a new Adobe© Illustrator template document with the active selection.`,
-                    trigger: {
-                        fn: () => {
-                            mkfCmds.IllustratorArtboards.emitter = this;
-                            mkfCmds.IllustratorArtboards.Execute(this.cmdContent);
-                        },
-                        thisArg: this
-                    }, group: `export`
+                    trigger: { fn: () => { this.editor.cmdListExportArtboardTemplate.Execute(this.cmdContent); } },
+                    group: `export`
                 },
                 {
                     icon: `remove`, htitle: `Delete all selected glyphs.`,

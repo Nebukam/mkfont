@@ -35,7 +35,7 @@ class CmdImportTTF extends actions.Command {
         if (nkm.env.isNodeEnabled) {
             nkm.actions.RELAY.ShowOpenDialog({
                 //defaultPath: this._currentValue ? this._currentValue : ``,
-                filters:[{ name:'TrueType files', extensions:['ttf'] } ],
+                filters: [{ name: 'TrueType files', extensions: ['ttf'] }],
                 properties: ['openFile']
             }, this._OnPicked);
         } else {
@@ -72,13 +72,12 @@ class CmdImportTTF extends actions.Command {
 
 
         let
-            editor = this._emitter.editor,
-            family = editor.data;
+            family = this._emitter.data;
 
-        editor.StartActionGroup({ 
-            icon:`document-download`,
-            name: `TTF Import`, 
-            title: `Created glyphs from TTF file` 
+        this._emitter.StartActionGroup({
+            icon: `document-download`,
+            name: `TTF Import`,
+            title: `Created glyphs from TTF file`
         });
 
         for (let i = 0; i < importedGlyphs.length; i++) {
@@ -94,7 +93,7 @@ class CmdImportTTF extends actions.Command {
                 existingGlyph = family.GetGlyph(unicodeInfos.u);
 
             if (existingGlyph.isNull) {
-                editor.Do(mkfActions.CreateGlyph, {
+                this._emitter.Do(mkfActions.CreateGlyph, {
                     family: family,
                     unicode: unicodeInfos,
                     path: svgStats,
@@ -102,12 +101,12 @@ class CmdImportTTF extends actions.Command {
                 });
             } else {
                 let variant = existingGlyph.GetVariant(family.selectedSubFamily);
-                editor.Do(mkfActions.SetProperty, {
+                this._emitter.Do(mkfActions.SetProperty, {
                     target: variant,
                     id: mkfData.IDS.PATH_DATA,
                     value: svgStats
                 });
-                editor.Do(mkfActions.SetPropertyMultiple, {
+                this._emitter.Do(mkfActions.SetPropertyMultiple, {
                     target: variant.transformSettings,
                     values: transforms
                 });
@@ -115,14 +114,9 @@ class CmdImportTTF extends actions.Command {
 
         }
 
-        editor.EndActionGroup();
-
+        this._emitter.EndActionGroup();
 
         this._Success();
-
-    }
-
-    _OnImportContinue() {
 
     }
 
@@ -130,7 +124,7 @@ class CmdImportTTF extends actions.Command {
         this._Cancel();
     }
 
-    _End(){
+    _End() {
         this._blockingDialog.Consume();
         super._End();
     }

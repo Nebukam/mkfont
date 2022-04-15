@@ -11,8 +11,9 @@ class WelcomeView extends ui.views.View {
 
     _Init() {
         super._Init();
+        this.cmdNewFromTTF = this._commands.Create(mkfCmds.StartNewFromTTF);
+        this.cmdNewFromSVGs = this._commands.Create(mkfCmds.StartNewFromSVGS);
     }
-
 
     _Style() {
         return nkm.style.Extends({
@@ -85,11 +86,11 @@ class WelcomeView extends ui.views.View {
                     group:`n`
                 },
                 {
-                    command: mkfCmds.StartNewFromTTF,
+                    command: this.cmdNewFromTTF,
                     variant: ui.FLAGS.MINIMAL, flavor: nkm.com.FLAGS.LOADING
                 },
                 {
-                    command: mkfCmds.StartNewFromSVGS,
+                    command: this.cmdNewFromSVGs,
                     variant: ui.FLAGS.MINIMAL, flavor: nkm.com.FLAGS.LOADING
                 },
                 {

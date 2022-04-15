@@ -11,7 +11,7 @@ const mkfData = require(`../../data`);
 const mkfCatalog = require(`../../catalogs`);
 const mkfActions = require(`../actions`);
 
-class CmdImportExternalFileMultiple extends actions.Command {
+class CmdImportFileList extends actions.Command {
     constructor() { super(); }
 
     _Init() {
@@ -70,7 +70,7 @@ class CmdImportExternalFileMultiple extends actions.Command {
             return;
         }
 
-        let subFamily = this._context.selectedSubFamily;
+        let subFamily = this._emitter.data.selectedSubFamily;
         this._importCatalog.Clear();
 
         this._PreprocessFileList(list);
@@ -143,16 +143,14 @@ class CmdImportExternalFileMultiple extends actions.Command {
 
         //Go through the catalog
 
-        let
-            editor = this._emitter.editor,
-            family = editor.data,
+        let family = this._emitter.data,
             list = this._importCatalog._items,
             trValues = this._importTransformationSettings.Values();
 
-        editor.StartActionGroup({ 
-            icon:`directory-download`,
-            name: `Import SVGs`, 
-            title: `Imported SVGs as glyph` 
+        this._emitter.StartActionGroup({
+            icon: `directory-download`,
+            name: `Import SVGs`,
+            title: `Imported SVGs as glyph`
         });
 
         for (let i = 0; i < list.length; i++) {
@@ -170,7 +168,7 @@ class CmdImportExternalFileMultiple extends actions.Command {
                 existingGlyph = family.GetGlyph(unicodeInfos.u);
 
             if (existingGlyph.isNull) {
-                editor.Do(mkfActions.CreateGlyph, {
+                this._emitter.Do(mkfActions.CreateGlyph, {
                     family: family,
                     unicode: unicodeInfos,
                     path: svgStats,
@@ -178,14 +176,14 @@ class CmdImportExternalFileMultiple extends actions.Command {
                 });
             } else {
                 let variant = existingGlyph.GetVariant(family.selectedSubFamily);
-                editor.Do(mkfActions.SetProperty, {
+                this._emitter.Do(mkfActions.SetProperty, {
                     target: variant,
                     id: mkfData.IDS.PATH_DATA,
                     value: svgStats
                 });
                 //TODO : Keep Shift & push values? Need more control at time of import :(
-                    
-                editor.Do(mkfActions.SetPropertyMultiple, {
+
+                this._emitter.Do(mkfActions.SetPropertyMultiple, {
                     target: variant.transformSettings,
                     values: trValues
                 });
@@ -193,7 +191,7 @@ class CmdImportExternalFileMultiple extends actions.Command {
 
         }
 
-        editor.EndActionGroup();
+        this._emitter.EndActionGroup();
 
         this._Success();
     }
@@ -209,7 +207,7 @@ class CmdImportExternalFileMultiple extends actions.Command {
 
             p_list[i] = filePath;
 
-            floop : for (let c = 0; c < filename.length; c++) {
+            floop: for (let c = 0; c < filename.length; c++) {
                 if (c < 1) { continue; }
                 let n = filename.substr(0, c);
                 try {
@@ -247,11 +245,11 @@ class CmdImportExternalFileMultiple extends actions.Command {
     }
 
     _End() {
-        if(this._blockingDialog){ this._blockingDialog.Consume(); }
+        if (this._blockingDialog) { this._blockingDialog.Consume(); }
         if (this._importEditor) { this._importEditor.catalog = null; }
         super._End();
     }
 
 }
 
-module.exports = CmdImportExternalFileMultiple;
+module.exports = CmdImportFileList;

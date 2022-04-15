@@ -75,7 +75,7 @@ class IDS_EXT {
             recompute:true,
             inputType: inputs.Textarea,
             label: `Broad`,
-            inputOptions: { rows:15 },
+            inputOptions: { rows:15, placeholder:`Add some text here to find common character associations` },
         },
         [this.LIGA_MIN]: {
             recompute:true,

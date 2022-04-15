@@ -11,7 +11,7 @@ const mkfData = require(`../../data`);
 const mkfCatalog = require(`../../catalogs`);
 const mkfActions = require(`../actions`);
 
-class CmdImportTextLiga extends actions.Command {
+class CmdImportLigatures extends actions.Command {
     constructor() { super(); }
 
     _Init() {
@@ -24,9 +24,6 @@ class CmdImportTextLiga extends actions.Command {
         this._importEditor = null;
 
     }
-
-    set glyphInfos(p_value) { this._glyphInfos = p_value; }
-    get glyphInfos() { return this._glyphInfos; }
 
     _InternalExecute() {
 
@@ -68,13 +65,12 @@ class CmdImportTextLiga extends actions.Command {
     _ProcessResults(p_results) {
 
         let
-            editor = this._emitter.editor,
-            family = this._context;
+            family = this._emitter.data;
 
-        editor.StartActionGroup({ 
-            icon:`text-liga`,
-            name: `Ligatures creation`, 
-            title: `Created ligature glyphs` 
+        this._emitter.StartActionGroup({
+            icon: `text-liga`,
+            name: `Ligatures creation`,
+            title: `Created ligature glyphs`
         });
 
         for (let i = 0; i < p_results.length; i++) {
@@ -90,7 +86,7 @@ class CmdImportTextLiga extends actions.Command {
                 existingGlyph = family.GetGlyph(unicodeInfos.u);
 
             if (existingGlyph.isNull) {
-                editor.Do(mkfActions.CreateGlyph, {
+                this._emitter.Do(mkfActions.CreateGlyph, {
                     family: family,
                     unicode: unicodeInfos,
                     path: SVGOPS.EmptySVGStats()
@@ -99,7 +95,7 @@ class CmdImportTextLiga extends actions.Command {
 
         }
 
-        editor.EndActionGroup();
+        this._emitter.EndActionGroup();
 
         this._Success();
     }
@@ -115,4 +111,4 @@ class CmdImportTextLiga extends actions.Command {
 
 }
 
-module.exports = CmdImportTextLiga;
+module.exports = CmdImportLigatures;

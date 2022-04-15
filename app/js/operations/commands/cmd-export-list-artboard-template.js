@@ -16,7 +16,7 @@ const mkfData = require(`../../data`);
 const mkfActions = require(`../actions`);
 const { join } = require('path');
 
-class CmdIllustratorArtboard extends CmdListProcessor {
+class CmdExportListArtboartTemplate extends CmdListProcessor {
     constructor() { super(); }
 
     _Init() {
@@ -140,4 +140,4 @@ class CmdIllustratorArtboard extends CmdListProcessor {
 
 }
 
-module.exports = CmdIllustratorArtboard;
+module.exports = CmdExportListArtboartTemplate;

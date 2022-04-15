@@ -10,7 +10,7 @@ const UNICODE = require(`../../unicode`);
 const mkfData = require(`../../data`);
 const mkfActions = require(`../actions`);
 
-class CmdImportExternalFile extends actions.Command {
+class CmdImportFileSingle extends actions.Command {
     constructor() { super(); }
 
     _Init() {
@@ -73,8 +73,7 @@ class CmdImportExternalFile extends actions.Command {
 
 
         let
-            editor = this._emitter.editor,
-            family = editor.data,
+            family = this._emitter.data,
             subFamily = family.selectedSubFamily;
 
         // Check if glyph exists
@@ -86,13 +85,13 @@ class CmdImportExternalFile extends actions.Command {
         if (glyph.isNull) {
             // Need to create a new glyph!
             unicodeInfos = glyph.unicodeInfos;
-            editor.Do(mkfActions.CreateGlyph, {
+            this._emitter.Do(mkfActions.CreateGlyph, {
                 family: family,
                 unicode: unicodeInfos,
                 path: svgStats
             });
         } else {
-            editor.Do(mkfActions.SetProperty, {
+            this._emitter.Do(mkfActions.SetProperty, {
                 target: variant,
                 id: mkfData.IDS.PATH_DATA,
                 value: svgStats
@@ -113,4 +112,4 @@ class CmdImportExternalFile extends actions.Command {
 
 }
 
-module.exports = CmdImportExternalFile;
+module.exports = CmdImportFileSingle;

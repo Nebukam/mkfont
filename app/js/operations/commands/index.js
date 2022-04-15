@@ -27,21 +27,22 @@ module.exports = {
     GlyphCopy: require(`./cmd-glyph-copy`),
     GlyphPaste: require(`./cmd-glyph-paste`),
 
-    ImportTTF: new (require(`./cmd-import-ttf`))(),
+    ImportTTF: require(`./cmd-import-ttf`),
 
     ImportListMissingGlyphs: require(`./cmd-import-list-missing-glyphs`),
-    ImportExternalFile: new (require(`./cmd-import-external-file`))(),
-    ImportExternalFileMultiple: new (require(`./cmd-import-external-file-multiple`))(),
-    ImportTextLiga: new (require(`./cmd-import-text-liga`))(),
+    ImportFileSingle: require(`./cmd-import-file-single`),
+    ImportFileList: require(`./cmd-import-file-list`),
+    ImportLigatures: require(`./cmd-import-ligatures`),
 
     ExportTTF: require(`./cmd-export-ttf`),
 
     ExportListUni: require(`./cmd-export-list-uni`),
     ExportListUniHex: require(`./cmd-export-list-uni-hex`),
-    ExportSingleUniHex: new (require(`./cmd-export-single-uni-hex-`))(),
+    ExportSingleUniHex: new (require(`./cmd-export-single-uni-hex-`))(),    
+    ExportListArtboartTemplate: require(`./cmd-export-list-artboard-template`),
 
-    StartNewFromTTF: new (require(`./cmd-start-new-from-ttf`))(),
-    StartNewFromSVGS: new (require(`./cmd-start-new-from-svgs`))(),
+    StartNewFromTTF: require(`./cmd-start-new-from-ttf`),
+    StartNewFromSVGS: require(`./cmd-start-new-from-svgs`),
 
     get CreateFamilyDoc() { return docCmds.DocumentCreate.Rent({ name: `New .mkfont`, ...mkDocInfos }) },
     get SaveFamilyDoc() { return docCmds.DocumentSave.Rent({ name: `Save .mkfont`, ...mkDocInfos }) },
@@ -49,5 +50,4 @@ module.exports = {
     get ReleaseFamilyDoc() { return docCmds.DocumentRelease.Rent({ ...mkDocInfos }) },
 
     EditInExternalEditor: require(`./cmd-edit-in-external-editor`),
-    IllustratorArtboards: new (require(`./cmd-illustrator-artboards`))(),
 }

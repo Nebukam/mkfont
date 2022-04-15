@@ -31,11 +31,13 @@ class FamilyContentInspector extends nkm.datacontrols.InspectorView {
                     icon: 'text-liga', isDynamic: true,
                     fetchList: mkfData.RangeContent.FetchFamilyGlyphLiga
                 },
+                /*
                 {
                     name: 'Components', typeTag: `Custom`, count: mkfData.RangeContent.CountComponents,
                     icon: 'icon', isDynamic: true,
                     fetchList: mkfData.RangeContent.FetchFamilyComponents
                 },
+                */
                 {//TODO : All glyph for full search opportunities
                     name: 'All Unicodes', typeTag: `Custom`, count: mkfData.RangeContent.CountAll,
                     icon: 'text', isDynamic: true,

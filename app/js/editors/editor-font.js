@@ -69,7 +69,7 @@ class FontEditor extends nkm.uiworkspace.editors.EditorEx {
         this._inspectedData.invalidateAnalyticsOnBump = true;
 
         // Commands
-        this.cmdSave = this._commands.Create(mkfCmds.SaveFamilyDoc, { shortcut: this.shortcuts.Create("Ctrl S") });
+        this.cmdSave = this._commands.Add(mkfCmds.SaveFamilyDoc, { shortcut: this.shortcuts.Create("Ctrl S") });
         this.cmdExport = this._commands.Create(mkfCmds.ExportTTF, { shortcut: this.shortcuts.Create("Ctrl E") });
         this.cmdEditInPlace = this._commands.Create(mkfCmds.EditInExternalEditor);
 
@@ -81,6 +81,12 @@ class FontEditor extends nkm.uiworkspace.editors.EditorEx {
         this.cmdListImportMissing = this._commands.Create(mkfCmds.ImportListMissingGlyphs);
         this.cmdListExportUni = this._commands.Create(mkfCmds.ExportListUni);
         this.cmdListExportUniHex = this._commands.Create(mkfCmds.ExportListUniHex);
+        this.cmdListExportArtboardTemplate = this._commands.Create(mkfCmds.ExportListArtboartTemplate);
+
+        this.cmdImportTTF = this._commands.Create(mkfCmds.ImportTTF);
+        this.cmdImportFileSingle = this._commands.Create(mkfCmds.ImportFileSingle);
+        this.cmdImportFileList = this._commands.Create(mkfCmds.ImportFileList);
+        this.cmdImportLigatures = this._commands.Create(mkfCmds.ImportLigatures);
 
         this.shortcuts.Create("Ctrl Z", this._actionStack.Undo);
         this.shortcuts.Create("Ctrl Y", this._actionStack.Redo);
@@ -263,7 +269,7 @@ class FontEditor extends nkm.uiworkspace.editors.EditorEx {
         this._viewport._RefreshItems();
 
 
-        //mkfCmds.ImportTextLiga.Execute(this._data);
+        //mkfCmds.ImportLigatures.Execute(this._data);
 
     }
 

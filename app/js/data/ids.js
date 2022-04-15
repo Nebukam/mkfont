@@ -337,15 +337,15 @@ class IDS {
             transform:true,
             inputType: inputs.Number,
             label: `Shift`,
-            inputOptions: { step: 1, min: 0, max: 5000, size: ui.FLAGS.SIZE_XXS },
-            desc: `Shifts the X-advance.\nValues between -1 & 1 are treated as percentage of the glyph' width.\ni.e, 0.12 will be 12% of the glyph width.`
+            inputOptions: { step: 1, min: 0, max: 5000, size: ui.FLAGS.SIZE_XXS, placeholder:`Multiple values` },
+            desc: `Append empty space before the glyph.`
         },
         [this.TR_WIDTH_PUSH]: {
             transform:true,
             inputType: inputs.Number,
             label: `Push`,
-            inputOptions: { step: 1, min: 0, max: 5000, size: ui.FLAGS.SIZE_XXS },
-            desc: `Expands glyph X-advance.\nValues between -1 & 1 are treated as percentage of the glyph' width.\ni.e, 0.12 will be 12% of the glyph width.`
+            inputOptions: { step: 1, min: 0, max: 5000, size: ui.FLAGS.SIZE_XXS, placeholder:`Multiple values` },
+            desc: `Add empty space after the glyph.`
         },
 
         [this.TR_VER_ALIGN]: {

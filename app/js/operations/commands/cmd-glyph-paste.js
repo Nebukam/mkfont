@@ -53,6 +53,7 @@ class CmdGlyphPaste extends actions.Command {
 
         SVGOPS.TryGetTRValues(trValues, svgString);
 
+        
         console.log(trValues);
 
         if (glyph.isNull) {

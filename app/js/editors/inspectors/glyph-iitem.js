@@ -140,12 +140,7 @@ class GlyphVariantInspectorItem extends nkm.datacontrols.ControlWidget {
                 {
                     icon: `document-download-small`, htitle: `Import SVG`,
                     flavor: nkm.com.FLAGS.LOADING, variant: ui.FLAGS.MINIMAL,
-                    trigger: {
-                        fn: () => {
-                            mkfCmds.ImportExternalFile.emitter = this;
-                            mkfCmds.ImportExternalFile.Execute(this._data);
-                        }
-                    },
+                    trigger: { fn: () => { this.editor.cmdImportFileSingle.Execute(this._data); } },
                     group: `read`
                 },
                 {

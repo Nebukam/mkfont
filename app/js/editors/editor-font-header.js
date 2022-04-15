@@ -69,17 +69,18 @@ class FontEditorHeader extends nkm.datacontrols.ControlView {
         this._toolbarLeft = this.Attach(ui.WidgetBar, `toolbar left`);
         this._toolbarLeft.options = {
             inline: true,
+            //size: ui.FLAGS.SIZE_S,
             defaultWidgetClass: nkm.uilib.buttons.Button,
             handles: [
                 {
                     label: `Save`, icon: `save`, htitle: `Save`,
-                    size: ui.FLAGS.SIZE_S, flavor: ui.FLAGS.CTA,// variant:ui.FLAGS.FRAME,
+                    flavor: ui.FLAGS.CTA,// variant:ui.FLAGS.FRAME,
                     trigger: { fn: () => { this.editor.cmdSave.Execute(); } },
                     group: `file-actions`
                 },
                 {
                     label: `Export`, icon: `upload`, htitle: `Export as TTF file`,
-                    size: ui.FLAGS.SIZE_S, flavor: ui.FLAGS.CTA, variant: ui.FLAGS.FRAME,
+                    flavor: ui.FLAGS.CTA, variant: ui.FLAGS.FRAME,
                     trigger: { fn: () => { this.editor.cmdExport.Execute(); } },
                     group: `file-actions`
                 },/*
@@ -93,7 +94,6 @@ class FontEditorHeader extends nkm.datacontrols.ControlView {
                 {
                     command: this._modalFamilyOpts, isCmdEmitter: true,
                     htitle: `Family name, infos & metadata`,
-                    size: ui.FLAGS.SIZE_S,
                     group: `family`
                 },
                 {
@@ -104,7 +104,6 @@ class FontEditorHeader extends nkm.datacontrols.ControlView {
                 {
                     command: this._modalSubFamilyOpts, isCmdEmitter: true,
                     htitle: `Global metrics (affect all glyphs)`,
-                    size: ui.FLAGS.SIZE_S,
                     group: `family`
                 },
                 /*{
@@ -118,41 +117,23 @@ class FontEditorHeader extends nkm.datacontrols.ControlView {
                 {
                     label: `Ligatures`, icon: `text-liga`,
                     htitle: `Analyze a text blurb to find and create ligatures`,
-                    size: ui.FLAGS.SIZE_S, //variant: ui.FLAGS.FRAME,
-                    flavor: nkm.com.FLAGS.LOADING,
+                    flavor: nkm.com.FLAGS.LOADING, //variant: ui.FLAGS.FRAME,
+                    trigger: { fn: () => { this.editor.cmdImportLigatures.Execute(); } },
                     group: `external`,
-                    trigger: {
-                        fn: () => {
-                            mkfCmds.ImportTextLiga.emitter = this;
-                            mkfCmds.ImportTextLiga.Execute(this._data);
-                        }
-                    },
                 },
                 {
                     label: `SVGs`, icon: `directory-download-small`,
                     htitle: `Import multiple SVGs`,
-                    size: ui.FLAGS.SIZE_S, //variant: ui.FLAGS.FRAME,
-                    flavor: nkm.com.FLAGS.LOADING,
+                    flavor: nkm.com.FLAGS.LOADING, //variant: ui.FLAGS.FRAME,
+                    trigger: { fn: () => { this.editor.cmdImportFileList.Execute(); } },
                     group: `external`,
-                    trigger: {
-                        fn: () => {
-                            mkfCmds.ImportExternalFileMultiple.emitter = this;
-                            mkfCmds.ImportExternalFileMultiple.Execute(this._data);
-                        }
-                    },
                 },
                 {
                     label: `TTF`, icon: `directory-download-small`,
                     htitle: `Import a TTF file`,
-                    size: ui.FLAGS.SIZE_S, //variant: ui.FLAGS.FRAME, flavor: nkm.com.FLAGS.LOADING,
-
+                    //variant: ui.FLAGS.FRAME, flavor: nkm.com.FLAGS.LOADING,
+                    trigger: { fn: () => { this.editor.cmdImportTTF.Execute(); } },
                     group: `external`,
-                    trigger: {
-                        fn: () => {
-                            mkfCmds.ImportTTF.emitter = this;
-                            mkfCmds.ImportTTF.Execute(this._data);
-                        }
-                    },
                 }
             ]
         };

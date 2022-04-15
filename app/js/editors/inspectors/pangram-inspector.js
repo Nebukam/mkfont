@@ -69,6 +69,9 @@ class PangramInspector extends nkm.datacontrols.InspectorView {
                 'display': 'flex',
                 'flex-flow': 'column nowrap'
             },
+            '.item':{
+                'margin-bottom':`4px`
+            },
             '.pangram': {
                 'flex': '1 1 auto',
                 'width': '100%',
@@ -93,7 +96,7 @@ class PangramInspector extends nkm.datacontrols.InspectorView {
         this._pangramRenderer = this.Attach(mkfWidgets.PangramRenderer, 'pangram', this._body);
         this.forwardData.To(this._pangramRenderer);
 
-        this._toolbar = this.Attach(ui.WidgetBar, `toolbar`, this._footer);
+        this._toolbar = this.Attach(ui.WidgetBar, `item toolbar`, this._footer);
         this._toolbar.options = {
             defaultWidgetClass: nkm.uilib.inputs.InlineSelect,
             size: ui.FLAGS.SIZE_S,
@@ -118,21 +121,40 @@ class PangramInspector extends nkm.datacontrols.InspectorView {
             ]
         };
 
-        this._slider = this.Attach(nkm.uilib.inputs.SliderOnly, `slider`, this._footer);
+        this._slider = this.Attach(nkm.uilib.inputs.SliderOnly, `item slider`, this._footer);
         this._slider.options = {
             min: 8, max: 72, currentValue: 20,
             size: ui.FLAGS.SIZE_XXS,
             onSubmit: { fn: this._Bind(this._UpdateFontSize) }
         }
 
-        this._text = this.Attach(nkm.uilib.inputs.Textarea, `text`, this._footer);
+        this._text = this.Attach(nkm.uilib.inputs.Textarea, `item text`, this._footer);
         this._text.options = {
             currentValue: longPangram,
-            onSubmit: { fn: (p_i, p_t) => { this._pangramRenderer.text = p_t; } }
+            onSubmit: { fn: (p_i, p_t) => { this._pangramRenderer.text = p_t; } },
+            rows:6
         }
 
         this._pangramRenderer.fontSize = 20;
         this._pangramRenderer.text = longPangram;
+
+        this._footerToolbar = this.Attach(ui.WidgetBar, `item toolbar`, this._footer);
+        this._footerToolbar.options = {
+            inline: true,
+            stretch: ui.WidgetBar.FLAG_STRETCH,
+            defaultWidgetClass: nkm.uilib.buttons.Button,
+            handles: [
+                {
+                    label: `Rebuild font`, icon: `clear`,
+                    flavor: nkm.com.FLAGS.WARNING, variant: ui.FLAGS.MINIMAL,
+                    trigger: {
+                        fn: () => { this._data._fontCache._RebuildCache(); },
+                        thisArg: this
+                    }
+                }
+            ]
+        }
+
     }
 
     _UpdateFontSize(p_input, p_value) {
