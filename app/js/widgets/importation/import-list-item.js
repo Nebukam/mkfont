@@ -8,7 +8,10 @@ const UNICODE = require(`../../unicode`);
 const mkfData = require(`../../data`);
 const GlyphCanvasRenderer = require(`../glyph-canvas-renderer`);
 
-class ImportListItem extends lists.FolderListItem {
+const __outOfRange = `outOfRange`;
+const __skipped = `ignored`;
+
+class ImportListItem extends nkm.datacontrols.ControlWidget {
     constructor() { super(); }
 
     static __draggable = false;
@@ -17,14 +20,12 @@ class ImportListItem extends lists.FolderListItem {
         super._Init();
         this._Bind(this._UpdatePreview);
         this._Bind(this._OnSubmit);
-
-        this._extensions.Remove(this._extDrag);
-        this._dataObserver.Hook(nkm.com.SIGNAL.VALUE_CHANGED, this._OnDataUpdated, this);
+        this._flags.Add(this, __outOfRange, __skipped);
     }
 
     _PostInit() {
         super._PostInit();
-        //this.focusArea = this;
+        this.focusArea = this;
     }
 
     _Style() {
@@ -34,7 +35,7 @@ class ImportListItem extends lists.FolderListItem {
                 'grid-template-rows': `5px 28px 28px`,
                 'grid-template-columns': `max-content min-content 1fr`,
                 'align-items': `center`,
-                'padding-bottom': `5px`
+                'padding': `5px`
             },
             '.renderer': {
                 'position': 'relative',
@@ -76,9 +77,6 @@ class ImportListItem extends lists.FolderListItem {
     _Render() {
 
         this._glyphRenderer = this.Attach(GlyphCanvasRenderer, `renderer`, this._host);
-        //this._glyphRenderer.centered = true;
-        super._Render();
-        this._label.element.classList.add(`hidden`);
 
         this._outputLabel = new ui.manipulators.Text(ui.El(`div`, { class: `output label font-xsmall` }, this._host));
         this._outputLabel.ellipsis = true;
@@ -94,8 +92,9 @@ class ImportListItem extends lists.FolderListItem {
                     cl: uilib.inputs.Checkbox,
                     onSubmit: {
                         fn: (p_input, p_value) => {
-                            this._data.SetOption(`use-custom-unicode`, p_value);
+                            this._data.userDoCustom = p_value;
                             this._unicodeInputField.disabled = !p_value;
+                            this._Reprocess();
                         }
                     },
                     group: `read`, member: { owner: this, id: `_useCustomUniCheckbox` }
@@ -109,72 +108,80 @@ class ImportListItem extends lists.FolderListItem {
             ]
         };
 
-        this._icon.element.remove();
+    }
+
+    _OnEditorChanged(p_oldEditor) {
+        this._subFamily = this._editor ? this._editor._subFamily : null;
     }
 
     Activate(p_evt) {
         if (!super.Activate(p_evt)) { return false; }
-
-        let editor = nkm.datacontrols.FindEditor(this);
-        if (editor) { editor.inspectedData.Set(this._data); }
-
+        this.editor.inspectedData.Set(this._data);
         return true;
     }
 
     _OnDataChanged(p_oldData) {
         super._OnDataChanged(p_oldData);
         if (this._data) {
-            this._subFamily = this._data.GetOption(`subFamily`);
-            this._transformSettings = this._data.GetOption(`transforms`);
+            this._transformSettings = this._data.transforms;
             this._transformSettings.Watch(nkm.com.SIGNAL.UPDATED, this._UpdatePreview);
-
         } else {
-            if (this._transformSettings) { this._transformSettings.Unwatch(nkm.com.SIGNAL.UPDATED, this._UpdatePreview); }
+            if (this._transformSettings) {
+                this._transformSettings.Unwatch(nkm.com.SIGNAL.UPDATED, this._UpdatePreview);
+                this._transformSettings = null;
+            }
         }
     }
 
     _OnDataUpdated(p_data) {
         super._OnDataUpdated(p_data);
+        this.Update();
+    }
+
+    Update() {
+
+        //TODO: Update widget display based on current data & import settings
+
+        this._unicodeInputField.placeholderValue = this._data.placeholder;
 
         let
-            useCustom = this._data.GetOption(`use-custom-unicode`, false),
-            uniStruct = null;
+            useCustom = this._data.userDoCustom,
+            targetUnicode = this._data.targetUnicode,
+            mode = this._data.transforms.Get(mkfData.IDS_EXT.IMPORT_OVERLAP_MODE),
+            OoR = this._data.outOfRange,
+            skipped = (mode == mkfData.ENUMS.OVERLAP_PRESERVE && this._data.variant);
+
         this._unicodeInputField.disabled = !useCustom;
         this._useCustomUniCheckbox.currentValue = useCustom;
 
+        this._flags.Set(__outOfRange, OoR);
+        this._flags.Set(__skipped, skipped);
+
         if (useCustom) {
-            uniStruct = this._data.GetOption(`unicode-user-input`, ``);
-            this._unicodeInputField.placeholderValue = `custom...`;
-            this._unicodeInputField.currentValue = uniStruct;
+            this._unicodeInputField.currentValue = this._data.userInput;
         } else {
-            uniStruct = this._data.GetOption(`name`, ``);
-            this._unicodeInputField.placeholderValue = uniStruct;
-            this._unicodeInputField.currentValue = this._data.GetOption(`name`, ``)
+            this._unicodeInputField.currentValue = ``;
         }
 
-        let editor = nkm.datacontrols.FindEditor(this);
-
-        uniStruct = editor._FindUnicodeStructure(uniStruct);
-        //uniStruct.forEach((val) => { displayValue.push(UNICODE.GetUnicodeCharacter(Number.parseInt(val, 16))); });
-
-        if (!uniStruct || uniStruct.length == 0) {
-            this._outputLabel.Set(`<span style='color:var(--col-warning)'>invalid, will be ignored.</span>`);
+        if (!targetUnicode || targetUnicode.length == 0) {
+            this._outputLabel.Set(`<span style='color:var(--col-warning)'>Invalid or empty : will be ignored.</span>`);
         } else {
             let unichars = [];
-            uniStruct.forEach((val) => { unichars.push(UNICODE.GetUnicodeCharacter(Number.parseInt(val, 16))); });
-            this._outputLabel.Set(uniStruct.join(`<span style='opacity:0.5'>+</span>`) + ` = <b>${unichars.join(``)}</b>`);
+            targetUnicode.forEach((val) => { unichars.push(UNICODE.GetUnicodeCharacter(Number.parseInt(val, 16))); });
+            this._outputLabel.Set(targetUnicode.join(`<span style='opacity:0.5'>+</span>`) + ` = <b>${unichars.join(``)}</b>`);
         }
 
         this._UpdatePreview();
+
     }
 
     _UpdatePreview() {
 
-        let subFamily = this._data.GetOption(`subFamily`),
+        let subFamily = this.editor._subFamily,
             contextInfos = subFamily._contextInfos,
-            pathData = this._data.GetOption(`svgStats`),
+            pathData = this._data.svgStats,
             transformedPath = SVGOPS.FitPath(
-                this._data.GetOption(`transforms`),
+                this._data.transforms,
                 contextInfos,
                 pathData
             );
@@ -187,7 +194,13 @@ class ImportListItem extends lists.FolderListItem {
     }
 
     _OnSubmit(p_input, p_value) {
-        this._data.SetOption(`unicode-user-input`, p_value);
+        this._data.userInput = p_value;
+        this._Reprocess();
+    }
+
+    _Reprocess() {
+        this.editor._assignManager._ProcessSingle(this._data);
+        this.Update();
     }
 
     _CleanUp() {

@@ -127,13 +127,33 @@ class ENUMS {
     ]);
 
     static OVERLAP_OVERWRITE = 0;
-    static OVERLAP_KEEP = 1;
-    static OVERLAP_INDIVIDUAL = 2;
+    static OVERLAP_PRESERVE = 1;
 
     static OVERLAP = nkm.data.catalogs.CreateFrom({ name: `Transform reference`, autoSort: false }, [
-        { name: `Overwrite`, [nkm.com.IDS.VALUE]: this.OVERLAP_OVERWRITE },
-        //{ name: `Keep existing`, [nkm.com.IDS.VALUE]: this.OVERLAP_KEEP },
-        { name: `Individual`, [nkm.com.IDS.VALUE]: this.OVERLAP_INDIVIDUAL },
+        { name: `Overwrite transforms`, [nkm.com.IDS.VALUE]: this.OVERLAP_OVERWRITE },
+        { name: `Preserve existing transforms`, [nkm.com.IDS.VALUE]: this.OVERLAP_PRESERVE },
+    ]);
+
+    static ASSIGN_FILENAME = 0;
+    static ASSIGN_SELECTION = 1;
+    static ASSIGN_SELECTION_RANGE = 2;
+    static ASSIGN_FROM_BLOCK = 3;
+    static ASSIGN_FROM_BLOCK_RANGE = 4;
+
+    static ASSIGN_IMPORT_MODE = nkm.data.catalogs.CreateFrom({ name: `Transform reference`, autoSort: false }, [
+        { name: `From filename`, [nkm.com.IDS.VALUE]: this.ASSIGN_FILENAME, comment: `Use imported filename to drive glyph assignment` },
+        { name: `Start from selection`, [nkm.com.IDS.VALUE]: this.ASSIGN_SELECTION, comment: `Use the start of the active selection and fill from there` },
+        { name: `Limited to selection`, [nkm.com.IDS.VALUE]: this.ASSIGN_SELECTION_RANGE, comment: `Limit import to the current selection of glyphs` },
+        { name: `Start from block`, [nkm.com.IDS.VALUE]: this.ASSIGN_FROM_BLOCK, comment: `Limit import to the current selection of glyphs` },
+        { name: `Limited to block`, [nkm.com.IDS.VALUE]: this.ASSIGN_FROM_BLOCK_RANGE, comment: `Limit import to the current selection of glyphs` },
+    ]);
+
+    static BLOCK_START_BEGIN = 0;
+    static BLOCK_START_FIRST_AVAIL = 1;
+
+    static BLOCK_START_MODE = nkm.data.catalogs.CreateFrom({ name: `Block start mode`, autoSort: false }, [
+        { name: `Block beginning`, [nkm.com.IDS.VALUE]: this.BLOCK_START_BEGIN },
+        { name: `First empty slot`, [nkm.com.IDS.VALUE]: this.BLOCK_START_FIRST_AVAIL },
     ]);
 
 }

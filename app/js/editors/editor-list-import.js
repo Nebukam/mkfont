@@ -12,10 +12,24 @@ const mkfWidgets = require(`../widgets`);
 class EditorListImport extends nkm.datacontrols.Editor {
     constructor() { super(); }
 
+    static __assignMap = {
+        [mkfData.ENUMS.ASSIGN_FILENAME]: mkfWidgets.importation.AssignFilename,
+        [mkfData.ENUMS.ASSIGN_FROM_BLOCK]: mkfWidgets.importation.AssignBlock,
+        [mkfData.ENUMS.ASSIGN_FROM_BLOCK_RANGE]: mkfWidgets.importation.AssignBlockRange,
+        [mkfData.ENUMS.ASSIGN_SELECTION]: mkfWidgets.importation.AssignSelection,
+        [mkfData.ENUMS.ASSIGN_SELECTION_RANGE]: mkfWidgets.importation.AssignSelectionRange,
+    };
+
     _Init() {
         super._Init();
         this._builder = new nkm.datacontrols.helpers.ControlBuilder(this);
         this.forwardData.To(this._builder);
+
+        this._dataObserver.Hook(nkm.com.SIGNAL.VALUE_CHANGED, this._OnDataValueChanged, this);
+        this._assignManager = null;
+
+        this._importList = [];
+
     }
 
     _Style() {
@@ -62,14 +76,14 @@ class EditorListImport extends nkm.datacontrols.Editor {
             },
             '.header': {
                 'display': 'flex',
-                'flex-flow': 'row wrap',
+                'flex-flow': 'column nowrap',
                 'flex': '1 1 auto',
                 'min-height': '0',
                 'max-width': '300px',
                 'align-content': 'flex-start',
             },
             '.control': {
-                'flex': '1 1 auto',
+                'flex': '0 1 auto',
                 'margin': '0 2px 5px 2px'
             },
             '.small': {
@@ -79,6 +93,7 @@ class EditorListImport extends nkm.datacontrols.Editor {
     }
 
     _Render() {
+
         super._Render();
 
         this._header = ui.El(`div`, { class: `item header` }, this._host);
@@ -87,18 +102,26 @@ class EditorListImport extends nkm.datacontrols.Editor {
         this._builder.defaultCSS = `control`;
         this._builder.host = this._header;
         this._builder.Build([
-            { cl: mkfWidgets.ControlHeader, options: { label: `Options` } },
-            { options: { propertyId: mkfData.IDS.IMPORT_PREFIX } },
-            { options: { propertyId: mkfData.IDS.IMPORT_SEPARATOR } },
-            //{ options: { propertyId: mkfData.IDS.IMPORT_MARK_X }, css: 'small' },
-            //{ options: { propertyId: mkfData.IDS.IMPORT_MARK_CAP }, css: 'small' },
-            //{ options: { propertyId: mkfData.IDS.IMPORT_MARK_COL } },
+            { options: { propertyId: mkfData.IDS_EXT.IMPORT_OVERLAP_MODE } },
+            { cl: mkfWidgets.ControlHeader, options: { label: `Import method` } },
+            { options: { propertyId: mkfData.IDS_EXT.IMPORT_ASSIGN_MODE } },
         ]);
 
         this._settingsInspector = this.Attach(mkfInspectors.TransformSettings, `item settings`);
         this.forwardData.To(this._settingsInspector);
 
-        this._importListBrowser = this.Attach(mkfWidgets.lists.ImportListRoot, `list`, this._host);
+        this._domStreamer = this.Attach(ui.helpers.DOMStreamer, `list`);
+        this._domStreamer
+            .Watch(ui.SIGNAL.ITEM_CLEARED, this._OnItemCleared, this)
+            .Watch(ui.SIGNAL.ITEM_REQUESTED, this._OnItemRequested, this);
+
+        this._domStreamer.options = {
+            layout: {
+                itemSlots: 1,
+                itemSize: 60,
+                itemCount: 0,
+            }
+        };
 
         this._glyphRenderer = this.Attach(mkfWidgets.GlyphCanvasRenderer, `preview`, this._host);
         this._glyphRenderer.options = {
@@ -110,15 +133,43 @@ class EditorListImport extends nkm.datacontrols.Editor {
 
     }
 
-    set subFamily(p_value) {
-        this._subFamily = p_value;
+    set subFamily(p_value) { this._subFamily = p_value; }
+
+    _OnDataChanged(p_oldData) {
+        super._OnDataChanged(p_oldData);
+        if (this._data) {
+            this._RefreshAssignManager();
+            this._domStreamer.itemCount = this._importList.length;
+        } else {
+            this._domStreamer.itemCount = 0;
+        }
     }
 
-    set catalog(p_value) {
-        this._catalog = p_value;
-        this._importListBrowser.data = p_value;
-        this._UpdateUnicodeImportedValues();
-        if (this._catalog) { this.inspectedData.Set(this._catalog.At(0)); }
+    _OnDataValueChanged(p_data, p_id, p_valueObj, p_oldValue) {
+        if (p_id == mkfData.IDS_EXT.IMPORT_ASSIGN_MODE) { this._RefreshAssignManager(); }
+    }
+
+    _RefreshAssignManager() {
+
+        if (this._assignManager) {
+            this._builder.Remove(this._assignManager);
+            this._assignManager = null;
+        }
+
+        console.log(this._data.Get(mkfData.IDS_EXT.IMPORT_ASSIGN_MODE));
+
+        let cl = this.constructor.__assignMap[this._data.Get(mkfData.IDS_EXT.IMPORT_ASSIGN_MODE)];
+        if (!cl) { return; }
+
+        this._assignManager = this._builder.Add(cl, null, { importList: this._importList }, true);
+        this._assignManager.Watch(nkm.com.SIGNAL.UPDATED, this._OnImportListUpdated, this);
+        this._assignManager.importList = this._importList;
+
+    }
+
+    _OnImportListUpdated(p_manager) {
+        // Refresh dom items, I guess
+        this._domStreamer._items.forEach((item) => { item.Update(); });
     }
 
     _OnInspectableItemBumped(p_selection, p_data) {
@@ -129,71 +180,33 @@ class EditorListImport extends nkm.datacontrols.Editor {
     _OnDataUpdated(p_data) {
         super._OnDataUpdated(p_data);
         this._UpdatePreview(this._inspectedData.lastItem);
-        this._UpdateUnicodeImportedValues();
     }
 
-    _UpdateUnicodeImportedValues() {
-
-        if (!this._catalog) { return; }
-        let list = this._catalog._items;
-
-        for (let i = 0; i < list.length; i++) {
-            let item = list[i],
-                name = item.GetOption(`name`),
-                parsedUnicode = ``,
-                parseArray = this._FindUnicodeStructure(name);
-
-            item.SetOption(`imported-unicode`, parseArray);
-        }
+    _OnItemCleared() {
 
     }
 
-    _FindUnicodeStructure(p_string) {
+    _OnItemRequested(p_streamer, p_index, p_fragment, p_returnFn) {
 
         let
-            prefix = this._data.Get(mkfData.IDS.IMPORT_PREFIX),
-            separator = this._data.Get(mkfData.IDS.IMPORT_SEPARATOR);
+            data = this._importList[p_index],
+            newItem = this.Attach(mkfWidgets.importation.ImportListItem, `item`, p_fragment);
 
-        let parseArray = p_string.split(prefix);
-        parseArray = parseArray.length > 1 ? parseArray.pop() : parseArray[0];
-        parseArray = this._GetUnicodeStructure(parseArray.split(separator));
-        return parseArray;
+        newItem.editor = this;
+        //TODO : Assigne existing transform data, if any. 
+        newItem.data = data;
 
-    }
+        p_returnFn(p_index, newItem)
 
-    _GetUnicodeStructure(p_array) {
-
-        if (p_array.length == 1) {
-            return this._SingleStructure(p_array[0]);
-        }
-
-        let result = [];
-        for (let i = 0; i < p_array.length; i++) {
-            result.push(...this._SingleStructure(p_array[i]));
-        }
-
-
-        return result;
-
-    }
-
-    _SingleStructure(p_value) {
-        if (p_value.length == 1) { return [UNICODE.GetAddress(p_value)]; }
-        if (p_value.substr(0, 2) == `U+`) { return [p_value.substring(2)]; }
-
-        let result = [];
-        for (let i = 0; i < p_value.length; i++) { result.push(UNICODE.GetAddress(p_value.substr(i, 1))); }
-        return result;
     }
 
     _UpdatePreview(p_data) {
 
         if (!p_data) { return; }
-        
+
         let
-            subFamily = p_data.GetOption(`subFamily`),
-            contextInfos = subFamily._contextInfos,
-            pathData = p_data.GetOption(`svgStats`),
+            contextInfos = this._subFamily._contextInfos,
+            pathData = p_data.svgStats,
             transformedPath = SVGOPS.FitPath(
                 this._data,
                 contextInfos,
@@ -206,6 +219,10 @@ class EditorListImport extends nkm.datacontrols.Editor {
         this._glyphRenderer.computedPath = transformedPath;
         this._glyphRenderer.Draw();
 
+    }
+
+    GetGlyphVariant(p_unicodeInfos) {
+        return this._subFamily.family.GetGlyph(p_unicodeInfos.u).GetVariant(this._subFamily);
     }
 
     _CleanUp() {

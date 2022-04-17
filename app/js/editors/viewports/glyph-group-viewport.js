@@ -123,9 +123,7 @@ class GlyphGroupViewport extends nkm.datacontrols.ControlView { //ui.views.View
         this._domStreamer = this.Attach(ui.helpers.DOMStreamer, 'dom-stream');
         this._domStreamer
             .Watch(ui.SIGNAL.ITEM_CLEARED, this._OnItemCleared, this)
-            //.Watch(ui.SIGNAL.ITEM_REQUEST_RANGE_UPDATE, this._OnItemRequestRangeUpdate, this)
-            .Watch(ui.SIGNAL.ITEM_REQUESTED, this._OnItemRequested, this)
-            .Watch(ui.SIGNAL.RESIZE, this._OnStreamerResized, this);
+            .Watch(ui.SIGNAL.ITEM_REQUESTED, this._OnItemRequested, this);
 
         this._domStreamer.options = {
             layout: {
@@ -158,10 +156,6 @@ class GlyphGroupViewport extends nkm.datacontrols.ControlView { //ui.views.View
                 gap: 5
             }
         };
-
-    }
-
-    _OnStreamerResized() {
 
     }
 

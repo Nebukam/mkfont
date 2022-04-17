@@ -2,6 +2,7 @@
 
 module.exports = {
 
+    importation:require(`./importation`),
     lists:require(`./lists`),
 
     GlyphSlot : require(`./glyph-slot`),

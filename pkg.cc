@@ -1,6 +1,6 @@
 {
     "name": "mkfont",
-    "version": "0.2.3",
+    "version": "0.3.0",
     "author": {
         "name": "Timothé Lapetite",
         "email": "nebukam@gmail.com"
@@ -25,7 +25,7 @@
 
 {
     "name": "mkfont",
-    "version": "0.2.3",
+    "version": "0.3.0",
     "author": {
         "name": "Timothé Lapetite",
         "email": "nebukam@gmail.com"

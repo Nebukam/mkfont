@@ -21,19 +21,11 @@ class CmdImportFileList extends actions.Command {
         this._Bind(this._OnPicked);
         this._Bind(this._OnImportContinue);
 
-        this._importCatalog = nkm.data.catalogs.CreateFrom({
-            name: `Import list`,
-            localItemClass: mkfCatalog.Import,
-            expanded: true
-        });
-
+        this._importList = [];
         this._importEditor = null;
         this._importTransformationSettings = new mkfData.ImportSettings();
 
     }
-
-    set glyphInfos(p_value) { this._glyphInfos = p_value; }
-    get glyphInfos() { return this._glyphInfos; }
 
     _InternalExecute() {
 
@@ -70,10 +62,10 @@ class CmdImportFileList extends actions.Command {
             return;
         }
 
-        let subFamily = this._emitter.data.selectedSubFamily;
-        this._importCatalog.Clear();
+        let subFamily = this._context.selectedSubFamily;
 
         this._PreprocessFileList(list);
+        this._importList.length = 0;
 
 
         for (let i = 0; i < list.length; i++) {
@@ -88,38 +80,43 @@ class CmdImportFileList extends actions.Command {
 
                 if (!svgStats.exists) { continue; }
 
-                let entryOptions = {
-                    filePath: filePath,
-                    name: nkm.u.PATH.name(filePath),
-                    ['use-custom-unicode']: false,
-                    ['unicode-user-input']: nkm.u.PATH.name(filePath),
-                    svgStats: svgStats,
-                    subFamily: subFamily,
-                    transforms: this._importTransformationSettings
-                };
 
-                this._importCatalog.Register(entryOptions);
+                let fname = nkm.u.PATH.name(filePath),
+                    entryOptions = {
+                        filePath: filePath,
+                        name: fname,
+                        targetUnicode: null,
+                        unicodeInfos: null,
+                        outOfRange: false,
+                        userDoImport: true,
+                        userDoCustom: false,
+                        userInput: fname,
+                        placeholder: fname,
+                        svgStats: svgStats,
+                        transforms: this._importTransformationSettings,
+                        variant: null
+                    };
+
+                this._importList.push(entryOptions);
 
             }
             catch (e) { console.error(e); }
         }
 
-        if (this._importCatalog.count == 0) {
+        if (this._importList.length == 0) {
             this._Cancel();
             return;
         }
 
-        //this._importInspector.data = ;
 
-        if (!this._importEditor) {
-            this._importEditor = nkm.ui.UI.Rent(`mkfont-list-import-editor`);
-        }
+        if (!this._importEditor) { this._importEditor = nkm.ui.UI.Rent(`mkfont-list-import-editor`); }
 
-        //this._importTransformationSettings
+        // TODO
+        // this._importTransformationSettings.Set(IDS_EXT.IMPORT_BLOCK, UNICODE.instance._blockCatalog.At(0) );
 
         this._importEditor.subFamily = subFamily;
+        this._importEditor._importList = this._importList;
         this._importEditor.data = this._importTransformationSettings;
-        this._importEditor.catalog = this._importCatalog;
 
         this._blockingDialog.Consume();
         this._blockingDialog = null;
@@ -145,7 +142,8 @@ class CmdImportFileList extends actions.Command {
 
         let family = this._emitter.data,
             list = this._importCatalog._items,
-            trValues = this._importTransformationSettings.Values();
+            trValues = this._importTransformationSettings.Values(),
+            overlapMode = this._importTransformationSettings.Get(mkfData.IDS_EXT.IMPORT_OVERLAP_MODE);
 
         this._emitter.StartActionGroup({
             icon: `directory-download`,
@@ -154,39 +152,46 @@ class CmdImportFileList extends actions.Command {
         });
 
         for (let i = 0; i < list.length; i++) {
-            let item = list[i],
-                svgStats = item.GetOption(`svgStats`),
-                useCustom = item.GetOption(`use-custom-unicode`),
-                uniStruct = useCustom ? item.GetOption(`unicode-user-input`) : item.GetOption(`name`);
-
-            uniStruct = this._importEditor._FindUnicodeStructure(uniStruct);
-
-            if (uniStruct.length == 0) { continue; }
-
             let
-                unicodeInfos = UNICODE.GetInfos(uniStruct, true),
-                existingGlyph = family.GetGlyph(unicodeInfos.u);
+                item = list[i],
+                targetUnicode = item.targetUnicode,
+                svgStats = item.svgStats,
+                unicodeInfos = UNICODE.GetInfos(targetUnicode, true);
+
+            if (item.outOfRange
+                || !item.userDoImport
+                || !targetUnicode
+                || !unicodeInfos) {
+                continue;
+            }
+
+            let existingGlyph = family.GetGlyph(unicodeInfos.u);
 
             if (existingGlyph.isNull) {
+
                 this._emitter.Do(mkfActions.CreateGlyph, {
                     family: family,
                     unicode: unicodeInfos,
                     path: svgStats,
                     transforms: trValues
                 });
+
             } else {
+
                 let variant = existingGlyph.GetVariant(family.selectedSubFamily);
                 this._emitter.Do(mkfActions.SetProperty, {
                     target: variant,
                     id: mkfData.IDS.PATH_DATA,
                     value: svgStats
                 });
-                //TODO : Keep Shift & push values? Need more control at time of import :(
 
-                this._emitter.Do(mkfActions.SetPropertyMultiple, {
-                    target: variant.transformSettings,
-                    values: trValues
-                });
+                if (overlapMode == mkfData.ENUMS.OVERLAP_OVERWRITE) {
+                    this._emitter.Do(mkfActions.SetPropertyMultiple, {
+                        target: variant.transformSettings,
+                        values: trValues
+                    });
+                }
+
             }
 
         }
@@ -235,7 +240,7 @@ class CmdImportFileList extends actions.Command {
         }
 
         if (foundName.length > 0) {
-            this._importTransformationSettings.Set(mkfData.IDS.IMPORT_PREFIX, foundName);
+            this._importTransformationSettings.Set(mkfData.IDS_EXT.IMPORT_PREFIX, foundName);
         }
 
     }
@@ -246,7 +251,11 @@ class CmdImportFileList extends actions.Command {
 
     _End() {
         if (this._blockingDialog) { this._blockingDialog.Consume(); }
-        if (this._importEditor) { this._importEditor.catalog = null; }
+        if (this._importEditor) {
+            this._importEditor.data = null;
+            this._importEditor._importList = null;
+            this._importEditor.subFamily = null;
+        }
         super._End();
     }
 
