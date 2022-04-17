@@ -99,6 +99,21 @@ class UTILS {
 
     }
 
+    static FindFirstEmptyIndex(p_family, p_start = 0) {
+
+        let
+            glyph = p_family.GetGlyph(p_start.toString(16).padStart(4, `0`)),
+            index = p_start;
+
+        while (!glyph.isNull) {
+            glyph = p_family.GetGlyph(index.toString(16).padStart(4, `0`));
+            index++;
+        }
+
+        return index;
+
+    }
+
 }
 
 module.exports = UTILS;

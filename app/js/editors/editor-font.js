@@ -75,8 +75,8 @@ class FontEditor extends nkm.uiworkspace.editors.EditorEx {
 
         this.cmdGlyphClear = this._commands.Create(mkfCmds.GlyphClear);
         this.cmdGlyphDelete = this._commands.Create(mkfCmds.GlyphDelete);
-        this.cmdGlyphCopy = this._commands.Create(mkfCmds.GlyphCopy, { shortcut: this.shortcuts.Create("Ctrl C") });
-        this.cmdGlyphPaste = this._commands.Create(mkfCmds.GlyphPaste, { shortcut: this.shortcuts.Create("Ctrl V") });
+        this.cmdGlyphCopy = this._commands.Create(mkfCmds.GlyphCopy, { shortcut: this.shortcuts.Create("Ctrl C").Weak() });
+        this.cmdGlyphPaste = this._commands.Create(mkfCmds.GlyphPaste, { shortcut: this.shortcuts.Create("Ctrl V").Weak() });
 
         this.cmdListImportMissing = this._commands.Create(mkfCmds.ImportListMissingGlyphs);
         this.cmdListExportUni = this._commands.Create(mkfCmds.ExportListUni);
@@ -232,7 +232,8 @@ class FontEditor extends nkm.uiworkspace.editors.EditorEx {
     }
 
     SetActiveRange(p_rangeData) {
-        this._viewport.displayRange = p_rangeData ? p_rangeData.options : null;
+        this._displayRange = p_rangeData ? p_rangeData.options : null;
+        this._viewport.displayRange = this._displayRange;
     }
 
     _OnLeftShelfHandleChanged(p_shelf, p_newHandle, p_oldHandle) {

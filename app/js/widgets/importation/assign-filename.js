@@ -16,7 +16,9 @@ const ControlHeader = require(`../control-header`);
 class AssignSelectionFilenameControl extends AssignBaseControl {
     constructor() { super(); }
 
-    static __valueIDs = [];
+    static __valueIDs = [
+        mkfData.IDS_EXT.IMPORT_PREFIX,
+        mkfData.IDS_EXT.IMPORT_SEPARATOR];
 
     static __controls = [
         { cl: ControlHeader, options: { label: `Filename infos` } },
@@ -41,7 +43,7 @@ class AssignSelectionFilenameControl extends AssignBaseControl {
 
     }
 
-    _ProcessSingle(p_item) {
+    _InternalProcess(p_item) {
         p_item.targetUnicode = this._FindUnicodeStructure(p_item.userDoCustom ? p_item.userInput : p_item.name);
     }
 
@@ -58,30 +60,7 @@ class AssignSelectionFilenameControl extends AssignBaseControl {
         return parseArray;
 
     }
-
-    _GetUnicodeStructure(p_array) {
-
-        if (p_array.length == 1) { return this._SingleStructure(p_array[0]); }
-
-        let result = [];
-        for (let i = 0; i < p_array.length; i++) {
-            result.push(...this._SingleStructure(p_array[i]));
-        }
-
-        return result;
-
-    }
-
-    _SingleStructure(p_value) {
-
-        if (p_value.length == 1) { return [UNICODE.GetAddress(p_value)]; }
-        if (p_value.substr(0, 2) == `U+`) { return [p_value.substring(2)]; }
-
-        let result = [];
-        for (let i = 0; i < p_value.length; i++) { result.push(UNICODE.GetAddress(p_value.substr(i, 1))); }
-        return result;
-
-    }
+    
 
 }
 

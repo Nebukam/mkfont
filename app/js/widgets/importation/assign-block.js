@@ -15,7 +15,10 @@ const ControlHeader = require(`../control-header`);
 class AssignSelectionBlockControl extends AssignBaseControl {
     constructor() { super(); }
 
-    static __valueIDs = [];
+    static __valueIDs = [
+        mkfData.IDS_EXT.IMPORT_BLOCK,
+        mkfData.IDS_EXT.IMPORT_BLOCK_START
+    ];
 
     static __controls = [
         { cl: ControlHeader, options: { label: `Block infos` } },
@@ -41,12 +44,26 @@ class AssignSelectionBlockControl extends AssignBaseControl {
     }
 
     _UpdateList() {
-        // preprocess required values...
+        this._block = this._data.Get(mkfData.IDS_EXT.IMPORT_BLOCK);
+        this._start = this._block._options.start;
+
+        if (this._data.Get(mkfData.IDS_EXT.IMPORT_BLOCK_START) == mkfData.ENUMS.BLOCK_START_FIRST_AVAIL) {
+            this._start = mkfData.UTILS.FindFirstEmptyIndex(this.editor._subFamily.family, this._start);
+        }
+
         super._UpdateList();
     }
 
-    _InternalProcess(p_item) {
+    _ComputeStartOffset() {
+        //this._offsetIndex = 0;
+    }
+
+    _InternalProcess(p_item, p_index) {
         // Update item data
+        p_index += this._start;
+        let unicode = p_index.toString(16).padStart(4, '0');
+        p_item.targetUnicode = [unicode];
+        p_item.placeholder = unicode;
     }
 
 }

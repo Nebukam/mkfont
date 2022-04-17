@@ -42,11 +42,26 @@ class AssignSelectionControl extends AssignBaseControl {
 
     _UpdateList() {
         // preprocess required values...
+        this._block = this.editor._importSelection.stack._array;
+        this._start = 0;
+        this._count = this._block.length;
+        this._end = this._start + this._count;
         super._UpdateList();
     }
 
-    _InternalProcess(p_item) {
-        // Update item data
+    _ComputeStartOffset() {
+        //this._offsetIndex = 0;
+    }
+
+    _InternalProcess(p_item, p_index) {
+        if (p_index >= this._end || p_index < 0) {
+            p_item.outOfRange = true;
+            p_item.targetUnicode = [];
+        } else {
+            let unicode = this._block[p_index].u;
+            p_item.targetUnicode = [unicode];
+            p_item.placeholder = unicode;
+        }
     }
 
 }

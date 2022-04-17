@@ -80,14 +80,23 @@ class GlyphIdentity extends ui.Widget {
 
     }
 
+    _DisplayNull(p_title = `UNKNOWN`) {
+        this._title.Set(p_title);
+        this._blockTag.label = `---`; this._blockTag.htitle = null;
+        this._catTag.label = `---`;
+        this._hexTag.label = `-`;
+        this._catTag.textColor = `var(--col-error)`;
+    }
+
+    _OnDataChanged(p_oldData) {
+        super._OnDataChanged(p_oldData);
+        if (!this._data) { this._DisplayNull(); }
+    }
+
     _OnDataUpdated(p_data) {
 
         if (!p_data) {
-            this._title.Set(`---`);
-            this._blockTag.label = `---`; this._blockTag.htitle = null;
-            this._catTag.label = `---`;
-            this._hexTag.label = `-`;
-            this._catTag.textColor = `var(--col-error)`;
+            this._DisplayNull();
             return;
         }
 

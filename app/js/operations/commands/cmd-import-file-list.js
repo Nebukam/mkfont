@@ -93,8 +93,10 @@ class CmdImportFileList extends actions.Command {
                         userInput: fname,
                         placeholder: fname,
                         svgStats: svgStats,
+                        preserved: false,
                         transforms: this._importTransformationSettings,
-                        variant: null
+                        variant: null,
+                        index: i
                     };
 
                 this._importList.push(entryOptions);
@@ -115,7 +117,9 @@ class CmdImportFileList extends actions.Command {
         // this._importTransformationSettings.Set(IDS_EXT.IMPORT_BLOCK, UNICODE.instance._blockCatalog.At(0) );
 
         this._importEditor.subFamily = subFamily;
+        this._importEditor._currentDisplayRange = this._emitter._displayRange;
         this._importEditor._importList = this._importList;
+        this._importEditor._importSelection = this._emitter.inspectedData;
         this._importEditor.data = this._importTransformationSettings;
 
         this._blockingDialog.Consume();
@@ -141,7 +145,6 @@ class CmdImportFileList extends actions.Command {
         //Go through the catalog
 
         let family = this._emitter.data,
-            list = this._importCatalog._items,
             trValues = this._importTransformationSettings.Values(),
             overlapMode = this._importTransformationSettings.Get(mkfData.IDS_EXT.IMPORT_OVERLAP_MODE);
 
@@ -151,17 +154,21 @@ class CmdImportFileList extends actions.Command {
             title: `Imported SVGs as glyph`
         });
 
-        for (let i = 0; i < list.length; i++) {
+        for (let i = 0; i < this._importList.length; i++) {
             let
-                item = list[i],
+                item = this._importList[i],
                 targetUnicode = item.targetUnicode,
-                svgStats = item.svgStats,
-                unicodeInfos = UNICODE.GetInfos(targetUnicode, true);
+                svgStats = item.svgStats;
 
             if (item.outOfRange
                 || !item.userDoImport
-                || !targetUnicode
-                || !unicodeInfos) {
+                || !targetUnicode) {
+                continue;
+            }
+
+            let unicodeInfos = UNICODE.GetInfos(targetUnicode, true);
+
+            if (!unicodeInfos) {
                 continue;
             }
 

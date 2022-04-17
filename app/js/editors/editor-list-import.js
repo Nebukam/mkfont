@@ -29,6 +29,7 @@ class EditorListImport extends nkm.datacontrols.Editor {
         this._assignManager = null;
 
         this._importList = [];
+        this._importSelection = null;
 
     }
 
@@ -39,7 +40,7 @@ class EditorListImport extends nkm.datacontrols.Editor {
                 'flex-flow': 'column wrap',
                 'flex': '0 0 auto',
                 'grid-template-columns': 'max-content max-content max-content',
-                'grid-template-rows': '180px 1fr',
+                'grid-template-rows': 'min-content 80px min-content',
                 'grid-gap': '10px'
             },
             '.item': {
@@ -47,13 +48,14 @@ class EditorListImport extends nkm.datacontrols.Editor {
                 'grid-column-start': '1',
             },
             '.list': {
+                'grid-column-start': '2',
+                'grid-row': '1 / span 3',
+
                 'position': 'relative',
                 'height': '0',
                 'width': '300px',
                 //'padding': '10px',
                 'background-color': 'rgba(0,0,0,0.2)',
-                'grid-column-start': '2',
-                'grid-row': '1 / span 2',
                 'overflow': 'auto',
                 'min-height': '100%',
             },
@@ -61,20 +63,36 @@ class EditorListImport extends nkm.datacontrols.Editor {
                 'width': '300px'
             },
             '.preview': {
+                'grid-column-start': '3',
+                'grid-row': '2 / span 2',
+
                 'position': 'relative',
                 'width': '400px',
                 'height': '100%',
                 //'aspect-ratio': '1/1',
                 'flex': '0 0 100%',
-                'background-color': '#1b1b1b',
+                //'background-color': '#1b1b1b',
                 'border-radius': '3px',
-                'grid-column-start': '3',
-                'grid-row': '1 / span 2',
+            },
+            '.renderer': {
+                'position': 'absolute',
+                'width': '100%',
+                'height': '100%',
+            },
+            '.isover': {
+                'background-color': 'rgba(27,27,27,0.8)',
             },
             '.identity': {
-                'width': '100%'
+                'grid-column-start': '3',
+                'grid-row': '1 / 1',
+
+                'width': '100%',
+                'max-width': `fit-content`,
             },
             '.header': {
+                'grid-column-start': '1',
+                'grid-row': '1 / span 2',
+
                 'display': 'flex',
                 'flex-flow': 'column nowrap',
                 'flex': '1 1 auto',
@@ -88,6 +106,10 @@ class EditorListImport extends nkm.datacontrols.Editor {
             },
             '.small': {
                 // 'flex': '1 1 45%'
+            },
+            '.tagbar': {
+                '@': ['absolute-bottom'],
+                'margin-bottom': `10px`
             }
         }, super._Style());
     }
@@ -103,7 +125,6 @@ class EditorListImport extends nkm.datacontrols.Editor {
         this._builder.host = this._header;
         this._builder.Build([
             { options: { propertyId: mkfData.IDS_EXT.IMPORT_OVERLAP_MODE } },
-            { cl: mkfWidgets.ControlHeader, options: { label: `Import method` } },
             { options: { propertyId: mkfData.IDS_EXT.IMPORT_ASSIGN_MODE } },
         ]);
 
@@ -118,18 +139,41 @@ class EditorListImport extends nkm.datacontrols.Editor {
         this._domStreamer.options = {
             layout: {
                 itemSlots: 1,
-                itemSize: 60,
+                itemSize: 66,
                 itemCount: 0,
             }
         };
 
-        this._glyphRenderer = this.Attach(mkfWidgets.GlyphCanvasRenderer, `preview`, this._host);
+        this._identity = this.Attach(mkfWidgets.GlyphIdentity, `identity`, this._host);
+
+        let previewCtnr = ui.El(`div`, { class: `preview` }, this._host);
+
+        this._underlayGlyphRenderer = this.Attach(mkfWidgets.GlyphCanvasRenderer, `renderer`, previewCtnr);
+        this._underlayGlyphRenderer.options = {
+            drawGuides: true,
+            drawLabels: false,
+            drawBBox: true,
+            centered: false,
+        };
+
+
+        this._glyphRenderer = this.Attach(mkfWidgets.GlyphCanvasRenderer, `renderer isover`, previewCtnr);
         this._glyphRenderer.options = {
             drawGuides: true,
             drawLabels: true,
             drawBBox: true,
             centered: false,
         };
+
+        this._tagBar = this.Attach(ui.WidgetBar, `tagbar`, previewCtnr);
+        this._tagBar.options = {
+            defaultWidgetClass: nkm.uilib.widgets.Tag,
+            size: ui.FLAGS.SIZE_XS
+        };
+
+        this._preserved = this._tagBar.CreateHandle();
+        this._preserved.bgColor = `rgba(var(--col-cta-rgb),0.5)`;
+        this._preserved.label = `uses existing transforms`;
 
     }
 
@@ -140,13 +184,21 @@ class EditorListImport extends nkm.datacontrols.Editor {
         if (this._data) {
             this._RefreshAssignManager();
             this._domStreamer.itemCount = this._importList.length;
+            this.inspectedData.Set(this._importList[0]);
         } else {
             this._domStreamer.itemCount = 0;
         }
     }
 
     _OnDataValueChanged(p_data, p_id, p_valueObj, p_oldValue) {
+
         if (p_id == mkfData.IDS_EXT.IMPORT_ASSIGN_MODE) { this._RefreshAssignManager(); }
+        let infos = mkfData.IDS_EXT.GetInfos(p_id);
+
+        if (!infos) { return; }
+
+        this._assignManager._UpdateList();
+
     }
 
     _RefreshAssignManager() {
@@ -155,8 +207,6 @@ class EditorListImport extends nkm.datacontrols.Editor {
             this._builder.Remove(this._assignManager);
             this._assignManager = null;
         }
-
-        console.log(this._data.Get(mkfData.IDS_EXT.IMPORT_ASSIGN_MODE));
 
         let cl = this.constructor.__assignMap[this._data.Get(mkfData.IDS_EXT.IMPORT_ASSIGN_MODE)];
         if (!cl) { return; }
@@ -202,16 +252,24 @@ class EditorListImport extends nkm.datacontrols.Editor {
 
     _UpdatePreview(p_data) {
 
-        if (!p_data) { return; }
+        if (!p_data) {
+            this._identity.data = null;
+            return;
+        }
+
+        this._identity.data = p_data.unicodeInfos;
 
         let
+            refTransform = p_data.preserved ? p_data.variant._transformSettings : this._data,
             contextInfos = this._subFamily._contextInfos,
             pathData = p_data.svgStats,
             transformedPath = SVGOPS.FitPath(
-                this._data,
+                refTransform,
                 contextInfos,
                 pathData
             );
+
+        this._preserved.visible = p_data.preserved;
 
         this._glyphRenderer.contextInfos = contextInfos;
         this._glyphRenderer.glyphWidth = transformedPath.width;
@@ -219,14 +277,30 @@ class EditorListImport extends nkm.datacontrols.Editor {
         this._glyphRenderer.computedPath = transformedPath;
         this._glyphRenderer.Draw();
 
+        if (p_data.variant) {
+
+            pathData = p_data.variant.Get(mkfData.IDS.PATH_DATA);
+
+            this._underlayGlyphRenderer.visible = true;
+            this._underlayGlyphRenderer.contextInfos = contextInfos;
+            this._underlayGlyphRenderer.glyphWidth = pathData.width;
+            this._underlayGlyphRenderer.glyphPath = pathData.path;
+            this._underlayGlyphRenderer.computedPath = pathData;
+            this._underlayGlyphRenderer.Draw();
+
+        } else {
+            this._underlayGlyphRenderer.visible = false;
+        }
+
     }
 
     GetGlyphVariant(p_unicodeInfos) {
-        return this._subFamily.family.GetGlyph(p_unicodeInfos.u).GetVariant(this._subFamily);
+        return this._subFamily.family.GetGlyph(p_unicodeInfos?.u).GetVariant(this._subFamily);
     }
 
     _CleanUp() {
-        this.catalog = null;
+        this._importList.length = 0;
+        this._importSelection = null;
         super._CleanUp();
     }
 

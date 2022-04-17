@@ -74,30 +74,97 @@ class AssignBaseControl extends nkm.datacontrols.ControlView {
 
     _UpdateList() {
 
+        this._offsetIndex = 0;
+
+        this._ComputeStartOffset();
+
         for (let i = 0; i < this._importList.length; i++) {
-            this._ProcessSingle(this._importList[i]);
+            this._ProcessSingle(this._importList[i], i + this._offsetIndex);
         }
 
         this.Broadcast(nkm.com.SIGNAL.UPDATED, this);
     }
 
-    _ProcessSingle(p_item) {
+    _ComputeStartOffset() { }
 
-        this._InternalProcess(p_item);
+    _ProcessSingle(p_item, p_index = null) {
+
+        if (!p_index) { p_index = p_item.index; }
+        else { p_item.index = p_index; }
+
+        p_item.outOfRange = false;
+
+        if (!p_item.userDoImport || p_item.userDoCustom) {
+            this._offsetIndex--;
+            if (p_item.userDoCustom) {
+                p_item.targetUnicode = this._GetUnicodeStructure([p_item.userInput]);
+            }
+        } else {
+            this._InternalProcess(p_item, p_index);
+        }
 
         p_item.unicodeInfos = UNICODE.GetInfos(p_item.targetUnicode, false);
         let variant = this.editor.GetGlyphVariant(p_item.unicodeInfos);
         p_item.variant = variant ? variant.glyph.isNull ? null : variant : null;
 
+        if(p_item.variant){
+            let overlapMode = this.editor._data.Get(mkfData.IDS_EXT.IMPORT_OVERLAP_MODE);
+            if(overlapMode == mkfData.ENUMS.OVERLAP_IGNORE){
+                p_item.preserved = false;
+                p_item.outOfRange = true;
+            }else{
+                p_item.preserved = overlapMode == mkfData.ENUMS.OVERLAP_PRESERVE;
+            }
+        }else{
+            p_item.preserved = false;
+        }
+
     }
 
-    _InternalProcess(p_item) {
+    _InternalProcess(p_item, p_index) {
 
     }
 
     _CleanUp() {
         this.importList = null;
         super._CleanUp();
+    }
+
+    _GetUnicodeStructure(p_array) {
+
+        if (p_array.length == 1) { return this._SingleStructure(p_array[0]); }
+
+        let result = [];
+        for (let i = 0; i < p_array.length; i++) {
+            result.push(...this._SingleStructure(p_array[i]));
+        }
+
+        return result;
+
+    }
+
+    _SingleStructure(p_value, p_index) {
+
+        if (p_value.length == 1) { return [UNICODE.GetAddress(p_value)]; }
+        if (p_value.toUpperCase().includes(`U+`)) {
+
+            let
+                split = p_value.toUpperCase().split(`U+`),
+                results = [];
+
+            for (let i = 0; i < split.length; i++) {
+                let hex = split[i].trim();
+                if (nkm.u.isHex(hex, 4)) { results.push(hex); }
+            }
+
+            return results;
+
+        }
+
+        let result = [];
+        for (let i = 0; i < p_value.length; i++) { result.push(UNICODE.GetAddress(p_value.substr(i, 1))); }
+        return result;
+
     }
 
 }

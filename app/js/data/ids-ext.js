@@ -93,78 +93,78 @@ class IDS_EXT {
     static {
 
         this.infos[this.IMPORT_ASSIGN_MODE] = {
-            transform: true,
+            import: true,
             enum: ENUMS.ASSIGN_IMPORT_MODE,
             inputType: inputs.Select,
-            label: `Assign to glyph`,
+            label: `Assignation`,
             inputOptions: { catalog: ENUMS.ASSIGN_IMPORT_MODE, itemKey: nkm.com.IDS.VALUE, size: ui.FLAGS.SIZE_S },
-            desc: `...`
+            desc: `How the imported file is associated to a Unicode value.`
         };
 
         this.infos[this.IMPORT_OVERLAP_MODE] = {
-            transform: true,
+            import: true,
             enum: ENUMS.OVERLAP,
             inputType: inputs.Select,
-            label: `Existing glyphs`,
+            label: `Overlap`,
             inputOptions: { catalog: ENUMS.OVERLAP, itemKey: nkm.com.IDS.VALUE, size: ui.FLAGS.SIZE_S },
-            desc: `...`
+            desc: `How deal with glyphs that already exists.`
         };
 
         this.infos[this.IMPORT_BLOCK] = {
-            transform: true,
+            import: true,
             enum: UNICODE.instance._blockCatalog,
             inputType: inputs.Select,
             label: `Reference block`,
             inputOptions: { catalog: UNICODE.instance._blockCatalog, size: ui.FLAGS.SIZE_S },
-            desc: `...`
+            desc: `UNICODE Block to work with (there's ${UNICODE.instance._blockCatalog.count} of them!)`
         };
 
         this.infos[this.IMPORT_BLOCK_START] = {
-            transform: true,
+            import: true,
             enum: ENUMS.BLOCK_START_MODE,
             inputType: inputs.Select,
             label: `Start point`,
             inputOptions: { catalog: ENUMS.BLOCK_START_MODE, itemKey: nkm.com.IDS.VALUE, size: ui.FLAGS.SIZE_S },
-            desc: `...`
+            desc: `Where to start adding within the selected block`
         };
 
         this.infos[this.IMPORT_JUMP_OVER] = {
-            transform: true,
+            import: true,
             inputType: inputs.Boolean,
             label: `Search`,
             inputOptions: { placeholder: `...`, size: ui.FLAGS.SIZE_XS },
         };
 
         this.infos[this.IMPORT_PREFIX] = {
-            transform: true,
+            import: true,
             inputType: inputs.Text,
             label: `Name prefix`,
             desc: `Prefix used to check where the unicode definition starts in the filename.\nThe prefix and all characters before will be ignored.`
         };
 
         this.infos[this.IMPORT_SEPARATOR] = {
-            transform: true,
+            import: true,
             inputType: inputs.Text,
             label: `Separator`,
             desc: `Separator character in filenames.\nUsed to separate unicode values\ni.e char_U+0000, char_U+0000_U+0000, char_l_i_g_a`
         };
 
         this.infos[this.IMPORT_MARK_X] = {
-            transform: true,
+            import: true,
             inputType: inputs.Text,
             label: `X hint`,
             desc: `A string of text that, if found in the file name, will scale the glyph to X-Height instead of selected default.`
         };
 
         this.infos[this.IMPORT_MARK_CAP] = {
-            transform: true,
+            import: true,
             inputType: inputs.Text,
             label: `Cap hint`,
             desc: `A string of text that, if found in the file name, will scale the glyph to Cap-Height instead of selected default.`
         };
 
         this.infos[this.IMPORT_MARK_COL] = {
-            transform: true,
+            import: true,
             inputType: inputs.Color,
             label: `Bounds color`,
             desc: `Color used inside the imported SVG to 'mark' its special boundaries.\nSee online help for more about special boundaries.`
