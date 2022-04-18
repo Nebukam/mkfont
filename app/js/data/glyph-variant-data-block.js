@@ -73,6 +73,7 @@ class GlyphVariantDataBlock extends SimpleDataEx {
 
         if (!this._glyph) { return; }
         if (!this._glyph.family) { this._fontObject.remove(); return; }
+        if (this._glyph == this._glyph.family._refGlyph) { return; }
 
         let
             glyph = this._fontObject,
