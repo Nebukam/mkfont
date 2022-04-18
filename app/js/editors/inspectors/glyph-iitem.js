@@ -28,8 +28,8 @@ class GlyphVariantInspectorItem extends nkm.datacontrols.ControlWidget {
         { cl: mkfWidgets.ControlHeader, options: { label: `Metrics` } },
         { options: { propertyId: mkfData.IDS.WIDTH }, hideWhen: { fn: shouldHideWIDTH } },//, css:'helf'
         { options: { propertyId: mkfData.IDS.HEIGHT } },//, css:'helf'
-        //{ cl: mkfWidgets.ControlHeader, options: { label: `Metadata` } },
-        //{ options: { propertyId: mkfData.IDS.GLYPH_NAME } },//, css:'separator' 
+        { cl: mkfWidgets.ControlHeader, options: { label: `Export` } },
+        { options: { propertyId: mkfData.IDS.EXPORT_GLYPH } },
     ];
 
     _Init() {

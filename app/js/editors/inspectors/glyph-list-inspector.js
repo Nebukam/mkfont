@@ -21,9 +21,11 @@ class GlyphListInspector extends nkm.datacontrols.ListInspectorView {
     constructor() { super(); }
 
     static __controls = [
-        //{ cl: mkfWidgets.ControlHeader, options: { label: `Export` } },
-        //{ options: { propertyId: mkfData.IDS.EXPORT_GLYPH } },
-        //{ options: { propertyId: mkfData.IDS.GLYPH_NAME } },//, css:'separator' 
+        { cl: mkfWidgets.ControlHeader, options: { label: `Metrics` } },
+        { options: { propertyId: mkfData.IDS.WIDTH } },
+        { options: { propertyId: mkfData.IDS.HEIGHT } },
+        { cl: mkfWidgets.ControlHeader, options: { label: `Export` } },
+        { options: { propertyId: mkfData.IDS.EXPORT_GLYPH } },
     ];
 
     _Init() {
@@ -51,13 +53,19 @@ class GlyphListInspector extends nkm.datacontrols.ListInspectorView {
 
         this._flags.Add(this, __invalidSelection);
 
-        this._transformReference = nkm.com.Rent(mkfData.TransformSettings);
-        this._transformReference.Watch(nkm.com.SIGNAL.VALUE_CHANGED, this._OnTransformValueChanged, this);
-
         this._delayedInspectorRefresh = nkm.com.DelayedCall(this._Bind(this._RefreshTransformInspector));
 
         this._previews = [];
         this._cachedTransforms = null;
+        this._cachedVariants = null;
+
+        for (let i = 0; i < GlyphListInspector.__controls.length; i++) {
+            let config = GlyphListInspector.__controls[i];
+            if (config.options) {
+                config.options.command = null;
+                config.options.onSubmit = null;
+            }
+        }
 
     }
 
@@ -113,13 +121,21 @@ class GlyphListInspector extends nkm.datacontrols.ListInspectorView {
                 'display': `none`,
                 '@': [`absolute-center`],
                 'text-align': `center`
+            },
+            '.list': {
+                'position': 'relative',
+                'display': 'flex',
+                'flex-flow': 'column nowrap'
+            },
+            '.control': {
+                'margin-bottom': '5px',
             }
         }, super._Style());
     }
 
     _Render() {
 
-        super._Render();
+
         this._tempLabel = new ui.manipulators.Text(ui.El(`div`, { class: `infos label` }, this._host));
 
         this._glyphIdentity = this.Attach(mkfWidgets.GlyphIdentity, `identity`, this._host);
@@ -149,7 +165,9 @@ class GlyphListInspector extends nkm.datacontrols.ListInspectorView {
 
         this._transformInspector = this.Attach(TransformSettingsSilent, `inspector`, this._editBody);
 
-        //
+        this._buildHost = ui.El(`div`, { class: `list` }, this._editBody);
+
+        super._Render();
 
         this._importToolbar.options = {
             inline: true,
@@ -189,35 +207,23 @@ class GlyphListInspector extends nkm.datacontrols.ListInspectorView {
 
     _OnContextUpdated(p_family) { this._delayedInspectorRefresh.Schedule(); }
 
-    _OnTransformValueChanged(p_data, p_id, p_valueObj, p_oldValue) {
-        // Apply new value to all glyphs within active selection
-        let editor = this.editor;
-        if (!editor) { return; }
-
-        editor.Do(
-            mkfOperations.actions.SetProperty, {
-            target: this._cachedTransforms,
-            id: p_id,
-            value: p_valueObj.value
-        });
-
-    }
-
     _RefreshTransformInspector() {
 
         if (!this._data) { return; }
 
         this._transformInspector.data = null;
+        this._builder.data = null;
+
         let an = this._data.analytics;
 
         if (this._FindCommonValues()) {
 
             this._flags.Set(__invalidSelection, false);
 
-            this._RefreshCachedTransforms();
+            this._RefreshCachedData();
 
             this._transformInspector.data = this._transformReference;
-            this._transformInspector.visible = true;
+            this._builder.data = this._variantReference;
 
             this._UpdatePreviews();
 
@@ -232,8 +238,8 @@ class GlyphListInspector extends nkm.datacontrols.ListInspectorView {
 
             this._tempLabel.Set(label);
 
-            this._transformInspector.visible = false;
             this._cachedTransforms = null;
+            this._cachedVariants = null;
 
         }
 
@@ -242,16 +248,15 @@ class GlyphListInspector extends nkm.datacontrols.ListInspectorView {
 
     }
 
-    _RefreshCachedTransforms() {
+    _RefreshCachedData() {
 
-        let recompute = this._cachedTransforms ? false : true;
-
+        let recompute = this._cachedVariants ? false : true;
         let existing = this._data.analytics.existing;
 
         if (!recompute) {
-            if (existing.length == this._cachedTransforms.length) {
+            if (existing.length == this._cachedVariants.length) {
                 checkloop: for (let i = 0; i < existing.length; i++) {
-                    if (!this._cachedTransforms.includes(existing[i]._transformSettings)) {
+                    if (!this._cachedVariants.includes(existing[i])) {
                         recompute = true;
                         break checkloop;
                     }
@@ -261,8 +266,11 @@ class GlyphListInspector extends nkm.datacontrols.ListInspectorView {
 
         if (recompute) {
             this._cachedTransforms = [];
+            this._cachedVariants = [];
             for (let i = 0; i < existing.length; i++) {
-                this._cachedTransforms.push(existing[i]._transformSettings);
+                let variant = existing[i];
+                this._cachedVariants.push(variant);
+                this._cachedTransforms.push(variant._transformSettings);
             }
         }
     }
@@ -272,11 +280,60 @@ class GlyphListInspector extends nkm.datacontrols.ListInspectorView {
         let analytics = this._data.analytics;
         if (analytics.existingGlyphs == 0) { return false; }
 
-        return mkfData.UTILS.FindCommonValues(
+        if (this._transformReference) { this._transformReference.Unwatch(nkm.com.SIGNAL.VALUE_CHANGED, this._OnTransformValueChanged, this); }
+        if (this._variantReference) { this._variantReference.Unwatch(nkm.com.SIGNAL.VALUE_CHANGED, this._OnRefGlyphValueChanged, this); }
+
+        let refVariant = this.editor._data.refGlyph.GetVariant(this.editor._data.selectedSubFamily);
+        this._variantReference = refVariant;
+        this._transformReference = refVariant._transformSettings;
+
+        let result = mkfData.UTILS.FindCommonValues(
             this._transformReference,
             analytics.existing,
             `_transformSettings`
         );
+
+        if (result) {
+
+            mkfData.UTILS.FindCommonValues(
+                this._variantReference,
+                analytics.existing
+            );
+
+            if (this._transformReference) { this._transformReference.Watch(nkm.com.SIGNAL.VALUE_CHANGED, this._OnTransformValueChanged, this); }
+            if (this._variantReference) { this._variantReference.Watch(nkm.com.SIGNAL.VALUE_CHANGED, this._OnRefGlyphValueChanged, this); }
+
+        }
+
+        return result;
+
+    }
+
+    _OnTransformValueChanged(p_data, p_id, p_valueObj, p_oldValue) {
+
+        let editor = this.editor;
+        if (!editor) { return; }
+
+        editor.Do(
+            mkfOperations.actions.SetProperty, {
+            target: this._cachedTransforms,
+            id: p_id,
+            value: p_valueObj.value
+        });
+
+    }
+
+    _OnRefGlyphValueChanged(p_data, p_id, p_valueObj, p_oldValue) {
+
+        let editor = this.editor;
+        if (!editor) { return; }
+
+        editor.Do(
+            mkfOperations.actions.SetProperty, {
+            target: this._cachedVariants,
+            id: p_id,
+            value: p_valueObj.value
+        });
 
     }
 

@@ -47,8 +47,15 @@ class FamilyFontCache {
 
         let
             subFamily = this._fontData.selectedSubFamily,
-            ttf = svg2ttf(subFamily.fontObject.outerHTML, {});
+            ttf;
 
+        try {
+            ttf = svg2ttf(subFamily.fontObject.outerHTML, {});
+        } catch (e) {
+            console.log(e);
+            return;
+        }
+        
         //console.log(subFamily.fontObject.outerHTML);
 
         let base64 = u.tils.BytesToBase64(ttf.buffer);

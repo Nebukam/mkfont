@@ -346,10 +346,10 @@ class IDS {
 
     //#region Transform properties
 
-
     static TR_BOUNDS_MODE = 'bounds';
     static TR_SCALE_MODE = 'scale';
     static TR_SCALE_FACTOR = 'scale-factor';
+    static TR_NRM_FACTOR = 'nrm-factor';
 
     static TR_VER_ALIGN = 'valign';
     static TR_VER_ALIGN_ANCHOR = 'vanchor';
@@ -383,8 +383,16 @@ class IDS {
             transform: true,
             inputType: inputs.Slider,
             label: `Scale factor`,
-            inputOptions: { changeOnInput: true, step: 1, min: 0.01, max: 100, step: 0.01, size: ui.FLAGS.SIZE_XXS },
+            inputOptions: { changeOnInput: true, min: 0.01, max: 100, step: 0.01, size: ui.FLAGS.SIZE_XXS },
             desc: `Factor by which the input vector will be scaled.`
+        };
+
+        this.infos[this.TR_NRM_FACTOR] = {
+            transform: true,
+            inputType: inputs.Slider,
+            label: `Normalize margin`,
+            inputOptions: { changeOnInput: true, min: -1, max: 1, step: 0.01, size: ui.FLAGS.SIZE_XXS },
+            desc: `Margin to apply to the glyph when normalizing it.`
         };
 
         this.infos[this.TR_WIDTH_SHIFT] = {

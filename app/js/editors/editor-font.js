@@ -90,6 +90,7 @@ class FontEditor extends nkm.uiworkspace.editors.EditorEx {
 
         this.shortcuts.Create("Ctrl Z", this._actionStack.Undo);
         this.shortcuts.Create("Ctrl Y", this._actionStack.Redo);
+        this.shortcuts.Create("Ctrl A", { fn: () => { this._viewport._selectionStack.data.RequestSelectAll(); } }).Weak();
 
     }
 
@@ -366,6 +367,7 @@ class FontEditor extends nkm.uiworkspace.editors.EditorEx {
     }
 
     _CleanUp() {
+        this._viewport._selectionStack.Clear();
         super._CleanUp();
     }
 

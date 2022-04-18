@@ -17,8 +17,7 @@ class GlyphInspector extends nkm.datacontrols.InspectorView {
     constructor() { super(); }
 
     static __controls = [
-        { cl: mkfWidgets.ControlHeader, options: { label: `Export` } },
-        { options: { propertyId: mkfData.IDS.EXPORT_GLYPH } },
+        //{ cl: mkfWidgets.ControlHeader, options: { label: `Export` } },
         //{ options: { propertyId: mkfData.IDS.GLYPH_NAME } },//, css:'separator' 
     ];
 

@@ -384,6 +384,8 @@ class SVGOperations {
             refMode = p_settings.Get(IDS.TR_BOUNDS_MODE),
             sShift = p_settings.Resolve(IDS.TR_WIDTH_SHIFT),
             sPush = p_settings.Resolve(IDS.TR_WIDTH_PUSH),
+            ctxH = p_settings.ResolveVariant(IDS.HEIGHT, p_context.h),
+            ctxW = p_settings.ResolveVariant(IDS.WIDTH, p_context.w),
             mono = p_context.mono;
 
         if (p_svgStats.emptyPath) {
@@ -437,10 +439,26 @@ class SVGOperations {
                 scale = p_context.ch / heightRef;
                 break;
             case ENUMS.SCALE_HEIGHT:
-                scale = p_context.h / heightRef;
+                scale = ctxH / heightRef;
                 break;
             case ENUMS.SCALE_MANUAL:
                 scale = p_settings.Resolve(IDS.TR_SCALE_FACTOR);
+                break;
+            case ENUMS.SCALE_NORMALIZE:
+                let
+                    nrmfctr = p_settings.Get(IDS.TR_NRM_FACTOR),
+                    hra = fitH / ctxH,
+                    wra = fitW / ctxW;
+
+                if (hra > wra) {
+                    hra = fitH / (ctxH + (ctxH * nrmfctr));
+                    scale = 1 / hra;
+                } else {
+                    wra = fitW / (ctxW + (ctxW * nrmfctr));
+                    scale = 1 / wra;
+                }
+
+                //mono = true;
                 break;
             default:
             case ENUMS.SCALE_NONE:
@@ -514,12 +532,12 @@ class SVGOperations {
                 widthRef += sShift + sPush;
                 break;
             case ENUMS.HALIGN_SPREAD:
-                widthRef = p_context.w;
+                widthRef = ctxW;
                 offsetX += widthRef * 0.5;
                 break;
             default:
             case ENUMS.HALIGN_XMAX:
-                widthRef = p_context.w;
+                widthRef = ctxW;
                 offsetX += widthRef;
                 break;
         }

@@ -46,15 +46,17 @@ class ENUMS {
     static SCALE_CAP_HEIGHT = 5;
     static SCALE_HEIGHT = 6;
     static SCALE_MANUAL = 7;
+    static SCALE_NORMALIZE = 8;
 
     static SCALE = nkm.data.catalogs.CreateFrom({ name: `Scale`, autoSort: false }, [
         { name: `Baseline to Ascender`, [nkm.com.IDS.VALUE]: this.SCALE_ASCENDER, icon: 'font-ascender' },
         { name: `Ascender to Descender`, [nkm.com.IDS.VALUE]: this.SCALE_SPREAD, icon: 'font-bounds-h' },
         { name: `Baseline to X Height`, [nkm.com.IDS.VALUE]: this.SCALE_X_HEIGHT, icon: 'font-x-height' },
         { name: `Baseline to Cap heignt`, [nkm.com.IDS.VALUE]: this.SCALE_CAP_HEIGHT, icon: 'font-cap-height' },
-        { name: `Height (from Metrics)`, [nkm.com.IDS.VALUE]: this.SCALE_HEIGHT, icon: 'spread-ver' },
-        { name: `EM (from Metrics)`, [nkm.com.IDS.VALUE]: this.SCALE_EM, icon: 'text-em' },
+        { name: `Height (from family Metrics)`, [nkm.com.IDS.VALUE]: this.SCALE_HEIGHT, icon: 'spread-ver' },
+        { name: `EM (from family Metrics)`, [nkm.com.IDS.VALUE]: this.SCALE_EM, icon: 'text-em' },
         { name: `Manual`, [nkm.com.IDS.VALUE]: this.SCALE_MANUAL, icon: 'edit' },
+        { name: `Normalized (uses family Metrics)`, [nkm.com.IDS.VALUE]: this.SCALE_NORMALIZE, icon: 'scale' },
         { name: `None `, [nkm.com.IDS.VALUE]: this.SCALE_NONE, icon: 'clear' },
     ]);
 

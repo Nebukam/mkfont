@@ -45,6 +45,7 @@ class GlyphVariantDataBlock extends SimpleDataEx {
         p_values[IDS.PATH_DATA] = { value: null };
         p_values[IDS.OUT_OF_BOUNDS] = { value: false };
         p_values[IDS.EMPTY] = { value: false };
+        p_values[IDS.EXPORT_GLYPH] = { value: true };
     }
 
     _BuildFontObject() { return svgGlyphRef.cloneNode(true); }

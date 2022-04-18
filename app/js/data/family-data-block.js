@@ -57,6 +57,12 @@ class FamilyDataBlock extends SimpleDataEx {
         this._nullGlyph.isNull = true;
         this._nullGlyph._defaultGlyph._fontObject.remove();
 
+        this._refGlyph = new Glyph();
+        this._refGlyph.family = this;
+        this._refGlyph._SetDefaultVariant(this._defaultSubFamily);
+        this._refGlyph.isNull = true;
+        this._refGlyph._defaultGlyph._fontObject.remove();
+
         Glyph.__defaultVariantClass = GlyphVariantMissing;
         this._missingGlyph = new Glyph();
         Glyph.__defaultVariantClass = GlyphVariant;
@@ -105,6 +111,7 @@ class FamilyDataBlock extends SimpleDataEx {
     }
 
     get nullGlyph() { return this._nullGlyph; }
+    get refGlyph(){ return this._refGlyph; }
 
     get transformSettings() { return this._transformSettings; }
     get searchSettings() { return this._searchSettings; }
@@ -131,6 +138,9 @@ class FamilyDataBlock extends SimpleDataEx {
             g.AddVariant(p_subFamily);
         }
 
+        this._nullGlyph.AddVariant(p_subFamily);
+        this._refGlyph.AddVariant(p_subFamily);
+
         let catalogItem = this._subFamiliesCatalog.Register({ name: `default`, data: p_subFamily });
         p_subFamily._catalogItem = catalogItem;
     }
@@ -144,6 +154,9 @@ class FamilyDataBlock extends SimpleDataEx {
             let g = this._glyphs.At(i);
             g.RemoveVariant(p_subFamily);
         }
+
+        this._nullGlyph.RemoveVariant(p_subFamily);
+        this._refGlyph.RemoveVariant(p_subFamily);
 
         let item = this._subFamiliesCatalog.FindFirstDataHolder(p_subFamily, false);
         item.Release();

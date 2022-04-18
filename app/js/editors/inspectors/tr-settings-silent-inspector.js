@@ -25,7 +25,6 @@ class TransformSettingsSilentInspector extends TransformSettingsInspector {
                 config.options.command = null;
                 config.options.onSubmit = null;
             }
-
         }
 
     }

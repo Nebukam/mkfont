@@ -69,7 +69,8 @@ class GlyphGroupViewport extends nkm.datacontrols.ControlView { //ui.views.View
         this._inspectionDataForward.dataSelection = dataSel;
         this._dataSelectionObserver
             .Hook(com.SIGNAL.ITEM_ADDED, this._OnSelectionStackBump, this)
-            .Hook(com.SIGNAL.ITEM_BUMPED, this._OnSelectionStackBump, this);
+            .Hook(com.SIGNAL.ITEM_BUMPED, this._OnSelectionStackBump, this)
+            .Hook(ui.SIGNAL.SELECTION_TOTAL_COUNT_REQUEST, this._OnSelectionRequestAllCount, this);
 
         this._contentRange = new RangeContent();
         this._contentRange.Watch(nkm.com.SIGNAL.READY, this._OnRangeReady, this);
@@ -233,10 +234,6 @@ class GlyphGroupViewport extends nkm.datacontrols.ControlView { //ui.views.View
         }
     }
 
-    _OnSelectionStackBump(p_data) {
-        this._domStreamer.SetFocusIndex(this._content.indexOf(p_data), false);
-    }
-
     _OnItemRequested(p_streamer, p_index, p_fragment, p_returnFn) {
 
         let unicodeInfos = this._content ? this._content[p_index] : null;
@@ -265,6 +262,15 @@ class GlyphGroupViewport extends nkm.datacontrols.ControlView { //ui.views.View
 
     _OnItemCleared(p_item) {
         this._unicodeMap.delete(p_item.data);
+    }
+
+    _OnSelectionStackBump(p_data) {
+        this._domStreamer.SetFocusIndex(this._content.indexOf(p_data), false);
+    }
+
+    _OnSelectionRequestAllCount(p_sel, p_returnFn) {
+        if (!this._content) { return; }
+        p_returnFn(this._content.length);
     }
 
     //#endregion

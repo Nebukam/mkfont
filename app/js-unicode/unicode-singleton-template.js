@@ -26,7 +26,7 @@ class UNICODE extends nkm.com.helpers.Singleton {
         let mgc = [];
         for (let p in gc) {
             let lgc = gc[p], subs = lgc.subs,
-                cgc = { name: lgc.name, itemClass:UniCategoryGroup, content: [] };
+                cgc = { name: lgc.name, itemClass:UniCategoryGroup, autoSort:false, content: [] };
             for (let i = 0; i < subs.length; i++) {
                 let lcgc = subs[i];
                 lcgc.parent = lgc;

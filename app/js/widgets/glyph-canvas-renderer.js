@@ -41,6 +41,7 @@ class GlyphCanvasRenderer extends ui.helpers.Canvas {
 
         this._emptyGlyph = false;
 
+        this.glyphColor = null;
 
     }
 
@@ -89,6 +90,8 @@ class GlyphCanvasRenderer extends ui.helpers.Canvas {
         this._glyphWidth = p_value;
         this._delayedRedraw.Schedule();
     }
+
+    set glyphColor(p_value) { this._glyphColor = p_value; }
 
     set computedPath(p_value) {
         this._computedPath = p_value;
@@ -145,7 +148,7 @@ class GlyphCanvasRenderer extends ui.helpers.Canvas {
         }
 
         // Draw glyph
-        let col = nkm.style.Get(`--glyph-color`);
+        let col = this._glyphColor || nkm.style.Get(`--glyph-color`);
         ctx.fillStyle = col;
 
         if (this._emptyGlyph) {

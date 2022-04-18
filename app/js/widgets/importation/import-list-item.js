@@ -111,6 +111,7 @@ class ImportListItem extends nkm.datacontrols.ControlWidget {
 
         this._newIcon = new ui.manipulators.Icon(ui.El(`div`, { class: `new-icon` }, this._host));
         this._newIcon.Set(`new-small`);
+        this._newIcon._element.setAttribute(`title`, `This glyph doesn't exist yet and will be added to the font.`);
 
         this._outputLabel = new ui.manipulators.Text(ui.El(`div`, { class: `output label font-xsmall` }, this._host));
         this._outputLabel.ellipsis = true;

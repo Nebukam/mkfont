@@ -24,6 +24,11 @@ const transformIDs = [
     mkfData.IDS.TR_SCALE_FACTOR
 ];
 
+const glyphsIDs = [
+    mkfData.IDS.WIDTH,
+    mkfData.IDS.HEIGHT
+];
+
 class ActionSetEM extends ActionSetPropertyValue {
     constructor() { super(); }
 
@@ -58,7 +63,8 @@ class ActionSetEM extends ActionSetPropertyValue {
 
             let
                 list = subFamily.family._glyphs.internalArray,
-                tn = transformIDs.length;
+                tn = transformIDs.length,
+                gn = glyphsIDs.length;
 
             for (let g = 0, n = list.length; g < n; g++) {
 
@@ -68,6 +74,12 @@ class ActionSetEM extends ActionSetPropertyValue {
 
                 if (pathData && !variant.Get(mkfData.IDS.EMPTY)) {
                     SVGOPS.ScalePathData(pathData, scaleFactor);
+                }
+
+                for (let t = 0; t < gn; t++) {
+                    let id = glyphsIDs[t],
+                        valueObj = variant._values[id];
+                    if (valueObj.override) { valueObj.value = valueObj.value * scaleFactor; }
                 }
 
                 for (let t = 0; t < tn; t++) {

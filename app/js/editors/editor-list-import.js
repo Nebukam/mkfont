@@ -60,7 +60,8 @@ class EditorListImport extends nkm.datacontrols.Editor {
                 'min-height': '100%',
             },
             '.settings': {
-                'width': '300px'
+                'width': '300px',
+                'height':'376px'
             },
             '.preview': {
                 'grid-column-start': '3',

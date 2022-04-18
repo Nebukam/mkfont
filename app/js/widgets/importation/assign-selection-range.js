@@ -19,8 +19,6 @@ class AssignSelectionRangeControl extends AssignBaseControl {
 
     static __controls = [
         //{ cl: ControlHeader, options: { label: `Selection infos` } },
-        //{ options: { propertyId: mkfData.IDS_EXT.EXPORT_GLYPH } },
-        //{ options: { propertyId: mkfData.IDS_EXT.GLYPH_NAME } },
     ];
 
     _Init() {

@@ -25,6 +25,7 @@ class TransformSettingsDataBlock extends SimpleDataEx {
         p_values[IDS.TR_BOUNDS_MODE] = { value: ENUMS.BOUNDS_MIXED };
         p_values[IDS.TR_SCALE_MODE] = { value: ENUMS.SCALE_ASCENDER };
         p_values[IDS.TR_SCALE_FACTOR] = { value: 1 };
+        p_values[IDS.TR_NRM_FACTOR] = { value: 0 };
         p_values[IDS.TR_VER_ALIGN] = { value: ENUMS.VALIGN_BASELINE };
         p_values[IDS.TR_VER_ALIGN_ANCHOR] = { value: ENUMS.VANCHOR_BOTTOM };
         p_values[IDS.TR_HOR_ALIGN] = { value: ENUMS.HALIGN_XMIN };
@@ -39,6 +40,15 @@ class TransformSettingsDataBlock extends SimpleDataEx {
     get resolutionFallbacks() {
         if (this._glyphVariantOwner) { return [this._glyphVariantOwner._subFamily._transformSettings]; }
         else { return []; }
+    }
+
+    ResolveVariant(p_id, p_fallback) {
+        if (this._glyphVariantOwner) {
+            let val = this._glyphVariantOwner.Resolve(p_id);
+            if (val == null || val == undefined) { return p_fallback; }
+            return val;
+        }
+        return p_fallback;
     }
 
     CommitUpdate() {
@@ -62,8 +72,6 @@ class TransformSettingsDataBlock extends SimpleDataEx {
                 path.bbox.top < -32000 ||
                 path.bbox.bottom > 32000 ||
                 path.bbox.right > 32000);
-
-        if (Math.abs(Math.max(path.bbox.height, path.bbox.width)) > 2000) { }
 
         if (this.Get(IDS.TR_HOR_ALIGN) == ENUMS.HALIGN_XMIN) {
             w = path.width;
