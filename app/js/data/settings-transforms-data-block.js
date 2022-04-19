@@ -30,8 +30,9 @@ class TransformSettingsDataBlock extends SimpleDataEx {
         p_values[IDS.TR_VER_ALIGN_ANCHOR] = { value: ENUMS.VANCHOR_BOTTOM };
         p_values[IDS.TR_HOR_ALIGN] = { value: ENUMS.HALIGN_XMIN };
         p_values[IDS.TR_HOR_ALIGN_ANCHOR] = { value: ENUMS.HANCHOR_LEFT };
-        p_values[IDS.TR_WIDTH_SHIFT] = { value: 0, override: true };
-        p_values[IDS.TR_WIDTH_PUSH] = { value: 0, override: true };
+        p_values[IDS.TR_WIDTH_SHIFT] = { value: 0 }; //, override: true
+        p_values[IDS.TR_WIDTH_PUSH] = { value: 0 }; //, override: true
+        p_values[IDS.TR_AUTO_WIDTH] = { value: true };
 
     }
 
@@ -73,7 +74,7 @@ class TransformSettingsDataBlock extends SimpleDataEx {
                 path.bbox.bottom > 32000 ||
                 path.bbox.right > 32000);
 
-        if (this.Get(IDS.TR_HOR_ALIGN) == ENUMS.HALIGN_XMIN) {
+        if (this.Get(IDS.TR_AUTO_WIDTH)) {
             w = path.width;
         } else {
             w = this._glyphVariantOwner.Resolve([IDS.WIDTH]);
@@ -82,7 +83,7 @@ class TransformSettingsDataBlock extends SimpleDataEx {
         this._glyphVariantOwner._computedPath = path;
 
         this._glyphVariantOwner.BatchSet({
-            [IDS.WIDTH]: w,
+            [IDS.EXPORTED_WIDTH]: w,
             [IDS.PATH]: path.path,
             [IDS.OUT_OF_BOUNDS]: oob,
             [IDS.EMPTY]: pathData.path === `M 0 0 L 0 0 z`,

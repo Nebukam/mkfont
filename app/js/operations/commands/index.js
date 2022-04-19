@@ -19,6 +19,7 @@ module.exports = {
     OpenPrefs: new (require(`./cmd-open-prefs`))(),
 
     SetProperty: new (require(`./cmd-action-set-property`))(), //Single instance
+    SetPropertyOverride: new (require(`./cmd-action-set-property-override`))(), //Single instance
     SetEM: new (require(`./cmd-action-set-em`))(), //Single instance
     SetAscent: new (require(`./cmd-action-set-ascent`))(), //Single instance
 

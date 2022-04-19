@@ -384,6 +384,7 @@ class SVGOperations {
             refMode = p_settings.Get(IDS.TR_BOUNDS_MODE),
             sShift = p_settings.Resolve(IDS.TR_WIDTH_SHIFT),
             sPush = p_settings.Resolve(IDS.TR_WIDTH_PUSH),
+            autoWidth = p_settings.Get(IDS.TR_AUTO_WIDTH),
             ctxH = p_settings.ResolveVariant(IDS.HEIGHT, p_context.h),
             ctxW = p_settings.ResolveVariant(IDS.WIDTH, p_context.w),
             mono = p_context.mono;
@@ -445,6 +446,7 @@ class SVGOperations {
                 scale = p_settings.Resolve(IDS.TR_SCALE_FACTOR);
                 break;
             case ENUMS.SCALE_NORMALIZE:
+
                 let
                     nrmfctr = p_settings.Get(IDS.TR_NRM_FACTOR),
                     hra = fitH / ctxH,
@@ -458,7 +460,7 @@ class SVGOperations {
                     scale = 1 / wra;
                 }
 
-                //mono = true;
+                autoWidth = false;
                 break;
             default:
             case ENUMS.SCALE_NONE:
@@ -505,40 +507,34 @@ class SVGOperations {
 
         // H align
 
-        let hAlign = p_settings.Get(IDS.TR_HOR_ALIGN);
-        if (hAlign == ENUMS.HALIGN_XMIN) {
-            //if (Math.abs(sShift) < 0.99) { sShift = widthRef * sShift; }
-            //if (Math.abs(sPush) < 0.99) { sPush = widthRef * sPush; }
-        }
+        if (autoWidth) { widthRef += sShift + sPush; }
+        else { widthRef = ctxW; }
+
+        if (mono) { widthRef = p_context.w; }
 
         switch (p_settings.Get(IDS.TR_HOR_ALIGN_ANCHOR)) {
             case ENUMS.HANCHOR_LEFT:
                 offsetX += 0;
                 break;
             case ENUMS.HANCHOR_CENTER:
-                offsetX -= widthRef * 0.5;
+                offsetX -= fitW * 0.5;
                 break;
             default:
             case ENUMS.HANCHOR_RIGHT:
-                offsetX -= widthRef;
+                offsetX -= fitW;
                 break;
         }
 
-        if (mono) { widthRef = p_context.w; }
-
-        switch (hAlign) {
+        switch (p_settings.Get(IDS.TR_HOR_ALIGN)) {
             case ENUMS.HALIGN_XMIN:
                 offsetX += sShift;
-                widthRef += sShift + sPush;
                 break;
             case ENUMS.HALIGN_SPREAD:
-                widthRef = ctxW;
                 offsetX += widthRef * 0.5;
                 break;
             default:
             case ENUMS.HALIGN_XMAX:
-                widthRef = ctxW;
-                offsetX += widthRef;
+                offsetX += widthRef - sPush;
                 break;
         }
 

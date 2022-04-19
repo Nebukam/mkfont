@@ -225,6 +225,7 @@ class IDS {
     static H_ORIGIN_X = 'horiz-origin-x';
     static H_ORIGIN_Y = 'horiz-origin-y';
     static WIDTH = 'width';
+    static EXPORTED_WIDTH = 'ew';
     static V_ORIGIN_X = 'vert-origin-x';
     static V_ORIGIN_Y = 'vert-origin-y';
     static HEIGHT = 'height';
@@ -250,10 +251,16 @@ class IDS {
         this.infos[this.WIDTH] = {
             recompute: true,
             inputType: inputs.Number,
+            inputOptions: { placeholder: `Multiple values` },
             label: `Width`,
             desc: `indicates the horizontal advance after rendering a glyph in horizontal orientation.`
         };
-
+        this.infos[this.EXPORTED_WIDTH] = {
+            recompute: true,
+            label: `...`,
+            desc: `...`
+        };
+        
         /*
         this.infos[this.V_ORIGIN_X] = {
             inputType: inputs.Number,
@@ -269,6 +276,7 @@ class IDS {
         this.infos[this.HEIGHT] = {
             recompute: true,
             inputType: inputs.Number,
+            inputOptions: { placeholder: `Multiple values` },
             label: `Height`,
             desc: `indicates the vertical advance after rendering a glyph in vertical orientation.`
         };
@@ -359,6 +367,8 @@ class IDS {
     static TR_WIDTH_SHIFT = 'xshift';
     static TR_WIDTH_PUSH = 'xpush';
 
+    static TR_AUTO_WIDTH = 'auto-w';
+
     static {
 
         this.infos[this.TR_BOUNDS_MODE] = {
@@ -408,6 +418,13 @@ class IDS {
             label: `Push`,
             inputOptions: { step: 1, min: 0, max: 5000, size: ui.FLAGS.SIZE_XXS, placeholder: `Multiple values` },
             desc: `Add empty space after the glyph.`
+        };
+        this.infos[this.TR_AUTO_WIDTH] = {
+            transform: true,
+            inputType: inputs.Boolean,
+            label: `Automatic Width`,
+            inputOptions: { size: ui.FLAGS.SIZE_XS, placeholder: `Multiple values` },
+            desc: `If enabled, the glyph' width is equal to its asset width + shift + push.\nOtherwise the value is expected to be either manual, or inherited from the family Metrics.`
         };
 
         this.infos[this.TR_VER_ALIGN] = {

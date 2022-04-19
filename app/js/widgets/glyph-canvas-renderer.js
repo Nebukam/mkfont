@@ -113,7 +113,7 @@ class GlyphCanvasRenderer extends ui.helpers.Canvas {
         }
 
         this.contextInfos = p_glyphVariant.subFamily._contextInfos;
-        this.glyphWidth = p_glyphVariant.Resolve(IDS.WIDTH);
+        this.glyphWidth = p_glyphVariant.Resolve(IDS.EXPORTED_WIDTH);
         this.glyphPath = p_glyphVariant.Get(IDS.PATH);
         this.computedPath = p_glyphVariant._computedPath;
 

@@ -34,7 +34,8 @@ class FamilyFontCache {
 
         if (glyphCount > threshold) { return; }
 
-        this._RebuildCache();
+        //this._RebuildCache();
+        this._scheduledRebuild.Schedule();
 
     }
 

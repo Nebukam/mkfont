@@ -7,6 +7,7 @@ module.exports = {
     CreateGlyph: require(`./action-glyph-create`),
     GlyphDelete: require(`./action-glyph-delete`),
     SetProperty: require(`./action-set-property-value`),
+    SetPropertyOverride: require(`./action-set-property-override`),
     SetPropertyMultiple: require(`./action-set-property-value-multiple`),
     
 }

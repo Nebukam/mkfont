@@ -37,10 +37,11 @@ class GlyphVariantDataBlock extends SimpleDataEx {
     _ResetValues(p_values) {
         //p_values[IDS.H_ORIGIN_X] = { value: null };
         //p_values[IDS.H_ORIGIN_Y] = { value: null };
-        p_values[IDS.WIDTH] = { value: null, override: true };
+        p_values[IDS.WIDTH] = { value: 1000 }; //, override: true
+        p_values[IDS.EXPORTED_WIDTH] = { value: 0 };
         //p_values[IDS.V_ORIGIN_X] = { value: null };
         //p_values[IDS.V_ORIGIN_Y] = { value: null };
-        p_values[IDS.HEIGHT] = { value: null, override: false };
+        p_values[IDS.HEIGHT] = { value: null, override: false }; //
         p_values[IDS.PATH] = { value: '' };
         p_values[IDS.PATH_DATA] = { value: null };
         p_values[IDS.OUT_OF_BOUNDS] = { value: false };
@@ -79,7 +80,7 @@ class GlyphVariantDataBlock extends SimpleDataEx {
             glyph = this._fontObject,
             uInfos = this._glyph.unicodeInfos,
             uCode = this.Resolve(IDS.UNICODE),
-            width = this._subFamily.Get(IDS.MONOSPACE) ? this._subFamily.Get(IDS.WIDTH) : this.Resolve(IDS.WIDTH),
+            width = this._subFamily.Get(IDS.MONOSPACE) ? this._subFamily.Get(IDS.WIDTH) : this.Resolve(IDS.EXPORTED_WIDTH),
             height = this.Resolve(IDS.HEIGHT);
 
         glyph.setAttribute(SVGOPS.ATT_H_ADVANCE, width);

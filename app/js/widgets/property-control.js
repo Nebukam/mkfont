@@ -249,7 +249,13 @@ class PropertyControl extends nkm.datacontrols.ControlWidget {
             manualUpdate = true,
             exportedValue = this.exportedValue;
 
-        valueObj.override = p_value;
+        if (valueObj.override == p_value) { return; }
+
+        //valueObj.override = p_value;
+
+        mkfCmds.SetPropertyOverride.emitter = this;
+        mkfCmds.SetPropertyOverride.inputValue = p_value;
+        mkfCmds.SetPropertyOverride.Execute();
 
         if (p_value) {
             if (!this.localValue) { this._data.Set(this._valueID, exportedValue); }
@@ -263,10 +269,6 @@ class PropertyControl extends nkm.datacontrols.ControlWidget {
             this._data.CommitUpdate();
         }
 
-    }
-
-    _ToClipboard() {
-        navigator.clipboard.writeText(this._data._options.glyph);
     }
 
     _CleanUp() {

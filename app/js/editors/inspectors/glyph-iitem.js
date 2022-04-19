@@ -18,7 +18,7 @@ const __nullGlyph = `null-glyph`;
 
 const shouldHideWIDTH = (owner) => {
     if (!owner.data) { return true; }
-    return owner.data.Get(mkfData.IDS.TR_HOR_ALIGN) != mkfData.ENUMS.HALIGN_XMIN;
+    return !(owner.data._transformSettings.Get(mkfData.IDS.TR_AUTO_WIDTH) && owner.data._transformSettings.Get(mkfData.IDS.TR_SCALE_MODE) != mkfData.ENUMS.SCALE_NORMALIZE );
 };
 
 class GlyphVariantInspectorItem extends nkm.datacontrols.ControlWidget {
@@ -26,8 +26,8 @@ class GlyphVariantInspectorItem extends nkm.datacontrols.ControlWidget {
 
     static __controls = [
         { cl: mkfWidgets.ControlHeader, options: { label: `Metrics` } },
-        { options: { propertyId: mkfData.IDS.WIDTH }, hideWhen: { fn: shouldHideWIDTH } },//, css:'helf'
-        { options: { propertyId: mkfData.IDS.HEIGHT } },//, css:'helf'
+        { options: { propertyId: mkfData.IDS.WIDTH }, disableWhen: { fn: shouldHideWIDTH } },//, css:'helf'
+        //{ options: { propertyId: mkfData.IDS.HEIGHT } },//, css:'helf'
         { cl: mkfWidgets.ControlHeader, options: { label: `Export` } },
         { options: { propertyId: mkfData.IDS.EXPORT_GLYPH } },
     ];

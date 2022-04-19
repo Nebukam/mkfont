@@ -23,7 +23,7 @@ class GlyphListInspector extends nkm.datacontrols.ListInspectorView {
     static __controls = [
         { cl: mkfWidgets.ControlHeader, options: { label: `Metrics` } },
         { options: { propertyId: mkfData.IDS.WIDTH } },
-        { options: { propertyId: mkfData.IDS.HEIGHT } },
+        //{ options: { propertyId: mkfData.IDS.HEIGHT } },
         { cl: mkfWidgets.ControlHeader, options: { label: `Export` } },
         { options: { propertyId: mkfData.IDS.EXPORT_GLYPH } },
     ];

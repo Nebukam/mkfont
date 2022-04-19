@@ -11,6 +11,7 @@ const mkfWidgets = require(`../../widgets`);
 const isXMIN = (owner) => { return (owner.data.Get(mkfData.IDS.TR_HOR_ALIGN) == mkfData.ENUMS.HALIGN_XMIN); };// && owner.data.Get(mkfData.IDS.TR_SCALE_MODE) != mkfData.ENUMS.SCALE_NORMALIZE); };
 const isMANUAL = (owner) => { return owner.data.Get(mkfData.IDS.TR_SCALE_MODE) == mkfData.ENUMS.SCALE_MANUAL; };
 const isNRM = (owner) => { return owner.data.Get(mkfData.IDS.TR_SCALE_MODE) == mkfData.ENUMS.SCALE_NORMALIZE; };
+const isRNRM = (owner) => { return owner.data.Get(mkfData.IDS.TR_SCALE_MODE) != mkfData.ENUMS.SCALE_NORMALIZE; };
 
 class TransformSettingsInspector extends nkm.datacontrols.InspectorView {
     constructor() { super(); }
@@ -28,9 +29,10 @@ class TransformSettingsInspector extends nkm.datacontrols.InspectorView {
         { cl: mkfWidgets.ControlHeader, options: { label: `Horizontal align` }, css: 'header' },
         { options: { propertyId: mkfData.IDS.TR_HOR_ALIGN, inputOnly: true }, css: 'small' },
         { options: { propertyId: mkfData.IDS.TR_HOR_ALIGN_ANCHOR, inputOnly: true }, css: 'small' },
-        { cl: mkfWidgets.ControlHeader, options: { label: `Advance` }, css: 'header', requireData: true, disableWhen: { fn: isXMIN } },
-        { options: { propertyId: mkfData.IDS.TR_WIDTH_SHIFT }, requireData: true, disableWhen: { fn: isXMIN } },
-        { options: { propertyId: mkfData.IDS.TR_WIDTH_PUSH }, requireData: true, disableWhen: { fn: isXMIN } },
+        { cl: mkfWidgets.ControlHeader, options: { label: `Advance` }, css: 'header', requireData: true }, //, disableWhen: { fn: isXMIN }
+        { options: { propertyId: mkfData.IDS.TR_WIDTH_SHIFT }, requireData: true, disableWhen: { fn: isRNRM } }, //
+        { options: { propertyId: mkfData.IDS.TR_WIDTH_PUSH }, requireData: true, disableWhen: { fn: isRNRM } }, //
+        { options: { propertyId: mkfData.IDS.TR_AUTO_WIDTH }, requireData: true, disableWhen: { fn: isRNRM } }, //
     ];
 
     _Init() {
