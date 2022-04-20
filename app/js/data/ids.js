@@ -333,6 +333,7 @@ class IDS {
         };
 
         this.infos[this.EXPORT_GLYPH] = {
+            recompute: true,
             label: `Export`,
             inputType: inputs.Boolean,
             inputOptions: { size: ui.FLAGS.SIZE_XS },

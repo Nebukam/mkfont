@@ -15,8 +15,9 @@ MKFont is a free tool to make font out of vector graphics. Works for Windows, Ma
 
 ## Screenshots
 
-![home](https://raw.githubusercontent.com/Nebukam/mkfont/main/assets-dev/docs/screenshots/home.png)  
 ![grid](https://raw.githubusercontent.com/Nebukam/mkfont/main/assets-dev/docs/screenshots/grid.png)   
+![search](https://raw.githubusercontent.com/Nebukam/mkfont/main/assets-dev/docs/screenshots/search.png)  
+![batch-import](https://raw.githubusercontent.com/Nebukam/mkfont/main/assets-dev/docs/screenshots/batch-import.png)  
 ![ligatures](https://raw.githubusercontent.com/Nebukam/mkfont/main/assets-dev/docs/screenshots/ligatures.png)  
 
 ## Roadmap

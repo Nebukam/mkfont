@@ -64,6 +64,7 @@ class TransformSettingsDataBlock extends SimpleDataEx {
         if (!pathData || !this._glyphVariantOwner.subFamily) { return; }
 
         let
+            rw = this._glyphVariantOwner.Resolve(IDS.WIDTH),
             path = SVGOPS.FitPath(this,
                 this._glyphVariantOwner.subFamily._contextInfos,
                 pathData
@@ -74,8 +75,11 @@ class TransformSettingsDataBlock extends SimpleDataEx {
                 path.bbox.bottom > 32000 ||
                 path.bbox.right > 32000);
 
+
+
         if (this.Get(IDS.TR_AUTO_WIDTH)) {
             w = path.width;
+            if (this.Get(IDS.TR_SCALE_MODE) != ENUMS.SCALE_NORMALIZE) { rw = w; }
         } else {
             w = this._glyphVariantOwner.Resolve([IDS.WIDTH]);
         }
@@ -83,6 +87,7 @@ class TransformSettingsDataBlock extends SimpleDataEx {
         this._glyphVariantOwner._computedPath = path;
 
         this._glyphVariantOwner.BatchSet({
+            [IDS.WIDTH]: rw,
             [IDS.EXPORTED_WIDTH]: w,
             [IDS.PATH]: path.path,
             [IDS.OUT_OF_BOUNDS]: oob,

@@ -50,8 +50,10 @@ class FamilyDataBlockJSONSerializer extends nkm.data.serialization.json.DataBloc
     static SerializeContent(p_serial, p_data, p_options = null) {
         let fontObj = {};
 
+        let refValueIds = p_data.refGlyph.defaultGlyph._transformSettings._values;
+
         fontObj[__ID_values] = p_data.ValuesAndOverrides();
-        fontObj[__ID_tr] = p_data._transformSettings.ValuesAndOverrides();
+        fontObj[__ID_tr] = p_data._transformSettings.ValuesAndOverrides(refValueIds);
 
         // Glyphs
         let glyphs = [];
@@ -102,7 +104,7 @@ class FamilyDataBlockJSONSerializer extends nkm.data.serialization.json.DataBloc
                 subFamily = p_data._subFamilies.At(i),
                 subFamilyObj = {
                     [__ID_values]: subFamily.ValuesAndOverrides(),
-                    [__ID_tr]: subFamily._transformSettings.ValuesAndOverrides()
+                    [__ID_tr]: subFamily._transformSettings.ValuesAndOverrides(refValueIds)
                 };
 
             subFamilies.push(subFamilyObj);

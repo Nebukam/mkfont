@@ -17,12 +17,17 @@ const TransformSettingsSilent = require(`./tr-settings-silent-inspector`);
 
 const __invalidSelection = `sel-invalid`;
 
+const shouldHideWIDTH = (owner) => {
+    if (!owner.data) { return true; }
+    return !(owner.data._transformSettings.Get(mkfData.IDS.TR_AUTO_WIDTH) && owner.data._transformSettings.Get(mkfData.IDS.TR_SCALE_MODE) != mkfData.ENUMS.SCALE_NORMALIZE);
+};
+
 class GlyphListInspector extends nkm.datacontrols.ListInspectorView {
     constructor() { super(); }
 
     static __controls = [
         { cl: mkfWidgets.ControlHeader, options: { label: `Metrics` } },
-        { options: { propertyId: mkfData.IDS.WIDTH } },
+        { options: { propertyId: mkfData.IDS.WIDTH }, disableWhen: { fn: shouldHideWIDTH } },
         //{ options: { propertyId: mkfData.IDS.HEIGHT } },
         { cl: mkfWidgets.ControlHeader, options: { label: `Export` } },
         { options: { propertyId: mkfData.IDS.EXPORT_GLYPH } },

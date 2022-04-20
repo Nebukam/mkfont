@@ -350,7 +350,7 @@ class FontEditor extends nkm.uiworkspace.editors.EditorEx {
                 title: `Close editor`,
                 message: `Unsaved changes will be lost, are you sure?`,
                 actions: [
-                    { label: `Close`, icon: `warning`, flavor: nkm.com.FLAGS.WARNING, trigger: { fn: this._ConfirmClose } }, //variant: nkm.ui.FLAGS.FRAME
+                    { label: `Don't save and Close`, icon: `warning`, flavor: nkm.com.FLAGS.WARNING, trigger: { fn: this._ConfirmClose } }, //variant: nkm.ui.FLAGS.FRAME
                     { label: `Cancel` }
                 ],
                 icon: `warning`,

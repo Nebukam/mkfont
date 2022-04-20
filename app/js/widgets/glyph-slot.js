@@ -29,7 +29,7 @@ class GlyphSlot extends nkm.datacontrols.ControlWidget {
         this._glyhpVariant = null;
         this._glyphInfos = null;
 
-        this._flags.Add(this, mkfData.IDS.OUT_OF_BOUNDS, mkfData.IDS.EMPTY);
+        this._flags.Add(this, mkfData.IDS.OUT_OF_BOUNDS, mkfData.IDS.EMPTY, mkfData.IDS.EXPORT_GLYPH);
 
         this._dataObserver.Hook(SIGNAL.VARIANT_UPDATED, this._UpdateGlyphPreview, this);
 
@@ -136,6 +136,14 @@ class GlyphSlot extends nkm.datacontrols.ControlWidget {
             '.quick-menu': {
                 '@': ['absolute-top-left'],
                 'margin': '5px'
+            },
+            ':host(.exists:not(.export-glyph)) .preview:before': {
+                'content': `""`,
+                'position': `absolute`,
+                'top': '50%', 'left': '50%', 
+                'transform': 'translate(-50%, -50%) rotate(45deg)',
+                'width': `1px`, 'height': `120%`,
+                'background-color': `var(--col-error)`
             }
         }, super._Style());
     }
@@ -220,9 +228,9 @@ class GlyphSlot extends nkm.datacontrols.ControlWidget {
 
         let qMenu = this.constructor.__quickMenu;
         if (qMenu) {
-            if (qMenu.parent == this) { 
+            if (qMenu.parent == this) {
                 qMenu.editor = this.editor;
-                qMenu.data = this._glyhpVariant; 
+                qMenu.data = this._glyhpVariant;
             }
         }
 
@@ -238,10 +246,12 @@ class GlyphSlot extends nkm.datacontrols.ControlWidget {
             this.classList.add(`exists`);
             this._flags.Set(mkfData.IDS.OUT_OF_BOUNDS, this._glyhpVariant.Get(mkfData.IDS.OUT_OF_BOUNDS));
             this._flags.Set(mkfData.IDS.EMPTY, this._glyhpVariant.Get(mkfData.IDS.EMPTY));
+            this._flags.Set(mkfData.IDS.EXPORT_GLYPH, this._glyhpVariant.Get(mkfData.IDS.EXPORT_GLYPH));
         } else {
             delete this._glyphPlaceholder._element.style.display;
             this._flags.Set(mkfData.IDS.OUT_OF_BOUNDS, false);
             this._flags.Set(mkfData.IDS.EMPTY, false);
+            this._flags.Set(mkfData.IDS.EXPORT_GLYPH, false);
             this.classList.remove(`exists`);
         }
 
@@ -267,7 +277,7 @@ class GlyphSlot extends nkm.datacontrols.ControlWidget {
             this.Attach(qMenu, `quick-menu`, this._host);
 
         }
-        
+
     }
 
     /**
