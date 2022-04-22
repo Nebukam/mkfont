@@ -7,7 +7,8 @@ const mkfInspectors = require(`./inspectors`);
 const mkfOperations = require(`../operations`);
 const mkfCmds = mkfOperations.commands;
 
-class FontEditorHeader extends nkm.datacontrols.ControlView {
+const base = nkm.datacontrols.ControlView;
+class FontEditorHeader extends base {
     constructor() { super(); }
 
     _Init() {
@@ -38,7 +39,7 @@ class FontEditorHeader extends nkm.datacontrols.ControlView {
 
     }
 
-    _Style() {
+    static _Style() {
         return nkm.style.Extends({
             ':host': {
                 'display': 'flex',
@@ -59,7 +60,7 @@ class FontEditorHeader extends nkm.datacontrols.ControlView {
             '.toolbar': {
 
             }
-        }, super._Style());
+        }, base._Style());
     }
 
     _Render() {

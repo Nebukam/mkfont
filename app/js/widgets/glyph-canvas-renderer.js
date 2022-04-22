@@ -6,7 +6,8 @@ const IDS = require(`../data/ids`);
 
 var __patternImg;
 
-class GlyphCanvasRenderer extends ui.helpers.Canvas {
+const base = ui.helpers.Canvas;
+class GlyphCanvasRenderer extends base {
     constructor() { super(); }
 
     static __distribute = nkm.com.helpers.OptionsDistribute.Ext()

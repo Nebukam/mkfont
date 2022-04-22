@@ -2,15 +2,15 @@ const nkm = require(`@nkmjs/core`);
 const u = nkm.u;
 const ui = nkm.ui;
 
-
-class ResourceBinding extends ui.Widget {
+const base = ui.Widget;
+class ResourceBinding extends base {
     constructor() { super(); }
 
     _Init() {
         super._Init();
     }
 
-    _Style() {
+    static _Style() {
         return nkm.style.Extends({
             ':host': {
                 '@': ['fade-in'],
@@ -39,7 +39,7 @@ class ResourceBinding extends ui.Widget {
                 'flex': '1 0 auto',
                 'font-family': `monospace`
             }
-        }, super._Style());
+        }, base._Style());
     }
 
     _Render() {

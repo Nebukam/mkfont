@@ -5,7 +5,8 @@ const ui = nkm.ui;
 
 const defaultPangram = `By Jove, my quick study of lexicography won a prize!`;
 
-class PangramRenderer extends ui.Widget {
+const base = ui.Widget;
+class PangramRenderer extends base {
     constructor() { super(); }
 
     _PostInit() {
@@ -13,7 +14,7 @@ class PangramRenderer extends ui.Widget {
         this.align = `left`;
     }
 
-    _Style() {
+    static _Style() {
         return nkm.style.Extends({
             ':host': {
                 'position': 'relative',
@@ -41,7 +42,7 @@ class PangramRenderer extends ui.Widget {
                 'background-color': 'rgba(0,0,0,0)',
                 'border': 'none',
             }
-        }, super._Style());
+        }, base._Style());
     }
 
     _Render() {

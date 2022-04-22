@@ -2,7 +2,8 @@ const nkm = require(`@nkmjs/core`);
 const ui = nkm.ui;
 const uilib = nkm.uilib;
 
-class ControlHeader extends ui.Widget {
+const base = ui.Widget;
+class ControlHeader extends base {
     constructor() { super(); }
 
     static __usePaintCallback = true;
@@ -26,7 +27,7 @@ class ControlHeader extends ui.Widget {
     }
     set editor(p_value) { this._editor = p_value; }
 
-    _Style() {
+    static _Style() {
         return nkm.style.Extends({
             ':host': {
                 'position': 'relative',
@@ -42,7 +43,7 @@ class ControlHeader extends ui.Widget {
                 'text-transform': 'uppercase',
                 'opacity': '0.5',
             },
-        }, super._Style());
+        }, base._Style());
     }
 
     _Render() {

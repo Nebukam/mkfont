@@ -12,7 +12,8 @@ const mkfData = require(`../data`);
 const mkfOperations = require(`../operations`);
 const mkfCmds = mkfOperations.commands;
 
-class FontEditor extends nkm.uiworkspace.editors.EditorEx {
+const base = nkm.uiworkspace.editors.EditorEx;
+class FontEditor extends base {
     constructor() { super(); }
 
     static __registerableEditor = true;
@@ -197,7 +198,7 @@ class FontEditor extends nkm.uiworkspace.editors.EditorEx {
         if (p_value) { p_value.Watch(nkm.com.SIGNAL.VALUE_CHANGED, this._OnDataValueChanged, this); }
     }
 
-    _Style() {
+    static _Style() {
         return nkm.style.Extends({
             ':host': {
                 '--glyph-color': '#f5f5f5',
@@ -210,7 +211,7 @@ class FontEditor extends nkm.uiworkspace.editors.EditorEx {
             '.inspector': {
                 'min-width': '250px'
             }
-        }, super._Style());
+        }, base._Style());
     }
 
     _Render() {

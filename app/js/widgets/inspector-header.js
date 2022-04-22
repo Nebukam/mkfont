@@ -2,7 +2,8 @@ const nkm = require(`@nkmjs/core`);
 const ui = nkm.ui;
 const uilib = nkm.uilib;
 
-class InspectorHeader extends ui.Widget {
+const base = ui.Widget;
+class InspectorHeader extends base {
     constructor() { super(); }
 
     static __usePaintCallback = true;
@@ -12,7 +13,7 @@ class InspectorHeader extends ui.Widget {
 
     set options(p_value) { this.constructor.__distribute.Update(this, p_value); }
 
-    _Style() {
+    static _Style() {
         return nkm.style.Extends({
             ':host': {
                 'position': 'relative',
@@ -35,7 +36,7 @@ class InspectorHeader extends ui.Widget {
                 'right': `0`,
                 'opacity': '0.1'
             }
-        }, super._Style());
+        }, base._Style());
     }
 
     _Render() {

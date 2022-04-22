@@ -2,7 +2,8 @@ const nkm = require(`@nkmjs/core`);
 const ui = nkm.ui;
 const uilib = nkm.uilib;
 
-class MainExplorer extends nkm.uiworkspace.Explorer {
+const base = nkm.uiworkspace.Explorer;
+class MainExplorer extends base {
     constructor() { super(); }
 
     _Init() {
@@ -11,12 +12,12 @@ class MainExplorer extends nkm.uiworkspace.Explorer {
 
     }
 
-    _Style() {
+    static _Style() {
         return nkm.style.Extends({
             ':host': {
 
             }
-        }, super._Style());
+        }, base._Style());
     }
 
     _Render() {

@@ -7,7 +7,8 @@ const mkfWidgets = require(`../widgets`);
 
 const isAutoSave = (owner) => { return owner.data ? owner.data.Get(mkfData.IDS_PREFS.AUTOSAVE) : true; };
 
-class PrefsExplorer extends uilib.overlays.ControlDrawer {
+const base = uilib.overlays.ControlDrawer;
+class PrefsExplorer extends base {
     constructor() { super(); }
 
     static __controls = [
@@ -45,7 +46,7 @@ class PrefsExplorer extends uilib.overlays.ControlDrawer {
         this._builder.defaultCSS = `control`;
     }
 
-    _Style() {
+    static _Style() {
         return nkm.style.Extends({
             ':host': {
                 'min-width':'350px',
@@ -69,7 +70,7 @@ class PrefsExplorer extends uilib.overlays.ControlDrawer {
             '.separator': {
                 //'border-top':'1px solid gray'
             }
-        }, super._Style());
+        }, base._Style());
     }
 
     _Render() {

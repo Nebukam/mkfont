@@ -5,7 +5,8 @@ const uilib = nkm.uilib;
 const mkfData = require(`../../data`);
 const mkfWidgets = require(`../../widgets`);
 
-class DisplayInspector extends nkm.datacontrols.InspectorView {
+const base = nkm.datacontrols.InspectorView;
+class DisplayInspector extends base {
     constructor() { super(); }
 
     static __controls = [
@@ -28,7 +29,7 @@ class DisplayInspector extends nkm.datacontrols.InspectorView {
         this._builder.defaultCSS = `control`;
     }
 
-    _Style() {
+    static _Style() {
         return nkm.style.Extends({
             ':host': {
                 'min-width': '350px',
@@ -46,7 +47,7 @@ class DisplayInspector extends nkm.datacontrols.InspectorView {
                 'flex': '0 1 auto',
                 'margin-bottom': '5px'
             }
-        }, super._Style());
+        }, base._Style());
     }
 
     _Render() {

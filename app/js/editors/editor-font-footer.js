@@ -7,7 +7,8 @@ const SIGNAL = require(`../signal`);
 const mkfData = require(`../data`);
 const mkfWidgets = require(`../widgets`);
 
-class FontEditorFooter extends nkm.datacontrols.ControlView {
+const base = nkm.datacontrols.ControlView;
+class FontEditorFooter extends base {
     constructor() { super(); }
 
     _Init() {
@@ -18,7 +19,7 @@ class FontEditorFooter extends nkm.datacontrols.ControlView {
             .Watch(nkm.com.SIGNAL.READY, this._OnContentUpdateComplete, this);
     }
 
-    _Style() {
+    static _Style() {
         return nkm.style.Extends({
             ':host': {
                 'display': 'flex',
@@ -29,7 +30,7 @@ class FontEditorFooter extends nkm.datacontrols.ControlView {
                 'position':'absolute',
                 'width': '100%',
             },
-        }, super._Style());
+        }, base._Style());
     }
 
     _Render() {

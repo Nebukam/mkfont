@@ -2,19 +2,19 @@ const nkm = require(`@nkmjs/core`);
 const u = nkm.u;
 const ui = nkm.ui;
 
-
-class LigaButton extends ui.WidgetButton {
+const base = ui.WidgetButton;
+class LigaButton extends base {
     constructor() { super(); }
 
     static __NFO__ = nkm.com.NFOS.Ext({
         css: [`@/buttons/button-ex.css`]
-    }, ui.WidgetButton, ['css']);
+    }, base, ['css']);
 
     _Init() {
         super._Init();
     }
 
-    _Style() {
+    static _Style() {
         return nkm.style.Extends({
             ':host': {
                 '@': ['fade-in'],
@@ -43,7 +43,7 @@ class LigaButton extends ui.WidgetButton {
                 'flex': '1 0 auto',
                 'font-family': `monospace`
             }
-        }, super._Style());
+        }, base._Style());
     }
 
     _Render() {

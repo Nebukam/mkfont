@@ -13,7 +13,8 @@ const UNICODE = require(`../../unicode`);
 
 const TransformSettingsInspector = require(`./tr-settings-inspector`);
 
-class GlyphInspectorPlaceholder extends ui.views.View {
+const base = ui.views.View;
+class GlyphInspectorPlaceholder extends base {
     constructor() { super(); }
 
     static __controls = [
@@ -26,7 +27,7 @@ class GlyphInspectorPlaceholder extends ui.views.View {
         super._Init();
     }
 
-    _Style() {
+    static _Style() {
         return nkm.style.Extends({
             ':host': {
                 'padding': '10px',
@@ -57,7 +58,7 @@ class GlyphInspectorPlaceholder extends ui.views.View {
                 'text-align':'center',
                 'opacity':'0.5'
             }
-        }, super._Style());
+        }, base._Style());
     }
 
     _Render() {

@@ -13,7 +13,8 @@ const UNICODE = require(`../../unicode`);
 
 const GlyphIItem = require(`./glyph-iitem`);
 
-class GlyphInspector extends nkm.datacontrols.InspectorView {
+const base = nkm.datacontrols.InspectorView;
+class GlyphInspector extends base {
     constructor() { super(); }
 
     static __controls = [
@@ -43,7 +44,7 @@ class GlyphInspector extends nkm.datacontrols.InspectorView {
 
     }
 
-    _Style() {
+    static _Style() {
         return nkm.style.Extends({
             ':host': {
                 'padding': '10px',
@@ -67,7 +68,7 @@ class GlyphInspector extends nkm.datacontrols.InspectorView {
             '.control': {
                 'margin-bottom': '5px',
             }
-        }, super._Style());
+        }, base._Style());
     }
 
     _Render() {

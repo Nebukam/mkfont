@@ -13,7 +13,8 @@ const __preserved = `preserved`;
 const __ignored = `ignored`;
 const __new = `new`;
 
-class ImportListItem extends nkm.datacontrols.ControlWidget {
+const base = nkm.datacontrols.ControlWidget;
+class ImportListItem extends base {
     constructor() { super(); }
 
     static __draggable = false;
@@ -30,7 +31,7 @@ class ImportListItem extends nkm.datacontrols.ControlWidget {
         this.focusArea = this;
     }
 
-    _Style() {
+    static _Style() {
         return nkm.style.Extends({
             ':host': {
                 'display': 'grid',
@@ -96,7 +97,7 @@ class ImportListItem extends nkm.datacontrols.ControlWidget {
                 'left': `44px`,
                 'width': `20px`,
             },
-        }, super._Style());
+        }, base._Style());
     }
 
     _Render() {

@@ -6,7 +6,8 @@ const mkfData = require(`../data`);
 const mkfOperations = require(`../operations`);
 const mkfCmds = mkfOperations.commands;
 
-class GlyphSlotQuickmenu extends ui.WidgetBar {
+const base = ui.WidgetBar;
+class GlyphSlotQuickmenu extends base {
     constructor() { super(); }
 
     static __defaultOrientation = ui.FLAGS.VERTICAL;
@@ -52,7 +53,7 @@ class GlyphSlotQuickmenu extends ui.WidgetBar {
         };
     }
 
-    _Style() {
+    static _Style() {
         return nkm.style.Extends({
             ':host': {
                 '@': ['fade-in'],
@@ -61,7 +62,7 @@ class GlyphSlotQuickmenu extends ui.WidgetBar {
                 'border-radius': `4px`,
                 'padding': `3px`,
             },
-        }, super._Style());
+        }, base._Style());
     }
 
     _Render() {

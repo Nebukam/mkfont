@@ -8,10 +8,11 @@ const mkfWidgets = require(`../../widgets`);
 
 const TransformSettingsInspector = require(`./tr-settings-inspector`);
 
-class TransformSettingsSilentInspector extends TransformSettingsInspector {
+const base = TransformSettingsInspector;
+class TransformSettingsSilentInspector extends base {
     constructor() { super(); }
 
-    static __controls = [...TransformSettingsInspector.__controls];
+    static __controls = [...base.__controls];
 
     _Init() {
         super._Init();
@@ -19,8 +20,8 @@ class TransformSettingsSilentInspector extends TransformSettingsInspector {
         this._builder.defaultControlClass = mkfWidgets.PropertyControl;
         this._builder.defaultCSS = `control`;
 
-        for (let i = 0; i < TransformSettingsInspector.__controls.length; i++) {
-            let config = TransformSettingsInspector.__controls[i];
+        for (let i = 0; i < base.__controls.length; i++) {
+            let config = base.__controls[i];
             if (config.options) {
                 config.options.command = null;
                 config.options.onSubmit = null;

@@ -2,11 +2,11 @@ const nkm = require(`@nkmjs/core`);
 const u = nkm.u;
 const ui = nkm.ui;
 
-
-class SearchStatus extends ui.Widget {
+const base = ui.Widget;
+class SearchStatus extends base {
     constructor() { super(); }
 
-    _Style() {
+    static _Style() {
         return nkm.style.Extends({
             ':host': {
                 'position':'relative',
@@ -31,7 +31,7 @@ class SearchStatus extends ui.Widget {
                 'pointer-events':'none',
                 'text-align':'center'
             }
-        }, super._Style());
+        }, base._Style());
     }
 
     _Render() {

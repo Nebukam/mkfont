@@ -6,7 +6,8 @@ const lists = nkm.uilib.lists;
 
 const mkfData = require(`../../data`);
 
-class BlockItem extends lists.FolderListItem {
+const base = lists.FolderListItem;
+class BlockItem extends base {
     constructor() { super(); }
 
     static __draggable = false;
@@ -21,12 +22,12 @@ class BlockItem extends lists.FolderListItem {
         //this.focusArea = this;
     }
 
-    _Style() {
+    static _Style() {
         return nkm.style.Extends({
             ':host': {
 
             },
-        }, super._Style());
+        }, base._Style());
     }
 
     _Render() {

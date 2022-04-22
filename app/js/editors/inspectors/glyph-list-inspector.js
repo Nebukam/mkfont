@@ -22,7 +22,8 @@ const shouldHideWIDTH = (owner) => {
     return !(owner.data._transformSettings.Get(mkfData.IDS.TR_AUTO_WIDTH) && owner.data._transformSettings.Get(mkfData.IDS.TR_SCALE_MODE) != mkfData.ENUMS.SCALE_NORMALIZE);
 };
 
-class GlyphListInspector extends nkm.datacontrols.ListInspectorView {
+const base = nkm.datacontrols.ListInspectorView;
+class GlyphListInspector extends base {
     constructor() { super(); }
 
     static __controls = [
@@ -74,7 +75,7 @@ class GlyphListInspector extends nkm.datacontrols.ListInspectorView {
 
     }
 
-    _Style() {
+    static _Style() {
         return nkm.style.Extends({
             ':host': {
                 'padding': '10px',
@@ -135,7 +136,7 @@ class GlyphListInspector extends nkm.datacontrols.ListInspectorView {
             '.control': {
                 'margin-bottom': '5px',
             }
-        }, super._Style());
+        }, base._Style());
     }
 
     _Render() {

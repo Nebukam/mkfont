@@ -1,0 +1,25 @@
+/*-------------------------------*/
+/*<!---- @nkmjs/ui-library ----!>*/
+/*-------------------------------*/
+
+@import '../_constants';
+@import '../_variables';
+@import '../_mixins';
+@import '../_functions';
+
+$padding: 2px;
+$bg: rgb(70, 70, 70);
+
+:host {
+    
+    @include no-select;
+
+}
+
+.label{
+    flex: 0 0 auto;
+
+    font-size:10px;
+    text-transform: uppercase;    
+    color: var(--flavor-contrast);
+}

@@ -12,8 +12,8 @@ const mkfWidgets = require(`../../widgets`);
 const PangramHeader = require(`./pangram-header`);
 const PangramFooter = require(`./pangram-footer`);
 
-
-class PangramViewport extends nkm.datacontrols.ControlView {
+const base = nkm.datacontrols.ControlView;
+class PangramViewport extends base {
     constructor() { super(); }
 
     _Init() {
@@ -25,7 +25,7 @@ class PangramViewport extends nkm.datacontrols.ControlView {
         super._PostInit();
     }
 
-    _Style() {
+    static _Style() {
         return nkm.style.Extends({
             ':host': {
                 'position': 'relative',
@@ -48,7 +48,7 @@ class PangramViewport extends nkm.datacontrols.ControlView {
             '.search-status': {
                 '@': ['absolute-center']
             }
-        }, super._Style());
+        }, base._Style());
     }
 
     _Render() {        

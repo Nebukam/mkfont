@@ -18,7 +18,8 @@ const longPangram =
 
 Ut wisi enim ad minim veniam, quis nostrud exercitation ulliam corper suscipit lobortis nisl ut aliquip ex ea commodo consequat.`;
 
-class PangramInspector extends nkm.datacontrols.InspectorView {
+const base = nkm.datacontrols.InspectorView;
+class PangramInspector extends base {
     constructor() { super(); }
 
     static __defaultInstanceOf = mkfData.Family;
@@ -46,7 +47,7 @@ class PangramInspector extends nkm.datacontrols.InspectorView {
         this._builder.defaultCSS = `control`;
     }
 
-    _Style() {
+    static _Style() {
         return nkm.style.Extends({
             ':host': {
                 'position': 'relative',
@@ -79,7 +80,7 @@ class PangramInspector extends nkm.datacontrols.InspectorView {
             '.slider': {
                 'margin': '10px 0px 10px 0px'
             }
-        }, super._Style());
+        }, base._Style());
     }
 
     _Render() {

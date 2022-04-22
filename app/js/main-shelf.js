@@ -2,7 +2,8 @@ const nkm = require(`@nkmjs/core`);
 const u = nkm.u;
 const ui = nkm.ui;
 
-class MainShelf extends nkm.uilib.views.Shelf {
+const base = nkm.uilib.views.Shelf;
+class MainShelf extends base {
     constructor() { super(); }
 
     //static __default_navPlacement = ui.FLAGS.RIGHT;
@@ -11,12 +12,12 @@ class MainShelf extends nkm.uilib.views.Shelf {
         super._Init();
     }
 
-    _Style() {
+    static _Style() {
         return nkm.style.Extends({
             ':host': {
                 
             },
-        }, super._Style());
+        }, base._Style());
     }
 
 

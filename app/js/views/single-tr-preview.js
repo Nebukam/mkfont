@@ -9,7 +9,8 @@ const mkfData = require(`../data`);
 const mkfInspectors = require(`../editors/inspectors`);
 const mkfWidgets = require(`../widgets`);
 
-class SingleImportPreview extends ui.views.View {
+const base = ui.views.View;
+class SingleImportPreview extends base {
     constructor() { super(); }
 
     _Init() {
@@ -17,7 +18,7 @@ class SingleImportPreview extends ui.views.View {
         this._transformedData = null;
     }
 
-    _Style() {
+    static _Style() {
         return nkm.style.Extends({
             ':host': {
                 'display': 'grid',
@@ -54,7 +55,7 @@ class SingleImportPreview extends ui.views.View {
             '.identity': {
                 'width': '100%'
             }
-        }, super._Style());
+        }, base._Style());
     }
 
     _Render() {

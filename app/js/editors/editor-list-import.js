@@ -9,7 +9,8 @@ const mkfData = require(`../data`);
 const mkfInspectors = require(`./inspectors`);
 const mkfWidgets = require(`../widgets`);
 
-class EditorListImport extends nkm.datacontrols.Editor {
+const base = nkm.datacontrols.Editor;
+class EditorListImport extends base {
     constructor() { super(); }
 
     static __assignMap = {
@@ -33,7 +34,7 @@ class EditorListImport extends nkm.datacontrols.Editor {
 
     }
 
-    _Style() {
+    static _Style() {
         return nkm.style.Extends({
             ':host': {
                 'display': 'grid',
@@ -112,7 +113,7 @@ class EditorListImport extends nkm.datacontrols.Editor {
                 '@': ['absolute-bottom'],
                 'margin-bottom': `10px`
             }
-        }, super._Style());
+        }, base._Style());
     }
 
     _Render() {

@@ -14,10 +14,11 @@ const __flag_inherited = `inherited`;
 
 const PropertyControl = require(`../property-control`);
 
-class AssignBaseControl extends nkm.datacontrols.ControlView {
+const base = nkm.datacontrols.ControlView;
+class AssignBaseControl extends base {
     constructor() { super(); }
 
-    static __distribute = nkm.datacontrols.ControlView.__distribute.Ext()
+    static __distribute = base.__distribute.Ext()
         .To(`importList`)
         .Move(`data`);
 
@@ -36,7 +37,7 @@ class AssignBaseControl extends nkm.datacontrols.ControlView {
         super._PostInit();
     }
 
-    _Style() {
+    static _Style() {
         return nkm.style.Extends({
             ':host': {
                 'position': 'relative',
@@ -50,7 +51,7 @@ class AssignBaseControl extends nkm.datacontrols.ControlView {
                 'flex': '1 1 auto',
                 'margin': '0 0 5px 0'
             },
-        }, super._Style());
+        }, base._Style());
     }
 
     _Render() {

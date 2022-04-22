@@ -12,7 +12,8 @@ const mkfCmds = mkfOperations.commands;
 const AssignBaseControl = require("./assign-base");
 const ControlHeader = require(`../control-header`);
 
-class AssignSelectionControl extends AssignBaseControl {
+const base = AssignBaseControl;
+class AssignSelectionControl extends base {
     constructor() { super(); }
 
     static __valueIDs = [];
@@ -25,12 +26,12 @@ class AssignSelectionControl extends AssignBaseControl {
         super._Init();
     }
 
-    _Style() {
+    static _Style() {
         return nkm.style.Extends({
             ':host': {
 
             },
-        }, super._Style());
+        }, base._Style());
     }
 
     _Render() {

@@ -6,7 +6,8 @@ const ui = nkm.ui;
 
 const mkfWidgets = require(`../../widgets`);
 
-class GlyphGroup extends ui.WidgetItem {
+const base = ui.WidgetItem;
+class GlyphGroup extends base {
     constructor() { super(); }
 
     _Init() {
@@ -39,7 +40,7 @@ class GlyphGroup extends ui.WidgetItem {
     }
 
 
-    _Style() {
+    static _Style() {
         return nkm.style.Extends({
             ':host': {
                 'position': 'relative',
@@ -65,7 +66,7 @@ class GlyphGroup extends ui.WidgetItem {
                 'flex': '0 0 auto',
                 'margin':'3px'
             }
-        }, super._Style());
+        }, base._Style());
     }
 
     _Render() {

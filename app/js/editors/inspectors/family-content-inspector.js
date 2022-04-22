@@ -9,9 +9,8 @@ const mkfCatalog = require(`../../catalogs`);
 
 // Manages what is shown & selectable in the viewport.
 
-
-
-class FamilyContentInspector extends nkm.datacontrols.InspectorView {
+const base = nkm.datacontrols.InspectorView;
+class FamilyContentInspector extends base {
     constructor() { super(); }
 
     _Init() {
@@ -51,7 +50,7 @@ class FamilyContentInspector extends nkm.datacontrols.InspectorView {
 
     }
 
-    _Style() {
+    static _Style() {
         return nkm.style.Extends({
             ':host': {
                 'display': 'flex',
@@ -70,7 +69,7 @@ class FamilyContentInspector extends nkm.datacontrols.InspectorView {
                 'flex': '0 0 auto',
                 'margin-bottom': '5px'
             }
-        }, super._Style());
+        }, base._Style());
     }
 
     _Render() {

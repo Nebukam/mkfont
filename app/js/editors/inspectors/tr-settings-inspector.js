@@ -13,7 +13,8 @@ const isMANUAL = (owner) => { return owner.data.Get(mkfData.IDS.TR_SCALE_MODE) =
 const isNRM = (owner) => { return owner.data.Get(mkfData.IDS.TR_SCALE_MODE) == mkfData.ENUMS.SCALE_NORMALIZE; };
 const isRNRM = (owner) => { return owner.data.Get(mkfData.IDS.TR_SCALE_MODE) != mkfData.ENUMS.SCALE_NORMALIZE; };
 
-class TransformSettingsInspector extends nkm.datacontrols.InspectorView {
+const base = nkm.datacontrols.InspectorView;
+class TransformSettingsInspector extends base {
     constructor() { super(); }
 
     static __controls = [
@@ -50,7 +51,7 @@ class TransformSettingsInspector extends nkm.datacontrols.InspectorView {
         };
     }
 
-    _Style() {
+    static _Style() {
         return nkm.style.Extends({
             ':host': {
                 '@': ['fade-in'],
@@ -77,7 +78,7 @@ class TransformSettingsInspector extends nkm.datacontrols.InspectorView {
             '.osmall': {
                 'flex': '1 1 80%'
             }
-        }, super._Style());
+        }, base._Style());
     }
 
     //#region Family properties

@@ -7,7 +7,8 @@ const UNICODE = require(`../unicode`);
 const mkfOperations = require(`../operations`);
 const mkfCmds = mkfOperations.commands;
 
-class GlyphIdentity extends ui.Widget {
+const base = ui.Widget;
+class GlyphIdentity extends base {
     constructor() { super(); }
 
     _Init() {
@@ -15,7 +16,7 @@ class GlyphIdentity extends ui.Widget {
         this._multi = null;
     }
 
-    _Style() {
+    static _Style() {
         return nkm.style.Extends({
             ':host': {
                 'min-height': 'auto',
@@ -41,7 +42,7 @@ class GlyphIdentity extends ui.Widget {
             '.toolbar': {
 
             }
-        }, super._Style());
+        }, base._Style());
     }
 
     _Render() {

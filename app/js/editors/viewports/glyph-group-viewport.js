@@ -16,8 +16,8 @@ const GlyphGroupHeader = require(`./glyph-group-header`);
 const GlyphGroupFooter = require(`./glyph-group-footer`);
 const GlyphGroupSearch = require(`./glyph-group-search`);
 
-
-class GlyphGroupViewport extends nkm.datacontrols.ControlView { //ui.views.View
+const base = nkm.datacontrols.ControlView; //ui.views.View
+class GlyphGroupViewport extends base { 
     constructor() { super(); }
 
     _Init() {
@@ -86,7 +86,7 @@ class GlyphGroupViewport extends nkm.datacontrols.ControlView { //ui.views.View
         super._PostInit();
     }
 
-    _Style() {
+    static _Style() {
         return nkm.style.Extends({
             ':host': {
                 'position': 'relative',
@@ -109,7 +109,7 @@ class GlyphGroupViewport extends nkm.datacontrols.ControlView { //ui.views.View
             '.search-status': {
                 '@': ['absolute-center']
             }
-        }, super._Style());
+        }, base._Style());
     }
 
     _Render() {

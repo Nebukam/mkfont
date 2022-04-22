@@ -7,7 +7,8 @@ const mkfInspectors = require(`../inspectors`);
 const mkfOperations = require(`../../operations`);
 const mkfCmds = mkfOperations.commands;
 
-class PangramHeader extends nkm.datacontrols.ControlView {
+const base = nkm.datacontrols.ControlView;
+class PangramHeader extends base {
     constructor() { super(); }
 
     _Init() {
@@ -20,7 +21,7 @@ class PangramHeader extends nkm.datacontrols.ControlView {
 
     }
 
-    _Style() {
+    static _Style() {
         return nkm.style.Extends({
             ':host': {
                 'min-height': 'auto',
@@ -35,7 +36,7 @@ class PangramHeader extends nkm.datacontrols.ControlView {
                 'flex-flow': 'row nowrap',
                 'justify-content': 'space-between'
             }
-        }, super._Style());
+        }, base._Style());
     }
 
     _Render() {

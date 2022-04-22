@@ -7,7 +7,8 @@ const mkfWidgets = require(`../../widgets`);
 const mkfInspectors = require(`../inspectors`);
 const mkfOperations = require(`../../operations`);
 
-class GlyphGroupFooter extends nkm.datacontrols.ControlView {
+const base = nkm.datacontrols.ControlView;
+class GlyphGroupFooter extends base {
     constructor() { super(); }
 
     static __controls = [
@@ -30,7 +31,7 @@ class GlyphGroupFooter extends nkm.datacontrols.ControlView {
         this._builder.defaultCSS = `control`;
     }
 
-    _Style() {
+    static _Style() {
         return nkm.style.Extends({
             ':host': {
                 'min-height': 'auto',
@@ -46,7 +47,7 @@ class GlyphGroupFooter extends nkm.datacontrols.ControlView {
             '.slider': {
                 'width':`100px`
             }
-        }, super._Style());
+        }, base._Style());
     }
 
     _Render() {

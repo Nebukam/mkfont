@@ -9,7 +9,8 @@ const mkfCmds = mkfOperations.commands;
 
 const __flag_inherited = `inherited`;
 
-class PropertyControl extends nkm.datacontrols.ControlWidget {
+const base = nkm.datacontrols.ControlWidget;
+class PropertyControl extends base {
     constructor() { super(); }
 
     static __usePaintCallback = true;
@@ -20,7 +21,7 @@ class PropertyControl extends nkm.datacontrols.ControlWidget {
         return p_data;
     };
 
-    static __distribute = nkm.datacontrols.ControlWidget.__distribute.Ext()
+    static __distribute = base.__distribute.Ext()
         .To(`propertyId`)
         .To(`hideOverride`)
         .To(`subData`, null, null)
@@ -55,7 +56,7 @@ class PropertyControl extends nkm.datacontrols.ControlWidget {
 
 
 
-    _Style() {
+    static _Style() {
         return nkm.style.Extends({
             ':host': {
                 'position': 'relative',
@@ -102,7 +103,7 @@ class PropertyControl extends nkm.datacontrols.ControlWidget {
                 'margin-right': '4px',
                 //'margin-left': '-4px'
             }
-        }, super._Style());
+        }, base._Style());
     }
 
     _Render() {

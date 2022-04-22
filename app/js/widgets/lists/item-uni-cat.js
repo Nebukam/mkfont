@@ -6,7 +6,8 @@ const lists = nkm.uilib.lists;
 
 const mkfData = require(`../../data`);
 
-class CatItem extends lists.FolderListItem {
+const base = lists.FolderListItem;
+class CatItem extends base {
     constructor() { super(); }
 
     static __draggable = false;
@@ -16,7 +17,7 @@ class CatItem extends lists.FolderListItem {
         this._extensions.Remove(this._extDrag);
     }
 
-    _Style() {
+    static _Style() {
         return nkm.style.Extends({
             ':host': {
 
@@ -30,7 +31,7 @@ class CatItem extends lists.FolderListItem {
                 'top': '5px',
                 'left': 'calc(calc(var(--depth) * var(--folder-indent)) + 16px)',
             },
-        }, super._Style());
+        }, base._Style());
     }
 
     _Render() {

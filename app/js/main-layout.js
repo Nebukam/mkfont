@@ -4,14 +4,15 @@ const ui = nkm.ui;
 
 const MainShelf = require(`./main-shelf`);
 
-class MainLayout extends ui.views.Layer {
+const base = ui.views.Layer;
+class MainLayout extends base {
     constructor() { super(); }
 
     _Init() {
         super._Init();
     }
 
-    _Style() {
+    static _Style() {
         return nkm.style.Extends({
             ':host': {
                 //'background':`url("${nkm.style.URLImgs(`bg.png`)}")`,
@@ -25,7 +26,7 @@ class MainLayout extends ui.views.Layer {
             },
             '.workspace': {
             }
-        }, super._Style());
+        }, base._Style());
     }
 
     _Render() {

@@ -7,7 +7,8 @@ const mkfData = require(`../../data`);
 const mkfWidgets = require(`../../widgets`);
 const mkfInspectors = require(`../inspectors`);
 
-class GlyphGroupSearch extends nkm.datacontrols.ControlView {
+const base = nkm.datacontrols.ControlView;
+class GlyphGroupSearch extends base {
     constructor() { super(); }
 
     static __controls = [
@@ -44,7 +45,7 @@ class GlyphGroupSearch extends nkm.datacontrols.ControlView {
 
     }
 
-    _Style() {
+    static _Style() {
         return nkm.style.Extends({
             ':host': {
                 'position': 'relative',
@@ -82,7 +83,7 @@ class GlyphGroupSearch extends nkm.datacontrols.ControlView {
                 'left': '0',
                 'width': '100%'
             }
-        }, super._Style());
+        }, base._Style());
     }
 
     _Render() {

@@ -5,7 +5,8 @@ const uilib = nkm.uilib;
 const mkfData = require(`../../data`);
 const mkfWidgets = require(`../../widgets`);
 
-class LigatureCreationInspector extends nkm.datacontrols.InspectorView {
+const base = nkm.datacontrols.InspectorView;
+class LigatureCreationInspector extends base {
     constructor() { super(); }
 
     _Init() {
@@ -13,7 +14,7 @@ class LigatureCreationInspector extends nkm.datacontrols.InspectorView {
         this._ligaCatalog = nkm.data.catalogs.CreateFrom({ name:`ligatures` });
     }
 
-    _Style() {
+    static _Style() {
         return nkm.style.Extends({
             ':host': {
                 'min-width': '350px',
@@ -31,7 +32,7 @@ class LigatureCreationInspector extends nkm.datacontrols.InspectorView {
                 'flex': '0 1 auto',
                 'margin-bottom': '5px'
             }
-        }, super._Style());
+        }, base._Style());
     }
 
     _Render() {

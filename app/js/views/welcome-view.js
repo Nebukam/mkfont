@@ -6,7 +6,8 @@ const { shell } = require(`electron`);
 const mkfOperations = require(`../operations`);
 const mkfCmds = mkfOperations.commands;
 
-class WelcomeView extends ui.views.View {
+const base = ui.views.View;
+class WelcomeView extends base {
     constructor() { super(); }
 
     _Init() {
@@ -15,7 +16,7 @@ class WelcomeView extends ui.views.View {
         this.cmdNewFromSVGs = this._commands.Create(mkfCmds.StartNewFromSVGS);
     }
 
-    _Style() {
+    static _Style() {
         return nkm.style.Extends({
             ':host': {
                 'display': 'flex',
@@ -59,7 +60,7 @@ class WelcomeView extends ui.views.View {
                 'justify-self': `center`,
                 'grid-column': `1 / span 2`
             }
-        }, super._Style());
+        }, base._Style());
     }
 
     _Render() {

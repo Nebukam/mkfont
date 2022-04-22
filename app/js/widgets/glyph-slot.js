@@ -9,7 +9,8 @@ const mkfData = require(`../data`);
 
 const GlyphCanvasRenderer = require(`./glyph-canvas-renderer`);
 
-class GlyphSlot extends nkm.datacontrols.ControlWidget {
+const base = nkm.datacontrols.ControlWidget;
+class GlyphSlot extends base {
     constructor() { super(); }
 
     static __usePaintCallback = true;
@@ -40,7 +41,7 @@ class GlyphSlot extends nkm.datacontrols.ControlWidget {
         this.focusArea = this;
     }
 
-    _Style() {
+    static _Style() {
         return nkm.style.Extends({
             ':host': {
                 '@': ['fade-in'],
@@ -145,7 +146,7 @@ class GlyphSlot extends nkm.datacontrols.ControlWidget {
                 'width': `1px`, 'height': `120%`,
                 'background-color': `var(--col-error)`
             }
-        }, super._Style());
+        }, base._Style());
     }
 
     _Render() {
