@@ -154,6 +154,9 @@ class SettingsSearchDataBlock extends SimpleDataEx {
         let pass = false;
         if (this._resultSet.has(p_unicodeInfos)) { return; }
 
+        let exists = (p_unicodeInfos.u in this._family._glyphsMap);
+        if (this._mustExists && !exists) { return; }
+
         if (this._terms.length != 0) {
             let
                 char = p_unicodeInfos.char,
@@ -189,11 +192,12 @@ class SettingsSearchDataBlock extends SimpleDataEx {
                 }
             }
 
+        } else {
+            //Search active, "exists" is toggled on.
+            if (this._mustExists && exists) { pass = true; }
         }
 
         if (!pass) { return; }
-
-        if (this._mustExists) { if (!(p_unicodeInfos.u in this._family._glyphsMap)) { return; } }
 
         if (this._addComps && p_unicodeInfos.relatives) {
             let relatives = p_unicodeInfos.relatives;

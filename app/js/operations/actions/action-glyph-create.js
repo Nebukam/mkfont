@@ -25,6 +25,7 @@ class ActionCreateGlyph extends actions.Action {
         glyphVariant.Set(mkfData.IDS.PATH_DATA, p_operation.path);
         glyphVariant.transformSettings.BatchSet(defaultTr);
         glyphVariant.transformSettings.BatchSet(transforms);
+        glyphVariant.BatchSet(transforms);
 
         family.AddGlyph(newGlyph);
         glyphVariant.transformSettings.UpdateTransform();

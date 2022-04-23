@@ -89,7 +89,11 @@ class CmdImportLigatures extends actions.Command {
                 this._emitter.Do(mkfActions.CreateGlyph, {
                     family: family,
                     unicode: unicodeInfos,
-                    path: SVGOPS.EmptySVGStats()
+                    path: SVGOPS.EmptySVGStats(),
+                    transforms: {
+                        [mkfData.IDS.WIDTH]: family.selectedSubFamily.Get(mkfData.IDS.WIDTH),
+                        [mkfData.IDS.TR_AUTO_WIDTH]: false
+                    }
                 });
             }
 

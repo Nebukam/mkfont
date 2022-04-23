@@ -4,6 +4,7 @@ const nkm = require(`@nkmjs/core`);
 const ui = nkm.ui;
 const inputs = nkm.uilib.inputs;
 
+const UNICODE = require(`../unicode`);
 
 /**
  * @description TODO
@@ -41,16 +42,16 @@ class IDS_EXT {
             desc: `Toggle auto-save feature on/off`
         };
         this.infos[this.AUTOSAVE_TIMER] = {
-            inputType: inputs.SliderOnly,
+            inputType: inputs.Slider,
             label: `Autosave interval`,
-            inputOptions: { min: 1, max: 60, size: ui.FLAGS.SIZE_XXS },
+            inputOptions: { min: 1, max: 60, size: ui.FLAGS.SIZE_XS },
             desc: `Interval at which the autosave triggers (in minutes).\nMin 1min, max 60min.`
         };
         this.infos[this.MANUAL_PREVIEW_REFRESH_THRESHOLD] = {
-            inputType: inputs.SliderOnly,
+            inputType: inputs.Slider,
             label: `Pangram max glyph`,
-            inputOptions: { min: 0, max: 65535, size: ui.FLAGS.SIZE_XXS },
-            desc: `Number of glyphs within the font after which the pangram stops automatically updating the preview.\nMassive font auto-refresh can cause a serious performance hit, or simply crash the app.\nMin 0, max 65535.`
+            inputOptions: { min: 0, max: UNICODE.MAX_GLYPH_COUNT, size: ui.FLAGS.SIZE_XS },
+            desc: `Number of glyphs within the font after which the pangram stops automatically updating the preview.\nMassive font auto-refresh can cause a serious performance hit, or simply crash the app.\nMin 0, max ${UNICODE.MAX_GLYPH_COUNT}.`
         };
 
         //Third parties

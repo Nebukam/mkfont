@@ -75,14 +75,14 @@ class FontEditor extends base {
         this.cmdEditInPlace = this._commands.Create(mkfCmds.EditInExternalEditor);
 
         this.cmdGlyphClear = this._commands.Create(mkfCmds.GlyphClear);
-        this.cmdGlyphDelete = this._commands.Create(mkfCmds.GlyphDelete);
-        this.cmdGlyphCopy = this._commands.Create(mkfCmds.GlyphCopy, { shortcut: this.shortcuts.Create("Ctrl C").Weak() });
-        this.cmdGlyphPaste = this._commands.Create(mkfCmds.GlyphPaste, { shortcut: this.shortcuts.Create("Ctrl V").Weak() });
+        this.cmdGlyphDelete = this._commands.Create(mkfCmds.GlyphDelete, { shortcut: this.shortcuts.Create("Delete").Strict() });
+        this.cmdGlyphCopy = this._commands.Create(mkfCmds.GlyphCopy, { shortcut: this.shortcuts.Create("Ctrl C").Strict() });
+        this.cmdGlyphPaste = this._commands.Create(mkfCmds.GlyphPaste, { shortcut: this.shortcuts.Create("Ctrl V").Strict() });
 
         this.cmdListImportMissing = this._commands.Create(mkfCmds.ImportListMissingGlyphs);
         this.cmdListExportUni = this._commands.Create(mkfCmds.ExportListUni);
         this.cmdListExportUniHex = this._commands.Create(mkfCmds.ExportListUniHex);
-        this.cmdListExportArtboardTemplate = this._commands.Create(mkfCmds.ExportListArtboartTemplate);
+        this.cmdListExportArtboardTemplate = this._commands.Create(mkfCmds.ExportListArtboardTemplate);
 
         this.cmdImportTTF = this._commands.Create(mkfCmds.ImportTTF);
         this.cmdImportFileSingle = this._commands.Create(mkfCmds.ImportFileSingle);
@@ -91,7 +91,7 @@ class FontEditor extends base {
 
         this.shortcuts.Create("Ctrl Z", this._actionStack.Undo);
         this.shortcuts.Create("Ctrl Y", this._actionStack.Redo);
-        this.shortcuts.Create("Ctrl A", { fn: () => { this._viewport._selectionStack.data.RequestSelectAll(); } }).Weak();
+        this.shortcuts.Create("Ctrl A", { fn: () => { this._viewport._selectionStack.data.RequestSelectAll(); } }).Strict();
 
     }
 

@@ -115,7 +115,6 @@ class GlyphPreview extends base {
             unicodeCharacter = UNICODE.GetUnicodeCharacter(parseInt(this._glyphInfos.u, 16));
         }
 
-        console.log(unicodeCharacter);
         this._svgPlaceholder.Set(unicodeCharacter, true);
     }
 

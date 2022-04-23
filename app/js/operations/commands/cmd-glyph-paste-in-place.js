@@ -10,11 +10,11 @@ const UNICODE = require(`../../unicode`);
 const mkfData = require(`../../data`);
 const mkfActions = require(`../actions`);
 
-class CmdGlyphPaste extends actions.Command {
+class CmdGlyphPasteInPlace extends actions.Command {
     constructor() { super(); }
 
     _InternalExecute() {
-
+        
         let
             family = this._emitter.data,
             variant = family.GetGlyph(this._context?.u || this._emitter.inspectedData.lastItem?.u).GetVariant(family.selectedSubFamily),
@@ -91,4 +91,4 @@ class CmdGlyphPaste extends actions.Command {
 
 }
 
-module.exports = CmdGlyphPaste;
+module.exports = CmdGlyphPasteInPlace;

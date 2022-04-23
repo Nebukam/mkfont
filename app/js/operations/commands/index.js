@@ -40,7 +40,7 @@ module.exports = {
     ExportListUni: require(`./cmd-export-list-uni`),
     ExportListUniHex: require(`./cmd-export-list-uni-hex`),
     ExportSingleUniHex: new (require(`./cmd-export-single-uni-hex-`))(),    
-    ExportListArtboartTemplate: require(`./cmd-export-list-artboard-template`),
+    ExportListArtboardTemplate: require(`./cmd-export-list-artboard-template`),
 
     StartNewFromTTF: require(`./cmd-start-new-from-ttf`),
     StartNewFromSVGS: require(`./cmd-start-new-from-svgs`),

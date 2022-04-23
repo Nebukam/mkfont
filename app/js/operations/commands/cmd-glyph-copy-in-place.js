@@ -10,7 +10,7 @@ const UNICODE = require(`../../unicode`);
 const mkfData = require(`../../data`);
 const mkfActions = require(`../actions`);
 
-class CmdGlyphCopy extends actions.Command {
+class CmdGlyphCopyInPlace extends actions.Command {
     constructor() { super(); }
 
     _InternalExecute() {
@@ -32,4 +32,4 @@ class CmdGlyphCopy extends actions.Command {
 
 }
 
-module.exports = CmdGlyphCopy;
+module.exports = CmdGlyphCopyInPlace;

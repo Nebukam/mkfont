@@ -138,7 +138,7 @@ class PangramInspector extends base {
         let slider = this.Attach(nkm.uilib.inputs.Slider, `item slider`, slidersCtnr);
         slider.options = {
             min: 8, max: 144, currentValue: 16,
-            size: ui.FLAGS.SIZE_XXS,
+            size: ui.FLAGS.SIZE_XS,
             onSubmit: { fn: (p_input, p_value) => { this._pangramRenderer.fontSize = p_value; } }
         }
 
@@ -148,7 +148,7 @@ class PangramInspector extends base {
         slider = this.Attach(nkm.uilib.inputs.Slider, `item slider`, slidersCtnr);
         slider.options = {
             min: 0.1, max: 10, step:0.01, currentValue: 1,
-            size: ui.FLAGS.SIZE_XXS,
+            size: ui.FLAGS.SIZE_XS,
             onSubmit: { fn: (p_input, p_value) => { this._pangramRenderer.lineHeight = p_value; } }
         }
 
@@ -170,8 +170,7 @@ class PangramInspector extends base {
             defaultWidgetClass: nkm.uilib.buttons.Button,
             handles: [
                 {
-                    label: `Rebuild font`, icon: `clear`,
-                    flavor: nkm.com.FLAGS.WARNING, variant: ui.FLAGS.MINIMAL,
+                    label: `Refresh preview`, icon: `refresh`,
                     trigger: {
                         fn: () => { this._data._fontCache._RebuildCache(); },
                         thisArg: this

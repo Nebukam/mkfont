@@ -251,7 +251,7 @@ class IDS {
         this.infos[this.WIDTH] = {
             recompute: true,
             inputType: inputs.Number,
-            inputOptions: { placeholder: `Multiple values`, min:0 },
+            inputOptions: { placeholder: `· · ·`, min:0 },
             label: `Width`,
             desc: `indicates the horizontal advance after rendering a glyph in horizontal orientation.`
         };
@@ -276,7 +276,7 @@ class IDS {
         this.infos[this.HEIGHT] = {
             recompute: true,
             inputType: inputs.Number,
-            inputOptions: { placeholder: `Multiple values` },
+            inputOptions: { placeholder: `· · ·` },
             label: `Height`,
             desc: `indicates the vertical advance after rendering a glyph in vertical orientation.`
         };
@@ -410,21 +410,21 @@ class IDS {
             transform: true,
             inputType: inputs.Number,
             label: `Shift`,
-            inputOptions: { step: 1, min: -32000, max: 32000, size: ui.FLAGS.SIZE_XXS, placeholder: `Multiple values` },
+            inputOptions: { step: 1, min: -32000, max: 32000, size: ui.FLAGS.SIZE_XXS, placeholder: `· · ·` },
             desc: `Append empty space before the glyph.`
         };
         this.infos[this.TR_WIDTH_PUSH] = {
             transform: true,
             inputType: inputs.Number,
             label: `Push`,
-            inputOptions: { step: 1, min: -32000, max: 32000, size: ui.FLAGS.SIZE_XXS, placeholder: `Multiple values` },
+            inputOptions: { step: 1, min: -32000, max: 32000, size: ui.FLAGS.SIZE_XXS, placeholder: `· · ·` },
             desc: `Add empty space after the glyph.`
         };
         this.infos[this.TR_AUTO_WIDTH] = {
             transform: true,
             inputType: inputs.Boolean,
             label: `Automatic Width`,
-            inputOptions: { size: ui.FLAGS.SIZE_XS, placeholder: `Multiple values` },
+            inputOptions: { size: ui.FLAGS.SIZE_XS, placeholder: `· · ·` },
             desc: `If enabled, the glyph' width is equal to its asset width + shift + push.\nOtherwise the value is expected to be either manual, or inherited from the family Metrics.`
         };
 
