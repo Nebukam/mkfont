@@ -85,4 +85,4 @@ class AssignSelectionRangeControl extends base {
 }
 
 module.exports = AssignSelectionRangeControl;
-ui.Register(`mkfont-assign-selection-range`, AssignSelectionRangeControl);
+ui.Register(`mkf-assign-selection-range`, AssignSelectionRangeControl);

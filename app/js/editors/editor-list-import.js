@@ -37,43 +37,36 @@ class EditorListImport extends base {
     static _Style() {
         return nkm.style.Extends({
             ':host': {
-                'display': 'grid',
-                'flex-flow': 'column wrap',
-                'flex': '0 0 auto',
-                'grid-template-columns': 'max-content max-content max-content',
-                'grid-template-rows': 'min-content 80px min-content',
+                'display': 'flex',
+                'flex-flow': 'row nowrap',
+                'flex': '1 1 auto',
                 'grid-gap': '10px'
             },
             '.item': {
                 'flex': '1 0 auto',
-                'grid-column-start': '1',
+            },
+            '.column':{
+                'overflow-x':'hidden',
+                'overflow-y':'auto',
+                'flex': '1 1 auto',
+                'min-height':0,
             },
             '.list': {
-                'grid-column-start': '2',
-                'grid-row': '1 / span 3',
-
                 'position': 'relative',
-                'height': '0',
                 'width': '300px',
                 //'padding': '10px',
                 'background-color': 'rgba(0,0,0,0.2)',
                 'overflow': 'auto',
-                'min-height': '100%',
+                'min-height': '0',
             },
             '.settings': {
                 'width': '300px',
                 'height':'376px'
             },
             '.preview': {
-                'grid-column-start': '3',
-                'grid-row': '2 / span 2',
-
                 'position': 'relative',
-                'width': '400px',
-                'height': '100%',
-                //'aspect-ratio': '1/1',
-                'flex': '0 0 100%',
-                //'background-color': '#1b1b1b',
+                'aspect-ratio':'1/1',
+                'width': '330px',
                 'border-radius': '3px',
             },
             '.renderer': {
@@ -85,16 +78,9 @@ class EditorListImport extends base {
                 'background-color': 'rgba(27,27,27,0.8)',
             },
             '.identity': {
-                'grid-column-start': '3',
-                'grid-row': '1 / 1',
-
                 'width': '100%',
-                'max-width': `fit-content`,
             },
             '.header': {
-                'grid-column-start': '1',
-                'grid-row': '1 / span 2',
-
                 'display': 'flex',
                 'flex-flow': 'column nowrap',
                 'flex': '1 1 auto',
@@ -120,20 +106,22 @@ class EditorListImport extends base {
 
         super._Render();
 
-        this._header = ui.El(`div`, { class: `item header` }, this._host);
+        let column = ui.El(`div`, { class: `column` }, this._host);
+
+        this._header = ui.El(`div`, { class: `item header` }, column);
 
         this._builder.defaultControlClass = mkfWidgets.PropertyControl;
         this._builder.defaultCSS = `control`;
-        this._builder.host = this._header;
+        this._builder.host = column;
         this._builder.Build([
             { options: { propertyId: mkfData.IDS_EXT.IMPORT_OVERLAP_MODE } },
             { options: { propertyId: mkfData.IDS_EXT.IMPORT_ASSIGN_MODE } },
         ]);
 
-        this._settingsInspector = this.Attach(mkfInspectors.TransformSettings, `item settings`);
+        this._settingsInspector = this.Attach(mkfInspectors.TransformSettings, `item settings`, column);
         this.forwardData.To(this._settingsInspector);
 
-        this._domStreamer = this.Attach(ui.helpers.DOMStreamer, `list`);
+        this._domStreamer = this.Attach(ui.helpers.DOMStreamer, `column list`);
         this._domStreamer
             .Watch(ui.SIGNAL.ITEM_CLEARED, this._OnItemCleared, this)
             .Watch(ui.SIGNAL.ITEM_REQUESTED, this._OnItemRequested, this);
@@ -146,9 +134,11 @@ class EditorListImport extends base {
             }
         };
 
-        this._identity = this.Attach(mkfWidgets.GlyphIdentity, `identity`, this._host);
+        column = ui.El(`div`, { class: `column` }, this._host);
 
-        let previewCtnr = ui.El(`div`, { class: `preview` }, this._host);
+        this._identity = this.Attach(mkfWidgets.GlyphIdentity, `identity`, column);
+
+        let previewCtnr = ui.El(`div`, { class: `preview` }, column);
 
         this._underlayGlyphRenderer = this.Attach(mkfWidgets.GlyphCanvasRenderer, `renderer`, previewCtnr);
         this._underlayGlyphRenderer.options = {
@@ -309,4 +299,4 @@ class EditorListImport extends base {
 }
 
 module.exports = EditorListImport;
-ui.Register(`mkfont-list-import-editor`, EditorListImport);
+ui.Register(`mkf-list-import-editor`, EditorListImport);

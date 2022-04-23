@@ -303,4 +303,4 @@ class GlyphSlot extends base {
 }
 
 module.exports = GlyphSlot;
-ui.Register(`mkfont-glyph-slot`, GlyphSlot);
+ui.Register(`mkf-glyph-slot`, GlyphSlot);

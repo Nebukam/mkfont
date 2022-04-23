@@ -15,10 +15,11 @@ const TransformSettingsInspector = require(`./tr-settings-inspector`);
 const SIGNAL = require("../../signal");
 
 const __nullGlyph = `null-glyph`;
+const __hasPopout = `has-popout`;
 
 const shouldHideWIDTH = (owner) => {
     if (!owner.data) { return true; }
-    return !(owner.data._transformSettings.Get(mkfData.IDS.TR_AUTO_WIDTH) && owner.data._transformSettings.Get(mkfData.IDS.TR_SCALE_MODE) != mkfData.ENUMS.SCALE_NORMALIZE );
+    return !(owner.data._transformSettings.Get(mkfData.IDS.TR_AUTO_WIDTH) && owner.data._transformSettings.Get(mkfData.IDS.TR_SCALE_MODE) != mkfData.ENUMS.SCALE_NORMALIZE);
 };
 
 const base = nkm.datacontrols.ControlWidget;
@@ -39,10 +40,13 @@ class GlyphVariantInspectorItem extends base {
         this._builder.defaultControlClass = mkfWidgets.PropertyControl;
         this._builder.defaultCSS = `control`;
 
-        this._flags.Add(this, __nullGlyph);
+        this._flags.Add(this, __nullGlyph, __hasPopout);
+        this._obstructedPreview = false;
+
+        this._rectTracker = new ui.helpers.RectTracker(this._Bind(this._OnPreviewRectUpdate));
+        this._rectTracker.Enable();
 
         this._dataObserver.Hook(SIGNAL.VARIANT_UPDATED, () => { this._OnDataUpdate(this._data); }, this);
-
     }
 
     _OnPaintChange() {
@@ -71,11 +75,7 @@ class GlyphVariantInspectorItem extends base {
                 'background-color': 'rgba(0,0,0,0.5)',
                 'border-radius': '5px',
             },
-            '.renderer': {
-                'position': 'relative',
-                'width': '100%',
-                'aspect-ratio': '1/1',
-            },
+            ':host(.has-popout) .preview': { 'opacity': '0.25' },
             '.toolbar': {
                 'flex': `1 1 auto`,
                 'justify-content': `center`,
@@ -89,28 +89,8 @@ class GlyphVariantInspectorItem extends base {
                 'flex': '1 1 auto',
                 'margin-bottom': '10px',
             },
-            ':host(.null-glyph) .settings, :host(:not(.null-glyph)) .placeholder': { 'display': 'none' },
             '.control': {
                 'margin-bottom': '5px',
-            },
-            '.placeholder': {
-                'flex': '1 0 100%',
-                'position': 'relative',
-                'display': `grid`,
-                'place-items': `center`,
-                'text-align': `center`,
-                'font-size': '10em',
-                'user-select': 'none',
-                'color': 'rgba(255,255,255,0.25)',
-                'font-family': 'monospace',
-                'line-height': '100%'
-            },
-            '.infoTag': {
-                '@': ['absolute-center']
-            },
-            '.emptyTag': {
-                '@': ['absolute-bottom'],
-                'margin': `5px`
             }
 
 
@@ -122,17 +102,9 @@ class GlyphVariantInspectorItem extends base {
         this._importToolbar = this.Attach(ui.WidgetBar, `toolbar`, this._host);
         this._importToolbar.stretch = ui.WidgetBar.FLAG_STRETCH;
 
-        this._previewBox = ui.dom.El(`div`, { class: `preview` }, this._host);
-        this._svgPlaceholder = new ui.manipulators.Text(ui.dom.El(`div`, { class: `box placeholder` }, this._previewBox), false, false);
-
-        this._glyphRenderer = this.Attach(mkfWidgets.GlyphCanvasRenderer, `renderer`, this._previewBox);
-        this._glyphRenderer.options = {
-            drawGuides: true,
-            drawLabels: true,
-            drawBBox: true,
-            centered: false,
-            normalize: true
-        };
+        this._glyphPreview = this.Attach(mkfWidgets.GlyphPreview, `preview`, this._host);
+        this.forwardData.To(this._glyphPreview);
+        this._rectTracker.Add(this._glyphPreview);
 
         this._importToolbar.options = {
             inline: true,
@@ -182,43 +154,66 @@ class GlyphVariantInspectorItem extends base {
 
         this._builder.host = ui.El(`div`, { class: `settings` }, this._host);
 
-        this._oobTag = this.Attach(uilib.widgets.Tag, `infoTag`, this._previewBox);
-        this._oobTag.options = {
-            label: `out of bounds`,
-            flavor: nkm.com.FLAGS.ERROR,
-            htitle: `The glyph is out of bounds and won't be added to the font.\nKeep it within -32000..32000`
-        };
-        this._oobTag.visible = false;
-
-        this._emptyTag = this.Attach(uilib.widgets.Tag, `emptyTag`, this._previewBox);
-        this._emptyTag.options = {
-            label: `empty`,
-            bgColor: nkm.style.Get(`--col-warning-dark`),
-            htitle: `This glyph is void.`
-        };
-        this._emptyTag.visible = false;
-
         super._Render();
 
+        this.focusArea = this;
     }
 
     get glyphInfos() { return this._glyphInfos; }
     set glyphInfos(p_value) {
         if (this._glyphInfos == p_value) { return; }
-
         this._glyphInfos = p_value;
+        this._glyphPreview.glyphInfos = p_value;
+    }
 
-        let unicodeCharacter = ``;
-
-        if (nkm.u.isNumber(this._glyphInfos)) {
-            unicodeCharacter = UNICODE.GetUnicodeCharacter(this._glyphInfos);
-        } else if (nkm.u.isString(this._glyphInfos)) {
-            unicodeCharacter = this._glyphInfos;
+    _OnPreviewRectUpdate(p_tracker) {
+        let ratio = p_tracker.GetRatio(this._glyphPreview);
+        if (ratio < 0.9) {
+            this._obstructedPreview = true;
+            this._TogglePopOutPreview(true);
         } else {
-            unicodeCharacter = UNICODE.GetUnicodeCharacter(parseInt(this._glyphInfos.u, 16));
+            this._obstructedPreview = false;
+            this._TogglePopOutPreview(false);
+        }
+    }
+
+    _TogglePopOutPreview(p_toggle) {
+
+        if (!this._isFocused || !this._obstructedPreview) { p_toggle = false; }
+
+        if (this._hasPopOut == p_toggle) { return; }
+
+        this._hasPopOut = p_toggle;
+        this._flags.Set(__hasPopout, p_toggle);
+
+        if (!p_toggle) {
+            if (this._popoutPreview) {
+                this._popoutPreview.Release();
+                this._popoutPreview = null;
+            }
+        } else {
+            this._popoutPreview = uilib.modals.Simple.Pop({
+                anchor: this._transformInspector,
+                placement: ui.ANCHORING.LEFT,
+                origin: ui.ANCHORING.RIGHT,
+                keepWithinScreen: true,
+                static: true,
+                content: mkfWidgets.GlyphPreview
+            });
+            this._popoutPreview.content.data = this._data;
+            this._popoutPreview.content.glyphInfos = this._glyphInfos;
         }
 
-        this._svgPlaceholder.Set(unicodeCharacter);
+    }
+
+    _FocusGain() {
+        super._FocusGain();
+        this._TogglePopOutPreview(true);
+    }
+
+    _FocusLost() {
+        super._FocusLost();
+        this._TogglePopOutPreview(false);
     }
 
     _OnDataChanged(p_oldData) {
@@ -231,17 +226,18 @@ class GlyphVariantInspectorItem extends base {
             this._editInPlaceBtn.disabled = isNullGlyph;
             this._glyphDeleteBtn.disabled = isNullGlyph;
 
+            if (this._popoutPreview) { this._popoutPreview.content.glyphInfos = this._glyphInfos; }
         }
+
+        if (this._popoutPreview) { this._popoutPreview.content.data = this._data; }
+
     }
 
-    _OnDataUpdated(p_data) {
-        super._OnDataUpdated(p_data);
-        this._glyphRenderer.Set(p_data);
-        this._oobTag.visible = p_data.Get(mkfData.IDS.OUT_OF_BOUNDS);
-        this._emptyTag.visible = p_data.Get(mkfData.IDS.EMPTY);
+    _CleanUp() {
+        this._obstructedPreview = false;
+        this._TogglePopOutPreview(false);
+        super._CleanUp();
     }
-
-
 
 }
 

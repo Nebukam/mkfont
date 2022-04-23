@@ -28,7 +28,7 @@ class CmdImportLigatures extends actions.Command {
     _InternalExecute() {
 
         if (!this._importEditor) {
-            this._importEditor = nkm.ui.UI.Rent(`mkfont-liga-import-editor`);
+            this._importEditor = nkm.ui.UI.Rent(`mkf-liga-import-editor`);
         }
 
         this._importEditor.data = this._context;

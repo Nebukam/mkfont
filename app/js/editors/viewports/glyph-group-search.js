@@ -141,4 +141,4 @@ class GlyphGroupSearch extends base {
 }
 
 module.exports = GlyphGroupSearch;
-ui.Register(`mkfont-glyph-group-search`, GlyphGroupSearch);
+ui.Register(`mkf-glyph-group-search`, GlyphGroupSearch);

@@ -54,4 +54,4 @@ class InspectorHeader extends base {
 }
 
 module.exports = InspectorHeader;
-ui.Register(`mkfont-inspector-header`, InspectorHeader);
+ui.Register(`mkf-inspector-header`, InspectorHeader);

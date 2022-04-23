@@ -52,4 +52,4 @@ class BlockItem extends base {
 }
 
 module.exports = BlockItem;
-ui.Register(`mkfont-item-uni-block`, BlockItem);
+ui.Register(`mkf-item-uni-block`, BlockItem);

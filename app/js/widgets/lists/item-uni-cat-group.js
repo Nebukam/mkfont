@@ -65,4 +65,4 @@ class CatGroupItem extends base {
 }
 
 module.exports = CatGroupItem;
-ui.Register(`mkfont-item-uni-cat-group`, CatGroupItem);
+ui.Register(`mkf-item-uni-cat-group`, CatGroupItem);

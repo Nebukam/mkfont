@@ -375,4 +375,4 @@ class FontEditor extends base {
 }
 
 module.exports = FontEditor;
-ui.Register(`mkfont-font-editor`, FontEditor);
+ui.Register(`mkf-font-editor`, FontEditor);

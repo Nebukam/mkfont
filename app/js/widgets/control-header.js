@@ -60,4 +60,4 @@ class ControlHeader extends base {
 }
 
 module.exports = ControlHeader;
-ui.Register(`mkfont-control-header`, ControlHeader);
+ui.Register(`mkf-control-header`, ControlHeader);

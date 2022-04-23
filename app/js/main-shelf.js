@@ -24,4 +24,4 @@ class MainShelf extends base {
 }
 
 module.exports = MainShelf;
-ui.Register(`mkfont-main-shelf`, MainShelf);
+ui.Register(`mkf-main-shelf`, MainShelf);

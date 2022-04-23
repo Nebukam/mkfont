@@ -111,4 +111,4 @@ class SingleImportPreview extends base {
 }
 
 module.exports = SingleImportPreview;
-ui.Register(`mkfont-single-tr-preview`, SingleImportPreview);
+ui.Register(`mkf-single-tr-preview`, SingleImportPreview);

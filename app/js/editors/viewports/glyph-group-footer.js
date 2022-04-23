@@ -66,4 +66,4 @@ class GlyphGroupFooter extends base {
 }
 
 module.exports = GlyphGroupFooter;
-ui.Register(`mkfont-glyph-group-footer`, GlyphGroupFooter);
+ui.Register(`mkf-glyph-group-footer`, GlyphGroupFooter);

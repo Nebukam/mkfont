@@ -66,4 +66,4 @@ class PangramFooter extends base {
 }
 
 module.exports = PangramFooter;
-ui.Register(`mkfont-pangram-footer`, PangramFooter);
+ui.Register(`mkf-pangram-footer`, PangramFooter);

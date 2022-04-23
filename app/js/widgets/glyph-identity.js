@@ -135,4 +135,4 @@ class GlyphIdentity extends base {
 }
 
 module.exports = GlyphIdentity;
-ui.Register(`mkfont-glyph-identity`, GlyphIdentity);
+ui.Register(`mkf-glyph-identity`, GlyphIdentity);

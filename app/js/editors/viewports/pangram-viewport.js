@@ -65,4 +65,4 @@ class PangramViewport extends base {
 }
 
 module.exports = PangramViewport;
-ui.Register(`mkfont-pangram-viewport`, PangramViewport);
+ui.Register(`mkf-pangram-viewport`, PangramViewport);

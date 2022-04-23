@@ -5,6 +5,7 @@ const ui = nkm.ui;
 const mkfData = require(`../data`);
 const mkfInspectors = require(`./inspectors`);
 const mkfOperations = require(`../operations`);
+const mkfWidgets = require(`../widgets`);
 const mkfCmds = mkfOperations.commands;
 
 const base = nkm.datacontrols.ControlView;
@@ -42,6 +43,7 @@ class FontEditorHeader extends base {
     static _Style() {
         return nkm.style.Extends({
             ':host': {
+                'position':'relative',
                 'display': 'flex',
                 'flex-flow': 'row nowrap',
                 'align-items': 'center',
@@ -59,6 +61,10 @@ class FontEditorHeader extends base {
             },
             '.toolbar': {
 
+            },
+            '.monitor':{
+                '@':[`absolute-right`],
+                'margin-right':'10px'
             }
         }, base._Style());
     }
@@ -146,6 +152,9 @@ class FontEditorHeader extends base {
         this._title.ellipsis = true;
         this._title.Set("---");
 
+        //this._glyphMonitor = this.Attach(mkfWidgets.FamilyGlyphMonitor, `monitor`);
+        //this.forwardData.To(this._glyphMonitor);
+
     }
 
     _OnDataUpdated(p_data) {
@@ -156,4 +165,4 @@ class FontEditorHeader extends base {
 }
 
 module.exports = FontEditorHeader;
-ui.Register(`mkfont-font-editor-header`, FontEditorHeader);
+ui.Register(`mkf-font-editor-header`, FontEditorHeader);

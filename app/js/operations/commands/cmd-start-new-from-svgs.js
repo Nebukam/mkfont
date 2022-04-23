@@ -113,7 +113,7 @@ class CmdCreateFamilyDocFromSVGs extends CmdCreateFamilyDoc {
         //this._importInspector.data = ;
 
         if (!this._importEditor) {
-            this._importEditor = nkm.ui.UI.Rent(`mkfont-list-import-editor`);
+            this._importEditor = nkm.ui.UI.Rent(`mkf-list-import-editor`);
         }
 
         //this._importTransformationSettings

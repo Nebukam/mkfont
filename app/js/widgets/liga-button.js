@@ -83,4 +83,4 @@ class LigaButton extends base {
 }
 
 module.exports = LigaButton;
-ui.Register(`mkfont-liga-button`, LigaButton);
+ui.Register(`mkf-liga-button`, LigaButton);

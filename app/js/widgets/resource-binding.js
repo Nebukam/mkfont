@@ -88,4 +88,4 @@ class ResourceBinding extends base {
 }
 
 module.exports = ResourceBinding;
-ui.Register(`mkfont-resource-binding`, ResourceBinding);
+ui.Register(`mkf-resource-binding`, ResourceBinding);

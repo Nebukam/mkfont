@@ -385,4 +385,4 @@ class GlyphCanvasRenderer extends __BASE__ {
 }
 
 module.exports = GlyphCanvasRenderer;
-ui.Register(`mkfont-glyph-canvas-renderer`, GlyphCanvasRenderer);
+ui.Register(`mkf-glyph-canvas-renderer`, GlyphCanvasRenderer);

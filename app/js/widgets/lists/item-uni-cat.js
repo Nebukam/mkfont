@@ -47,4 +47,4 @@ class CatItem extends base {
 }
 
 module.exports = CatItem;
-ui.Register(`mkfont-item-uni-cat`, CatItem);
+ui.Register(`mkf-item-uni-cat`, CatItem);

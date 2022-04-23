@@ -52,4 +52,4 @@ class FamilyItem extends base {
 }
 
 module.exports = FamilyItem;
-ui.Register(`mkfont-item-uni-family`, FamilyItem);
+ui.Register(`mkf-item-uni-family`, FamilyItem);

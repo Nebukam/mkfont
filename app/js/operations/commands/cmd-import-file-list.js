@@ -111,7 +111,7 @@ class CmdImportFileList extends actions.Command {
         }
 
 
-        if (!this._importEditor) { this._importEditor = nkm.ui.UI.Rent(`mkfont-list-import-editor`); }
+        if (!this._importEditor) { this._importEditor = nkm.ui.UI.Rent(`mkf-list-import-editor`); }
 
         // TODO
         // this._importTransformationSettings.Set(IDS_EXT.IMPORT_BLOCK, UNICODE.instance._blockCatalog.At(0) );

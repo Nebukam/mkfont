@@ -289,4 +289,4 @@ class PropertyControl extends base {
 }
 
 module.exports = PropertyControl;
-ui.Register(`mkfont-property-control`, PropertyControl);
+ui.Register(`mkf-property-control`, PropertyControl);

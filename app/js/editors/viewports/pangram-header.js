@@ -134,4 +134,4 @@ class PangramHeader extends base {
 }
 
 module.exports = PangramHeader;
-ui.Register(`mkfont-pangram-header`, PangramHeader);
+ui.Register(`mkf-pangram-header`, PangramHeader);

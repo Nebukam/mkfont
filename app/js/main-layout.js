@@ -57,4 +57,4 @@ class MainLayout extends base {
 }
 
 module.exports = MainLayout;
-ui.Register(`mkfont-main-layout`, MainLayout);
+ui.Register(`mkf-main-layout`, MainLayout);

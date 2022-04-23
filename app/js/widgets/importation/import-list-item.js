@@ -267,4 +267,4 @@ class ImportListItem extends base {
 }
 
 module.exports = ImportListItem;
-ui.Register(`mkfont-import-list-item`, ImportListItem);
+ui.Register(`mkf-import-list-item`, ImportListItem);

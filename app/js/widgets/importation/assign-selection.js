@@ -66,4 +66,4 @@ class AssignSelectionControl extends base {
 }
 
 module.exports = AssignSelectionControl;
-ui.Register(`mkfont-assign-selection`, AssignSelectionControl);
+ui.Register(`mkf-assign-selection`, AssignSelectionControl);

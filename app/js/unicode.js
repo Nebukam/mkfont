@@ -13,6 +13,8 @@ class UNICODE extends nkm.com.helpers.Singleton {
 
     static SetActiveRange = new CmdSetActiveRange();
 
+    static get MAX_GLYPH_COUNT(){ return 65534; }
+
     _Init() {
 
         super._Init();

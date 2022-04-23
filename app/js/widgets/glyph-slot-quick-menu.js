@@ -86,4 +86,4 @@ class GlyphSlotQuickmenu extends base {
 }
 
 module.exports = GlyphSlotQuickmenu;
-ui.Register(`mkfont-glyph-slot-quickmenu`, GlyphSlotQuickmenu);
+ui.Register(`mkf-glyph-slot-quickmenu`, GlyphSlotQuickmenu);

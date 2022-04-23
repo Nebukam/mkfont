@@ -66,4 +66,4 @@ class AssignSelectionFilenameControl extends base {
 }
 
 module.exports = AssignSelectionFilenameControl;
-ui.Register(`mkfont-assign-filename`, AssignSelectionFilenameControl);
+ui.Register(`mkf-assign-filename`, AssignSelectionFilenameControl);

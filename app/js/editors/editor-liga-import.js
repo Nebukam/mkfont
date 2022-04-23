@@ -283,4 +283,4 @@ class EditorLigaImport extends base {
 }
 
 module.exports = EditorLigaImport;
-ui.Register(`mkfont-liga-import-editor`, EditorLigaImport);
+ui.Register(`mkf-liga-import-editor`, EditorLigaImport);

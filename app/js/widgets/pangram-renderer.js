@@ -32,6 +32,7 @@ class PangramRenderer extends base {
             },
             '.pangram': {
                 'text-align': 'var(--font-align)',
+                'line-height': 'var(--line-height)',
                 'font-size': 'var(--font-size)',
                 'color': 'var(--glyph-color)',
                 'text-transform': 'var(--case)'
@@ -77,9 +78,11 @@ class PangramRenderer extends base {
 
     set fontSize(p_value) { this.style.setProperty(`--font-size`, `${p_value}px`); }
 
+    set lineHeight(p_value) { this.style.setProperty(`--line-height`, `${p_value}em`); }
+
     set case(p_value) { this.style.setProperty(`--case`, `${p_value}`); }
 
 }
 
 module.exports = PangramRenderer;
-ui.Register(`mkfont-pangram`, PangramRenderer);
+ui.Register(`mkf-pangram`, PangramRenderer);

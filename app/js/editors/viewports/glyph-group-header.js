@@ -145,4 +145,4 @@ class GlyphGroupHeader extends base {
 }
 
 module.exports = GlyphGroupHeader;
-ui.Register(`mkfont-glyph-group-header`, GlyphGroupHeader);
+ui.Register(`mkf-glyph-group-header`, GlyphGroupHeader);

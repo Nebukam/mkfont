@@ -332,4 +332,4 @@ class GlyphGroupViewport extends base {
 }
 
 module.exports = GlyphGroupViewport;
-ui.Register(`mkfont-glyph-group-viewport`, GlyphGroupViewport);
+ui.Register(`mkf-glyph-group-viewport`, GlyphGroupViewport);

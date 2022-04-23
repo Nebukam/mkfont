@@ -114,6 +114,7 @@ class ENUMS {
         { name: `Align left`, [nkm.com.IDS.VALUE]: `left`, icon: 'text-align-left' },
         { name: `Align center`, [nkm.com.IDS.VALUE]: `center`, icon: 'text-align-center' },
         { name: `Align right`, [nkm.com.IDS.VALUE]: `right`, icon: 'text-align-right' },
+        { name: `Justify`, [nkm.com.IDS.VALUE]: `justify`, icon: 'text-align-justify' },
     ]);
 
     static PANGRAM_DIR = nkm.data.catalogs.CreateFrom({ name: `Direction`, autoSort: false }, [

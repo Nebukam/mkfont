@@ -59,4 +59,4 @@ class SearchStatus extends base {
 }
 
 module.exports = SearchStatus;
-ui.Register(`mkfont-search-status`, SearchStatus);
+ui.Register(`mkf-search-status`, SearchStatus);

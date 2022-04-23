@@ -118,4 +118,4 @@ class GlyphGroup extends base {
 }
 
 module.exports = GlyphGroup;
-ui.Register(`mkfont-glyph-group`, GlyphGroup);
+ui.Register(`mkf-glyph-group`, GlyphGroup);

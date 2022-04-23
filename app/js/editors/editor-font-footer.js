@@ -74,4 +74,4 @@ class FontEditorFooter extends base {
 }
 
 module.exports = FontEditorFooter;
-ui.Register(`mkfont-font-editor-footer`, FontEditorFooter);
+ui.Register(`mkf-font-editor-footer`, FontEditorFooter);

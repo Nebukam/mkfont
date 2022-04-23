@@ -70,15 +70,24 @@ class PangramInspector extends base {
                 'display': 'flex',
                 'flex-flow': 'column nowrap'
             },
-            '.item':{
-                'margin-bottom':`4px`
+            '.item': {
+                'margin-bottom': `4px`
+            },
+            '.sliders':{
+                'display':'flex',
+                'flex-flow':'row wrap',
+                'align-items': 'center',
+                'margin': '10px 0px 10px 0px'
+            },
+            '.sliders .item':{
+                'flex': '1 1 50%',
             },
             '.pangram': {
                 'flex': '1 1 auto',
                 'width': '100%',
             },
             '.slider': {
-                'margin': '10px 0px 10px 0px'
+                //'margin': '10px 0px 10px 0px'
             }
         }, base._Style());
     }
@@ -122,21 +131,36 @@ class PangramInspector extends base {
             ]
         };
 
-        this._slider = this.Attach(nkm.uilib.inputs.SliderOnly, `item slider`, this._footer);
-        this._slider.options = {
-            min: 8, max: 72, currentValue: 20,
+        let slidersCtnr = ui.El(`div`, { class: `sliders` }, this._footer);
+
+        let label = new ui.manipulators.Text(ui.El(`span`, {class:'label item'}, slidersCtnr));
+        label.Set(`Font size (px)`, true);
+        let slider = this.Attach(nkm.uilib.inputs.Slider, `item slider`, slidersCtnr);
+        slider.options = {
+            min: 8, max: 144, currentValue: 16,
             size: ui.FLAGS.SIZE_XXS,
-            onSubmit: { fn: this._Bind(this._UpdateFontSize) }
+            onSubmit: { fn: (p_input, p_value) => { this._pangramRenderer.fontSize = p_value; } }
+        }
+
+        label = new ui.manipulators.Text(ui.El(`span`, {class:'label item'}, slidersCtnr));
+        label.Set(`Line height (em)`, true);
+        label._element.setAttribute(`title`, `'em' units are relative to font size.\nOne em = 100% of the font size.`);
+        slider = this.Attach(nkm.uilib.inputs.Slider, `item slider`, slidersCtnr);
+        slider.options = {
+            min: 0.1, max: 10, step:0.01, currentValue: 1,
+            size: ui.FLAGS.SIZE_XXS,
+            onSubmit: { fn: (p_input, p_value) => { this._pangramRenderer.lineHeight = p_value; } }
         }
 
         this._text = this.Attach(nkm.uilib.inputs.Textarea, `item text`, this._footer);
         this._text.options = {
             currentValue: longPangram,
             onSubmit: { fn: (p_i, p_t) => { this._pangramRenderer.text = p_t; } },
-            rows:6
+            rows: 6
         }
 
-        this._pangramRenderer.fontSize = 20;
+        this._pangramRenderer.fontSize = 16;
+        this._pangramRenderer.lineHeight = 1;
         this._pangramRenderer.text = longPangram;
 
         this._footerToolbar = this.Attach(ui.WidgetBar, `item toolbar`, this._footer);
@@ -157,11 +181,6 @@ class PangramInspector extends base {
         }
 
     }
-
-    _UpdateFontSize(p_input, p_value) {
-        this._pangramRenderer.fontSize = p_value;
-    }
-
 
 }
 

@@ -149,4 +149,4 @@ class WelcomeView extends base {
 }
 
 module.exports = WelcomeView;
-ui.Register(`mkfont-welcome`, WelcomeView);
+ui.Register(`mkf-welcome`, WelcomeView);
