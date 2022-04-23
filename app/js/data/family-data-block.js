@@ -289,6 +289,12 @@ class FamilyDataBlock extends SimpleDataEx {
 
         //TODO : Cleanup up subFamilies, glyphs, and their variant
 
+        while(!this._glyphs.isEmpty){
+            let g = this._glyphs.last;
+            this.RemoveGlyph(g);
+            g.Release();
+        }
+
         /////
         this._glyphs.Clear();
         this._glyphsMap = {};

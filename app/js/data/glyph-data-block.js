@@ -152,8 +152,13 @@ class GlyphDataBlock extends SimpleDataEx {
     }
 
     _CleanUp() {
+        
         //TODO : Cleanup variants
+
         this.family = null;
+
+        this._defaultGlyph.Reset(false, true); // will clear SVG stuff since family == null
+
         this._unicode = null;
         this._unicodeInfos = null;
         super._CleanUp();

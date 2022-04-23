@@ -126,6 +126,15 @@ class GlyphVariantDataBlock extends SimpleDataEx {
         this._transformSettings.UpdateTransform();
     }
 
+    Reset(p_individualSet = true, p_silent = false) {
+
+        super.Reset(p_individualSet, p_silent);
+        this._transformSettings.Reset(p_individualSet, p_silent);
+
+        if (!this._glyph || !this._glyph.family) { this._UpdateFontObject(); }
+
+    }
+
     _CleanUp() {
         this.glyph = null;
         super._CleanUp();
