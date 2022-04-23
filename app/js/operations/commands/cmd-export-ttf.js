@@ -29,7 +29,7 @@ class CmdExportTTF extends actions.Command {
             this._blockingDialog = nkm.dialog.Push({
                 title: `Processing`,
                 message: `Please wait...`,
-                icon: `load-arrow-small`,
+                icon: `load-arrow`,
                 origin: this,
             });
 

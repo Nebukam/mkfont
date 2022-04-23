@@ -87,6 +87,9 @@ class PropertyControl extends base {
                 'white-space': 'nowrap',
                 //'overflow': 'hidden',
             },
+            ':host(.false) .label': {
+                'text-decoration': 'line-through var(--col-error-dark)',
+            },
             '.label::after': {
                 'content': '"🛈"',
                 //'position':'absolute',
@@ -229,6 +232,13 @@ class PropertyControl extends base {
         } else {
             this._input.currentValue = this.localValue;
         }
+
+        this.classList.remove(`false`);
+        if (nkm.u.isInstanceOf(this._input, uilib.inputs.Boolean)) {
+            if (!this._input.currentValue) { this.classList.add(`false`); }
+        }
+
+
     }
 
     _OnValueSubmit(p_input, p_value) {
@@ -251,8 +261,6 @@ class PropertyControl extends base {
             exportedValue = this.exportedValue;
 
         if (valueObj.override == p_value) { return; }
-
-        //valueObj.override = p_value;
 
         mkfCmds.SetPropertyOverride.emitter = this;
         mkfCmds.SetPropertyOverride.inputValue = p_value;

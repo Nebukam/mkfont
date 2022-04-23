@@ -42,11 +42,7 @@ class GlyphSlotQuickmenu extends base {
                 {
                     icon: `text-unicode`, htitle: `Copy unicode Hex to clipboard`,
                     variant: ui.FLAGS.MINIMAL,
-                    trigger: {
-                        fn: () => {
-                            mkfCmds.ExportSingleUniHex.Execute(this._data.glyph.unicodeInfos);
-                        }
-                    },
+                    trigger: { fn: () => { mkfCmds.ExportSingleUniHex.Execute(this._glyphInfos); } },
                     member: { owner: this, id: `_copyUniBtn` }
                 }
             ]

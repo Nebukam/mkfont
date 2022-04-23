@@ -63,7 +63,7 @@ class TransformSettingsInspector extends base {
                 'align-content': 'flex-start',
             },
             '.control': {
-                'flex': '1 1 auto',
+                'flex': '1 1 100%',
                 'margin': '0 2px 5px 2px'
             },
             '.small': {

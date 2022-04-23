@@ -111,7 +111,7 @@ class FamilyDataBlock extends SimpleDataEx {
     }
 
     get nullGlyph() { return this._nullGlyph; }
-    get refGlyph(){ return this._refGlyph; }
+    get refGlyph() { return this._refGlyph; }
 
     get transformSettings() { return this._transformSettings; }
     get searchSettings() { return this._searchSettings; }
@@ -285,11 +285,20 @@ class FamilyDataBlock extends SimpleDataEx {
         super.CommitUpdate();
     }
 
+    _OnReset(p_individualSet, p_silent) {
+
+        this._transformSettings.Reset(p_individualSet, p_silent);
+        this._searchSettings.Reset(p_individualSet, p_silent);
+        this._defaultSubFamily.Reset(p_individualSet, p_silent);
+
+        super._OnReset();
+    }
+
     _CleanUp() {
 
         //TODO : Cleanup up subFamilies, glyphs, and their variant
 
-        while(!this._glyphs.isEmpty){
+        while (!this._glyphs.isEmpty) {
             let g = this._glyphs.last;
             this.RemoveGlyph(g);
             g.Release();

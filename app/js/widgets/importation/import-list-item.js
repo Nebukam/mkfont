@@ -12,6 +12,7 @@ const __outOfRange = `outOfRange`;
 const __preserved = `preserved`;
 const __ignored = `ignored`;
 const __new = `new`;
+const __replace = `replace`;
 
 const base = nkm.datacontrols.ControlWidget;
 class ImportListItem extends base {
@@ -23,7 +24,7 @@ class ImportListItem extends base {
         super._Init();
         this._Bind(this._UpdatePreview);
         this._Bind(this._OnSubmit);
-        this._flags.Add(this, __outOfRange, __preserved, __ignored, __new);
+        this._flags.Add(this, __outOfRange, __preserved, __ignored, __new, __replace);
     }
 
     _PostInit() {
@@ -53,6 +54,7 @@ class ImportListItem extends base {
                 'background-color': `var(--col-cta)`
             },
             ':host(:not(.new)) .new-icon': { 'display': 'none', },
+            ':host(:not(.replace)) .replace-icon': { 'display': 'none', },
             ':host(.ignored):after': {
                 'content': `""`,
                 'position': `absolute`,
@@ -91,7 +93,7 @@ class ImportListItem extends base {
                 //'background-color': `rgba(127,127,127,0.05)`,
                 'border-radius': '3px'
             },
-            '.new-icon': {
+            '.sic': {
                 'position': 'absolute',
                 'top': `4px`,
                 'left': `44px`,
@@ -110,9 +112,13 @@ class ImportListItem extends base {
             centered: false,
         };
 
-        this._newIcon = new ui.manipulators.Icon(ui.El(`div`, { class: `new-icon` }, this._host));
+        this._newIcon = new ui.manipulators.Icon(ui.El(`div`, { class: `sic new-icon` }, this._host));
         this._newIcon.Set(`new-small`);
         this._newIcon._element.setAttribute(`title`, `This glyph doesn't exist yet and will be added to the font.`);
+
+        this._replaceIcon = new ui.manipulators.Icon(ui.El(`div`, { class: `sic replace-icon` }, this._host));
+        this._replaceIcon.Set(`load-arrow-small`);
+        this._replaceIcon._element.setAttribute(`title`, `This glyph already exist and will be updated.`);
 
         this._outputLabel = new ui.manipulators.Text(ui.El(`div`, { class: `output label font-xsmall` }, this._host));
         this._outputLabel.ellipsis = true;
@@ -214,6 +220,7 @@ class ImportListItem extends base {
 
         this._flags.Set(__ignored, ignored);
         this._flags.Set(__new, !this._data.variant && !ignored);
+        this._flags.Set(__replace, this._data.variant && !ignored);
 
         if(ignored){
             this._outputLabel.Set(`<span style='color:var(--col-warning)'>Not imported.</span>`);

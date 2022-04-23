@@ -6,8 +6,8 @@ const IDS = require(`../data/ids`);
 
 var __patternImg;
 
-const base = ui.helpers.Canvas;
-class GlyphCanvasRenderer extends base {
+const __BASE__ = ui.helpers.Canvas;
+class GlyphCanvasRenderer extends __BASE__ {
     constructor() { super(); }
 
     static __distribute = nkm.com.helpers.OptionsDistribute.Ext()
@@ -154,7 +154,7 @@ class GlyphCanvasRenderer extends base {
 
         if (this._emptyGlyph) {
             if (this._computedPath) {
-                let cw = this._computedPath.width;
+                let cw = this._glyphWidth;
                 ctx.lineWidth = iscale;
                 ctx.strokeStyle = `rgba(${nkm.style.Get(`--col-warning-dark-rgb`)},0.8)`;
                 ctx.beginPath();

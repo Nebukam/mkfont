@@ -38,8 +38,8 @@ class CmdImportLigatures extends actions.Command {
             //message: `Tweak the imported data to make sure it fits!`,
             content: [{ cl: this._importEditor, donotrelease: true }],
             actions: [
-                { label: `Create all`, icon: `load-arrow-small`, flavor: nkm.com.FLAGS.LOADING, trigger: { fn: this._OnImportContinueAll } }, //variant: nkm.ui.FLAGS.FRAME
-                { label: `Create selected`, icon: `load-arrow-small`, flavor: nkm.com.FLAGS.LOADING, variant: nkm.ui.FLAGS.FRAME, trigger: { fn: this._OnImportContinue } }, //variant: nkm.ui.FLAGS.FRAME
+                { label: `Create all`, icon: `new`, flavor: nkm.ui.FLAGS.CTA, variant: nkm.ui.FLAGS.FRAME, trigger: { fn: this._OnImportContinueAll } }, //variant: nkm.ui.FLAGS.FRAME
+                { label: `Create selected`, icon: `new`, flavor: nkm.ui.FLAGS.CTA, trigger: { fn: this._OnImportContinue } }, //variant: nkm.ui.FLAGS.FRAME
                 { label: `Cancel`, trigger: { fn: this._Cancel, thisArg: this } }
             ],
             icon: `font-liga`,

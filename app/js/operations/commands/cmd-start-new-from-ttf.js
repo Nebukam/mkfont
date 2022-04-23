@@ -24,7 +24,7 @@ class CmdCreateFamilyDocFromTTF extends CmdCreateFamilyDoc {
         this._blockingDialog = nkm.dialog.Push({
             title: `Processing`,
             message: `Please wait...`,
-            icon: `load-arrow-small`,
+            icon: `load-arrow`,
             origin: this,
         });
 

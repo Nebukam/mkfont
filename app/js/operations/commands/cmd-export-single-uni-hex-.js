@@ -18,6 +18,7 @@ class CmdExportSingleUniHex extends actions.Command {
     }
 
     _InternalExecute() {
+        console.log(this._context);
         let val = u.isString(this._context) ? this._context : UNICODE.UUni(this._context);
         navigator.clipboard.writeText(val.toUpperCase());
         this._Success();

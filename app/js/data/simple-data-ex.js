@@ -98,11 +98,17 @@ class SimpleDataEx extends nkm.data.SimpleDataBlock {
             let copy = { ...this._values };
             this._ResetValues(copy);
             this.BatchSetWithOverrides(copy, p_silent);
+            this._OnReset(p_individualSet, p_silent);
         } else {
             this._ResetValues(this._values);
+            this._OnReset(p_individualSet, p_silent);
             if (!p_silent) { this.CommitUpdate(); }
         }
 
+    }
+
+    _OnReset(p_individualSet, p_silent) {
+        if (this._fontObject) { this._UpdateFontObject(); }
     }
 
 
