@@ -113,7 +113,7 @@ class GlyphCanvasRenderer extends __BASE__ {
             return false;
         }
 
-        this.contextInfos = p_glyphVariant.subFamily._contextInfos;
+        this.contextInfos = p_glyphVariant.family._contextInfos;
         this.glyphWidth = p_glyphVariant.Resolve(IDS.EXPORTED_WIDTH);
         this.glyphPath = p_glyphVariant.Get(IDS.PATH);
         this.computedPath = p_glyphVariant._computedPath;

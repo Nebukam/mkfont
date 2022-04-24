@@ -204,7 +204,7 @@ class GlyphListInspector extends base {
 
     _GetActiveVariant(p_unicodeInfos) {
         if (!this._context || !p_unicodeInfos) { return null; }
-        return this._context.GetGlyph(p_unicodeInfos.u).GetVariant(this._context.selectedSubFamily);
+        return this._context.GetGlyph(p_unicodeInfos.u).activeVariant;
     }
 
     _OnGlyphAdded(p_family, p_glyph) { this._delayedInspectorRefresh.Schedule(); }
@@ -289,7 +289,7 @@ class GlyphListInspector extends base {
         if (this._transformReference) { this._transformReference.Unwatch(nkm.com.SIGNAL.VALUE_CHANGED, this._OnTransformValueChanged, this); }
         if (this._variantReference) { this._variantReference.Unwatch(nkm.com.SIGNAL.VALUE_CHANGED, this._OnRefGlyphValueChanged, this); }
 
-        let refVariant = this.editor._data.refGlyph.GetVariant(this.editor._data.selectedSubFamily);
+        let refVariant = this.editor._data.refGlyph.activeVariant;
         this._variantReference = refVariant;
         this._transformReference = refVariant._transformSettings;
 

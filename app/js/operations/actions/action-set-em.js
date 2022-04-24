@@ -8,7 +8,7 @@ const svgpath = require('svgpath');
 
 const ActionSetPropertyValue = require(`./action-set-property-value`);
 
-const subFamilyIDs = [
+const familyIDs = [
     mkfData.IDS.BASELINE,
     mkfData.IDS.ASCENT,
     mkfData.IDS.DESCENT,
@@ -41,7 +41,7 @@ class ActionSetEM extends ActionSetPropertyValue {
 
         if (resample) {
 
-            // Need to scale all subFamily metrics
+            // Need to scale all family metrics
             // - Ascent
             // - Descent
             // - Height
@@ -53,22 +53,22 @@ class ActionSetEM extends ActionSetPropertyValue {
             // - Push
             // - Manual scale factor if any
 
-            let subFamily = p_target;
+            let family = p_target;
 
-            for (let s = 0; s < subFamilyIDs.length; s++) {
-                let id = subFamilyIDs[s],
-                    value = subFamily.Get(id);
-                if (value != null) { subFamily.Set(id, value * scaleFactor); }
+            for (let s = 0; s < familyIDs.length; s++) {
+                let id = familyIDs[s],
+                    value = family.Get(id);
+                if (value != null) { family.Set(id, value * scaleFactor); }
             }
 
             let
-                list = subFamily.family._glyphs.internalArray,
+                list = family._glyphs.internalArray,
                 tn = transformIDs.length,
                 gn = glyphsIDs.length;
 
             for (let g = 0, n = list.length; g < n; g++) {
 
-                let variant = list[g].GetVariant(subFamily),
+                let variant = list[g].activeVariant,
                     transform = variant._transformSettings,
                     pathData = variant.Get(mkfData.IDS.PATH_DATA);
 

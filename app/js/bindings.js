@@ -50,8 +50,7 @@ class Bindings extends nkm.com.helpers.BindingKit {
                     {
                         key: mkfData.Glyph, keys: unicodeInfos,
                         binding: mkfEditors.inspectors.Glyph
-                    },
-                    { key: mkfData.SubFamily, binding: mkfEditors.inspectors.SubFamily },
+                    }
                 ]
             },
             {

@@ -16,7 +16,7 @@ class ActionCreateGlyph extends actions.Action {
             newGlyph = nkm.com.Rent(mkfData.Glyph),
             glyphVariant = newGlyph._defaultGlyph,
             family = p_operation.family,
-            defaultTr = family.selectedSubFamily.transformSettings,
+            defaultTr = family.transformSettings,
             transforms = p_operation.transforms || {};
 
         newGlyph.Set(mkfData.IDS.UNICODE, p_operation.unicode.u);

@@ -72,9 +72,8 @@ class CmdCreateFamilyDocFromSVGs extends CmdCreateFamilyDoc {
         let document = this._GetDoc(true);
 
         this._newFamily = document.currentData;
-        this._newFamily.defaultSubFamily._UpdateDisplayValues();
+        this._newFamily._UpdateDisplayValues();
 
-        let subFamily = this._newFamily.selectedSubFamily;
         this._importCatalog.Clear();
 
         for (let i = 0; i < list.length; i++) {
@@ -95,7 +94,7 @@ class CmdCreateFamilyDocFromSVGs extends CmdCreateFamilyDoc {
                     ['use-custom-unicode']: false,
                     ['unicode-user-input']: nkm.u.PATH.name(filePath),
                     svgStats: svgStats,
-                    subFamily: subFamily,
+                    family: this._newFamily,
                     transforms: this._importTransformationSettings
                 };
 
@@ -118,7 +117,7 @@ class CmdCreateFamilyDocFromSVGs extends CmdCreateFamilyDoc {
 
         //this._importTransformationSettings
 
-        this._importEditor.subFamily = subFamily;
+        this._importEditor.family = this._newFamily;
         this._importEditor.data = this._importTransformationSettings;
         this._importEditor.catalog = this._importCatalog;
 
@@ -179,8 +178,8 @@ class CmdCreateFamilyDocFromSVGs extends CmdCreateFamilyDoc {
 
     }
 
-    _End(){
-        if(this._blockingDialog){ this._blockingDialog.Consume(); }
+    _End() {
+        if (this._blockingDialog) { this._blockingDialog.Consume(); }
         super._End();
     }
 

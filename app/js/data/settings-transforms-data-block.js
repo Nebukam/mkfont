@@ -39,7 +39,7 @@ class TransformSettingsDataBlock extends SimpleDataEx {
     set glyphVariantOwner(p_value) { this._glyphVariantOwner = p_value; }
 
     get resolutionFallbacks() {
-        if (this._glyphVariantOwner) { return [this._glyphVariantOwner._subFamily._transformSettings]; }
+        if (this._glyphVariantOwner) { return [this._glyphVariantOwner._family._transformSettings]; }
         else { return []; }
     }
 
@@ -61,12 +61,12 @@ class TransformSettingsDataBlock extends SimpleDataEx {
 
         let pathData = this._glyphVariantOwner.Get(IDS.PATH_DATA);
 
-        if (!pathData || !this._glyphVariantOwner.subFamily) { return; }
+        if (!pathData || !this._glyphVariantOwner._family) { return; }
 
         let
             rw = this._glyphVariantOwner.Get(IDS.WIDTH),
             path = SVGOPS.FitPath(this,
-                this._glyphVariantOwner.subFamily._contextInfos,
+                this._glyphVariantOwner._family._contextInfos,
                 pathData
             ),
             w = 0,

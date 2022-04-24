@@ -28,7 +28,6 @@ class GlyphGroupSearch extends base {
         this._dataPreProcessor = (p_owner, p_data) => {
             if (nkm.u.isInstanceOf(p_data, mkfData.Glyph)) { return p_data.family.searchSettings; }
             if (nkm.u.isInstanceOf(p_data, mkfData.GlyphVariant)) { return p_data.glyph.family.searchSettings; }
-            if (nkm.u.isInstanceOf(p_data, mkfData.SubFamily)) { return p_data.family.searchSettings; }
             if (nkm.u.isInstanceOf(p_data, mkfData.Family)) { return p_data.searchSettings; }
             return p_data;
         };

@@ -17,7 +17,7 @@ const GlyphGroupFooter = require(`./glyph-group-footer`);
 const GlyphGroupSearch = require(`./glyph-group-search`);
 
 const base = nkm.datacontrols.ControlView; //ui.views.View
-class GlyphGroupViewport extends base { 
+class GlyphGroupViewport extends base {
     constructor() { super(); }
 
     _Init() {
@@ -241,7 +241,7 @@ class GlyphGroupViewport extends base {
         if (!unicodeInfos || !this._data) { return; }
 
         let widget = this.Attach(mkfWidgets.GlyphSlot, 'glyph', p_fragment);
-        widget.subFamily = this._data.selectedSubFamily;
+        widget.context = this._data;
         widget.data = unicodeInfos;
 
         this._unicodeMap.set(unicodeInfos, widget);
@@ -321,10 +321,6 @@ class GlyphGroupViewport extends base {
         let range = this._displayRange;
         this._displayRange = null;
         this.displayRange = range;
-    }
-
-    _OnGlyphVariantRemoved(p_subFamily, p_glyphVariant) {
-
     }
 
     //#endregion

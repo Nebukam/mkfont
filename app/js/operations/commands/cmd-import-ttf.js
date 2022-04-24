@@ -53,10 +53,9 @@ class CmdImportTTF extends actions.Command {
 
         let
             p = p_response.filePaths[0],
-            importedGlyphs = null,
-            subFamily = this._context.selectedSubFamily;
+            importedGlyphs = null;
 
-        try { importedGlyphs = mkfData.TTF.GetImportData(subFamily, fs.readFileSync(p)); }
+        try { importedGlyphs = mkfData.TTF.GetImportData(this._context, fs.readFileSync(p)); }
         catch (e) { console.error(e); }
 
         if (!importedGlyphs) {
@@ -100,7 +99,7 @@ class CmdImportTTF extends actions.Command {
                     transforms: transforms
                 });
             } else {
-                let variant = existingGlyph.GetVariant(family.selectedSubFamily);
+                let variant = existingGlyph.activeVariant;
                 this._emitter.Do(mkfActions.SetProperty, {
                     target: variant,
                     id: mkfData.IDS.PATH_DATA,

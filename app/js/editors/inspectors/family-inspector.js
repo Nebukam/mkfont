@@ -12,8 +12,8 @@ class FamilyInspector extends base {
     static __controls = [
         { cl:mkfWidgets.ControlHeader, options:{ label:`Definition` } },
         { options: { propertyId: mkfData.IDS.FAMILY } },
-        { options:{ propertyId:mkfData.IDS.FONT_STYLE, subData:`selectedSubFamily` } },
-        { options:{ propertyId:mkfData.IDS.WEIGHT_CLASS, subData:`selectedSubFamily` } },
+        { options:{ propertyId:mkfData.IDS.FONT_STYLE } },
+        { options:{ propertyId:mkfData.IDS.WEIGHT_CLASS } },
         { cl:mkfWidgets.ControlHeader, options:{ label:`Infos` } },
         { options: { propertyId: mkfData.IDS.COPYRIGHT } },
         //{ options: { propertyId: mkfData.IDS.METADATA } },

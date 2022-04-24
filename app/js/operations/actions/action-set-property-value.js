@@ -36,8 +36,6 @@ class ActionSetPropertyValue extends actions.Action {
         if (!p_merge) { p_operation.oldValue = oldValue; }
         else { this._operation.value = newValue; }
 
-        console.log(target, newValue, oldValue);
-
         if (nkm.u.isArray(target)) {
             for (let i = 0; i < target.length; i++) {
                 let tgt = target[i];

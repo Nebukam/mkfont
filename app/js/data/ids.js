@@ -100,7 +100,8 @@ class IDS {
 
     //#endregion
 
-    //#region SubFamily properties
+    //#region Family metrics
+    
     static WEIGHT_CLASS = 'weight';
     static FONT_STYLE = 'style';
     static EM_UNITS = 'em';

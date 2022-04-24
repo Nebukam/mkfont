@@ -153,10 +153,6 @@ class ImportListItem extends base {
 
     }
 
-    _OnEditorChanged(p_oldEditor) {
-        this._subFamily = this._editor ? this._editor._subFamily : null;
-    }
-
     Activate(p_evt) {
         if (!super.Activate(p_evt)) { return false; }
         this.editor.inspectedData.Set(this._data);
@@ -222,7 +218,7 @@ class ImportListItem extends base {
         this._flags.Set(__new, !this._data.variant && !ignored);
         this._flags.Set(__replace, this._data.variant && !ignored);
 
-        if(ignored){
+        if (ignored) {
             this._outputLabel.Set(`<span style='color:var(--col-warning)'>Not imported.</span>`);
         }
 
@@ -232,8 +228,8 @@ class ImportListItem extends base {
 
     _UpdatePreview() {
 
-        let subFamily = this.editor._subFamily,
-            contextInfos = subFamily._contextInfos,
+        let family = this.editor.data,
+            contextInfos = family._contextInfos,
             pathData = this._data.svgStats,
             transformedPath = SVGOPS.FitPath(
                 this._data.preserved ? this._data.variant._transformSettings : this._data.transforms,
@@ -255,7 +251,7 @@ class ImportListItem extends base {
 
     _Reprocess() {
         this.editor._assignManager._ProcessSingle(this._data);
-        this.Update();        
+        this.Update();
         this.editor._UpdatePreview(this._data);
     }
 

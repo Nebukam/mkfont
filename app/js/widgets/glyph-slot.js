@@ -26,7 +26,6 @@ class GlyphSlot extends base {
         this._extensions.Remove(this._extDrag);
         this._notifiesSelectionStack = true;
 
-        this._subFamily = null;
         this._glyhpVariant = null;
         this._glyphInfos = null;
 
@@ -141,7 +140,7 @@ class GlyphSlot extends base {
             ':host(.exists:not(.export-glyph)) .preview:before': {
                 'content': `""`,
                 'position': `absolute`,
-                'top': '50%', 'left': '50%', 
+                'top': '50%', 'left': '50%',
                 'transform': 'translate(-50%, -50%) rotate(45deg)',
                 'width': `1px`, 'height': `120%`,
                 'background-color': `var(--col-error)`
@@ -164,12 +163,6 @@ class GlyphSlot extends base {
 
         ui.dom.El(`div`, { class: `cat-hint` }, this._host);
 
-    }
-
-    get subFamily() { return this._subFamily; }
-    set subFamily(p_value) {
-        if (this._subFamily == p_value) { return; }
-        this._subFamily = p_value;
     }
 
     _OnDataChanged(p_oldData) {
@@ -204,8 +197,8 @@ class GlyphSlot extends base {
     _UpdateGlyph() {
 
         let variant = null;
-        if (this._data && this._subFamily) {
-            variant = this._subFamily.family.GetGlyph(this._data.u).GetVariant(this._subFamily);
+        if (this._data && this._context) {
+            variant = this._context.GetGlyph(this._data.u).activeVariant;
         }
 
         if (this._glyhpVariant == variant) { return; }

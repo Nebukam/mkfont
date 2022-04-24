@@ -32,7 +32,7 @@ class CmdImportFileSingle extends actions.Command {
         if (nkm.env.isNodeEnabled) {
             nkm.actions.RELAY.ShowOpenDialog({
                 //defaultPath: this._currentValue ? this._currentValue : ``,
-                filters:[{ name:'SVG files', extensions:['svg'] } ],
+                filters: [{ name: 'SVG files', extensions: ['svg'] }],
                 properties: ['openFile']
             }, this._OnPicked);
         } else {
@@ -72,9 +72,7 @@ class CmdImportFileSingle extends actions.Command {
         }
 
 
-        let
-            family = this._emitter.data,
-            subFamily = family.selectedSubFamily;
+        let family = this._emitter.data;
 
         // Check if glyph exists
         let
