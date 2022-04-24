@@ -7,9 +7,9 @@ const io = nkm.io;
 const UNICODE = require(`../unicode`);
 const SIGNAL = require(`../signal`);
 const IDS = require(`./ids`);
+const ENUMS = require(`./enums`);
 
 const SimpleDataEx = require(`./simple-data-ex`);
-const SubFamily = require(`./sub-family-data-block`);
 const Glyph = require(`./glyph-data-block`);
 const GlyphVariant = require(`./glyph-variant-data-block`);
 const GlyphVariantMissing = require(`./glyph-missing-data-block`);
@@ -19,6 +19,17 @@ const LigaImportSettings = require(`./settings-liga-import-data-block`);
 
 const ContentUpdater = require(`../content-updater`);
 const FamilyFontCache = require(`./family-font-cache`);
+
+const domparser = new DOMParser();
+const svgFontString =
+    `<font>` +
+    `   <font-face>` +
+    `       <font-face-src><font-face-src-name></font-face-src-name></font-face-src>` +
+    `   </font-face>` +
+    `</font>`;
+
+const svgFontRef = domparser.parseFromString(svgFontString, `image/svg+xml`).getElementsByTagName(`font`)[0];
+
 
 class FamilyDataBlock extends SimpleDataEx {
     constructor() { super(); }
@@ -45,21 +56,13 @@ class FamilyDataBlock extends SimpleDataEx {
         this._ligatureSet = new Set();
         this._glyphUnicodeCache = [];
 
-        this._subFamiliesCatalog = nkm.data.catalogs.CreateFrom({ name: 'Sub Families' });
-
-        this._subFamilies = new nkm.collections.List();
-        this._defaultSubFamily = new SubFamily();
-        this._defaultSubFamily._isDefault = true;
-
         this._nullGlyph = new Glyph();
         this._nullGlyph.family = this;
-        this._nullGlyph._SetDefaultVariant(this._defaultSubFamily);
         this._nullGlyph.isNull = true;
         this._nullGlyph._defaultGlyph._fontObject.remove();
 
         this._refGlyph = new Glyph();
         this._refGlyph.family = this;
-        this._refGlyph._SetDefaultVariant(this._defaultSubFamily);
         this._refGlyph.isNull = true;
         this._refGlyph._defaultGlyph._fontObject.remove();
 
@@ -67,10 +70,7 @@ class FamilyDataBlock extends SimpleDataEx {
         this._missingGlyph = new Glyph();
         Glyph.__defaultVariantClass = GlyphVariant;
         this._missingGlyph.family = this;
-        this._missingGlyph._SetDefaultVariant(this._defaultSubFamily);
-        this._missingGlyph.defaultGlyph.Set(IDS.PATH_DATA, SVGOPS.EmptySVGStats());
-
-        this._selectedSubFamily = this._defaultSubFamily;
+        this._missingGlyph.activeVariant.Set(IDS.PATH_DATA, SVGOPS.EmptySVGStats());
 
         //
 
@@ -79,6 +79,32 @@ class FamilyDataBlock extends SimpleDataEx {
         //
 
         this._fontCache = new FamilyFontCache(this);
+
+        //
+
+        this._contextInfos = {
+            raw: 1,
+            rah: 1,
+            w: 1000,
+            h: 1000,
+            rh: 1000,
+            asc: 1000,
+            bsl: 1000,
+            dsc: 0,
+            ref: 1000,
+            xh: 1000,
+            ch: 1000,
+            em: 1000,
+            mono: false
+        }
+
+        this._family = null;
+
+        this._transformSettings = new ImportSettings();
+        //this._transformSettings.Watch(nkm.com.SIGNAL.VALUE_CHANGED, this._OnTransformSettingsUpdated, this);
+
+        this._globalTransforms = new ImportSettings();
+        //this._globalTransforms.Watch(nkm.com.SIGNAL.VALUE_CHANGED, this._OnTransformSettingsUpdated, this);
 
     }
 
@@ -99,16 +125,41 @@ class FamilyDataBlock extends SimpleDataEx {
 
         p_values[IDS.PREVIEW_SIZE] = { value: defaults.Get(IDS.PREVIEW_SIZE) };
 
+        ////
+
+        let defaultEm = 1000;
+
+        p_values[IDS.WEIGHT_CLASS] = { value: ENUMS.WEIGHTS.At(3).value };
+        p_values[IDS.FONT_STYLE] = { value: `Regular` };
+
+        p_values[IDS.EM_UNITS] = { value: defaultEm, propagate: true };
+        p_values[IDS.EM_RESAMPLE] = { value: true };
+        p_values[IDS.BASELINE] = { value: defaultEm * 0.8, propagate: true };
+        p_values[IDS.ASCENT] = { value: defaultEm * 0.8, propagate: true };
+        p_values[IDS.ASC_RESAMPLE] = { value: false };
+        p_values[IDS.DESCENT] = { value: defaultEm * -0.25, propagate: true };
+
+        p_values[IDS.CAP_HEIGHT] = { value: defaultEm * 0.7, propagate: true };
+        p_values[IDS.X_HEIGHT] = { value: defaultEm * 0.7 * 0.72, propagate: true };
+
+        //p_values[IDS.H_ORIGIN_X] = { value: 0 };
+        //p_values[IDS.H_ORIGIN_Y] = { value: 0 };
+        p_values[IDS.WIDTH] = { value: 1000, propagate: true };
+        //p_values[IDS.V_ORIGIN_X] = { value: 0 };
+        //p_values[IDS.V_ORIGIN_Y] = { value: 0 };
+        p_values[IDS.HEIGHT] = { value: 1000, propagate: true };
+        p_values[IDS.MONOSPACE] = { value: false, propagate: true };
+        p_values[IDS.UNDERLINE_POSITION] = { value: null };
+        p_values[IDS.UNDERLINE_THICKNESS] = { value: null };
+        //p_values[IDS.HANGING] = { value: 500 };
+
     }
 
     Wake() {
         this._id = nkm.data.ID.New(`New MKFont`);
     }
 
-    _PostInit() {
-        super._PostInit();
-        this.AddSubFamily(this._defaultSubFamily);
-    }
+    _BuildFontObject() { return svgFontRef.cloneNode(true); }
 
     get nullGlyph() { return this._nullGlyph; }
     get refGlyph() { return this._refGlyph; }
@@ -116,62 +167,18 @@ class FamilyDataBlock extends SimpleDataEx {
     get transformSettings() { return this._transformSettings; }
     get searchSettings() { return this._searchSettings; }
 
-    get defaultSubFamily() { return this._defaultSubFamily; }
-
-    // Subfamily management
-
-    get selectedSubFamily() { return this._selectedSubFamily; }
-    set selectedSubFamily(p_value) {
-        if (!p_value) { p_value = this._defaultSubFamily; }
-        this._selectedSubFamily = p_value;
-        this.Broadcast(SIGNAL.SUBFAMILY_CHANGED, this._selectedSubFamily);
-    }
-
-    AddSubFamily(p_subFamily) {
-        if (!this._subFamilies.Add(p_subFamily)) { return; }
-
-        p_subFamily.family = this;
-        p_subFamily.Watch(nkm.com.SIGNAL.VALUE_CHANGED, this._OnSubFamilyValueUpdated, this);
-
-        for (let i = 0, n = this._glyphs.count; i < n; i++) {
-            let g = this._glyphs.At(i);
-            g.AddVariant(p_subFamily);
-        }
-
-        this._nullGlyph.AddVariant(p_subFamily);
-        this._refGlyph.AddVariant(p_subFamily);
-
-        let catalogItem = this._subFamiliesCatalog.Register({ name: `default`, data: p_subFamily });
-        p_subFamily._catalogItem = catalogItem;
-    }
-
-    RemoveSubFamily(p_subFamily) {
-        if (!this._subFamilies.Remove(p_subFamily)) { return; }
-
-        p_subFamily.Unwatch(nkm.com.SIGNAL.VALUE_CHANGED, this._OnSubFamilyValueUpdated, this);
-
-        for (let i = 0, n = this._glyphs.count; i < n; i++) {
-            let g = this._glyphs.At(i);
-            g.RemoveVariant(p_subFamily);
-        }
-
-        this._nullGlyph.RemoveVariant(p_subFamily);
-        this._refGlyph.RemoveVariant(p_subFamily);
-
-        let item = this._subFamiliesCatalog.FindFirstDataHolder(p_subFamily, false);
-        item.Release();
-    }
-
-    // Glyph management
+    //#region Glyph management
 
     AddGlyph(p_glyph) {
-        p_glyph.family = this;
+
         if (!this._glyphs.Add(p_glyph)) { return; }
 
         let unicode = p_glyph.Get(IDS.UNICODE);
         if (unicode in this._glyphsMap) {
             throw new Error(`Glyph already registered with unicode @${unicode}`);
         }
+
+        p_glyph.family = this;
 
         if (unicode) {
             this._glyphsMap[unicode] = p_glyph;
@@ -184,14 +191,10 @@ class FamilyDataBlock extends SimpleDataEx {
             .Watch(SIGNAL.VARIANT_UPDATED, this._OnGlyphVariantUpdated)
             .Watch(nkm.com.SIGNAL.UPDATED, this._OnGlyphUpdated);
 
-        for (let i = 0, n = this._subFamilies.count; i < n; i++) {
-            let subFamily = this._subFamilies.At(i);
-            if (subFamily._isDefault) { p_glyph._SetDefaultVariant(subFamily); }
-            else { p_glyph.AddVariant(subFamily); }
-        }
+        ContentUpdater.Push(this, this._UpdateFontObject);
 
         this.Broadcast(SIGNAL.GLYPH_ADDED, this, p_glyph);
-        ContentUpdater.instance.Broadcast(SIGNAL.GLYPH_ADDED, p_glyph);
+        //ContentUpdater.instance.Broadcast(SIGNAL.GLYPH_ADDED, p_glyph);
 
     }
 
@@ -216,13 +219,12 @@ class FamilyDataBlock extends SimpleDataEx {
 
         p_glyph.family = null;
 
-        for (let i = 0, n = this._subFamilies.count; i < n; i++) {
-            let glyphVariant = p_glyph.GetVariant(this._subFamilies.At(i));
-            ContentUpdater.Push(glyphVariant, glyphVariant._UpdateFontObject);
-        }
+        //
+
+        ContentUpdater.Push(this, this._UpdateFontObject);
 
         this.Broadcast(SIGNAL.GLYPH_REMOVED, this, g);
-        ContentUpdater.instance.Broadcast(SIGNAL.GLYPH_REMOVED, g);
+        //ContentUpdater.instance.Broadcast(SIGNAL.GLYPH_REMOVED, g);
 
     }
 
@@ -248,7 +250,7 @@ class FamilyDataBlock extends SimpleDataEx {
     // Watch
 
     _OnGlyphUnicodeChanged(p_glyph, p_valueObj, p_oldValue) {
-        // TODO : Move from old slot to the new one
+
         let index = this._glyphUnicodeCache.indexOf(p_oldValue);
 
         if (index != -1) { this._glyphUnicodeCache[index] = unicode; }
@@ -259,37 +261,108 @@ class FamilyDataBlock extends SimpleDataEx {
         if (p_glyph.isLigature) { this._ligatureSet.add(p_glyph); }
         else { this._ligatureSet.delete(p_glyph); }
 
+        ContentUpdater.Push(this, this._UpdateFontObject);
+
     }
 
-    _OnGlyphUpdated() {
-        this._scheduledUpdate.Schedule();
-    }
+    _OnGlyphUpdated() { this._scheduledUpdate.Schedule(); }
 
-    _OnGlyphVariantUpdated(p_glyph, p_glyphVariant) {
-        p_glyphVariant.subFamily._scheduledUpdate.Schedule();
-        this._scheduledUpdate.Schedule();
-    }
+    _OnGlyphVariantUpdated(p_glyph, p_glyphVariant) { this._scheduledUpdate.Schedule(); }
 
-    _OnSubFamilyValueUpdated(p_subFamily, p_id, p_valueObj, p_oldValue) {
-        let infos = IDS.GetInfos(p_id);
-        if (!infos || !infos.recompute) { return; }
-        for (let i = 0, n = this._glyphs.count; i < n; i++) {
-            let g = this._glyphs.At(i);
-            g._OnSubFamilyValueUpdated(p_subFamily, p_id, p_valueObj, p_oldValue);
-        }
-        this._scheduledUpdate.Schedule();
-    }
+    //#endregion
+
+    //#region properties update
 
     CommitUpdate() {
-        this._id.name = this._selectedSubFamily ? `${this.Get(IDS.FAMILY)}-${this._selectedSubFamily.Get(IDS.FONT_STYLE)}` : this.Get(IDS.FAMILY);
+        this._id.name = `${this.Get(IDS.FAMILY)}-${this.Get(IDS.FONT_STYLE)}`;
         super.CommitUpdate();
     }
+
+    CommitValueUpdate(p_id, p_valueObj, p_oldValue, p_silent = false) {
+        super.CommitValueUpdate(p_id, p_valueObj, p_oldValue, p_silent);
+        let infos = IDS.GetInfos(p_id);
+        if (!infos || !infos.recompute || !p_valueObj.propagate) { return; }
+        this._glyphs.ForEach((item, i) => { item._ScheduleTransformationUpdate(); });
+    }
+
+    _UpdateFontObject() {
+
+        let
+            font = this._fontObject,
+
+            fontFace = font.getElementsByTagName(`font-face`)[0],
+            fontFaceSrc = font.getElementsByTagName(`font-face-src`)[0],
+            fontFaceSrcName = font.getElementsByTagName(`font-face-src-name`)[0],
+            missingGlyph = font.getElementsByTagName(`missing-glyph`)[0],
+
+            fullName = `${this.Resolve(IDS.FAMILY)}-${this.Resolve(IDS.FONT_STYLE)}`;
+
+        font.setAttribute(IDS.ID, fullName);
+        font.setAttribute(SVGOPS.ATT_H_ADVANCE, this.Resolve(IDS.WIDTH));
+        font.setAttribute(SVGOPS.ATT_V_ADVANCE, this.Resolve(IDS.HEIGHT));
+
+        fontFaceSrcName.setAttribute(`name`, fullName);
+
+        fontFace.setAttribute(SVGOPS.ATT_ASCENT, this.Get(IDS.BASELINE));
+        fontFace.setAttribute(SVGOPS.ATT_DESCENT, this.Get(IDS.DESCENT));
+        fontFace.setAttribute(SVGOPS.ATT_EM_UNITS, this.Get(IDS.EM_UNITS));
+        fontFace.setAttribute(SVGOPS.ATT_WEIGHT_CLASS, this.Get(IDS.WEIGHT_CLASS));
+        fontFace.setAttribute('font-stretch', 'normal');
+
+    }
+
+    _UpdateDisplayValues() {
+
+        let
+            fw = this.Resolve(IDS.WIDTH),
+            fh = this.Resolve(IDS.HEIGHT),
+            bsl = this.Resolve(IDS.BASELINE),
+            asc = this.Resolve(IDS.ASCENT),
+            dsc = this.Resolve(IDS.DESCENT),
+            em = this.Resolve(IDS.EM_UNITS),
+            xh = this.Resolve(IDS.X_HEIGHT),
+            ch = this.Resolve(IDS.CAP_HEIGHT),
+            h = asc - dsc,
+            offy = Math.min(bsl - asc, 0),
+            rh = Math.max(em, h),
+            sc = 1,
+            ratio_w = 1,
+            ratio_h = 1,
+            ref = 0;
+
+        if (fw > rh) {
+            //font wider than taller
+            ref = fw;
+            ratio_w = ref / rh;
+        } else {
+            //font taller than wider
+            ref = rh;
+            ratio_h = ref / fw;
+        }
+
+        this._contextInfos.raw = ratio_w;
+        this._contextInfos.rah = ratio_h;
+        this._contextInfos.w = fw;
+        this._contextInfos.h = fh;
+        this._contextInfos.offy = offy;
+        this._contextInfos.rh = rh;
+        this._contextInfos.bsl = bsl;
+        this._contextInfos.asc = asc;
+        this._contextInfos.dsc = dsc;
+        this._contextInfos.xh = xh;
+        this._contextInfos.ch = ch;
+        this._contextInfos.ref = ref;
+        this._contextInfos.em = em;
+        this._contextInfos.mono = this.Resolve(IDS.MONOSPACE);
+
+    }
+
+    //#endregion
 
     _OnReset(p_individualSet, p_silent) {
 
         this._transformSettings.Reset(p_individualSet, p_silent);
         this._searchSettings.Reset(p_individualSet, p_silent);
-        this._defaultSubFamily.Reset(p_individualSet, p_silent);
 
         super._OnReset();
     }

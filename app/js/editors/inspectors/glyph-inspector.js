@@ -103,7 +103,7 @@ class GlyphInspector extends base {
             }
 
             this._variantCtrl.glyphInfos = this._data;
-            this._variantCtrl.data = glyph.GetVariant(this._context.selectedSubFamily);
+            this._variantCtrl.data = glyph.activeVariant;
 
         }
     }
@@ -115,7 +115,7 @@ class GlyphInspector extends base {
 
     _GetActiveVariant() {
         if (!this._context || !this._data) { return null; }
-        return this._context.GetGlyph(this._data.u).GetVariant(this._context.selectedSubFamily);
+        return this._context.GetGlyph(this._data.u).activeVariant;
     }
 
     _OnGlyphAdded(p_family, p_glyph) {

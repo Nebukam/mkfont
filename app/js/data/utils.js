@@ -20,14 +20,7 @@ class UTILS {
         let valueObj = p_self._values[p_id];
         let result = valueObj ? valueObj.value : null;
 
-        // TODO : If valueObj.override = true, attempt to return local value
-        // TODO : If valueObj.override = false, skip local value and go straight to inherited one
-
-        if (result != null) {
-            if (`override` in valueObj) {
-                if (valueObj.override) { return result; }
-            } else { return result; }
-        }
+        if (result != null) { return result; }
 
         if (p_fallbacks.length > 0) {
             p_self = p_fallbacks.shift();

@@ -40,7 +40,6 @@ class FontEditor extends base {
         this._leftShelfList = [];
         this._leftShelfCatalog = new nkm.data.catalogs.Catalog(false);
 
-        this._selectedSubFamily = null;
         this._pangramInspector = null;
 
         //const ContentUpdater = require(`../content-updater`);
@@ -190,14 +189,6 @@ class FontEditor extends base {
 
     }
 
-    set selectedSubFamily(p_value) {
-        if (this._selectedSubFamily == p_value) { return; }
-        let old = this._selectedSubFamily;
-        this._selectedSubFamily = p_value;
-        if (old) { old.Unwatch(nkm.com.SIGNAL.VALUE_CHANGED, this._OnDataValueChanged, this); }
-        if (p_value) { p_value.Watch(nkm.com.SIGNAL.VALUE_CHANGED, this._OnDataValueChanged, this); }
-    }
-
     static _Style() {
         return nkm.style.Extends({
             ':host': {
@@ -260,20 +251,9 @@ class FontEditor extends base {
 
     _OnDataChanged(p_oldData) {
         super._OnDataChanged(p_oldData);
-
-        if (this._data) {
-            this.selectedSubFamily = this._data.defaultSubFamily;
-            this._OnDataValueChanged(this._data, mkfData.IDS.PREVIEW_SIZE, null);
-        } else {
-            this.selectedSubFamily = null;
-        }
-
+        if (this._data) { this._OnDataValueChanged(this._data, mkfData.IDS.PREVIEW_SIZE, null); }
         this.SetActiveRange(UNICODE.instance._blockCatalog.At(0));
         this._viewport._RefreshItems();
-
-
-        //mkfCmds.ImportLigatures.Execute(this._data);
-
     }
 
     _OnDataValueChanged(p_data, p_id, p_valueObj) {
@@ -284,13 +264,11 @@ class FontEditor extends base {
 
         if (infos.recompute) {
 
-            let subFam = this._selectedSubFamily;
+            p_data._UpdateDisplayValues();
 
-            subFam._UpdateDisplayValues();
-
-            let s = subFam.Resolve(mkfData.IDS.PREVIEW_SIZE),
-                rW = subFam._contextInfos.raw,
-                rH = subFam._contextInfos.rah,
+            let s = p_data.Get(mkfData.IDS.PREVIEW_SIZE),
+                rW = p_data._contextInfos.raw,
+                rH = p_data._contextInfos.rah,
                 pH = `auto`,
                 pW = `auto`,
                 fH = s, fW = s;
@@ -307,7 +285,7 @@ class FontEditor extends base {
                 fW = s;
             }
 
-            this.style.setProperty(`--glyph-color`, p_data.Resolve(mkfData.IDS.COLOR_PREVIEW));
+            this.style.setProperty(`--glyph-color`, p_data.Get(mkfData.IDS.COLOR_PREVIEW));
             this.style.setProperty(`--preview-size`, `${s}px`);
             this.style.setProperty(`--preview-height`, `${fH * 0.8}px`);
             this.style.setProperty(`--preview-width`, `${fW * 0.8}px`);
@@ -318,13 +296,9 @@ class FontEditor extends base {
         }
     }
 
-    _OnGlyphAdded(p_family, p_glyph) {
-        this._inspectedData.DelayedUpdate(true);
-    }
+    _OnGlyphAdded(p_family, p_glyph) { this._inspectedData.DelayedUpdate(true); }
 
-    _OnGlyphRemoved(p_family, p_glyph) {
-        this._inspectedData.DelayedUpdate(true);
-    }
+    _OnGlyphRemoved(p_family, p_glyph) { this._inspectedData.DelayedUpdate(true); }
 
     _AnalyizeGlyphInfos(p_infos, p_analytics, index, total) {
 
@@ -334,7 +308,7 @@ class FontEditor extends base {
             p_analytics.nullGlyphs++;
         } else {
             p_analytics.existingGlyphs++;
-            p_analytics.existing.push(glyph.GetVariant(this._data.selectedSubFamily));
+            p_analytics.existing.push(glyph.activeVariant);
             p_analytics.existingInfos.push(p_infos);
         }
 

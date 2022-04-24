@@ -25,7 +25,7 @@ class CmdExportTTF extends actions.Command {
         }
 
         if (!ContentUpdater.ready) {
-            
+
             this._blockingDialog = nkm.dialog.Push({
                 title: `Processing`,
                 message: `Please wait...`,
@@ -47,14 +47,13 @@ class CmdExportTTF extends actions.Command {
 
             let
                 family = this._context,
-                subFamily = family.selectedSubFamily,
-                ttf = svg2ttf(subFamily.fontObject.outerHTML, {
-                    familyname: subFamily.Resolve(IDS.FAMILY) || `unamed-mkfont`,
-                    subfamilyname: subFamily.Resolve(IDS.FONT_STYLE) || `regular`,
-                    copyright: subFamily.Resolve(IDS.COPYRIGHT) || `mkfont`,
-                    description: subFamily.Resolve(IDS.DESCRIPTION) || `Made with mkfont`,
-                    url: subFamily.Resolve(IDS.URL) || `https://github.com/Nebukam/mkfont`,
-                    version: subFamily.Resolve(IDS.VERSION) || `1.0`,
+                ttf = svg2ttf(family.fontObject.outerHTML, {
+                    familyname: family.Resolve(IDS.FAMILY) || `unamed-mkfont`,
+                    subfamilyname: family.Resolve(IDS.FONT_STYLE) || `regular`,
+                    copyright: family.Resolve(IDS.COPYRIGHT) || `mkfont`,
+                    description: family.Resolve(IDS.DESCRIPTION) || `Made with mkfont`,
+                    url: family.Resolve(IDS.URL) || `https://github.com/Nebukam/mkfont`,
+                    version: family.Resolve(IDS.VERSION) || `1.0`,
                 });
 
             u.Download(`font`, ttf.buffer, u.MIME.Get(`.ttf`));
@@ -66,7 +65,7 @@ class CmdExportTTF extends actions.Command {
     }
 
     _End() {
-        if(this._blockingDialog){ this._blockingDialog.Consume(); }
+        if (this._blockingDialog) { this._blockingDialog.Consume(); }
         super._End();
     }
 

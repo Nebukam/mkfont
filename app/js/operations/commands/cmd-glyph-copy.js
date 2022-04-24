@@ -16,7 +16,7 @@ class CmdGlyphCopy extends actions.Command {
     _InternalExecute() {
 
         let family = this._emitter.data,
-            variant = family.GetGlyph(this._context?.u || this._emitter.inspectedData.lastItem?.u).GetVariant(family.selectedSubFamily);
+            variant = family.GetGlyph(this._context?.u || this._emitter.inspectedData.lastItem?.u).activeVariant;
 
         if (variant.glyph.isNull) {
             this._Cancel();

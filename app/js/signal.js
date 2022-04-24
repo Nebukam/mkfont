@@ -38,13 +38,6 @@ class SIGNAL {
   static TTF_UPDATED = Symbol(`ttfUpdated`);
 
   /**
-   * @description TODO
-   * @type {symbol}
-   * @customtag read-only
-   */
-  static SUBFAMILY_CHANGED = Symbol(`subfamily-changed`);
-
-  /**
   * @description TODO
   * @type {symbol}
   * @customtag read-only

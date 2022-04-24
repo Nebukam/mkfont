@@ -48,7 +48,7 @@ class AssignSelectionBlockRangeControl extends base {
         this._end = this._start + this._count;
 
         if (this._data.Get(mkfData.IDS_EXT.IMPORT_BLOCK_START) == mkfData.ENUMS.BLOCK_START_FIRST_AVAIL) {
-            this._start = mkfData.UTILS.FindFirstEmptyIndex(this.editor._subFamily.family, this._start);
+            this._start = mkfData.UTILS.FindFirstEmptyIndex(this.editor.data, this._start);
             this._count = Math.max(this._end - this._start, 0);
             this._end = this._start + (this._end - this._start);
         }

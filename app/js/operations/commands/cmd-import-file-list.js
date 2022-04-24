@@ -62,7 +62,7 @@ class CmdImportFileList extends actions.Command {
             return;
         }
 
-        let subFamily = this._context.selectedSubFamily;
+        let family = this._context;
 
         this._PreprocessFileList(list);
         this._importList.length = 0;
@@ -116,8 +116,7 @@ class CmdImportFileList extends actions.Command {
         // TODO
         // this._importTransformationSettings.Set(IDS_EXT.IMPORT_BLOCK, UNICODE.instance._blockCatalog.At(0) );
 
-        this._importEditor.subFamily = subFamily;
-        this._importEditor._currentDisplayRange = this._emitter._displayRange;
+        this._importEditor.family = family;
         this._importEditor._importList = this._importList;
         this._importEditor._importSelection = this._emitter.inspectedData;
         this._importEditor.data = this._importTransformationSettings;
@@ -168,9 +167,7 @@ class CmdImportFileList extends actions.Command {
 
             let unicodeInfos = UNICODE.GetInfos(targetUnicode, true);
 
-            if (!unicodeInfos) {
-                continue;
-            }
+            if (!unicodeInfos) { continue; }
 
             let existingGlyph = family.GetGlyph(unicodeInfos.u);
 
@@ -185,7 +182,7 @@ class CmdImportFileList extends actions.Command {
 
             } else {
 
-                let variant = existingGlyph.GetVariant(family.selectedSubFamily);
+                let variant = existingGlyph.activeVariant;
                 this._emitter.Do(mkfActions.SetProperty, {
                     target: variant,
                     id: mkfData.IDS.PATH_DATA,
@@ -261,7 +258,7 @@ class CmdImportFileList extends actions.Command {
         if (this._importEditor) {
             this._importEditor.data = null;
             this._importEditor._importList = null;
-            this._importEditor.subFamily = null;
+            this._importEditor.family = null;
         }
         super._End();
     }

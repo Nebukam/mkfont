@@ -30,7 +30,6 @@ class TTFImport {
 
         let
             family = nkm.com.Rent(Family),
-            subFamily = family.defaultSubFamily,
             em = this.numeric(fontFace, SVGOPS.ATT_EM_UNITS, 1000),
             width = this.numeric(font, SVGOPS.ATT_H_ADVANCE, em),
             height = em, //this.numeric(font, SVGOPS.ATT_V_ADVANCE, em),
@@ -41,7 +40,7 @@ class TTFImport {
 
         family.Set(IDS.FAMILY, font.getAttribute(`id`));
 
-        subFamily.BatchSet({
+        family.BatchSet({
             [IDS.EM_UNITS]: em,
             [IDS.WIDTH]: width,
             [IDS.HEIGHT]: height,
@@ -52,7 +51,7 @@ class TTFImport {
 
         // NOTE : When importing a TTF, the ASCENT is actually the baseline, and real ascender == BASELINE.
 
-        subFamily._UpdateDisplayValues();
+        family._UpdateDisplayValues();
 
         for (let i = 0; i < glyphs.length; i++) {
 
@@ -68,7 +67,7 @@ class TTFImport {
             let newGlyph = nkm.com.Rent(Glyph),
                 variant = newGlyph._defaultGlyph;
 
-            if (gW != width) { variant.Set(IDS.WIDTH, gW); }
+            //if (gW != width) { variant.Set(IDS.WIDTH, gW); }
             //if (glyphAdvY != fontAdvy) { defg.Set(IDS.HEIGHT, glyphAdvY); }
 
             // Flip & translate glyph
@@ -103,6 +102,8 @@ class TTFImport {
             svgStats.path = path;//svgpath(path).translate(-bbox.x, 0).toString();
             //SVGOPS.TranslateBBox(bbox, -bbox.x, 0);
 
+            if (gH == height) { gH = null; }
+
             variant.BatchSet({
                 [IDS.PATH_DATA]: svgStats,
                 [IDS.HEIGHT]: gH,
@@ -118,13 +119,13 @@ class TTFImport {
 
         }
 
-        subFamily.Set(IDS.WIDTH, Math.min(max_adv_x, em));
+        family.Set(IDS.WIDTH, Math.min(max_adv_x, em));
 
         return family;
 
     }
 
-    static GetImportData(p_subFamily, p_ttfBytes) {
+    static GetImportData(p_family, p_ttfBytes) {
 
         let
             svgFont = domparser.parseFromString(ttf2svg(p_ttfBytes), `image/svg+xml`),
@@ -134,15 +135,13 @@ class TTFImport {
         if (!fontFace) { throw new Error(`fontFace element missing`); }
 
         let
-            family = p_subFamily.family,
-            subFamily = p_subFamily,
             importList = [],
             em = this.numeric(fontFace, SVGOPS.ATT_EM_UNITS),
             width = this.numeric(fontFace, SVGOPS.ATT_H_ADVANCE, em),
             height = this.numeric(fontFace, SVGOPS.ATT_V_ADVANCE, em),
             ascent = this.numeric(fontFace, SVGOPS.ATT_ASCENT, em * 0.7),
             descent = this.numeric(fontFace, SVGOPS.ATT_DESCENT, em * -0.25),
-            asc = p_subFamily.Resolve(IDS.ASCENT),
+            asc = p_family.Resolve(IDS.ASCENT),
             scale = asc / ascent;
 
 

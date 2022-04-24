@@ -45,11 +45,11 @@ class EditorListImport extends base {
             '.item': {
                 'flex': '1 0 auto',
             },
-            '.column':{
-                'overflow-x':'hidden',
-                'overflow-y':'auto',
+            '.column': {
+                'overflow-x': 'hidden',
+                'overflow-y': 'auto',
                 'flex': '1 1 auto',
-                'min-height':0,
+                'min-height': 0,
             },
             '.list': {
                 'position': 'relative',
@@ -61,11 +61,11 @@ class EditorListImport extends base {
             },
             '.settings': {
                 'width': '300px',
-                'height':'376px'
+                'height': '376px'
             },
             '.preview': {
                 'position': 'relative',
-                'aspect-ratio':'1/1',
+                'aspect-ratio': '1/1',
                 'width': '330px',
                 'border-radius': '3px',
             },
@@ -90,7 +90,8 @@ class EditorListImport extends base {
             },
             '.control': {
                 'flex': '0 1 auto',
-                'margin': '0 2px 5px 2px'
+                'margin': '0 2px 5px 2px',
+                'max-width':'296px'
             },
             '.small': {
                 // 'flex': '1 1 45%'
@@ -169,7 +170,8 @@ class EditorListImport extends base {
 
     }
 
-    set subFamily(p_value) { this._subFamily = p_value; }
+    get family() { return this._family; }
+    set family(p_value) { this._family = p_value; }
 
     _OnDataChanged(p_oldData) {
         super._OnDataChanged(p_oldData);
@@ -253,7 +255,7 @@ class EditorListImport extends base {
 
         let
             refTransform = p_data.preserved ? p_data.variant._transformSettings : this._data,
-            contextInfos = this._subFamily._contextInfos,
+            contextInfos = this._family._contextInfos,
             pathData = p_data.svgStats,
             transformedPath = SVGOPS.FitPath(
                 refTransform,
@@ -287,7 +289,7 @@ class EditorListImport extends base {
     }
 
     GetGlyphVariant(p_unicodeInfos) {
-        return this._subFamily.family.GetGlyph(p_unicodeInfos?.u).GetVariant(this._subFamily);
+        return this._family.GetGlyph(p_unicodeInfos?.u).activeVariant;
     }
 
     _CleanUp() {

@@ -32,7 +32,7 @@ class CmdGlyphClear extends actions.Command {
             for (let i = 0; i < this._context.length; i++) {
 
                 let infos = this._context[i],
-                    variant = family.GetGlyph(infos.u).GetVariant(family.selectedSubFamily);
+                    variant = family.GetGlyph(infos.u).activeVariant;
 
                 this._Empty(variant, infos, true);
             }
@@ -64,7 +64,7 @@ class CmdGlyphClear extends actions.Command {
                 unicode: p_infos,
                 path: svgStats,
                 transforms: {
-                    [mkfData.IDS.WIDTH]: f.selectedSubFamily.Get(mkfData.IDS.WIDTH),
+                    [mkfData.IDS.WIDTH]: f.Get(mkfData.IDS.WIDTH),
                     [mkfData.IDS.TR_AUTO_WIDTH]: false
                 }
             });
@@ -81,7 +81,7 @@ class CmdGlyphClear extends actions.Command {
             this._emitter.Do(mkfActions.SetPropertyMultiple, {
                 target: p_variant,
                 values: {
-                    [mkfData.IDS.WIDTH]: f.selectedSubFamily.Get(mkfData.IDS.WIDTH),
+                    [mkfData.IDS.WIDTH]: f.Get(mkfData.IDS.WIDTH),
                     [mkfData.IDS.PATH_DATA]: svgStats
                 }
             });

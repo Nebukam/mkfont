@@ -100,7 +100,8 @@ class IDS {
 
     //#endregion
 
-    //#region SubFamily properties
+    //#region Family metrics
+    
     static WEIGHT_CLASS = 'weight';
     static FONT_STYLE = 'style';
     static EM_UNITS = 'em';
@@ -113,6 +114,7 @@ class IDS {
     static UNDERLINE_THICKNESS = 'u-thickness';
     static UNDERLINE_POSITION = 'u-position';
     static EM_RESAMPLE = 'em-resample';
+    static ASC_RESAMPLE = 'asc-resample';
     static MONOSPACE = 'monospace';
 
     static {
@@ -328,7 +330,7 @@ class IDS {
             recompute: true,
             inputType: inputs.SliderOnly,
             label: `Preview size`,
-            inputOptions: { changeOnInput: true, step: 1, min: 70, max: 250, size: ui.FLAGS.SIZE_XXS },
+            inputOptions: { changeOnInput: true, step: 1, min: 70, max: 250, size: ui.FLAGS.SIZE_XS },
             desc: `Define the size of individual items in the list.`
         };
 
@@ -394,15 +396,15 @@ class IDS {
             transform: true,
             inputType: inputs.Slider,
             label: `Scale factor`,
-            inputOptions: { changeOnInput: true, min: 0.01, max: 100, step: 0.01, size: ui.FLAGS.SIZE_XXS },
+            inputOptions: { changeOnInput: true, min: 0.01, max: 100, step: 0.01, size: ui.FLAGS.SIZE_XS },
             desc: `Factor by which the input vector will be scaled.`
         };
 
         this.infos[this.TR_NRM_FACTOR] = {
             transform: true,
             inputType: inputs.Slider,
-            label: `Normalize margin`,
-            inputOptions: { changeOnInput: true, min: -1, max: 1, step: 0.01, size: ui.FLAGS.SIZE_XXS },
+            label: `Margin`,
+            inputOptions: { changeOnInput: true, min: -1, max: 1, step: 0.01, size: ui.FLAGS.SIZE_XS },
             desc: `Margin to apply to the glyph when normalizing it.`
         };
 

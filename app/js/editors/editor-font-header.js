@@ -23,8 +23,8 @@ class FontEditorHeader extends base {
         this._modalFamilyOpts = this._CmdModal({ name: 'Infos', icon: 'font' },
             { content: mkfInspectors.Family, margins: margins });
 
-        this._modalSubFamilyOpts = this._CmdModal({ name: 'Metrics', icon: 'layout' },
-            { content: mkfInspectors.SubFamily, margins: margins });
+        this._modalFamilyMetrics = this._CmdModal({ name: 'Metrics', icon: 'layout' },
+            { content: mkfInspectors.FamilyMetrics, margins: margins });
 
         this._menuHah = this._commands.Create(ui.commands.Menu, 'Menu test', 'layout');
         this._menuHah.options = {
@@ -104,12 +104,7 @@ class FontEditorHeader extends base {
                     group: `family`
                 },
                 {
-                    member: { owner: this, id: `_btnSelectSubFamily` },
-                    cl: nkm.uilib.inputs.Select,
-                    group: `family`
-                },
-                {
-                    command: this._modalSubFamilyOpts, isCmdEmitter: true,
+                    command: this._modalFamilyMetrics, isCmdEmitter: true,
                     htitle: `Global metrics (affect all glyphs)`,
                     group: `family`
                 },
@@ -145,9 +140,6 @@ class FontEditorHeader extends base {
             ]
         };
 
-        this._btnSelectSubFamily.visible = false;
-        this.forwardData.To(this._btnSelectSubFamily, { dataMember: `_subFamiliesCatalog` });
-
         this._title = new ui.manipulators.Text(ui.dom.El("div", { class: "title font-large" }, this));
         this._title.ellipsis = true;
         this._title.Set("---");
@@ -159,7 +151,7 @@ class FontEditorHeader extends base {
 
     _OnDataUpdated(p_data) {
         super._OnDataUpdated(p_data);
-        this._title.Set(`${p_data.Resolve(mkfData.IDS.FAMILY)}-${p_data.selectedSubFamily.Resolve(mkfData.IDS.FONT_STYLE)}`);
+        this._title.Set(`${p_data.Get(mkfData.IDS.FAMILY)}-${p_data.Get(mkfData.IDS.FONT_STYLE)}`);
     }
 
 }

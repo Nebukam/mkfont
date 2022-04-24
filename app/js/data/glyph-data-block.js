@@ -31,11 +31,11 @@ class GlyphDataBlock extends SimpleDataEx {
         this._arabic_form = null;
         this._unicodeInfos = null;
 
+        this._variants = new nkm.collections.List();
+
         this._defaultGlyph = new this.constructor.__defaultVariantClass();
         this._defaultGlyph._isDefault = true;
-
-        this._glyphVariants = new nkm.collections.List();
-        this._subFamiliesMap = new nkm.collections.Dictionary();
+        this.AddVariant(this._defaultGlyph);
 
     }
 
@@ -47,15 +47,23 @@ class GlyphDataBlock extends SimpleDataEx {
 
     get resolutionFallbacks() { return [this._family]; }
 
-    get defaultGlyph() { return this._defaultGlyph; }
+    get activeVariant() { return this._defaultGlyph; }
 
     get isLigature() {
         let unc = this._values[IDS.UNICODE].value;
         return unc ? unc.includes(`+`) ? true : false : false;
     }
 
-    set family(p_value) { this._family = p_value; }
     get family() { return this._family; }
+    set family(p_value) {
+        if (this._family == p_value) { return; }
+        let oldFamily = this._family;
+        this._family = p_value;
+
+        for (let i = 0; i < this._variants.count; i++) { this._variants.At(i).family = p_value; }
+    }
+
+    get variantsCount() { return this._variants.count; }
 
     get unicodeInfos() {
         if (!this._unicodeInfos) { return UNICODE.GetInfos(this.Get(IDS.UNICODE), true); }
@@ -63,105 +71,72 @@ class GlyphDataBlock extends SimpleDataEx {
     }
     set unicodeInfos(p_value) { this._unicodeInfos = p_value; }
 
-    //
-
-    _SetDefaultVariant(p_subFamily) {
-        if (!this._glyphVariants.Add(p_subFamily)) { return this._defaultGlyph; }
-        this._OnGlyphVariantAdded(this._defaultGlyph, p_subFamily);
-        return this._defaultGlyph;
-    }
-
     // Variant management
 
-    AddVariant(p_subFamily) {
-        if (!this._glyphVariants.Add(p_subFamily)) { return this._subFamiliesMap.Get(p_subFamily); }
-        // TODO : Retrieve deleted variants
-        let glyphVariant = com.Rent(GlyphVariant);
-        this._OnGlyphVariantAdded(glyphVariant, p_subFamily);
-        return glyphVariant;
+    AddVariant(p_glyphVariant = null) {
+        if (p_glyphVariant != null) { if (this._variants.Contains(p_glyphVariant)) { return p_glyphVariant; } }
+        else { p_glyphVariant = com.Rent(this.constructor.__defaultVariantClass); }
+        this._variants.Add(p_glyphVariant);
+        p_glyphVariant.index = this._variants.count - 1;
+        this._OnGlyphVariantAdded(p_glyphVariant);
+        return p_glyphVariant;
     }
 
-    _OnGlyphVariantAdded(p_glyphVariant, p_subFamily) {
-
-        this._subFamiliesMap.Set(p_subFamily, p_glyphVariant);
-
+    _OnGlyphVariantAdded(p_glyphVariant) {
         p_glyphVariant.glyph = this;
-        p_glyphVariant.subFamily = p_subFamily;
-
+        p_glyphVariant.family = this._family;
         p_glyphVariant.Watch(com.SIGNAL.UPDATED, this._OnGlyphVariantUpdated, this);
-        p_subFamily.Watch(com.SIGNAL.RELEASED, this._OnSubFamilyReleased, this);
-
         this.Broadcast(com.SIGNAL.ITEM_ADDED, this, p_glyphVariant);
-        p_subFamily.Broadcast(SIGNAL.GLYPH_ADDED, this, p_glyphVariant);
-
     }
 
-    RemoveVariant(p_subFamily) {
-        if (!this._glyphVariants.Remove(p_subFamily)) { return null; }
-        let glyphVariant = this._subFamiliesMap.Get(p_subFamily);
-        glyphVariant.subFamily = null;
-        glyphVariant.Unwatch(com.SIGNAL.UPDATED, this._OnGlyphVariantUpdated, this);
+    RemoveVariant(p_glyphVariant) {
+        if (p_glyphVariant == this._defaultGlyph) { return null; }
+        if (!this._variants.Remove(p_glyphVariant)) { return null; }
+        this._OnGlyphVariantRemoved(p_glyphVariant);
+        return p_glyphVariant;
+    }
 
-        this.Broadcast(com.SIGNAL.ITEM_REMOVED, this, glyphVariant);
-
-        p_subFamily.Broadcast(SIGNAL.GLYPH_REMOVED, this, glyphVariant);
-        return this._subFamiliesMap.Get(p_subFamily);
+    _OnGlyphVariantRemoved(p_glyphVariant) {
+        p_glyphVariant.glyph = null;
+        p_glyphVariant.family = null;
+        p_glyphVariant.Unwatch(com.SIGNAL.UPDATED, this._OnGlyphVariantUpdated, this);
+        this._variants.ForEach((item, i) => { item.index = i; });
+        this.Broadcast(com.SIGNAL.ITEM_REMOVED, this, p_glyphVariant);
     }
 
     _OnGlyphVariantUpdated(p_glyphVariant) {
         this.Broadcast(SIGNAL.VARIANT_UPDATED, this, p_glyphVariant);
     }
 
-    GetVariant(p_subFamily) {
-        let variant = this._subFamiliesMap.Get(p_subFamily);
-        if (!variant) { variant = this._defaultGlyph; }
-        return variant;
-    }
-
-    GetActiveVariant() {
-        let variant = this._subFamiliesMap.Get(this._family._selectedSubFamily);
+    GetVariant(p_index = 0) {
+        let variant = this._variants.At(p_index);
         if (!variant) { variant = this._defaultGlyph; }
         return variant;
     }
 
     //
 
-    //
-
-    _OnSubFamilyReleased(p_subFamily) {
-        let glyphVariant = this._subFamiliesMap.Get(p_subFamily);
-        if (glyphVariant) {
-            this._subFamiliesMap.Remove(p_subFamily);
-            glyphVariant.Release();
-        }
-    }
-
-    _OnSubFamilyValueUpdated(p_subFamily, p_id, p_valueObj, p_oldValue) {
-        let glyphVariant;
-        if (p_subFamily._isDefault) {
-            // Forward update to all
-            for (let i = 0, n = this._glyphVariants.count; i < n; i++) {
-                glyphVariant = this.GetVariant(this._glyphVariants.At(i));
-                glyphVariant._OnSubFamilyValueUpdated(p_subFamily, p_id, p_valueObj, p_oldValue);
-            }
-        } else {
-            // Forward update only to mapped glyphVariant
-            glyphVariant = this.GetVariant(p_subFamily);
-            glyphVariant._OnSubFamilyValueUpdated(p_subFamily, p_id, p_valueObj, p_oldValue);
-        }
+    _ScheduleTransformationUpdate() {
+        this._variants.ForEach((item, i) => { item._ScheduleTransformationUpdate(); });
     }
 
     _CleanUp() {
-        
-        //TODO : Cleanup variants
 
         this.family = null;
 
-        this._defaultGlyph.Reset(false, true); // will clear SVG stuff since family == null
+        let v = this._variants.last;
 
+        while (v != null) {
+            v = this.RemoveVariant(this._variants.last);
+            if (v) { v.Release(); }
+        }
+
+        this._defaultGlyph.Reset(false, true); // will clear SVG stuff since family == null
         this._unicode = null;
         this._unicodeInfos = null;
+
         super._CleanUp();
+
     }
 
 

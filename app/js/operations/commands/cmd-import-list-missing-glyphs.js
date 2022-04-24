@@ -85,7 +85,7 @@ class CmdImportListMissingGlyphs extends CmdListProcessor {
                 unicode: list[i],
                 path: SVGOPS.EmptySVGStats(),
                 transforms: {
-                    [mkfData.IDS.WIDTH]: this._family.selectedSubFamily.Get(mkfData.IDS.WIDTH),
+                    [mkfData.IDS.WIDTH]: this._family.Get(mkfData.IDS.WIDTH),
                     [mkfData.IDS.TR_AUTO_WIDTH]: false
                 }
             });

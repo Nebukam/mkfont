@@ -28,8 +28,8 @@ class GlyphVariantInspectorItem extends base {
 
     static __controls = [
         { cl: mkfWidgets.ControlHeader, options: { label: `Metrics` } },
-        { options: { propertyId: mkfData.IDS.WIDTH }, disableWhen: { fn: shouldHideWIDTH } },//, css:'helf'
-        //{ options: { propertyId: mkfData.IDS.HEIGHT } },//, css:'helf'
+        { options: { propertyId: mkfData.IDS.WIDTH }, disableWhen: { fn: shouldHideWIDTH } },
+        { options: { propertyId: mkfData.IDS.HEIGHT } },
         { cl: mkfWidgets.ControlHeader, options: { label: `Export` } },
         { options: { propertyId: mkfData.IDS.EXPORT_GLYPH } },
     ];
@@ -85,6 +85,7 @@ class GlyphVariantInspectorItem extends base {
                 'border-radius': '4px',
                 'background-color': `rgba(19, 19, 19, 0.25)`
             },
+            ':host(.null-glyph) .settings': { 'display': 'none' },
             '.settings': {
                 'flex': '1 1 auto',
                 'margin-bottom': '10px',
@@ -179,7 +180,7 @@ class GlyphVariantInspectorItem extends base {
 
     _TogglePopOutPreview(p_toggle) {
 
-        if (!this._isFocused || !this._obstructedPreview) { p_toggle = false; }
+        if (!this._isFocused || !this._obstructedPreview || !this._data) { p_toggle = false; }
 
         if (this._hasPopOut == p_toggle) { return; }
 

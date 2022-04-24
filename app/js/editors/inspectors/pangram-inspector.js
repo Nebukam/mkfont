@@ -137,7 +137,7 @@ class PangramInspector extends base {
         label.Set(`Font size (px)`, true);
         let slider = this.Attach(nkm.uilib.inputs.Slider, `item slider`, slidersCtnr);
         slider.options = {
-            min: 8, max: 144, currentValue: 16,
+            min: 8, max: 144, currentValue: 20,
             size: ui.FLAGS.SIZE_XS,
             onSubmit: { fn: (p_input, p_value) => { this._pangramRenderer.fontSize = p_value; } }
         }
@@ -159,7 +159,7 @@ class PangramInspector extends base {
             rows: 6
         }
 
-        this._pangramRenderer.fontSize = 16;
+        this._pangramRenderer.fontSize = 20;
         this._pangramRenderer.lineHeight = 1;
         this._pangramRenderer.text = longPangram;
 

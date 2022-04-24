@@ -13,7 +13,6 @@ class FontEditorFooter extends base {
 
     _Init() {
         super._Init();
-        this._dataObserver.Hook(SIGNAL.SUBFAMILY_CHANGED, this._OnSubFamilyChanged, this);
         ContentUpdater.instance
             .Watch(nkm.com.SIGNAL.UPDATED, this._OnContentUpdate, this)
             .Watch(nkm.com.SIGNAL.READY, this._OnContentUpdateComplete, this);
@@ -41,22 +40,6 @@ class FontEditorFooter extends base {
             flavor: nkm.com.FLAGS.LOADING
         }
         //this._progressLabel = new ui.manipulators.Text(ui.El(`div`, { class: `label` }, this._host));
-    }
-
-    _OnDataChanged(p_oldData) {
-        super._OnDataChanged(p_oldData);
-        if (this._data) {
-            this._OnSubFamilyChanged(this._data.selectedSubFamily);
-        }
-    }
-
-    _OnDataUpdated(p_data) {
-        super._OnDataUpdated(p_data);
-        //this._pangramRenderer._scheduledDraw.Schedule();
-    }
-
-    _OnSubFamilyChanged(p_subFamily) {
-
     }
 
     //

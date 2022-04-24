@@ -10,7 +10,6 @@ module.exports = {
     IDS_PREFS: require(`./ids-prefs`),
     UTILS: require(`./utils`),
 
-    SubFamily: require(`./sub-family-data-block`),
     Family: require(`./family-data-block`),
     
     GlyphVariant: require(`./glyph-variant-data-block`),

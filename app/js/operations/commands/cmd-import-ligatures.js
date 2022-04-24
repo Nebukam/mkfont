@@ -91,7 +91,7 @@ class CmdImportLigatures extends actions.Command {
                     unicode: unicodeInfos,
                     path: SVGOPS.EmptySVGStats(),
                     transforms: {
-                        [mkfData.IDS.WIDTH]: family.selectedSubFamily.Get(mkfData.IDS.WIDTH),
+                        [mkfData.IDS.WIDTH]: family.Get(mkfData.IDS.WIDTH),
                         [mkfData.IDS.TR_AUTO_WIDTH]: false
                     }
                 });

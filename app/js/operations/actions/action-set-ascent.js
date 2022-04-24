@@ -8,7 +8,7 @@ const svgpath = require('svgpath');
 
 const ActionSetPropertyValue = require(`./action-set-property-value`);
 
-const subFamilyIDs = [
+const familyIDs = [
     mkfData.IDS.X_HEIGHT,
     mkfData.IDS.CAP_HEIGHT,
 ];
@@ -24,19 +24,11 @@ class ActionSetAscent extends ActionSetPropertyValue {
             scaleFactor = p_from / p_to;
 
         if (resample) {
-
-            // Need to scale all subFamily metrics
-            // - X height
-            // - Cap height
-
-            let subFamily = p_target;
-
-            for (let s = 0; s < subFamilyIDs.length; s++) {
-                let id = subFamilyIDs[s],
-                    value = subFamily.Get(id);
-                if (value != null) { subFamily.Set(id, value * scaleFactor); }
+            for (let s = 0; s < familyIDs.length; s++) {
+                let id = familyIDs[s],
+                    value = p_target.Get(id);
+                if (value != null) { p_target.Set(id, value * scaleFactor); }
             }
-
         }
 
     }

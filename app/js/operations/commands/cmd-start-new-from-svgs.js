@@ -23,12 +23,7 @@ class CmdCreateFamilyDocFromSVGs extends CmdCreateFamilyDoc {
         this._Bind(this._OnPicked);
         this._Bind(this._OnImportContinue);
 
-        this._importCatalog = nkm.data.catalogs.CreateFrom({
-            name: `Import list`,
-            localItemClass: mkfCatalog.Import,
-            expanded: true
-        });
-
+        this._importList = [];
         this._importEditor = null;
         this._importTransformationSettings = new mkfData.ImportSettings();
 
@@ -72,10 +67,7 @@ class CmdCreateFamilyDocFromSVGs extends CmdCreateFamilyDoc {
         let document = this._GetDoc(true);
 
         this._newFamily = document.currentData;
-        this._newFamily.defaultSubFamily._UpdateDisplayValues();
-
-        let subFamily = this._newFamily.selectedSubFamily;
-        this._importCatalog.Clear();
+        this._newFamily._UpdateDisplayValues();
 
         for (let i = 0; i < list.length; i++) {
 
@@ -89,38 +81,42 @@ class CmdCreateFamilyDocFromSVGs extends CmdCreateFamilyDoc {
 
                 if (!svgStats.exists) { continue; }
 
-                let entryOptions = {
-                    filePath: filePath,
-                    name: nkm.u.PATH.name(filePath),
-                    ['use-custom-unicode']: false,
-                    ['unicode-user-input']: nkm.u.PATH.name(filePath),
-                    svgStats: svgStats,
-                    subFamily: subFamily,
-                    transforms: this._importTransformationSettings
-                };
 
-                this._importCatalog.Register(entryOptions);
+                let fname = nkm.u.PATH.name(filePath),
+                    entryOptions = {
+                        filePath: filePath,
+                        name: fname,
+                        targetUnicode: null,
+                        unicodeInfos: null,
+                        outOfRange: false,
+                        userDoImport: true,
+                        userDoCustom: false,
+                        userInput: fname,
+                        placeholder: fname,
+                        svgStats: svgStats,
+                        preserved: false,
+                        transforms: this._importTransformationSettings,
+                        variant: null,
+                        index: i
+                    };
+
+                this._importList.push(entryOptions);
 
             }
             catch (e) { console.error(e); }
         }
 
-        if (this._importCatalog.count == 0) {
+        if (this._importList.length == 0) {
             this._Cancel();
             return;
         }
 
-        //this._importInspector.data = ;
+        if (!this._importEditor) { this._importEditor = nkm.ui.UI.Rent(`mkf-list-import-editor`); }
 
-        if (!this._importEditor) {
-            this._importEditor = nkm.ui.UI.Rent(`mkf-list-import-editor`);
-        }
-
-        //this._importTransformationSettings
-
-        this._importEditor.subFamily = subFamily;
+        this._importEditor.family = this._newFamily;
+        this._importEditor._importList = this._importList;
+        this._importEditor._importSelection = null;
         this._importEditor.data = this._importTransformationSettings;
-        this._importEditor.catalog = this._importCatalog;
 
         this._blockingDialog.Consume();
         this._blockingDialog = null;
@@ -144,25 +140,27 @@ class CmdCreateFamilyDocFromSVGs extends CmdCreateFamilyDoc {
 
         //Go through the catalog
 
-        let
-            list = this._importCatalog._items,
-            trValues = this._importTransformationSettings.Values();
+        let trValues = this._importTransformationSettings.Values();
 
-        for (let i = 0; i < list.length; i++) {
+        for (let i = 0; i < this._importList.length; i++) {
+            let
+                item = this._importList[i],
+                targetUnicode = item.targetUnicode,
+                svgStats = item.svgStats;
 
-            let item = list[i],
-                svgStats = item.GetOption(`svgStats`),
-                useCustom = item.GetOption(`use-custom-unicode`),
-                uniStruct = useCustom ? item.GetOption(`unicode-user-input`) : item.GetOption(`name`);
+            if (item.outOfRange
+                || !item.userDoImport
+                || !targetUnicode) {
+                continue;
+            }
 
-            uniStruct = this._importEditor._FindUnicodeStructure(uniStruct);
+            let unicodeInfos = UNICODE.GetInfos(targetUnicode, true);
 
-            if (uniStruct.length == 0) { continue; }
+            if (!unicodeInfos) { continue; }
 
             let
-                unicodeInfos = UNICODE.GetInfos(uniStruct, true),
                 newGlyph = nkm.com.Rent(mkfData.Glyph),
-                glyphVariant = newGlyph._defaultGlyph;
+                glyphVariant = newGlyph.activeVariant;
 
             newGlyph.Set(mkfData.IDS.UNICODE, unicodeInfos.u);
             newGlyph.unicodeInfos = unicodeInfos;
@@ -179,8 +177,8 @@ class CmdCreateFamilyDocFromSVGs extends CmdCreateFamilyDoc {
 
     }
 
-    _End(){
-        if(this._blockingDialog){ this._blockingDialog.Consume(); }
+    _End() {
+        if (this._blockingDialog) { this._blockingDialog.Consume(); }
         super._End();
     }
 

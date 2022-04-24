@@ -17,7 +17,7 @@ class CmdGlyphPaste extends actions.Command {
 
         let
             family = this._emitter.data,
-            variant = family.GetGlyph(this._context?.u || this._emitter.inspectedData.lastItem?.u).GetVariant(family.selectedSubFamily),
+            variant = family.GetGlyph(this._context?.u || this._emitter.inspectedData.lastItem?.u).activeVariant,
             svgStats = { exists: false },
             svgString = clipboard.readText();
 

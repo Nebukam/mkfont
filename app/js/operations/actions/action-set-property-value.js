@@ -48,9 +48,6 @@ class ActionSetPropertyValue extends actions.Action {
             this._UpdateValue(target, newValue, oldValue);
             target.CommitUpdate();
         }
-
-
-
     }
 
     _UpdateDisplayInfos() {
