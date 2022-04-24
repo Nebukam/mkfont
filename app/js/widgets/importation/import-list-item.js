@@ -228,7 +228,7 @@ class ImportListItem extends base {
 
     _UpdatePreview() {
 
-        let family = this.editor.data,
+        let family = this.editor.family,
             contextInfos = family._contextInfos,
             pathData = this._data.svgStats,
             transformedPath = SVGOPS.FitPath(

@@ -41,7 +41,7 @@ class AssignSelectionControl extends base {
 
     _UpdateList() {
         // preprocess required values...
-        this._block = this.editor._importSelection.stack._array;
+        this._block = this.editor._importSelection ? this.editor._importSelection.stack._array : [];
         this._start = 0;
         this._count = this._block.length;
         this._end = this._start + this._count;

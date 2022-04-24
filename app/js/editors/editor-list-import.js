@@ -90,7 +90,8 @@ class EditorListImport extends base {
             },
             '.control': {
                 'flex': '0 1 auto',
-                'margin': '0 2px 5px 2px'
+                'margin': '0 2px 5px 2px',
+                'max-width':'296px'
             },
             '.small': {
                 // 'flex': '1 1 45%'
@@ -169,6 +170,7 @@ class EditorListImport extends base {
 
     }
 
+    get family() { return this._family; }
     set family(p_value) { this._family = p_value; }
 
     _OnDataChanged(p_oldData) {

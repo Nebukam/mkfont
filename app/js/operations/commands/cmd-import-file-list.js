@@ -117,7 +117,6 @@ class CmdImportFileList extends actions.Command {
         // this._importTransformationSettings.Set(IDS_EXT.IMPORT_BLOCK, UNICODE.instance._blockCatalog.At(0) );
 
         this._importEditor.family = family;
-        this._importEditor._currentDisplayRange = this._emitter._displayRange;
         this._importEditor._importList = this._importList;
         this._importEditor._importSelection = this._emitter.inspectedData;
         this._importEditor.data = this._importTransformationSettings;
@@ -168,9 +167,7 @@ class CmdImportFileList extends actions.Command {
 
             let unicodeInfos = UNICODE.GetInfos(targetUnicode, true);
 
-            if (!unicodeInfos) {
-                continue;
-            }
+            if (!unicodeInfos) { continue; }
 
             let existingGlyph = family.GetGlyph(unicodeInfos.u);
 

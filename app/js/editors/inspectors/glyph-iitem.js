@@ -180,7 +180,7 @@ class GlyphVariantInspectorItem extends base {
 
     _TogglePopOutPreview(p_toggle) {
 
-        if (!this._isFocused || !this._obstructedPreview) { p_toggle = false; }
+        if (!this._isFocused || !this._obstructedPreview || !this._data) { p_toggle = false; }
 
         if (this._hasPopOut == p_toggle) { return; }
 

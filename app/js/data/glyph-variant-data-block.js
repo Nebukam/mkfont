@@ -29,6 +29,7 @@ class GlyphVariantDataBlock extends SimpleDataEx {
         this._transformSettings = new TransformSettings();
         this._transformSettings.glyphVariantOwner = this;
 
+        this._family = null;
         this._glyph = null;
         this._computedPath = null;
         this._index = 0;

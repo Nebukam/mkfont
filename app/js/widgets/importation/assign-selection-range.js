@@ -33,7 +33,7 @@ class AssignSelectionRangeControl extends base {
             },
             '.label': {
                 'text-align': 'center',
-                'padding':`15px`
+                'padding': `15px`
             }
         }, base._Style());
     }
@@ -45,7 +45,7 @@ class AssignSelectionRangeControl extends base {
 
     _UpdateList() {
         // preprocess required values...
-        this._block = this.editor._importSelection.stack._array;
+        this._block = this.editor._importSelection ? this.editor._importSelection.stack._array : [];
         this._start = 0;
         this._count = this._block.length;
         this._end = this._start + this._count;
@@ -55,12 +55,12 @@ class AssignSelectionRangeControl extends base {
             text = `${this._count} selected glyphs.`;
 
         if (len > this._count) {
-            if(this._count == 0){
+            if (this._count == 0) {
                 text += `<br><span style='color:var(--col-warning)'>No item can be automatically assigned.</span>`;
-            }else{
+            } else {
                 text += `<br><span style='color:var(--col-warning)'>Only the first ${this._count} items can be automatically assigned.</span>`;
             }
-            
+
         }
         this._label.Set(text);
 
