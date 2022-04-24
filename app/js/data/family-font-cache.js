@@ -35,14 +35,14 @@ class FamilyFontCache {
         if (glyphCount > threshold) { return; }
 
         //this._RebuildCache();
-        this._scheduledRebuild.Schedule();
+        this._scheduledRebuild.Bump();
 
     }
 
     _RebuildCache() {
 
         if (!ContentUpdater.ready) {
-            this._scheduledRebuild.Schedule();
+            this._scheduledRebuild.Bump();
             return;
         }
 
@@ -56,7 +56,7 @@ class FamilyFontCache {
             console.log(e);
             return;
         }
-        
+
         //console.log(subFamily.fontObject.outerHTML);
 
         let base64 = u.tils.BytesToBase64(ttf.buffer);

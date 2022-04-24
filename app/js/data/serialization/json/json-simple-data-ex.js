@@ -50,7 +50,7 @@ class FamilyDataBlockJSONSerializer extends nkm.data.serialization.json.DataBloc
      * @returns 
      */
     static SerializeContent(p_serial, p_data, p_options = null) {
-        p_serial[nkm.data.serialization.CONTEXT.JSON.DATA_KEY] = p_data.ValuesAndOverrides();
+        p_serial[nkm.data.serialization.CONTEXT.JSON.DATA_KEY] = p_data.Values();
     }
 
     /**
@@ -60,7 +60,7 @@ class FamilyDataBlockJSONSerializer extends nkm.data.serialization.json.DataBloc
      * @returns 
      */
     static DeserializeContent(p_serial, p_data, p_options = null, p_meta = null) {
-        p_data.BatchSetWithOverrides(p_serial);
+        p_data.BatchSet(p_serial);
     }
 
 }

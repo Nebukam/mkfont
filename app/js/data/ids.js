@@ -401,7 +401,7 @@ class IDS {
         this.infos[this.TR_NRM_FACTOR] = {
             transform: true,
             inputType: inputs.Slider,
-            label: `Normalize margin`,
+            label: `Margin`,
             inputOptions: { changeOnInput: true, min: -1, max: 1, step: 0.01, size: ui.FLAGS.SIZE_XXS },
             desc: `Margin to apply to the glyph when normalizing it.`
         };

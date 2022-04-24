@@ -37,11 +37,11 @@ class GlyphVariantDataBlock extends SimpleDataEx {
     _ResetValues(p_values) {
         //p_values[IDS.H_ORIGIN_X] = { value: null };
         //p_values[IDS.H_ORIGIN_Y] = { value: null };
-        p_values[IDS.WIDTH] = { value: 1000 }; //, override: true
+        p_values[IDS.WIDTH] = { value: null, nullable:true };
         p_values[IDS.EXPORTED_WIDTH] = { value: 0 };
         //p_values[IDS.V_ORIGIN_X] = { value: null };
         //p_values[IDS.V_ORIGIN_Y] = { value: null };
-        p_values[IDS.HEIGHT] = { value: null, override: false }; //
+        p_values[IDS.HEIGHT] = { value: null, nullable:true }; //
         p_values[IDS.PATH] = { value: '' };
         p_values[IDS.PATH_DATA] = { value: null };
         p_values[IDS.OUT_OF_BOUNDS] = { value: false };

@@ -79,7 +79,7 @@ class ActionSetEM extends ActionSetPropertyValue {
                 for (let t = 0; t < gn; t++) {
                     let id = glyphsIDs[t],
                         valueObj = variant._values[id];
-                    if (!(`override` in valueObj) || valueObj.override) { variant.Set(id, valueObj.value * scaleFactor); }
+                    if (!isNaN(valueObj.value)) { variant.Set(id, valueObj.value * scaleFactor); }
                 }
 
                 for (let t = 0; t < tn; t++) {

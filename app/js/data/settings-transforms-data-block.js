@@ -30,8 +30,8 @@ class TransformSettingsDataBlock extends SimpleDataEx {
         p_values[IDS.TR_VER_ALIGN_ANCHOR] = { value: ENUMS.VANCHOR_BOTTOM };
         p_values[IDS.TR_HOR_ALIGN] = { value: ENUMS.HALIGN_XMIN };
         p_values[IDS.TR_HOR_ALIGN_ANCHOR] = { value: ENUMS.HANCHOR_LEFT };
-        p_values[IDS.TR_WIDTH_SHIFT] = { value: 0 }; //, override: true
-        p_values[IDS.TR_WIDTH_PUSH] = { value: 0 }; //, override: true
+        p_values[IDS.TR_WIDTH_SHIFT] = { value: 0 };
+        p_values[IDS.TR_WIDTH_PUSH] = { value: 0 };
         p_values[IDS.TR_AUTO_WIDTH] = { value: true };
 
     }
@@ -64,7 +64,7 @@ class TransformSettingsDataBlock extends SimpleDataEx {
         if (!pathData || !this._glyphVariantOwner.subFamily) { return; }
 
         let
-            rw = this._glyphVariantOwner.Resolve(IDS.WIDTH),
+            rw = this._glyphVariantOwner.Get(IDS.WIDTH),
             path = SVGOPS.FitPath(this,
                 this._glyphVariantOwner.subFamily._contextInfos,
                 pathData
@@ -79,9 +79,9 @@ class TransformSettingsDataBlock extends SimpleDataEx {
 
         if (this.Get(IDS.TR_AUTO_WIDTH)) {
             w = path.width;
-            if (this.Get(IDS.TR_SCALE_MODE) != ENUMS.SCALE_NORMALIZE) { rw = w; }
+            if (this.Get(IDS.TR_SCALE_MODE) != ENUMS.SCALE_NORMALIZE && rw != null) { rw = w; }
         } else {
-            w = this._glyphVariantOwner.Resolve([IDS.WIDTH]);
+            w = this._glyphVariantOwner.Resolve(IDS.WIDTH);
         }
 
         this._glyphVariantOwner._computedPath = path;

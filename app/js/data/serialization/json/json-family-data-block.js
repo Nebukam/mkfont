@@ -52,8 +52,8 @@ class FamilyDataBlockJSONSerializer extends nkm.data.serialization.json.DataBloc
 
         let refValueIds = p_data.refGlyph.defaultGlyph._transformSettings._values;
 
-        fontObj[__ID_values] = p_data.ValuesAndOverrides();
-        fontObj[__ID_tr] = p_data._transformSettings.ValuesAndOverrides(refValueIds);
+        fontObj[__ID_values] = p_data.Values();
+        fontObj[__ID_tr] = p_data._transformSettings.Values(refValueIds);
 
         // Glyphs
         let glyphs = [];
@@ -66,7 +66,7 @@ class FamilyDataBlockJSONSerializer extends nkm.data.serialization.json.DataBloc
                 glyph = p_data._glyphs.At(i),
                 variants = [],
                 glyphObj = {
-                    [__ID_values]: glyph.ValuesAndOverrides(),
+                    [__ID_values]: glyph.Values(),
                     [__ID_variants]: variants
                 };
 
@@ -81,8 +81,8 @@ class FamilyDataBlockJSONSerializer extends nkm.data.serialization.json.DataBloc
                 let
                     variant = glyph.GetVariant(glyph._glyphVariants.At(v)),
                     variantObj = {
-                        [__ID_values]: variant.ValuesAndOverrides(),
-                        [__ID_tr]: variant._transformSettings.ValuesAndOverrides()
+                        [__ID_values]: variant.Values(),
+                        [__ID_tr]: variant._transformSettings.Values()
                     };
 
                 // cleanup runtime-computed values
@@ -103,8 +103,8 @@ class FamilyDataBlockJSONSerializer extends nkm.data.serialization.json.DataBloc
             let
                 subFamily = p_data._subFamilies.At(i),
                 subFamilyObj = {
-                    [__ID_values]: subFamily.ValuesAndOverrides(),
-                    [__ID_tr]: subFamily._transformSettings.ValuesAndOverrides(refValueIds)
+                    [__ID_values]: subFamily.Values(),
+                    [__ID_tr]: subFamily._transformSettings.Values(refValueIds)
                 };
 
             subFamilies.push(subFamilyObj);
@@ -123,8 +123,8 @@ class FamilyDataBlockJSONSerializer extends nkm.data.serialization.json.DataBloc
     static DeserializeContent(p_serial, p_data, p_options = null, p_meta = null) {
 
         // First load family data specifics
-        p_data.BatchSetWithOverrides(p_serial[__ID_values]);
-        p_data._transformSettings.BatchSetWithOverrides(p_serial[__ID_tr]);
+        p_data.BatchSet(p_serial[__ID_values]);
+        p_data._transformSettings.BatchSet(p_serial[__ID_tr]);
 
         // Add subfamilies
         let subFamilies = p_serial[__ID_subFamilies],
@@ -140,8 +140,8 @@ class FamilyDataBlockJSONSerializer extends nkm.data.serialization.json.DataBloc
             }
 
             sfInstances.push(sf);
-            sf.BatchSetWithOverrides(sfData[__ID_values]);
-            sf._transformSettings.BatchSetWithOverrides(sfData[__ID_tr]);
+            sf.BatchSet(sfData[__ID_values]);
+            sf._transformSettings.BatchSet(sfData[__ID_tr]);
 
         }
 
@@ -160,13 +160,13 @@ class FamilyDataBlockJSONSerializer extends nkm.data.serialization.json.DataBloc
                 glyph.unicodeInfos = UNICODE.GetInfos(unic, true);
             }
 
-            glyph.BatchSetWithOverrides(glyphValues);
+            glyph.BatchSet(glyphValues);
             p_data.AddGlyph(glyph);
 
             for (let s = 0; s < sfInstances.length; s++) {
                 let variant = glyph.GetVariant(sfInstances[s]), vData = variantsData[s];
-                variant.BatchSetWithOverrides(vData[__ID_values]);
-                variant._transformSettings.BatchSetWithOverrides(vData[__ID_tr]);
+                variant.BatchSet(vData[__ID_values]);
+                variant._transformSettings.BatchSet(vData[__ID_tr]);
             }
         }
 

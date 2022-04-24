@@ -29,7 +29,7 @@ class GlyphListInspector extends base {
     static __controls = [
         { cl: mkfWidgets.ControlHeader, options: { label: `Metrics` } },
         { options: { propertyId: mkfData.IDS.WIDTH }, disableWhen: { fn: shouldHideWIDTH } },
-        //{ options: { propertyId: mkfData.IDS.HEIGHT } },
+        { options: { propertyId: mkfData.IDS.HEIGHT } },
         { cl: mkfWidgets.ControlHeader, options: { label: `Export` } },
         { options: { propertyId: mkfData.IDS.EXPORT_GLYPH } },
     ];

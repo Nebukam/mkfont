@@ -23,22 +23,22 @@ class SubFamilyInspector extends base {
         //{ options:{ propertyId:mkfData.IDS.FONT_STYLE } },
         //{ options:{ propertyId:mkfData.IDS.WEIGHT_CLASS } },
 
-        { cl:mkfWidgets.ControlHeader, options:{ label:`Resolution` } },
-        { options:{ propertyId:mkfData.IDS.EM_UNITS, command:mkfCmds.SetEM } },
-        { options:{ propertyId:mkfData.IDS.EM_RESAMPLE } },
-        
-        { cl:mkfWidgets.ControlHeader, options:{ label:`Metrics` } },
-        { options:{ propertyId:mkfData.IDS.BASELINE } },
-        { options:{ propertyId:mkfData.IDS.ASCENT, command:mkfCmds.SetAscent } },
-        { options:{ propertyId:mkfData.IDS.ASC_RESAMPLE } },
-        { options:{ propertyId:mkfData.IDS.DESCENT } },
-        
-        { cl:mkfWidgets.ControlHeader, options:{ label:`Control metrics` } },
-        { options:{ propertyId:mkfData.IDS.X_HEIGHT } },
-        { options:{ propertyId:mkfData.IDS.CAP_HEIGHT } },
-        { options:{ propertyId:mkfData.IDS.HEIGHT } },
-        { options:{ propertyId:mkfData.IDS.WIDTH } },
-        { options:{ propertyId:mkfData.IDS.MONOSPACE } },
+        { cl: mkfWidgets.ControlHeader, options: { label: `Resolution` } },
+        { options: { propertyId: mkfData.IDS.EM_UNITS, command: mkfCmds.SetEM } },
+        { options: { propertyId: mkfData.IDS.EM_RESAMPLE } },
+
+        { cl: mkfWidgets.ControlHeader, options: { label: `Metrics` } },
+        { options: { propertyId: mkfData.IDS.BASELINE } },
+        { options: { propertyId: mkfData.IDS.ASCENT, command: mkfCmds.SetAscent } },
+        { options: { propertyId: mkfData.IDS.ASC_RESAMPLE } },
+        { options: { propertyId: mkfData.IDS.DESCENT } },
+
+        { cl: mkfWidgets.ControlHeader, options: { label: `Control metrics` } },
+        { options: { propertyId: mkfData.IDS.X_HEIGHT } },
+        { options: { propertyId: mkfData.IDS.CAP_HEIGHT } },
+        { options: { propertyId: mkfData.IDS.HEIGHT } },
+        { options: { propertyId: mkfData.IDS.WIDTH } },
+        { options: { propertyId: mkfData.IDS.MONOSPACE } },
         //{ options:{ propertyId:mkfData.IDS.UNDERLINE_POSITION } },
         //{ options:{ propertyId:mkfData.IDS.UNDERLINE_THICKNESS } },
         //{ options:{ propertyId:mkfData.IDS.H_ORIGIN_X } },
@@ -48,9 +48,9 @@ class SubFamilyInspector extends base {
     ];
 
     static __trControls = [
-        { cl: mkfWidgets.ControlHeader, options: { label: `Glyph boundaries` }, css:'header' },
-        { options: { propertyId: mkfData.IDS.TR_WIDTH_SHIFT, hideOverride:true } },
-        { options: { propertyId: mkfData.IDS.TR_WIDTH_PUSH, hideOverride:true } },
+        { cl: mkfWidgets.ControlHeader, options: { label: `Glyph boundaries` }, css: 'header' },
+        { options: { propertyId: mkfData.IDS.TR_WIDTH_SHIFT } },
+        { options: { propertyId: mkfData.IDS.TR_WIDTH_PUSH } },
     ];
 
     _Init() {
@@ -66,7 +66,7 @@ class SubFamilyInspector extends base {
 
         this._builder.defaultControlClass = mkfWidgets.PropertyControl;
         this._builder.defaultCSS = `control`;
-        
+
 
         this._trBuilder = new nkm.datacontrols.helpers.ControlBuilder(this);
         this._trBuilder.defaultControlClass = mkfWidgets.PropertyControl;
@@ -78,7 +78,7 @@ class SubFamilyInspector extends base {
     static _Style() {
         return nkm.style.Extends({
             ':host': {
-                'min-width':'350px',
+                'min-width': '350px',
                 'display': 'flex',
                 'flex-flow': 'column nowrap',
             },
@@ -119,7 +119,7 @@ class SubFamilyInspector extends base {
 
     }
 
-    _OnDataUpdated(p_data){
+    _OnDataUpdated(p_data) {
         super._OnDataUpdated(p_data);
         this._trBuilder.RefreshConditionals();
     }
@@ -131,7 +131,7 @@ class SubFamilyInspector extends base {
         if (!p_selectedSubFamily) { return; }
 
         this._builder.data = p_selectedSubFamily;
-        this._trBuilder.data =  p_selectedSubFamily.transformSettings;
+        this._trBuilder.data = p_selectedSubFamily.transformSettings;
 
     }
 

@@ -68,7 +68,7 @@ class TTFImport {
             let newGlyph = nkm.com.Rent(Glyph),
                 variant = newGlyph._defaultGlyph;
 
-            if (gW != width) { variant.Set(IDS.WIDTH, gW); }
+            //if (gW != width) { variant.Set(IDS.WIDTH, gW); }
             //if (glyphAdvY != fontAdvy) { defg.Set(IDS.HEIGHT, glyphAdvY); }
 
             // Flip & translate glyph
@@ -102,6 +102,8 @@ class TTFImport {
 
             svgStats.path = path;//svgpath(path).translate(-bbox.x, 0).toString();
             //SVGOPS.TranslateBBox(bbox, -bbox.x, 0);
+
+            if (gH == height) { gH = null; }
 
             variant.BatchSet({
                 [IDS.PATH_DATA]: svgStats,

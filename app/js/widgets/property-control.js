@@ -23,7 +23,6 @@ class PropertyControl extends base {
 
     static __distribute = base.__distribute.Ext()
         .To(`propertyId`)
-        .To(`hideOverride`)
         .To(`subData`, null, null)
         .To(`inputOnly`, null, null)
         .To(`onSubmit`, `_onSubmitFn`, null)
@@ -71,20 +70,13 @@ class PropertyControl extends base {
             },
 
             ':host(.inherited) .input-field, :host(.inherited) .label': {
-                'pointer-events': 'none !important',
-                'opacity': '0.5'
-            },
-
-            '.label-area': {
-                'display': 'flex',
-                'flex-flow': 'row nowrap',
-                'align-items': 'center',
-                'max-width': '50%',
-                'flex': '1 1 50%'
+                //'pointer-events': 'none !important',
+                'opacity': '0.8'
             },
             '.label': {
                 //'text-overflow': 'ellipsis',
                 'white-space': 'nowrap',
+                'flex': '1 1 50%'
                 //'overflow': 'hidden',
             },
             ':host(.false) .label': {
@@ -101,24 +93,28 @@ class PropertyControl extends base {
             '.input-field': {
                 'flex': '1 0 50%'
             },
-            '.toggle': {
+            '.nullify': {
                 //'width': '30px',
                 'margin-right': '4px',
                 //'margin-left': '-4px'
-            }
+            },
         }, base._Style());
     }
 
     _Render() {
         super._Render();
-        this._labelCtnr = ui.dom.El(`div`, { class: `label-area` }, this._host);
-        this._toggle = this.Attach(inputs.Checkbox, `toggle`, this._labelCtnr);
-        this._toggle.options = {
+
+        this._label = new ui.manipulators.Text(ui.dom.El(`span`, { class: `label` }, this._host), false, false);
+
+        this._nullifyBtn = this.Attach(nkm.uilib.buttons.Tool, `nullify`, this._host);
+        this._nullifyBtn.options = {
             size: nkm.ui.FLAGS.SIZE_XS,
             preventTabIndexing: true,
-            onSubmit: { fn: this._Bind(this._OnToggleSubmit) }
+            trigger: { fn: this._Bind(this._NullifyValue) },
+            //order: 2,
+            icon: `remove`
         }
-        this._label = new ui.manipulators.Text(ui.dom.El(`span`, { class: `label` }, this._labelCtnr), false, false);
+
     }
 
     set subData(p_value) {
@@ -128,19 +124,20 @@ class PropertyControl extends base {
     set invertInputOrder(p_value) {
 
         if (p_value) {
-            this._labelCtnr.style.order = `1`;
+            this._label._element.style.order = `1`;
             this._inputOrder = 0;
         } else {
-            this._labelCtnr.style.order = `0`;
+            this._label._element.style.order = `0`;
             this._inputOrder = 1;
         }
+
         if (this._input) { this._input.order = this._inputOrder; }
     }
 
     set inputOnly(p_value) {
         this._inputOnly = p_value;
-        if (p_value) { this._labelCtnr.style.display = `none`; }
-        else { this._labelCtnr.style.removeProperty(`display`); }
+        if (p_value) { this._label._element.style.display = `none`; }
+        else { this._label._element.style.removeProperty(`display`); }
     }
 
     get propertyId() { return this._valueID; }
@@ -160,9 +157,6 @@ class PropertyControl extends base {
 
         let inputType = null;
 
-        // if info 'overridable' : show toggle.
-        // override value = if value is null, not overriden. Otherwise, ok.
-
         this._input = this.Attach(this._valueInfos.inputType, `input-field`);
         this._input.options = {
             size: nkm.ui.FLAGS.SIZE_S,
@@ -176,14 +170,9 @@ class PropertyControl extends base {
 
     }
 
-    set hideOverride(p_value) {
-        this._hideOverride = p_value;
-        this._toggle.visible = !p_value;
-    }
-
-    set allowOverride(p_value) {
-        this._allowOverride = p_value;
-        this._toggle.visible = p_value;
+    set isNullable(p_value) {
+        this._isNullable = p_value;
+        this._nullifyBtn.visible = p_value;
     }
 
     get localValueObj() {
@@ -208,36 +197,31 @@ class PropertyControl extends base {
         super._OnDataChanged(p_oldData);
         if (this._data) {
             let dataObj = this.localValueObj;
-            this.allowOverride = this._hideOverride ? false : dataObj ? (`override` in dataObj) : false;
+            this.isNullable = dataObj ? (`nullable` in dataObj) : false;
+        } else {
+            this.isNullable = false;
         }
     }
 
     _OnDataUpdated(p_data) {
         super._OnDataUpdated(p_data);
 
-        if (this._input) {
-            this._input.currentValue = this.exportedValue;
-        }
+        this._inherited = this._isNullable ? this.localValueObj.value == null : false;
 
-        this._inherited = this._allowOverride ? !this.localValueObj.override : false;
-
-        if (this._allowOverride) {
-            this._flags.Set(__flag_inherited, this._inherited);
-        }
-
-        this._toggle.currentValue = !this._inherited;
+        this._flags.Set(__flag_inherited, this._inherited);
 
         if (this._inherited) {
-            this._input.currentValue = this.exportedValue;
+            this._input.currentValue = null;
+            this._input.placeholderValue = this.exportedValue;
         } else {
             this._input.currentValue = this.localValue;
         }
 
+        // Red strikethrough on boolean input
         this.classList.remove(`false`);
         if (nkm.u.isInstanceOf(this._input, uilib.inputs.Boolean)) {
             if (!this._input.currentValue) { this.classList.add(`false`); }
         }
-
 
     }
 
@@ -253,30 +237,15 @@ class PropertyControl extends base {
         }
     }
 
-    _OnToggleSubmit(p_input, p_value) {
+    _NullifyValue(p_input) {
 
-        let
-            valueObj = this.localValueObj,
-            manualUpdate = true,
-            exportedValue = this.exportedValue;
+        let valueObj = this.localValueObj;
 
-        if (valueObj.override == p_value) { return; }
+        if (valueObj.value == null) { return; }
 
-        mkfCmds.SetPropertyOverride.emitter = this;
-        mkfCmds.SetPropertyOverride.inputValue = p_value;
-        mkfCmds.SetPropertyOverride.Execute();
-
-        if (p_value) {
-            if (!this.localValue) { this._data.Set(this._valueID, exportedValue); }
-            else { manualUpdate = true; }
-        } else {
-            manualUpdate = true;
-        }
-
-        if (manualUpdate) {
-            this._data.CommitValueUpdate(this._valueID, valueObj, exportedValue, false);
-            this._data.CommitUpdate();
-        }
+        mkfCmds.SetProperty.emitter = this;
+        mkfCmds.SetProperty.inputValue = null;
+        mkfCmds.SetProperty.Execute();
 
     }
 

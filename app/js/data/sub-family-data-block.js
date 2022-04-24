@@ -197,7 +197,8 @@ class SubFamilyDataBlock extends SimpleDataEx {
     }
 
     _OnTransformSettingsUpdated(p_data, p_id, valueObj) {
-        if ((`override` in valueObj)) {
+        //TODO : Maintain list of inheritable parameters (== driven by parent data if null)
+        if ((`nullable` in valueObj)) {
             //Value is overridable, go through all glyphs and CommitUpdate the one who aren't overriding the value
             let list = this._family._glyphs.internalArray;
             for (let i = 0; i < list.length; i++) {
