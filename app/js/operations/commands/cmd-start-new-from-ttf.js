@@ -11,8 +11,8 @@ const CmdCreateFamilyDoc = require(`./cmd-start-new-mkfont`);
 class CmdCreateFamilyDocFromTTF extends CmdCreateFamilyDoc {
     constructor() { super(); }
 
-    static __displayName = `New .mkfont from TTF`;
-    static __displayIcon = `directory-download-small`;
+    static __displayName = `Load TTF`;
+    static __displayIcon = `document-upload-small`;
 
     _Init() {
         super._Init();

@@ -47,7 +47,8 @@ class WelcomeView extends base {
                 'grid-column': `2`,
                 'padding-top': '10px',
                 'padding-left': '10px',
-                'border-left': '1px solid rgba(127,127,127,0.1)'
+                'border-left': '1px solid rgba(127,127,127,0.1)',
+                'padding-bottom': '20px'
             },
             '.block:hover': {
                 'border-left': '1px solid rgba(127,127,127,0.5)'
