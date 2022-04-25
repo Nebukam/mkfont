@@ -51,6 +51,7 @@ class FamilyMetricsInspector extends base {
         { cl: mkfWidgets.ControlHeader, options: { label: `Glyph boundaries` }, css: 'header' },
         { options: { propertyId: mkfData.IDS.TR_WIDTH_SHIFT } },
         { options: { propertyId: mkfData.IDS.TR_WIDTH_PUSH } },
+        { options: { propertyId: mkfData.IDS.TR_Y_OFFSET } }, //
     ];
 
     _Init() {

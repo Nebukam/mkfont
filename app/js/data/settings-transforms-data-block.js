@@ -33,6 +33,7 @@ class TransformSettingsDataBlock extends SimpleDataEx {
         p_values[IDS.TR_WIDTH_SHIFT] = { value: 0, nullable: true, propagate: true };
         p_values[IDS.TR_WIDTH_PUSH] = { value: 0, nullable: true, propagate: true };
         p_values[IDS.TR_AUTO_WIDTH] = { value: true };
+        p_values[IDS.TR_Y_OFFSET] = { value: 0, nullable: true, propagate: true };
 
     }
 

@@ -372,6 +372,8 @@ class IDS {
 
     static TR_AUTO_WIDTH = 'auto-w';
 
+    static TR_Y_OFFSET = 'yoffset';
+
     static {
 
         this.infos[this.TR_BOUNDS_MODE] = {
@@ -430,6 +432,16 @@ class IDS {
             label: `Automatic Width`,
             inputOptions: { size: ui.FLAGS.SIZE_XS, placeholder: `· · ·` },
             desc: `If enabled, the glyph' width is equal to its asset width + shift + push.\nOtherwise the value is expected to be either manual, or inherited from the family Metrics.`
+        };
+
+        
+        this.infos[this.TR_Y_OFFSET] = {
+            transform: true,
+            recompute:true,
+            inputType: inputs.Number,
+            label: `Vertical offset`,
+            inputOptions: { step: 1, min: -32000, max: 32000, size: ui.FLAGS.SIZE_XXS, placeholder: `· · ·` },
+            desc: `A vertical offset applied to the glyph position after everything else is computed.`
         };
 
         this.infos[this.TR_VER_ALIGN] = {

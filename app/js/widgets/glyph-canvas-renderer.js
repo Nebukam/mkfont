@@ -182,6 +182,7 @@ class GlyphCanvasRenderer extends __BASE__ {
                 ctx.beginPath();
                 ctx.moveTo(0, fit.y + fit.height * 0.5); ctx.lineTo(fit.x, fit.y + fit.height * 0.5);
                 ctx.moveTo(fit.x + fit.width, fit.y + fit.height * 0.5); ctx.lineTo(this._glyphWidth, fit.y + fit.height * 0.5);
+                ctx.moveTo(fit.x + fit.width * 0.5, fit.y + fit.height); ctx.lineTo(fit.x + fit.width * 0.5, fit.y + fit.height - fit.yoff);
                 ctx.stroke();
 
                 ctx.beginPath();

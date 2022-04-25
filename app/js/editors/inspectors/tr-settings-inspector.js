@@ -30,10 +30,11 @@ class TransformSettingsInspector extends base {
         { cl: mkfWidgets.ControlHeader, options: { label: `Horizontal align` }, css: 'header' },
         { options: { propertyId: mkfData.IDS.TR_HOR_ALIGN, inputOnly: true }, css: 'small' },
         { options: { propertyId: mkfData.IDS.TR_HOR_ALIGN_ANCHOR, inputOnly: true }, css: 'small' },
-        { cl: mkfWidgets.ControlHeader, options: { label: `Advance` }, css: 'header', requireData: true }, //, disableWhen: { fn: isXMIN }
+        { cl: mkfWidgets.ControlHeader, options: { label: `Offsets` }, css: 'header', requireData: true }, //, disableWhen: { fn: isXMIN }
         { options: { propertyId: mkfData.IDS.TR_WIDTH_SHIFT }, requireData: true, disableWhen: { fn: isRNRM } }, //
         { options: { propertyId: mkfData.IDS.TR_WIDTH_PUSH }, requireData: true, disableWhen: { fn: isRNRM } }, //
         { options: { propertyId: mkfData.IDS.TR_AUTO_WIDTH }, requireData: true, disableWhen: { fn: isRNRM } }, //
+        { options: { propertyId: mkfData.IDS.TR_Y_OFFSET }, requireData: true }, //
     ];
 
     _Init() {

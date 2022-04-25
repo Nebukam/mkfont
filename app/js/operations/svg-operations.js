@@ -369,6 +369,7 @@ class SVGOperations {
             refMode = p_settings.Get(IDS.TR_BOUNDS_MODE),
             sShift = p_settings.Resolve(IDS.TR_WIDTH_SHIFT),
             sPush = p_settings.Resolve(IDS.TR_WIDTH_PUSH),
+            yUserOffset = p_settings.Resolve(IDS.TR_Y_OFFSET),
             autoWidth = p_settings.Get(IDS.TR_AUTO_WIDTH),
             ctxH = p_settings.ResolveVariant(IDS.HEIGHT, p_context.h),
             ctxW = p_settings.ResolveVariant(IDS.WIDTH, p_context.w),
@@ -526,6 +527,8 @@ class SVGOperations {
                 break;
         }
 
+        offsetY += yUserOffset;
+
         path = svgpath(path)
             .scale(scale)
             .translate(offsetX, offsetY)
@@ -534,7 +537,7 @@ class SVGOperations {
         return {
             height: Math.max(heightRef, 0),
             width: Math.max(widthRef, 0),
-            fit: { width: fitW, height: fitH, x: offsetX, y: offsetY },
+            fit: { width: fitW, height: fitH, x: offsetX, y: offsetY, yoff:yUserOffset },
             path: path,
             bbox: this.GetBBox(path)
         };
