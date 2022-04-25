@@ -439,7 +439,7 @@ class IDS {
             transform: true,
             recompute:true,
             inputType: inputs.Number,
-            label: `Vertical offset`,
+            label: `Vertical Offset`,
             inputOptions: { step: 1, min: -32000, max: 32000, size: ui.FLAGS.SIZE_XXS, placeholder: `· · ·` },
             desc: `A vertical offset applied to the glyph position after everything else is computed.`
         };

@@ -59,7 +59,7 @@ class EditorListImport extends base {
             },
             '.settings': {
                 'width': '300px',
-                'height': '376px'
+                //'height': '376px'
             },
             '.preview': {
                 'position': 'relative',
