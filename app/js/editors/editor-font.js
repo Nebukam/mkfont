@@ -12,6 +12,8 @@ const mkfData = require(`../data`);
 const mkfOperations = require(`../operations`);
 const mkfCmds = mkfOperations.commands;
 
+const helpers = require(`./helpers`);
+
 const base = nkm.uiworkspace.editors.EditorEx;
 class FontEditor extends base {
     constructor() { super(); }
@@ -67,6 +69,8 @@ class FontEditor extends base {
             },
         );
         this._inspectedData.invalidateAnalyticsOnBump = true;
+
+        this._bindingManager = new helpers.BindingManager(this);
 
         // Commands
         this.cmdSave = this._commands.Add(mkfCmds.SaveFamilyDoc, { shortcut: this.shortcuts.Create("Ctrl S") });
@@ -131,6 +135,14 @@ class FontEditor extends base {
                 [ui.IDS.VIEW_CLASS]: mkfInspectors.Pangram,
                 assign: `_pangramInspector`
             },
+            /*
+            {
+                [ui.IDS.NAME]: `Actions`,
+                [ui.IDS.ICON]: `action`,
+                [ui.IDS.VIEW_CLASS]: mkfInspectors.FamilyActions,
+                assign: `_actionsInspector`,
+            },
+            */
             {
                 [ui.IDS.NAME]: `History`,
                 [ui.IDS.ICON]: `refresh`,
@@ -342,6 +354,7 @@ class FontEditor extends base {
     }
 
     _CleanUp() {
+        this._bindingManager.Clear();
         this._viewport._selectionStack.Clear();
         super._CleanUp();
     }

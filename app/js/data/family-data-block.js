@@ -101,10 +101,7 @@ class FamilyDataBlock extends SimpleDataEx {
         this._family = null;
 
         this._transformSettings = new ImportSettings();
-        //this._transformSettings.Watch(nkm.com.SIGNAL.VALUE_CHANGED, this._OnTransformSettingsUpdated, this);
-
-        this._globalTransforms = new ImportSettings();
-        //this._globalTransforms.Watch(nkm.com.SIGNAL.VALUE_CHANGED, this._OnTransformSettingsUpdated, this);
+        this._transformSettings.Watch(nkm.com.SIGNAL.VALUE_CHANGED, this._OnTransformValueChanged, this);
 
     }
 
@@ -285,6 +282,17 @@ class FamilyDataBlock extends SimpleDataEx {
         this._glyphs.ForEach((item, i) => { item._ScheduleTransformationUpdate(); });
     }
 
+    _OnTransformValueChanged(p_data, p_id, p_valueObj, p_oldValue) {
+        let infos = IDS.GetInfos(p_id);
+        if (!infos || !infos.recompute || !p_valueObj.propagate) { return; }
+        // TODO : This can be greatly optimized by only propagating to glyphs that have the associated property == null
+        this._glyphs.ForEach((item, i) => {
+            item._variants.ForEach((v) => {
+                if (v._transformSettings._values[p_id].value == null) { v._transformSettings.CommitUpdate(); }
+            })
+        });
+    }
+
     _UpdateFontObject() {
 
         let
@@ -363,6 +371,10 @@ class FamilyDataBlock extends SimpleDataEx {
 
         this._transformSettings.Reset(p_individualSet, p_silent);
         this._searchSettings.Reset(p_individualSet, p_silent);
+
+        for (var p in this._transformSettings._values) {
+            delete this._transformSettings._values[p].nullable;
+        }
 
         super._OnReset();
     }

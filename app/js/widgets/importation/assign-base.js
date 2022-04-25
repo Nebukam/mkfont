@@ -108,15 +108,15 @@ class AssignBaseControl extends base {
         let variant = this.editor.GetGlyphVariant(p_item.unicodeInfos);
         p_item.variant = variant ? variant.glyph.isNull ? null : variant : null;
 
-        if(p_item.variant){
+        if (p_item.variant) {
             let overlapMode = this.editor._data.Get(mkfData.IDS_EXT.IMPORT_OVERLAP_MODE);
-            if(overlapMode == mkfData.ENUMS.OVERLAP_IGNORE){
+            if (overlapMode == mkfData.ENUMS.OVERLAP_IGNORE) {
                 p_item.preserved = false;
                 p_item.outOfRange = true;
-            }else{
+            } else {
                 p_item.preserved = overlapMode == mkfData.ENUMS.OVERLAP_PRESERVE;
             }
-        }else{
+        } else {
             p_item.preserved = false;
         }
 

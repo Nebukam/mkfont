@@ -6,8 +6,9 @@ const u = nkm.u;
 const io = nkm.io;
 
 const SimpleDataEx = require(`./simple-data-ex`);
-const IDS_PREFS = require(`./ids-prefs`);
 const IDS = require(`./ids`);
+const IDS_EXT = require(`./ids-ext`);
+const IDS_PREFS = require(`./ids-prefs`);
 const ENUMS = require(`./enums`);
 
 class PreferencesSettingsDataBlock extends SimpleDataEx {
@@ -39,6 +40,8 @@ class PreferencesSettingsDataBlock extends SimpleDataEx {
         p_values[IDS_PREFS.AUTOSAVE] = { value: false };
         p_values[IDS_PREFS.AUTOSAVE_TIMER] = { value: 10 };
         p_values[IDS_PREFS.MANUAL_PREVIEW_REFRESH_THRESHOLD] = { value: 5000 };
+
+        p_values[IDS_EXT.IMPORT_BIND_RESOURCE] = { value: true };
 
         p_values[IDS.FAMILY] = { value: `New MKFont` };
         p_values[IDS.COPYRIGHT] = { value: `(c) mkfont 2022` };

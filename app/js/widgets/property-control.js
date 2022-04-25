@@ -27,6 +27,7 @@ class PropertyControl extends base {
         .To(`inputOnly`, null, null)
         .To(`onSubmit`, `_onSubmitFn`, null)
         .To(`invertInputOrder`, null, false)
+        .To(`directSet`, `_directSet`, false)
         .To(`command`, null, mkfCmds.SetProperty);
 
     _Init() {
@@ -35,6 +36,7 @@ class PropertyControl extends base {
         this._valueID = null;
         this._valueInfos = null;
         this._input = null;
+        this._directSet = false;
 
         this._Bind(this._OnValueSubmit);
 
@@ -52,8 +54,6 @@ class PropertyControl extends base {
         super._PostInit();
         //this.focusArea = this;
     }
-
-
 
     static _Style() {
         return nkm.style.Extends({
@@ -108,10 +108,8 @@ class PropertyControl extends base {
 
         this._nullifyBtn = this.Attach(nkm.uilib.buttons.Tool, `nullify`, this._host);
         this._nullifyBtn.options = {
-            size: nkm.ui.FLAGS.SIZE_XS,
-            preventTabIndexing: true,
-            trigger: { fn: this._Bind(this._NullifyValue) },
-            //order: 2,
+            size: nkm.ui.FLAGS.SIZE_XS, trigger: { fn: this._Bind(this._NullifyValue) },
+            htitle: `Set value to null.\nDoing so will force this parameter to be inherited from its hierarchy.`,
             icon: `remove`
         }
 
@@ -226,6 +224,12 @@ class PropertyControl extends base {
     }
 
     _OnValueSubmit(p_input, p_value) {
+
+        if (this._directSet) {
+            this._data.Set(this._valueID, p_value);
+            return;
+        }
+
         if (this._onSubmitFn) {
             this._onSubmitFn(this, this._valueID, p_value);
         } else if (this._cmd) {
@@ -240,6 +244,12 @@ class PropertyControl extends base {
     _NullifyValue(p_input) {
 
         let valueObj = this.localValueObj;
+
+        if (this._directSet) {
+            this._data.Set(this._valueID, null);
+            this._data.CommitValueUpdate(this._valueID, valueObj, null, false);
+            return;
+        }
 
         if (valueObj.value == null) { return; }
 

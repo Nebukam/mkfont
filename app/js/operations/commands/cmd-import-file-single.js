@@ -49,16 +49,14 @@ class CmdImportFileSingle extends actions.Command {
         }
 
         let
-            p = p_response.filePaths[0],
+            filepath = p_response.filePaths[0],
             svgString,
             svgStats;
 
-        try { svgString = fs.readFileSync(p, 'utf8'); }
-        catch (e) { svgString = null; }
+        try { svgString = fs.readFileSync(filepath, 'utf8'); }
+        catch (e) { svgString = null; console.error(e); }
 
         svgStats = SVGOPS.SVGStats(svgString);
-        svgStats.filepath = p;
-        svgStats.name = nkm.u.PATH.name(p);
 
         if (!svgStats.exists) {
             nkm.dialog.Push({
@@ -72,17 +70,18 @@ class CmdImportFileSingle extends actions.Command {
         }
 
 
-        let family = this._emitter.data;
+        let
+            family = this._emitter.data,
+            doBinding = nkm.env.APP.PGet(mkfData.IDS_EXT.IMPORT_BIND_RESOURCE)
 
         // Check if glyph exists
         let
             variant = this._context,
             glyph = variant.glyph,
-            unicodeInfos;
+            unicodeInfos = glyph.unicodeInfos;
 
         if (glyph.isNull) {
             // Need to create a new glyph!
-            unicodeInfos = glyph.unicodeInfos;
             this._emitter.Do(mkfActions.CreateGlyph, {
                 family: family,
                 unicode: unicodeInfos,
@@ -94,6 +93,12 @@ class CmdImportFileSingle extends actions.Command {
                 id: mkfData.IDS.PATH_DATA,
                 value: svgStats
             });
+        }
+
+        if (doBinding) {
+            this._emitter._bindingManager.Bind(
+                family.GetGlyph(unicodeInfos.u).activeVariant,
+                filepath);
         }
 
         this._Success();

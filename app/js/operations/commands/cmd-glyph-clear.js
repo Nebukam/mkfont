@@ -95,6 +95,7 @@ class CmdGlyphClear extends actions.Command {
             if (!p_inGroup) { this._emitter.EndActionGroup(); }
         }
 
+        this._emitter._bindingManager.Unbind(p_variant);
         glyph.CommitUpdate();
 
     }

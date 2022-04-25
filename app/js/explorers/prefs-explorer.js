@@ -24,6 +24,7 @@ class PrefsExplorer extends base {
 
         { cl:mkfWidgets.ControlHeader, options:{ label:`-` }, css:`separator` },
         { cl:mkfWidgets.ControlHeader, options:{ label:`Import` }, css:`separator` },
+        { options: { propertyId: mkfData.IDS_EXT.IMPORT_BIND_RESOURCE } },
         { options: { propertyId: mkfData.IDS_PREFS.MARK_COLOR } },
 
         { cl:mkfWidgets.ControlHeader, options:{ label:`-` }, css:`separator` },

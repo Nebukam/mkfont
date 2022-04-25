@@ -22,7 +22,7 @@ class CmdEditInPlace extends actions.Command {
     _Init() {
 
         super._Init();
-        
+
         this._Bind(this._OnPicked);
         this._Bind(this._OnWriteSuccess);
         this._Bind(this._OnWriteFail);

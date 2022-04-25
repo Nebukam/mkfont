@@ -36,21 +36,21 @@ class WelcomeView extends base {
                 'align-self': `center`,
                 'grid-row': `1 / span 2`,
                 'background-image': nkm.style.URLAssets(`mkfont-logo-nobg.svg`, true),
-                'background-size':`70%`
+                'background-size': `70%`
             },
             '.title': {
-                'padding':'15px',
+                'padding': '15px',
             },
-            '.start': { 'align-self': `center`, 'grid-row':'1 / span 2' },//start
-            '.end': { 'align-self': `start`, 'display':`none` }, 
+            '.start': { 'align-self': `center`, 'grid-row': '1 / span 2' },//start
+            '.end': { 'align-self': `start`, 'display': `none` },
             '.block': {
                 'grid-column': `2`,
-                'padding-top':'10px',
-                'padding-left':'10px',
-                'border-left':'1px solid rgba(127,127,127,0.1)'
+                'padding-top': '10px',
+                'padding-left': '10px',
+                'border-left': '1px solid rgba(127,127,127,0.1)'
             },
             '.block:hover': {
-                'border-left':'1px solid rgba(127,127,127,0.5)'
+                'border-left': '1px solid rgba(127,127,127,0.5)'
             },
             '.actionlist': {
                 'align-items': `flex-start`
@@ -84,20 +84,22 @@ class WelcomeView extends base {
                 {
                     command: mkfCmds.CreateFamilyDoc,
                     variant: ui.FLAGS.MINIMAL, flavor: ui.FLAGS.CTA,
-                    group:`n`
+                    group: `n`
                 },
                 {
                     command: this.cmdNewFromTTF,
                     variant: ui.FLAGS.MINIMAL, flavor: nkm.com.FLAGS.LOADING
                 },
+                /*
                 {
                     command: this.cmdNewFromSVGs,
                     variant: ui.FLAGS.MINIMAL, flavor: nkm.com.FLAGS.LOADING
                 },
+                */
                 {
                     command: mkfCmds.LoadFamilyDoc,
                     variant: ui.FLAGS.MINIMAL, flavor: nkm.com.FLAGS.LOADING,
-                    group:`plop`
+                    group: `plop`
                 },
             ]
         };
@@ -116,31 +118,31 @@ class WelcomeView extends base {
             handles: [
                 {
                     label: `${nkm.env.CONF.version}`,
-                    cl:nkm.uilib.widgets.Tag,
-                    size:ui.FLAGS.SIZE_XS,
+                    cl: nkm.uilib.widgets.Tag,
+                    size: ui.FLAGS.SIZE_XS,
                     group: `Version`
                 },
                 {
                     label: `About`,
                     variant: ui.FLAGS.MINIMAL, flavor: ui.FLAGS.CTA,
                     group: `about`,
-                    trigger:{
-                        fn:()=>{ shell.openExternal("https://github.com/Nebukam/mkfont") }
+                    trigger: {
+                        fn: () => { shell.openExternal("https://github.com/Nebukam/mkfont") }
                     }
                 },
                 {
                     label: `Help`,
                     variant: ui.FLAGS.MINIMAL,
                     group: `help`,
-                    trigger:{
-                        fn:()=>{ shell.openExternal("https://github.com/Nebukam/mkfont/wiki") }
+                    trigger: {
+                        fn: () => { shell.openExternal("https://github.com/Nebukam/mkfont/wiki") }
                     }
                 },
                 {
                     label: `Settings`,
                     variant: ui.FLAGS.FRAME,
                     group: `settings`,
-                    command:mkfCmds.OpenPrefs
+                    command: mkfCmds.OpenPrefs
                 }
             ]
         };
