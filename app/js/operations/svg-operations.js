@@ -46,7 +46,7 @@ const svgopts = {
                 transformPrecision: 10,
                 removeUseless: false, //true
                 collapseRepeated: false, //true
-                utilizeAbsolute: false, //true
+                utilizeAbsolute: true, //true
                 leadingZero: false, //true
                 negativeExtraSpace: false, //true
                 noSpaceAfterFlags: false, // a20 60 45 0 1 30 20 → a20 60 45 0130 20
@@ -148,9 +148,13 @@ class SVGOperations {
 
         if (!p_input) { return result; }
 
+        console.log(p_input);
+
         try {
 
             let svg = domparser.parseFromString(optimize(p_input, svgopts).data, `image/svg+xml`).getElementsByTagName(`svg`)[0];
+
+            console.warn(svg.outerHTML);
 
             //let svg = domparser.parseFromString(p_input, `image/svg+xml`).getElementsByTagName(`svg`)[0];
             //console.log(optimize(p_input, svgopts).data, svg);
@@ -182,7 +186,11 @@ class SVGOperations {
                         tr = p.getAttribute(`transform`);
 
                     //Attempt to apply transforms that can be applied
-                    if (tr) { p.setAttribute(`d`, svgpath(d).transform(tr).toString()); }
+                    if (tr) {
+                        d = svgpath(d).transform(tr).toString();
+                        p.setAttribute(`d`, d);
+                    }
+
 
                     let tbb = this.GetBBox(d);
                     if (tbb.width == 0 && tbb.height == 0) { d = null; }
