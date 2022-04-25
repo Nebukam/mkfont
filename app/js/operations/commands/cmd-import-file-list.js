@@ -66,8 +66,7 @@ class CmdImportFileList extends actions.Command {
 
         this._PreprocessFileList(list);
         this._importList.length = 0;
-
-
+        
         for (let i = 0; i < list.length; i++) {
 
             let filePath = list[i];
@@ -110,7 +109,6 @@ class CmdImportFileList extends actions.Command {
             return;
         }
 
-
         if (!this._importEditor) { this._importEditor = nkm.ui.UI.Rent(`mkf-list-import-editor`); }
 
         // TODO
@@ -145,7 +143,8 @@ class CmdImportFileList extends actions.Command {
 
         let family = this._emitter.data,
             trValues = this._importTransformationSettings.Values(),
-            overlapMode = this._importTransformationSettings.Get(mkfData.IDS_EXT.IMPORT_OVERLAP_MODE);
+            overlapMode = this._importTransformationSettings.Get(mkfData.IDS_EXT.IMPORT_OVERLAP_MODE),
+            doBinding = this._importTransformationSettings.Get(mkfData.IDS_EXT.IMPORT_BIND_RESOURCE);
 
         this._emitter.StartActionGroup({
             icon: `directory-download`,
@@ -196,6 +195,12 @@ class CmdImportFileList extends actions.Command {
                     });
                 }
 
+            }
+
+            if (doBinding) {
+                this._emitter._bindingManager.Bind(
+                    family.GetGlyph(unicodeInfos.u).activeVariant,
+                    item.filePath);
             }
 
         }

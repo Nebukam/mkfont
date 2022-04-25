@@ -173,6 +173,12 @@ class GlyphListInspector extends base {
 
         this._buildHost = ui.El(`div`, { class: `list` }, this._editBody);
 
+        this._clearBindings = this.Attach(nkm.uilib.buttons.Button, `btn`, this._editBody);
+        this._clearBindings.options = {
+            label: `Clear resource bindings`, icon: `remove`,
+            trigger: { fn: () => { this._ClearRscBindings(); } }
+        };
+
         super._Render();
 
         this._importToolbar.options = {
@@ -309,10 +315,28 @@ class GlyphListInspector extends base {
             if (this._transformReference) { this._transformReference.Watch(nkm.com.SIGNAL.VALUE_CHANGED, this._OnTransformValueChanged, this); }
             if (this._variantReference) { this._variantReference.Watch(nkm.com.SIGNAL.VALUE_CHANGED, this._OnRefGlyphValueChanged, this); }
 
+            let hasBinding = false;
+
+            bindloop: for (let i = 0; i < analytics.existing.length; i++) {
+                let variant = analytics.existing[i];
+                if (this.editor._bindingManager.Get(variant)) { hasBinding = true; }
+                if (hasBinding) { break bindloop; }
+            }
+
+            this._clearBindings.visible = hasBinding;
+
+        } else {
+            this._clearBindings.visible = false;
         }
 
         return result;
 
+    }
+
+    _ClearRscBindings() {
+        let analytics = this._data.analytics;
+        if (analytics.existingGlyphs == 0) { return; }
+        analytics.existing.forEach(variant => { this.editor._bindingManager.Unbind(variant); });
     }
 
     _OnTransformValueChanged(p_data, p_id, p_valueObj, p_oldValue) {

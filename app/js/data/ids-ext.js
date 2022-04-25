@@ -90,6 +90,8 @@ class IDS_EXT {
        
     static IMPORT_JUMP_OVER = 'import-jump-over';
 
+    static IMPORT_BIND_RESOURCE = 'import-bind';
+
     static {
 
         this.infos[this.IMPORT_ASSIGN_MODE] = {
@@ -135,6 +137,14 @@ class IDS_EXT {
             inputOptions: { placeholder: `...`, size: ui.FLAGS.SIZE_XS },
         };
 
+        this.infos[this.IMPORT_BIND_RESOURCE] = {
+            import: true,
+            inputType: inputs.Boolean,
+            label: `Bind imported files`,
+            inputOptions: { placeholder: `...`, size: ui.FLAGS.SIZE_XS },
+            desc: `Imported files will become bound to their glyphs.\nThis means that each time the files are updated outside the app, the glyph will be re-imported.\nNote that you remove that binding at any time.`,
+        };
+        
         this.infos[this.IMPORT_PREFIX] = {
             import: true,
             inputType: inputs.Text,

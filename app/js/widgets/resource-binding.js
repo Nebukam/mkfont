@@ -2,12 +2,17 @@ const nkm = require(`@nkmjs/core`);
 const u = nkm.u;
 const ui = nkm.ui;
 
-const base = ui.Widget;
+const base = nkm.datacontrols.ControlWidget;
 class ResourceBinding extends base {
     constructor() { super(); }
 
+    static __NFO__ = nkm.com.NFOS.Ext({
+        css: [`@/buttons/button-ex.css`]
+    }, base, ['css']);
+
     _Init() {
         super._Init();
+        //this._dataObserver.Hook()
     }
 
     static _Style() {
@@ -18,71 +23,62 @@ class ResourceBinding extends base {
                 'min-width': 'auto',
                 //'padding': '20px',
                 'display': 'flex',
-                'flex-direction': 'row',
+                'flex-direction': 'row nowrap',
                 'padding': '5px',
                 'margin-bottom': '5px',
-                'align-items': `center`,
-                'padding-right':`15px`,
-                'padding-left':`15px`
+                'align-items': `center`
             },
             '.item': {
                 'flex': '0 0 auto',
-                'margin':`3px`
+                'margin': `3px`,
+                'user-select': 'none'
             },
             '.counter': {
 
             },
-            '.chekbox': {
+            '.checkbox': {
                 'flex': '0 0 16px',
             },
-            '.long-name': {
-                'flex': '1 0 auto',
-                'font-family': `monospace`
+            '.label': {
+                'flex': '1 1 auto',
+                'direction': 'rtl'
+            },
+            '.btn': {
+                'margin': '3px'
             }
         }, base._Style());
     }
 
     _Render() {
 
+        this.classList.add(`loading`);
+
         super._Render();
 
-        this._icon = new ui.manipulators.Icon(ui.dom.El(`div`, { class: `item chekbox` }, this));
-        this._icon.Set(`checkbox-off`);
+        this._icon = new ui.manipulators.Icon(ui.dom.El(`div`, { class: `item checkbox` }, this));
+        this._icon.Set(`document-link`);
 
-        this._fileName = new ui.manipulators.Text(ui.dom.El(`code`, { class: "item long-name" }, this), false);
-        this._fileName.Set("---");
+        this._fileName = new ui.manipulators.Text(ui.dom.El(`code`, { class: "item label" }, this), false);
+        this._fileName.Set("resource.ext");
+        this._fileName.ellipsis = true;
 
-        this._btnLocate = this.Add(nkm.uilib.buttons.Tool, `btn`);
-        this._btnLocate.options = {
-            icon:`document-search`
+        this._btnRemove = this.Attach(nkm.uilib.buttons.Tool, `btn`);
+        this._btnRemove.options = {
+            icon: `remove`, size: nkm.ui.FLAGS.SIZE_XS,
+            variant: ui.FLAGS.FRAME, flavor: nkm.com.FLAGS.ERROR,
+            trigger: { fn: () => { if (this._data && this._data.currentRsc) { this._data.currentRsc.Release(); } } }
         }
 
-        this._btnRemove = this.Add(nkm.uilib.buttons.Tool, `btn`);
-        this._btnLocate.options = {
-            icon:`remove`
+    }
+
+    _OnDataChanged(p_oldData) {
+        super._OnDataChanged(p_oldData);
+        if (this._data) {
+            this.visible = this._data ? true : false;
+            this._fileName.Set(this._data.path);
+        } else {
+            this.visible = false;
         }
-
-    }
-
-    SetLiga(p_liga) {
-        this._liga = p_liga;
-        this._fileName.Set(p_liga.ligature, true);
-        this._count.label = `×${p_liga.count}`;
-        this.ToggleLiga(p_liga.export);
-    }
-
-    Activate(p_evt){
-        if(!super.Activate(p_evt)){return false;}
-        this.ToggleLiga();
-        return false;
-    }
-
-    ToggleLiga(p_bool = null){
-        this._liga.export = p_bool != null ? p_bool : !this._liga.export;
-        this.Toggle(this._liga.export);
-        this._icon.Set(`checkbox-${this._liga.export ? 'on' : 'off'}`);
-
-        nkm.datacontrols.FindEditor(this).ToggleLiga(this._liga);
     }
 
 }

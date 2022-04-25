@@ -23,8 +23,6 @@ class EditorListImport extends base {
 
     _Init() {
         super._Init();
-        this._builder = new nkm.datacontrols.helpers.ControlBuilder(this);
-        this.forwardData.To(this._builder);
 
         this._dataObserver.Hook(nkm.com.SIGNAL.VALUE_CHANGED, this._OnDataValueChanged, this);
         this._assignManager = null;
@@ -91,7 +89,7 @@ class EditorListImport extends base {
             '.control': {
                 'flex': '0 1 auto',
                 'margin': '0 2px 5px 2px',
-                'max-width':'296px'
+                'max-width': '296px'
             },
             '.small': {
                 // 'flex': '1 1 45%'
@@ -107,20 +105,39 @@ class EditorListImport extends base {
 
         super._Render();
 
+        // First col
+
         let column = ui.El(`div`, { class: `column` }, this._host);
 
         this._header = ui.El(`div`, { class: `item header` }, column);
 
-        this._builder.defaultControlClass = mkfWidgets.PropertyControl;
-        this._builder.defaultCSS = `control`;
-        this._builder.host = column;
-        this._builder.Build([
+        let builder = new nkm.datacontrols.helpers.ControlBuilder(this);
+        this.forwardData.To(builder);
+
+        builder.defaultControlClass = mkfWidgets.PropertyControl;
+        builder.defaultCSS = `control`;
+        builder.host = column;
+        builder.Build([
             { options: { propertyId: mkfData.IDS_EXT.IMPORT_OVERLAP_MODE } },
             { options: { propertyId: mkfData.IDS_EXT.IMPORT_ASSIGN_MODE } },
         ]);
 
+        this._builder = builder;
+
         this._settingsInspector = this.Attach(mkfInspectors.TransformSettings, `item settings`, column);
         this.forwardData.To(this._settingsInspector);
+
+        builder = new nkm.datacontrols.helpers.ControlBuilder(this);
+        this.forwardData.To(builder);
+
+        builder.defaultControlClass = mkfWidgets.PropertyControl;
+        builder.defaultCSS = `control`;
+        builder.host = column;
+        builder.Build([
+            { options: { propertyId: mkfData.IDS_EXT.IMPORT_BIND_RESOURCE } },
+        ]);
+
+        // Second col
 
         this._domStreamer = this.Attach(ui.helpers.DOMStreamer, `column list`);
         this._domStreamer
@@ -134,6 +151,8 @@ class EditorListImport extends base {
                 itemCount: 0,
             }
         };
+
+        // Third col
 
         column = ui.El(`div`, { class: `column` }, this._host);
 

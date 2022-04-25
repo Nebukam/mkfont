@@ -16,4 +16,5 @@ module.exports = {
     SearchStatus: require(`./search-status`),
     LigaButton: require(`./liga-button`),
     FamilyGlyphMonitor: require(`./family-glyph-monitor`),
+    ResourceBinding: require(`./resource-binding`),
 }

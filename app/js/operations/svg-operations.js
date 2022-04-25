@@ -370,6 +370,9 @@ class SVGOperations {
             ctxW = p_settings.ResolveVariant(IDS.WIDTH, p_context.w),
             mono = p_context.mono;
 
+        if (sShift == null) { sShift = p_context.xshift; }
+        if (sPush == null) { sPush = p_context.xpush; }
+
         if (p_svgStats.emptyPath) {
             return {
                 height: 0,

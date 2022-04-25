@@ -7,6 +7,7 @@ module.exports = {
     Family: require(`./family-inspector`),
     FamilyMetrics: require(`./family-metrics-inspector`),
     FamilyContent: require(`./family-content-inspector`),
+    FamilyActions: require(`./family-actions-inspector`),
 
     Glyph: require(`./glyph-inspector`),
     GlyphList: require(`./glyph-list-inspector`),

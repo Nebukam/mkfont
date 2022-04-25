@@ -410,6 +410,7 @@ class IDS {
 
         this.infos[this.TR_WIDTH_SHIFT] = {
             transform: true,
+            recompute:true,
             inputType: inputs.Number,
             label: `Shift`,
             inputOptions: { step: 1, min: -32000, max: 32000, size: ui.FLAGS.SIZE_XXS, placeholder: `· · ·` },
@@ -417,6 +418,7 @@ class IDS {
         };
         this.infos[this.TR_WIDTH_PUSH] = {
             transform: true,
+            recompute:true,
             inputType: inputs.Number,
             label: `Push`,
             inputOptions: { step: 1, min: -32000, max: 32000, size: ui.FLAGS.SIZE_XXS, placeholder: `· · ·` },

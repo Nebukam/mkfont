@@ -64,6 +64,9 @@ class CmdGlyphDelete extends actions.Command {
             glyph: p_glyph,
             family: this._emitter.data
         });
+
+        this._emitter._bindingManager.UnbindVariants(p_glyph);
+
     }
 
 }

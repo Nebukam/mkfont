@@ -44,7 +44,6 @@ class GlyphVariantInspectorItem extends base {
         this._obstructedPreview = false;
 
         this._rectTracker = new ui.helpers.RectTracker(this._Bind(this._OnPreviewRectUpdate));
-        this._rectTracker.Enable();
 
         this._dataObserver.Hook(SIGNAL.VARIANT_UPDATED, () => { this._OnDataUpdate(this._data); }, this);
     }
@@ -52,9 +51,9 @@ class GlyphVariantInspectorItem extends base {
     _OnPaintChange() {
         super._OnPaintChange();
         if (this._isPainted) {
-
+            this._rectTracker.Enable();
         } else {
-
+            this._rectTracker.Disable();
         }
     }
 
@@ -92,6 +91,10 @@ class GlyphVariantInspectorItem extends base {
             },
             '.control': {
                 'margin-bottom': '5px',
+            },
+            '.binder': {
+                'width': '100%',
+                'margin-top': '10px'
             }
 
 
@@ -150,6 +153,7 @@ class GlyphVariantInspectorItem extends base {
             ]
         };
 
+        this._binder = this.Attach(mkfWidgets.ResourceBinding, `binder control`);
         this._transformInspector = this.Attach(TransformSettingsInspector, `settings`);
         this.forwardData.To(this._transformInspector, { dataMember: `transformSettings` });
 
@@ -226,12 +230,20 @@ class GlyphVariantInspectorItem extends base {
             this._copyPathBtn.disabled = isNullGlyph;
             this._editInPlaceBtn.disabled = isNullGlyph;
             this._glyphDeleteBtn.disabled = isNullGlyph;
-
             if (this._popoutPreview) { this._popoutPreview.content.glyphInfos = this._glyphInfos; }
+        } else {
+            this._binder.data = null;
         }
 
         if (this._popoutPreview) { this._popoutPreview.content.data = this._data; }
 
+    }
+
+    _OnDataUpdated(p_data) {
+        super._OnDataUpdated(p_data);
+        let binding = this.editor._bindingManager.Get(p_data);
+        this._binder.data = binding
+        this._editInPlaceBtn.disabled = binding ? true : false;
     }
 
     _CleanUp() {

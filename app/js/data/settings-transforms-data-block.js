@@ -30,8 +30,8 @@ class TransformSettingsDataBlock extends SimpleDataEx {
         p_values[IDS.TR_VER_ALIGN_ANCHOR] = { value: ENUMS.VANCHOR_BOTTOM };
         p_values[IDS.TR_HOR_ALIGN] = { value: ENUMS.HALIGN_XMIN };
         p_values[IDS.TR_HOR_ALIGN_ANCHOR] = { value: ENUMS.HANCHOR_LEFT };
-        p_values[IDS.TR_WIDTH_SHIFT] = { value: 0 };
-        p_values[IDS.TR_WIDTH_PUSH] = { value: 0 };
+        p_values[IDS.TR_WIDTH_SHIFT] = { value: 0, nullable: true, propagate: true };
+        p_values[IDS.TR_WIDTH_PUSH] = { value: 0, nullable: true, propagate: true };
         p_values[IDS.TR_AUTO_WIDTH] = { value: true };
 
     }
