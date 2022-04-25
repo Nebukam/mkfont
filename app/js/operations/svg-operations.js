@@ -148,13 +148,9 @@ class SVGOperations {
 
         if (!p_input) { return result; }
 
-        console.log(p_input);
-
         try {
 
             let svg = domparser.parseFromString(optimize(p_input, svgopts).data, `image/svg+xml`).getElementsByTagName(`svg`)[0];
-
-            console.warn(svg.outerHTML);
 
             //let svg = domparser.parseFromString(p_input, `image/svg+xml`).getElementsByTagName(`svg`)[0];
             //console.log(optimize(p_input, svgopts).data, svg);
