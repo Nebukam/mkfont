@@ -95,6 +95,8 @@ class FamilyDataBlock extends SimpleDataEx {
             xh: 1000,
             ch: 1000,
             em: 1000,
+            xshift: 0,
+            xpush: 0,
             mono: false
         }
 
@@ -285,6 +287,7 @@ class FamilyDataBlock extends SimpleDataEx {
     _OnTransformValueChanged(p_data, p_id, p_valueObj, p_oldValue) {
         let infos = IDS.GetInfos(p_id);
         if (!infos || !infos.recompute || !p_valueObj.propagate) { return; }
+        this._UpdateDisplayValues();
         // TODO : This can be greatly optimized by only propagating to glyphs that have the associated property == null
         this._glyphs.ForEach((item, i) => {
             item._variants.ForEach((v) => {
@@ -361,6 +364,8 @@ class FamilyDataBlock extends SimpleDataEx {
         this._contextInfos.ch = ch;
         this._contextInfos.ref = ref;
         this._contextInfos.em = em;
+        this._contextInfos.xshift = this._transformSettings.Get(IDS.TR_WIDTH_SHIFT);
+        this._contextInfos.xpush = this._transformSettings.Get(IDS.TR_WIDTH_PUSH);
         this._contextInfos.mono = this.Resolve(IDS.MONOSPACE);
 
     }

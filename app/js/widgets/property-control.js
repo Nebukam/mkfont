@@ -210,7 +210,7 @@ class PropertyControl extends base {
 
         if (this._inherited) {
             this._input.currentValue = null;
-            this._input.placeholderValue = this.exportedValue;
+            if (this.exportedValue != null) { this._input.placeholderValue = this.exportedValue; }
         } else {
             this._input.currentValue = this.localValue;
         }

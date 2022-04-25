@@ -344,8 +344,6 @@ class GlyphListInspector extends base {
         let editor = this.editor;
         if (!editor) { return; }
 
-        console.log(`hah`, arguments);
-
         editor.Do(
             mkfOperations.actions.SetProperty, {
             target: this._cachedTransforms,

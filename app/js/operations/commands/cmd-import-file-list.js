@@ -66,8 +66,6 @@ class CmdImportFileList extends actions.Command {
 
         this._PreprocessFileList(list);
         this._importList.length = 0;
-
-        this._importTransformationSettings.Reset();
         
         for (let i = 0; i < list.length; i++) {
 

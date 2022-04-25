@@ -84,7 +84,12 @@ class WelcomeView extends base {
                 {
                     command: mkfCmds.CreateFamilyDoc,
                     variant: ui.FLAGS.MINIMAL, flavor: ui.FLAGS.CTA,
-                    group: `n`
+                    group: `mkfont`
+                },
+                {
+                    command: mkfCmds.LoadFamilyDoc,
+                    variant: ui.FLAGS.MINIMAL, flavor: nkm.com.FLAGS.LOADING,
+                    group: `mkfont`
                 },
                 {
                     command: this.cmdNewFromTTF,
@@ -96,11 +101,6 @@ class WelcomeView extends base {
                     variant: ui.FLAGS.MINIMAL, flavor: nkm.com.FLAGS.LOADING
                 },
                 */
-                {
-                    command: mkfCmds.LoadFamilyDoc,
-                    variant: ui.FLAGS.MINIMAL, flavor: nkm.com.FLAGS.LOADING,
-                    group: `plop`
-                },
             ]
         };
 
