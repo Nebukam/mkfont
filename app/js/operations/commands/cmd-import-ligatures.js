@@ -50,10 +50,22 @@ class CmdImportLigatures extends actions.Command {
     }
 
     _OnImportContinueAll() {
+
+        if (!this._importEditor._results) {
+            this._Cancel();
+            return;
+        }
+
         this._ProcessResults(this._importEditor._results);
     }
 
     _OnImportContinue() {
+
+        if (!this._importEditor._results) {
+            this._Cancel();
+            return;
+        }
+
         let filteredResults = [];
         for (let i = 0; i < this._importEditor._results.length; i++) {
             let liga = this._importEditor._results[i];
