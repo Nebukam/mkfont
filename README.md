@@ -13,9 +13,18 @@ MKFont is a free tool to make font out of vector graphics. Works for Windows, Ma
 - [Documentation wiki](https://github.com/Nebukam/mkfont/wiki)
 - [Quick start](https://github.com/Nebukam/mkfont/wiki/Step-by-step)
 
-## Screenshots
+## Screenshots  
 
-![preview](https://raw.githubusercontent.com/Nebukam/mkfont/main/assets-dev/docs/screenshots/mkfont-preview.gif)
+
+![preview](https://raw.githubusercontent.com/Nebukam/mkfont/main/assets-dev/docs/screenshots/mkfont-preview.gif)  
+
+<br>
+<br>
+
+---  
+<br>
+<br>
+
 ![grid](https://raw.githubusercontent.com/Nebukam/mkfont/main/assets-dev/docs/screenshots/grid.png)   
 ![search](https://raw.githubusercontent.com/Nebukam/mkfont/main/assets-dev/docs/screenshots/search.png)  
 ![batch-import](https://raw.githubusercontent.com/Nebukam/mkfont/main/assets-dev/docs/screenshots/batch-import.png)  
@@ -28,3 +37,4 @@ MKFont is under active development, have a look to the repo [issues](https://git
 ## Kudos
 MKFont wouldn't be possible if not for [@fontello](https://github.com/fontello) folks sharing their magic : the app is primarily built around [svg2ttf](https://github.com/fontello/svg2ttf) & [svgpath](https://github.com/fontello/svgpath).  
 MKFont uses the [Unicode](https://home.unicode.org/) database.  
+Screenshots are showcasing the font [Basement-Medium](https://freetypography.com/2020/05/02/free-font-basement/).
