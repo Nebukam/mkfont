@@ -5,6 +5,7 @@ const ui = nkm.ui;
 const inputs = nkm.uilib.inputs;
 const operations = require(`../../operations/index`);
 
+const UNICODE = require(`../../unicode`);
 const SIGNAL = require(`../../signal`);
 
 const mkfData = require(`../../data`);
@@ -25,26 +26,16 @@ class PangramInspector extends base {
     static __defaultInstanceOf = mkfData.Family;
     static __controls = [
         //{ options:{ propertyId:mkfData.IDS.FONT_STYLE } },
-        //{ options:{ propertyId:mkfData.IDS.WEIGHT_CLASS } },
-        //{ options:{ propertyId:mkfData.IDS.EM_UNITS } },
-        //{ options:{ propertyId:mkfData.IDS.ASCENT } },
-        //{ options:{ propertyId:mkfData.IDS.DESCENT } },
-        //{ options:{ propertyId:mkfData.IDS.CAP_HEIGHT } },
-        //{ options:{ propertyId:mkfData.IDS.X_HEIGHT } },
-        //{ options:{ propertyId:mkfData.IDS.WIDTH } },
-        //{ options:{ propertyId:mkfData.IDS.HEIGHT } },
-        //{ options:{ propertyId:mkfData.IDS.UNDERLINE_POSITION } },
-        //{ options:{ propertyId:mkfData.IDS.UNDERLINE_THICKNESS } },
-        //{ options:{ propertyId:mkfData.IDS.H_ORIGIN_X } },
-        //{ options:{ propertyId:mkfData.IDS.H_ORIGIN_Y } },
-        //{ options:{ propertyId:mkfData.IDS.V_ORIGIN_X } },
-        //{ options:{ propertyId:mkfData.IDS.V_ORIGIN_Y } },
     ];
 
     _Init() {
         super._Init();
         this._builder.defaultControlClass = mkfWidgets.PropertyControl;
         this._builder.defaultCSS = `control`;
+
+        this._inspectionHandler = new nkm.datacontrols.helpers.InspectionDataHandler(this);
+        this._inspectionHandler
+            .Watch(nkm.com.SIGNAL.UPDATED, this._OnSelectionUpdated, this);
     }
 
     static _Style() {
@@ -73,13 +64,13 @@ class PangramInspector extends base {
             '.item': {
                 'margin-bottom': `4px`
             },
-            '.sliders':{
-                'display':'flex',
-                'flex-flow':'row wrap',
+            '.sliders': {
+                'display': 'flex',
+                'flex-flow': 'row wrap',
                 'align-items': 'center',
                 'margin': '10px 0px 10px 0px'
             },
-            '.sliders .item':{
+            '.sliders .item': {
                 'flex': '1 1 50%',
             },
             '.pangram': {
@@ -133,7 +124,7 @@ class PangramInspector extends base {
 
         let slidersCtnr = ui.El(`div`, { class: `sliders` }, this._footer);
 
-        let label = new ui.manipulators.Text(ui.El(`span`, {class:'label item'}, slidersCtnr));
+        let label = new ui.manipulators.Text(ui.El(`span`, { class: 'label item' }, slidersCtnr));
         label.Set(`Font size (px)`, true);
         let slider = this.Attach(nkm.uilib.inputs.Slider, `item slider`, slidersCtnr);
         slider.options = {
@@ -142,12 +133,12 @@ class PangramInspector extends base {
             onSubmit: { fn: (p_input, p_value) => { this._pangramRenderer.fontSize = p_value; } }
         }
 
-        label = new ui.manipulators.Text(ui.El(`span`, {class:'label item'}, slidersCtnr));
+        label = new ui.manipulators.Text(ui.El(`span`, { class: 'label item' }, slidersCtnr));
         label.Set(`Line height (em)`, true);
         label._element.setAttribute(`title`, `'em' units are relative to font size.\nOne em = 100% of the font size.`);
         slider = this.Attach(nkm.uilib.inputs.Slider, `item slider`, slidersCtnr);
         slider.options = {
-            min: 0.1, max: 10, step:0.01, currentValue: 1,
+            min: 0.1, max: 10, step: 0.01, currentValue: 1,
             size: ui.FLAGS.SIZE_XS,
             onSubmit: { fn: (p_input, p_value) => { this._pangramRenderer.lineHeight = p_value; } }
         }
@@ -162,6 +153,7 @@ class PangramInspector extends base {
         this._pangramRenderer.fontSize = 20;
         this._pangramRenderer.lineHeight = 1;
         this._pangramRenderer.text = longPangram;
+        this._pangramRenderer.Watch(nkm.com.SIGNAL.VALUE_CHANGED, this._OnTextSelected, this);
 
         this._footerToolbar = this.Attach(ui.WidgetBar, `item toolbar`, this._footer);
         this._footerToolbar.options = {
@@ -178,6 +170,45 @@ class PangramInspector extends base {
                 }
             ]
         }
+
+    }
+
+    _OnEditorChanged(p_oldEditor) { this._inspectionHandler.editor = this._editor; }
+
+    _OnSelectionUpdated(p_sel) {
+        if (p_sel.stack.count == 0) {
+            this._pangramRenderer.highlightList = null;
+            return;
+        }
+
+        let hlist = [];
+        p_sel.stack.ForEach((infos) => {
+            hlist.push(infos.char);
+        });
+
+        this._pangramRenderer.highlightList = hlist;
+
+    }
+
+    _OnTextSelected(p_text) {
+
+        ui.dom.ClearHighlightedText();
+
+        let addresses = UNICODE.GetAddressesFromText(p_text);
+
+        if (addresses.length == 0) { return; }
+
+        let data = [];
+        for (let i = 0; i < addresses.length; i++) {
+            let glyph = this._data.GetGlyph(addresses[i]);
+            if (glyph.isNull) { continue; }
+            data.push(glyph.unicodeInfos);
+        }
+
+        if (data.length == 0) { return; }
+
+        this.editor.viewport.selectionStack.Clear();
+        this.editor.inspectedData.SetList(data.reverse());
 
     }
 

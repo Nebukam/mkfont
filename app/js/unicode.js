@@ -13,7 +13,7 @@ class UNICODE extends nkm.com.helpers.Singleton {
 
     static SetActiveRange = new CmdSetActiveRange();
 
-    static get MAX_GLYPH_COUNT(){ return 65534; }
+    static get MAX_GLYPH_COUNT() { return 65534; }
 
     _Init() {
 
@@ -69,7 +69,7 @@ class UNICODE extends nkm.com.helpers.Singleton {
         let mgc = [];
         for (let p in gc) {
             let lgc = gc[p], subs = lgc.subs,
-                cgc = { name: lgc.name, itemClass:UniCategoryGroup, autoSort:false, content: [] };
+                cgc = { name: lgc.name, itemClass: UniCategoryGroup, autoSort: false, content: [] };
             for (let i = 0; i < subs.length; i++) {
                 let lcgc = subs[i];
                 lcgc.parent = lgc;
@@ -410,10 +410,10 @@ class UNICODE extends nkm.com.helpers.Singleton {
         });
 
         this._blocks = b;
-        this._blockCatalog = nkm.data.catalogs.CreateFrom({ name: `Unicode blocks`, autoSort:false }, b);
+        this._blockCatalog = nkm.data.catalogs.CreateFrom({ name: `Unicode blocks`, autoSort: false }, b);
         this._blockCatalog.expanded = true;
 
-        this._categoriesCatalog = nkm.data.catalogs.CreateFrom({ name: `Categories`, autoSort:false }, mgc);
+        this._categoriesCatalog = nkm.data.catalogs.CreateFrom({ name: `Categories`, autoSort: false }, mgc);
         this._categoriesCatalog.expanded = true;
 
         for (var g in gc) {
@@ -35163,6 +35163,21 @@ class UNICODE extends nkm.com.helpers.Singleton {
         } else {
             return `U+${p_infos.u}`;
         }
+    }
+
+    static GetAddressesFromText(p_text, p_ignoreLigatures = true) {
+        let result = [];
+        if (true) { //p_ignoreLigatures
+            for (let i = 0; i < p_text.length; i++) {
+                let address = this.GetAddress(p_text.substring(i, i + 1));
+                if (result.includes(address)) { continue; }
+                result.push(address);
+            }
+        } else {
+            //TODO : Implement ligature lookup
+        }
+
+        return result;
     }
 
 }

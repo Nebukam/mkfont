@@ -9,9 +9,20 @@ const base = ui.Widget;
 class PangramRenderer extends base {
     constructor() { super(); }
 
+    _Init() {
+        super._Init();
+        this._pointer
+            .Hook(ui.POINTER.MOUSE_LEFT, ui.POINTER.DOWN, this._Bind(this._StartSelection))
+            .Hook(ui.POINTER.MOUSE_LEFT, ui.POINTER.RELEASE, this._Bind(this._EndSelection));
+
+        this._ongoingSelection = false;
+        this._highlightList = null;
+    }
+
     _PostInit() {
         super._PostInit();
         this.align = `left`;
+        this.focusArea = this;
     }
 
     static _Style() {
@@ -42,6 +53,11 @@ class PangramRenderer extends base {
                 'appearance': `none`,
                 'background-color': 'rgba(0,0,0,0)',
                 'border': 'none',
+            },
+            '.high': {
+                'color':`white`,
+                'background-color': `rgba(var(--col-active-dark-rgb), 0.8)`,
+                'border-radius': `2px`,
             }
         }, base._Style());
     }
@@ -53,7 +69,7 @@ class PangramRenderer extends base {
         this.text = null;
     }
 
-    _OnDataUpdated(p_data){
+    _OnDataUpdated(p_data) {
         super._OnDataUpdated(p_data);
         this._pangramText._element.style.setProperty('font-family', `'${p_data._fontCache.uuid}'`);
     }
@@ -72,8 +88,7 @@ class PangramRenderer extends base {
         if (!p_value) { p_value = defaultPangram; }
 
         this._previewText = p_value;
-        let val = '<p>' + p_value.replace(/[^\S\n]+\n/g, '\n').replace(/\n\n+/g, '</p><p>').replace(/\n/g, '<br>') + '</p>';
-        this._pangramText.Set(val);
+        this._ParseHighlights();
     }
 
     set fontSize(p_value) { this.style.setProperty(`--font-size`, `${p_value}px`); }
@@ -81,6 +96,52 @@ class PangramRenderer extends base {
     set lineHeight(p_value) { this.style.setProperty(`--line-height`, `${p_value}em`); }
 
     set case(p_value) { this.style.setProperty(`--case`, `${p_value}`); }
+
+
+    set highlightList(p_list) {
+        this._highlightList = p_list;
+        if (p_list) { p_list.sort(); }
+        this._ParseHighlights();
+    }
+
+    _ParseHighlights() {
+        let
+            val = this._previewText,
+            valSpan = val;
+
+        if (this._highlightList) {
+            valSpan = ``;
+            for (let i = 0, n = val.length; i < n; i++) {
+                let letter = val.substring(i, i + 1);
+                if (this._highlightList.includes(letter)) { valSpan += `<span class="high">${letter}</span>`; }
+                else { valSpan += letter; }
+            }
+        }
+        val = '<p>' + valSpan.replace(/[^\S\n]+\n/g, '\n').replace(/\n\n+/g, '</p><p>').replace(/\n/g, '<br>') + '</p>';
+        this._pangramText.Set(val);
+    }
+
+    //#region Interactive selection
+
+    _OnPaintChange() {
+        super._OnPaintChange();
+        if (!this._isPainted) { this._ongoingSelection = false; }
+    }
+
+    _StartSelection() {
+        if (this._ongoingSelection) { return; }
+        this._ongoingSelection = true;
+    }
+
+    _EndSelection() {
+        if (!this._ongoingSelection) { return; }
+        this._ongoingSelection = false;
+        let text = ui.dom.highlightedText;
+        if (!text || text.length == 0) { return; }
+        this.Broadcast(nkm.com.SIGNAL.VALUE_CHANGED, text);
+    }
+
+    //#endregion
 
 }
 
