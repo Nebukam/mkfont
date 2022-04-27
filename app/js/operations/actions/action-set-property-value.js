@@ -54,7 +54,7 @@ class ActionSetPropertyValue extends actions.Action {
         this.displayInfos = {
             name: `Set ${this._operation.id}`,
             title: `${nkm.u.isArray(this._operation.target) ? 'Multiple' : this._operation.target + `'s`} ${this._operation.id}\n` +
-                `from : ${this._operation.oldValue}\n` +
+                `from : ${nkm.u.isArray(this._operation.oldValue) ? 'Multiple' : this._operation.oldValue}\n` +
                 `to: ${this._operation.value}`
         };
     }

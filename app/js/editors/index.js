@@ -7,5 +7,6 @@ module.exports = {
     FontEditor: require(`./editor-font`),
     ListImportEditor: require(`./editor-list-import`),
     LigaImportEditor: require(`./editor-liga-import`),
+    MKFontImportEditor: require(`./editor-mkfont-import`),
 
 }

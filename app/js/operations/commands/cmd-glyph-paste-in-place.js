@@ -14,78 +14,64 @@ class CmdGlyphPasteInPlace extends actions.Command {
     constructor() { super(); }
 
     _InternalExecute() {
-        
-        let
-            family = this._emitter.data,
-            variant = family.GetGlyph(this._context?.u || this._emitter.inspectedData.lastItem?.u).activeVariant,
-            svgStats = { exists: false },
-            svgString = clipboard.readText();
 
-        try {
-            svgStats = SVGOPS.SVGStats(svgString);
-        } catch (e) { console.log(e); }
+        let family = this._emitter.data;
 
-        //console.log(svgStats);
-
-        if (!svgStats.exists) {
-            /*
-            nkm.dialog.Push({
-                title: `Invalid content`,
-                message: `Couldn't find how to use the selected file :()`,
-                actions: [{ label: `Okay` }],
-                origin: this, flavor: nkm.com.FLAGS.WARNING
-            });
-            */
+        if (!globalThis.__mkfGlyphCopies ||
+            globalThis.__mkfGlyphCopies.length == 0) {
             this._Cancel();
             return;
         }
 
-        let
-            glyph = variant.glyph,
-            trValues = variant._transformSettings.Values(),
-            unicodeInfos;
+        this._emitter.StartActionGroup({
+            icon: `clipboard-read`,
+            name: `Paste in place`,
+            title: `Pasted glyphs from an mkfont to another`
+        });
 
-        SVGOPS.TryGetTRValues(trValues, svgString);
-
-        
-        console.log(trValues);
-
-        if (glyph.isNull) {
-            // Need to create a new glyph!
-            unicodeInfos = glyph.unicodeInfos;
-            this._emitter.Do(mkfActions.CreateGlyph, {
-                family: family,
-                unicode: unicodeInfos,
-                path: svgStats,
-                transforms: trValues
-            });
-        } else {
-
-            this._emitter.StartActionGroup({
-                icon: `clipboard-read`,
-                name: `Pasted glyph`,
-                title: `Pasted an glyph with its transforms`
-            });
-
-
-            this._emitter.Do(mkfActions.SetProperty, {
-                target: variant,
-                id: mkfData.IDS.PATH_DATA,
-                value: svgStats
-            });
-            if (trValues) {
-                this._emitter.Do(mkfActions.SetPropertyMultiple, {
-                    target: variant.transformSettings,
-                    values: trValues
-                });
-            }
-
-            this._emitter.EndActionGroup();
-
+        for (let i = 0; i < globalThis.__mkfGlyphCopies.length; i++) {
+            this.PasteInPlace(family, globalThis.__mkfGlyphCopies[i]);
         }
 
-        glyph.CommitUpdate();
+        this._emitter.EndActionGroup();
+
         this._Success();
+
+    }
+
+    PasteInPlace(p_family, p_data) {
+
+        let
+            unicodeInfos = p_data.unicode,
+            glyph = p_family.GetGlyph(unicodeInfos.u);
+
+        if (glyph.isNull) {
+
+            this._emitter.Do(mkfActions.CreateGlyph, {
+                family: p_family,
+                unicode: p_data.unicode,
+                //glyphValues: p_data.glyphValues,
+                variantValues: p_data.variantValues,
+                transforms: p_data.transforms
+            });
+
+        } else {
+            /*
+            this._emitter.Do(mkfActions.SetPropertyMultiple, {
+                target: glyph,
+                values: p_data.glyphValues
+            });
+            */
+            this._emitter.Do(mkfActions.SetPropertyMultiple, {
+                target: glyph.activeVariant,
+                values: p_data.variantValues
+            });
+            this._emitter.Do(mkfActions.SetPropertyMultiple, {
+                target: glyph.activeVariant.transformSettings,
+                values: p_data.transforms
+            });
+
+        }
 
     }
 

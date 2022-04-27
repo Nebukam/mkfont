@@ -191,6 +191,10 @@ class PropertyControl extends base {
         this._cmd = p_value;
     }
 
+    set placeholderValue(p_value){
+        this._input.placeholderValue = p_value;
+    }
+
     _OnDataChanged(p_oldData) {
         super._OnDataChanged(p_oldData);
         if (this._data) {

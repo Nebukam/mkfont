@@ -42,13 +42,10 @@ class CmdGlyphPaste extends actions.Command {
 
         let
             glyph = variant.glyph,
-            trValues = variant._transformSettings.Values(),
+            mkfValues = SVGOPS.TryGetMKFValues(svgString, variant),
             unicodeInfos;
 
-        SVGOPS.TryGetTRValues(trValues, svgString);
-
-        
-        console.log(trValues);
+        delete mkfValues.variantValues[mkfData.IDS.PATH];
 
         if (glyph.isNull) {
             // Need to create a new glyph!
@@ -57,7 +54,8 @@ class CmdGlyphPaste extends actions.Command {
                 family: family,
                 unicode: unicodeInfos,
                 path: svgStats,
-                transforms: trValues
+                transforms: mkfValues.hasTransforms ? mkfValues.transforms : null,
+                variantValues: mkfValues.hasVariantValues ? mkfValues.variantValues : null
             });
         } else {
 
@@ -67,17 +65,19 @@ class CmdGlyphPaste extends actions.Command {
                 title: `Pasted an glyph with its transforms`
             });
 
+            this._emitter.Do(mkfActions.SetProperty,
+                { target: variant, id: mkfData.IDS.PATH_DATA, value: svgStats }
+            );
 
-            this._emitter.Do(mkfActions.SetProperty, {
-                target: variant,
-                id: mkfData.IDS.PATH_DATA,
-                value: svgStats
-            });
-            if (trValues) {
-                this._emitter.Do(mkfActions.SetPropertyMultiple, {
-                    target: variant.transformSettings,
-                    values: trValues
-                });
+            if (mkfValues.hasTransforms) {
+                this._emitter.Do(mkfActions.SetPropertyMultiple,
+                    { target: variant.transformSettings, values: mkfValues.transforms }
+                );
+            }
+            if (mkfValues.hasVariantValues) {
+                this._emitter.Do(mkfActions.SetPropertyMultiple,
+                    { target: variant, values: mkfValues.variantValues }
+                );
             }
 
             this._emitter.EndActionGroup();

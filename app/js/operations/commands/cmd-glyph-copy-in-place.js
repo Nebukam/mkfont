@@ -16,16 +16,51 @@ class CmdGlyphCopyInPlace extends actions.Command {
     _InternalExecute() {
 
         let family = this._emitter.data,
-            variant = family.GetGlyph(this._context?.u || this._emitter.inspectedData.lastItem?.u).activeVariant;
+            infoList = this._emitter.inspectedData.stack._array;
 
-        if (variant.glyph.isNull) {
+        if (globalThis.__mkfGlyphCopies) { globalThis.__mkfGlyphCopies.length = 0; }
+        globalThis.__mkfGlyphCopies = null;
+
+        if (infoList.length == 0) {
             this._Cancel();
             return;
         }
 
-        try {
-            navigator.clipboard.writeText(SVGOPS.SVGFromGlyphVariant(variant, true));
-        } catch (e) { console.log(e); }
+        let copies = [];
+
+        for (let i = 0; i < infoList.length; i++) {
+
+            let
+                unicodeInfos = infoList[i],
+                glyph = family.GetGlyph(unicodeInfos.u);
+
+            if (glyph.isNull) { continue; }
+
+            let
+                variant = glyph.activeVariant,
+                copy = {
+                    unicode: unicodeInfos,
+                    glyphValues: glyph.Values(),
+                    variantValues: variant.Values(),
+                    transforms: variant._transformSettings.Values()
+                };
+
+            //Cleanup
+            delete copy.variantValues[mkfData.IDS.PATH];
+            copy.variantValues[mkfData.IDS.PATH_DATA] = { ...variant._values[mkfData.IDS.PATH_DATA].value };
+
+
+            copies.push(copy);
+
+        }
+
+        if (copies.length == 0) {
+            this._Cancel();
+            return;
+        }
+
+        globalThis.__mkfGlyphCopies = copies;
+
 
         this._Success();
     }

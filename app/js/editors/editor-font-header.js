@@ -136,7 +136,16 @@ class FontEditorHeader extends base {
                     //variant: ui.FLAGS.FRAME, flavor: nkm.com.FLAGS.LOADING,
                     trigger: { fn: () => { this.editor.cmdImportTTF.Execute(); } },
                     group: `external`,
+                },
+                /*
+                {
+                    label: `MKfont`, icon: `directory-download-small`,
+                    htitle: `Import glyphs from another .mkfont file`,
+                    //variant: ui.FLAGS.FRAME, flavor: nkm.com.FLAGS.LOADING,
+                    trigger: { fn: () => { this.editor.cmdImportMKFont.Execute(); } },
+                    group: `external`,
                 }
+                */
             ]
         };
 

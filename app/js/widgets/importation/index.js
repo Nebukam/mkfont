@@ -9,5 +9,6 @@ module.exports = {
     AssignSelection : require(`./assign-selection`),
 
     ImportListItem: require(`./import-list-item`),
+    ImportMKFontItem: require(`./import-mkfont-item`),
 
 }

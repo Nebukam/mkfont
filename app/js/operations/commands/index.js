@@ -26,6 +26,9 @@ module.exports = {
     GlyphClear: require(`./cmd-glyph-clear`),
     GlyphCopy: require(`./cmd-glyph-copy`),
     GlyphPaste: require(`./cmd-glyph-paste`),
+    GlyphCopyInPlace: require(`./cmd-glyph-copy-in-place`),
+    GlyphPasteInPlace: require(`./cmd-glyph-paste-in-place`),
+    GlyphPasteTransform: require(`./cmd-glyph-paste-transform`),
 
     ImportTTF: require(`./cmd-import-ttf`),
 
@@ -33,12 +36,13 @@ module.exports = {
     ImportFileSingle: require(`./cmd-import-file-single`),
     ImportFileList: require(`./cmd-import-file-list`),
     ImportLigatures: require(`./cmd-import-ligatures`),
+    ImportMKFont: require(`./cmd-import-mkfont`),
 
     ExportTTF: require(`./cmd-export-ttf`),
 
     ExportListUni: require(`./cmd-export-list-uni`),
     ExportListUniHex: require(`./cmd-export-list-uni-hex`),
-    ExportSingleUniHex: new (require(`./cmd-export-single-uni-hex-`))(),    
+    ExportSingleUniHex: new (require(`./cmd-export-single-uni-hex-`))(),
     ExportListArtboardTemplate: require(`./cmd-export-list-artboard-template`),
 
     StartNewFromTTF: require(`./cmd-start-new-from-ttf`),
