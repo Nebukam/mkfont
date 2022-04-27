@@ -60,6 +60,7 @@ class CmdGlyphCopyInPlace extends actions.Command {
         }
 
         globalThis.__mkfGlyphCopies = copies;
+        globalThis.__mkfGlyphCopiesEM = family.Get(mkfData.IDS.EM_UNITS);
 
 
         this._Success();

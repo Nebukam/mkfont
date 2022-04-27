@@ -540,7 +540,7 @@ class SVGOperations {
     static SVGFromGlyphVariant(p_variant, p_includeMark = true) {
 
         let
-            inlined = ``,
+            inlined = `mkf-em="${p_variant.family.Get(IDS.EM_UNITS)}" `,
             markedPath = ``,
             tr = p_variant._transformSettings._values,
             vr = p_variant._values,
@@ -579,17 +579,22 @@ class SVGOperations {
             if (!svg) { return result; }
 
             let
+                em = Number(svg.getAttribute(`mkf-em`)),
+                scaleFactor = Number.isNaN(em) ? 1 : p_variant.glyph.family.Get(IDS.EM_UNITS) / em,
+                resample = (scaleFactor != 1);
+
+            let
                 refTr = p_variant._transformSettings._values,
                 refVr = p_variant._values;
 
 
             for (let id in refTr) {
-                if (this.TryAssignAttribute(id, svg, result.transforms)) { result.hasTransforms = true; }
+                if (this.TryAssignAttribute(id, svg, result.transforms, resample, scaleFactor)) { result.hasTransforms = true; }
             }
 
             for (let id in refVr) {
                 if (id == IDS.PATH_DATA) { continue; }
-                if (this.TryAssignAttribute(id, svg, result.variantValues)) { result.hasVariantValues = true; }
+                if (this.TryAssignAttribute(id, svg, result.variantValues, resample, scaleFactor)) { result.hasVariantValues = true; }
             }
 
         } catch (e) { console.error(e); }
@@ -598,7 +603,7 @@ class SVGOperations {
 
     }
 
-    static TryAssignAttribute(p_id, p_source, p_target) {
+    static TryAssignAttribute(p_id, p_source, p_target, p_resample = false, p_scaleFactor = 0) {
 
         let nkmId = `mkf-${p_id}`;
 
@@ -608,7 +613,13 @@ class SVGOperations {
             value = p_source.getAttribute(nkmId),
             num = Number(value)
 
-        if (!isNaN(num)) { value = num; }
+        if (!Number.isNaN(num)) {
+            if (p_resample) {
+                if (IDS.TR_RESAMPLE_IDS.includes(p_id) ||
+                    IDS.GLYPH_RESAMPLE_IDS.includes(p_id)) { value = num * p_scaleFactor; }
+                else { value = num; }
+            } else { value = num; }
+        }
         else {
             if (value == 'null') { value = null; }
             else if (value == 'true') { value = true; }

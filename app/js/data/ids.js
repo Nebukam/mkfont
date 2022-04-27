@@ -237,6 +237,12 @@ class IDS {
     static GLYPH_NAME = 'name';
     static UNICODE = 'unicode';
 
+    static GLYPH_RESAMPLE_IDS = [
+        this.WIDTH,
+        this.HEIGHT,
+        this.EXPORTED_WIDTH,
+    ];
+
     static {
         /*
         this.infos[this.H_ORIGIN_X] = {
@@ -373,6 +379,12 @@ class IDS {
     static TR_AUTO_WIDTH = 'auto-w';
 
     static TR_Y_OFFSET = 'yoffset';
+
+    static TR_RESAMPLE_IDS = [
+        this.TR_WIDTH_SHIFT,
+        this.TR_WIDTH_PUSH,
+        this.TR_Y_OFFSET
+    ];
 
     static {
 

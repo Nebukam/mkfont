@@ -207,7 +207,7 @@ class TTFImport {
 
     static numeric(p_el, p_id, p_defaultValue = 0) {
         let value = Number(p_el.getAttribute(p_id));
-        if (isNaN(value)) { value = p_defaultValue; }
+        if (Number.isNaN(value)) { value = p_defaultValue; }
         return value;
     }
 

@@ -18,16 +18,6 @@ const familyIDs = [
     mkfData.IDS.CAP_HEIGHT,
 ];
 
-const transformIDs = [
-    mkfData.IDS.TR_WIDTH_SHIFT,
-    mkfData.IDS.TR_WIDTH_PUSH,
-    mkfData.IDS.TR_SCALE_FACTOR
-];
-
-const glyphsIDs = [
-    mkfData.IDS.WIDTH,
-    mkfData.IDS.HEIGHT
-];
 
 class ActionSetEM extends ActionSetPropertyValue {
     constructor() { super(); }
@@ -61,10 +51,7 @@ class ActionSetEM extends ActionSetPropertyValue {
                 if (value != null) { family.Set(id, value * scaleFactor); }
             }
 
-            let
-                list = family._glyphs.internalArray,
-                tn = transformIDs.length,
-                gn = glyphsIDs.length;
+            let list = family._glyphs.internalArray;
 
             for (let g = 0, n = list.length; g < n; g++) {
 
@@ -73,17 +60,21 @@ class ActionSetEM extends ActionSetPropertyValue {
                     pathData = variant.Get(mkfData.IDS.PATH_DATA);
 
                 if (pathData && !variant.Get(mkfData.IDS.EMPTY)) {
-                    SVGOPS.ScalePathData(pathData, scaleFactor);
+                   // SVGOPS.ScalePathData(pathData, scaleFactor);
                 }
 
-                for (let t = 0; t < gn; t++) {
-                    let id = glyphsIDs[t],
+                let idList = mkfData.IDS.GLYPH_RESAMPLE_IDS;
+
+                for (let t = 0, tn = idList.length; t < tn; t++) {
+                    let id = idList[t],
                         valueObj = variant._values[id];
-                    if (!isNaN(valueObj.value)) { variant.Set(id, valueObj.value * scaleFactor); }
+                    if (!Number.isNaN(valueObj.value)) { variant.Set(id, valueObj.value * scaleFactor); }
                 }
 
-                for (let t = 0; t < tn; t++) {
-                    let id = transformIDs[t],
+                idList = mkfData.IDS.TR_RESAMPLE_IDS;
+
+                for (let t = 0, tn = idList.length; t < tn; t++) {
+                    let id = idList[t],
                         value = transform.Get(id);
                     if (value != null) { transform.Set(id, value * scaleFactor); }
                 }

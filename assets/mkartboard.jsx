@@ -286,7 +286,7 @@ function AddOutline(text, layer, artbrd, h) {
 function Param(input, fallback) {
 
     var num = Number(input.text);
-    if (isNaN(num)) { return fallback; }
+    if (Number.isNaN(num)) { return fallback; }
     return num;
 
 }
