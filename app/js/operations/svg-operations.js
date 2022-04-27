@@ -330,30 +330,6 @@ class SVGOperations {
 
     }
 
-    static TryGetTRValues(p_obj, p_svgString) {
-
-        try {
-
-            let svg = domparser.parseFromString(p_svgString, `image/svg+xml`).getElementsByTagName(`svg`)[0];
-            if (!svg) { return null; }
-
-            for (var id in p_obj) {
-                let
-                    value = svg.getAttribute(id),
-                    num = Number.parseFloat(value);
-
-                if (!isNaN(num)) { p_obj[id] = num; }
-            }
-
-            return p_obj;
-
-        } catch (e) {
-            console.log(e);
-            return p_obj;
-        }
-
-    }
-
     static TranslateBBox(p_bbox, p_trx, p_try = 0) {
         p_bbox.x = p_bbox.x + p_trx;
         p_bbox.y = p_bbox.y + p_try;
@@ -537,7 +513,7 @@ class SVGOperations {
         return {
             height: Math.max(heightRef, 0),
             width: Math.max(widthRef, 0),
-            fit: { width: fitW, height: fitH, x: offsetX, y: offsetY, yoff:yUserOffset },
+            fit: { width: fitW, height: fitH, x: offsetX, y: offsetY, yoff: yUserOffset },
             path: path,
             bbox: this.GetBBox(path)
         };
@@ -564,18 +540,86 @@ class SVGOperations {
     static SVGFromGlyphVariant(p_variant, p_includeMark = true) {
 
         let
-            inlineTr = ``,
+            inlined = ``,
             markedPath = ``,
-            tr = p_variant._transformSettings,
+            tr = p_variant._transformSettings._values,
+            vr = p_variant._values,
             p = p_variant.Get(IDS.PATH_DATA);
 
-        for (let p in tr._values) { inlineTr += `${p}="${tr._values[p].value}" `; }
+        for (let p in tr) {
+            let v = tr[p].value;
+            if (v == null || nkm.u.isNumber(v) || nkm.u.isString(v)) { inlined += `mkf-${p}="${v}" `; }
+        }
+
+        for (let p in vr) {
+            let v = vr[p].value;
+            if (v == null || nkm.u.isNumber(v) || nkm.u.isString(v)) { inlined += `mkf-${p}="${v}" `; }
+        }
 
         if (p_includeMark) {
             markedPath = `<path style="stroke:#FF00FF;fill:none" d="M 0 0 L ${p.width} 0 L ${p.width} ${p.height} L 0 ${p.height} z"></path>`;
         }
 
-        return `<svg viewBox="0 0 ${p.width} ${p.height}" ${inlineTr}><path d="${p.path}"></path>${markedPath}</svg>`;
+        return `<svg viewBox="0 0 ${p.width} ${p.height}" ${inlined}><path d="${p.path}"></path>${markedPath}</svg>`;
+
+    }
+
+    static TryGetMKFValues(p_svgString, p_variant) {
+
+        let result = {
+            transforms: {},
+            hasTransforms: false,
+            variantValues: {},
+            hasVariantValues: false,
+        };
+
+        try {
+
+            let svg = domparser.parseFromString(p_svgString, `image/svg+xml`).getElementsByTagName(`svg`)[0];
+            if (!svg) { return result; }
+
+            let
+                refTr = p_variant._transformSettings._values,
+                refVr = p_variant._values;
+
+
+            for (let id in refTr) {
+                if (this.TryAssignAttribute(id, svg, result.transforms)) { result.hasTransforms = true; }
+            }
+
+            for (let id in refVr) {
+                if (id == IDS.PATH_DATA) { continue; }
+                if (this.TryAssignAttribute(id, svg, result.variantValues)) { result.hasVariantValues = true; }
+            }
+
+        } catch (e) { console.error(e); }
+
+        return result;
+
+    }
+
+    static TryAssignAttribute(p_id, p_source, p_target) {
+
+        let nkmId = `mkf-${p_id}`;
+
+        if (!p_source.hasAttribute(nkmId)) { return false; }
+
+        let
+            value = p_source.getAttribute(nkmId),
+            num = Number(value)
+
+        if (!isNaN(num)) { value = num; }
+        else {
+            if (value == 'null') { value = null; }
+            else if (value == 'true') { value = true; }
+            else if (value == 'false') { value = false; }
+        }
+
+        if (value === undefined) { return false; }
+
+        p_target[p_id] = value;
+
+        return true;
 
     }
 

@@ -190,6 +190,7 @@ class IDS_EXT {
     static LIGA_MIN = 'ligaMin';
     static LIGA_MAX = 'ligaMax';
     static LIGA_MIN_OCCURENCE = 'ligaOccMin';
+    static LIGA_EACH_LINE = 'ligaEachLine';
 
     static RANGE_MIXED = 0;
     static RANGE_INLINE = 1;
@@ -202,7 +203,7 @@ class IDS_EXT {
             recompute: true,
             inputType: inputs.Textarea,
             label: `Broad`,
-            inputOptions: { rows: 15, placeholder: `Add some text here to find common character associations` },
+            inputOptions: { rows: 15 },
         };
 
         this.infos[this.LIGA_MIN] = {
@@ -227,6 +228,14 @@ class IDS_EXT {
             label: `Min occurences`,
             inputOptions: { size: ui.FLAGS.SIZE_XS, min: 1 },
             desc: `Minimum amount of time a ligature candidate must've been found to be shown.`
+        };
+
+        this.infos[this.LIGA_EACH_LINE] = {
+            recompute: true,
+            inputType: inputs.Boolean,
+            label: `Each line is a ligature`,
+            inputOptions: { size: ui.FLAGS.SIZE_XS },
+            desc: `When enabled, each new line is considered as a valid ligature candidate.`
         };
 
     }

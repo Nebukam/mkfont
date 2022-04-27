@@ -1,13 +1,13 @@
 {
     "name": "mkfont",
-    "version": "0.5.3",
+    "version": "0.5.4",
     "author": {
         "name": "Timothé Lapetite",
         "email": "nebukam@gmail.com"
     },
     "license": "SEE LICENSE IN LICENSE",
     "dependencies": {
-        "@nkmjs/core": "^0.2.13",
+        "@nkmjs/core": "^0.2.14",
         "svg2ttf": "^6.0.3",
         "svgo": "^2.8.0",
         "svgpath": "^2.5.0",
@@ -18,14 +18,14 @@
         "processor": "node app/js-unicode/unicode-processor.js"
     },
     "devDependencies": {
-        "@nkmjs/core-dev": "^0.2.13",
+        "@nkmjs/core-dev": "^0.2.14",
         "electron": "^17.1.0"
     }
 }
 
 {
     "name": "mkfont",
-    "version": "0.5.3",
+    "version": "0.5.4",
     "author": {
         "name": "Timothé Lapetite",
         "email": "nebukam@gmail.com"

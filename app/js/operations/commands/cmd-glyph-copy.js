@@ -24,7 +24,8 @@ class CmdGlyphCopy extends actions.Command {
         }
 
         try {
-            navigator.clipboard.writeText(SVGOPS.SVGFromGlyphVariant(variant, true));
+            let svgString = SVGOPS.SVGFromGlyphVariant(variant, true);
+            navigator.clipboard.writeText(svgString);
         } catch (e) { console.log(e); }
 
         this._Success();

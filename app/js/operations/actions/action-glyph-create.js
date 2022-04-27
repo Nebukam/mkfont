@@ -16,13 +16,22 @@ class ActionCreateGlyph extends actions.Action {
             newGlyph = nkm.com.Rent(mkfData.Glyph),
             glyphVariant = newGlyph._defaultGlyph,
             family = p_operation.family,
+            variantValues = p_operation.variantValues || null,
+            glyphValues = p_operation.glyphValues || null,
+            path = p_operation.path || null,
             defaultTr = family.transformSettings,
             transforms = p_operation.transforms || {};
+
+        newGlyph.family = family; // Otherwise Resolve() fails
 
         newGlyph.Set(mkfData.IDS.UNICODE, p_operation.unicode.u);
         newGlyph.unicodeInfos = p_operation.unicode;
 
-        glyphVariant.Set(mkfData.IDS.PATH_DATA, p_operation.path);
+        if (glyphValues) { newGlyph.BatchSet(glyphValues); }
+
+        if (variantValues) { glyphVariant.BatchSet(variantValues); }
+        if (path) { glyphVariant.Set(mkfData.IDS.PATH_DATA, path); }
+
         glyphVariant.transformSettings.BatchSet(defaultTr);
         glyphVariant.transformSettings.BatchSet(transforms);
         glyphVariant.BatchSet(transforms);
@@ -36,11 +45,11 @@ class ActionCreateGlyph extends actions.Action {
 
     }
 
-    _UpdateDisplayInfos(){
+    _UpdateDisplayInfos() {
         this.displayInfos = {
-            icon:`new`,
-            name:`Create : ${this._operation.glyph.unicodeInfos.char}`,
-            title:`Create glyph : ${this._operation.glyph.unicodeInfos.char}`
+            icon: `new`,
+            name: `Create : ${this._operation.glyph.unicodeInfos.char}`,
+            title: `Create glyph : ${this._operation.glyph.unicodeInfos.char}`
         };
     }
 

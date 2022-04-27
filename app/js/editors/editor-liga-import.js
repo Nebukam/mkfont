@@ -9,6 +9,8 @@ const mkfData = require(`../data`);
 const mkfInspectors = require(`./inspectors`);
 const mkfWidgets = require(`../widgets`);
 
+const isNEWLINE = (owner) => { return owner.data ? !owner.data.Get(mkfData.IDS_EXT.LIGA_EACH_LINE) : true; };
+
 const base = nkm.datacontrols.Editor;
 class EditorLigaImport extends base {
     constructor() { super(); }
@@ -81,11 +83,12 @@ class EditorLigaImport extends base {
 
         this._builder.Build([
             { cl: mkfWidgets.ControlHeader, options: { label: `Text` } },
-            { options: { propertyId: mkfData.IDS_EXT.LIGA_TEXT, inputOnly: true } },
+            { options: { propertyId: mkfData.IDS_EXT.LIGA_TEXT, inputOnly: true }, member: `_textBox` },
+            { options: { propertyId: mkfData.IDS_EXT.LIGA_EACH_LINE } },
             { cl: mkfWidgets.ControlHeader, options: { label: `Limits (first 500 results)` } },
-            { options: { propertyId: mkfData.IDS_EXT.LIGA_MIN } },
-            { options: { propertyId: mkfData.IDS_EXT.LIGA_MAX } },
-            { options: { propertyId: mkfData.IDS_EXT.LIGA_MIN_OCCURENCE } },
+            { options: { propertyId: mkfData.IDS_EXT.LIGA_MIN }, disableWhen: { fn: isNEWLINE } },
+            { options: { propertyId: mkfData.IDS_EXT.LIGA_MAX }, disableWhen: { fn: isNEWLINE } },
+            { options: { propertyId: mkfData.IDS_EXT.LIGA_MIN_OCCURENCE }, disableWhen: { fn: isNEWLINE } },
         ]);
 
         this._list = ui.El(`div`, { class: `list` }, this);
@@ -102,6 +105,13 @@ class EditorLigaImport extends base {
 
     _OnDataUpdated(p_data) {
         super._OnDataUpdated(p_data);
+
+        if (p_data.Get(mkfData.IDS_EXT.LIGA_EACH_LINE)) {
+            this._textBox.placeholderValue = `One ligature per new line.`;
+        } else {
+            this._textBox.placeholderValue = `Add some text here to find common character associations.`;
+        }
+
         this._ComputeCandidates();
     }
 
@@ -120,6 +130,39 @@ class EditorLigaImport extends base {
     _ComputeCandidates() {
 
         this._ClearBtns();
+
+        // Simple version
+
+        if (this._data.Get(mkfData.IDS_EXT.LIGA_EACH_LINE)) {
+
+            let
+                results = [],
+                input = this._data.Get(mkfData.IDS_EXT.LIGA_TEXT);
+
+            try {
+                input = input.match(/[^\r\n]+/g);
+                input = [...new Set(input)].sort();
+                console.log(input);
+                for (let i = 0; i < input.length; i++) {
+                    let liga = input[i];
+                    if (liga.length <= 1) { continue; }
+                    results.push({ export: (this._cached.has(liga) ? true : false), count: 1, ligature: liga });
+                }
+            } catch (e) {
+                console.log(e);
+            }
+
+            if (results.length == 0) {
+                this._msgLabel.Set(`Current settings yield no results.`);
+            }
+
+            this._OnResultReady(results);
+
+            return;
+
+        }
+
+        // Complex version
 
         let
             input = this._data.Get(mkfData.IDS_EXT.LIGA_TEXT),

@@ -81,6 +81,9 @@ class FontEditor extends base {
         this.cmdGlyphDelete = this._commands.Create(mkfCmds.GlyphDelete, { shortcut: this.shortcuts.Create("Delete").Strict() });
         this.cmdGlyphCopy = this._commands.Create(mkfCmds.GlyphCopy, { shortcut: this.shortcuts.Create("Ctrl C").Strict() });
         this.cmdGlyphPaste = this._commands.Create(mkfCmds.GlyphPaste, { shortcut: this.shortcuts.Create("Ctrl V").Strict() });
+        this.cmdGlyphCopyInPlace = this._commands.Create(mkfCmds.GlyphCopyInPlace, { shortcut: this.shortcuts.Create("Ctrl Shift C").Strict() });
+        this.cmdGlyphPasteInPlace = this._commands.Create(mkfCmds.GlyphPasteInPlace, { shortcut: this.shortcuts.Create("Ctrl Shift V").Strict() });
+        this.cmdGlyphPasteTransform = this._commands.Create(mkfCmds.GlyphPasteTransform, { shortcut: this.shortcuts.Create("Ctrl Alt V").Strict() });
 
         this.cmdListImportMissing = this._commands.Create(mkfCmds.ImportListMissingGlyphs);
         this.cmdListExportUni = this._commands.Create(mkfCmds.ExportListUni);
@@ -91,6 +94,7 @@ class FontEditor extends base {
         this.cmdImportFileSingle = this._commands.Create(mkfCmds.ImportFileSingle);
         this.cmdImportFileList = this._commands.Create(mkfCmds.ImportFileList);
         this.cmdImportLigatures = this._commands.Create(mkfCmds.ImportLigatures);
+        this.cmdImportMKFont = this._commands.Create(mkfCmds.ImportMKFont);
 
         this.shortcuts.Create("Ctrl Z", this._actionStack.Undo);
         this.shortcuts.Create("Ctrl Y", this._actionStack.Redo);
