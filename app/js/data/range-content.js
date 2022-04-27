@@ -34,6 +34,9 @@ class RangeContent extends nkm.com.pool.DisposableObjectEx {
     }
 
     static FetchFamilyGlyphAll(p_family) {
+        try {
+            p_family._glyphUnicodeCache.sort((a, b) => { return a.length > 6 ? 1 : parseInt(a, 16) - parseInt(b, 16); });
+        } catch (e) { }
         return p_family._glyphUnicodeCache;
     }
 
@@ -43,6 +46,9 @@ class RangeContent extends nkm.com.pool.DisposableObjectEx {
             (item, index) => {
                 if (p_family._ligatureSet.has(item)) { result.push(item.Get(IDS.UNICODE)); }
             });
+        try {
+            result.sort((a, b) => { return parseInt(a, 16) - parseInt(b, 16); });
+        } catch (e) { }
         return result;
     }
 
