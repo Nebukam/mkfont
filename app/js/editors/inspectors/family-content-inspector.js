@@ -21,7 +21,7 @@ class FamilyContentInspector extends base {
             { name: 'Quick access', localItemClass: mkfCatalog.UniFamily, expanded: true, autoSort:false },
             [
                 {
-                    name: 'Glyphs', typeTag: `Custom`, count: mkfData.RangeContent.CountGlyphs,
+                    name: 'My Glyphs', typeTag: `Custom`, count: mkfData.RangeContent.CountGlyphs,
                     icon: 'text-style', isDynamic: true,
                     fetchList: mkfData.RangeContent.FetchFamilyGlyphAll
                 },

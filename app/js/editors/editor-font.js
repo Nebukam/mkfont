@@ -267,8 +267,16 @@ class FontEditor extends base {
 
     _OnDataChanged(p_oldData) {
         super._OnDataChanged(p_oldData);
-        if (this._data) { this._OnDataValueChanged(this._data, mkfData.IDS.PREVIEW_SIZE, null); }
-        this.SetActiveRange(UNICODE.instance._blockCatalog.At(0));
+        let ar = UNICODE.instance._blockCatalog.At(0);
+        if (this._data) { 
+            this._OnDataValueChanged(this._data, mkfData.IDS.PREVIEW_SIZE, null); 
+            if(this._data._glyphs.count > 0){
+                ar = this._contentInspector._specialCatalog.At(0); //My Glyphs
+            }
+        }
+
+        this.SetActiveRange(ar);        
+        
         this._viewport._RefreshItems();
     }
 
