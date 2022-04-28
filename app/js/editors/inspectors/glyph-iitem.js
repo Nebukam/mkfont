@@ -154,6 +154,7 @@ class GlyphVariantInspectorItem extends base {
         };
 
         this._binder = this.Attach(mkfWidgets.ResourceBinding, `binder control`);
+        this._binder.visible = false;
         this._transformInspector = this.Attach(TransformSettingsInspector, `settings`);
         this.forwardData.To(this._transformInspector, { dataMember: `transformSettings` });
 
@@ -241,9 +242,16 @@ class GlyphVariantInspectorItem extends base {
 
     _OnDataUpdated(p_data) {
         super._OnDataUpdated(p_data);
-        let binding = this.editor._bindingManager.Get(p_data);
-        this._binder.data = binding
-        this._editInPlaceBtn.disabled = binding ? true : false;
+        let isNullGlyph = p_data.glyph.isNull;
+        if (isNullGlyph) {
+            p_data.glyph.unicodeInfos = this._glyphInfos;
+            this._binder.data = null;
+            this._editInPlaceBtn.disabled = true;
+        } else {
+            let binding = this.editor._bindingManager.Get(p_data);
+            this._binder.data = binding;
+            this._editInPlaceBtn.disabled = binding ? true : false;
+        }
     }
 
     _CleanUp() {
