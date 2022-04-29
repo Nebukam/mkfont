@@ -77,6 +77,7 @@ class EditorListImport extends base {
             },
             '.identity': {
                 'width': '100%',
+                'max-width':`330px`
             },
             '.header': {
                 'display': 'flex',
@@ -154,7 +155,7 @@ class EditorListImport extends base {
 
         // Third col
 
-        column = ui.El(`div`, { class: `column` }, this._host);
+        column = ui.El(`div`, { class: `column third` }, this._host);
 
         this._identity = this.Attach(mkfWidgets.GlyphIdentity, `identity`, column);
 

@@ -49,7 +49,7 @@ class AssignSelectionBlockControl extends base {
         this._start = this._block._options.start;
 
         if (this._data.Get(mkfData.IDS_EXT.IMPORT_BLOCK_START) == mkfData.ENUMS.BLOCK_START_FIRST_AVAIL) {
-            this._start = mkfData.UTILS.FindFirstEmptyIndex(this.editor.data, this._start);
+            this._start = mkfData.UTILS.FindFirstEmptyIndex(this.editor.family, this._start);
         }
 
         super._UpdateList();

@@ -62,6 +62,8 @@ class CmdImportFileList extends actions.Command {
             return;
         }
 
+        p_response.filePaths.sort();
+
         let family = this._context;
 
         this._PreprocessFileList(list);
