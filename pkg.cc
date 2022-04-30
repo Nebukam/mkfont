@@ -7,7 +7,8 @@
     },
     "license": "SEE LICENSE IN LICENSE",
     "dependencies": {
-        "@nkmjs/core": "^0.2.15",
+        "@nkmjs/core": "^0.2.16",
+        "svg-path-reverse": "^1.3.0",
         "svg2ttf": "^6.0.3",
         "svgo": "^2.8.0",
         "svgpath": "^2.5.0",
@@ -18,7 +19,7 @@
         "processor": "node app/js-unicode/unicode-processor.js"
     },
     "devDependencies": {
-        "@nkmjs/core-dev": "^0.2.15",
+        "@nkmjs/core-dev": "^0.2.16",
         "electron": "^17.1.0"
     }
 }
@@ -33,6 +34,7 @@
     "license": "SEE LICENSE IN LICENSE",
     "dependencies": {
         "@nkmjs/core": "../nkmjs/packages/nkmjs-core",
+        "svg-path-reverse": "^1.3.0",
         "svg2ttf": "^6.0.3",
         "svgo": "^2.8.0",
         "svgpath": "^2.5.0",
