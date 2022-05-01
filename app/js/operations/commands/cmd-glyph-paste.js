@@ -50,7 +50,7 @@ class CmdGlyphPaste extends actions.Command {
         if (glyph.isNull) {
             // Need to create a new glyph!
             unicodeInfos = glyph.unicodeInfos;
-            this._emitter.Do(mkfActions.CreateGlyph, {
+            this._emitter.Do(mkfActions.GlyphCreate, {
                 family: family,
                 unicode: unicodeInfos,
                 path: svgStats,

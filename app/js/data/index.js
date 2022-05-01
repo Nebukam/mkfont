@@ -12,12 +12,14 @@ module.exports = {
 
     Family: require(`./family-data-block`),
     
+    GlyphLayer: require(`./glyph-layer-data-block`),
     GlyphVariant: require(`./glyph-variant-data-block`),
     Glyph: require(`./glyph-data-block`),
 
     TransformSettings: require(`./settings-transforms-data-block`),
     ImportSettings: require(`./settings-import-data-block`),
     LigaImportSettings: require(`./settings-liga-import-data-block`),
+    LayerTransforms: require(`./layer-transforms-data-block`),
     Prefs: require(`./settings-preferences`),
 
     RangeContent : require(`./range-content`),

@@ -12,6 +12,7 @@ const TransformSettings = require(`./settings-transforms-data-block`);
 const svgpath = require('svgpath');
 const ContentUpdater = require(`../content-updater`);
 const UNICODE = require('../unicode');
+const SIGNAL = require('../signal');
 
 const domparser = new DOMParser();
 const svgString = `<glyph ${IDS.GLYPH_NAME}="" ${IDS.UNICODE}="" d="" ${IDS.WIDTH}="" ${IDS.HEIGHT}="" ></glyph>`;
@@ -33,8 +34,16 @@ class GlyphVariantDataBlock extends SimpleDataEx {
         this._glyph = null;
         this._computedPath = null;
         this._index = 0;
+        this._layers = new nkm.collections.List();
+
+        this._layerObserver = new nkm.com.signals.Observer();
+        this._layerObserver.Hook(nkm.com.SIGNAL.UPDATED, this._ScheduleTransformationUpdate, this);
+
+        this._layerUsers = new nkm.collections.List();
 
     }
+
+    get layerUsers() { return this._layerUsers; }
 
     get index() { return this._index; }
     set index(p_value) {
@@ -56,6 +65,46 @@ class GlyphVariantDataBlock extends SimpleDataEx {
         p_values[IDS.OUT_OF_BOUNDS] = { value: false };
         p_values[IDS.EMPTY] = { value: false };
         p_values[IDS.EXPORT_GLYPH] = { value: true };
+        p_values[IDS.COMPOSITION] = { value: null };
+    }
+
+    get layers() { return this._layers; }
+
+    //#region Layer management
+
+    AddLayer(p_layer) {
+        if (!this._layers.Add(p_layer)) { return p_layer; }
+        p_layer._variant = this;
+        this._layers.ForEach((item, i) => { item.index = i; });
+        this._layerObserver.Observe(p_layer);
+        this.Broadcast(SIGNAL.LAYER_ADDED, this, p_layer);
+        this.Broadcast(SIGNAL.LAYERS_UPDATED, this);
+        this._ScheduleTransformationUpdate();
+    }
+
+    RemoveLayer(p_layer) {
+        if (!this._layers.Remove(p_layer)) { return null; }
+        this._layerObserver.Unobserve(p_layer);
+        p_layer._variant = null;
+        this._layers.ForEach((item, i) => { item.index = i; });
+        this.Broadcast(SIGNAL.LAYER_REMOVED, this, p_layer);
+        this.Broadcast(SIGNAL.LAYERS_UPDATED, this);
+        this._ScheduleTransformationUpdate();
+    }
+
+    MoveLayer(p_layer, p_index) {
+        if (!this._layers.Contains(p_layer)) { return; }
+        this._layers.Move(p_layer, p_index);
+        this._layers.ForEach((item, i) => { item.index = i; });
+        this.Broadcast(SIGNAL.LAYERS_UPDATED, this);
+        this._ScheduleTransformationUpdate();
+    }
+
+    //#endregion
+
+    _OnLayerUpdated() {
+        if (this._transformSettings._waitingForUpdate) { return; }
+        //this.Set(IDS.PATH, this._ConcatPaths(this.Get(IDS.PATH_DATA).path));
     }
 
     _BuildFontObject() { return svgGlyphRef.cloneNode(true); }
@@ -73,6 +122,12 @@ class GlyphVariantDataBlock extends SimpleDataEx {
         this._family = p_value;
         if (this._family) { this._family.fontObject.appendChild(this._fontObject); }
         else { this._fontObject.remove(); }
+    }
+
+    _ConcatPaths(p_rootPath) {
+        if (this._layers.isEmpty) { return p_rootPath; }
+        this._layers.ForEach((item) => { p_rootPath += ` `+item.Get(IDS.PATH); });
+        return p_rootPath;
     }
 
     _UpdateFontObject() {
@@ -117,7 +172,9 @@ class GlyphVariantDataBlock extends SimpleDataEx {
     }
 
     _ScheduleTransformationUpdate() {
+        this._transformSettings._waitingForUpdate = true;
         ContentUpdater.Push(this, this._ApplyTransformUpdate);
+        this._layerUsers.ForEach((item) => { item._variant._ScheduleTransformationUpdate(); });
     }
 
     _ApplyTransformUpdate() {
@@ -131,6 +188,8 @@ class GlyphVariantDataBlock extends SimpleDataEx {
 
     _CleanUp() {
         this.glyph = null;
+        while (!this._layerUsers.isEmpty) { this._layerUsers.Pop().importedVariant = null; }
+        while (!this._layers.isEmpty) { this._layers.Pop().Release(); }
         super._CleanUp();
     }
 

@@ -85,6 +85,11 @@ class FontEditor extends base {
         this.cmdGlyphPasteInPlace = this._commands.Create(mkfCmds.GlyphPasteInPlace, { shortcut: this.shortcuts.Create("Ctrl Shift V").Strict() });
         this.cmdGlyphPasteTransform = this._commands.Create(mkfCmds.GlyphPasteTransform, { shortcut: this.shortcuts.Create("Ctrl Alt V").Strict() });
 
+        this.cmdLayerAdd = this._commands.Create(mkfCmds.LayerAdd);
+        this.cmdLayerRemove = this._commands.Create(mkfCmds.LayerRemove);
+        this.cmdLayersOn = this._commands.Create(mkfCmds.LayerAllOn);
+        this.cmdLayersOff = this._commands.Create(mkfCmds.LayerAllOff);
+
         this.cmdListImportMissing = this._commands.Create(mkfCmds.ImportListMissingGlyphs);
         this.cmdListExportUni = this._commands.Create(mkfCmds.ExportListUni);
         this.cmdListExportUniHex = this._commands.Create(mkfCmds.ExportListUniHex);
@@ -268,15 +273,15 @@ class FontEditor extends base {
     _OnDataChanged(p_oldData) {
         super._OnDataChanged(p_oldData);
         let ar = UNICODE.instance._blockCatalog.At(0);
-        if (this._data) { 
-            this._OnDataValueChanged(this._data, mkfData.IDS.PREVIEW_SIZE, null); 
-            if(this._data._glyphs.count > 0){
+        if (this._data) {
+            this._OnDataValueChanged(this._data, mkfData.IDS.PREVIEW_SIZE, null);
+            if (this._data._glyphs.count > 0) {
                 ar = this._contentInspector._specialCatalog.At(0); //My Glyphs
             }
         }
 
-        this.SetActiveRange(ar);        
-        
+        this.SetActiveRange(ar);
+
         this._viewport._RefreshItems();
     }
 

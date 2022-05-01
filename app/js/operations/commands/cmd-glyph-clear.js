@@ -59,7 +59,7 @@ class CmdGlyphClear extends actions.Command {
 
         if (glyph.isNull) {
             // Need to create a new glyph!
-            this._emitter.Do(mkfActions.CreateGlyph, {
+            this._emitter.Do(mkfActions.GlyphCreate, {
                 family: f,
                 unicode: p_infos,
                 path: svgStats,

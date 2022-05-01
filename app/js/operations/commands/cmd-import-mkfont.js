@@ -135,7 +135,7 @@ class CmdImportMKFont extends actions.Command {
 
                 // Create glyph
 
-                this._emitter.Do(mkfActions.CreateGlyph, {
+                this._emitter.Do(mkfActions.GlyphCreate, {
                     family: family,
                     unicode: unicodeInfos,
                     path: svgStats,

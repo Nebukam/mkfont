@@ -174,7 +174,7 @@ class CmdImportFileList extends actions.Command {
 
             if (existingGlyph.isNull) {
 
-                this._emitter.Do(mkfActions.CreateGlyph, {
+                this._emitter.Do(mkfActions.GlyphCreate, {
                     family: family,
                     unicode: unicodeInfos,
                     path: svgStats,

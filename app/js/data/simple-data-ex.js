@@ -7,6 +7,8 @@ const io = nkm.io;
 const IDS = require(`./ids`);
 const UTILS = require(`./utils`);
 
+const __noResolution = [];
+
 class SimpleDataEx extends nkm.data.SimpleDataBlock {
 
     constructor() {
@@ -23,7 +25,7 @@ class SimpleDataEx extends nkm.data.SimpleDataBlock {
 
     }
 
-    get resolutionFallbacks() { return []; }
+    get resolutionFallbacks() { return __noResolution; }
 
     get fontObject() { return this._fontObject; }
 

@@ -226,6 +226,40 @@ class UNICODE extends nkm.com.helpers.Singleton {
         return result;
     }
 
+    /**
+     * 
+     * @param {string} p_string accepts : 'a', 'abc', 'aU+0000', 'abcU+0000', 'U+0000U+0000U+0000'
+     * @returns 
+     */
+    static TryGetInfosFromString(p_string) {
+
+        if (!p_string || p_string == ``) { return null; }
+
+        let
+            glyphInfos = null,
+            unicodes = [];
+
+        if (p_string.includes(`U+`)) {
+            let chunks = p_string.split(`U+`);
+            for (let i = 0; i < chunks.length; i++) {
+                let uchar = chunks[i];
+                if (uchar.length == 1) { uchar = UNICODE.GetAddress(uchar); }
+                unicodes.push(uchar);
+            }
+        } else {
+            for (let i = 0; i < p_string.length; i++) {
+                unicodes.push(UNICODE.GetAddress(p_string.substr(i, 1)));
+            }
+        }
+
+        glyphInfos = this.GetInfos(unicodes, false);
+        unicodes.length = 0;
+        unicodes = null;
+
+        return glyphInfos;
+
+    }
+
 }
 
 module.exports = UNICODE;

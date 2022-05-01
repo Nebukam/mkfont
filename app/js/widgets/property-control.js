@@ -22,9 +22,9 @@ class PropertyControl extends base {
     };
 
     static __distribute = base.__distribute.Ext()
-        .To(`propertyId`)
+        .To(`propertyId`, null, null)
         .To(`subData`, null, null)
-        .To(`inputOnly`, null, null)
+        .To(`inputOnly`, null, false)
         .To(`onSubmit`, `_onSubmitFn`, null)
         .To(`invertInputOrder`, null, false)
         .To(`directSet`, `_directSet`, false)
@@ -37,6 +37,7 @@ class PropertyControl extends base {
         this._valueInfos = null;
         this._input = null;
         this._directSet = false;
+        this._subData = null;
 
         this._Bind(this._OnValueSubmit);
 
@@ -58,6 +59,7 @@ class PropertyControl extends base {
     static _Style() {
         return nkm.style.Extends({
             ':host': {
+                '@': ['fade-in'],
                 'position': 'relative',
                 //'border':'1px solid gray',
                 'display': 'flex',
@@ -150,6 +152,8 @@ class PropertyControl extends base {
             this._input = null;
         }
 
+        if (!p_id) { return; }
+
         this._label._element.setAttribute(`title`, this._valueInfos.desc);
         this._label.Set(this._valueInfos.label || this._valueID);
 
@@ -191,7 +195,7 @@ class PropertyControl extends base {
         this._cmd = p_value;
     }
 
-    set placeholderValue(p_value){
+    set placeholderValue(p_value) {
         this._input.placeholderValue = p_value;
     }
 
@@ -264,8 +268,27 @@ class PropertyControl extends base {
     }
 
     _CleanUp() {
+
+        this.propertyId = null;
+
         this._onSubmitFn = null;
         this._cmd = null;
+
+        this._fallbackData = null;
+        this._valueID = null;
+        this._valueInfos = null;
+        this._directSet = false;
+
+        this._flags.Set(__flag_inherited, false);
+
+        this._onSubmitFn = null;
+        this._inherited = false;
+        this._inputOnly = false;
+
+        this._inputOrder = 1;
+
+        this._subData = null;
+
         super._CleanUp();
     }
 

@@ -193,6 +193,7 @@ class FamilyDataBlock extends SimpleDataEx {
         ContentUpdater.Push(this, this._UpdateFontObject);
 
         this.Broadcast(SIGNAL.GLYPH_ADDED, this, p_glyph);
+        p_glyph.Broadcast(SIGNAL.GLYPH_ADDED, p_glyph);
         //ContentUpdater.instance.Broadcast(SIGNAL.GLYPH_ADDED, p_glyph);
 
     }
@@ -223,6 +224,7 @@ class FamilyDataBlock extends SimpleDataEx {
         ContentUpdater.Push(this, this._UpdateFontObject);
 
         this.Broadcast(SIGNAL.GLYPH_REMOVED, this, g);
+        g.Broadcast(SIGNAL.GLYPH_REMOVED, g);
         //ContentUpdater.instance.Broadcast(SIGNAL.GLYPH_REMOVED, g);
 
     }

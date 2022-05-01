@@ -233,9 +233,12 @@ class IDS {
     static HEIGHT = 'height';
 
     static PATH = 'path';
-    static PATH_DATA = 'path-data';
+    static PATH_DATA = 'path-data';    
     static GLYPH_NAME = 'name';
     static UNICODE = 'unicode';
+
+    static COMPOSITION = 'comp';
+    static INVERTED = 'inverted';
 
     static GLYPH_RESAMPLE_IDS = [
         this.WIDTH,
@@ -307,6 +310,20 @@ class IDS {
 
         this.infos[this.PATH_DATA] = {
             recompute: true,
+        };
+
+        this.infos[this.COMPOSITION] = {
+            recompute: true,
+            label: `Composition`,
+            desc: `Composition of the glyph`
+        };
+
+        this.infos[this.INVERTED] = {
+            recompute: true,
+            label: `Reverse path`,
+            inputType: inputs.Boolean,
+            inputOptions: { size: ui.FLAGS.SIZE_XS },
+            desc: `Whether or not to reverse the order of points withing the path. This effectively allows you to create "holes".`
         };
     }
 
@@ -486,6 +503,66 @@ class IDS {
             enum: ENUMS.HANCHOR,
             inputType: inputs.InlineSelect,
             label: `Anchor`,
+            inputOptions: { catalog: ENUMS.HANCHOR, itemKey: nkm.com.IDS.VALUE, size: ui.FLAGS.SIZE_M },
+            desc: `...`
+        };
+    }
+
+    //#endregion
+
+    //#region Layer properties
+
+
+
+    static TR_LYR_BOUNDS_MODE = 'lyr-bounds';
+    static TR_LYR_SCALE_MODE = 'lyr-scale';
+
+    static TR_LYR_VER_ALIGN = 'lyr-valign';
+    static TR_LYR_HOR_ALIGN = 'lyr-halign';
+    
+    static CHARACTER_NAME = 'lyr-char';
+
+    static {
+
+        this.infos[this.CHARACTER_NAME] = {
+            inputType: inputs.Text,
+            inputOptions: { placeholder: `A, U+0041, ...` },
+            label: `Character`,
+            desc: `Single character, ligature, or U+0000 formatted name`
+        };
+
+        this.infos[this.TR_LYR_BOUNDS_MODE] = {
+            transform: true,
+            enum: ENUMS.BOUNDS,
+            inputType: inputs.InlineSelect,
+            label: `Glyph bounds`,
+            inputOptions: { catalog: ENUMS.LYR_BOUNDS, itemKey: nkm.com.IDS.VALUE, size: ui.FLAGS.SIZE_M },
+            desc: `The reference bounds used to compute transformations.`
+        };
+
+        this.infos[this.TR_LYR_SCALE_MODE] = {
+            transform: true,
+            enum: ENUMS.SCALE,
+            inputType: inputs.InlineSelect,
+            label: `Scale mode`,
+            inputOptions: { catalog: ENUMS.LYR_SCALE, itemKey: nkm.com.IDS.VALUE, size: ui.FLAGS.SIZE_M },
+            desc: `Scale`
+        };
+
+        this.infos[this.TR_LYR_VER_ALIGN] = {
+            transform: true,
+            enum: ENUMS.VANCHOR,
+            inputType: inputs.InlineSelect,
+            label: `Align`,
+            inputOptions: { catalog: ENUMS.VANCHOR, itemKey: nkm.com.IDS.VALUE, size: ui.FLAGS.SIZE_M },
+            desc: `...`
+        };
+
+        this.infos[this.TR_LYR_HOR_ALIGN] = {
+            transform: true,
+            enum: ENUMS.HANCHOR,
+            inputType: inputs.InlineSelect,
+            label: `Align`,
             inputOptions: { catalog: ENUMS.HANCHOR, itemKey: nkm.com.IDS.VALUE, size: ui.FLAGS.SIZE_M },
             desc: `...`
         };

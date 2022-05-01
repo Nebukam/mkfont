@@ -17,4 +17,5 @@ module.exports = {
     LigaButton: require(`./liga-button`),
     FamilyGlyphMonitor: require(`./family-glyph-monitor`),
     ResourceBinding: require(`./resource-binding`),
+    LayersView:require(`./layers-view`),
 }

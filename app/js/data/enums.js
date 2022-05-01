@@ -161,6 +161,28 @@ class ENUMS {
         { name: `First empty slot`, [nkm.com.IDS.VALUE]: this.BLOCK_START_FIRST_AVAIL },
     ]);
 
+    //
+
+    static LYR_BOUNDS_OUTSIDE = 0;
+    static LYR_BOUNDS_MIXED = 1;
+    static LYR_BOUNDS_INSIDE = 2;
+
+    static LYR_BOUNDS = nkm.data.catalogs.CreateFrom({ name: `Transform reference`, autoSort: false }, [
+        { name: `Imported bounds`, [nkm.com.IDS.VALUE]: this.LYR_BOUNDS_OUTSIDE, icon: 'bounds-outside' },
+        { name: `Mixed bounds`, [nkm.com.IDS.VALUE]: this.LYR_BOUNDS_MIXED, icon: 'bounds-mixed' },
+        { name: `Glyph bounds`, [nkm.com.IDS.VALUE]: this.LYR_BOUNDS_INSIDE, icon: 'bounds-inside' },
+    ]);
+
+    static LYR_SCALE_NONE = 0;
+    static LYR_SCALE_MANUAL = 7;
+    static LYR_SCALE_NORMALIZE = 8;
+
+    static LYR_SCALE = nkm.data.catalogs.CreateFrom({ name: `Scale`, autoSort: false }, [
+        { name: `Manual`, [nkm.com.IDS.VALUE]: this.LYR_SCALE_MANUAL, icon: 'edit' },
+        { name: `Normalized`, [nkm.com.IDS.VALUE]: this.LYR_SCALE_NORMALIZE, icon: 'scale' },
+        { name: `None `, [nkm.com.IDS.VALUE]: this.LYR_SCALE_NONE, icon: 'clear' },
+    ]);
+
 }
 
 module.exports = ENUMS;

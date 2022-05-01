@@ -76,7 +76,7 @@ class CmdGlyphPasteInPlace extends actions.Command {
 
         if (glyph.isNull) {
 
-            this._emitter.Do(mkfActions.CreateGlyph, {
+            this._emitter.Do(mkfActions.GlyphCreate, {
                 family: p_family,
                 unicode: p_data.unicode,
                 //glyphValues: p_data.glyphValues,

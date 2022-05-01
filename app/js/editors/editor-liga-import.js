@@ -142,7 +142,6 @@ class EditorLigaImport extends base {
             try {
                 input = input.match(/[^\r\n]+/g);
                 input = [...new Set(input)].sort();
-                console.log(input);
                 for (let i = 0; i < input.length; i++) {
                     let liga = input[i];
                     if (liga.length <= 1) { continue; }

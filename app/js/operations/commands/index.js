@@ -30,6 +30,11 @@ module.exports = {
     GlyphPasteInPlace: require(`./cmd-glyph-paste-in-place`),
     GlyphPasteTransform: require(`./cmd-glyph-paste-transform`),
 
+    LayerAdd: require(`./cmd-layer-add`),
+    LayerRemove: require(`./cmd-layer-remove`),
+    LayerAllOff: require(`./cmd-layers-all-off`),
+    LayerAllOn: require(`./cmd-layers-all-on`),
+
     ImportTTF: require(`./cmd-import-ttf`),
 
     ImportListMissingGlyphs: require(`./cmd-import-list-missing-glyphs`),

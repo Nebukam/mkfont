@@ -17,6 +17,7 @@ class TransformSettingsDataBlock extends SimpleDataEx {
 
         super._Init();
         this._glyphVariantOwner = null;
+        this._waitingForUpdate = false;
 
     }
 
@@ -60,6 +61,8 @@ class TransformSettingsDataBlock extends SimpleDataEx {
 
     UpdateTransform() {
 
+        this._waitingForUpdate = false;
+
         let pathData = this._glyphVariantOwner.Get(IDS.PATH_DATA);
 
         if (!pathData || !this._glyphVariantOwner._family) { return; }
@@ -87,10 +90,18 @@ class TransformSettingsDataBlock extends SimpleDataEx {
 
         this._glyphVariantOwner._computedPath = path;
 
+        if (!this._glyphVariantOwner.layers.isEmpty) {
+            this._glyphVariantOwner.layers.ForEach(item => {
+                if (item.importedVariant) {
+                    item.Set(IDS.PATH, item.importedVariant.Get(IDS.PATH));
+                }
+            });
+        }
+
         this._glyphVariantOwner.BatchSet({
             //[IDS.WIDTH]: rw,
             [IDS.EXPORTED_WIDTH]: w,
-            [IDS.PATH]: path.path,
+            [IDS.PATH]: this._glyphVariantOwner._ConcatPaths(path.path), //path.pathReversed || path.path,
             [IDS.OUT_OF_BOUNDS]: oob,
             [IDS.EMPTY]: pathData.path === `M 0 0 L 0 0 z`,
         });
@@ -98,6 +109,7 @@ class TransformSettingsDataBlock extends SimpleDataEx {
     }
 
     _CleanUp() {
+        this._waitingForUpdate = false;
         super._CleanUp();
     }
 

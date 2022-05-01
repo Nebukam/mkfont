@@ -42,6 +42,7 @@ class ControlHeader extends base {
                 //'text-align':'center',
                 'text-transform': 'uppercase',
                 'opacity': '0.5',
+                'font-size':`0.65em`
             },
         }, base._Style());
     }

@@ -85,7 +85,8 @@ class GlyphVariantInspectorItem extends base {
                 'background-color': `rgba(19, 19, 19, 0.25)`
             },
             ':host(.null-glyph) .settings': { 'display': 'none' },
-            '.settings': {
+            '.settings, .drawer': {
+                'min-width': `0`,
                 'flex': '1 1 auto',
                 'margin-bottom': '10px',
             },
@@ -109,6 +110,11 @@ class GlyphVariantInspectorItem extends base {
         this._glyphPreview = this.Attach(mkfWidgets.GlyphPreview, `preview`, this._host);
         this.forwardData.To(this._glyphPreview);
         this._rectTracker.Add(this._glyphPreview);
+
+        this._layers = this.Attach(mkfWidgets.LayersView, `drawer settings`, this._host);
+        this._transforms = ui.El(`div`, { class: `drawer settings` }, this._host);
+
+        this.forwardData.To(this._layers);
 
         this._importToolbar.options = {
             inline: true,
@@ -155,10 +161,10 @@ class GlyphVariantInspectorItem extends base {
 
         this._binder = this.Attach(mkfWidgets.ResourceBinding, `binder control`);
         this._binder.visible = false;
-        this._transformInspector = this.Attach(TransformSettingsInspector, `settings`);
+        this._transformInspector = this.Attach(TransformSettingsInspector, `settings`, this._transforms);
         this.forwardData.To(this._transformInspector, { dataMember: `transformSettings` });
 
-        this._builder.host = ui.El(`div`, { class: `settings` }, this._host);
+        this._builder.host = this._transforms;//ui.El(`div`, { class: `settings` }, this._host);
 
         super._Render();
 

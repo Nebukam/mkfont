@@ -60,7 +60,7 @@ class ActionSetEM extends ActionSetPropertyValue {
                     pathData = variant.Get(mkfData.IDS.PATH_DATA);
 
                 if (pathData && !variant.Get(mkfData.IDS.EMPTY)) {
-                   // SVGOPS.ScalePathData(pathData, scaleFactor);
+                    // SVGOPS.ScalePathData(pathData, scaleFactor);
                 }
 
                 let idList = mkfData.IDS.GLYPH_RESAMPLE_IDS;
@@ -72,6 +72,16 @@ class ActionSetEM extends ActionSetPropertyValue {
                 }
 
                 idList = mkfData.IDS.TR_RESAMPLE_IDS;
+
+                // Resample layer values
+                for (let j = 0, jn = variant.layers.count; j < jn; j++) {
+                    let ltr = variant.layers.At(j)._transformSettings;
+                    for (let t = 0, tn = idList.length; t < tn; t++) {
+                        let id = idList[t],
+                            value = ltr.Get(id);
+                        if (value != null) { ltr.Set(id, value * scaleFactor); }
+                    }
+                }
 
                 for (let t = 0, tn = idList.length; t < tn; t++) {
                     let id = idList[t],

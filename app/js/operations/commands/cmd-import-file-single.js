@@ -82,7 +82,7 @@ class CmdImportFileSingle extends actions.Command {
 
         if (glyph.isNull) {
             // Need to create a new glyph!
-            this._emitter.Do(mkfActions.CreateGlyph, {
+            this._emitter.Do(mkfActions.GlyphCreate, {
                 family: family,
                 unicode: unicodeInfos,
                 path: svgStats
