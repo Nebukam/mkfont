@@ -34,12 +34,14 @@ class GlyphLayerDataBlock extends SimpleDataEx {
         this.expanded = false;
 
         this._glyphInfos = null;
+        this._isCircular = false;
 
     }
 
     _ResetValues(p_values) {
         p_values[IDS.PATH] = { value: '' };
         p_values[IDS.INVERTED] = { value: false };
+        p_values[IDS.CIRCULAR_REFERENCE] = { value: false };
         p_values[IDS.CHARACTER_NAME] = { value: null };
         p_values[IDS.EXPORT_GLYPH] = { value: true };
     }
@@ -90,16 +92,20 @@ class GlyphLayerDataBlock extends SimpleDataEx {
         }
 
         let glyph = this._variant.family.GetGlyph(this._glyphInfos.u);
-        if (glyph.isNull) { this.importedVariant = null; }
-        else {
-            // Check for circular dependency
-            let isCircular = false;
+        if (glyph.isNull) {
+            
+            this.importedVariant = null;
+            this._values[IDS.CIRCULAR_REFERENCE].value = false;
 
-            if(isCircular){
-                this.Set(IDS.CHARACTER_NAME, ``);
-                return;
-            }
-            this.importedVariant = glyph.activeVariant;
+        } else {
+
+            let candidate = glyph.activeVariant;
+
+            this._isCircular = this._variant.family.HasCircularDep(this._variant, candidate);
+            this.importedVariant = candidate;
+
+            this.Set(IDS.CIRCULAR_REFERENCE, this._isCircular);
+
         }
 
     }
@@ -123,6 +129,7 @@ class GlyphLayerDataBlock extends SimpleDataEx {
         this._index = 0;
         this.expanded = false;
         this._glyphInfos = null;
+        this._isCircular = false;
         super._CleanUp();
     }
 

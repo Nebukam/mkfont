@@ -10,6 +10,8 @@ const PropertyControl = require(`./property-control`);
 const isMANUAL = (owner) => { return owner.data.Get(mkfData.IDS.TR_LYR_SCALE_MODE) == mkfData.ENUMS.LYR_SCALE_MANUAL; };
 const isNRM = (owner) => { return owner.data.Get(mkfData.IDS.TR_LYR_SCALE_MODE) == mkfData.ENUMS.LYR_SCALE_NORMALIZE; };
 
+const __circular = `circular`;
+
 const base = nkm.datacontrols.InspectorWidgetGroup;
 class LayerControl extends base {
     constructor() { super(); }
@@ -19,6 +21,7 @@ class LayerControl extends base {
     static __controls = [
         { cl: ControlHeader, options: { label: `Glyph name` }, css: 'hdr' },
         { options: { propertyId: mkfData.IDS.CHARACTER_NAME, subData: `_layer` } },
+        { options: { propertyId: mkfData.IDS.INVERTED, subData: `_layer` } },
         { cl: ControlHeader, options: { label: `Boundaries & Scale` }, css: 'hdr' },
         { options: { propertyId: mkfData.IDS.TR_LYR_BOUNDS_MODE, inputOnly: true }, css: 'small' },
         { options: { propertyId: mkfData.IDS.TR_LYR_SCALE_MODE, inputOnly: true }, css: 'small' },
@@ -38,6 +41,8 @@ class LayerControl extends base {
 
     _Init() {
         super._Init();
+
+        this._flags.Add(this, __circular);
 
         this._builder.defaultControlClass = PropertyControl;
         this._builder.defaultCSS = `control`;
@@ -72,6 +77,9 @@ class LayerControl extends base {
                 'margin-bottom': '5px',
                 'align-items': `center`,
                 'background-color': `rgba(127,127,127,0.25)`,
+            },
+            ':host(.circular)': {
+                'background-color': `rgba(var(--col-error-dark-rgb),0.25)`,
             },
             ':host(.expanded) .icon.expand': {
                 'transform': `rotate(90deg)`
@@ -115,7 +123,6 @@ class LayerControl extends base {
                 'align-items': `center`,
                 'flex': '1 1 auto',
                 'box-sizing': `border-box`,
-
             },
         }, base._Style());
     }
@@ -153,17 +160,6 @@ class LayerControl extends base {
                     group: `move`
                 },
                 {
-                    icon: `checkbox`, htitle: `Hide this layer`,
-                    cl: nkm.uilib.inputs.Boolean,
-                    variant: ui.FLAGS.MINIMAL,
-                    onSubmit: {
-                        fn: (p_input, p_value) => {
-                            //this.editor.cmdLayersOff.Execute(this._data);
-                        }
-                    },
-                    group: `edit`
-                },
-                {
                     icon: `remove`, htitle: `Delete  this layer`,
                     variant: ui.FLAGS.MINIMAL,
                     trigger: { fn: () => { this.editor.cmdLayerRemove.Execute(this._data); } },
@@ -178,6 +174,12 @@ class LayerControl extends base {
         super._OnDataUpdated(p_data);
         let char = p_data.Get(mkfData.IDS.CHARACTER_NAME);
         this._label.Set(char && char != `` ? `layer : ${char} ` : `(empty layer)`);
+        this._flags.Set(__circular, p_data.Get(mkfData.IDS.CIRCULAR_REFERENCE));
+    }
+
+    _CleanUp() {
+        this._flags.Set(__circular, false);
+        super._CleanUp();
     }
 
 }

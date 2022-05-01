@@ -126,7 +126,7 @@ class GlyphVariantDataBlock extends SimpleDataEx {
 
     _ConcatPaths(p_rootPath) {
         if (this._layers.isEmpty) { return p_rootPath; }
-        this._layers.ForEach((item) => { p_rootPath += ` `+item.Get(IDS.PATH); });
+        this._layers.ForEach((item) => { p_rootPath += ` ` + item.Get(IDS.PATH); });
         return p_rootPath;
     }
 
@@ -174,7 +174,9 @@ class GlyphVariantDataBlock extends SimpleDataEx {
     _ScheduleTransformationUpdate() {
         this._transformSettings._waitingForUpdate = true;
         ContentUpdater.Push(this, this._ApplyTransformUpdate);
-        this._layerUsers.ForEach((item) => { item._variant._ScheduleTransformationUpdate(); });
+        this._layerUsers.ForEach((item) => {
+            if (!item._isCircular) { item._variant._ScheduleTransformationUpdate(); }
+        });
     }
 
     _ApplyTransformUpdate() {

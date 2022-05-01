@@ -5,6 +5,8 @@ const dom = nkm.ui.dom;
 const u = nkm.u;
 const io = nkm.io;
 
+const svgpr = require('svg-path-reverse');
+
 const SimpleDataEx = require(`./simple-data-ex`);
 const IDS = require(`./ids`);
 const ENUMS = require(`./enums`);
@@ -92,8 +94,10 @@ class TransformSettingsDataBlock extends SimpleDataEx {
 
         if (!this._glyphVariantOwner.layers.isEmpty) {
             this._glyphVariantOwner.layers.ForEach(item => {
-                if (item.importedVariant) {
-                    item.Set(IDS.PATH, item.importedVariant.Get(IDS.PATH));
+                if (item.importedVariant && !item._isCircular) {
+                    let path = item.importedVariant.Get(IDS.PATH);
+                    if (item.Get(IDS.INVERTED)) { item.Set(IDS.PATH, svgpr.reverse(path)) }
+                    else { item.Set(IDS.PATH, path); }
                 }
             });
         }

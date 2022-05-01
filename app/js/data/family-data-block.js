@@ -374,6 +374,22 @@ class FamilyDataBlock extends SimpleDataEx {
 
     //#endregion
 
+    HasCircularDep(p_target, p_candidate) {
+
+        if (p_target == p_candidate) { return true; }
+
+        if (p_candidate._layers.isEmpty) { return false; }
+
+        let layers = p_candidate._layers._array;
+
+        for (let i = 0, n = layers.length; i < n; i++) {
+            let layer = layers[i];
+            if (this.HasCircularDep(p_target, layer.importedVariant)) { return true; }
+        }
+
+        return false;
+    }
+
     _OnReset(p_individualSet, p_silent) {
 
         this._transformSettings.Reset(p_individualSet, p_silent);
@@ -404,6 +420,7 @@ class FamilyDataBlock extends SimpleDataEx {
 
         super._CleanUp();
     }
+
 
 }
 

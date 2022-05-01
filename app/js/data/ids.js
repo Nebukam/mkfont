@@ -101,7 +101,7 @@ class IDS {
     //#endregion
 
     //#region Family metrics
-    
+
     static WEIGHT_CLASS = 'weight';
     static FONT_STYLE = 'style';
     static EM_UNITS = 'em';
@@ -233,7 +233,7 @@ class IDS {
     static HEIGHT = 'height';
 
     static PATH = 'path';
-    static PATH_DATA = 'path-data';    
+    static PATH_DATA = 'path-data';
     static GLYPH_NAME = 'name';
     static UNICODE = 'unicode';
 
@@ -262,7 +262,7 @@ class IDS {
         this.infos[this.WIDTH] = {
             recompute: true,
             inputType: inputs.Number,
-            inputOptions: { placeholder: `· · ·`, min:0 },
+            inputOptions: { placeholder: `· · ·`, min: 0 },
             label: `Width`,
             desc: `indicates the horizontal advance after rendering a glyph in horizontal orientation.`
         };
@@ -271,7 +271,7 @@ class IDS {
             label: `...`,
             desc: `...`
         };
-        
+
         /*
         this.infos[this.V_ORIGIN_X] = {
             inputType: inputs.Number,
@@ -441,7 +441,7 @@ class IDS {
 
         this.infos[this.TR_WIDTH_SHIFT] = {
             transform: true,
-            recompute:true,
+            recompute: true,
             inputType: inputs.Number,
             label: `Shift`,
             inputOptions: { step: 1, min: -32000, max: 32000, size: ui.FLAGS.SIZE_XXS, placeholder: `· · ·` },
@@ -449,7 +449,7 @@ class IDS {
         };
         this.infos[this.TR_WIDTH_PUSH] = {
             transform: true,
-            recompute:true,
+            recompute: true,
             inputType: inputs.Number,
             label: `Push`,
             inputOptions: { step: 1, min: -32000, max: 32000, size: ui.FLAGS.SIZE_XXS, placeholder: `· · ·` },
@@ -463,10 +463,10 @@ class IDS {
             desc: `If enabled, the glyph' width is equal to its asset width + shift + push.\nOtherwise the value is expected to be either manual, or inherited from the family Metrics.`
         };
 
-        
+
         this.infos[this.TR_Y_OFFSET] = {
             transform: true,
-            recompute:true,
+            recompute: true,
             inputType: inputs.Number,
             label: `Vertical Offset`,
             inputOptions: { step: 1, min: -32000, max: 32000, size: ui.FLAGS.SIZE_XXS, placeholder: `· · ·` },
@@ -519,8 +519,9 @@ class IDS {
 
     static TR_LYR_VER_ALIGN = 'lyr-valign';
     static TR_LYR_HOR_ALIGN = 'lyr-halign';
-    
+
     static CHARACTER_NAME = 'lyr-char';
+    static CIRCULAR_REFERENCE = 'circ-dep';
 
     static {
 
@@ -565,6 +566,11 @@ class IDS {
             label: `Align`,
             inputOptions: { catalog: ENUMS.HANCHOR, itemKey: nkm.com.IDS.VALUE, size: ui.FLAGS.SIZE_M },
             desc: `...`
+        };
+
+        this.infos[this.CIRCULAR_REFERENCE] = {
+            label: `Circular reference`,
+            desc: `The current value creates a circular reference :(`
         };
     }
 
