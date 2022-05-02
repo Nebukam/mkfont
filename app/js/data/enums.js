@@ -26,6 +26,17 @@ class ENUMS {
         { name: `Black`, [nkm.com.IDS.VALUE]: 900 },
     ]);
 
+    static MIRROR_NONE = 0;
+    static MIRROR_H = 1;
+    static MIRROR_V = 2;
+    static MIRROR_H_AND_V = 3;
+
+    static MIRROR = nkm.data.catalogs.CreateFrom({ name: `Transform reference`, autoSort: false }, [
+        { name: `Mirror Horizontal`, [nkm.com.IDS.VALUE]: this.MIRROR_H, icon: 'mirror-hor' },
+        { name: `Mirror Vertical`, [nkm.com.IDS.VALUE]: this.MIRROR_V, icon: 'mirror-ver' },
+        { name: `Mirror Horizontal & Vertical`, [nkm.com.IDS.VALUE]: this.MIRROR_H_AND_V, icon: 'mirror-both' },
+        { name: `Don't mirror`, [nkm.com.IDS.VALUE]: this.MIRROR_NONE, icon: 'clear' },
+    ]);
 
     static BOUNDS_OUTSIDE = 0;
     static BOUNDS_MIXED = 1;
@@ -138,6 +149,7 @@ class ENUMS {
         { name: `Preserve existing transforms`, [nkm.com.IDS.VALUE]: this.OVERLAP_PRESERVE },
         { name: `Don't import`, [nkm.com.IDS.VALUE]: this.OVERLAP_IGNORE },
     ]);
+    
 
     static ASSIGN_FILENAME = 0;
     static ASSIGN_SELECTION = 1;
@@ -173,14 +185,10 @@ class ENUMS {
         { name: `Glyph bounds`, [nkm.com.IDS.VALUE]: this.LYR_BOUNDS_INSIDE, icon: 'bounds-inside' },
     ]);
 
-    static LYR_SCALE_NONE = 0;
-    static LYR_SCALE_MANUAL = 7;
-    static LYR_SCALE_NORMALIZE = 8;
-
     static LYR_SCALE = nkm.data.catalogs.CreateFrom({ name: `Scale`, autoSort: false }, [
-        { name: `Manual`, [nkm.com.IDS.VALUE]: this.LYR_SCALE_MANUAL, icon: 'edit' },
-        { name: `Normalized`, [nkm.com.IDS.VALUE]: this.LYR_SCALE_NORMALIZE, icon: 'scale' },
-        { name: `None `, [nkm.com.IDS.VALUE]: this.LYR_SCALE_NONE, icon: 'clear' },
+        { name: `Manual`, [nkm.com.IDS.VALUE]: this.SCALE_MANUAL, icon: 'edit' },
+        { name: `Normalized`, [nkm.com.IDS.VALUE]: this.SCALE_NORMALIZE, icon: 'scale' },
+        { name: `None `, [nkm.com.IDS.VALUE]: this.SCALE_NONE, icon: 'clear' },
     ]);
 
 }

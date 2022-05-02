@@ -326,7 +326,7 @@ class IDS {
     static CUSTOM_WIDTH = 'custom-width';
 
     static COLOR_PREVIEW = 'color-preview';
-    
+
     static PREVIEW_SIZE = 'preview-size';
 
     static OUT_OF_BOUNDS = 'out-of-bounds';
@@ -390,11 +390,15 @@ class IDS {
     static TR_AUTO_WIDTH = 'auto-w';
 
     static TR_Y_OFFSET = 'yoffset';
+    static TR_X_OFFSET = 'xoffset';
+
+    static TR_MIRROR = 'mirror';
 
     static TR_RESAMPLE_IDS = [
         this.TR_WIDTH_SHIFT,
         this.TR_WIDTH_PUSH,
         this.TR_Y_OFFSET,
+        this.TR_X_OFFSET,
         this.TR_SCALE_FACTOR,
     ];
 
@@ -467,7 +471,15 @@ class IDS {
             inputOptions: { step: 1, min: -32000, max: 32000, size: ui.FLAGS.SIZE_XXS, placeholder: `· · ·` },
             desc: `A vertical offset applied to the glyph position after everything else is computed.`
         };
-
+        this.infos[this.TR_X_OFFSET] = {
+            transform: true,
+            recompute: true,
+            inputType: inputs.Number,
+            label: `Horizontal Offset`,
+            inputOptions: { step: 1, min: -32000, max: 32000, size: ui.FLAGS.SIZE_XXS, placeholder: `· · ·` },
+            desc: `An horizontal offset applied to the glyph position after everything else is computed.`
+        };
+        
         this.infos[this.TR_VER_ALIGN] = {
             transform: true,
             enum: ENUMS.VALIGN,
@@ -499,6 +511,15 @@ class IDS {
             inputType: inputs.InlineSelect,
             label: `Anchor`,
             inputOptions: { catalog: ENUMS.HANCHOR, itemKey: nkm.com.IDS.VALUE, size: ui.FLAGS.SIZE_M },
+            desc: `...`
+        };
+
+        this.infos[this.TR_MIRROR] = {
+            transform: true,
+            enum: ENUMS.MIRROR,
+            inputType: inputs.InlineSelect,
+            label: `Mirror`,
+            inputOptions: { catalog: ENUMS.MIRROR, itemKey: nkm.com.IDS.VALUE, size: ui.FLAGS.SIZE_M },
             desc: `...`
         };
     }
@@ -542,7 +563,7 @@ class IDS {
 
         this.infos[this.TR_LYR_SCALE_MODE] = {
             transform: true,
-            enum: ENUMS.SCALE,
+            enum: ENUMS.LYR_SCALE,
             inputType: inputs.InlineSelect,
             label: `Scale mode`,
             inputOptions: { catalog: ENUMS.LYR_SCALE, itemKey: nkm.com.IDS.VALUE, size: ui.FLAGS.SIZE_M },

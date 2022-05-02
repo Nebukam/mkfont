@@ -12,8 +12,8 @@ const mkfData = require(`../data`);
 const ControlHeader = require(`./control-header`);
 const PropertyControl = require(`./property-control`);
 
-const isMANUAL = (owner) => { return owner.data.Get(mkfData.IDS.TR_LYR_SCALE_MODE) == mkfData.ENUMS.LYR_SCALE_MANUAL; };
-const isNRM = (owner) => { return owner.data.Get(mkfData.IDS.TR_LYR_SCALE_MODE) == mkfData.ENUMS.LYR_SCALE_NORMALIZE; };
+const isMANUAL = (owner) => { return owner.data.Get(mkfData.IDS.TR_LYR_SCALE_MODE) == mkfData.ENUMS.SCALE_MANUAL; };
+const isNRM = (owner) => { return owner.data.Get(mkfData.IDS.TR_LYR_SCALE_MODE) == mkfData.ENUMS.SCALE_NORMALIZE; };
 
 const base = nkm.datacontrols.InspectorView;
 class LayerTransformSettingsInspector extends base {
@@ -25,9 +25,12 @@ class LayerTransformSettingsInspector extends base {
         { options: { propertyId: mkfData.IDS.INVERTED, subData: `_layer` } },
         { cl: ControlHeader, options: { label: `Boundaries & Scale` }, css: 'hdr' },
         { options: { propertyId: mkfData.IDS.TR_LYR_BOUNDS_MODE, inputOnly: true }, css: 'small' },
+        { options: { propertyId: mkfData.IDS.TR_BOUNDS_MODE, inputOnly: true }, css: 'small' },
+        { options: { propertyId: mkfData.IDS.TR_MIRROR, inputOnly: true }, css: 'small' },
         { options: { propertyId: mkfData.IDS.TR_LYR_SCALE_MODE, inputOnly: true }, css: 'small' },
         { options: { propertyId: mkfData.IDS.TR_SCALE_FACTOR }, requireData: true, hideWhen: { fn: isMANUAL } },
         { options: { propertyId: mkfData.IDS.TR_NRM_FACTOR }, requireData: true, hideWhen: { fn: isNRM } },
+
         { cl: ControlHeader, options: { label: `Vertical align + anchoring` }, css: 'hdr' },
         { options: { propertyId: mkfData.IDS.TR_LYR_VER_ALIGN, inputOnly: true }, css: 'small' },
         { options: { propertyId: mkfData.IDS.TR_VER_ALIGN_ANCHOR, inputOnly: true }, css: 'small' },
@@ -35,8 +38,7 @@ class LayerTransformSettingsInspector extends base {
         { options: { propertyId: mkfData.IDS.TR_LYR_HOR_ALIGN, inputOnly: true }, css: 'small' },
         { options: { propertyId: mkfData.IDS.TR_HOR_ALIGN_ANCHOR, inputOnly: true }, css: 'small' },
         { cl: ControlHeader, options: { label: `Offsets` }, css: 'hdr', requireData: true },
-        { options: { propertyId: mkfData.IDS.TR_WIDTH_SHIFT }, requireData: true },
-        { options: { propertyId: mkfData.IDS.TR_WIDTH_PUSH }, requireData: true },
+        { options: { propertyId: mkfData.IDS.TR_X_OFFSET }, requireData: true },
         { options: { propertyId: mkfData.IDS.TR_Y_OFFSET }, requireData: true },
     ];
 

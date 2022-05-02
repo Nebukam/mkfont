@@ -351,7 +351,8 @@ class SVGOperations {
             autoWidth = p_settings.Get(IDS.TR_AUTO_WIDTH),
             ctxH = p_settings.ResolveVariant(IDS.HEIGHT, p_context.h),
             ctxW = p_settings.ResolveVariant(IDS.WIDTH, p_context.w),
-            mono = p_context.mono;
+            mono = p_context.mono,
+            mirror = p_settings.Get(IDS.TR_MIRROR);
 
         if (sShift == null) { sShift = p_context.xshift; }
         if (sPush == null) { sPush = p_context.xpush; }
@@ -367,7 +368,6 @@ class SVGOperations {
 
         let
             bbox = p_svgStats.BBox,
-            markedBBox = p_svgStats.markedBBox,
             scale = 1,
             heightRef = p_svgStats.height,
             widthRef = p_svgStats.width,
@@ -375,6 +375,7 @@ class SVGOperations {
             offsetX = 0,
             fitH = heightRef,
             fitW = widthRef;
+
 
         if (refMode == ENUMS.BOUNDS_INSIDE) {
             fitH = heightRef = bbox.height;
@@ -387,6 +388,21 @@ class SVGOperations {
             path = svgpath(path)
                 .translate(-bbox.x, 0)
                 .toString();
+        }
+
+        if (mirror != ENUMS.MIRROR_NONE) {
+
+            switch (mirror) {
+                case ENUMS.MIRROR_H:
+                    path = svgpath(path).scale(-1, 1).translate(fitW, 0).toString();
+                    break;
+                case ENUMS.MIRROR_V:
+                    path = svgpath(path).scale(1, -1).translate(0, fitH).toString();
+                    break;
+                case ENUMS.MIRROR_H_AND_V:
+                    path = svgpath(path).scale(-1, -1).translate(fitW, fitH).toString();
+                    break;
+            }
         }
 
 
@@ -516,6 +532,129 @@ class SVGOperations {
             height: Math.max(heightRef, 0),
             width: Math.max(widthRef, 0),
             fit: { width: fitW, height: fitH, x: offsetX, y: offsetY, yoff: yUserOffset },
+            path: path,
+            bbox: this.GetBBox(path)
+        };
+
+    }
+
+    static FitLayerPath(p_settings, p_context, p_w, p_h, p_variantPath, p_cw, p_ch) {
+
+        let
+            path = p_variantPath,
+            ctxW = p_w,
+            ctxH = p_h,
+            pWidth = p_cw,
+            pHeight = p_ch,
+            offsetX = 0,
+            offsetY = 0,
+            scale = 1;
+
+        switch (p_settings.Get(IDS.TR_LYR_BOUNDS_MODE)) {
+            case ENUMS.LYR_BOUNDS_OUTSIDE:
+                break;
+            case ENUMS.LYR_BOUNDS_MIXED:
+                offsetX = p_context.bbox.x;
+                ctxW = p_context.bbox.width;
+                break;
+            case ENUMS.LYR_BOUNDS_INSIDE:
+                offsetX = p_context.bbox.x;
+                offsetY = p_context.bbox.y;
+                ctxW = p_context.bbox.width;
+                ctxH = p_context.bbox.height;
+                break;
+        }
+
+        let selfBound = p_settings.Get(IDS.TR_BOUNDS_MODE);
+        if (selfBound != ENUMS.BOUNDS_OUTSIDE) {
+            let vbbox = this.GetBBox(p_variantPath);
+            switch (selfBound) {
+                case ENUMS.BOUNDS_MIXED:
+                    offsetX -= vbbox.x;
+                    pWidth = vbbox.width;
+                    break;
+                case ENUMS.BOUNDS_INSIDE:
+                    offsetX -= vbbox.x;
+                    offsetY -= vbbox.y;
+                    pWidth = vbbox.width;
+                    pHeight = vbbox.height;
+                    break;
+            }
+        }
+
+        // Scale
+
+        switch (p_settings.Get(IDS.TR_LYR_SCALE_MODE)) {
+            case ENUMS.SCALE_MANUAL:
+                scale = p_settings.Get(IDS.TR_SCALE_FACTOR);
+                pWidth *= scale;
+                pHeight *= scale;
+                break;
+            case ENUMS.SCALE_NORMALIZE:
+                break;
+        }
+
+        // Adjust offsetX based on context & input
+        // context
+        switch (p_settings.Get(IDS.TR_LYR_HOR_ALIGN)) {
+            case ENUMS.HANCHOR_LEFT:
+                break;
+            case ENUMS.HANCHOR_CENTER:
+                offsetX += ctxW * 0.5;
+                break;
+            case ENUMS.HANCHOR_RIGHT:
+                offsetX += ctxW;
+                break;
+        }
+        // path
+        switch (p_settings.Get(IDS.TR_HOR_ALIGN_ANCHOR)) {
+            case ENUMS.HANCHOR_LEFT:
+                break;
+            case ENUMS.HANCHOR_CENTER:
+                offsetX -= pWidth * 0.5;
+                break;
+            case ENUMS.HANCHOR_RIGHT:
+                offsetX -= pWidth;
+                break;
+        }
+
+        // Adjust offsetY based on context & input
+        // context
+        switch (p_settings.Get(IDS.TR_LYR_VER_ALIGN)) {
+            case ENUMS.VANCHOR_TOP:
+                break;
+            case ENUMS.VANCHOR_CENTER:
+                offsetY += ctxH * 0.5;
+                break;
+            case ENUMS.VANCHOR_BOTTOM:
+                offsetY += ctxH;
+                break;
+        }
+        // path
+        switch (p_settings.Get(IDS.TR_VER_ALIGN_ANCHOR)) {
+            case ENUMS.VANCHOR_TOP:
+                break;
+            case ENUMS.VANCHOR_CENTER:
+                offsetY -= pHeight * 0.5;
+                break;
+            case ENUMS.VANCHOR_BOTTOM:
+                offsetY -= pHeight;
+                break;
+        }
+
+        let yUserOffset = p_settings.Get(IDS.TR_Y_OFFSET);
+        offsetY += yUserOffset;
+        offsetX += p_settings.Get(IDS.TR_X_OFFSET);
+
+        path = svgpath(path)
+            .scale(scale)
+            .translate(offsetX, offsetY)
+            .toString();
+
+        return {
+            height: Math.max(pHeight, 0),
+            width: Math.max(pWidth, 0),
+            fit: { width: pWidth, height: pHeight, x: offsetX, y: offsetY, yoff: yUserOffset },
             path: path,
             bbox: this.GetBBox(path)
         };

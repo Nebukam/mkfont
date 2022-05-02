@@ -203,7 +203,7 @@ class GlyphVariantInspectorItem extends base {
 
         builder.defaultControlClass = mkfWidgets.PropertyControl;
         builder.defaultCSS = `item`;
-        builder.host = this._host;
+        builder.host = ui.El(`div`, {class:`drawer`}, this._host);
         builder.Build([
             { cl: mkfWidgets.ControlHeader, options: { label: `Export` } },
             { options: { propertyId: mkfData.IDS.EXPORT_GLYPH } },

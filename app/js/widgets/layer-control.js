@@ -134,7 +134,7 @@ class LayerControl extends base {
         this._flags.Set(__circular, p_data.Get(mkfData.IDS.CIRCULAR_REFERENCE));
         let viz = p_data.Get(mkfData.IDS.EXPORT_GLYPH);
         this._btnVisible.currentValue = viz;
-        this._flags.Set(__false, viz);
+        this._flags.Set(__false, !viz);
     }
 
     _CleanUp() {

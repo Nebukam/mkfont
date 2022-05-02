@@ -26,6 +26,8 @@ class TransformSettingsInspector extends base {
         { options: { propertyId: mkfData.IDS.TR_SCALE_MODE, inputOnly: true }, css: 'osmall' },
         { options: { propertyId: mkfData.IDS.TR_SCALE_FACTOR }, requireData: true, hideWhen: { fn: isMANUAL } },
         { options: { propertyId: mkfData.IDS.TR_NRM_FACTOR }, requireData: true, hideWhen: { fn: isNRM } },
+        { cl: mkfWidgets.ControlHeader, options: { label: `Mirror` }, css: 'header' },
+        { options: { propertyId: mkfData.IDS.TR_MIRROR, inputOnly: true } },
         { cl: mkfWidgets.ControlHeader, options: { label: `Vertical align` }, css: 'header' },
         { options: { propertyId: mkfData.IDS.TR_VER_ALIGN, inputOnly: true }, css: 'small' },
         { options: { propertyId: mkfData.IDS.TR_VER_ALIGN_ANCHOR, inputOnly: true }, css: 'small' },

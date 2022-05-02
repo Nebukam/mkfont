@@ -37,6 +37,7 @@ class TransformSettingsDataBlock extends SimpleDataEx {
         p_values[IDS.TR_WIDTH_PUSH] = { value: 0, nullable: true, propagate: true };
         p_values[IDS.TR_AUTO_WIDTH] = { value: true };
         p_values[IDS.TR_Y_OFFSET] = { value: 0, nullable: true, propagate: true };
+        p_values[IDS.TR_MIRROR] = { value: ENUMS.MIRROR_NONE };
 
     }
 
@@ -75,17 +76,11 @@ class TransformSettingsDataBlock extends SimpleDataEx {
                 this._glyphVariantOwner.family._contextInfos,
                 pathData
             ),
-            w = 0,
-            oob = (path.bbox.left < -32000 ||
-                path.bbox.top < -32000 ||
-                path.bbox.bottom > 32000 ||
-                path.bbox.right > 32000);
-
+            w = 0;
 
 
         if (this.Get(IDS.TR_AUTO_WIDTH)) {
             w = path.width;
-            //if (this.Get(IDS.TR_SCALE_MODE) != ENUMS.SCALE_NORMALIZE && rw != null) { rw = w; }
         } else {
             w = this._glyphVariantOwner.Resolve(IDS.WIDTH);
         }
@@ -94,15 +89,29 @@ class TransformSettingsDataBlock extends SimpleDataEx {
 
         if (!this._glyphVariantOwner.layers.isEmpty) {
             this._glyphVariantOwner.layers.ForEach(item => {
-                if (item.importedVariant && !item._isCircular && item.Get(IDS.EXPORT_GLYPH)) {
-                    let path = item.importedVariant.Get(IDS.PATH);
-                    if (item.Get(IDS.INVERTED)) { item.Set(IDS.PATH, svgpr.reverse(path)) }
-                    else { item.Set(IDS.PATH, path); }
+                let ref = item.importedVariant;
+                if (ref && !item._isCircular && item.Get(IDS.EXPORT_GLYPH)) {
+                    let layerPath = ref.Get(IDS.PATH);
+                    if (item.Get(IDS.INVERTED)) { try { layerPath = svgpr.reverse(layerPath); } catch (e) { } }
+                    item._values[IDS.PATH].value = SVGOPS.FitLayerPath(
+                        item._transformSettings,
+                        path, w, this._glyphVariantOwner.Resolve(IDS.HEIGHT),
+                        layerPath, ref.Get(IDS.EXPORTED_WIDTH), ref.Resolve(IDS.HEIGHT));
+                } else {
+                    item._values[IDS.PATH].value = null;
                 }
             });
         }
 
-        let pathConcat = this._glyphVariantOwner._ConcatPaths(path.path);
+        let
+            pathConcat = this._glyphVariantOwner._ConcatPaths(path.path),
+            tempBBox = SVGOPS.GetBBox(pathConcat),
+            oob = (tempBBox.left < -32000 ||
+                tempBBox.top < -32000 ||
+                tempBBox.bottom > 32000 ||
+                tempBBox.right > 32000);
+
+
 
         this._glyphVariantOwner.BatchSet({
             //[IDS.WIDTH]: rw,

@@ -19,17 +19,27 @@ class LayerTransformsDataBlock extends SimpleDataEx {
     _ResetValues(p_values) {
 
         p_values[IDS.TR_LYR_BOUNDS_MODE] = { value: ENUMS.LYR_BOUNDS_OUTSIDE };
-        p_values[IDS.TR_LYR_SCALE_MODE] = { value: ENUMS.LYR_SCALE_NONE };
+        p_values[IDS.TR_BOUNDS_MODE] = { value: ENUMS.BOUNDS_OUTSIDE };
+        p_values[IDS.TR_LYR_SCALE_MODE] = { value: ENUMS.SCALE_NONE };
         p_values[IDS.TR_SCALE_FACTOR] = { value: 1 };
         p_values[IDS.TR_NRM_FACTOR] = { value: 0 };
-        p_values[IDS.TR_LYR_VER_ALIGN] = { value: ENUMS.VALIGN_BASELINE };
-        p_values[IDS.TR_VER_ALIGN_ANCHOR] = { value: ENUMS.VANCHOR_BOTTOM };
-        p_values[IDS.TR_LYR_HOR_ALIGN] = { value: ENUMS.HALIGN_XMIN };
-        p_values[IDS.TR_HOR_ALIGN_ANCHOR] = { value: ENUMS.HANCHOR_LEFT };
-        p_values[IDS.TR_WIDTH_SHIFT] = { value: 0 };
-        p_values[IDS.TR_WIDTH_PUSH] = { value: 0 };
+        p_values[IDS.TR_LYR_VER_ALIGN] = { value: ENUMS.VANCHOR_CENTER };
+        p_values[IDS.TR_VER_ALIGN_ANCHOR] = { value: ENUMS.VANCHOR_CENTER };
+        p_values[IDS.TR_LYR_HOR_ALIGN] = { value: ENUMS.HANCHOR_CENTER };
+        p_values[IDS.TR_HOR_ALIGN_ANCHOR] = { value: ENUMS.HANCHOR_CENTER };
+        p_values[IDS.TR_X_OFFSET] = { value: 0 };
         p_values[IDS.TR_Y_OFFSET] = { value: 0 };
+        p_values[IDS.TR_MIRROR] = { value: ENUMS.MIRROR_NONE };
 
+    }
+
+    CommitUpdate() {
+        super.CommitUpdate();
+        if (this._layer) {
+            if (this._layer._variant) {
+                this._layer._variant._ScheduleTransformationUpdate();
+            }
+        }
     }
 
     _CleanUp() {

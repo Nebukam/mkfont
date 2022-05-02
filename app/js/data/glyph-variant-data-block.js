@@ -125,7 +125,10 @@ class GlyphVariantDataBlock extends SimpleDataEx {
 
     _ConcatPaths(p_rootPath) {
         if (this._layers.isEmpty) { return p_rootPath; }
-        this._layers.ForEach((item) => { p_rootPath += ` ` + item.Get(IDS.PATH); });
+        this._layers.ForEach((item) => {
+            let pathData = item.Get(IDS.PATH);
+            if (pathData) { p_rootPath += ` ` + pathData.path; };
+        });
         return p_rootPath;
     }
 
