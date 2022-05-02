@@ -10,6 +10,7 @@ const { optimize } = require('svgo');
 const ttf2svg = require('ttf2svg');
 const svg2ttf = require('svg2ttf');
 const svgpath = require('svgpath');
+const svgpathreverse = require('svg-path-reverse');
 
 const domparser = new DOMParser();
 /*
@@ -352,7 +353,8 @@ class SVGOperations {
             ctxH = p_settings.ResolveVariant(IDS.HEIGHT, p_context.h),
             ctxW = p_settings.ResolveVariant(IDS.WIDTH, p_context.w),
             mono = p_context.mono,
-            mirror = p_settings.Get(IDS.TR_MIRROR);
+            mirror = p_settings.Get(IDS.TR_MIRROR),
+            doReverse = false;
 
         if (sShift == null) { sShift = p_context.xshift; }
         if (sPush == null) { sPush = p_context.xpush; }
@@ -395,9 +397,11 @@ class SVGOperations {
             switch (mirror) {
                 case ENUMS.MIRROR_H:
                     path = svgpath(path).scale(-1, 1).translate(fitW, 0).toString();
+                    doReverse = true;
                     break;
                 case ENUMS.MIRROR_V:
                     path = svgpath(path).scale(1, -1).translate(0, fitH).toString();
+                    doReverse = true;
                     break;
                 case ENUMS.MIRROR_H_AND_V:
                     path = svgpath(path).scale(-1, -1).translate(fitW, fitH).toString();
@@ -528,6 +532,8 @@ class SVGOperations {
             .translate(offsetX, offsetY)
             .toString();
 
+        if (doReverse) { path = svgpathreverse.reverse(path); }
+
         return {
             height: Math.max(heightRef, 0),
             width: Math.max(widthRef, 0),
@@ -548,7 +554,10 @@ class SVGOperations {
             pHeight = p_ch,
             offsetX = 0,
             offsetY = 0,
-            scale = 1;
+            scale = 1,
+            mirror = p_settings.Get(IDS.TR_MIRROR),
+            pathTransform = svgpath(path),
+            doReverse = false;
 
         switch (p_settings.Get(IDS.TR_LYR_BOUNDS_MODE)) {
             case ENUMS.LYR_BOUNDS_OUTSIDE:
@@ -565,19 +574,35 @@ class SVGOperations {
                 break;
         }
 
-        let selfBound = p_settings.Get(IDS.TR_BOUNDS_MODE);
-        if (selfBound != ENUMS.BOUNDS_OUTSIDE) {
+        let boundMode = p_settings.Get(IDS.TR_BOUNDS_MODE);
+
+        if (boundMode != ENUMS.BOUNDS_OUTSIDE) {
             let vbbox = this.GetBBox(p_variantPath);
-            switch (selfBound) {
+            switch (boundMode) {
                 case ENUMS.BOUNDS_MIXED:
-                    offsetX -= vbbox.x;
+                    pathTransform.translate(-vbbox.x, 0);
                     pWidth = vbbox.width;
                     break;
                 case ENUMS.BOUNDS_INSIDE:
-                    offsetX -= vbbox.x;
-                    offsetY -= vbbox.y;
+                    pathTransform.translate(-vbbox.x, -vbbox.y);
                     pWidth = vbbox.width;
                     pHeight = vbbox.height;
+                    break;
+            }
+        }
+
+        if (mirror != ENUMS.MIRROR_NONE) {
+            switch (mirror) {
+                case ENUMS.MIRROR_H:
+                    pathTransform.scale(-1, 1).translate(pWidth, 0);
+                    doReverse = true;
+                    break;
+                case ENUMS.MIRROR_V:
+                    pathTransform.scale(1, -1).translate(0, pHeight);
+                    doReverse = true;
+                    break;
+                case ENUMS.MIRROR_H_AND_V:
+                    pathTransform.scale(-1, -1).translate(pWidth, pHeight);
                     break;
             }
         }
@@ -586,7 +611,7 @@ class SVGOperations {
 
         switch (p_settings.Get(IDS.TR_LYR_SCALE_MODE)) {
             case ENUMS.SCALE_MANUAL:
-                scale = p_settings.Get(IDS.TR_SCALE_FACTOR);
+                scale = p_settings.Get(IDS.TR_LYR_SCALE_FACTOR);
                 pWidth *= scale;
                 pHeight *= scale;
                 break;
@@ -646,10 +671,12 @@ class SVGOperations {
         offsetY += yUserOffset;
         offsetX += p_settings.Get(IDS.TR_X_OFFSET);
 
-        path = svgpath(path)
+        path = pathTransform
             .scale(scale)
             .translate(offsetX, offsetY)
             .toString();
+
+        if (doReverse) { path = svgpathreverse.reverse(path); }
 
         return {
             height: Math.max(pHeight, 0),

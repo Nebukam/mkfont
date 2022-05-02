@@ -12,6 +12,7 @@ const LayerTransforms = require(`./layer-transforms-data-block`);
 const svgpath = require('svgpath');
 const ContentUpdater = require(`../content-updater`);
 const UNICODE = require('../unicode');
+const SIGNAL = require('../signal');
 
 class GlyphLayerDataBlock extends SimpleDataEx {
 
@@ -59,12 +60,14 @@ class GlyphLayerDataBlock extends SimpleDataEx {
         if (this._importedVariant == p_value) { return; }
         if (this._importedVariant) {
             this._importedVariant.layerUsers.Remove(this);
+            this._importedVariant.Unwatch(SIGNAL.LAYERS_UPDATED, this._OnImportedVariantLayersUpdated, this);
         }
 
         this._importedVariant = p_value;
 
         if (this._importedVariant) {
             this._importedVariant.layerUsers.Add(this);
+            this._importedVariant.Watch(SIGNAL.LAYERS_UPDATED, this._OnImportedVariantLayersUpdated, this);
         } else {
             this._isCircular = false;
             this.Set(IDS.PATH, null); //Clear path
@@ -72,6 +75,10 @@ class GlyphLayerDataBlock extends SimpleDataEx {
 
         this._variant._ScheduleTransformationUpdate();
 
+    }
+
+    _OnImportedVariantLayersUpdated() {
+        if (this._isCircular) { this._RetrieveImportedVariant(); }
     }
 
     _RetrieveGlyphInfos() {
@@ -98,7 +105,6 @@ class GlyphLayerDataBlock extends SimpleDataEx {
 
             this._isCircular = this._variant.family.HasCircularDep(this._variant, candidate);
             this.importedVariant = candidate;
-
             this.Set(IDS.CIRCULAR_REFERENCE, this._isCircular);
 
         }

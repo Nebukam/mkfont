@@ -9,6 +9,7 @@ module.exports = {
     GlyphCanvasRenderer : require(`./glyph-canvas-renderer`),
     GlyphPreview: require(`./glyph-preview`),
     GlyphIdentity: require(`./glyph-identity`),
+    GlyphStats: require(`./glyph-stats`),
     PropertyControl: require(`./property-control`),
     PangramRenderer: require(`./pangram-renderer`),
     ControlHeader: require(`./control-header`),

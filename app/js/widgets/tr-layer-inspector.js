@@ -28,7 +28,7 @@ class LayerTransformSettingsInspector extends base {
         { options: { propertyId: mkfData.IDS.TR_BOUNDS_MODE, inputOnly: true }, css: 'small' },
         { options: { propertyId: mkfData.IDS.TR_MIRROR, inputOnly: true }, css: 'small' },
         { options: { propertyId: mkfData.IDS.TR_LYR_SCALE_MODE, inputOnly: true }, css: 'small' },
-        { options: { propertyId: mkfData.IDS.TR_SCALE_FACTOR }, requireData: true, hideWhen: { fn: isMANUAL } },
+        { options: { propertyId: mkfData.IDS.TR_LYR_SCALE_FACTOR }, requireData: true, hideWhen: { fn: isMANUAL } },
         { options: { propertyId: mkfData.IDS.TR_NRM_FACTOR }, requireData: true, hideWhen: { fn: isNRM } },
 
         { cl: ControlHeader, options: { label: `Vertical align + anchoring` }, css: 'hdr' },

@@ -21,7 +21,7 @@ class LayerTransformsDataBlock extends SimpleDataEx {
         p_values[IDS.TR_LYR_BOUNDS_MODE] = { value: ENUMS.LYR_BOUNDS_OUTSIDE };
         p_values[IDS.TR_BOUNDS_MODE] = { value: ENUMS.BOUNDS_OUTSIDE };
         p_values[IDS.TR_LYR_SCALE_MODE] = { value: ENUMS.SCALE_NONE };
-        p_values[IDS.TR_SCALE_FACTOR] = { value: 1 };
+        p_values[IDS.TR_LYR_SCALE_FACTOR] = { value: 1 };
         p_values[IDS.TR_NRM_FACTOR] = { value: 0 };
         p_values[IDS.TR_LYR_VER_ALIGN] = { value: ENUMS.VANCHOR_CENTER };
         p_values[IDS.TR_VER_ALIGN_ANCHOR] = { value: ENUMS.VANCHOR_CENTER };

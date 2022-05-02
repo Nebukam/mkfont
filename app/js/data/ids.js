@@ -353,10 +353,10 @@ class IDS {
 
         this.infos[this.EXPORT_GLYPH] = {
             recompute: true,
-            label: `Export`,
+            label: `Export glyph`,
             inputType: inputs.Boolean,
             inputOptions: { size: ui.FLAGS.SIZE_XS },
-            desc: `Whtether this glyph will be added to the exported font or not.`
+            desc: `Whether this glyph will be added to the exported font or not.`
         };
 
         this.infos[this.OUT_OF_BOUNDS] = {
@@ -530,6 +530,7 @@ class IDS {
 
     static TR_LYR_BOUNDS_MODE = 'lyr-bounds';
     static TR_LYR_SCALE_MODE = 'lyr-scale';
+    static TR_LYR_SCALE_FACTOR = 'lyr-scale-factor';
 
     static TR_LYR_VER_ALIGN = 'lyr-valign';
     static TR_LYR_HOR_ALIGN = 'lyr-halign';
@@ -568,6 +569,13 @@ class IDS {
             label: `Scale mode`,
             inputOptions: { catalog: ENUMS.LYR_SCALE, itemKey: nkm.com.IDS.VALUE, size: ui.FLAGS.SIZE_M },
             desc: `Scale`
+        };
+        this.infos[this.TR_LYR_SCALE_FACTOR] = {
+            transform: true,
+            inputType: inputs.Slider,
+            label: `Scale factor`,
+            inputOptions: { changeOnInput: true, min: 0.01, max: 2, step: 0.01, size: ui.FLAGS.SIZE_XS },
+            desc: `Factor by which the layer will be scaled.`
         };
 
         this.infos[this.TR_LYR_VER_ALIGN] = {

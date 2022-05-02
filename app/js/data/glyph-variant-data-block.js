@@ -84,6 +84,7 @@ class GlyphVariantDataBlock extends SimpleDataEx {
     RemoveLayer(p_layer) {
         if (!this._layers.Remove(p_layer)) { return null; }
         this._layerObserver.Unobserve(p_layer);
+        p_layer.importedVariant = null;
         p_layer._variant = null;
         this._layers.ForEach((item, i) => { item.index = i; });
         this.Broadcast(SIGNAL.LAYER_REMOVED, this, p_layer);

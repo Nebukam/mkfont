@@ -90,7 +90,7 @@ class GlyphVariantInspectorItem extends base {
                 'border-radius': '4px',
                 'background-color': `rgba(19, 19, 19, 0.25)`
             },
-            ':host(.null-glyph) .drawer': { 'display': 'none' },
+            ':host(.null-glyph) .drawer:not(.always-visible)': { 'display': 'none' },
             '.drawer': {
                 'flex': '1 1 auto',
                 'padding': `10px`,
@@ -203,11 +203,19 @@ class GlyphVariantInspectorItem extends base {
 
         builder.defaultControlClass = mkfWidgets.PropertyControl;
         builder.defaultCSS = `item`;
-        builder.host = ui.El(`div`, {class:`drawer`}, this._host);
+        builder.host = ui.El(`div`, {class:`item drawer`}, this._host);
         builder.Build([
-            { cl: mkfWidgets.ControlHeader, options: { label: `Export` } },
+            //{ cl: mkfWidgets.ControlHeader, options: { label: `Export` } },
             { options: { propertyId: mkfData.IDS.EXPORT_GLYPH } },
         ]);
+
+        //Layers foldout
+        this._foldoutInfos = this.Attach(nkm.uilib.widgets.Foldout, `item drawer always-visible`, this._host);
+        this._foldoutInfos.options = {
+            title: `Stats`, icon: `infos`, expanded: true
+        };
+        
+        this._glyphStats = this.Attach(mkfWidgets.GlyphStats, `item`, this._foldoutInfos);
 
         super._Render();
 
@@ -219,6 +227,7 @@ class GlyphVariantInspectorItem extends base {
         if (this._glyphInfos == p_value) { return; }
         this._glyphInfos = p_value;
         this._glyphPreview.glyphInfos = p_value;
+        this._glyphStats.data = p_value;
     }
 
     _OnPreviewRectUpdate(p_tracker) {

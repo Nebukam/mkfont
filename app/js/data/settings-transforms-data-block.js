@@ -92,7 +92,7 @@ class TransformSettingsDataBlock extends SimpleDataEx {
                 let ref = item.importedVariant;
                 if (ref && !item._isCircular && item.Get(IDS.EXPORT_GLYPH)) {
                     let layerPath = ref.Get(IDS.PATH);
-                    if (item.Get(IDS.INVERTED)) { try { layerPath = svgpr.reverse(layerPath); } catch (e) { } }
+                    if (item.Get(IDS.INVERTED)) { layerPath = svgpr.reverse(layerPath); }
                     item._values[IDS.PATH].value = SVGOPS.FitLayerPath(
                         item._transformSettings,
                         path, w, this._glyphVariantOwner.Resolve(IDS.HEIGHT),

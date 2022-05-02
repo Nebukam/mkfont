@@ -135,6 +135,12 @@ class GlyphListInspector extends base {
             },
             '.control': {
                 'margin-bottom': '5px',
+            },
+            '.drawer': {
+                'flex': '1 1 auto',
+                'padding': `10px`,
+                'background-color': `rgba(19, 19, 19, 0.25)`,
+                'margin-bottom': '5px',
             }
         }, base._Style());
     }
@@ -151,6 +157,7 @@ class GlyphListInspector extends base {
         this._importToolbar.stretch = ui.WidgetBar.FLAG_STRETCH;
 
         this._editBody = ui.El(`div`, { class: `edit-body` }, this._host);
+        
 
         this._previewCtnr = ui.El(`div`, { class: `previews` }, this._editBody);
 
@@ -169,11 +176,16 @@ class GlyphListInspector extends base {
         this._counter.label = `+50`;
         this._counter.bgColor = `var(--col-cta-dark)`;
 
-        this._transformInspector = this.Attach(TransformSettingsSilent, `inspector`, this._editBody);
+        let drawer = ui.El(`div`, { class: `drawer` }, this._editBody);
 
-        this._buildHost = ui.El(`div`, { class: `list` }, this._editBody);
+        this._transformInspector = this.Attach(TransformSettingsSilent, `inspector`, drawer);
 
-        this._clearBindings = this.Attach(nkm.uilib.buttons.Button, `btn`, this._editBody);
+        this._clearBindings = this.Attach(nkm.uilib.buttons.Button, `btn`, drawer);
+
+        drawer = ui.El(`div`, { class: `drawer` }, this._editBody);
+
+        this._buildHost = ui.El(`div`, { class: `list` }, drawer);
+
         this._clearBindings.options = {
             label: `Clear resource bindings`, icon: `remove`,
             trigger: { fn: () => { this._ClearRscBindings(); } }
