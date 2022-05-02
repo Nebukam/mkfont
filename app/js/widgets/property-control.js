@@ -1,3 +1,5 @@
+'use strict';
+
 const nkm = require(`@nkmjs/core`);
 const ui = nkm.ui;
 const uilib = nkm.uilib;
@@ -76,10 +78,8 @@ class PropertyControl extends base {
                 'opacity': '0.8'
             },
             '.label': {
-                //'text-overflow': 'ellipsis',
                 'white-space': 'nowrap',
                 'flex': '1 1 50%'
-                //'overflow': 'hidden',
             },
             ':host(.false) .label': {
                 'text-decoration': 'line-through var(--col-error-dark)',

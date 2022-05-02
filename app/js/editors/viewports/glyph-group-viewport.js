@@ -1,3 +1,5 @@
+'use strict';
+
 const { uilib, datacontrols } = require("@nkmjs/core");
 const nkm = require(`@nkmjs/core`);
 const com = nkm.com;

@@ -1,3 +1,5 @@
+'use strict';
+
 // Read svg from clipboard and trigger "action-set-svg"
 const nkm = require(`@nkmjs/core`);
 const actions = nkm.actions;

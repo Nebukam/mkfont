@@ -1,3 +1,5 @@
+'use strict';
+
 const nkm = require(`@nkmjs/core`);
 const ui = nkm.ui;
 const uilib = nkm.uilib;
@@ -30,6 +32,7 @@ class ControlHeader extends base {
     static _Style() {
         return nkm.style.Extends({
             ':host': {
+                '@': ['fade-in'],
                 'position': 'relative',
                 'width': '100%',
                 'border-bottom': '1px solid rgba(127, 127, 127, 0.1)',
@@ -42,7 +45,7 @@ class ControlHeader extends base {
                 //'text-align':'center',
                 'text-transform': 'uppercase',
                 'opacity': '0.5',
-                'font-size':`0.65em`
+                'font-size': `0.65em`
             },
         }, base._Style());
     }

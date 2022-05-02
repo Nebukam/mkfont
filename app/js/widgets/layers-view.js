@@ -1,3 +1,5 @@
+'use strict';
+
 const nkm = require(`@nkmjs/core`);
 const SIGNAL = require("../signal");
 const u = nkm.u;
@@ -6,13 +8,11 @@ const ui = nkm.ui;
 const ControlHeader = require(`./control-header`);
 const LayerControl = require(`./layer-control`);
 
+const __nolayer = `nolayer`;
+
 const base = nkm.datacontrols.ControlView;
 class LayersView extends base {
     constructor() { super(); }
-
-    static __controls = [
-        { cl: ControlHeader, options: { label: `Layers` }, css: `control` },
-    ];
 
     _Init() {
         super._Init();
@@ -32,7 +32,7 @@ class LayersView extends base {
                 //'padding': '20px',
                 'display': 'flex',
                 'flex-flow': 'column nowrap',
-                'padding': '5px',
+                //'padding': '5px',
                 'margin-bottom': '5px',
                 'align-items': `center`
             },
@@ -56,12 +56,14 @@ class LayersView extends base {
             },
             '.list': {
                 'flex': '0 1 auto',
-                'width':`100%`,
-                'padding': `10px`,
+                'width': `100%`,
+                'padding': `10px 0px`,
+                'border-top': `1px solid rgba(127,127,127,0.25)`,
+                'border-bottom': `1px solid rgba(127,127,127,0.25)`,
                 'display': `flex`,
                 'flex-flow': `column nowrap`,
-                'background-color':`rgba(19,19,19,0.25)`,
-                'border-radius':`3px`
+                //'background-color':`rgba(19,19,19,0.25)`,
+                'border-radius': `3px`
             },
             '.item': {
                 'flex': '0 1 auto',
@@ -136,7 +138,7 @@ class LayersView extends base {
             this._items.length = layerList.length;
         }
 
-        for (let i = 0, n = layerList.length; i < n; i++) { this._items[(n-1)-i].data = layerList[i]; }
+        for (let i = 0, n = layerList.length; i < n; i++) { this._items[(n - 1) - i].data = layerList[i]; }
     }
 
 

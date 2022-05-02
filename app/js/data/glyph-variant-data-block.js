@@ -65,7 +65,6 @@ class GlyphVariantDataBlock extends SimpleDataEx {
         p_values[IDS.OUT_OF_BOUNDS] = { value: false };
         p_values[IDS.EMPTY] = { value: false };
         p_values[IDS.EXPORT_GLYPH] = { value: true };
-        p_values[IDS.COMPOSITION] = { value: null };
     }
 
     get layers() { return this._layers; }

@@ -107,6 +107,21 @@ class UTILS {
 
     }
 
+    static Resample(p_values, p_ids, p_scale = 1, p_inPlace = false) {
+
+        let resampled = p_inPlace ? p_values : {};
+
+        if (p_scale == 1) {
+            if (!p_inPlace) { for (let id in p_values) { resampled[id] = p_values[id]; } }
+            return resampled;
+        }
+
+        for (let id in p_values) {
+            resampled[id] = p_ids.includes(id) ? p_values[id] * p_scale : p_values[id];
+        }
+        return resampled;
+    }
+
 }
 
 module.exports = UTILS;

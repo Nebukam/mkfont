@@ -1,3 +1,5 @@
+'use strict';
+
 const nkm = require(`@nkmjs/core`);
 const ui = nkm.ui;
 const uilib = nkm.uilib;
@@ -109,6 +111,7 @@ class GlyphCanvasRenderer extends __BASE__ {
             this.Clear();
             this.contextInfos = null;
             this.computedPath = null;
+            this._compositePath = false;
             this.glyphPath = null;
             return false;
         }
@@ -117,6 +120,7 @@ class GlyphCanvasRenderer extends __BASE__ {
         this.glyphWidth = p_glyphVariant.Resolve(IDS.EXPORTED_WIDTH);
         this.glyphPath = p_glyphVariant.Get(IDS.PATH);
         this.computedPath = p_glyphVariant._computedPath;
+        this._compositePath = !p_glyphVariant._layers.isEmpty;
 
         this.Draw();
 
@@ -153,21 +157,45 @@ class GlyphCanvasRenderer extends __BASE__ {
         ctx.fillStyle = col;
 
         if (this._emptyGlyph) {
-            if (this._computedPath) {
-                let cw = this._glyphWidth;
-                ctx.lineWidth = iscale;
-                ctx.strokeStyle = `rgba(${nkm.style.Get(`--col-warning-dark-rgb`)},0.8)`;
-                ctx.beginPath();
-                ctx.rect(0, 0, cw, f.em);
-                ctx.stroke();
 
-                ctx.strokeStyle = `rgba(${nkm.style.Get(`--col-warning-dark-rgb`)},0.25)`;
-                ctx.beginPath();
-                ctx.moveTo(0, 0); ctx.lineTo(cw, f.em);
-                ctx.moveTo(cw, 0); ctx.lineTo(0, f.em);
-                ctx.stroke();
+            if (this._compositePath) {
 
+                if (this._computedPath && this._drawBBox) {
+                    let cw = this._glyphWidth;
+                    ctx.lineWidth = iscale;
+                    ctx.strokeStyle = `rgba(${nkm.style.Get(`--col-infos-rgb`)},0.8)`;
+                    ctx.beginPath();
+                    ctx.rect(0, 0, cw, f.em);
+                    ctx.stroke();
+
+                    ctx.strokeStyle = `rgba(${nkm.style.Get(`--col-infos-rgb`)},0.25)`;
+                    ctx.beginPath();
+                    ctx.moveTo(0, 0); ctx.lineTo(cw, f.em);
+                    ctx.moveTo(cw, 0); ctx.lineTo(0, f.em);
+                    ctx.stroke();
+
+                }
+
+                ctx.fill(this._glyphPath);
+
+            } else {
+                if (this._computedPath) {
+                    let cw = this._glyphWidth;
+                    ctx.lineWidth = iscale;
+                    ctx.strokeStyle = `rgba(${nkm.style.Get(`--col-warning-dark-rgb`)},0.8)`;
+                    ctx.beginPath();
+                    ctx.rect(0, 0, cw, f.em);
+                    ctx.stroke();
+
+                    ctx.strokeStyle = `rgba(${nkm.style.Get(`--col-warning-dark-rgb`)},0.25)`;
+                    ctx.beginPath();
+                    ctx.moveTo(0, 0); ctx.lineTo(cw, f.em);
+                    ctx.moveTo(cw, 0); ctx.lineTo(0, f.em);
+                    ctx.stroke();
+
+                }
             }
+
         } else {
             ctx.fill(this._glyphPath);
         }

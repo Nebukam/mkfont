@@ -1,3 +1,5 @@
+'use strict';
+
 const nkm = require(`@nkmjs/core`);
 const u = nkm.u;
 const ui = nkm.ui;
@@ -132,10 +134,6 @@ class GlyphGroupSearch extends base {
         }
     }
 
-    _CleanUp() {
-        if (this.constructor.__clearBuilderOnRelease) { this._builder.Clear(); }
-        super._CleanUp();
-    }
 
 }
 

@@ -94,7 +94,7 @@ class TransformSettingsDataBlock extends SimpleDataEx {
 
         if (!this._glyphVariantOwner.layers.isEmpty) {
             this._glyphVariantOwner.layers.ForEach(item => {
-                if (item.importedVariant && !item._isCircular) {
+                if (item.importedVariant && !item._isCircular && item.Get(IDS.EXPORT_GLYPH)) {
                     let path = item.importedVariant.Get(IDS.PATH);
                     if (item.Get(IDS.INVERTED)) { item.Set(IDS.PATH, svgpr.reverse(path)) }
                     else { item.Set(IDS.PATH, path); }
@@ -102,12 +102,14 @@ class TransformSettingsDataBlock extends SimpleDataEx {
             });
         }
 
+        let pathConcat = this._glyphVariantOwner._ConcatPaths(path.path);
+
         this._glyphVariantOwner.BatchSet({
             //[IDS.WIDTH]: rw,
             [IDS.EXPORTED_WIDTH]: w,
-            [IDS.PATH]: this._glyphVariantOwner._ConcatPaths(path.path), //path.pathReversed || path.path,
+            [IDS.PATH]: pathConcat, //path.pathReversed || path.path,
             [IDS.OUT_OF_BOUNDS]: oob,
-            [IDS.EMPTY]: pathData.path === `M 0 0 L 0 0 z`,
+            [IDS.EMPTY]: pathConcat === `M 0 0 L 0 0 z`,
         });
 
     }

@@ -23,7 +23,7 @@ $family_regular: 'Regular', apple-system, BlinkMacSystemFont, "Segoe UI", Roboto
     font-family: $family_regular;
 
     --font-size: var(#{$varname_font_size_s});
-    font-size: var(--font-size);
+    font-size: var(--font-size) !important;
 
     &.font-tag{
         --font-size: var(#{$varname_font_size_tag});

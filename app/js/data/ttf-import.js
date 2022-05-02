@@ -1,3 +1,5 @@
+'use strict';
+
 const nkm = require(`@nkmjs/core`);
 const css = nkm.style.CSS;
 const Family = require(`./family-data-block`);

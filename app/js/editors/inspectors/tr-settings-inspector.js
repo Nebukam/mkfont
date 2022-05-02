@@ -1,3 +1,5 @@
+'use strict';
+
 const nkm = require(`@nkmjs/core`);
 const ui = nkm.ui;
 const uilib = nkm.uilib;
@@ -85,10 +87,6 @@ class TransformSettingsInspector extends base {
 
     //#endregion
 
-    _CleanUp() {
-        if (this.constructor.__clearBuilderOnRelease) { this._builder.Clear(); }
-        super._CleanUp();
-    }
 
 }
 

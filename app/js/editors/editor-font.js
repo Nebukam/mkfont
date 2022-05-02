@@ -1,3 +1,5 @@
+'use strict';
+
 const nkm = require(`@nkmjs/core`);
 const u = nkm.u;
 const ui = nkm.ui;
@@ -89,6 +91,8 @@ class FontEditor extends base {
         this.cmdLayerRemove = this._commands.Create(mkfCmds.LayerRemove);
         this.cmdLayersOn = this._commands.Create(mkfCmds.LayerAllOn);
         this.cmdLayersOff = this._commands.Create(mkfCmds.LayerAllOff);
+        this.cmdLayersCopy = this._commands.Create(mkfCmds.LayersCopy);
+        this.cmdLayersPaste = this._commands.Create(mkfCmds.LayersPaste);
 
         this.cmdListImportMissing = this._commands.Create(mkfCmds.ImportListMissingGlyphs);
         this.cmdListExportUni = this._commands.Create(mkfCmds.ExportListUni);

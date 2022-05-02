@@ -4,12 +4,14 @@ const UNICODE = require(`../../../unicode`);
 const IDS = require(`../../ids`);
 
 const Glyph = require(`../../glyph-data-block`);
+const GlyphLayer = require(`../../glyph-layer-data-block`);
 
 const __ID_tr = `transforms`;
 const __ID_values = `values`;
 const __ID_glyphs = `glyphs`;
 const __ID_variants = `variants`;
 const __ID_isLigature = `isLiga`;
+const __ID_lyrs = `layers`;
 
 /**
  * This is a base implementation. It only add & serialize the known "metadata" property.
@@ -83,6 +85,17 @@ class FamilyDataBlockJSONSerializer extends nkm.data.serialization.json.DataBloc
                         [__ID_tr]: variant._transformSettings.Values()
                     };
 
+                if (!variant._layers.isEmpty) {
+                    let layers = [];
+                    variantObj[__ID_lyrs] = layers;
+                    variant._layers.ForEach(lyr => {
+                        layers.push({
+                            [__ID_values]: lyr.Values(),
+                            [__ID_tr]: lyr._transformSettings.Values()
+                        });
+                    });
+                }
+
                 // cleanup runtime-computed values
                 delete variantObj[__ID_values][IDS.PATH];
                 delete variantObj[__ID_values][IDS.OUT_OF_BOUNDS];
@@ -109,6 +122,11 @@ class FamilyDataBlockJSONSerializer extends nkm.data.serialization.json.DataBloc
         // First load family data specifics
         p_data.BatchSet(p_serial[__ID_values]);
         p_data._transformSettings.BatchSet(p_serial[__ID_tr]);
+
+        let
+            layeredVariants = [],
+            layerInfos = [];
+
 
         // Add glyphs
         let glyphs = p_serial[__ID_glyphs];
@@ -137,8 +155,26 @@ class FamilyDataBlockJSONSerializer extends nkm.data.serialization.json.DataBloc
 
                 variant.BatchSet(vData[__ID_values]);
                 variant._transformSettings.BatchSet(vData[__ID_tr]);
+
+                if (__ID_lyrs in vData) {
+                    layeredVariants.push(variant);
+                    layerInfos.push(vData[__ID_lyrs]);
+                }
+
             }
         }
+
+        // Add layer last, so they can be resolved against existing glyphs
+
+        layeredVariants.forEach((variant, i) => {
+            let layers = layerInfos[i];
+            layers.forEach(layer => {
+                let layerInstance = nkm.com.Rent(GlyphLayer);
+                variant.AddLayer(layerInstance);
+                layerInstance.BatchSet(layer[__ID_values]);
+                layerInstance._transformSettings.BatchSet(layer[__ID_tr]);
+            });
+        });
 
     }
 

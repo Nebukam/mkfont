@@ -1,4 +1,5 @@
-//
+'use strict';
+
 const nkm = require(`@nkmjs/core`);
 const actions = nkm.actions;
 const u = nkm.u;
@@ -33,9 +34,9 @@ class CmdLayersOff extends actions.Command {
         }
 
         this._emitter.StartActionGroup({
-            icon: `visible`,
-            name: `All layers visible`,
-            title: `Make all layers visible.`
+            icon: `hidden`,
+            name: `All layers invisible`,
+            title: `Make all layers invisible.`
         });
 
         this._emitter.Do(mkfActions.SetProperty, {

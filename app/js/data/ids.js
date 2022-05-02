@@ -237,7 +237,6 @@ class IDS {
     static GLYPH_NAME = 'name';
     static UNICODE = 'unicode';
 
-    static COMPOSITION = 'comp';
     static INVERTED = 'inverted';
 
     static GLYPH_RESAMPLE_IDS = [
@@ -312,12 +311,6 @@ class IDS {
             recompute: true,
         };
 
-        this.infos[this.COMPOSITION] = {
-            recompute: true,
-            label: `Composition`,
-            desc: `Composition of the glyph`
-        };
-
         this.infos[this.INVERTED] = {
             recompute: true,
             label: `Reverse path`,
@@ -333,6 +326,7 @@ class IDS {
     static CUSTOM_WIDTH = 'custom-width';
 
     static COLOR_PREVIEW = 'color-preview';
+    
     static PREVIEW_SIZE = 'preview-size';
 
     static OUT_OF_BOUNDS = 'out-of-bounds';
@@ -400,7 +394,8 @@ class IDS {
     static TR_RESAMPLE_IDS = [
         this.TR_WIDTH_SHIFT,
         this.TR_WIDTH_PUSH,
-        this.TR_Y_OFFSET
+        this.TR_Y_OFFSET,
+        this.TR_SCALE_FACTOR,
     ];
 
     static {
@@ -512,8 +507,6 @@ class IDS {
 
     //#region Layer properties
 
-
-
     static TR_LYR_BOUNDS_MODE = 'lyr-bounds';
     static TR_LYR_SCALE_MODE = 'lyr-scale';
 
@@ -521,6 +514,7 @@ class IDS {
     static TR_LYR_HOR_ALIGN = 'lyr-halign';
 
     static CHARACTER_NAME = 'lyr-char';
+    static CHARACTER_STRUCT = 'lyr-struct';
     static CIRCULAR_REFERENCE = 'circ-dep';
 
     static {
@@ -529,6 +523,11 @@ class IDS {
             inputType: inputs.Text,
             inputOptions: { placeholder: `A, U+0041, ...` },
             label: `Character`,
+            desc: `Single character, ligature, or U+0000 formatted name`
+        };
+
+        this.infos[this.CHARACTER_STRUCT] = {
+            label: `Character struct`,
             desc: `Single character, ligature, or U+0000 formatted name`
         };
 

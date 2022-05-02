@@ -1,3 +1,5 @@
+'use strict';
+
 const nkm = require(`@nkmjs/core`);
 const ui = nkm.ui;
 const uilib = nkm.uilib;
@@ -23,10 +25,10 @@ class CatItem extends base {
 
             },
             '.cat-hint': {
-                'position':'absolute',
-                'width':'4px',
-                'height':'4px',
-                'border-radius':'10px',
+                'position': 'absolute',
+                'width': '4px',
+                'height': '4px',
+                'border-radius': '10px',
                 'background-color': 'var(--col-cat)',
                 'top': '5px',
                 'left': 'calc(calc(var(--depth) * var(--folder-indent)) + 16px)',
@@ -36,10 +38,10 @@ class CatItem extends base {
 
     _Render() {
         super._Render();
-        ui.dom.El(`div`, {class:`cat-hint`}, this._host);
+        ui.dom.El(`div`, { class: `cat-hint` }, this._host);
     }
 
-    _OnDataUpdated(p_oldData){
+    _OnDataUpdated(p_oldData) {
         super._OnDataUpdated(p_oldData);
         this.style.setProperty(`--col-cat`, `var(--col-${this._data.GetOption(`col`, `default`)})`);
     }

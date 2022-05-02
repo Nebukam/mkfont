@@ -18,11 +18,11 @@ class ActionLayerAdd extends actions.Action {
             layerValues = p_operation.layerValues || null,
             transforms = p_operation.transforms || null;
 
-        if (layerValues) { newLayer.BatchSet(layerValues); }
-        if (transforms) { newLayer.transformSettings.BatchSet(transforms); }
-
         glyphVariant.AddLayer(newLayer);
         //glyphVariant.transformSettings.UpdateTransform();
+
+        if (layerValues) { newLayer.BatchSet(layerValues, true); }
+        if (transforms) { newLayer.transformSettings.BatchSet(transforms, true); }
 
         p_operation.layer = newLayer; // Store created glyph
         p_operation.index = index;

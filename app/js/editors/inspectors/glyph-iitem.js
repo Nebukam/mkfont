@@ -30,6 +30,11 @@ class GlyphVariantInspectorItem extends base {
         { cl: mkfWidgets.ControlHeader, options: { label: `Metrics` } },
         { options: { propertyId: mkfData.IDS.WIDTH }, disableWhen: { fn: shouldHideWIDTH } },
         { options: { propertyId: mkfData.IDS.HEIGHT } },
+        //{ cl: mkfWidgets.ControlHeader, options: { label: `Export` } },
+        //{ options: { propertyId: mkfData.IDS.EXPORT_GLYPH } },
+    ];
+
+    static __glyphControls = [
         { cl: mkfWidgets.ControlHeader, options: { label: `Export` } },
         { options: { propertyId: mkfData.IDS.EXPORT_GLYPH } },
     ];
@@ -61,15 +66,17 @@ class GlyphVariantInspectorItem extends base {
         return nkm.style.Extends({
             ':host': {
                 'display': 'flex',
-                'flex-flow': 'row wrap',
+                'flex-flow': 'column nowrap',
                 'justify-content': `space-between`,
+            },
+            '.item': {
+                'margin-bottom': '5px',
             },
             '.preview': {
                 'position': 'relative',
                 'display': 'flex',
-                'aspect-ratio': '1/1',// 'var(--preview-ratio)',
                 'flex': '1 1 auto',
-                'width': '100%',
+                'width': 'calc(100% - 6px)',
                 'overflow': 'hidden',
                 'background-color': 'rgba(0,0,0,0.5)',
                 'border-radius': '5px',
@@ -78,20 +85,16 @@ class GlyphVariantInspectorItem extends base {
             '.toolbar': {
                 'flex': `1 1 auto`,
                 'justify-content': `center`,
-                'margin-bottom': '5px',
                 'margin-top': '5px',
                 'padding': '4px',
                 'border-radius': '4px',
                 'background-color': `rgba(19, 19, 19, 0.25)`
             },
-            ':host(.null-glyph) .settings': { 'display': 'none' },
-            '.settings, .drawer': {
-                'min-width': `0`,
+            ':host(.null-glyph) .drawer': { 'display': 'none' },
+            '.drawer': {
                 'flex': '1 1 auto',
-                'margin-bottom': '10px',
-            },
-            '.control': {
-                'margin-bottom': '5px',
+                'padding': `10px`,
+                'background-color': `rgba(19, 19, 19, 0.25)`,
             },
             '.binder': {
                 'width': '100%',
@@ -104,17 +107,41 @@ class GlyphVariantInspectorItem extends base {
 
     _Render() {
 
-        this._importToolbar = this.Attach(ui.WidgetBar, `toolbar`, this._host);
+        this._importToolbar = this.Attach(ui.WidgetBar, `item toolbar`, this._host);
         this._importToolbar.stretch = ui.WidgetBar.FLAG_STRETCH;
 
-        this._glyphPreview = this.Attach(mkfWidgets.GlyphPreview, `preview`, this._host);
+        this._glyphPreview = this.Attach(mkfWidgets.GlyphPreview, `item preview`, this._host);
         this.forwardData.To(this._glyphPreview);
         this._rectTracker.Add(this._glyphPreview);
 
-        this._layers = this.Attach(mkfWidgets.LayersView, `drawer settings`, this._host);
-        this._transforms = ui.El(`div`, { class: `drawer settings` }, this._host);
+        //Transform foldout
 
-        this.forwardData.To(this._layers);
+        this._foldoutTranforms = this.Attach(nkm.uilib.widgets.Foldout, `item drawer`, this._host);
+        this._foldoutTranforms.options = {
+            title: `Transformations`, icon: `view-grid`, expanded: true,
+            handles: [
+                {
+                    icon: 'clipboard-read', htitle: 'Paste transforms (Ctrl Alt V)',
+                    trigger: { fn: () => { this.editor.cmdGlyphPasteTransform.Execute(this._data); } },
+                }
+            ]
+        };
+
+        //Layers foldout
+        this._foldoutLayers = this.Attach(nkm.uilib.widgets.Foldout, `item drawer`, this._host);
+        this._foldoutLayers.options = {
+            title: `Layers`, icon: `three-lines`, expanded: true,
+            handles: [
+                {
+                    icon: 'clipboard-write', htitle: 'Copy layers',
+                    trigger: { fn: () => { this.editor.cmdLayersCopy.Execute(this._data); } },
+                },
+                {
+                    icon: 'clipboard-read', htitle: 'Paste layers (hold Alt to add instead of replace)',
+                    trigger: { fn: () => { this.editor.cmdLayersPaste.Execute(this._data); } },
+                },
+            ]
+        };
 
         this._importToolbar.options = {
             inline: true,
@@ -161,10 +188,26 @@ class GlyphVariantInspectorItem extends base {
 
         this._binder = this.Attach(mkfWidgets.ResourceBinding, `binder control`);
         this._binder.visible = false;
-        this._transformInspector = this.Attach(TransformSettingsInspector, `settings`, this._transforms);
+
+        this._transformInspector = this.Attach(TransformSettingsInspector, `item`, this._foldoutTranforms);
         this.forwardData.To(this._transformInspector, { dataMember: `transformSettings` });
 
-        this._builder.host = this._transforms;//ui.El(`div`, { class: `settings` }, this._host);
+        this._builder.host = this._foldoutTranforms.body;
+
+        this._layers = this.Attach(mkfWidgets.LayersView, `item`, this._foldoutLayers);
+        this.forwardData.To(this._layers);
+
+
+        let builder = new nkm.datacontrols.helpers.ControlBuilder(this);
+        this.forwardData.To(builder);
+
+        builder.defaultControlClass = mkfWidgets.PropertyControl;
+        builder.defaultCSS = `item`;
+        builder.host = this._host;
+        builder.Build([
+            { cl: mkfWidgets.ControlHeader, options: { label: `Export` } },
+            { options: { propertyId: mkfData.IDS.EXPORT_GLYPH } },
+        ]);
 
         super._Render();
 
@@ -205,7 +248,7 @@ class GlyphVariantInspectorItem extends base {
             }
         } else {
             this._popoutPreview = uilib.modals.Simple.Pop({
-                anchor: this._transformInspector,
+                anchor: this.parent,
                 placement: ui.ANCHORING.LEFT,
                 origin: ui.ANCHORING.RIGHT,
                 keepWithinScreen: true,

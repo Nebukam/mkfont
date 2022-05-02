@@ -13,11 +13,6 @@ const svgpath = require('svgpath');
 const ContentUpdater = require(`../content-updater`);
 const UNICODE = require('../unicode');
 
-const domparser = new DOMParser();
-const svgString = `<glyph ${IDS.GLYPH_NAME}="" ${IDS.UNICODE}="" d="" ${IDS.WIDTH}="" ${IDS.HEIGHT}="" ></glyph>`;
-
-const svgGlyphRef = domparser.parseFromString(svgString, `image/svg+xml`).getElementsByTagName(`glyph`)[0];
-
 class GlyphLayerDataBlock extends SimpleDataEx {
 
     constructor() { super(); }
@@ -46,10 +41,7 @@ class GlyphLayerDataBlock extends SimpleDataEx {
         p_values[IDS.EXPORT_GLYPH] = { value: true };
     }
 
-    get glyphInfos() {
-        if (!this._glyphInfos) { this._RetrieveGlyphInfos(); }
-        return this._glyphInfos;
-    }
+    get glyphInfos() { return this._glyphInfos; }
     set glyphInfos(p_value) { this._glyphInfos = p_value; }
 
     get index() { return this._index; }
@@ -73,9 +65,12 @@ class GlyphLayerDataBlock extends SimpleDataEx {
 
         if (this._importedVariant) {
             this._importedVariant.layerUsers.Add(this);
+        } else {
+            this._isCircular = false;
+            this.Set(IDS.PATH, null); //Clear path
         }
 
-        if (this._variant) { this._variant._ScheduleTransformationUpdate(); }
+        this._variant._ScheduleTransformationUpdate();
 
     }
 
@@ -93,7 +88,7 @@ class GlyphLayerDataBlock extends SimpleDataEx {
 
         let glyph = this._variant.family.GetGlyph(this._glyphInfos.u);
         if (glyph.isNull) {
-            
+
             this.importedVariant = null;
             this._values[IDS.CIRCULAR_REFERENCE].value = false;
 

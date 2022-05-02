@@ -116,6 +116,23 @@ class GlyphDataBlock extends SimpleDataEx {
 
     //
 
+    _OnGlyphAddedToFamily(p_family) {
+        this.Broadcast(SIGNAL.GLYPH_ADDED, this);
+    }
+
+    _OnGlyphRemovedFromFamily(p_family) {
+        this.Broadcast(SIGNAL.GLYPH_REMOVED, this);
+        // Disconnect variant users
+        this._variants.ForEach((item, i) => {
+            for (let i = 0, n = item._layerUsers.count; i < n; i++) {
+                let user = item._layerUsers.last;
+                user.importedVariant = null;
+            }
+        });
+    }
+
+    //
+
     _ScheduleTransformationUpdate() {
         this._variants.ForEach((item, i) => { item._ScheduleTransformationUpdate(); });
     }

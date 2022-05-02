@@ -1,3 +1,5 @@
+'use strict';
+
 const nkm = require(`@nkmjs/core`);
 const ui = nkm.ui;
 const uilib = nkm.uilib;
@@ -23,16 +25,16 @@ class CatGroupItem extends base {
             ':host': {
 
             },
-            '.hint-ctnr':{
-                'position':`relative`,
-                'display':`flex`,
-                'flex-flow':`column wrap`,
+            '.hint-ctnr': {
+                'position': `relative`,
+                'display': `flex`,
+                'flex-flow': `column wrap`,
                 'flex': `1 1 auto`,
                 'max-height': `8px`,
-                'grid-gap':`2px`,
+                'grid-gap': `2px`,
                 'align-content': `flex-start`,
-                'margin-left':`4px`,
-                'opacity':`0.5`
+                'margin-left': `4px`,
+                'opacity': `0.5`
             },
             '.cat-hint': {
                 'width': '2px',

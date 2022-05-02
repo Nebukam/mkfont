@@ -105,6 +105,8 @@ class FamilyDataBlock extends SimpleDataEx {
         this._transformSettings = new ImportSettings();
         this._transformSettings.Watch(nkm.com.SIGNAL.VALUE_CHANGED, this._OnTransformValueChanged, this);
 
+        this._delayedUpdateReferences = nkm.com.DelayedCall(this._Bind(this._UpdateLayerReferences));
+
     }
 
     _ResetValues(p_values) {
@@ -193,8 +195,11 @@ class FamilyDataBlock extends SimpleDataEx {
         ContentUpdater.Push(this, this._UpdateFontObject);
 
         this.Broadcast(SIGNAL.GLYPH_ADDED, this, p_glyph);
-        p_glyph.Broadcast(SIGNAL.GLYPH_ADDED, p_glyph);
+        p_glyph._OnGlyphAddedToFamily(this);
         //ContentUpdater.instance.Broadcast(SIGNAL.GLYPH_ADDED, p_glyph);
+
+        //Need a way to find which layer might be referencing this glyph
+        this._delayedUpdateReferences.Schedule();
 
     }
 
@@ -219,13 +224,13 @@ class FamilyDataBlock extends SimpleDataEx {
 
         p_glyph.family = null;
 
-        //
-
         ContentUpdater.Push(this, this._UpdateFontObject);
 
         this.Broadcast(SIGNAL.GLYPH_REMOVED, this, g);
-        g.Broadcast(SIGNAL.GLYPH_REMOVED, g);
+        g._OnGlyphRemovedFromFamily(this);
         //ContentUpdater.instance.Broadcast(SIGNAL.GLYPH_REMOVED, g);
+
+        this._delayedUpdateReferences.Schedule();
 
     }
 
@@ -268,7 +273,9 @@ class FamilyDataBlock extends SimpleDataEx {
 
     _OnGlyphUpdated() { this._scheduledUpdate.Schedule(); }
 
-    _OnGlyphVariantUpdated(p_glyph, p_glyphVariant) { this._scheduledUpdate.Schedule(); }
+    _OnGlyphVariantUpdated(p_glyph, p_glyphVariant) {
+        this._scheduledUpdate.Schedule();
+    }
 
     //#endregion
 
@@ -295,6 +302,19 @@ class FamilyDataBlock extends SimpleDataEx {
             item._variants.ForEach((v) => {
                 if (v._transformSettings._values[p_id].value == null) { v._transformSettings.CommitUpdate(); }
             })
+        });
+    }
+
+    _UpdateLayerReferences() {
+
+        this._glyphs.ForEach(glyph => {
+            glyph._variants.ForEach(variant => {
+                if (!variant._layers.isEmpty) {
+                    variant._layers.ForEach(layer => {
+                        if (!layer.importedVariant) { layer._RetrieveGlyphInfos(); }
+                    });
+                }
+            });
         });
     }
 
@@ -376,15 +396,34 @@ class FamilyDataBlock extends SimpleDataEx {
 
     HasCircularDep(p_target, p_candidate) {
 
+        if (!p_candidate || !p_target) { return false; }
         if (p_target == p_candidate) { return true; }
+        if (p_candidate._layers.isEmpty) { return false; }
 
+        let tempSet = new Set(),
+            result = this._HasCircularDep(p_target, p_candidate, tempSet);
+
+        tempSet.clear();
+        tempSet = null;
+
+        return result;
+
+    }
+
+    _HasCircularDep(p_target, p_candidate, p_set) {
+
+        if (p_set.has(p_candidate)) { return false; }
+        p_set.add(p_candidate);
+
+        if (!p_candidate || !p_target) { return false; }
+        if (p_target == p_candidate) { return true; }
         if (p_candidate._layers.isEmpty) { return false; }
 
         let layers = p_candidate._layers._array;
 
         for (let i = 0, n = layers.length; i < n; i++) {
             let layer = layers[i];
-            if (this.HasCircularDep(p_target, layer.importedVariant)) { return true; }
+            if (this._HasCircularDep(p_target, layer.importedVariant, p_set)) { return true; }
         }
 
         return false;

@@ -34,6 +34,8 @@ module.exports = {
     LayerRemove: require(`./cmd-layer-remove`),
     LayerAllOff: require(`./cmd-layers-all-off`),
     LayerAllOn: require(`./cmd-layers-all-on`),
+    LayersCopy: require(`./cmd-layers-copy`),
+    LayersPaste: require(`./cmd-layers-paste`),
 
     ImportTTF: require(`./cmd-import-ttf`),
 

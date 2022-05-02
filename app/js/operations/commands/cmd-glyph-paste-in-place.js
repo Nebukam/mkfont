@@ -1,4 +1,5 @@
-//
+'use strict';
+
 const nkm = require(`@nkmjs/core`);
 const actions = nkm.actions;
 const u = nkm.u;
@@ -9,6 +10,7 @@ const fs = require('fs');
 const UNICODE = require(`../../unicode`);
 const mkfData = require(`../../data`);
 const mkfActions = require(`../actions`);
+const SHARED_OPS = require('./shared-ops');
 
 class CmdGlyphPasteInPlace extends actions.Command {
     constructor() { super(); }
@@ -17,15 +19,25 @@ class CmdGlyphPasteInPlace extends actions.Command {
 
         let family = this._emitter.data;
 
-        if (!globalThis.__mkfGlyphCopies ||
-            globalThis.__mkfGlyphCopies.length == 0) {
+        if (!globalThis.__copySourceGlyphs ||
+            globalThis.__copySourceGlyphs.length == 0 ||
+            globalThis.__copySourceFamily == family) {
             this._Cancel();
             return;
         }
 
-        this._scaleFactor = family.Get(mkfData.IDS.EM_UNITS) / globalThis.__mkfGlyphCopiesEM;
+        this._scaleFactor = globalThis.__copySourceEM ? family.Get(mkfData.IDS.EM_UNITS) / globalThis.__copySourceEM : 1;
 
-        let resample = (this._scaleFactor != 1);
+        let
+            resample = (this._scaleFactor != 1),
+            nullCount = 0;
+
+        globalThis.__copySourceGlyphs.forEach(g => { nullCount += g.isNull ? 1 : 0; });
+
+        if (nullCount == globalThis.__copySourceGlyphs.length) {
+            this._Cancel();
+            return;
+        }
 
         this._emitter.StartActionGroup({
             icon: `clipboard-read`,
@@ -33,8 +45,10 @@ class CmdGlyphPasteInPlace extends actions.Command {
             title: `Pasted glyphs from an mkfont to another`
         });
 
-        for (let i = 0; i < globalThis.__mkfGlyphCopies.length; i++) {
-            this.PasteInPlace(family, globalThis.__mkfGlyphCopies[i], resample);
+        for (let i = 0; i < globalThis.__copySourceGlyphs.length; i++) {
+            let g = globalThis.__copySourceGlyphs[i];
+            if (g.isNull) { continue; }
+            this.PasteInPlace(family, g, resample);
         }
 
         this._emitter.EndActionGroup();
@@ -43,46 +57,33 @@ class CmdGlyphPasteInPlace extends actions.Command {
 
     }
 
-    PasteInPlace(p_family, p_data, p_resample = false) {
+    PasteInPlace(p_family, p_sourceGlyph, p_resample = false) {
 
         let
-            unicodeInfos = p_data.unicode,
-            glyph = p_family.GetGlyph(unicodeInfos.u);
+            unicodeInfos = p_sourceGlyph.unicodeInfos,
+            targetGlyph = p_family.GetGlyph(unicodeInfos.u),
+            targetVariant = targetGlyph.activeVariant,
+            sourceVariant = p_sourceGlyph.activeVariant,
+            variantValues = sourceVariant.Values(),
+            transforms = sourceVariant._transformSettings.Values();
 
         if (p_resample) {
-
-            let idList = mkfData.IDS.GLYPH_RESAMPLE_IDS;
-
-            for (let i = 0; i < idList.length; i++) {
-                let
-                    id = idList[i],
-                    value = p_data.variantValues[id];
-
-                if (value != undefined && value != null) { p_data.variantValues[id] = value * this._scaleFactor; }
-
-            }
-
-            idList = mkfData.IDS.TR_RESAMPLE_IDS;
-
-            for (let i = 0; i < idList.length; i++) {
-                let
-                    id = idList[i],
-                    value = p_data.transforms[id];
-
-                if (value != undefined && value != null) { p_data.transforms[id] = value * this._scaleFactor; }
-            }
-
+            variantValues = mkfData.UTILS.Resample(variantValues, mkfData.IDS.GLYPH_RESAMPLE_IDS, this._scaleFactor, true);
+            transforms = mkfData.UTILS.Resample(transforms, mkfData.IDS.TR_RESAMPLE_IDS, this._scaleFactor, true);
         }
 
-        if (glyph.isNull) {
+        if (targetGlyph.isNull) {
 
             this._emitter.Do(mkfActions.GlyphCreate, {
                 family: p_family,
-                unicode: p_data.unicode,
-                //glyphValues: p_data.glyphValues,
-                variantValues: p_data.variantValues,
-                transforms: p_data.transforms
+                unicode: p_sourceGlyph.unicode,
+                variantValues: variantValues,
+                transforms: transforms
             });
+
+            targetVariant = p_family.GetGlyph(unicodeInfos.u).activeVariant;
+
+            SHARED_OPS.CopyLayers(targetVariant, sourceVariant);
 
         } else {
             /*
@@ -92,13 +93,16 @@ class CmdGlyphPasteInPlace extends actions.Command {
             });
             */
             this._emitter.Do(mkfActions.SetPropertyMultiple, {
-                target: glyph.activeVariant,
-                values: p_data.variantValues
+                target: targetVariant,
+                values: variantValues
             });
             this._emitter.Do(mkfActions.SetPropertyMultiple, {
-                target: glyph.activeVariant.transformSettings,
-                values: p_data.transforms
+                target: targetVariant.transformSettings,
+                values: transforms
             });
+
+            SHARED_OPS.RemoveLayers(this._emitter, targetVariant);
+            SHARED_OPS.AddLayers(this._emitter, targetVariant, sourceVariant, this._scaleFactor);
 
         }
 

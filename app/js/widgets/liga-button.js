@@ -1,3 +1,5 @@
+'use strict';
+
 const nkm = require(`@nkmjs/core`);
 const u = nkm.u;
 const ui = nkm.ui;
@@ -26,12 +28,12 @@ class LigaButton extends base {
                 'padding': '5px',
                 'margin-bottom': '5px',
                 'align-items': `center`,
-                'padding-right':`15px`,
-                'padding-left':`15px`
+                'padding-right': `15px`,
+                'padding-left': `15px`
             },
             '.item': {
                 'flex': '0 0 auto',
-                'margin':`3px`
+                'margin': `3px`
             },
             '.counter': {
 
@@ -66,13 +68,13 @@ class LigaButton extends base {
         this.ToggleLiga(p_liga.export);
     }
 
-    Activate(p_evt){
-        if(!super.Activate(p_evt)){return false;}
+    Activate(p_evt) {
+        if (!super.Activate(p_evt)) { return false; }
         this.ToggleLiga();
         return false;
     }
 
-    ToggleLiga(p_bool = null){
+    ToggleLiga(p_bool = null) {
         this._liga.export = p_bool != null ? p_bool : !this._liga.export;
         this.Toggle(this._liga.export);
         this._checkBox.Set(`checkbox-${this._liga.export ? 'on' : 'off'}`);

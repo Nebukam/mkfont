@@ -1,3 +1,5 @@
+'use strict';
+
 const nkm = require(`@nkmjs/core`);
 const css = nkm.style.CSS;
 const IDS = require(`../data/ids`);
@@ -8,7 +10,6 @@ const { optimize } = require('svgo');
 const ttf2svg = require('ttf2svg');
 const svg2ttf = require('svg2ttf');
 const svgpath = require('svgpath');
-const svgpathreverse = require('svg-path-reverse')
 
 const domparser = new DOMParser();
 /*
@@ -516,7 +517,6 @@ class SVGOperations {
             width: Math.max(widthRef, 0),
             fit: { width: fitW, height: fitH, x: offsetX, y: offsetY, yoff: yUserOffset },
             path: path,
-            pathReversed: svgpathreverse.reverse(path),
             bbox: this.GetBBox(path)
         };
 
