@@ -14,11 +14,11 @@ class SHARED_OPS {
 
     static RemoveLayers(p_editor, p_target) {
         p_target._layers.ForEach(layer => {
-
-            p_editor.Do(mkfActions.LayerRemove, {
-                target: layer
-            });
-
+            if (layer._variant) {
+                p_editor.Do(mkfActions.LayerRemove, {
+                    target: layer
+                });
+            }
         });
     }
 

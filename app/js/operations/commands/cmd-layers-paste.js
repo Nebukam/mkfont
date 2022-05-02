@@ -54,7 +54,7 @@ class CmdLayersPaste extends actions.Command {
             });
         }
 
-        SHARED_OPS.RemoveLayers(this._emitter, this._context, globalThis.__copySourceLayers, scaleFactor);
+        SHARED_OPS.AddLayers(this._emitter, this._context, globalThis.__copySourceLayers, scaleFactor);
 
         this._emitter.EndActionGroup();
 

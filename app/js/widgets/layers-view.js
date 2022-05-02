@@ -99,6 +99,12 @@ class LayersView extends base {
                     trigger: { fn: () => { this.editor.cmdLayersOff.Execute(this._data); } },
                     group: `edit`
                 },
+                {
+                    icon: `link`, htitle: `Create composition layers.`,
+                    variant: ui.FLAGS.MINIMAL,
+                    trigger: { fn: () => { this.editor.cmdLayerAddComp.Execute(this._data); } },
+                    group: `automate`, member: { owner: this, id: `_addCompBtn` }
+                },
             ]
         };
 
@@ -109,6 +115,13 @@ class LayersView extends base {
     _OnDataChanged(p_oldData) {
         super._OnDataChanged(p_oldData);
         this._RefreshLayerControls();
+    }
+
+    _OnDataUpdated(p_data) {
+        super._OnDataUpdated(p_data);
+        let hasComp = false;
+        if (p_data.glyph.unicodeInfos.comp) { hasComp = true; }
+        this._addCompBtn.disabled = !hasComp;
     }
 
     _RefreshLayerControls() {

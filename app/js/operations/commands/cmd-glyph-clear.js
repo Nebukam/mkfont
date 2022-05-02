@@ -10,6 +10,7 @@ const fs = require('fs');
 const UNICODE = require(`../../unicode`);
 const mkfData = require(`../../data`);
 const mkfActions = require(`../actions`);
+const SHARED_OPS = require('./shared-ops');
 
 class CmdGlyphClear extends actions.Command {
     constructor() { super(); }
@@ -59,6 +60,15 @@ class CmdGlyphClear extends actions.Command {
         let f = this._emitter.data;
 
         if (glyph.isNull) {
+
+            if (!p_inGroup && nkm.ui.INPUT.alt) {
+                this._emitter.StartActionGroup({
+                    icon: `reset`,
+                    name: `Reset glyph`,
+                    title: `Clears selected glyphs data`
+                });
+            }
+
             // Need to create a new glyph!
             this._emitter.Do(mkfActions.GlyphCreate, {
                 family: f,
@@ -69,6 +79,11 @@ class CmdGlyphClear extends actions.Command {
                     [mkfData.IDS.TR_AUTO_WIDTH]: false
                 }
             });
+
+            if (nkm.ui.INPUT.alt) { this._emitter.cmdLayerAddComp.Execute(f.GetGlyph(p_infos.u).activeVariant); }
+
+            if (!p_inGroup && nkm.ui.INPUT.alt) { this._emitter.EndActionGroup(); }
+
         } else {
 
             if (!p_inGroup) {
@@ -92,6 +107,10 @@ class CmdGlyphClear extends actions.Command {
                 id: mkfData.IDS.TR_AUTO_WIDTH,
                 value: false
             });
+
+            SHARED_OPS.RemoveLayers(this._emitter, p_variant);
+
+            if (nkm.ui.INPUT.alt) { this._emitter.cmdLayerAddComp.Execute(p_variant); }
 
             if (!p_inGroup) { this._emitter.EndActionGroup(); }
         }
