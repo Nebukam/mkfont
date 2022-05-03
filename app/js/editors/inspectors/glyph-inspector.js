@@ -59,7 +59,7 @@ class GlyphInspector extends base {
                 'margin-bottom': '0',
             },
             '.body': {
-
+                
             },
             '.settings': {
                 'flex': '1 0 auto',

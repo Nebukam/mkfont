@@ -21,9 +21,8 @@ class EditorLigaImport extends base {
         super._Init();
 
         this._builder = new nkm.datacontrols.helpers.ControlBuilder(this);
-        this._builder._defaultControlClass = mkfWidgets.PropertyControl;
-        this._builder.defaultCSS = `control`;
-
+        this._builder.options = { cl:mkfWidgets.PropertyControl, css:`control` };
+        
         this.forwardData.To(this._builder);
 
         this._dataPreProcessor = (p_owner, p_data) => {
@@ -77,12 +76,9 @@ class EditorLigaImport extends base {
 
     _Render() {
 
-
-        this._inputs = ui.dom.El(`div`, { class: `inputs` }, this._host);
-        this._builder.host = this._inputs;
-
         super._Render();
 
+        this._inputs = ui.dom.El(`div`, { class: `inputs` }, this._host);
         this._builder.Build([
             { cl: mkfWidgets.ControlHeader, options: { label: `Text` } },
             { options: { propertyId: mkfData.IDS_EXT.LIGA_TEXT, inputOnly: true }, member: `_textBox` },
@@ -91,7 +87,7 @@ class EditorLigaImport extends base {
             { options: { propertyId: mkfData.IDS_EXT.LIGA_MIN }, disableWhen: { fn: isNEWLINE } },
             { options: { propertyId: mkfData.IDS_EXT.LIGA_MAX }, disableWhen: { fn: isNEWLINE } },
             { options: { propertyId: mkfData.IDS_EXT.LIGA_MIN_OCCURENCE }, disableWhen: { fn: isNEWLINE } },
-        ]);
+        ], this._inputs);
 
         this._list = ui.El(`div`, { class: `list` }, this);
 

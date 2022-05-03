@@ -117,6 +117,16 @@ class IDS {
     static ASC_RESAMPLE = 'asc-resample';
     static MONOSPACE = 'monospace';
 
+    static FAMILY_RESAMPLE_IDS =  [
+        this.BASELINE,
+        this.ASCENT,
+        this.DESCENT,
+        this.WIDTH,
+        this.HEIGHT,
+        this.X_HEIGHT,
+        this.CAP_HEIGHT,
+    ];
+
     static {
 
         this.infos[this.WEIGHT_CLASS] = {

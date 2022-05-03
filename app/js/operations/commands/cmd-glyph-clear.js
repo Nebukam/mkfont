@@ -80,7 +80,9 @@ class CmdGlyphClear extends actions.Command {
                 }
             });
 
-            if (nkm.ui.INPUT.alt) { this._emitter.cmdLayerAddComp.Execute(f.GetGlyph(p_infos.u).activeVariant); }
+            if (nkm.ui.INPUT.alt) {
+                SHARED_OPS.BoostrapComp(this._emitter, f.GetGlyph(p_infos.u).activeVariant, p_infos);
+            }
 
             if (!p_inGroup && nkm.ui.INPUT.alt) { this._emitter.EndActionGroup(); }
 

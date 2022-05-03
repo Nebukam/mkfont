@@ -14,6 +14,8 @@ const base = nkm.datacontrols.ControlView;
 class LayersView extends base {
     constructor() { super(); }
 
+    static __layerControlClass = LayerControl;
+    
     _Init() {
         super._Init();
         this._InitSelectionStack(false, false);
@@ -26,7 +28,7 @@ class LayersView extends base {
     static _Style() {
         return nkm.style.Extends({
             ':host': {
-                '@': ['fade-in'],
+                //'@': ['fade-in'],
                 'min-height': 'auto',
                 'min-width': 'auto',
                 //'padding': '20px',
@@ -119,8 +121,11 @@ class LayersView extends base {
 
     _OnDataUpdated(p_data) {
         super._OnDataUpdated(p_data);
-        let hasComp = false;
-        if (p_data.glyph.unicodeInfos.comp) { hasComp = true; }
+        let
+            hasComp = false,
+            uInfos = p_data.glyph.unicodeInfos;
+
+        if (uInfos && uInfos.comp) { hasComp = true; }
         this._addCompBtn.disabled = !hasComp;
     }
 
@@ -142,7 +147,7 @@ class LayersView extends base {
             } else {
                 diff = Math.abs(diff);
                 for (let i = 0; i < diff; i++) {
-                    let item = this.Attach(LayerControl, `item`, this._listCtnr);
+                    let item = this.Attach(this.constructor.__layerControlClass, `item`, this._listCtnr);
                     item.editor = this.editor;
                     item.context = this._data;
                     this._items.push(item);

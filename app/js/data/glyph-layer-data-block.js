@@ -7,12 +7,11 @@ const io = nkm.io;
 
 const SimpleDataEx = require(`./simple-data-ex`);
 const IDS = require(`./ids`);
-const LayerTransforms = require(`./layer-transforms-data-block`);
 
-const svgpath = require('svgpath');
-const ContentUpdater = require(`../content-updater`);
 const UNICODE = require('../unicode');
 const SIGNAL = require('../signal');
+
+const ENUMS = require(`./enums`);
 
 class GlyphLayerDataBlock extends SimpleDataEx {
 
@@ -22,12 +21,9 @@ class GlyphLayerDataBlock extends SimpleDataEx {
 
         super._Init();
 
-        this._transformSettings = new LayerTransforms();
-        this._transformSettings._layer = this;
-
         this._variant = null;
         this._index = 0;
-        this.expanded = false;
+        this.expanded = true;
 
         this._glyphInfos = null;
         this._isCircular = false;
@@ -35,11 +31,28 @@ class GlyphLayerDataBlock extends SimpleDataEx {
     }
 
     _ResetValues(p_values) {
+
+        // Base bs
         p_values[IDS.PATH] = { value: '' };
         p_values[IDS.INVERTED] = { value: false };
         p_values[IDS.CIRCULAR_REFERENCE] = { value: false };
         p_values[IDS.CHARACTER_NAME] = { value: null };
         p_values[IDS.EXPORT_GLYPH] = { value: true };
+
+        // Transform settings
+        p_values[IDS.TR_LYR_BOUNDS_MODE] = { value: ENUMS.LYR_BOUNDS_OUTSIDE };
+        p_values[IDS.TR_BOUNDS_MODE] = { value: ENUMS.BOUNDS_OUTSIDE };
+        p_values[IDS.TR_LYR_SCALE_MODE] = { value: ENUMS.SCALE_NONE };
+        p_values[IDS.TR_LYR_SCALE_FACTOR] = { value: 1 };
+        p_values[IDS.TR_NRM_FACTOR] = { value: 0 };
+        p_values[IDS.TR_LYR_VER_ALIGN] = { value: ENUMS.VANCHOR_CENTER };
+        p_values[IDS.TR_VER_ALIGN_ANCHOR] = { value: ENUMS.VANCHOR_CENTER };
+        p_values[IDS.TR_LYR_HOR_ALIGN] = { value: ENUMS.HANCHOR_CENTER };
+        p_values[IDS.TR_HOR_ALIGN_ANCHOR] = { value: ENUMS.HANCHOR_CENTER };
+        p_values[IDS.TR_X_OFFSET] = { value: 0 };
+        p_values[IDS.TR_Y_OFFSET] = { value: 0 };
+        p_values[IDS.TR_MIRROR] = { value: ENUMS.MIRROR_NONE };
+
     }
 
     get glyphInfos() { return this._glyphInfos; }
@@ -51,8 +64,6 @@ class GlyphLayerDataBlock extends SimpleDataEx {
         this._index = p_value;
         if (this._variant) { this._variant._ScheduleTransformationUpdate(); }
     }
-
-    get transformSettings() { return this._transformSettings; }
 
     get importedVariant() { return this._importedVariant; }
     set importedVariant(p_value) {
@@ -119,16 +130,11 @@ class GlyphLayerDataBlock extends SimpleDataEx {
         if (infos.recompute && this._variant) { this._variant._ScheduleTransformationUpdate(); }
     }
 
-    _OnReset(p_individualSet, p_silent) {
-        this._transformSettings.Reset(p_individualSet, p_silent);
-        super._OnReset();
-    }
-
     _CleanUp() {
         this.importedVariant = null;
         this._variant = null;
         this._index = 0;
-        this.expanded = false;
+        this.expanded = true;
         this._glyphInfos = null;
         this._isCircular = false;
         super._CleanUp();

@@ -61,13 +61,15 @@ class PropertyControl extends base {
     static _Style() {
         return nkm.style.Extends({
             ':host': {
-                '@': ['fade-in'],
+                //'@': ['fade-in'],
                 'position': 'relative',
                 //'border':'1px solid gray',
                 'display': 'flex',
                 'flex-flow': 'row nowrap',
                 'align-items': 'center',
-                'flex': '1 1 auto'
+                'flex': '1 1 auto',
+                
+                'margin': '0 2px 5px 2px',
             },
             ':host(.selected)': {
                 'background-color': 'rgba(127,127,127,0.25)'

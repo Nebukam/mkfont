@@ -21,10 +21,8 @@ class CmdLayerRemove extends actions.Command {
 
     _InternalExecute() {
 
-        let layer = this._context;
-
         this._emitter.Do(mkfActions.LayerRemove, {
-            target: layer
+            target: this._context
         });
 
         this._Success();

@@ -9,6 +9,10 @@ const mkfData = require(`../../data`);
 class ActionLayerRemove extends actions.Action {
     constructor() { super(); }
 
+    static __deepCleanFn(p_action){
+        p_action._operation.target.Release();
+    }
+
     _InternalDo(p_operation, p_merge = false) {
 
         let

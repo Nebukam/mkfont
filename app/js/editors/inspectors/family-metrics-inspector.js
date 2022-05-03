@@ -57,15 +57,11 @@ class FamilyMetricsInspector extends base {
     _Init() {
         super._Init();
 
-        //this._builder.preProcessDataFn = this._Bind(this._PreprocessControlData);
-        //TODO ::: IDS.ASCENT => this._Bind(this._SetAscent)
-
-        this._builder.defaultControlClass = mkfWidgets.PropertyControl;
-        this._builder.defaultCSS = `control`;
+        let builderOptions = { cl: mkfWidgets.PropertyControl, css: `control` };
+        this._builder.options = builderOptions;
 
         this._trBuilder = new nkm.datacontrols.helpers.ControlBuilder(this);
-        this._trBuilder.defaultControlClass = mkfWidgets.PropertyControl;
-        this._trBuilder.defaultCSS = `control`;
+        this._trBuilder.options = builderOptions;
         this.forwardData.To(this._trBuilder, { dataMember: `transformSettings` })
 
     }
@@ -87,6 +83,7 @@ class FamilyMetricsInspector extends base {
             },
             '.control': {
                 'flex': '0 1 auto',
+                'margin': '0',
                 'margin-bottom': '5px'
             },
             '.pangram': {

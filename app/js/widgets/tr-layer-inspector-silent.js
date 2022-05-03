@@ -3,10 +3,10 @@
 const nkm = require(`@nkmjs/core`);
 const ui = nkm.ui;
 
-const TransformSettingsInspector = require(`./tr-settings-inspector`);
+const LayerTransformSettingsInspector = require(`./tr-layer-inspector`);
 
-const base = TransformSettingsInspector;
-class TransformSettingsSilentInspector extends base {
+const base = LayerTransformSettingsInspector;
+class LayerTransformSettingsInspectorSilent extends base {
     constructor() { super(); }
 
     static __controls = [...base.__controls];
@@ -19,8 +19,7 @@ class TransformSettingsSilentInspector extends base {
         }
     }
 
-
 }
 
-module.exports = TransformSettingsSilentInspector;
-ui.Register(`mkf-transform-settings-silent-inspector`, TransformSettingsSilentInspector);
+module.exports = LayerTransformSettingsInspectorSilent;
+ui.Register(`mkf-layer-transform-settings-inspector-silent`, LayerTransformSettingsInspectorSilent);

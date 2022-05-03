@@ -31,65 +31,41 @@ class ActionSetEM extends ActionSetPropertyValue {
 
         if (resample) {
 
-            // Need to scale all family metrics
-            // - Ascent
-            // - Descent
-            // - Height
-            // - Width
-            // - Height
-            // Need to scale all glyph metrics
-            // - Width (even thought it's computed)
-            // - Shift
-            // - Push
-            // - Manual scale factor if any
-
             let family = p_target;
 
-            for (let s = 0; s < familyIDs.length; s++) {
-                let id = familyIDs[s],
-                    value = family.Get(id);
-                if (value != null) { family.Set(id, value * scaleFactor); }
-            }
+            family.BatchSet(mkfData.UTILS.Resample(
+                family.Values(mkfData.IDS.FAMILY_RESAMPLE_IDS),
+                mkfData.IDS.FAMILY_RESAMPLE_IDS,
+                scaleFactor), true);
 
-            let list = family._glyphs.internalArray;
+            family._glyphs._array.forEach(glyph => {
+                glyph._variants.forEach(variant => {
 
-            for (let g = 0, n = list.length; g < n; g++) {
+                    // Glyph values
+                    variant.BatchSet(mkfData.UTILS.Resample(
+                        variant.Values(mkfData.IDS.GLYPH_RESAMPLE_IDS),
+                        mkfData.IDS.GLYPH_RESAMPLE_IDS,
+                        scaleFactor), true);
 
-                let variant = list[g].activeVariant,
-                    transform = variant._transformSettings,
-                    pathData = variant.Get(mkfData.IDS.PATH_DATA);
+                    // Glyph transforms
+                    let tr = variant._transformSettings;
+                    tr.BatchSet(mkfData.UTILS.Resample(
+                        tr.Values(mkfData.IDS.TR_RESAMPLE_IDS),
+                        mkfData.IDS.TR_RESAMPLE_IDS,
+                        scaleFactor), true);
 
-                if (pathData && !variant.Get(mkfData.IDS.EMPTY)) {
-                    // SVGOPS.ScalePathData(pathData, scaleFactor);
-                }
+                    // Layers transforms
+                    variant._layers.ForEach(layer => {
+                        let ltr = layer._transformSettings;
+                        ltr.BatchSet(mkfData.UTILS.Resample(
+                            ltr.Values(mkfData.IDS.TR_RESAMPLE_IDS),
+                            mkfData.IDS.TR_RESAMPLE_IDS,
+                            scaleFactor), true);
+                    });
 
-                let idList = mkfData.IDS.GLYPH_RESAMPLE_IDS;
 
-                for (let t = 0, tn = idList.length; t < tn; t++) {
-                    let id = idList[t],
-                        valueObj = variant._values[id];
-                    if (!Number.isNaN(valueObj.value)) { variant.Set(id, valueObj.value * scaleFactor); }
-                }
-
-                idList = mkfData.IDS.TR_RESAMPLE_IDS;
-
-                // Resample layer values
-                for (let j = 0, jn = variant.layers.count; j < jn; j++) {
-                    let ltr = variant.layers.At(j)._transformSettings;
-                    for (let t = 0, tn = idList.length; t < tn; t++) {
-                        let id = idList[t],
-                            value = ltr.Get(id);
-                        if (value != null) { ltr.Set(id, value * scaleFactor); }
-                    }
-                }
-
-                for (let t = 0, tn = idList.length; t < tn; t++) {
-                    let id = idList[t],
-                        value = transform.Get(id);
-                    if (value != null) { transform.Set(id, value * scaleFactor); }
-                }
-
-            }
+                });
+            });
 
         }
 

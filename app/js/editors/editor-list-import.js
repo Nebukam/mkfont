@@ -97,7 +97,6 @@ class EditorListImport extends base {
             },
             '.control': {
                 'flex': '0 1 auto',
-                'margin': '0 2px 5px 2px',
                 'max-width': '296px'
             },
             '.small': {
@@ -120,11 +119,9 @@ class EditorListImport extends base {
         this._header = ui.El(`div`, { class: `item header` }, column);
 
         let builder = new nkm.datacontrols.helpers.ControlBuilder(this);
+        builder.options = { host:this._header, cl:mkfWidgets.PropertyControl, css:`control` };
         this.forwardData.To(builder);
 
-        builder.defaultControlClass = mkfWidgets.PropertyControl;
-        builder.defaultCSS = `control`;
-        builder.host = this._header;
         builder.Build([
             { options: { propertyId: mkfData.IDS_EXT.IMPORT_OVERLAP_MODE } },
             { options: { propertyId: mkfData.IDS_EXT.IMPORT_ASSIGN_MODE } },
@@ -136,11 +133,9 @@ class EditorListImport extends base {
         this.forwardData.To(this._settingsInspector);
 
         builder = new nkm.datacontrols.helpers.ControlBuilder(this);
+        builder.options = { host:column, cl:mkfWidgets.PropertyControl, css:`control` };
         this.forwardData.To(builder);
 
-        builder.defaultControlClass = mkfWidgets.PropertyControl;
-        builder.defaultCSS = `control`;
-        builder.host = column;
         builder.Build([
             { cl: mkfWidgets.ControlHeader, options: { label: `Extras` } },
             { options: { propertyId: mkfData.IDS_EXT.IMPORT_BIND_RESOURCE } },

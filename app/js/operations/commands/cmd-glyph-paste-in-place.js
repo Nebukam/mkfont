@@ -102,7 +102,7 @@ class CmdGlyphPasteInPlace extends actions.Command {
             });
 
             SHARED_OPS.RemoveLayers(this._emitter, targetVariant);
-            SHARED_OPS.AddLayers(this._emitter, targetVariant, sourceVariant, this._scaleFactor);
+            SHARED_OPS.AddLayers(this._emitter, targetVariant, sourceVariant, this._scaleFactor, false);
 
         }
 

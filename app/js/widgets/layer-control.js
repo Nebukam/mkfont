@@ -35,9 +35,6 @@ class LayerControl extends base {
         this._builder.defaultControlClass = PropertyControl;
         this._builder.defaultCSS = `control`;
 
-        this.forwardData.Remove(this._builder);
-        this.forwardData.To(this._builder, { dataMember: `_transformSettings` });
-
     }
 
     _PostInit() {
@@ -67,7 +64,6 @@ class LayerControl extends base {
             },
             '.control': {
                 'flex': '1 1 100%',
-                'margin': '0 2px 5px 2px',
                 'min-height': 0
             },
             '.hdr': {
@@ -88,43 +84,49 @@ class LayerControl extends base {
             size: nkm.ui.FLAGS.SIZE_XS,
             defaultWidgetClass: nkm.uilib.buttons.Tool,
             handles: [
+                /*
                 {
                     icon: `up-short`, htitle: `Move layer up`,
                     variant: ui.FLAGS.MINIMAL,
                     //trigger: { fn: () => { this.editor.cmdLayerAdd.Execute(this._data); } },
-                    group: `move`
+                    group: `move`, member: { owner: this, id: `_moveUpBtn` }
                 },
                 {
                     icon: `down-short`, htitle: `Move layer down`,
                     variant: ui.FLAGS.MINIMAL,
                     //trigger: { fn: () => { this.editor.cmdLayersOn.Execute(this._data); } },
-                    group: `move`
+                    group: `move`, member: { owner: this, id: `_moveDownBtn` }
                 },
+                */
                 {
                     htitle: `Toggle visibility`,
                     cl: nkm.uilib.inputs.Checkbox,
                     iconOn: `visible`, iconOff: `hidden`,
-                    onSubmit: {
-                        fn: (p_input, p_value) => {
-                            this.editor.Do(mkfOperations.actions.SetProperty, {
-                                target: this._data,
-                                id: mkfData.IDS.EXPORT_GLYPH,
-                                value: p_value
-                            });
-                        }
-                    },
+                    onSubmit: { fn: this._ToggleVisibility, thisArg: this },
                     member: { owner: this, id: `_btnVisible` },
                     group: `vis`,
                 },
                 {
                     icon: `remove`, htitle: `Delete  this layer`,
                     variant: ui.FLAGS.MINIMAL,
-                    trigger: { fn: () => { this.editor.cmdLayerRemove.Execute(this._data); } },
+                    trigger: { fn: this._DeleteLayer, thisArg: this },
                     group: `remove`
                 },
             ]
         };
 
+    }
+
+    _ToggleVisibility(p_input, p_value) {
+        this.editor.Do(mkfOperations.actions.SetProperty, {
+            target: this._data,
+            id: mkfData.IDS.EXPORT_GLYPH,
+            value: p_value
+        });
+    }
+
+    _DeleteLayer() {
+        this.editor.cmdLayerRemove.Execute(this._data);
     }
 
     _OnDataUpdated(p_data) {

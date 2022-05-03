@@ -118,7 +118,7 @@ class GlyphVariantInspectorItem extends base {
 
         this._foldoutTranforms = this.Attach(nkm.uilib.widgets.Foldout, `item drawer`, this._host);
         this._foldoutTranforms.options = {
-            title: `Transformations`, icon: `view-grid`, expanded: true,
+            title: `Transformations`, icon: `view-grid`, prefId: `transforms`, expanded: true, //TODO CHANGE BACK to true
             handles: [
                 {
                     icon: 'clipboard-read', htitle: 'Paste transforms (Ctrl Alt V)',
@@ -130,7 +130,7 @@ class GlyphVariantInspectorItem extends base {
         //Layers foldout
         this._foldoutLayers = this.Attach(nkm.uilib.widgets.Foldout, `item drawer`, this._host);
         this._foldoutLayers.options = {
-            title: `Layers`, icon: `three-lines`, expanded: true,
+            title: `Layers`, icon: `three-lines`, prefId: `layers`, expanded: true,
             handles: [
                 {
                     icon: 'clipboard-write', htitle: 'Copy layers',
@@ -197,13 +197,10 @@ class GlyphVariantInspectorItem extends base {
         this._layers = this.Attach(mkfWidgets.LayersView, `item`, this._foldoutLayers);
         this.forwardData.To(this._layers);
 
-
         let builder = new nkm.datacontrols.helpers.ControlBuilder(this);
+        builder.options = { host: ui.El(`div`, { class: `item drawer` }, this._host), cl: mkfWidgets.PropertyControl, css: `item` };
         this.forwardData.To(builder);
 
-        builder.defaultControlClass = mkfWidgets.PropertyControl;
-        builder.defaultCSS = `item`;
-        builder.host = ui.El(`div`, {class:`item drawer`}, this._host);
         builder.Build([
             //{ cl: mkfWidgets.ControlHeader, options: { label: `Export` } },
             { options: { propertyId: mkfData.IDS.EXPORT_GLYPH } },
@@ -211,10 +208,8 @@ class GlyphVariantInspectorItem extends base {
 
         //Layers foldout
         this._foldoutInfos = this.Attach(nkm.uilib.widgets.Foldout, `item drawer always-visible`, this._host);
-        this._foldoutInfos.options = {
-            title: `Stats`, icon: `infos`, expanded: true
-        };
-        
+        this._foldoutInfos.options = { title: `Stats`, icon: `infos`, prefId: `glyph-infos`, expanded: true };
+
         this._glyphStats = this.Attach(mkfWidgets.GlyphStats, `item`, this._foldoutInfos);
 
         super._Render();

@@ -15,14 +15,13 @@ class ActionLayerAdd extends actions.Action {
             newLayer = nkm.com.Rent(mkfData.GlyphLayer),
             glyphVariant = p_operation.target,
             index = p_operation.index || -1,
-            layerValues = p_operation.layerValues || null,
-            transforms = p_operation.transforms || null;
+            layerValues = p_operation.layerValues || null;
 
+        newLayer.expanded = `expanded` in p_operation ? p_operation.expanded : true;
         glyphVariant.AddLayer(newLayer);
         //glyphVariant.transformSettings.UpdateTransform();
 
         if (layerValues) { newLayer.BatchSet(layerValues, true); }
-        if (transforms) { newLayer.transformSettings.BatchSet(transforms, true); }
 
         p_operation.layer = newLayer; // Store created glyph
         p_operation.index = index;

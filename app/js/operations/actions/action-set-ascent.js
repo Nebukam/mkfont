@@ -22,13 +22,13 @@ class ActionSetAscent extends ActionSetPropertyValue {
         let
             resample = this._operation.resample,
             scaleFactor = p_from / p_to;
+            
 
         if (resample) {
-            for (let s = 0; s < familyIDs.length; s++) {
-                let id = familyIDs[s],
-                    value = p_target.Get(id);
-                if (value != null) { p_target.Set(id, value * scaleFactor); }
-            }
+            p_target.BatchSet(mkfData.UTILS.Resample(
+                p_target.Values(familyIDs),
+                familyIDs,
+                scaleFactor), true);
         }
 
     }

@@ -21,8 +21,8 @@ class LayerTransformSettingsInspector extends base {
 
     static __controls = [
         { cl: ControlHeader, options: { label: `Glyph name` }, css: 'hdr' },
-        { options: { propertyId: mkfData.IDS.CHARACTER_NAME, subData: `_layer` } },
-        { options: { propertyId: mkfData.IDS.INVERTED, subData: `_layer` } },
+        { options: { propertyId: mkfData.IDS.CHARACTER_NAME } },
+        { options: { propertyId: mkfData.IDS.INVERTED } },
         { cl: ControlHeader, options: { label: `Boundaries & Scale` }, css: 'hdr' },
         { options: { propertyId: mkfData.IDS.TR_LYR_BOUNDS_MODE, inputOnly: true }, css: 'small' },
         { options: { propertyId: mkfData.IDS.TR_BOUNDS_MODE, inputOnly: true }, css: 'small' },
@@ -53,7 +53,7 @@ class LayerTransformSettingsInspector extends base {
     static _Style() {
         return nkm.style.Extends({
             ':host': {
-                '@': ['fade-in'],
+                //'@': ['fade-in'],
                 'display': 'flex',
                 'flex-flow': 'row wrap',
                 //'min-height': '0',
@@ -63,7 +63,6 @@ class LayerTransformSettingsInspector extends base {
             },
             '.control': {
                 'flex': '1 1 100%',
-                'margin': '0 2px 5px 2px'
             },
             '.small': {
                 'flex': '1 1 45%'

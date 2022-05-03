@@ -100,6 +100,13 @@ class SIGNAL {
   */
   static LAYERS_UPDATED = Symbol(`layers-updated`);
 
+  /**
+  * @description TODO
+  * @type {symbol}
+  * @customtag read-only
+  */
+   static LAYER_VALUE_CHANGED = Symbol(`layer-value-changed`);
+
 }
 
 module.exports = SIGNAL;

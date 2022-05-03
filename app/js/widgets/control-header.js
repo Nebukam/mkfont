@@ -32,11 +32,12 @@ class ControlHeader extends base {
     static _Style() {
         return nkm.style.Extends({
             ':host': {
-                '@': ['fade-in'],
+                //'@': ['fade-in'],
                 'position': 'relative',
                 'width': '100%',
                 'border-bottom': '1px solid rgba(127, 127, 127, 0.1)',
-                'margin-top': '2px'
+                'margin-top': '2px',
+                'margin': '0 2px 5px 2px',
             },
             '.label': {
                 //'border-bottom': 'rgba(127, 127, 127, 0.1)',

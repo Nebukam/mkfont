@@ -37,7 +37,9 @@ class GlyphVariantDataBlock extends SimpleDataEx {
         this._layers = new nkm.collections.List();
 
         this._layerObserver = new nkm.com.signals.Observer();
-        this._layerObserver.Hook(nkm.com.SIGNAL.UPDATED, this._ScheduleTransformationUpdate, this);
+        this._layerObserver
+            .Hook(nkm.com.SIGNAL.UPDATED, this._ScheduleTransformationUpdate, this)
+            .Hook(nkm.com.SIGNAL.VALUE_CHANGED, this._OnLayerValueChanged, this);
 
         this._layerUsers = new nkm.collections.List();
 
@@ -75,10 +77,12 @@ class GlyphVariantDataBlock extends SimpleDataEx {
         if (!this._layers.Add(p_layer)) { return p_layer; }
         p_layer._variant = this;
         this._layers.ForEach((item, i) => { item.index = i; });
+        p_layer._RetrieveImportedVariant();
         this._layerObserver.Observe(p_layer);
         this.Broadcast(SIGNAL.LAYER_ADDED, this, p_layer);
         this.Broadcast(SIGNAL.LAYERS_UPDATED, this);
         this._ScheduleTransformationUpdate();
+        return p_layer;
     }
 
     RemoveLayer(p_layer) {
@@ -90,6 +94,7 @@ class GlyphVariantDataBlock extends SimpleDataEx {
         this.Broadcast(SIGNAL.LAYER_REMOVED, this, p_layer);
         this.Broadcast(SIGNAL.LAYERS_UPDATED, this);
         this._ScheduleTransformationUpdate();
+        return p_layer;
     }
 
     MoveLayer(p_layer, p_index) {
@@ -98,6 +103,7 @@ class GlyphVariantDataBlock extends SimpleDataEx {
         this._layers.ForEach((item, i) => { item.index = i; });
         this.Broadcast(SIGNAL.LAYERS_UPDATED, this);
         this._ScheduleTransformationUpdate();
+        return p_layer;
     }
 
     //#endregion
@@ -174,6 +180,10 @@ class GlyphVariantDataBlock extends SimpleDataEx {
         if (infos.recompute && this._family) { this._ScheduleTransformationUpdate(); }
     }
 
+    _OnLayerValueChanged(p_layer, p_id, p_valueObj, p_oldValue) {
+        this.Broadcast(SIGNAL.LAYER_VALUE_CHANGED, this, p_layer, p_id, p_valueObj, p_oldValue);
+    }
+
     _ScheduleTransformationUpdate() {
         this._transformSettings._waitingForUpdate = true;
         ContentUpdater.Push(this, this._ApplyTransformUpdate);
@@ -191,10 +201,13 @@ class GlyphVariantDataBlock extends SimpleDataEx {
         super._OnReset();
     }
 
+    _ClearLayers() {
+        while (!this._layers.isEmpty) { this.RemoveLayer(this._layers.last).Release(); }
+    }
+
     _CleanUp() {
+        this._ClearLayers();
         this.glyph = null;
-        while (!this._layerUsers.isEmpty) { this._layerUsers.Pop().importedVariant = null; }
-        while (!this._layers.isEmpty) { this._layers.Pop().Release(); }
         super._CleanUp();
     }
 

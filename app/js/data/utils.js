@@ -12,6 +12,8 @@ const IDS_EXT = require(`./ids-ext`);
 class UTILS {
     constructor() { }
 
+    static __layerClass = null;
+
     static Resolve(p_id, p_self, ...p_fallbacks) {
 
         if (!p_self) { return null; }
@@ -92,6 +94,51 @@ class UTILS {
 
     }
 
+    static FindCommonLayersValues(p_reference, p_dataList) {
+
+        p_reference._ClearLayers();
+
+        let
+            layerIds = {},
+            vCount = p_dataList.length,
+            layerMap = new Map();
+        // Organize layer by names & count
+
+        p_dataList.forEach(variant => {
+
+            variant._layers.ForEach(layer => {
+
+                let
+                    id = layer.Get(IDS.CHARACTER_NAME),
+                    obj = null;
+
+                if (id in layerIds) { obj = layerIds[id]; }
+                else { obj = { count: 0, layers: [] }; layerIds[id] = obj; }
+
+                obj.count += 1;
+                obj.layers.push(layer);
+
+                if(layer.expanded){obj.expanded = true;}
+
+                if (obj.count == vCount) {
+
+                    let newLayer = nkm.com.Rent(this.__layerClass);
+                    p_reference.AddLayer(newLayer);
+                    newLayer.expanded = obj.expanded;
+                    newLayer._glyphInfos = layer._glyphInfos;
+                    this.FindCommonValues(newLayer, obj.layers);
+                    layerMap.set(newLayer, obj.layers);
+
+                }
+
+            });
+
+        });
+
+        return layerMap;
+
+    }
+
     static FindFirstEmptyIndex(p_family, p_start = 0) {
 
         let
@@ -117,7 +164,9 @@ class UTILS {
         }
 
         for (let id in p_values) {
-            resampled[id] = p_ids.includes(id) ? p_values[id] * p_scale : p_values[id];
+            let val = p_ids.includes(id) ? p_values[id] : null;
+            if (val == null) { continue; }
+            resampled[id] = val * p_scale;
         }
         return resampled;
     }
