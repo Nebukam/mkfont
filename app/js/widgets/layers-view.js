@@ -15,10 +15,10 @@ class LayersView extends base {
     constructor() { super(); }
 
     static __layerControlClass = LayerControl;
-    
+
     _Init() {
         super._Init();
-        this._InitSelectionStack(false, false);
+        ui.helpers.HostSelStack(this, false, false);
 
         this._dataObserver.Hook(SIGNAL.LAYERS_UPDATED, this._Bind(this._RefreshLayerControls));
 

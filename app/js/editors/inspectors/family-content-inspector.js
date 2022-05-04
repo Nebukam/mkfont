@@ -48,7 +48,7 @@ class FamilyContentInspector extends base {
 
         this._specialCatalog._items.forEach((item) => { item.primaryCommand = UNICODE.SetActiveRange; })
 
-        this._InitSelectionStack(false, true);
+        ui.helpers.HostSelStack(this, false, true);
 
     }
 
@@ -86,17 +86,17 @@ class FamilyContentInspector extends base {
 
         this._specials = this.Attach(nkm.uilib.lists.FolderListRoot, `item`, this._body);
         this._specials.data = this._specialCatalog;
-        this._specials.selectionStackOverride = this._selectionStack;
+        this._specials.selStackOverride = this._selStack;
 
         //this._categories = this.Attach(mkfWidgets.lists.FilterRoot, `asd`, this._body);
         this._categories = this.Attach(nkm.uilib.lists.FolderListRoot, `item`, this._body);
         this._categories.data = UNICODE.instance._categoriesCatalog;
-        this._categories.selectionStackOverride = this._selectionStack;
+        this._categories.selStackOverride = this._selStack;
 
         //this._blocks = this.Attach(mkfWidgets.lists.BlockRoot, `asd`, this._body);
         this._blocks = this.Attach(nkm.uilib.lists.FolderListRoot, `item`, this._body);
         this._blocks.data = UNICODE.instance._blockCatalog;
-        this._blocks.selectionStackOverride = this._selectionStack;
+        this._blocks.selStackOverride = this._selStack;
 
     }
 

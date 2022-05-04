@@ -189,13 +189,13 @@ class GlyphListInspector extends base {
         };
         this._layersView = this.Attach(mkfWidgets.LayersViewSilent, `item`, this._foldoutLayers);
 
-        // Extras
+        // Settings
 
-        this._foldoutExtras = this.Attach(nkm.uilib.widgets.Foldout, `drawer`, this._host);
-        this._foldoutExtras.options = { title: `Extras`, icon: `gear`, expanded: true };
+        this._foldoutSettings = this.Attach(nkm.uilib.widgets.Foldout, `drawer`, this._host);
+        this._foldoutSettings.options = { title: `Settings`, icon: `gear`, prefId: `glyphSettings`, expanded: true };
 
         let builder = new nkm.datacontrols.helpers.ControlBuilder(this);
-        builder.options = { host: this._foldoutExtras, cl: mkfWidgets.PropertyControl, css: `item` };
+        builder.options = { host: this._foldoutSettings, cl: mkfWidgets.PropertyControl, css: `item` };
 
         builder.Build([
             { cl: mkfWidgets.ControlHeader, options: { label: `Export` } },
@@ -204,7 +204,7 @@ class GlyphListInspector extends base {
         this._builderExtras = builder;
 
         // Clear bindings
-        this._clearBindings = this.Attach(nkm.uilib.buttons.Button, `btn`, this._foldoutExtras);
+        this._clearBindings = this.Attach(nkm.uilib.buttons.Button, `btn`, this._foldoutSettings);
         this._clearBindings.options = {
             label: `Clear resource bindings`, icon: `remove`,
             trigger: { fn: () => { this._ClearRscBindings(); } }

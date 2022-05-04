@@ -153,14 +153,14 @@ class ENUMS {
 
     static ASSIGN_FILENAME = 0;
     static ASSIGN_SELECTION = 1;
-    static ASSIGN_SELECTION_RANGE = 2;
+    static ASSIGN_SEL_RANGE = 2;
     static ASSIGN_FROM_BLOCK = 3;
     static ASSIGN_FROM_BLOCK_RANGE = 4;
 
     static ASSIGN_IMPORT_MODE = nkm.data.catalogs.CreateFrom({ name: `Transform reference`, autoSort: false }, [
         { name: `From filename`, [nkm.com.IDS.VALUE]: this.ASSIGN_FILENAME, comment: `Use imported filename to drive glyph assignment` },
         //{ name: `Start from selection`, [nkm.com.IDS.VALUE]: this.ASSIGN_SELECTION, comment: `Use the start of the active selection and fill from there` },
-        { name: `To selection`, [nkm.com.IDS.VALUE]: this.ASSIGN_SELECTION_RANGE, comment: `Limit import to the current selection of glyphs` },
+        { name: `To selection`, [nkm.com.IDS.VALUE]: this.ASSIGN_SEL_RANGE, comment: `Limit import to the current selection of glyphs` },
         { name: `To block`, [nkm.com.IDS.VALUE]: this.ASSIGN_FROM_BLOCK, comment: `Limit import to the current selection of glyphs` },
         { name: `To block (constrained)`, [nkm.com.IDS.VALUE]: this.ASSIGN_FROM_BLOCK_RANGE, comment: `Limit import to the current selection of glyphs` },
     ]);

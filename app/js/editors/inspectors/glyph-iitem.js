@@ -197,8 +197,13 @@ class GlyphVariantInspectorItem extends base {
         this._layers = this.Attach(mkfWidgets.LayersView, `item`, this._foldoutLayers);
         this.forwardData.To(this._layers);
 
+        // Settings
+
+        this._foldoutSettings = this.Attach(nkm.uilib.widgets.Foldout, `drawer`, this._host);
+        this._foldoutSettings.options = { title: `Settings`, icon: `gear`, prefId: `glyphSettings`, expanded: true };
+
         let builder = new nkm.datacontrols.helpers.ControlBuilder(this);
-        builder.options = { host: ui.El(`div`, { class: `item drawer` }, this._host), cl: mkfWidgets.PropertyControl, css: `item` };
+        builder.options = { host: this._foldoutSettings, cl: mkfWidgets.PropertyControl, css: `item` };
         this.forwardData.To(builder);
 
         builder.Build([
@@ -206,9 +211,11 @@ class GlyphVariantInspectorItem extends base {
             { options: { propertyId: mkfData.IDS.EXPORT_GLYPH } },
         ]);
 
+
         //Layers foldout
         this._foldoutInfos = this.Attach(nkm.uilib.widgets.Foldout, `item drawer always-visible`, this._host);
         this._foldoutInfos.options = { title: `Stats`, icon: `infos`, prefId: `glyph-infos`, expanded: true };
+        this._foldoutInfos.visible = false; //TODO: Remove
 
         this._glyphStats = this.Attach(mkfWidgets.GlyphStats, `item`, this._foldoutInfos);
 

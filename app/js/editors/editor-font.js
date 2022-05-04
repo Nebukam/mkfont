@@ -108,7 +108,7 @@ class FontEditor extends base {
 
         this.shortcuts.Create("Ctrl Z", this._actionStack.Undo);
         this.shortcuts.Create("Ctrl Y", this._actionStack.Redo);
-        this.shortcuts.Create("Ctrl A", { fn: () => { this._viewport._selectionStack.data.RequestSelectAll(); } }).Strict();
+        this.shortcuts.Create("Ctrl A", { fn: () => { this._viewport._selStack.data.RequestSelectAll(); } }).Strict();
 
     }
 
@@ -251,8 +251,21 @@ class FontEditor extends base {
     }
 
     SetActiveRange(p_rangeData) {
+
         this._displayRange = p_rangeData ? p_rangeData.options : null;
         this._viewport.displayRange = this._displayRange;
+
+        this._stateStack.Push({
+            oldRange: this._cachedRangeData,
+            newRange: p_rangeData,
+            restore: (p_self, p_forward) => {
+                let data = p_forward ? p_self.newRange : p_self.oldRange;
+                if (data) { this.SetActiveRange(data); }
+            }
+        });
+
+        this._cachedRangeData = p_rangeData;
+
     }
 
     _OnLeftShelfHandleChanged(p_shelf, p_newHandle, p_oldHandle) {
@@ -377,7 +390,7 @@ class FontEditor extends base {
 
     _CleanUp() {
         this._bindingManager.Clear();
-        this._viewport._selectionStack.Clear();
+        this._viewport._selStack.Clear();
         super._CleanUp();
     }
 

@@ -20,7 +20,7 @@ class EditorListImport extends base {
         [mkfData.ENUMS.ASSIGN_FROM_BLOCK]: mkfWidgets.importation.AssignBlock,
         [mkfData.ENUMS.ASSIGN_FROM_BLOCK_RANGE]: mkfWidgets.importation.AssignBlockRange,
         [mkfData.ENUMS.ASSIGN_SELECTION]: mkfWidgets.importation.AssignSelection,
-        [mkfData.ENUMS.ASSIGN_SELECTION_RANGE]: mkfWidgets.importation.AssignSelectionRange,
+        [mkfData.ENUMS.ASSIGN_SEL_RANGE]: mkfWidgets.importation.AssignSelectionRange,
     };
 
     _Init() {

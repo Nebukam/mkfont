@@ -29,7 +29,7 @@ class GlyphGroupViewport extends base {
         this._unicodeMap = new Map();
         this._displayRange = null;
 
-        this._inspectionDataForward = new datacontrols.helpers.InspectionDataForward(this);
+        this._inspectionDataForward = new datacontrols.helpers.InspectionDataBridge(this);
         this.forwardEditor.To(this._inspectionDataForward);
 
         this._dataObserver
@@ -46,7 +46,7 @@ class GlyphGroupViewport extends base {
 
         this._searchActive = false;
 
-        let dataSel = this._InitSelectionStack(true, true, {
+        let dataSel = nkm.ui.helpers.HostSelStack(this, true, true, {
             add: {
                 fn: (p_sel, p_index) => {
                     let widget = this._domStreamer.GetItemAt(p_index);
@@ -62,17 +62,19 @@ class GlyphGroupViewport extends base {
                 }, thisArg: this
             },
             count: {
-                fn: (p_sel) => { return this._content.length; }, thisArg: this
+                fn: (p_sel) => { return this._content ? this._content.length : 0; }, thisArg: this
+            },
+            index: {
+                fn: (p_sel, p_data) => { return this._content ? this._content.indexOf(p_data) : -1; }, thisArg: this
             },
         }).data;
 
         //dataSel.autoBump = true;
 
         this._inspectionDataForward.dataSelection = dataSel;
-        this._dataSelectionObserver
-            .Hook(com.SIGNAL.ITEM_ADDED, this._OnSelectionStackBump, this)
-            .Hook(com.SIGNAL.ITEM_BUMPED, this._OnSelectionStackBump, this)
-            .Hook(ui.SIGNAL.SELECTION_TOTAL_COUNT_REQUEST, this._OnSelectionRequestAllCount, this);
+        dataSel
+            .Watch(com.SIGNAL.ITEM_ADDED, this._OnSelectionStackBump, this)
+            .Watch(com.SIGNAL.ITEM_BUMPED, this._OnSelectionStackBump, this);
 
         this._contentRange = new RangeContent();
         this._contentRange.Watch(nkm.com.SIGNAL.READY, this._OnRangeReady, this);
@@ -268,11 +270,6 @@ class GlyphGroupViewport extends base {
 
     _OnSelectionStackBump(p_data) {
         this._domStreamer.SetFocusIndex(this._content.indexOf(p_data), false);
-    }
-
-    _OnSelectionRequestAllCount(p_sel, p_returnFn) {
-        if (!this._content) { return; }
-        p_returnFn(this._content.length);
     }
 
     //#endregion
