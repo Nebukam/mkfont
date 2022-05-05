@@ -39,6 +39,9 @@ class ActionSetEM extends ActionSetPropertyValue {
             mkfData.UTILS.ResampleValues(family._values, mkfData.IDS.FAMILY_RESAMPLE_IDS, scaleFactor, true);
             mkfData.UTILS.ResampleValues(family._transformSettings._values, mkfData.IDS.TR_RESAMPLE_IDS, scaleFactor, true);
 
+            family.CommitUpdate();
+            family._transformSettings.CommitUpdate();
+
             family._glyphs._array.forEach(glyph => {
                 glyph._variants.ForEach((variant) => {
 
@@ -70,6 +73,7 @@ class ActionSetEM extends ActionSetPropertyValue {
                             mkfData.IDS.TR_RESAMPLE_IDS,
                             scaleFactor), true);*/
                             mkfData.UTILS.ResampleValues(layer._values, mkfData.IDS.TR_RESAMPLE_IDS, scaleFactor, true);
+                            layer.CommitUpdate();
                     });
                     
                     variant.CommitUpdate();

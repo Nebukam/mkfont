@@ -370,6 +370,7 @@ class SVGOperations {
         }
 
         let
+            pathTransform = svgpath(path),
             bbox = p_svgStats.bbox,
             scale = 1,
             heightRef = p_svgStats.height,
@@ -383,12 +384,12 @@ class SVGOperations {
         if (refMode == ENUMS.BOUNDS_INSIDE) {
             fitH = heightRef = bbox.height;
             fitW = widthRef = bbox.width;
-            path = svgpath(path)
+            pathTransform
                 .translate(-bbox.x, -bbox.y)
                 .toString();
         } else if (refMode == ENUMS.BOUNDS_MIXED) {
             fitW = widthRef = bbox.width;
-            path = svgpath(path)
+            pathTransform
                 .translate(-bbox.x, 0)
                 .toString();
         }
@@ -397,15 +398,15 @@ class SVGOperations {
 
             switch (mirror) {
                 case ENUMS.MIRROR_H:
-                    path = svgpath(path).scale(-1, 1).translate(fitW, 0).toString();
+                    pathTransform.scale(-1, 1).translate(fitW, 0).toString();
                     doReverse = true;
                     break;
                 case ENUMS.MIRROR_V:
-                    path = svgpath(path).scale(1, -1).translate(0, fitH).toString();
+                    pathTransform.scale(1, -1).translate(0, fitH).toString();
                     doReverse = true;
                     break;
                 case ENUMS.MIRROR_H_AND_V:
-                    path = svgpath(path).scale(-1, -1).translate(fitW, fitH).toString();
+                    pathTransform.scale(-1, -1).translate(fitW, fitH).toString();
                     break;
             }
         }
@@ -542,7 +543,7 @@ class SVGOperations {
 
         offsetY += yUserOffset;
 
-        path = svgpath(path)
+        path = pathTransform
             .scale(scale)
             .translate(offsetX, offsetY)
             .toString();

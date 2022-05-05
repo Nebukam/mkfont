@@ -138,7 +138,7 @@ class IDS {
             recompute: true,
             inputType: inputs.NumberDrag,
             label: `EM Size`,
-            inputOptions: { step: 10, min: 2, max: 16000 },
+            inputOptions: { step: 1, min: 2, max: 16000 },
             desc: `specifies the number of coordinate units on the "em square", an abstract square whose height is the intended distance between lines of type in the same type size.\nThis is the size of the design grid on which glyphs are laid out.`,
         };
 
@@ -421,7 +421,7 @@ class IDS {
 
         this.infos[this.TR_SCALE_FACTOR] = {
             transform: true,
-            inputType: inputs.Slider,
+            inputType: inputs.NumberDrag,
             label: `Scale factor`,
             inputOptions: { changeOnInput: true, min: 0.01, max: 100, step: 0.01, size: ui.FLAGS.SIZE_XS },
             desc: `Factor by which the input vector will be scaled.`
@@ -429,7 +429,7 @@ class IDS {
 
         this.infos[this.TR_NRM_FACTOR] = {
             transform: true,
-            inputType: inputs.Slider,
+            inputType: inputs.NumberDrag,
             label: `Margin`,
             inputOptions: { changeOnInput: true, min: -1, max: 1, step: 0.01, size: ui.FLAGS.SIZE_XS },
             desc: `Margin to apply to the glyph when normalizing it.`
@@ -562,7 +562,7 @@ class IDS {
         };
         this.infos[this.TR_LYR_SCALE_FACTOR] = {
             transform: true,
-            inputType: inputs.Slider,
+            inputType: inputs.NumberDrag,
             label: `Scale factor`,
             inputOptions: { changeOnInput: true, min: 0.01, max: 2, step: 0.01, size: ui.FLAGS.SIZE_XS },
             desc: `Factor by which the layer will be scaled.`
