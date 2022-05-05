@@ -47,6 +47,7 @@ class FamilyInspector extends base {
             },
             '.control': {
                 'flex': '0 1 auto',
+                'margin': '0',
                 'margin-bottom': '5px'
             }
         }, base._Style());

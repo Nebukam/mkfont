@@ -21,22 +21,32 @@ class LayerTransformSettingsInspector extends base {
 
     static __controls = [
         { cl: ControlHeader, options: { label: `Glyph name` }, css: 'hdr' },
-        { options: { propertyId: mkfData.IDS.CHARACTER_NAME } },
+
+        { options: { propertyId: mkfData.IDS.CHARACTER_NAME }, css: 'small' },
+        {
+            cl: nkm.uilib.buttons.Tool, options: {
+                icon: `search-small`, htitle: `Search in glyphs`, variant: ui.FLAGS.MINIMAL, size: ui.FLAGS.SIZE_S,
+            }, css: 'btn'
+        },
+
         { options: { propertyId: mkfData.IDS.INVERTED } },
-        { cl: ControlHeader, options: { label: `Boundaries & Scale` }, css: 'hdr' },
-        { options: { propertyId: mkfData.IDS.TR_LYR_BOUNDS_MODE, inputOnly: true }, css: 'small' },
-        { options: { propertyId: mkfData.IDS.TR_BOUNDS_MODE, inputOnly: true }, css: 'small' },
+        { cl: ControlHeader, options: { label: `Context`, label2: `Layer` }, css: 'hdr' },
+        { options: { propertyId: mkfData.IDS.TR_ANCHOR, inputOnly: true }, css: 'vvsmall' },
+        { options: { propertyId: mkfData.IDS.TR_LYR_BOUNDS_MODE, inputOnly: true }, css: 'vsmall' },
+
+        { options: { propertyId: mkfData.IDS.TR_LYR_SELF_ANCHOR, inputOnly: true }, css: 'vvsmall' },
+        { options: { propertyId: mkfData.IDS.TR_BOUNDS_MODE, inputOnly: true }, css: 'vsmall' },
+
+        { cl: ControlHeader, options: { label: `Mirroring & scale` }, css: 'hdr' },
         { options: { propertyId: mkfData.IDS.TR_MIRROR, inputOnly: true }, css: 'small' },
-        { options: { propertyId: mkfData.IDS.TR_LYR_SCALE_MODE, inputOnly: true }, css: 'small' },
+        { options: { propertyId: mkfData.IDS.TR_LYR_SCALE_MODE, inputOnly: true }, css: 'vsmall' },
         { options: { propertyId: mkfData.IDS.TR_LYR_SCALE_FACTOR }, requireData: true, hideWhen: { fn: isMANUAL } },
         { options: { propertyId: mkfData.IDS.TR_NRM_FACTOR }, requireData: true, hideWhen: { fn: isNRM } },
 
-        { cl: ControlHeader, options: { label: `Vertical align + anchoring` }, css: 'hdr' },
-        { options: { propertyId: mkfData.IDS.TR_LYR_VER_ALIGN, inputOnly: true }, css: 'small' },
-        { options: { propertyId: mkfData.IDS.TR_VER_ALIGN_ANCHOR, inputOnly: true }, css: 'small' },
-        { cl: ControlHeader, options: { label: `Horizontal align + anchoring` }, css: 'hdr' },
-        { options: { propertyId: mkfData.IDS.TR_LYR_HOR_ALIGN, inputOnly: true }, css: 'small' },
-        { options: { propertyId: mkfData.IDS.TR_HOR_ALIGN_ANCHOR, inputOnly: true }, css: 'small' },
+        //{ cl: ControlHeader, options: { label: `Bound anchor` }, css: 'hdr' },
+
+        //{ cl: ControlHeader, options: { label: `Self anchor` }, css: 'hdr' },
+
         { cl: ControlHeader, options: { label: `Offsets` }, css: 'hdr', requireData: true },
         { options: { propertyId: mkfData.IDS.TR_X_OFFSET }, requireData: true },
         { options: { propertyId: mkfData.IDS.TR_Y_OFFSET }, requireData: true },
@@ -60,6 +70,7 @@ class LayerTransformSettingsInspector extends base {
                 //'overflow': 'auto',
                 //'padding': '10px',
                 'align-content': 'flex-start',
+                'align-items': `center`,
             },
             '.control': {
                 'flex': '1 1 100%',
@@ -70,11 +81,12 @@ class LayerTransformSettingsInspector extends base {
             '.header': {
                 'margin': '5px 2px 5px 2px'
             },
-            '.vsmall': {
-                'flex': '1 1 25%'
-            },
-            '.osmall': {
-                'flex': '1 1 80%'
+            '.vsmall': { 'flex': '1 1 25%' },
+            '.vvsmall': { 'flex': '1 1 15%' },
+            '.osmall': { 'flex': '1 1 80%' },
+            '.btn': {
+                'flex': '0 0 32px',
+                'margin': '0 2px 5px 2px',
             }
         }, base._Style());
     }

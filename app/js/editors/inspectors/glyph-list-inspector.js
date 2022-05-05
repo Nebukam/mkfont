@@ -98,6 +98,7 @@ class GlyphListInspector extends base {
                 'grid-template-rows': 'auto auto',
                 'justify-content': `center`,
                 'align-content': `space-between`, //center
+                'margin-bottom': '5px',
             },
             '.box': {
                 'position': 'relative',
@@ -124,6 +125,7 @@ class GlyphListInspector extends base {
             '.drawer': {
                 'padding': `10px`,
                 'background-color': `rgba(19, 19, 19, 0.25)`,
+                'border-radius': '4px',
                 'margin-bottom': '5px',
             },
             ':host(.sel-invalid) .drawer:not(.always-visible), :host(.sel-invalid) .previews': { 'display': 'none' },
@@ -351,12 +353,16 @@ class GlyphListInspector extends base {
 
             mkfData.UTILS.FindCommonValues(
                 this._variantReference,
-                analytics.existing
+                analytics.existing, null,
+                [mkfData.IDS.SHOW_ALL_LAYERS]
             );
+
+            let showAll = refVariant.Get(mkfData.IDS.SHOW_ALL_LAYERS);
 
             this._layerMap = mkfData.UTILS.FindCommonLayersValues(
                 this._variantReference,
-                analytics.existing
+                analytics.existing,
+                showAll
             );
 
             if (this._transformReference) { this._transformReference.Watch(nkm.com.SIGNAL.VALUE_CHANGED, this._OnTransformValueChanged, this); }
@@ -423,6 +429,8 @@ class GlyphListInspector extends base {
 
         let editor = this.editor;
         if (!editor || !this._layerMap) { return; }
+
+        console.log(p_id);
 
         let
             layerId = p_id == mkfData.IDS.CHARACTER_NAME ? p_oldValue : p_layer.Get(mkfData.IDS.CHARACTER_NAME),

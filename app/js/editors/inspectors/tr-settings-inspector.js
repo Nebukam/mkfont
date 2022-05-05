@@ -27,12 +27,12 @@ class TransformSettingsInspector extends base {
         { options: { propertyId: mkfData.IDS.TR_SCALE_MODE, inputOnly: true }, css: 'osmall' },
         { options: { propertyId: mkfData.IDS.TR_SCALE_FACTOR }, requireData: true, hideWhen: { fn: isMANUAL } },
         { options: { propertyId: mkfData.IDS.TR_NRM_FACTOR }, requireData: true, hideWhen: { fn: isNRM } },
-        { cl: mkfWidgets.ControlHeader, options: { label: `Vertical align` }, css: 'header' },
+        { cl: mkfWidgets.ControlHeader, options: { label: `Anchoring & Alignment` }, css: 'header' },
+        { options: { propertyId: mkfData.IDS.TR_ANCHOR, inputOnly: true }, css: 'vvsmall' },
         { options: { propertyId: mkfData.IDS.TR_VER_ALIGN, inputOnly: true }, css: 'small' },
-        { options: { propertyId: mkfData.IDS.TR_VER_ALIGN_ANCHOR, inputOnly: true }, css: 'small' },
-        { cl: mkfWidgets.ControlHeader, options: { label: `Horizontal align` }, css: 'header' },
-        { options: { propertyId: mkfData.IDS.TR_HOR_ALIGN, inputOnly: true }, css: 'small' },
-        { options: { propertyId: mkfData.IDS.TR_HOR_ALIGN_ANCHOR, inputOnly: true }, css: 'small' },
+        //{ cl: mkfWidgets.ControlHeader, options: { label: `Horizontal align` }, css: 'header' },
+        { options: { propertyId: mkfData.IDS.TR_HOR_ALIGN, inputOnly: true }, css: 'vsmall' },
+        
         { cl: mkfWidgets.ControlHeader, options: { label: `Offsets` }, css: 'header', requireData: true }, //, disableWhen: { fn: isXMIN }
         { options: { propertyId: mkfData.IDS.TR_WIDTH_SHIFT }, requireData: true, disableWhen: { fn: isRNRM } }, //
         { options: { propertyId: mkfData.IDS.TR_WIDTH_PUSH }, requireData: true, disableWhen: { fn: isRNRM } }, //
@@ -68,18 +68,13 @@ class TransformSettingsInspector extends base {
             '.control': {
                 'flex': '1 1 100%',
             },
-            '.small': {
-                'flex': '1 1 45%'
-            },
+            '.small': { 'flex': '1 1 45%' },
             '.header': {
                 'margin': '5px 2px 5px 2px'
             },
-            '.vsmall': {
-                'flex': '1 1 25%'
-            },
-            '.osmall': {
-                'flex': '1 1 80%'
-            }
+            '.vsmall': { 'flex': '1 1 25%' },
+            '.vvsmall': { 'flex': '1 1 15%' },
+            '.osmall': { 'flex': '1 1 80%' }
         }, base._Style());
     }
 

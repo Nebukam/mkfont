@@ -96,7 +96,7 @@ class TTFImport {
                 svgStats = {
                     width: gW, //bbox.width,
                     height: baseline, //bsl - bbox.y,
-                    BBox: bbox
+                    bbox: bbox
                 },
                 sShift = bbox.x,
                 sPush = gW - (bbox.width + sShift);
@@ -175,7 +175,7 @@ class TTFImport {
                 svgStats = {
                     width: bbox.width,
                     height: (ascent * scale),
-                    BBox: bbox,
+                    bbox: bbox,
                     path: svgpath(path).translate(-bbox.x, 0).toString()
                 },
                 sShift = bbox.x,
@@ -193,9 +193,8 @@ class TTFImport {
                     [IDS.TR_SCALE_MODE]: ENUMS.SCALE_ASCENDER,
                     [IDS.TR_SCALE_FACTOR]: 1,
                     [IDS.TR_VER_ALIGN]: ENUMS.VALIGN_BASELINE,
-                    [IDS.TR_VER_ALIGN_ANCHOR]: ENUMS.VANCHOR_BOTTOM,
                     [IDS.TR_HOR_ALIGN]: ENUMS.HALIGN_XMIN,
-                    [IDS.TR_HOR_ALIGN_ANCHOR]: ENUMS.HANCHOR_LEFT,
+                    [IDS.TR_ANCHOR]: ENUMS.ANCHOR_BOTTOM_LEFT,
                     [IDS.TR_WIDTH_SHIFT]: sShift,
                     [IDS.TR_WIDTH_PUSH]: sPush,
                 }

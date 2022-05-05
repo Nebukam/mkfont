@@ -19,6 +19,7 @@ const LigaImportSettings = require(`./settings-liga-import-data-block`);
 
 const ContentUpdater = require(`../content-updater`);
 const FamilyFontCache = require(`./family-font-cache`);
+const GlyphVariantRef = require(`./glyph-variant-data-block-reference`);
 
 const domparser = new DOMParser();
 const svgFontString =
@@ -61,6 +62,8 @@ class FamilyDataBlock extends SimpleDataEx {
         this._nullGlyph.isNull = true;
         this._nullGlyph._defaultGlyph._fontObject.remove();
 
+        
+        Glyph.__defaultVariantClass = GlyphVariantRef;
         this._refGlyph = new Glyph();
         this._refGlyph.family = this;
         this._refGlyph.isNull = true;
@@ -68,10 +71,11 @@ class FamilyDataBlock extends SimpleDataEx {
 
         Glyph.__defaultVariantClass = GlyphVariantMissing;
         this._missingGlyph = new Glyph();
-        Glyph.__defaultVariantClass = GlyphVariant;
         this._missingGlyph.family = this;
         this._missingGlyph.activeVariant.Set(IDS.PATH_DATA, SVGOPS.EmptySVGStats());
 
+        Glyph.__defaultVariantClass = GlyphVariant;
+        
         //
 
         this._ligaSettings = nkm.com.Rent(LigaImportSettings);

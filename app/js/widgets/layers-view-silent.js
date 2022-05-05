@@ -5,6 +5,8 @@ const SIGNAL = require("../signal");
 const u = nkm.u;
 const ui = nkm.ui;
 
+const mkfData = require(`../data`);
+
 const LayersView = require(`./layers-view`);
 const LayerControlSilent = require(`./layer-control-silent`);
 
@@ -15,6 +17,10 @@ class LayersViewSilent extends base {
     constructor() { super(); }
 
     static __layerControlClass = LayerControlSilent;
+
+    static __controls = [
+        { options: { propertyId: mkfData.IDS.SHOW_ALL_LAYERS, directSet: true }, requireData: true },
+    ];
 
     _Render() {
         super._Render();

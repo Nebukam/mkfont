@@ -12,6 +12,7 @@ class ControlHeader extends base {
     static __defaultSelectOnActivation = true;
     static __distribute = nkm.com.helpers.OptionsDistribute.Ext()
         .To(`label`, (p_target, p_value) => { p_target._label.Set(p_value); })
+        .To(`label2`, (p_target, p_value) => { p_target._label2.Set(p_value); }, null)
         .To(`htitle`, (p_target, p_value) => { p_target.htitle = p_value; });
 
 
@@ -38,16 +39,19 @@ class ControlHeader extends base {
                 'border-bottom': '1px solid rgba(127, 127, 127, 0.1)',
                 'margin-top': '2px',
                 'margin': '0 2px 5px 2px',
+                'display':`flex`,
+                'flex-flow':`row nowrap`
             },
             '.label': {
-                //'border-bottom': 'rgba(127, 127, 127, 0.1)',
-                //'padding-bottom':'2px',
-                //'font-style':'italic'
-                //'text-align':'center',
+                flex:`1 1 50%`,
                 'text-transform': 'uppercase',
                 'opacity': '0.5',
                 'font-size': `0.65em`
             },
+            '.second': {
+                //'text-align':`right`
+            }
+            
         }, base._Style());
     }
 
@@ -55,6 +59,7 @@ class ControlHeader extends base {
 
         super._Render();
         this._label = new ui.manipulators.Text(ui.dom.El(`div`, { class: `label font-xsmall` }, this._host), false, false);
+        this._label2 = new ui.manipulators.Text(ui.dom.El(`div`, { class: `label second font-xsmall` }, this._host), true, false);
 
     }
 

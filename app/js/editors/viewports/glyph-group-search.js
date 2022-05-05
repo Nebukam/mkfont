@@ -68,7 +68,7 @@ class GlyphGroupSearch extends base {
                 'margin-right': '10px'
             },
             '.main-toggle': { 'min-width': '100px', },
-            '.large': { 'margin-right': '30px' },
+            '.large': { 'margin-right': '10px' },
 
             ':host(.enabled)': { 'background-color': 'rgba(var(--col-active-dark-rgb),0.5)', },
             ':host(:not(.enabled)) .control:not(.main-toggle)': { opacity: 0.5, 'pointer-events': 'none' },

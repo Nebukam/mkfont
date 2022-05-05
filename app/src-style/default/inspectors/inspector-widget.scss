@@ -7,6 +7,6 @@
 @import '../_mixins';
 
 :host{
-    cursor: pointer;
+    //cursor: pointer;
     @include no-select;
 }

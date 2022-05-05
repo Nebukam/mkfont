@@ -82,17 +82,17 @@ class IDS {
         };
 
         this.infos[this.ALPHABETIC] = {
-            inputType: inputs.Number,
+            inputType: inputs.NumberDrag,
             desc: ``
         };
 
         this.infos[this.MATHEMATICAL] = {
-            inputType: inputs.Number,
+            inputType: inputs.NumberDrag,
             desc: ``
         };
 
         this.infos[this.IDEOGRAPHIC] = {
-            inputType: inputs.Number,
+            inputType: inputs.NumberDrag,
             desc: ``
         };
 
@@ -117,16 +117,6 @@ class IDS {
     static ASC_RESAMPLE = 'asc-resample';
     static MONOSPACE = 'monospace';
 
-    static FAMILY_RESAMPLE_IDS =  [
-        this.BASELINE,
-        this.ASCENT,
-        this.DESCENT,
-        this.WIDTH,
-        this.HEIGHT,
-        this.X_HEIGHT,
-        this.CAP_HEIGHT,
-    ];
-
     static {
 
         this.infos[this.WEIGHT_CLASS] = {
@@ -146,64 +136,64 @@ class IDS {
 
         this.infos[this.EM_UNITS] = {
             recompute: true,
-            inputType: inputs.Number,
+            inputType: inputs.NumberDrag,
             label: `EM Size`,
-            inputOptions: { step: 10, min: 20, max: 32000 },
+            inputOptions: { step: 10, min: 2, max: 16000 },
             desc: `specifies the number of coordinate units on the "em square", an abstract square whose height is the intended distance between lines of type in the same type size.\nThis is the size of the design grid on which glyphs are laid out.`,
         };
 
         this.infos[this.CAP_HEIGHT] = {
             recompute: true,
-            inputType: inputs.Number,
+            inputType: inputs.NumberDrag,
             label: `CAP height`,
             desc: `defines the height of uppercase glyphs of the font within the font coordinate system.`
         };
 
         this.infos[this.X_HEIGHT] = {
             recompute: true,
-            inputType: inputs.Number,
+            inputType: inputs.NumberDrag,
             label: `X height`,
             desc: `indicates the height of lowercase glyphs in the font within the font coordinate.`
         };
 
         this.infos[this.ASCENT] = {
             recompute: true,
-            inputType: inputs.Number,
+            inputType: inputs.NumberDrag,
             label: `Ascender`,
-            inputOptions: { step: 1, min: 0, max: 32000 },
+            inputOptions: { step: 1, min: 0, max: 16000 },
             desc: `defines the maximum unaccented height of the font within the font coordinate system.\nRelative to baseline.`
         };
 
         this.infos[this.DESCENT] = {
             recompute: true,
-            inputType: inputs.Number,
+            inputType: inputs.NumberDrag,
             label: `Descender`,
-            inputOptions: { step: 1, min: -32000, max: 0 },
+            inputOptions: { step: 1, min: -16000, max: 0 },
             desc: `defines the maximum unaccented depth of the font.\nRelative to baseline.`
         };
 
         this.infos[this.BASELINE] = {
             recompute: true,
-            inputType: inputs.Number,
+            inputType: inputs.NumberDrag,
             label: `Baseline`,
-            inputOptions: { step: 1, min: 0, max: 32000 },
+            inputOptions: { step: 1, min: 0, max: 16000 },
             desc: `defines the position of the font baseline within the font coordinate system.`
         };
 
         this.infos[this.UNDERLINE_THICKNESS] = {
-            inputType: inputs.Number,
+            inputType: inputs.NumberDrag,
             label: `Underline thickness`,
             desc: `...`
         };
 
         this.infos[this.UNDERLINE_POSITION] = {
-            inputType: inputs.Number,
+            inputType: inputs.NumberDrag,
             label: `Underline position`,
             desc: `...`
         };
 
         this.infos[this.HANGING] = {
-            inputType: inputs.Number,
+            inputType: inputs.NumberDrag,
             desc: ``
         };
 
@@ -249,28 +239,22 @@ class IDS {
 
     static INVERTED = 'inverted';
 
-    static GLYPH_RESAMPLE_IDS = [
-        this.WIDTH,
-        this.HEIGHT,
-        this.EXPORTED_WIDTH,
-    ];
-
     static {
         /*
         this.infos[this.H_ORIGIN_X] = {
-            inputType: inputs.Number,
+            inputType: inputs.NumberDrag,
             desc: `indicates the x-coordinate in the font coordinate system of the origin of a glyph to be used when drawing horizontally oriented text.`
         };
 
         this.infos[this.H_ORIGIN_Y] = {
-            inputType: inputs.Number,
+            inputType: inputs.NumberDrag,
             desc: `indicates the y-coordinate in the font coordinate system of the origin of a glyph to be used when drawing horizontally oriented text.`
         };
         */
 
         this.infos[this.WIDTH] = {
             recompute: true,
-            inputType: inputs.Number,
+            inputType: inputs.NumberDrag,
             inputOptions: { placeholder: `· · ·`, min: 0 },
             label: `Width`,
             desc: `indicates the horizontal advance after rendering a glyph in horizontal orientation.`
@@ -283,19 +267,19 @@ class IDS {
 
         /*
         this.infos[this.V_ORIGIN_X] = {
-            inputType: inputs.Number,
+            inputType: inputs.NumberDrag,
             desc: `indicates the x-coordinate in the font coordinate system of the origin of a glyph to be used when drawing vertically oriented text.`
         };
 
         this.infos[this.V_ORIGIN_Y] = {
-            inputType: inputs.Number,
+            inputType: inputs.NumberDrag,
             desc: `indicates the y-coordinate in the font coordinate system of the origin of a glyph to be used when drawing vertically oriented text.`
         };
         */
 
         this.infos[this.HEIGHT] = {
             recompute: true,
-            inputType: inputs.Number,
+            inputType: inputs.NumberDrag,
             inputOptions: { placeholder: `· · ·` },
             label: `Height`,
             desc: `indicates the vertical advance after rendering a glyph in vertical orientation.`
@@ -343,6 +327,8 @@ class IDS {
     static EMPTY = 'empty';
     static EXPORT_GLYPH = 'export-glyph';
 
+    static SHOW_ALL_LAYERS = 'show-all-layers';
+
     static {
 
         this.infos[this.COLOR_PREVIEW] = {
@@ -378,6 +364,14 @@ class IDS {
             label: `Empty`,
             desc: ``
         };
+
+        this.infos[this.SHOW_ALL_LAYERS] = {
+            label: `Show all shared layers`,
+            inputType: inputs.Boolean,
+            inputOptions: { size: ui.FLAGS.SIZE_XS },
+            desc: `Show all shared layers, not just the ones shared by every glyph in the selection.`
+        };
+
     }
 
     //#endregion
@@ -390,9 +384,8 @@ class IDS {
     static TR_NRM_FACTOR = 'nrm-factor';
 
     static TR_VER_ALIGN = 'valign';
-    static TR_VER_ALIGN_ANCHOR = 'vanchor';
     static TR_HOR_ALIGN = 'halign';
-    static TR_HOR_ALIGN_ANCHOR = 'hanchor';
+    static TR_ANCHOR = 'anchor';
 
     static TR_WIDTH_SHIFT = 'xshift';
     static TR_WIDTH_PUSH = 'xpush';
@@ -404,13 +397,7 @@ class IDS {
 
     static TR_MIRROR = 'mirror';
 
-    static TR_RESAMPLE_IDS = [
-        this.TR_WIDTH_SHIFT,
-        this.TR_WIDTH_PUSH,
-        this.TR_Y_OFFSET,
-        this.TR_X_OFFSET,
-        this.TR_SCALE_FACTOR,
-    ];
+    
 
     static {
 
@@ -451,17 +438,17 @@ class IDS {
         this.infos[this.TR_WIDTH_SHIFT] = {
             transform: true,
             recompute: true,
-            inputType: inputs.Number,
+            inputType: inputs.NumberDrag,
             label: `Shift`,
-            inputOptions: { step: 1, min: -32000, max: 32000, size: ui.FLAGS.SIZE_XXS, placeholder: `· · ·` },
+            inputOptions: { step: 1, min: -16000, max: 16000, size: ui.FLAGS.SIZE_XXS, placeholder: `· · ·` },
             desc: `Append empty space before the glyph.`
         };
         this.infos[this.TR_WIDTH_PUSH] = {
             transform: true,
             recompute: true,
-            inputType: inputs.Number,
+            inputType: inputs.NumberDrag,
             label: `Push`,
-            inputOptions: { step: 1, min: -32000, max: 32000, size: ui.FLAGS.SIZE_XXS, placeholder: `· · ·` },
+            inputOptions: { step: 1, min: -16000, max: 16000, size: ui.FLAGS.SIZE_XXS, placeholder: `· · ·` },
             desc: `Add empty space after the glyph.`
         };
         this.infos[this.TR_AUTO_WIDTH] = {
@@ -476,34 +463,26 @@ class IDS {
         this.infos[this.TR_Y_OFFSET] = {
             transform: true,
             recompute: true,
-            inputType: inputs.Number,
+            inputType: inputs.NumberDrag,
             label: `Vertical Offset`,
-            inputOptions: { step: 1, min: -32000, max: 32000, size: ui.FLAGS.SIZE_XXS, placeholder: `· · ·` },
+            inputOptions: { step: 1, min: -16000, max: 16000, size: ui.FLAGS.SIZE_XXS, placeholder: `· · ·` },
             desc: `A vertical offset applied to the glyph position after everything else is computed.`
         };
         this.infos[this.TR_X_OFFSET] = {
             transform: true,
             recompute: true,
-            inputType: inputs.Number,
+            inputType: inputs.NumberDrag,
             label: `Horizontal Offset`,
-            inputOptions: { step: 1, min: -32000, max: 32000, size: ui.FLAGS.SIZE_XXS, placeholder: `· · ·` },
+            inputOptions: { step: 1, min: -16000, max: 16000, size: ui.FLAGS.SIZE_XXS, placeholder: `· · ·` },
             desc: `An horizontal offset applied to the glyph position after everything else is computed.`
         };
-        
+
         this.infos[this.TR_VER_ALIGN] = {
             transform: true,
             enum: ENUMS.VALIGN,
             inputType: inputs.InlineSelect,
             label: `Align`,
             inputOptions: { catalog: ENUMS.VALIGN, itemKey: nkm.com.IDS.VALUE, size: ui.FLAGS.SIZE_M },
-            desc: `...`
-        };
-        this.infos[this.TR_VER_ALIGN_ANCHOR] = {
-            transform: true,
-            enum: ENUMS.VANCHOR,
-            inputType: inputs.InlineSelect,
-            label: `Anchor`,
-            inputOptions: { catalog: ENUMS.VANCHOR, itemKey: nkm.com.IDS.VALUE, size: ui.FLAGS.SIZE_M },
             desc: `...`
         };
 
@@ -515,14 +494,16 @@ class IDS {
             inputOptions: { catalog: ENUMS.HALIGN, itemKey: nkm.com.IDS.VALUE, size: ui.FLAGS.SIZE_M },
             desc: `...`
         };
-        this.infos[this.TR_HOR_ALIGN_ANCHOR] = {
+
+        this.infos[this.TR_ANCHOR] = {
             transform: true,
-            enum: ENUMS.HANCHOR,
-            inputType: inputs.InlineSelect,
+            enum: ENUMS.ANCHORS,
+            inputType: inputs.Anchor,
             label: `Anchor`,
-            inputOptions: { catalog: ENUMS.HANCHOR, itemKey: nkm.com.IDS.VALUE, size: ui.FLAGS.SIZE_M },
-            desc: `...`
+            //inputOptions: { catalog: ENUMS.ANCHORS, itemKey: nkm.com.IDS.VALUE, size: ui.FLAGS.SIZE_M },
+            desc: `Defines the anchor point of the glyph within the typographic space.`
         };
+
 
         this.infos[this.TR_MIRROR] = {
             transform: true,
@@ -542,8 +523,7 @@ class IDS {
     static TR_LYR_SCALE_MODE = 'lyr-scale';
     static TR_LYR_SCALE_FACTOR = 'lyr-scale-factor';
 
-    static TR_LYR_VER_ALIGN = 'lyr-valign';
-    static TR_LYR_HOR_ALIGN = 'lyr-halign';
+    static TR_LYR_SELF_ANCHOR = 'lyr-anchor';
 
     static CHARACTER_NAME = 'lyr-char';
     static CHARACTER_STRUCT = 'lyr-struct';
@@ -588,31 +568,50 @@ class IDS {
             desc: `Factor by which the layer will be scaled.`
         };
 
-        this.infos[this.TR_LYR_VER_ALIGN] = {
+        this.infos[this.TR_LYR_SELF_ANCHOR] = {
             transform: true,
-            enum: ENUMS.VANCHOR,
-            inputType: inputs.InlineSelect,
-            label: `Align`,
-            inputOptions: { catalog: ENUMS.VANCHOR, itemKey: nkm.com.IDS.VALUE, size: ui.FLAGS.SIZE_M },
-            desc: `...`
+            inputType: inputs.Anchor,
+            label: `Self anchor`,
+            //inputOptions: { changeOnInput: true, min: 0.01, max: 2, step: 0.01, size: ui.FLAGS.SIZE_XS },
+            desc: `Factor by which the layer will be scaled.`
         };
 
-        this.infos[this.TR_LYR_HOR_ALIGN] = {
-            transform: true,
-            enum: ENUMS.HANCHOR,
-            inputType: inputs.InlineSelect,
-            label: `Align`,
-            inputOptions: { catalog: ENUMS.HANCHOR, itemKey: nkm.com.IDS.VALUE, size: ui.FLAGS.SIZE_M },
-            desc: `...`
-        };
+
 
         this.infos[this.CIRCULAR_REFERENCE] = {
             label: `Circular reference`,
             desc: `The current value creates a circular reference :(`
         };
+
     }
 
+    static GLYPH_RESAMPLE_IDS = [
+        this.WIDTH,
+        this.HEIGHT,
+        this.EXPORTED_WIDTH,
+    ];
+
+    static TR_RESAMPLE_IDS = [
+        this.TR_WIDTH_SHIFT,
+        this.TR_WIDTH_PUSH,
+        this.TR_Y_OFFSET,
+        this.TR_X_OFFSET,
+        this.TR_SCALE_FACTOR,
+    ];
+
+    static FAMILY_RESAMPLE_IDS = [
+        this.BASELINE,
+        this.ASCENT,
+        this.DESCENT,
+        this.WIDTH,
+        this.HEIGHT,
+        this.X_HEIGHT,
+        this.CAP_HEIGHT,
+    ];
+
     //#endregion
+
+
 
     static GetInfos(p_id) {
         return p_id in this.infos ? this.infos[p_id] : null;

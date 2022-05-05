@@ -50,7 +50,9 @@ class GlyphVariantInspectorItem extends base {
 
         this._rectTracker = new ui.helpers.RectTracker(this._Bind(this._OnPreviewRectUpdate));
 
-        this._dataObserver.Hook(SIGNAL.VARIANT_UPDATED, () => { this._OnDataUpdate(this._data); }, this);
+        this._dataObserver
+            .Hook(SIGNAL.SELECTED_LAYER_CHANGED, (p_variant, p_layer) => { this._UpdatePreviewLayer(p_layer); }, this)
+            .Hook(SIGNAL.VARIANT_UPDATED, () => { this._OnDataUpdate(this._data); }, this);
     }
 
     _OnPaintChange() {
@@ -95,6 +97,7 @@ class GlyphVariantInspectorItem extends base {
                 'flex': '1 1 auto',
                 'padding': `10px`,
                 'background-color': `rgba(19, 19, 19, 0.25)`,
+                'border-radius': '4px',
             },
             '.binder': {
                 'width': '100%',
@@ -268,6 +271,7 @@ class GlyphVariantInspectorItem extends base {
             });
             this._popoutPreview.content.data = this._data;
             this._popoutPreview.content.glyphInfos = this._glyphInfos;
+            this._UpdatePreviewLayer();
         }
 
     }
@@ -291,13 +295,20 @@ class GlyphVariantInspectorItem extends base {
             this._copyPathBtn.disabled = isNullGlyph;
             this._editInPlaceBtn.disabled = isNullGlyph;
             this._glyphDeleteBtn.disabled = isNullGlyph;
-            if (this._popoutPreview) { this._popoutPreview.content.glyphInfos = this._glyphInfos; }
+            if (this._popoutPreview) {
+                this._popoutPreview.content.glyphInfos = this._glyphInfos;
+            }
         } else {
             this._binder.data = null;
         }
 
         if (this._popoutPreview) { this._popoutPreview.content.data = this._data; }
 
+    }
+
+    _UpdatePreviewLayer(p_layer) {
+        this._glyphPreview.glyphLayer = this._data.selectedLayer;
+        if (this._popoutPreview) { this._popoutPreview.content.glyphLayer = this._data.selectedLayer; }
     }
 
     _OnDataUpdated(p_data) {
@@ -312,6 +323,7 @@ class GlyphVariantInspectorItem extends base {
             this._binder.data = binding;
             this._editInPlaceBtn.disabled = binding ? true : false;
         }
+        this._UpdatePreviewLayer();
     }
 
     _CleanUp() {

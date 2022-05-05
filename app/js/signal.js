@@ -105,6 +105,13 @@ class SIGNAL {
   * @type {symbol}
   * @customtag read-only
   */
+   static SELECTED_LAYER_CHANGED = Symbol(`selected-layer-changed`);
+
+  /**
+  * @description TODO
+  * @type {symbol}
+  * @customtag read-only
+  */
    static LAYER_VALUE_CHANGED = Symbol(`layer-value-changed`);
 
 }

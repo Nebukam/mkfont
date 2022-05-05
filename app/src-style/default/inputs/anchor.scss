@@ -1,0 +1,67 @@
+/*-------------------------------*/
+/*<!---- @nkmjs/ui-library ----!>*/
+/*-------------------------------*/
+
+@import '../_variables';
+@import '../_mixins';
+@import '../_constants';
+
+:host{
+    --dot-size: min(var(--size-xs), calc(var(--size) / 3));
+    --sm-size: calc(var(--dot-size) * 0.5);
+}
+
+.grid{
+    &::before{
+        content: "";
+        position: absolute;
+        width: calc(100% - var(--dot-size) - 1px);
+        height: calc(100% - var(--dot-size) - 1px);
+        margin: calc(var(--dot-size) * 0.5 - 1px);
+        border: 1px solid black;
+    }
+}
+
+.anch {
+
+    border-radius: 100%;
+
+    &::after {
+        content: "";
+        border-radius: 100%;
+        position: absolute;
+        width: var(--sm-size);
+        height: var(--sm-size);
+        margin: calc(calc(var(--dot-size) - var(--sm-size)) * 0.5);
+        background-color: gray;
+    }
+
+    &::before {
+        content: "";
+        border-radius: 100%;
+        position: absolute;
+        width: var(--dot-size);
+        height: var(--dot-size);
+        background-color: var(--col-active);
+        display: none;
+    }
+
+    &:hover {
+        &::after {
+            background-color: white;
+        }
+        &::before {
+            background-color: white;
+        }
+    }
+
+    &.selected {
+        &::after {
+            background-color: white;
+        }
+        &::before {
+            display: inherit;
+        }
+    }
+
+}

@@ -36,6 +36,8 @@ class GlyphVariantDataBlock extends SimpleDataEx {
         this._index = 0;
         this._layers = new nkm.collections.List();
 
+        this._selectedLayer = null;
+
         this._layerObserver = new nkm.com.signals.Observer();
         this._layerObserver
             .Hook(nkm.com.SIGNAL.UPDATED, this._ScheduleTransformationUpdate, this)
@@ -203,9 +205,18 @@ class GlyphVariantDataBlock extends SimpleDataEx {
 
     _ClearLayers() {
         while (!this._layers.isEmpty) { this.RemoveLayer(this._layers.last).Release(); }
+        this.selectedLayer = null;
+    }
+
+    get selectedLayer() { return this._selectedLayer; }
+    set selectedLayer(p_value) {
+        if (this._selectedLayer == p_value) { return; }
+        this._selectedLayer = p_value;
+        this.Broadcast(SIGNAL.SELECTED_LAYER_CHANGED, this, this._selectedLayer);
     }
 
     _CleanUp() {
+        this.selectedLayer = null;
         this._ClearLayers();
         this.glyph = null;
         super._CleanUp();

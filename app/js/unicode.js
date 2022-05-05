@@ -32457,7 +32457,7 @@ class UNICODE extends nkm.com.helpers.Singleton {
 			'1f46e':{ u:'1f46e', i:31997, name:'POLICE OFFICER', cat:c.So,   canon:k._0, block:b[298]},
 			'1f46f':{ u:'1f46f', i:31998, name:'WOMAN WITH BUNNY EARS', cat:c.So,   canon:k._0, block:b[298]},
 			'1f470':{ u:'1f470', i:31999, name:'BRIDE WITH VEIL', cat:c.So,   canon:k._0, block:b[298]},
-			'1f471':{ u:'1f471', i:32000, name:'PERSON WITH BLOND HAIR', cat:c.So,   canon:k._0, block:b[298]},
+			'1f471':{ u:'1f471', i:16000, name:'PERSON WITH BLOND HAIR', cat:c.So,   canon:k._0, block:b[298]},
 			'1f472':{ u:'1f472', i:32001, name:'MAN WITH GUA PI MAO', cat:c.So,   canon:k._0, block:b[298]},
 			'1f473':{ u:'1f473', i:32002, name:'MAN WITH TURBAN', cat:c.So,   canon:k._0, block:b[298]},
 			'1f474':{ u:'1f474', i:32003, name:'OLDER MAN', cat:c.So,   canon:k._0, block:b[298]},

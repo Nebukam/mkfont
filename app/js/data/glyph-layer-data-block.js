@@ -27,6 +27,7 @@ class GlyphLayerDataBlock extends SimpleDataEx {
 
         this._glyphInfos = null;
         this._isCircular = false;
+        this._useCount = -1;
 
     }
 
@@ -45,10 +46,8 @@ class GlyphLayerDataBlock extends SimpleDataEx {
         p_values[IDS.TR_LYR_SCALE_MODE] = { value: ENUMS.SCALE_NONE };
         p_values[IDS.TR_LYR_SCALE_FACTOR] = { value: 1 };
         p_values[IDS.TR_NRM_FACTOR] = { value: 0 };
-        p_values[IDS.TR_LYR_VER_ALIGN] = { value: ENUMS.VANCHOR_CENTER };
-        p_values[IDS.TR_VER_ALIGN_ANCHOR] = { value: ENUMS.VANCHOR_CENTER };
-        p_values[IDS.TR_LYR_HOR_ALIGN] = { value: ENUMS.HANCHOR_CENTER };
-        p_values[IDS.TR_HOR_ALIGN_ANCHOR] = { value: ENUMS.HANCHOR_CENTER };
+        p_values[IDS.TR_ANCHOR] = { value: ENUMS.ANCHOR_CENTER };
+        p_values[IDS.TR_LYR_SELF_ANCHOR] = { value: ENUMS.ANCHOR_CENTER };
         p_values[IDS.TR_X_OFFSET] = { value: 0 };
         p_values[IDS.TR_Y_OFFSET] = { value: 0 };
         p_values[IDS.TR_MIRROR] = { value: ENUMS.MIRROR_NONE };
@@ -131,6 +130,7 @@ class GlyphLayerDataBlock extends SimpleDataEx {
     }
 
     _CleanUp() {
+        this._useCount = -1;
         this.importedVariant = null;
         this._variant = null;
         this._index = 0;

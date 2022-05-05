@@ -35,6 +35,8 @@ class LayerControl extends base {
         this._builder.defaultControlClass = PropertyControl;
         this._builder.defaultCSS = `control`;
 
+        this.focusArea = this;
+
     }
 
     _PostInit() {
@@ -99,6 +101,12 @@ class LayerControl extends base {
                 },
                 */
                 {
+                    icon: `link`, htitle: `Go to glyph`, variant: ui.FLAGS.MINIMAL, size: ui.FLAGS.SIZE_S, trigger: {
+                        fn: () => { if (this._data._glyphInfos) { this.editor.inspectedData.Set(this._data._glyphInfos); } },
+                        arg: ui.FLAGS.SELF
+                    }
+                },
+                {
                     htitle: `Toggle visibility`,
                     cl: nkm.uilib.inputs.Checkbox,
                     iconOn: `visible`, iconOff: `hidden`,
@@ -132,11 +140,23 @@ class LayerControl extends base {
     _OnDataUpdated(p_data) {
         super._OnDataUpdated(p_data);
         let char = p_data.Get(mkfData.IDS.CHARACTER_NAME);
-        this._label.Set(char && char != `` ? `layer : ${char} ` : `(empty layer)`);
+        if (p_data._useCount <= 0) { this._label.Set(char && char != `` ? `layer : ${char} ` : `(empty layer)`); }
+        else { this._label.Set(char && char != `` ? `layer (×${p_data._useCount}) : ${char}` : `(empty layer)`); }
+
         this._flags.Set(__circular, p_data.Get(mkfData.IDS.CIRCULAR_REFERENCE));
         let viz = p_data.Get(mkfData.IDS.EXPORT_GLYPH);
         this._btnVisible.currentValue = viz;
         this._flags.Set(__false, !viz);
+    }
+
+    _FocusGain() {
+        super._FocusGain();
+        if (this._data) { this._data._variant.selectedLayer = this._data; }
+    }
+
+    _FocusLost() {
+        super._FocusLost();
+        if (this._data && this._data._variant.selectedLayer == this._data) { this._data._variant.selectedLayer = null; }
     }
 
     _CleanUp() {

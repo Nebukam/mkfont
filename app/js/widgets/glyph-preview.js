@@ -85,7 +85,7 @@ class GlyphPreview extends base {
         this._oobTag.options = {
             label: `out of bounds`,
             flavor: nkm.com.FLAGS.ERROR,
-            htitle: `The glyph is out of bounds and won't be added to the font.\nKeep it within -32000..32000`
+            htitle: `The glyph is out of bounds and won't be added to the font.\nKeep it within -16000..16000`
         };
         this._oobTag.visible = false;
 
@@ -98,6 +98,8 @@ class GlyphPreview extends base {
         this._emptyTag.visible = false;
 
     }
+
+    set glyphLayer(p_value) { this._glyphRenderer.layer = p_value; }
 
     get glyphInfos() { return this._glyphInfos; }
     set glyphInfos(p_value) {
@@ -132,6 +134,11 @@ class GlyphPreview extends base {
         this._glyphRenderer.Set(p_data);
         this._oobTag.visible = p_data.Get(mkfData.IDS.OUT_OF_BOUNDS);
         this._emptyTag.visible = p_data.Get(mkfData.IDS.EMPTY);
+    }
+
+    _CleanUp(){
+        this.glyphLayer = null;
+        super._CleanUp();
     }
 
 }

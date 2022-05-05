@@ -262,7 +262,7 @@ class FontEditor extends base {
                 let data = p_forward ? p_self.newRange : p_self.oldRange;
                 if (data) { this.SetActiveRange(data); }
             }
-        });
+        }, true);
 
         this._cachedRangeData = p_rangeData;
 

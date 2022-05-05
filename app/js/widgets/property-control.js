@@ -74,7 +74,9 @@ class PropertyControl extends base {
             ':host(.selected)': {
                 'background-color': 'rgba(127,127,127,0.25)'
             },
-
+            ':host(.input-first) .input-field':{
+                'flex': '0 0 auto'
+            },
             ':host(.inherited) .input-field, :host(.inherited) .label': {
                 //'pointer-events': 'none !important',
                 'opacity': '0.8'
@@ -82,6 +84,9 @@ class PropertyControl extends base {
             '.label': {
                 'white-space': 'nowrap',
                 'flex': '1 1 50%'
+            },
+            '.label:not(:first-child)': {
+                'margin-left':`4px`
             },
             ':host(.false) .label': {
                 'text-decoration': 'line-through var(--col-error-dark)',
@@ -128,9 +133,11 @@ class PropertyControl extends base {
         if (p_value) {
             this._label._element.style.order = `1`;
             this._inputOrder = 0;
+            this.classList.add(`input-first`);
         } else {
             this._label._element.style.order = `0`;
             this._inputOrder = 1;
+            this.classList.remove(`input-first`);
         }
 
         if (this._input) { this._input.order = this._inputOrder; }
@@ -212,6 +219,7 @@ class PropertyControl extends base {
     }
 
     _OnDataUpdated(p_data) {
+
         super._OnDataUpdated(p_data);
 
         this._inherited = this._isNullable ? this.localValueObj.value == null : false;
@@ -256,7 +264,6 @@ class PropertyControl extends base {
         let valueObj = this.localValueObj;
 
         if (this._directSet) {
-            this._data.Set(this._valueID, null);
             this._data.CommitValueUpdate(this._valueID, valueObj, null, false);
             return;
         }

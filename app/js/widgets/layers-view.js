@@ -6,6 +6,7 @@ const u = nkm.u;
 const ui = nkm.ui;
 
 const ControlHeader = require(`./control-header`);
+const PropertyControl= require(`./property-control`);
 const LayerControl = require(`./layer-control`);
 
 const __nolayer = `nolayer`;
@@ -19,6 +20,9 @@ class LayersView extends base {
     _Init() {
         super._Init();
         ui.helpers.HostSelStack(this, false, false);
+
+        this._builder.defaultControlClass = PropertyControl;
+        this._builder.defaultCSS = `control`;
 
         this._dataObserver.Hook(SIGNAL.LAYERS_UPDATED, this._Bind(this._RefreshLayerControls));
 
@@ -36,7 +40,6 @@ class LayersView extends base {
                 'flex-flow': 'column nowrap',
                 //'padding': '5px',
                 'margin-bottom': '5px',
-                'align-items': `center`
             },
             '.control': {
                 'flex': '1 1 auto',
@@ -51,7 +54,7 @@ class LayersView extends base {
             },
             '.label': {
                 'flex': '1 1 auto',
-                'direction': 'rtl'
+                'text-align': 'center'
             },
             '.btn': {
                 'margin': '3px'
@@ -70,7 +73,11 @@ class LayersView extends base {
             '.item': {
                 'flex': '0 1 auto',
                 'margin': `3px`,
-                'user-select': 'none'
+                'user-select': 'none',
+                'border-radius': '4px',
+            },
+            '.toolbar':{
+                'align-self': `center`
             }
         }, base._Style());
     }
@@ -111,7 +118,8 @@ class LayersView extends base {
         };
 
         this._listCtnr = ui.El(`div`, { class: `list` }, this._host);
-
+        this._label = new ui.manipulators.Text(ui.dom.El(`div`, { class: `label font-xsmall` }, this._listCtnr), false, false);
+        this._label.Set(`<i>no layers</i>`);
     }
 
     _OnDataChanged(p_oldData) {
@@ -130,6 +138,8 @@ class LayersView extends base {
     }
 
     _RefreshLayerControls() {
+
+        this._label._element.style.removeProperty(`display`);
 
         if (!this._data) {
             this._items.forEach((item) => { item.Release(); });
@@ -157,6 +167,7 @@ class LayersView extends base {
         }
 
         for (let i = 0, n = layerList.length; i < n; i++) { this._items[(n - 1) - i].data = layerList[i]; }
+        if (layerList.length > 0) { this._label._element.style.setProperty(`display`, `none`); }
     }
 
 

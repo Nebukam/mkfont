@@ -35,7 +35,7 @@ class ENUMS {
         { name: `Mirror Horizontal`, [nkm.com.IDS.VALUE]: this.MIRROR_H, icon: 'mirror-hor' },
         { name: `Mirror Vertical`, [nkm.com.IDS.VALUE]: this.MIRROR_V, icon: 'mirror-ver' },
         { name: `Mirror Horizontal & Vertical`, [nkm.com.IDS.VALUE]: this.MIRROR_H_AND_V, icon: 'mirror-both' },
-        { name: `Don't mirror`, [nkm.com.IDS.VALUE]: this.MIRROR_NONE, icon: 'clear' },
+        { name: `Don't mirror`, [nkm.com.IDS.VALUE]: this.MIRROR_NONE, icon: 'close-small' },
     ]);
 
     static BOUNDS_OUTSIDE = 0;
@@ -68,7 +68,7 @@ class ENUMS {
         { name: `EM (from family Metrics)`, [nkm.com.IDS.VALUE]: this.SCALE_EM, icon: 'text-em' },
         { name: `Manual`, [nkm.com.IDS.VALUE]: this.SCALE_MANUAL, icon: 'edit' },
         { name: `Normalized (uses family Metrics)`, [nkm.com.IDS.VALUE]: this.SCALE_NORMALIZE, icon: 'scale' },
-        { name: `None `, [nkm.com.IDS.VALUE]: this.SCALE_NONE, icon: 'clear' },
+        { name: `None `, [nkm.com.IDS.VALUE]: this.SCALE_NONE, icon: 'close-small' },
     ]);
 
 
@@ -87,6 +87,27 @@ class ENUMS {
         //{ name: `To Value`, [nkm.com.IDS.VALUE]: 2, icon: 'edit' },
     ]);
 
+    static ANCHOR_TOP_LEFT = 0;
+    static ANCHOR_TOP = 1;
+    static ANCHOR_TOP_RIGHT = 2;
+    static ANCHOR_LEFT = 3;
+    static ANCHOR_CENTER = 4;
+    static ANCHOR_RIGHT = 5;
+    static ANCHOR_BOTTOM_LEFT = 6;
+    static ANCHOR_BOTTOM = 7;
+    static ANCHOR_BOTTOM_RIGHT = 8;
+
+    static ANCHORS = nkm.data.catalogs.CreateFrom({ name: `Anchoring alignment`, autoSort: false }, [
+        { name: `Top left `, [nkm.com.IDS.VALUE]: this.ANCHOR_TOP_LEFT, icon: 'placement-top-left' },
+        { name: `Top`, [nkm.com.IDS.VALUE]: this.ANCHOR_TOP, icon: 'placement-top' },
+        { name: `Top right`, [nkm.com.IDS.VALUE]: this.ANCHOR_TOP_RIGHT, icon: 'placement-top-right' },
+        { name: `Left `, [nkm.com.IDS.VALUE]: this.ANCHOR_TOP_LEFT, icon: 'placement-left' },
+        { name: `Center`, [nkm.com.IDS.VALUE]: this.ANCHOR_TOP, icon: 'placement-center' },
+        { name: `Right`, [nkm.com.IDS.VALUE]: this.ANCHOR_TOP_RIGHT, icon: 'placement-right' },
+        { name: `Bottom left `, [nkm.com.IDS.VALUE]: this.ANCHOR_TOP_LEFT, icon: 'placement-bottom-left' },
+        { name: `Bottom`, [nkm.com.IDS.VALUE]: this.ANCHOR_TOP, icon: 'placement-bottom' },
+        { name: `Bottom right`, [nkm.com.IDS.VALUE]: this.ANCHOR_TOP_RIGHT, icon: 'placement-bottom-right' },
+    ]);
 
     static VANCHOR_BOTTOM = 0;
     static VANCHOR_CENTER = 1;
@@ -188,7 +209,7 @@ class ENUMS {
     static LYR_SCALE = nkm.data.catalogs.CreateFrom({ name: `Scale`, autoSort: false }, [
         { name: `Manual`, [nkm.com.IDS.VALUE]: this.SCALE_MANUAL, icon: 'edit' },
         { name: `Normalized`, [nkm.com.IDS.VALUE]: this.SCALE_NORMALIZE, icon: 'scale' },
-        { name: `None `, [nkm.com.IDS.VALUE]: this.SCALE_NONE, icon: 'clear' },
+        { name: `None `, [nkm.com.IDS.VALUE]: this.SCALE_NONE, icon: 'close-small' },
     ]);
 
 }

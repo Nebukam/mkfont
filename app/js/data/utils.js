@@ -33,7 +33,8 @@ class UTILS {
 
     }
 
-    static FindCommonValues(p_reference, p_dataList, p_dataMember = null) {
+    static FindCommonValues(p_reference, p_dataList, p_dataMember = null, backupList = null) {
+
 
         let
             refValues = p_reference._values,
@@ -41,11 +42,12 @@ class UTILS {
             dataCount = p_dataList.length,
             valCount = 0,
             ignoreCount = 0,
-            searchState = 0;
+            searchState = 0,
+            backup = {};
 
-        for (var v in refValues) {
-            refValues[v].value = null;
-        }
+        if (backupList) { backupList.forEach(id => { backup[id] = refValues[id].value; }) }
+
+        for (var v in refValues) { refValues[v].value = null; }
 
         compareloop: for (let i = 0; i < dataCount; i++) {
 
@@ -81,6 +83,13 @@ class UTILS {
             }
         }
 
+        if (backupList) {
+            backupList.forEach(id => {
+                refValues[id].value = backup[id];
+                delete commonValues[id];
+            })
+        }
+
         if (searchState == 2) {
             if (ignoreCount == valCount) { return false; }
 
@@ -94,7 +103,7 @@ class UTILS {
 
     }
 
-    static FindCommonLayersValues(p_reference, p_dataList) {
+    static FindCommonLayersValues(p_reference, p_dataList, p_includeAll = false) {
 
         p_reference._ClearLayers();
 
@@ -109,31 +118,32 @@ class UTILS {
             variant._layers.ForEach(layer => {
 
                 let
-                    id = layer.Get(IDS.CHARACTER_NAME),
-                    obj = null;
+                    id = layer.Get(IDS.CHARACTER_NAME) || `____null___`,
+                    obj = layerIds[id];
 
-                if (id in layerIds) { obj = layerIds[id]; }
-                else { obj = { count: 0, layers: [] }; layerIds[id] = obj; }
+                if (!obj) { obj = { count: 0, layers: [], nfos: layer._glyphInfos }; layerIds[id] = obj; }
 
                 obj.count += 1;
                 obj.layers.push(layer);
 
-                if(layer.expanded){obj.expanded = true;}
-
-                if (obj.count == vCount) {
-
-                    let newLayer = nkm.com.Rent(this.__layerClass);
-                    p_reference.AddLayer(newLayer);
-                    newLayer.expanded = obj.expanded;
-                    newLayer._glyphInfos = layer._glyphInfos;
-                    this.FindCommonValues(newLayer, obj.layers);
-                    layerMap.set(newLayer, obj.layers);
-
-                }
+                if (layer.expanded) { obj.expanded = true; }
 
             });
 
         });
+
+        for (var lid in layerIds) {
+            let obj = layerIds[lid];
+            if ((p_includeAll || obj.count == vCount) && obj.count >= 2) {
+                let newLayer = nkm.com.Rent(this.__layerClass);
+                p_reference.AddLayer(newLayer);
+                newLayer.expanded = obj.expanded;
+                newLayer._useCount = obj.layers.length;
+                newLayer._glyphInfos = obj.nfos;
+                this.FindCommonValues(newLayer, obj.layers);
+                layerMap.set(newLayer, obj.layers);
+            }
+        }
 
         return layerMap;
 
@@ -169,6 +179,15 @@ class UTILS {
             resampled[id] = val * p_scale;
         }
         return resampled;
+    }
+
+    static ResampleValues(p_values, p_ids, p_scale = 1) {
+        if (p_scale == 1) { return; }
+        p_ids.forEach(id => {
+            let obj = p_values[id];
+            if (!obj || obj.value == null) { return; }
+            obj.value *= p_scale;
+        });
     }
 
 }

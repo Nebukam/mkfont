@@ -77,6 +77,7 @@ const __dummySVG = document.createElementNS("http://www.w3.org/2000/svg", "svg")
 __dummyDiv.appendChild(__dummySVG);
 document.body.appendChild(__dummyDiv);
 const __pathSVG = document.createElementNS("http://www.w3.org/2000/svg", "path");
+__dummySVG.appendChild(__pathSVG);
 
 SVGGraphicsElement.prototype.getBBox = function () {
     var rect;
@@ -222,13 +223,13 @@ class SVGOperations {
                         .toString();
 
                     result.path = mergedPaths;
-                    result.BBox = this.GetBBox(mergedPaths);
+                    result.bbox = this.GetBBox(mergedPaths);
 
 
                 } else {
 
                     result.path = mergedPaths;
-                    result.BBox = this.GetBBox(mergedPaths);
+                    result.bbox = this.GetBBox(mergedPaths);
 
                     let viewBox = svg.getAttribute(`viewBox`);
 
@@ -241,8 +242,8 @@ class SVGOperations {
                             wAtt = Number(svg.getAttribute(`width`)),
                             hAtt = Number(svg.getAttribute(`height`));
 
-                        result.width = Number.isNaN(wAtt) ? result.BBox.width : wAtt;
-                        result.height = Number.isNaN(hAtt) ? result.BBox.height : hAtt;
+                        result.width = Number.isNaN(wAtt) ? result.bbox.width : wAtt;
+                        result.height = Number.isNaN(hAtt) ? result.bbox.height : hAtt;
                     }
                 }
 
@@ -266,7 +267,7 @@ class SVGOperations {
                 exists: true,
                 markedBBox: false,
                 path: path,
-                BBox: this.GetBBox(path),
+                bbox: this.GetBBox(path),
                 width: 0,
                 height: 0,
                 emptyPath: true
@@ -329,7 +330,7 @@ class SVGOperations {
     static GetBBox(p_path) {
 
         __pathSVG.setAttribute(`d`, p_path);
-        return __pathSVG.getBBox();
+        return __dummySVG.getBBox();
 
     }
 
@@ -364,12 +365,12 @@ class SVGOperations {
                 height: 0,
                 width: Math.max(sShift + sPush, 0),
                 path: p_svgStats.path,
-                bbox: p_svgStats.BBox
+                bbox: p_svgStats.bbox
             };
         }
 
         let
-            bbox = p_svgStats.BBox,
+            bbox = p_svgStats.bbox,
             scale = 1,
             heightRef = p_svgStats.height,
             widthRef = p_svgStats.width,
@@ -478,15 +479,23 @@ class SVGOperations {
                 break;
         }
 
-        switch (p_settings.Get(IDS.TR_VER_ALIGN_ANCHOR)) {
-            case ENUMS.VANCHOR_BOTTOM:
+        let anchor = p_settings.Get(IDS.TR_ANCHOR);
+
+        switch (anchor) {
+            case ENUMS.ANCHOR_BOTTOM_LEFT:
+            case ENUMS.ANCHOR_BOTTOM:
+            case ENUMS.ANCHOR_BOTTOM_RIGHT:
                 offsetY += 0;
                 break;
-            case ENUMS.VANCHOR_CENTER:
+            case ENUMS.ANCHOR_LEFT:
+            case ENUMS.ANCHOR_CENTER:
+            case ENUMS.ANCHOR_RIGHT:
                 offsetY += heightRef * 0.5;
                 break;
             default:
-            case ENUMS.VANCHOR_TOP:
+            case ENUMS.ANCHOR_TOP_LEFT:
+            case ENUMS.ANCHOR_TOP:
+            case ENUMS.ANCHOR_TOP_RIGHT:
                 offsetY += heightRef;
                 break;
         }
@@ -499,15 +508,21 @@ class SVGOperations {
 
         if (mono) { widthRef = p_context.w; }
 
-        switch (p_settings.Get(IDS.TR_HOR_ALIGN_ANCHOR)) {
-            case ENUMS.HANCHOR_LEFT:
+        switch (anchor) {
+            case ENUMS.ANCHOR_TOP_LEFT:
+            case ENUMS.ANCHOR_LEFT:
+            case ENUMS.ANCHOR_BOTTOM_LEFT:
                 offsetX += 0;
                 break;
-            case ENUMS.HANCHOR_CENTER:
+            case ENUMS.ANCHOR_TOP:
+            case ENUMS.ANCHOR_CENTER:
+            case ENUMS.ANCHOR_BOTTOM:
                 offsetX -= fitW * 0.5;
                 break;
             default:
-            case ENUMS.HANCHOR_RIGHT:
+            case ENUMS.ANCHOR_TOP_RIGHT:
+            case ENUMS.ANCHOR_RIGHT:
+            case ENUMS.ANCHOR_BOTTOM_RIGHT:
                 offsetX -= fitW;
                 break;
         }
@@ -619,50 +634,77 @@ class SVGOperations {
                 break;
         }
 
+        let
+            ctxAnchor = p_settings.Get(IDS.TR_ANCHOR),
+            selfAnchor = p_settings.Get(IDS.TR_LYR_SELF_ANCHOR);
         // Adjust offsetX based on context & input
         // context
-        switch (p_settings.Get(IDS.TR_LYR_HOR_ALIGN)) {
-            case ENUMS.HANCHOR_LEFT:
+        switch (ctxAnchor) {
+            case ENUMS.ANCHOR_TOP_LEFT:
+            case ENUMS.ANCHOR_LEFT:
+            case ENUMS.ANCHOR_BOTTOM_LEFT:
                 break;
-            case ENUMS.HANCHOR_CENTER:
+            case ENUMS.ANCHOR_TOP:
+            case ENUMS.ANCHOR_CENTER:
+            case ENUMS.ANCHOR_BOTTOM:
                 offsetX += ctxW * 0.5;
                 break;
-            case ENUMS.HANCHOR_RIGHT:
+            case ENUMS.ANCHOR_TOP_RIGHT:
+            case ENUMS.ANCHOR_RIGHT:
+            case ENUMS.ANCHOR_BOTTOM_RIGHT:
                 offsetX += ctxW;
                 break;
         }
         // path
-        switch (p_settings.Get(IDS.TR_HOR_ALIGN_ANCHOR)) {
-            case ENUMS.HANCHOR_LEFT:
+        switch (selfAnchor) {
+            case ENUMS.ANCHOR_TOP_LEFT:
+            case ENUMS.ANCHOR_LEFT:
+            case ENUMS.ANCHOR_BOTTOM_LEFT:
                 break;
-            case ENUMS.HANCHOR_CENTER:
+            case ENUMS.ANCHOR_TOP:
+            case ENUMS.ANCHOR_CENTER:
+            case ENUMS.ANCHOR_BOTTOM:
                 offsetX -= pWidth * 0.5;
                 break;
-            case ENUMS.HANCHOR_RIGHT:
+            case ENUMS.ANCHOR_TOP_RIGHT:
+            case ENUMS.ANCHOR_RIGHT:
+            case ENUMS.ANCHOR_BOTTOM_RIGHT:
                 offsetX -= pWidth;
                 break;
         }
 
         // Adjust offsetY based on context & input
         // context
-        switch (p_settings.Get(IDS.TR_LYR_VER_ALIGN)) {
-            case ENUMS.VANCHOR_TOP:
+        switch (ctxAnchor) {
+            case ENUMS.ANCHOR_TOP_LEFT:
+            case ENUMS.ANCHOR_TOP:
+            case ENUMS.ANCHOR_TOP_RIGHT:
                 break;
-            case ENUMS.VANCHOR_CENTER:
+            case ENUMS.ANCHOR_LEFT:
+            case ENUMS.ANCHOR_CENTER:
+            case ENUMS.ANCHOR_RIGHT:
                 offsetY += ctxH * 0.5;
                 break;
-            case ENUMS.VANCHOR_BOTTOM:
+            case ENUMS.ANCHOR_BOTTOM_LEFT:
+            case ENUMS.ANCHOR_BOTTOM:
+            case ENUMS.ANCHOR_BOTTOM_RIGHT:
                 offsetY += ctxH;
                 break;
         }
         // path
-        switch (p_settings.Get(IDS.TR_VER_ALIGN_ANCHOR)) {
-            case ENUMS.VANCHOR_TOP:
+        switch (selfAnchor) {
+            case ENUMS.ANCHOR_TOP_LEFT:
+            case ENUMS.ANCHOR_TOP:
+            case ENUMS.ANCHOR_TOP_RIGHT:
                 break;
-            case ENUMS.VANCHOR_CENTER:
+            case ENUMS.ANCHOR_LEFT:
+            case ENUMS.ANCHOR_CENTER:
+            case ENUMS.ANCHOR_RIGHT:
                 offsetY -= pHeight * 0.5;
                 break;
-            case ENUMS.VANCHOR_BOTTOM:
+            case ENUMS.ANCHOR_BOTTOM_LEFT:
+            case ENUMS.ANCHOR_BOTTOM:
+            case ENUMS.ANCHOR_BOTTOM_RIGHT:
                 offsetY -= pHeight;
                 break;
         }
@@ -698,7 +740,7 @@ class SVGOperations {
         p_pathData.width *= p_scale;
         p_pathData.height *= p_scale;
         p_pathData.path = svgpath(p_pathData.path).scale(p_scale, p_scale).toString();
-        let bbox = p_pathData.BBox;
+        let bbox = p_pathData.bbox;
         bbox.x *= p_scale;
         bbox.y *= p_scale;
         bbox.width *= p_scale;
