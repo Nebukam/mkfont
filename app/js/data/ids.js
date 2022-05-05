@@ -17,6 +17,8 @@ class IDS {
 
     static infos = {};
 
+    static EMPTY_PATH_CONTENT = `M 0 0 L 0 0 z`;
+
     //#region family properties 
 
     static ID = 'id';
@@ -138,7 +140,7 @@ class IDS {
             recompute: true,
             inputType: inputs.NumberDrag,
             label: `EM Size`,
-            inputOptions: { step: 1, min: 2, max: 16000 },
+            inputOptions: { step: 1, min: 20, max: 16000 },
             desc: `specifies the number of coordinate units on the "em square", an abstract square whose height is the intended distance between lines of type in the same type size.\nThis is the size of the design grid on which glyphs are laid out.`,
         };
 

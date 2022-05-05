@@ -68,13 +68,13 @@ class PropertyControl extends base {
                 'flex-flow': 'row nowrap',
                 'align-items': 'center',
                 'flex': '1 1 auto',
-                
+
                 'margin': '0 2px 5px 2px',
             },
             ':host(.selected)': {
                 'background-color': 'rgba(127,127,127,0.25)'
             },
-            ':host(.input-first) .input-field':{
+            ':host(.input-first) .input-field': {
                 'flex': '0 0 auto'
             },
             ':host(.inherited) .input-field, :host(.inherited) .label': {
@@ -86,7 +86,7 @@ class PropertyControl extends base {
                 'flex': '1 1 50%'
             },
             '.label:not(:first-child)': {
-                'margin-left':`4px`
+                'margin-left': `4px`
             },
             ':host(.false) .label': {
                 'text-decoration': 'line-through var(--col-error-dark)',
@@ -242,6 +242,8 @@ class PropertyControl extends base {
     }
 
     _OnValueSubmit(p_input, p_value) {
+
+        if (this._releasing || this._released || !this._data) { return; }
 
         if (this._directSet) {
             this._data.Set(this._valueID, p_value);

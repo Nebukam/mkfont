@@ -29,6 +29,9 @@ class GlyphLayerDataBlock extends SimpleDataEx {
         this._isCircular = false;
         this._useCount = -1;
 
+        this._dirtyLayer = true;
+        this._computedPath = null;
+
     }
 
     _ResetValues(p_values) {
@@ -61,7 +64,7 @@ class GlyphLayerDataBlock extends SimpleDataEx {
     set index(p_value) {
         if (this._index == p_value) { return; }
         this._index = p_value;
-        if (this._variant) { this._variant._ScheduleTransformationUpdate(); }
+        if (this._variant) { this._DirtyLayer(); }
     }
 
     get importedVariant() { return this._importedVariant; }
@@ -70,20 +73,24 @@ class GlyphLayerDataBlock extends SimpleDataEx {
         if (this._importedVariant == p_value) { return; }
         if (this._importedVariant) {
             this._importedVariant.layerUsers.Remove(this);
-            this._importedVariant.Unwatch(SIGNAL.LAYERS_UPDATED, this._OnImportedVariantLayersUpdated, this);
+            this._importedVariant
+                .Unwatch(SIGNAL.LAYERS_UPDATED, this._OnImportedVariantLayersUpdated, this)
+                .Unwatch(nkm.com.SIGNAL.UPDATED, this._DirtyLayer, this);
         }
 
         this._importedVariant = p_value;
 
         if (this._importedVariant) {
             this._importedVariant.layerUsers.Add(this);
-            this._importedVariant.Watch(SIGNAL.LAYERS_UPDATED, this._OnImportedVariantLayersUpdated, this);
+            this._importedVariant
+                .Watch(SIGNAL.LAYERS_UPDATED, this._OnImportedVariantLayersUpdated, this)
+                .Watch(nkm.com.SIGNAL.UPDATED, this._DirtyLayer, this);
         } else {
             this._isCircular = false;
             this.Set(IDS.PATH, null); //Clear path
         }
 
-        this._variant._ScheduleTransformationUpdate();
+        this._DirtyLayer();
 
     }
 
@@ -124,12 +131,23 @@ class GlyphLayerDataBlock extends SimpleDataEx {
     CommitValueUpdate(p_id, p_valueObj, p_oldValue, p_silent = false) {
         if (p_id == IDS.CHARACTER_NAME) { this._RetrieveGlyphInfos(); }
         super.CommitValueUpdate(p_id, p_valueObj, p_oldValue, p_silent);
-        let infos = IDS.GetInfos(p_id);
-        if (!infos) { return; }
-        if (infos.recompute && this._variant) { this._variant._ScheduleTransformationUpdate(); }
     }
 
+    _DirtyLayer() {
+        if (this._isCircular) { return; }
+        this._dirtyLayer = true;
+        this._variant._ScheduleTransformationUpdate();
+    }
+
+    CommitUpdate() {
+        this._DirtyLayer();
+        super.CommitUpdate();
+    }
+
+    _CleanLayer() { this._dirtyLayer = false; }
+
     _CleanUp() {
+        this._computedPath = null;
         this._useCount = -1;
         this.importedVariant = null;
         this._variant = null;
@@ -138,6 +156,7 @@ class GlyphLayerDataBlock extends SimpleDataEx {
         this._glyphInfos = null;
         this._isCircular = false;
         super._CleanUp();
+        this._dirtyLayer = true;
     }
 
 

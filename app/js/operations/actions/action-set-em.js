@@ -24,7 +24,7 @@ class ActionSetEM extends ActionSetPropertyValue {
         if (resample) {
 
             let family = p_target;
-            /*
+
             family.BatchSet(mkfData.UTILS.Resample(
                 family.Values(mkfData.IDS.FAMILY_RESAMPLE_IDS),
                 mkfData.IDS.FAMILY_RESAMPLE_IDS,
@@ -34,48 +34,48 @@ class ActionSetEM extends ActionSetPropertyValue {
                 family._transformSettings.Values(mkfData.IDS.TR_RESAMPLE_IDS),
                 mkfData.IDS.TR_RESAMPLE_IDS,
                 scaleFactor), true);
-            */
 
-            mkfData.UTILS.ResampleValues(family._values, mkfData.IDS.FAMILY_RESAMPLE_IDS, scaleFactor, true);
-            mkfData.UTILS.ResampleValues(family._transformSettings._values, mkfData.IDS.TR_RESAMPLE_IDS, scaleFactor, true);
 
-            family.CommitUpdate();
-            family._transformSettings.CommitUpdate();
+            //mkfData.UTILS.ResampleValues(family._values, mkfData.IDS.FAMILY_RESAMPLE_IDS, scaleFactor, true);
+            //mkfData.UTILS.ResampleValues(family._transformSettings._values, mkfData.IDS.TR_RESAMPLE_IDS, scaleFactor, true);
+
+            //family.CommitUpdate();
+            //family._transformSettings.CommitUpdate();
 
             family._glyphs._array.forEach(glyph => {
                 glyph._variants.ForEach((variant) => {
 
                     // Glyph values
-                    /*
+
                     variant.BatchSet(mkfData.UTILS.Resample(
                         variant.Values(mkfData.IDS.GLYPH_RESAMPLE_IDS),
                         mkfData.IDS.GLYPH_RESAMPLE_IDS,
                         scaleFactor), true);
-                        */
 
-                    mkfData.UTILS.ResampleValues(variant._values, mkfData.IDS.GLYPH_RESAMPLE_IDS, scaleFactor, true);
+
+                    //mkfData.UTILS.ResampleValues(variant._values, mkfData.IDS.GLYPH_RESAMPLE_IDS, scaleFactor, true);
 
                     // Glyph transforms
-                    /*
+
                     let tr = variant._transformSettings;
                     tr.BatchSet(mkfData.UTILS.Resample(
                         tr.Values(mkfData.IDS.TR_RESAMPLE_IDS),
                         mkfData.IDS.TR_RESAMPLE_IDS,
-                        scaleFactor), true);*/
+                        scaleFactor), true);
 
-                    mkfData.UTILS.ResampleValues(variant._transformSettings._values, mkfData.IDS.TR_RESAMPLE_IDS, scaleFactor, true);
+                    //mkfData.UTILS.ResampleValues(variant._transformSettings._values, mkfData.IDS.TR_RESAMPLE_IDS, scaleFactor, true);
 
                     // Layers transforms
                     variant._layers.ForEach(layer => {
-                        /*
+
                         layer.BatchSet(mkfData.UTILS.Resample(
-                            ltr.Values(mkfData.IDS.TR_RESAMPLE_IDS),
+                            layer.Values(mkfData.IDS.TR_RESAMPLE_IDS),
                             mkfData.IDS.TR_RESAMPLE_IDS,
-                            scaleFactor), true);*/
-                            mkfData.UTILS.ResampleValues(layer._values, mkfData.IDS.TR_RESAMPLE_IDS, scaleFactor, true);
-                            layer.CommitUpdate();
+                            scaleFactor), true);
+                        //mkfData.UTILS.ResampleValues(layer._values, mkfData.IDS.TR_RESAMPLE_IDS, scaleFactor, true);
+                        //layer.CommitUpdate();
                     });
-                    
+
                     variant.CommitUpdate();
 
                 });

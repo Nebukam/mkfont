@@ -149,6 +149,8 @@ class GlyphDataBlock extends SimpleDataEx {
         }
 
         this._defaultGlyph.Reset(false, true); // will clear SVG stuff since family == null
+        this._defaultGlyph._ClearLayers();
+        
         this._unicode = null;
         this._unicodeInfos = null;
 

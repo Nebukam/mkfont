@@ -111,43 +111,9 @@ class GlyphVariantInspectorItem extends base {
     _Render() {
 
         this._importToolbar = this.Attach(ui.WidgetBar, `item toolbar`, this._host);
-        this._importToolbar.stretch = ui.WidgetBar.FLAG_STRETCH;
-
-        this._glyphPreview = this.Attach(mkfWidgets.GlyphPreview, `item preview`, this._host);
-        this.forwardData.To(this._glyphPreview);
-        this._rectTracker.Add(this._glyphPreview);
-
-        //Transform foldout
-
-        this._foldoutTranforms = this.Attach(nkm.uilib.widgets.Foldout, `item drawer`, this._host);
-        this._foldoutTranforms.options = {
-            title: `Transformations`, icon: `view-grid`, prefId: `transforms`, expanded: true, //TODO CHANGE BACK to true
-            handles: [
-                {
-                    icon: 'clipboard-read', htitle: 'Paste transforms (Ctrl Alt V)',
-                    trigger: { fn: () => { this.editor.cmdGlyphPasteTransform.Execute(this._data); } },
-                }
-            ]
-        };
-
-        //Layers foldout
-        this._foldoutLayers = this.Attach(nkm.uilib.widgets.Foldout, `item drawer`, this._host);
-        this._foldoutLayers.options = {
-            title: `Layers`, icon: `three-lines`, prefId: `layers`, expanded: true,
-            handles: [
-                {
-                    icon: 'clipboard-write', htitle: 'Copy layers',
-                    trigger: { fn: () => { this.editor.cmdLayersCopy.Execute(this._data); } },
-                },
-                {
-                    icon: 'clipboard-read', htitle: 'Paste layers (hold Alt to add instead of replace)',
-                    trigger: { fn: () => { this.editor.cmdLayersPaste.Execute(this._data); } },
-                },
-            ]
-        };
-
         this._importToolbar.options = {
             inline: true,
+            stretch: ui.WidgetBar.FLAG_STRETCH,
             defaultWidgetClass: nkm.uilib.buttons.Tool,
             handles: [
                 {
@@ -189,42 +155,92 @@ class GlyphVariantInspectorItem extends base {
             ]
         };
 
-        this._binder = this.Attach(mkfWidgets.ResourceBinding, `binder control`);
-        this._binder.visible = false;
+        this._glyphPreview = this.Attach(mkfWidgets.GlyphPreview, `item preview`, this._host);
+        this.forwardData.To(this._glyphPreview);
+        this._rectTracker.Add(this._glyphPreview);
 
-        this._transformInspector = this.Attach(TransformSettingsInspector, `item`, this._foldoutTranforms);
-        this.forwardData.To(this._transformInspector, { dataMember: `transformSettings` });
+        //Transforms
 
-        this._builder.host = this._foldoutTranforms.body;
+        let foldout = this._Foldout(
+            {
+                title: `Transformations`, icon: `view-grid`, prefId: `transforms`, expanded: true, //TODO CHANGE BACK to true
+                handles: [
+                    {
+                        icon: 'clipboard-read', htitle: 'Paste transforms (Ctrl Alt V)',
+                        trigger: { fn: () => { this.editor.cmdGlyphPasteTransform.Execute(this._data); } },
+                    }
+                ]
+            },
+            [
+                { cl: TransformSettingsInspector, dataMember: `_transformSettings` },
+            ]
+        );
 
-        this._layers = this.Attach(mkfWidgets.LayersView, `item`, this._foldoutLayers);
-        this.forwardData.To(this._layers);
+        this._builder.host = foldout.body;
+
+        //Layers
+
+        foldout = this._Foldout(
+            {
+                title: `Layers`, icon: `three-lines`, prefId: `layers`, expanded: true,
+                handles: [
+                    {
+                        icon: 'clipboard-write', htitle: 'Copy layers',
+                        trigger: { fn: () => { this.editor.cmdLayersCopy.Execute(this._data); } },
+                    },
+                    {
+                        icon: 'clipboard-read', htitle: 'Paste layers (hold Alt to add instead of replace)',
+                        trigger: { fn: () => { this.editor.cmdLayersPaste.Execute(this._data); } },
+                    },
+                ]
+            },
+            [
+                { cl: mkfWidgets.LayersView, member: { owner: this, id: `_layers` } },
+            ]
+        );
 
         // Settings
 
-        this._foldoutSettings = this.Attach(nkm.uilib.widgets.Foldout, `drawer`, this._host);
-        this._foldoutSettings.options = { title: `Settings`, icon: `gear`, prefId: `glyphSettings`, expanded: true };
+        foldout = this._Foldout(
+            { title: `Settings`, icon: `gear`, prefId: `glyphSettings`, expanded: true },
+            [
+                //{ cl: mkfWidgets.ControlHeader, options: { label: `Export` } },
+                { options: { propertyId: mkfData.IDS.EXPORT_GLYPH } },
+            ]
+        );
 
-        let builder = new nkm.datacontrols.helpers.ControlBuilder(this);
-        builder.options = { host: this._foldoutSettings, cl: mkfWidgets.PropertyControl, css: `item` };
-        this.forwardData.To(builder);
+        this._binder = this.Attach(mkfWidgets.ResourceBinding, `binder control`, foldout);
+        this._binder.visible = false;
 
-        builder.Build([
-            //{ cl: mkfWidgets.ControlHeader, options: { label: `Export` } },
-            { options: { propertyId: mkfData.IDS.EXPORT_GLYPH } },
-        ]);
+        // Stats
 
+        foldout = this._Foldout(
+            { title: `Stats`, icon: `infos`, prefId: `glyph-infos`, expanded: true },
+            null, `always-visible`);
 
-        //Layers foldout
-        this._foldoutInfos = this.Attach(nkm.uilib.widgets.Foldout, `item drawer always-visible`, this._host);
-        this._foldoutInfos.options = { title: `Stats`, icon: `infos`, prefId: `glyph-infos`, expanded: true };
-        this._foldoutInfos.visible = false; //TODO: Remove
+        foldout.visible = false;
 
-        this._glyphStats = this.Attach(mkfWidgets.GlyphStats, `item`, this._foldoutInfos);
+        this._glyphStats = this.Attach(mkfWidgets.GlyphStats, `item`, foldout);
 
         super._Render();
 
         this.focusArea = this;
+    }
+
+    _Foldout(p_foldout, p_controls, p_css = ``, p_host = null) {
+
+        let foldout = this.Attach(nkm.uilib.widgets.Foldout, `item drawer${p_css ? ' '+p_css : ''}`, p_host || this);
+        foldout.options = p_foldout;
+
+        if (p_controls) {
+            let builder = new nkm.datacontrols.helpers.ControlBuilder(this);
+            builder.options = { host: foldout, cl: mkfWidgets.PropertyControl, css: `item` };
+            this.forwardData.To(builder);
+            builder.Build(p_controls);
+        }
+
+        return foldout;
+
     }
 
     get glyphInfos() { return this._glyphInfos; }

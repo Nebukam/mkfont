@@ -262,7 +262,7 @@ class SVGOperations {
     static EmptySVGStats() {
 
         let
-            path = `M 0 0 L 0 0 z`,
+            path = IDS.EMPTY_PATH_CONTENT,
             result = {
                 exists: true,
                 markedBBox: false,

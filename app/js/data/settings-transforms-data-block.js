@@ -71,10 +71,7 @@ class TransformSettingsDataBlock extends SimpleDataEx {
 
         let
             rw = this._glyphVariantOwner.Get(IDS.WIDTH),
-            path = SVGOPS.FitPath(this,
-                this._glyphVariantOwner.family._contextInfos,
-                pathData
-            ),
+            path = SVGOPS.FitPath(this, this._glyphVariantOwner.family._contextInfos, pathData),
             w = 0;
 
 
@@ -96,15 +93,28 @@ class TransformSettingsDataBlock extends SimpleDataEx {
                 let ref = item.importedVariant;
                 if (ref && !item._isCircular && item.Get(IDS.EXPORT_GLYPH)) {
 
-                    let layerPath = ref.Get(IDS.PATH);
-                    if (item.Get(IDS.INVERTED)) { layerPath = svgpr.reverse(layerPath); }
-                    let lp = SVGOPS.FitLayerPath(
-                        item, path, w, this._glyphVariantOwner.Resolve(IDS.HEIGHT),
-                        layerPath, ref.Get(IDS.EXPORTED_WIDTH), ref.Resolve(IDS.HEIGHT));
-                    item._values[IDS.PATH].value = lp;
+                    let layerCP = item.Get(IDS.PATH);
 
-                    bbmin = Math.min(bbmin, lp.bbox.left, lp.bbox.right, lp.bbox.top, lp.bbox.bottom);
-                    bbmax = Math.max(bbmax, lp.bbox.left, lp.bbox.right, lp.bbox.top, lp.bbox.bottom);
+                    //if (item._dirtyLayer) {
+
+                        //this layer has been modified, refit its path
+
+                        let layerPath = ref.Get(IDS.PATH);
+                        if (item.Get(IDS.INVERTED)) { layerPath = svgpr.reverse(layerPath); }
+
+                        layerCP = SVGOPS.FitLayerPath(
+                            item, path, w, this._glyphVariantOwner.Resolve(IDS.HEIGHT),
+                            layerPath, ref.Get(IDS.EXPORTED_WIDTH), ref.Resolve(IDS.HEIGHT));
+
+                        item._values[IDS.PATH].value = layerCP;
+                        item._CleanLayer();
+
+                    //}
+
+                    let bb = layerCP.bbox;
+
+                    bbmin = Math.min(bbmin, bb.left, bb.right, bb.top, bb.bottom);
+                    bbmax = Math.max(bbmax, bb.left, bb.right, bb.top, bb.bottom);
 
                 } else {
                     item._values[IDS.PATH].value = null;
@@ -114,14 +124,14 @@ class TransformSettingsDataBlock extends SimpleDataEx {
 
         let
             pathConcat = this._glyphVariantOwner._ConcatPaths(path.path),
-            oob = (bbmin < -24000 || bbmax < -24000 || bbmin > 24000 || bbmax > 24000 );
+            oob = (bbmin < -24000 || bbmax < -24000 || bbmin > 24000 || bbmax > 24000);
 
         this._glyphVariantOwner.BatchSet({
             //[IDS.WIDTH]: rw,
             [IDS.EXPORTED_WIDTH]: w,
             [IDS.PATH]: pathConcat, //path.pathReversed || path.path,
             [IDS.OUT_OF_BOUNDS]: oob,
-            [IDS.EMPTY]: pathConcat === `M 0 0 L 0 0 z`,
+            [IDS.EMPTY]: pathConcat === IDS.EMPTY_PATH_CONTENT,
         });
 
     }

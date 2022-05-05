@@ -11,6 +11,8 @@ const mkfData = require(`../data`);
 
 const GlyphCanvasRenderer = require(`./glyph-canvas-renderer`);
 
+const __rscBound = `rsc-bound`;
+
 const base = nkm.datacontrols.ControlWidget;
 class GlyphSlot extends base {
     constructor() { super(); }
@@ -31,7 +33,7 @@ class GlyphSlot extends base {
         this._glyhpVariant = null;
         this._glyphInfos = null;
 
-        this._flags.Add(this, mkfData.IDS.OUT_OF_BOUNDS, mkfData.IDS.EMPTY, mkfData.IDS.EXPORT_GLYPH);
+        this._flags.Add(this, mkfData.IDS.OUT_OF_BOUNDS, mkfData.IDS.EMPTY, mkfData.IDS.EXPORT_GLYPH, __rscBound);
 
         this._dataObserver.Hook(SIGNAL.VARIANT_UPDATED, this._UpdateGlyphPreview, this);
 
@@ -146,6 +148,9 @@ class GlyphSlot extends base {
                 'transform': 'translate(-50%, -50%) rotate(45deg)',
                 'width': `1px`, 'height': `120%`,
                 'background-color': `var(--col-error)`
+            },
+            ':host(.rsc-bound)':{
+                
             }
         }, base._Style());
     }

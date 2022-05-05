@@ -62,7 +62,7 @@ class FamilyDataBlock extends SimpleDataEx {
         this._nullGlyph.isNull = true;
         this._nullGlyph._defaultGlyph._fontObject.remove();
 
-        
+
         Glyph.__defaultVariantClass = GlyphVariantRef;
         this._refGlyph = new Glyph();
         this._refGlyph.family = this;
@@ -75,7 +75,7 @@ class FamilyDataBlock extends SimpleDataEx {
         this._missingGlyph.activeVariant.Set(IDS.PATH_DATA, SVGOPS.EmptySVGStats());
 
         Glyph.__defaultVariantClass = GlyphVariant;
-        
+
         //
 
         this._ligaSettings = nkm.com.Rent(LigaImportSettings);
@@ -286,7 +286,7 @@ class FamilyDataBlock extends SimpleDataEx {
     //#region properties update
 
     CommitUpdate() {
-        this._id.name = `${this.Get(IDS.FAMILY)}-${this.Get(IDS.FONT_STYLE)}`;
+        if (this._id) { this._id.name = `${this.Get(IDS.FAMILY)}-${this.Get(IDS.FONT_STYLE)}`; }
         super.CommitUpdate();
     }
 
@@ -455,6 +455,14 @@ class FamilyDataBlock extends SimpleDataEx {
             g.Release();
         }
 
+        this._nullGlyph.Reset(false, true);
+        this._nullGlyph._defaultGlyph.Reset(false, true);
+        this._nullGlyph._defaultGlyph._ClearLayers();
+
+        this._refGlyph.Reset(false, true);
+        this._refGlyph._defaultGlyph.Reset(false, true);
+        this._refGlyph._defaultGlyph._ClearLayers();
+        
         /////
         this._glyphs.Clear();
         this._glyphsMap = {};

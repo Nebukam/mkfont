@@ -108,7 +108,12 @@ class FontEditor extends base {
 
         this.shortcuts.Create("Ctrl Z", this._actionStack.Undo);
         this.shortcuts.Create("Ctrl Y", this._actionStack.Redo);
-        this.shortcuts.Create("Ctrl A", { fn: () => { this._viewport._selStack.data.RequestSelectAll(); } }).Strict();
+        this.shortcuts.Create("Ctrl A", {
+            fn: () => {
+                this._viewport._selStack.data.RequestSelectAll();
+                nkm.ui.dom.ClearHighlightedText();
+            }
+        }).Strict();
 
     }
 

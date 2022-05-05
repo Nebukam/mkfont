@@ -90,7 +90,8 @@ class FamilyDataBlockJSONSerializer extends nkm.data.serialization.json.DataBloc
                     variantObj[__ID_lyrs] = layers;
                     variant._layers.ForEach(lyr => {
                         layers.push({
-                            [__ID_values]: lyr.Values()
+                            [__ID_values]: lyr.Values(),
+                            expanded:lyr.expanded
                         });
                     });
                 }
@@ -118,6 +119,7 @@ class FamilyDataBlockJSONSerializer extends nkm.data.serialization.json.DataBloc
      */
     static DeserializeContent(p_serial, p_data, p_options = null, p_meta = null) {
 
+        console.log(p_serial);
         // First load family data specifics
         p_data.BatchSet(p_serial[__ID_values]);
         p_data._transformSettings.BatchSet(p_serial[__ID_tr]);
@@ -169,6 +171,7 @@ class FamilyDataBlockJSONSerializer extends nkm.data.serialization.json.DataBloc
             let layers = layerInfos[i];
             layers.forEach(layer => {
                 let layerInstance = nkm.com.Rent(GlyphLayer);
+                layerInstance.expanded = layer.expanded;
                 variant.AddLayer(layerInstance);
                 layerInstance.BatchSet(layer[__ID_values]);
             });
