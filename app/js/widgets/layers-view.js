@@ -139,11 +139,13 @@ class LayersView extends base {
 
     _RefreshLayerControls() {
 
+
         this._label._element.style.removeProperty(`display`);
 
         if (!this._data) {
-            this._items.forEach((item) => { item.Release(); });
-            this._items.length = 0;
+
+            //this._items.forEach((item) => { item.Release(); });
+            //this._items.length = 0;
             return;
         }
 
@@ -168,6 +170,12 @@ class LayersView extends base {
 
         for (let i = 0, n = layerList.length; i < n; i++) { this._items[(n - 1) - i].data = layerList[i]; }
         if (layerList.length > 0) { this._label._element.style.setProperty(`display`, `none`); }
+    }
+
+    _CleanUp(){
+        this._items.forEach((item) => { item.Release(); });
+        this._items.length = 0;
+        super._CleanUp();
     }
 
 

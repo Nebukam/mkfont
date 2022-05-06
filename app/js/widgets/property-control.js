@@ -266,6 +266,7 @@ class PropertyControl extends base {
         let valueObj = this.localValueObj;
 
         if (this._directSet) {
+            valueObj.value = null;
             this._data.CommitValueUpdate(this._valueID, valueObj, null, false);
             return;
         }

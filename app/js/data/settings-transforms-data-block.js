@@ -37,6 +37,11 @@ class TransformSettingsDataBlock extends SimpleDataEx {
         p_values[IDS.TR_AUTO_WIDTH] = { value: true };
         p_values[IDS.TR_Y_OFFSET] = { value: 0, nullable: true, propagate: true };
         p_values[IDS.TR_MIRROR] = { value: ENUMS.MIRROR_NONE };
+        p_values[IDS.TR_SKEW_ROT_ORDER] = { value: ENUMS.SKR_ORDER_R_X_Y, nullable: true, propagate: true };
+        p_values[IDS.TR_ROTATION] = { value: 0, nullable: true, propagate: true };
+        p_values[IDS.TR_ROTATION_ANCHOR] = { value: ENUMS.ANCHOR_CENTER, nullable: true, propagate: true };
+        p_values[IDS.TR_SKEW_X] = { value: 0, nullable: true, propagate: true };
+        p_values[IDS.TR_SKEW_Y] = { value: 0, nullable: true, propagate: true };
 
     }
 
@@ -89,36 +94,44 @@ class TransformSettingsDataBlock extends SimpleDataEx {
 
 
         if (!this._glyphVariantOwner.layers.isEmpty) {
+            let
+                prevLayer = null,
+                prevLayerData = null;
             this._glyphVariantOwner.layers.ForEach(item => {
                 let ref = item.importedVariant;
                 if (ref && !item._isCircular && item.Get(IDS.EXPORT_GLYPH)) {
 
-                    let layerCP = item.Get(IDS.PATH);
+                    let
+                        layerCP = item.Get(IDS.PATH),
+                        layerPath = ref.Get(IDS.PATH);
 
-                    //if (item._dirtyLayer) {
+                    if (item.Get(IDS.INVERTED)) { layerPath = svgpr.reverse(layerPath); }
 
-                        //this layer has been modified, refit its path
-
-                        let layerPath = ref.Get(IDS.PATH);
-                        if (item.Get(IDS.INVERTED)) { layerPath = svgpr.reverse(layerPath); }
-
+                    if (item.Get(IDS.USE_PREV_LAYER) && prevLayerData) {
+                        layerCP = SVGOPS.FitLayerPath(
+                            item, prevLayerData, prevLayerData.width, prevLayerData.HEIGHT,
+                            layerPath, ref.Get(IDS.EXPORTED_WIDTH), ref.Resolve(IDS.HEIGHT));
+                    } else {
                         layerCP = SVGOPS.FitLayerPath(
                             item, path, w, this._glyphVariantOwner.Resolve(IDS.HEIGHT),
                             layerPath, ref.Get(IDS.EXPORTED_WIDTH), ref.Resolve(IDS.HEIGHT));
+                    }
 
-                        item._values[IDS.PATH].value = layerCP;
-                        item._CleanLayer();
-
-                    //}
+                    item._values[IDS.PATH].value = layerCP;
+                    item._CleanLayer();
 
                     let bb = layerCP.bbox;
+                    prevLayerData = layerCP;
 
                     bbmin = Math.min(bbmin, bb.left, bb.right, bb.top, bb.bottom);
                     bbmax = Math.max(bbmax, bb.left, bb.right, bb.top, bb.bottom);
 
                 } else {
+                    //prevLayerData = null; //So 'prev layer' is actually "closest valid layer"
                     item._values[IDS.PATH].value = null;
                 }
+
+                prevLayer = item;
             });
         }
 

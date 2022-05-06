@@ -51,17 +51,13 @@ class EditorListImport extends base {
                 'flex': '1 1 auto',
                 'min-height': 0,
             },
+            '.frst': { 'width': `300px`, },
             '.list': {
                 'position': 'relative',
-                'width': '300px',
-                //'padding': '10px',
+                'width': '350px',
                 'background-color': 'rgba(0,0,0,0.2)',
                 'overflow': 'auto',
                 'min-height': '0',
-            },
-            '.settings': {
-                'width': '300px',
-                //'height': '376px'
             },
             '.preview': {
                 'position': 'relative',
@@ -74,33 +70,22 @@ class EditorListImport extends base {
                 'width': '100%',
                 'height': '100%',
             },
-            '.isover': {
-                'background-color': 'rgba(27,27,27,0.8)',
-            },
+            '.isover': { 'background-color': 'rgba(27,27,27,0.8)', },
             '.identity': {
                 'width': '100%',
-                'max-width':`330px`
+                'max-width': `330px`
             },
             '.header': {
                 'display': 'flex',
                 'flex-flow': 'column nowrap',
                 'flex': '1 1 auto',
                 'min-height': '0',
-                'width':`calc(100% - 22px)`,
+                'width': `calc(100% - 22px)`,
                 'align-content': 'flex-start',
                 'border-radius': '4px',
-                'padding':`10px`,
+                'padding': `10px`,
                 'border': `1px solid rgba(127, 127, 127, 0.25)`,
-            },
-            '.header .control':{
-                'max-width': `275px`
-            },
-            '.control': {
-                'flex': '0 1 auto',
-                'max-width': '296px'
-            },
-            '.small': {
-                // 'flex': '1 1 45%'
+                'margin-bottom': `10px`
             },
             '.tagbar': {
                 '@': ['absolute-bottom'],
@@ -115,11 +100,11 @@ class EditorListImport extends base {
 
         // First col
 
-        let column = ui.El(`div`, { class: `column` }, this._host);
+        let column = ui.El(`div`, { class: `column frst` }, this._host);
         this._header = ui.El(`div`, { class: `item header` }, column);
 
         let builder = new nkm.datacontrols.helpers.ControlBuilder(this);
-        builder.options = { host:this._header, cl:mkfWidgets.PropertyControl, css:`control` };
+        builder.options = { host: this._header, cl: mkfWidgets.PropertyControl, css: `control` };
         this.forwardData.To(builder);
 
         builder.Build([
@@ -129,17 +114,16 @@ class EditorListImport extends base {
 
         this._builder = builder;
 
-        this._settingsInspector = this.Attach(mkfInspectors.TransformSettings, `item settings`, column);
-        this.forwardData.To(this._settingsInspector);
-
         builder = new nkm.datacontrols.helpers.ControlBuilder(this);
-        builder.options = { host:column, cl:mkfWidgets.PropertyControl, css:`control` };
+        builder.options = { host: column, cl: mkfWidgets.PropertyControl, css: `control` };
         this.forwardData.To(builder);
 
         builder.Build([
-            { cl: mkfWidgets.ControlHeader, options: { label: `Extras` } },
             { options: { propertyId: mkfData.IDS_EXT.IMPORT_BIND_RESOURCE } },
         ]);
+
+        this._settingsInspector = this.Attach(mkfInspectors.TransformSettings, `item settings`, column);
+        this.forwardData.To(this._settingsInspector);
 
         // Second col
 

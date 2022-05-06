@@ -22,6 +22,7 @@ class LayerControl extends base {
     constructor() { super(); }
 
     static __widgetExpandData = false;
+    static __clearBuilderOnRelease = false;
 
     static __controls = [
         { cl: LayerTransformSettings, options: {} }
@@ -141,7 +142,7 @@ class LayerControl extends base {
         super._OnDataUpdated(p_data);
         let char = p_data.Get(mkfData.IDS.CHARACTER_NAME);
         if (p_data._useCount <= 0) { this._label.Set(char && char != `` ? `layer : ${char} ` : `(empty layer)`); }
-        else { this._label.Set(char && char != `` ? `layer (×${p_data._useCount}) : ${char}` : `(empty layer)`); }
+        else { this._label.Set(char && char != `` ? `layer (×${p_data._useCount}) : ${char}` : `(empty layer ×${p_data._useCount})`); }
 
         this._flags.Set(__circular, p_data.Get(mkfData.IDS.CIRCULAR_REFERENCE));
         let viz = p_data.Get(mkfData.IDS.EXPORT_GLYPH);

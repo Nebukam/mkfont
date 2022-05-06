@@ -47,21 +47,27 @@ class FamilyMetricsInspector extends base {
         //{ options:{ propertyId:mkfData.IDS.V_ORIGIN_Y } },
     ];
 
-    static __trControls = [
-        { cl: mkfWidgets.ControlHeader, options: { label: `Glyph boundaries` }, css: 'header' },
-        { options: { propertyId: mkfData.IDS.TR_WIDTH_SHIFT } },
-        { options: { propertyId: mkfData.IDS.TR_WIDTH_PUSH } },
-        { options: { propertyId: mkfData.IDS.TR_Y_OFFSET } }, //
+    static __trControls = [        
+        { cl: mkfWidgets.ControlHeader, options: { label: `Translations` }, css: 'full' },
+        { options: { propertyId: mkfData.IDS.TR_WIDTH_SHIFT }, css: 'full'  },
+        { options: { propertyId: mkfData.IDS.TR_WIDTH_PUSH }, css: 'full'  },
+        { options: { propertyId: mkfData.IDS.TR_Y_OFFSET }, css: 'full'  }, //
+        
+        { cl: mkfWidgets.ControlHeader, options: { label: `Rotation & skews` }, css: 'full' },
+        { options: { propertyId: mkfData.IDS.TR_SKEW_ROT_ORDER }, css: 'full' },
+        { options: { propertyId: mkfData.IDS.TR_ROTATION_ANCHOR, inputOnly:true }, css:`small` }, //
+        { options: { propertyId: mkfData.IDS.TR_ROTATION }, css:`large` },
+        { options: { propertyId: mkfData.IDS.TR_SKEW_X }, css: 'full' }, //
+        { options: { propertyId: mkfData.IDS.TR_SKEW_Y } }, //
     ];
 
     _Init() {
         super._Init();
 
-        let builderOptions = { cl: mkfWidgets.PropertyControl, css: `control` };
-        this._builder.options = builderOptions;
+        this._builder.options = { cl: mkfWidgets.PropertyControl, css: `control` };
 
         this._trBuilder = new nkm.datacontrols.helpers.ControlBuilder(this);
-        this._trBuilder.options = builderOptions;
+        this._trBuilder.options = { cl: mkfWidgets.PropertyControl, css: `foldout-item` };
         this.forwardData.To(this._trBuilder, { dataMember: `transformSettings` })
 
     }
@@ -69,9 +75,10 @@ class FamilyMetricsInspector extends base {
     static _Style() {
         return nkm.style.Extends({
             ':host': {
-                'min-width': '350px',
+                'width': '350px',
                 'display': 'flex',
                 'flex-flow': 'column nowrap',
+                'overflow':`auto`
             },
             '.body': {
                 'display': 'flex',
@@ -82,12 +89,16 @@ class FamilyMetricsInspector extends base {
                 'padding': '10px',
             },
             '.control': {
-                'flex': '0 1 auto',
+                'flex': '0 0 auto',
                 'margin': '0',
                 'margin-bottom': '5px'
             },
-            '.pangram': {
-                'flex': '1 1 auto',
+            '.drawer': {
+                'padding': `10px`,
+                'flex': '1 1 100%',
+                'background-color': `rgba(19, 19, 19, 0.25)`,
+                'border-radius': '4px',
+                'margin-bottom': '0'
             }
         }, base._Style());
     }
@@ -96,7 +107,10 @@ class FamilyMetricsInspector extends base {
         this._body = ui.dom.El(`div`, { class: `body` }, this._host);
         this._builder.host = this._body;
         super._Render();
-        this._trBuilder.host = this._body;
+
+        let foldout = this.Attach(nkm.uilib.widgets.Foldout, `control drawer`, this._body);
+        foldout.options = { title: `Default transforms`, icon: `gear`, prefId: `f-metrics-tr`, expanded: true };
+        this._trBuilder.host = foldout;
         this._trBuilder.Build(this.constructor.__trControls);
     }
 

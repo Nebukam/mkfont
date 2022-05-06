@@ -24,9 +24,9 @@ class LayersViewSilent extends base {
 
     _Render() {
         super._Render();
-        this._toolbar.visible = false;
+        this._toolbar.Clear();
     }
-    
+
 
 }
 

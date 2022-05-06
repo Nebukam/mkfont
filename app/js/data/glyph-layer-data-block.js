@@ -23,7 +23,7 @@ class GlyphLayerDataBlock extends SimpleDataEx {
 
         this._variant = null;
         this._index = 0;
-        this.expanded = true;
+        this.expanded = false;
 
         this._glyphInfos = null;
         this._isCircular = false;
@@ -44,6 +44,7 @@ class GlyphLayerDataBlock extends SimpleDataEx {
         p_values[IDS.EXPORT_GLYPH] = { value: true };
 
         // Transform settings
+        p_values[IDS.USE_PREV_LAYER] = { value: false };
         p_values[IDS.TR_LYR_BOUNDS_MODE] = { value: ENUMS.LYR_BOUNDS_OUTSIDE };
         p_values[IDS.TR_BOUNDS_MODE] = { value: ENUMS.BOUNDS_OUTSIDE };
         p_values[IDS.TR_LYR_SCALE_MODE] = { value: ENUMS.SCALE_NONE };
@@ -54,6 +55,12 @@ class GlyphLayerDataBlock extends SimpleDataEx {
         p_values[IDS.TR_X_OFFSET] = { value: 0 };
         p_values[IDS.TR_Y_OFFSET] = { value: 0 };
         p_values[IDS.TR_MIRROR] = { value: ENUMS.MIRROR_NONE };
+
+        p_values[IDS.TR_SKEW_ROT_ORDER] = { value: ENUMS.SKR_ORDER_R_X_Y };
+        p_values[IDS.TR_ROTATION] = { value: 0 };
+        p_values[IDS.TR_ROTATION_ANCHOR] = { value: ENUMS.ANCHOR_CENTER };
+        p_values[IDS.TR_SKEW_X] = { value: 0 };
+        p_values[IDS.TR_SKEW_Y] = { value: 0 };
 
     }
 
@@ -105,7 +112,7 @@ class GlyphLayerDataBlock extends SimpleDataEx {
 
     _RetrieveImportedVariant() {
 
-        if (this._glyphInfos == null) {
+        if (this._glyphInfos == null || !this._variant || !this._variant.family) {
             this.importedVariant = null;
             return;
         }
@@ -152,7 +159,7 @@ class GlyphLayerDataBlock extends SimpleDataEx {
         this.importedVariant = null;
         this._variant = null;
         this._index = 0;
-        this.expanded = true;
+        this.expanded = false;
         this._glyphInfos = null;
         this._isCircular = false;
         super._CleanUp();

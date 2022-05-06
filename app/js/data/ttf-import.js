@@ -187,6 +187,8 @@ class TTFImport {
                 [IDS.GLYPH_NAME]: gName,
                 [IDS.UNICODE]: gU,
                 [IDS.PATH_DATA]: svgStats,
+                [IDS.WIDTH]:gW,
+                [IDS.HEIGHT]:gH,
                 transforms: {
                     // Make sure to push defaults
                     [IDS.TR_BOUNDS_MODE]: ENUMS.BOUNDS_MIXED,
@@ -195,6 +197,7 @@ class TTFImport {
                     [IDS.TR_VER_ALIGN]: ENUMS.VALIGN_BASELINE,
                     [IDS.TR_HOR_ALIGN]: ENUMS.HALIGN_XMIN,
                     [IDS.TR_ANCHOR]: ENUMS.ANCHOR_BOTTOM_LEFT,
+                    [IDS.TR_AUTO_WIDTH]: true,
                     [IDS.TR_WIDTH_SHIFT]: sShift,
                     [IDS.TR_WIDTH_PUSH]: sPush,
                 }

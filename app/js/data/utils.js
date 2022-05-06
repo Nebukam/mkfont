@@ -103,14 +103,14 @@ class UTILS {
 
     }
 
-    static FindCommonLayersValues(p_reference, p_dataList, p_includeAll = false) {
-
-        p_reference._ClearLayers();
+    static FindCommonLayersValues(p_layerMapRef, p_reference, p_dataList, p_includeAll = false) {
 
         let
             layerIds = {},
+            encounters = 0,
             vCount = p_dataList.length,
-            layerMap = new Map();
+            needRebuild = true;
+
         // Organize layer by names & count
 
         p_dataList.forEach(variant => {
@@ -121,7 +121,11 @@ class UTILS {
                     id = layer.Get(IDS.CHARACTER_NAME) || `____null___`,
                     obj = layerIds[id];
 
-                if (!obj) { obj = { count: 0, layers: [], nfos: layer._glyphInfos }; layerIds[id] = obj; }
+                if (!obj) {
+                    obj = { count: 0, layers: [], nfos: layer._glyphInfos };
+                    layerIds[id] = obj;
+                    encounters++;
+                }
 
                 obj.count += 1;
                 obj.layers.push(layer);
@@ -131,6 +135,63 @@ class UTILS {
             });
 
         });
+
+        //Before replacing the layerMap, check if the provided one (if any) is still valid
+        if (p_layerMapRef && p_layerMapRef.size == encounters) {
+
+            // Number of layer still matches.
+            needRebuild = false;
+            let
+                existingLayers = Array.from(p_layerMapRef.keys());
+
+            for (let m = 0, mn = p_layerMapRef.size; m < mn; m++) {
+                let
+                    layer = existingLayers[m],
+                    id = layer.Get(IDS.CHARACTER_NAME) || `____null___`;
+                // For each reference layer :
+                // Does its ID still exists ?
+                if (!(id in layerIds)) { needRebuild = true; break; }
+            }
+
+            if (!needRebuild) {
+
+                // Refresh common values, since we don't need to rebuild everything (great)
+                existingLayers.forEach(ref => {
+                    let
+                        id = ref.Get(IDS.CHARACTER_NAME) || `____null___`,
+                        layerInfos = layerIds[id],
+                        existingArray = p_layerMapRef.get(ref),
+                        newArray = layerInfos.layers,
+                        sameContent = true;
+
+                    if (existingArray.length == newArray.length) {
+                        for (let i = 0, n = existingArray.length; i < n; i++) {
+                            if (!newArray.includes(existingArray[i])) {
+                                sameContent = false; break;
+                            }
+                        }
+                    } else {
+                        sameContent = false;
+                    }
+
+                    if (sameContent) { newArray = existingArray; }
+
+                    ref._useCount = newArray.length;
+                    ref._glyphInfos = layerInfos.nfos;
+                    ref.expanded = layerInfos.expanded;
+                    p_layerMapRef.set(ref, newArray);
+                    this.FindCommonValues(ref, newArray);
+
+                });
+                return p_layerMapRef;
+            }
+
+        }
+
+        if (needRebuild && p_layerMapRef) { p_layerMapRef.clear(); }
+
+        p_reference._ClearLayers();
+        let layerMap = new Map();
 
         for (var lid in layerIds) {
             let obj = layerIds[lid];

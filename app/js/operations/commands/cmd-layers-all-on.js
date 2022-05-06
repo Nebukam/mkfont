@@ -21,31 +21,63 @@ class CmdLayersOn extends actions.Command {
 
     _InternalExecute() {
 
-        let
-            variant = this._context,
-            layerList = variant.layers._array,
-            ignore = true;
+        if (u.isArray(this._context)) {
 
-        layerList.forEach(element => { if (!element.Get(mkfData.IDS.EXPORT_GLYPH)) { ignore = false; } });
+            this._context.forEach(variant => {
 
-        if (ignore) {
-            this._Cancel();
-            return;
+                let
+                    layerList = variant.layers._array,
+                    ignore = true;
+
+                layerList.forEach(element => { if (!element.Get(mkfData.IDS.EXPORT_GLYPH)) { ignore = false; } });
+
+                if (ignore) { return; }
+
+                this._emitter.StartActionGroup({
+                    icon: `visible`,
+                    name: `All layers visible`,
+                    title: `Make all layers visible.`
+                });
+
+                this._emitter.Do(mkfActions.SetProperty, {
+                    target: layerList,
+                    id: mkfData.IDS.EXPORT_GLYPH,
+                    value: true
+                });
+
+                this._emitter.EndActionGroup();
+
+            });
+
+        } else {
+            let
+                variant = this._context,
+                layerList = variant.layers._array,
+                ignore = true;
+
+            layerList.forEach(element => { if (!element.Get(mkfData.IDS.EXPORT_GLYPH)) { ignore = false; } });
+
+            if (ignore) {
+                this._Cancel();
+                return;
+            }
+
+            this._emitter.StartActionGroup({
+                icon: `visible`,
+                name: `All layers visible`,
+                title: `Make all layers visible.`
+            });
+
+            this._emitter.Do(mkfActions.SetProperty, {
+                target: layerList,
+                id: mkfData.IDS.EXPORT_GLYPH,
+                value: true
+            });
+
+            this._emitter.EndActionGroup();
         }
 
-        this._emitter.StartActionGroup({
-            icon: `visible`,
-            name: `All layers visible`,
-            title: `Make all layers visible.`
-        });
 
-        this._emitter.Do(mkfActions.SetProperty, {
-            target: layerList,
-            id: mkfData.IDS.EXPORT_GLYPH,
-            value: true
-        });
-
-        this._emitter.EndActionGroup();
 
         this._Success();
 

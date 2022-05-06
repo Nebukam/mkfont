@@ -21,12 +21,31 @@ class CmdLayerAdd extends actions.Command {
 
     _InternalExecute() {
 
-        let variant = this._context;
+        if (u.isArray(this._context)) {
 
-        this._emitter.Do(mkfActions.LayerAdd, {
-            target: variant,
-            index: -1
-        });
+            this._emitter.StartActionGroup({
+                icon: `new`,
+                name: `Create new layer`,
+                title: `Create new layer on multiple glyphs.`
+            });
+
+            this._context.forEach(variant => {
+                this._emitter.Do(mkfActions.LayerAdd, {
+                    target: variant,
+                    index: -1
+                });
+            });
+
+            this._emitter.EndActionGroup();
+
+        } else {
+            let variant = this._context;
+            this._emitter.Do(mkfActions.LayerAdd, {
+                target: variant,
+                index: -1
+            });
+        }
+
 
         this._Success();
 

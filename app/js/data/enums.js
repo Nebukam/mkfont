@@ -212,6 +212,22 @@ class ENUMS {
         { name: `None `, [nkm.com.IDS.VALUE]: this.SCALE_NONE, icon: 'close-small' },
     ]);
 
+    static SKR_ORDER_R_X_Y = 0;
+    static SKR_ORDER_R_Y_X = 1;
+    static SKR_ORDER_X_R_Y = 2;
+    static SKR_ORDER_Y_R_X = 3;
+    static SKR_ORDER_X_Y_R = 4;
+    static SKR_ORDER_Y_X_R = 5;
+
+    static SKR_ORDER = nkm.data.catalogs.CreateFrom({ name: `Rot & Skew order`, autoSort: false }, [
+        { name: `R, X, Y`, [nkm.com.IDS.VALUE]: this.SKR_ORDER_R_X_Y},
+        { name: `R, Y, X`, [nkm.com.IDS.VALUE]: this.SKR_ORDER_R_Y_X},
+        { name: `X, R, Y`, [nkm.com.IDS.VALUE]: this.SKR_ORDER_X_R_Y},
+        { name: `Y, R, X`, [nkm.com.IDS.VALUE]: this.SKR_ORDER_Y_R_X},
+        { name: `X, Y, R`, [nkm.com.IDS.VALUE]: this.SKR_ORDER_X_Y_R},
+        { name: `Y, X, R`, [nkm.com.IDS.VALUE]: this.SKR_ORDER_Y_X_R},
+    ]);
+
 }
 
 module.exports = ENUMS;

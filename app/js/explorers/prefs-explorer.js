@@ -47,7 +47,7 @@ class PrefsExplorer extends base {
                 'flex': '1 1 auto',
                 'width': `350px`,
                 'padding': `10px`,
-                'background-color': `rgba(19, 19, 19, 0.25)`,
+                'background-color': `rgba(19, 19, 19, 0.15)`,
                 'border-radius': '4px',
                 'margin-bottom': '5px',
             }
@@ -109,7 +109,7 @@ class PrefsExplorer extends base {
 
         if (p_controls) {
             let builder = new nkm.datacontrols.helpers.ControlBuilder(this);
-            builder.options = { host: foldout, cl: mkfWidgets.PropertyControl, css: `item` };
+            builder.options = { host: foldout, cl: mkfWidgets.PropertyControl, css: `foldout-item full` };
             this.forwardData.To(builder);
             builder.Build(p_controls);
         }

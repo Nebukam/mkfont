@@ -10,12 +10,19 @@ class LayerTransformSettingsInspectorSilent extends base {
     constructor() { super(); }
 
     static __controls = [...base.__controls];
+    static __trControls = [...base.__trControls];
 
     static {
-        for (let i = 0; i < this.__controls.length; i++) {
-            let config = { ...this.__controls[i] };
-            if (config.options) { config.options = { ...config.options, directSet: true}; }
+        this.__DirectSet(this.__controls);
+        this.__DirectSet(this.__trControls);
+    }
+
+    static __DirectSet(p_array) {
+        for (let i = 0; i < p_array.length; i++) {
+            let config = { ...p_array[i] };
+            if (config.options) { config.options = { ...config.options, directSet: true }; }
             else { config.options = { directSet: true }; }
+            p_array[i] = config;
         }
     }
 

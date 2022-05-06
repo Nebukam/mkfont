@@ -398,8 +398,13 @@ class IDS {
     static TR_X_OFFSET = 'xoffset';
 
     static TR_MIRROR = 'mirror';
+    static TR_ROTATION = 'rot';
+    static TR_ROTATION_ANCHOR = 'rot-anchor';
+    static TR_SKEW_X = 'skew-x';
+    static TR_SKEW_Y = 'skew-y';
+    static TR_SKEW_ROT_ORDER = 'skew-rot-order';
 
-    
+
 
     static {
 
@@ -515,6 +520,45 @@ class IDS {
             inputOptions: { catalog: ENUMS.MIRROR, itemKey: nkm.com.IDS.VALUE, size: ui.FLAGS.SIZE_M },
             desc: `...`
         };
+        this.infos[this.TR_ROTATION] = {
+            transform: true,
+            inputType: inputs.NumberDrag,
+            label: `Rotation`,
+            inputOptions: { changeOnInput: true, step: 0.01, min: -180, max: 180, size: ui.FLAGS.SIZE_XS, placeholder: `· · ·` },
+            desc: `Rotate the glyph around its anchor point.`
+        };
+        this.infos[this.TR_ROTATION_ANCHOR] = {
+            transform: true,
+            inputType: inputs.Anchor,
+            label: `Rotation anchor`,
+            //inputOptions: { changeOnInput: true, step: 0.01, min: -180, max: 180, size: ui.FLAGS.SIZE_XS },
+            desc: `Defines the rotation anchor of the glyph`
+        };
+
+        this.infos[this.TR_SKEW_X] = {
+            transform: true,
+            recompute: true,
+            inputType: inputs.NumberDrag,
+            label: `Skew X`,
+            inputOptions: { step: 0.1, min: -85, max: 85, size: ui.FLAGS.SIZE_XXS, placeholder: `· · ·` },
+            desc: `Skews the glyph horizontally.`
+        };
+        this.infos[this.TR_SKEW_Y] = {
+            transform: true,
+            recompute: true,
+            inputType: inputs.NumberDrag,
+            label: `Skew Y`,
+            inputOptions: { step: 0.1, min: -85, max: 85, size: ui.FLAGS.SIZE_XXS, placeholder: `· · ·` },
+            desc: `Skews the glyph vertically.`
+        };
+        this.infos[this.TR_SKEW_ROT_ORDER] = {
+            inputType: inputs.Select,
+            enum: ENUMS.WEIGHTS,
+            label: `Rot/Skew order`,
+            inputOptions: { catalog: ENUMS.SKR_ORDER, itemKey: nkm.com.IDS.VALUE, placeholder: `· · ·` },
+            desc: `Normal, Bold, Heavy, Ultra-Heavy`,
+        };
+
     }
 
     //#endregion
@@ -531,6 +575,8 @@ class IDS {
     static CHARACTER_STRUCT = 'lyr-struct';
     static CIRCULAR_REFERENCE = 'circ-dep';
 
+    static USE_PREV_LAYER = 'lyr-bounds-lyr';
+
     static {
 
         this.infos[this.CHARACTER_NAME] = {
@@ -543,6 +589,13 @@ class IDS {
         this.infos[this.CHARACTER_STRUCT] = {
             label: `Character struct`,
             desc: `Single character, ligature, or U+0000 formatted name`
+        };
+
+        this.infos[this.USE_PREV_LAYER] = {
+            inputType: inputs.Boolean,
+            inputOptions: { size: ui.FLAGS.SIZE_XS },
+            label: `Rely on previous layer`,
+            desc: `If enabled, This layer use the first visible layer before it as bound reference.`
         };
 
         this.infos[this.TR_LYR_BOUNDS_MODE] = {

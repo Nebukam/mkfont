@@ -21,9 +21,27 @@ class CmdLayerRemove extends actions.Command {
 
     _InternalExecute() {
 
-        this._emitter.Do(mkfActions.LayerRemove, {
-            target: this._context
-        });
+        if (u.isArray(this._context)) {
+
+            this._emitter.StartActionGroup({
+                icon: `remove`,
+                name: `Remove layers`,
+                title: `Remove layers`
+            });
+
+            this._context.forEach(layer => {
+                this._emitter.Do(mkfActions.LayerRemove, {
+                    target: layer
+                });
+            });
+
+            this._emitter.EndActionGroup();
+
+        } else {
+            this._emitter.Do(mkfActions.LayerRemove, {
+                target: this._context
+            });
+        }        
 
         this._Success();
 

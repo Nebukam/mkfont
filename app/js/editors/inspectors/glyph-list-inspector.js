@@ -16,6 +16,7 @@ const UNICODE = require(`../../unicode`);
 const TransformSettingsSilent = require(`./tr-settings-silent-inspector`);
 
 const __invalidSelection = `sel-invalid`;
+const __hasPopout = `has-popout`;
 
 const shouldHideWIDTH = (owner) => {
     if (!owner.data) { return true; }
@@ -50,7 +51,7 @@ class GlyphListInspector extends base {
             .Hook(SIGNAL.GLYPH_REMOVED, this._OnGlyphRemoved, this)
             .Hook(nkm.com.SIGNAL.UPDATED, this._OnContextUpdated, this);
 
-        this._flags.Add(this, __invalidSelection);
+        this._flags.Add(this, __invalidSelection, __hasPopout);
 
         this._delayedInspectorRefresh = nkm.com.DelayedCall(this._Bind(this._RefreshTransformInspector));
 
@@ -66,7 +67,12 @@ class GlyphListInspector extends base {
             }
         }
 
+        this._rectTracker = new ui.helpers.RectTracker(this._Bind(this._OnPreviewRectUpdate));
+        this.focusArea = this;
+
     }
+
+    //#region DOM
 
     static _Style() {
         return nkm.style.Extends({
@@ -161,6 +167,7 @@ class GlyphListInspector extends base {
         // Previews
 
         this._previewCtnr = ui.El(`div`, { class: `previews` }, this._host);
+        this._rectTracker.Add(this._previewCtnr);
 
         for (let i = 0; i < 4; i++) {
             let gr = this.Attach(mkfWidgets.GlyphCanvasRenderer, `box`, this._previewCtnr);
@@ -209,9 +216,35 @@ class GlyphListInspector extends base {
                 ]
             },
             [
-                { cl: mkfWidgets.LayersViewSilent },
+                { cl: mkfWidgets.LayersViewSilent, member: `_layersView` },
             ]
         );
+
+        this._layersView._toolbar.CreateHandles(
+            {
+                icon: `new`, htitle: `Create new layer`,
+                flavor: nkm.ui.FLAGS.CTA, variant: ui.FLAGS.MINIMAL,
+                trigger: { fn: () => { this.editor.cmdLayerAdd.Execute(this._data.analytics.existing); } },
+                group: `create`
+            },
+            {
+                icon: `visible`, htitle: `Show all layers`,
+                variant: ui.FLAGS.MINIMAL,
+                trigger: { fn: () => { this.editor.cmdLayersOn.Execute(this._data.analytics.existing); } },
+                group: `edit`
+            },
+            {
+                icon: `hidden`, htitle: `Hide all layers`,
+                variant: ui.FLAGS.MINIMAL,
+                trigger: { fn: () => { this.editor.cmdLayersOff.Execute(this._data.analytics.existing); } },
+                group: `edit`
+            },
+            {
+                icon: `link`, htitle: `Create composition layers.`,
+                variant: ui.FLAGS.MINIMAL,
+                trigger: { fn: () => { this.editor.cmdLayerAddComp.Execute(this._data.analytics.existing); } },
+                group: `automate`, member: { owner: this, id: `_addCompBtn` }
+            });
 
 
         // Settings
@@ -242,7 +275,7 @@ class GlyphListInspector extends base {
 
         if (p_controls) {
             let builder = new nkm.datacontrols.helpers.ControlBuilder(this);
-            builder.options = { host: foldout, cl: mkfWidgets.PropertyControl, css: `item` };
+            builder.options = { host: foldout, cl: mkfWidgets.PropertyControl, css: `foldout-item` };
             builder.Build(p_controls);
             if (!this._builders) { this._builders = []; }
             this._builders.push(builder);
@@ -251,6 +284,8 @@ class GlyphListInspector extends base {
         return foldout;
 
     }
+
+    //#endregion
 
     _FlushData() { this._builders.forEach(builder => { builder.data = null; }); }
     _ReassignData() { this._builders.forEach(builder => { builder.data = this._variantReference; }); }
@@ -277,18 +312,13 @@ class GlyphListInspector extends base {
 
         this._FlushData();
 
-        if (this._layerMap) {
-            this._layerMap.clear();
-            this._layerMap = null;
-        }
-
         let an = this._data.analytics;
 
         if (this._FindCommonValues()) {
 
             this._flags.Set(__invalidSelection, false);
 
-            this._RefreshCachedData();
+            this._RebuildCachedData();
 
             this._ReassignData();
 
@@ -315,7 +345,7 @@ class GlyphListInspector extends base {
 
     }
 
-    _RefreshCachedData() {
+    _RebuildCachedData() {
 
         let recompute = this._cachedVariants ? false : true;
         let existing = this._data.analytics.existing;
@@ -332,6 +362,7 @@ class GlyphListInspector extends base {
         }
 
         if (recompute) {
+            console.log(`had to rebuild cache...`);
             this._cachedTransforms = [];
             this._cachedVariants = [];
             existing.forEach(variant => {
@@ -346,12 +377,17 @@ class GlyphListInspector extends base {
         let analytics = this._data.analytics;
         if (analytics.existingGlyphs == 0) { return false; }
 
-        if (this._transformReference) { this._transformReference.Unwatch(nkm.com.SIGNAL.VALUE_CHANGED, this._OnTransformValueChanged, this); }
+        if (this._transformReference) {
+            this._transformReference
+                .Unwatch(nkm.com.SIGNAL.VALUE_CHANGED, this._OnTransformValueChanged, this);
+        }
+
         if (this._variantReference) {
             this._variantReference
                 .Unwatch(nkm.com.SIGNAL.VALUE_CHANGED, this._OnRefGlyphValueChanged, this)
                 .Unwatch(SIGNAL.LAYER_VALUE_CHANGED, this._OnRefLayerValueChanged, this)
-                .Unwatch(SIGNAL.LAYER_REMOVED, this._OnRefLayerRemoved, this);
+                .Unwatch(SIGNAL.LAYER_REMOVED, this._OnRefLayerRemoved, this)
+                .Unwatch(SIGNAL.SELECTED_LAYER_CHANGED, this._RefLayerSelected, this);
         }
 
         let refVariant = this.editor._data.refGlyph.activeVariant;
@@ -375,17 +411,23 @@ class GlyphListInspector extends base {
             let showAll = refVariant.Get(mkfData.IDS.SHOW_ALL_LAYERS);
 
             this._layerMap = mkfData.UTILS.FindCommonLayersValues(
+                this._layerMap,
                 this._variantReference,
                 analytics.existing,
                 showAll
             );
 
-            if (this._transformReference) { this._transformReference.Watch(nkm.com.SIGNAL.VALUE_CHANGED, this._OnTransformValueChanged, this); }
+            if (this._transformReference) {
+                this._transformReference
+                    .Watch(nkm.com.SIGNAL.VALUE_CHANGED, this._OnTransformValueChanged, this);
+            }
+
             if (this._variantReference) {
                 this._variantReference
                     .Watch(nkm.com.SIGNAL.VALUE_CHANGED, this._OnRefGlyphValueChanged, this)
                     .Watch(SIGNAL.LAYER_VALUE_CHANGED, this._OnRefLayerValueChanged, this)
-                    .Watch(SIGNAL.LAYER_REMOVED, this._OnRefLayerRemoved, this);
+                    .Watch(SIGNAL.LAYER_REMOVED, this._OnRefLayerRemoved, this)
+                    .Watch(SIGNAL.SELECTED_LAYER_CHANGED, this._RefLayerSelected, this);
 
                 //TODO : Watch for layer updates and propagate them
             }
@@ -415,6 +457,8 @@ class GlyphListInspector extends base {
         if (analytics.existingGlyphs == 0) { return; }
         analytics.existing.forEach(variant => { this.editor._bindingManager.Unbind(variant); });
     }
+
+    //#region Apply changes
 
     _OnTransformValueChanged(p_data, p_id, p_valueObj, p_oldValue) {
 
@@ -471,16 +515,19 @@ class GlyphListInspector extends base {
 
         if (!layerInfos) { return; }
 
-        editor.StartActionGroup({
-            icon: `remove`,
-            name: `Delete layers`,
-            title: `Deleted a layer (${p_layer.Get(mkfData.IDS.CHARACTER_NAME)}) from selected items`
-        });
+        this.editor.cmdLayerRemove.Execute(layerInfos);
 
-        layerInfos.forEach(layer => { editor.Do(mkfOperations.actions.LayerRemove, { target: layer }); });
+    }
 
-        editor.EndActionGroup();
+    //#endregion
 
+    _OnPaintChange() {
+        super._OnPaintChange();
+        if (this._isPainted) {
+            this._rectTracker.Enable();
+        } else {
+            this._rectTracker.Disable();
+        }
     }
 
     _UpdatePreviews() {
@@ -508,6 +555,86 @@ class GlyphListInspector extends base {
         this._UpdatePreviews();
     }
 
+    //#region popout
+
+    _RefLayerSelected(p_variant, p_layer) {
+        this._sLayer = null;
+        if (!this._layerMap) { return; }
+    }
+
+    _GetAtop() {
+        let an = this._data.analytics;
+        if (an.existingGlyphs <= 0) { return null; }
+        return an.existing[an.existingGlyphs - 1];
+    }
+
+    _OnPreviewRectUpdate(p_tracker) {
+        let ratio = p_tracker.GetRatio(this._previewCtnr);
+        if (ratio < 0.9) {
+            this._obstructedPreview = true;
+            this._TogglePopOutPreview(true);
+        } else {
+            this._obstructedPreview = false;
+            this._TogglePopOutPreview(false);
+        }
+    }
+
+    _TogglePopOutPreview(p_toggle) {
+
+
+        let atop = this._GetAtop();
+
+        if (!this._isFocused || !this._obstructedPreview || !atop) { p_toggle = false; }
+
+        if (this._hasPopOut == p_toggle) { return; }
+
+        this._hasPopOut = p_toggle;
+        this._flags.Set(__hasPopout, p_toggle);
+
+        if (!p_toggle) {
+            if (this._popoutPreview) {
+                this._popoutPreview.Release();
+                this._popoutPreview = null;
+            }
+        } else {
+            this._popoutPreview = nkm.uilib.modals.Simple.Pop({
+                anchor: this.parent,
+                placement: ui.ANCHORING.LEFT,
+                origin: ui.ANCHORING.RIGHT,
+                keepWithinScreen: true,
+                static: true,
+                content: mkfWidgets.GlyphPreview
+            });
+
+            this._popoutPreview.content.data = atop;
+            this._popoutPreview.content.glyphInfos = atop ? atop.glyph.unicodeInfos : null;
+            //this._UpdatePreviewLayer();
+        }
+
+    }
+
+    _FocusGain() {
+        super._FocusGain();
+        this._TogglePopOutPreview(true);
+    }
+
+    _FocusLost() {
+        super._FocusLost();
+        this._TogglePopOutPreview(false);
+    }
+
+    _UpdatePreviewLayer(p_layer) {
+        this._glyphPreview.glyphLayer = this._data.selectedLayer;
+        if (this._popoutPreview) { this._popoutPreview.content.glyphLayer = this._data.selectedLayer; }
+    }
+
+    //#endregion
+
+    _CleanUp() {
+        this._obstructedPreview = false;
+        this._TogglePopOutPreview(false);
+        super._CleanUp();
+    }
 }
 
 module.exports = GlyphListInspector;

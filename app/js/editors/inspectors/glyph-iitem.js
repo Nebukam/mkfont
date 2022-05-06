@@ -43,7 +43,7 @@ class GlyphVariantInspectorItem extends base {
         super._Init();
 
         this._builder.defaultControlClass = mkfWidgets.PropertyControl;
-        this._builder.defaultCSS = `control`;
+        this._builder.defaultCSS = `foldout-item`;
 
         this._flags.Add(this, __nullGlyph, __hasPopout);
         this._obstructedPreview = false;
@@ -173,7 +173,7 @@ class GlyphVariantInspectorItem extends base {
             },
             [
                 { cl: TransformSettingsInspector, dataMember: `_transformSettings` },
-            ]
+            ],
         );
 
         this._builder.host = foldout.body;
@@ -209,7 +209,7 @@ class GlyphVariantInspectorItem extends base {
             ]
         );
 
-        this._binder = this.Attach(mkfWidgets.ResourceBinding, `binder control`, foldout);
+        this._binder = this.Attach(mkfWidgets.ResourceBinding, `foldout-item`, foldout);
         this._binder.visible = false;
 
         // Stats
@@ -234,7 +234,7 @@ class GlyphVariantInspectorItem extends base {
 
         if (p_controls) {
             let builder = new nkm.datacontrols.helpers.ControlBuilder(this);
-            builder.options = { host: foldout, cl: mkfWidgets.PropertyControl, css: `item` };
+            builder.options = { host: foldout, cl: mkfWidgets.PropertyControl, css: `foldout-item` };
             this.forwardData.To(builder);
             builder.Build(p_controls);
         }
