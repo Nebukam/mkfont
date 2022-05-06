@@ -36,7 +36,7 @@ class GlyphVariantInspectorItem extends base {
 
     static __glyphControls = [
         { cl: mkfWidgets.ControlHeader, options: { label: `Export` } },
-        { options: { propertyId: mkfData.IDS.EXPORT_GLYPH } },
+        { options: { propertyId: mkfData.IDS.EXPORT_GLYPH }, css:`full` },
     ];
 
     _Init() {
@@ -209,7 +209,7 @@ class GlyphVariantInspectorItem extends base {
             ]
         );
 
-        this._binder = this.Attach(mkfWidgets.ResourceBinding, `foldout-item`, foldout);
+        this._binder = this.Attach(mkfWidgets.ResourceBinding, `foldout-item full`, foldout);
         this._binder.visible = false;
 
         // Stats

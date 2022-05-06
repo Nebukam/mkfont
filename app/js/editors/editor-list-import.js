@@ -54,7 +54,7 @@ class EditorListImport extends base {
             '.frst': { 'width': `300px`, },
             '.list': {
                 'position': 'relative',
-                'width': '350px',
+                'width': '270px',
                 'background-color': 'rgba(0,0,0,0.2)',
                 'overflow': 'auto',
                 'min-height': '0',

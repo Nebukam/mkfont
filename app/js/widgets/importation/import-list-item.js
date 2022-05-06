@@ -127,8 +127,8 @@ class ImportListItem extends base {
 
         this._tb = this.Attach(ui.WidgetBar, `toolbar`, this._host);
         this._tb.options = {
-            //inline: true,
-            stretch: ui.WidgetBar.FLAG_STRETCH,
+            inline: true,
+            //stretch: ui.WidgetBar.FLAG_STRETCH,
             size: ui.FLAGS.SIZE_XS,
             defaultWidgetClass: nkm.uilib.buttons.Tool,
             handles: [
@@ -142,13 +142,13 @@ class ImportListItem extends base {
                             this._Reprocess();
                         }
                     },
-                    group: `read`, member: { owner: this, id: `_useCustomUniCheckbox` }
+                    member: { owner: this, id: `_useCustomUniCheckbox` }
                 },
                 {
                     cl: uilib.inputs.Text,
                     variant: ui.FLAGS.MINIMAL,
                     onSubmit: { fn: this._OnSubmit },
-                    group: `read`, member: { owner: this, id: `_unicodeInputField` }
+                    member: { owner: this, id: `_unicodeInputField` }
                 },
             ]
         };

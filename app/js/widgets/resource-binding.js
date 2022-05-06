@@ -22,7 +22,7 @@ class ResourceBinding extends base {
             ':host': {
                 '@': ['fade-in'],
                 'min-height': 'auto',
-                'min-width': 'auto',
+                'min-width': '0',
                 //'padding': '20px',
                 'display': 'flex',
                 'flex-direction': 'row nowrap',
