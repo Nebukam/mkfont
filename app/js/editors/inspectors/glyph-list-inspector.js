@@ -563,6 +563,7 @@ class GlyphListInspector extends base {
     }
 
     _GetAtop() {
+        if (!this._data) { return null; }
         let an = this._data.analytics;
         if (an.existingGlyphs <= 0) { return null; }
         return an.existing[an.existingGlyphs - 1];

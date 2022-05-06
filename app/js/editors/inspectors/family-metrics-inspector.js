@@ -68,7 +68,9 @@ class FamilyMetricsInspector extends base {
 
         this._trBuilder = new nkm.datacontrols.helpers.ControlBuilder(this);
         this._trBuilder.options = { cl: mkfWidgets.PropertyControl, css: `foldout-item` };
-        this.forwardData.To(this._trBuilder, { dataMember: `transformSettings` })
+        this.forwardData.To(this._trBuilder, { dataMember: `_transformSettings` });
+        this.forwardContext.To(this._trBuilder);
+        this.forwardEditor.To(this._trBuilder);
 
     }
 

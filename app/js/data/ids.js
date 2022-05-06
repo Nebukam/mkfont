@@ -430,7 +430,7 @@ class IDS {
             transform: true,
             inputType: inputs.NumberDrag,
             label: `Scale factor`,
-            inputOptions: { changeOnInput: true, min: 0.01, max: 100, step: 0.01, size: ui.FLAGS.SIZE_XS },
+            inputOptions: { min: 0.01, max: 100, step: 0.01, size: ui.FLAGS.SIZE_XS },
             desc: `Factor by which the input vector will be scaled.`
         };
 
@@ -438,7 +438,7 @@ class IDS {
             transform: true,
             inputType: inputs.NumberDrag,
             label: `Margin`,
-            inputOptions: { changeOnInput: true, min: -1, max: 1, step: 0.01, size: ui.FLAGS.SIZE_XS },
+            inputOptions: { min: -1, max: 1, step: 0.01, size: ui.FLAGS.SIZE_XS },
             desc: `Margin to apply to the glyph when normalizing it.`
         };
 
@@ -522,13 +522,15 @@ class IDS {
         };
         this.infos[this.TR_ROTATION] = {
             transform: true,
+            recompute: true,
             inputType: inputs.NumberDrag,
             label: `Rotation`,
-            inputOptions: { changeOnInput: true, step: 0.01, min: -180, max: 180, size: ui.FLAGS.SIZE_XS, placeholder: `· · ·` },
+            inputOptions: { step: 0.01, min: -180, max: 180, size: ui.FLAGS.SIZE_XS, placeholder: `· · ·` },
             desc: `Rotate the glyph around its anchor point.`
         };
         this.infos[this.TR_ROTATION_ANCHOR] = {
             transform: true,
+            recompute: true,
             inputType: inputs.Anchor,
             label: `Rotation anchor`,
             //inputOptions: { changeOnInput: true, step: 0.01, min: -180, max: 180, size: ui.FLAGS.SIZE_XS },
@@ -619,7 +621,7 @@ class IDS {
             transform: true,
             inputType: inputs.NumberDrag,
             label: `Scale factor`,
-            inputOptions: { changeOnInput: true, min: 0.01, max: 2, step: 0.01, size: ui.FLAGS.SIZE_XS },
+            inputOptions: { min: 0.01, max: 2, step: 0.01, size: ui.FLAGS.SIZE_XS },
             desc: `Factor by which the layer will be scaled.`
         };
 

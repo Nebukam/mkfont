@@ -31,6 +31,7 @@ class LayerTransformSettingsInspector extends base {
 
         { options: { propertyId: mkfData.IDS.INVERTED } },
         { options: { propertyId: mkfData.IDS.USE_PREV_LAYER } },
+
         { cl: ControlHeader, options: { label: `Context`, label2: `Layer` }, css: 'hdr' },
         { options: { propertyId: mkfData.IDS.TR_ANCHOR, inputOnly: true }, css: 'vsmall' },
         { options: { propertyId: mkfData.IDS.TR_LYR_BOUNDS_MODE, inputOnly: true }, css: 'small' },
@@ -50,7 +51,6 @@ class LayerTransformSettingsInspector extends base {
 
     static __trControls = [
         { options: { propertyId: mkfData.IDS.TR_MIRROR, inputOnly: true }, css: 'full' },
-        { options: { propertyId: mkfData.IDS.TR_ROTATION } },
         { options: { propertyId: mkfData.IDS.TR_SKEW_ROT_ORDER }, css: `full` },
         { options: { propertyId: mkfData.IDS.TR_ROTATION_ANCHOR, inputOnly: true }, css: `vsmall` },
         { options: { propertyId: mkfData.IDS.TR_ROTATION }, css: `large` },
