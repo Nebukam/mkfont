@@ -34,9 +34,8 @@ class MKFont extends nkm.app.AppBase {
             { id: `mainLayout`, cl: require(`./main-layout`) }
         ];
 
-        ui.Preload(mkfWidgets.GlyphSlot, 300);
-        ui.Preload(mkfWidgets.LigaButton, 300);
-        //ui.Preload(mkfEditors.FontEditor, 3);
+        //ui.Preload(mkfWidgets.GlyphSlot, 100);
+        //ui.Preload(mkfWidgets.LigaButton, 100);
 
         nkm.documents.DOCUMENTS.Watch(nkm.data.SIGNAL.NO_ACTIVE_EDITOR, this._OnDocDataRoaming, this);
 

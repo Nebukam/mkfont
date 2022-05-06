@@ -9,7 +9,8 @@
 
 :host {
 
-    
+    --icon-on:url(../assets/icons/icon_checkbox-on.svg);
+    --icon-off:url(../assets/icons/icon_checkbox-off.svg);
 
 }
 
@@ -17,10 +18,12 @@
     
     border:none !important;
 
+    
+
     height: var(--size);
     cursor: pointer;
 
-    background-image: url('../assets/icons/icon_checkbox-off.svg');
+    background-image: var(--icon-off);
     background-repeat: no-repeat;
     background-size: contain;
     background-position: center;
@@ -31,7 +34,7 @@
 }
 
 :host(.checked) .field {
-    background-image: url('../assets/icons/icon_checkbox-on.svg');
+    background-image: var(--icon-on);
     
 }
 

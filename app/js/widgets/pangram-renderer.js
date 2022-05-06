@@ -1,3 +1,5 @@
+'use strict';
+
 const nkm = require(`@nkmjs/core`);
 const com = nkm.com;
 const u = nkm.u;
@@ -55,7 +57,7 @@ class PangramRenderer extends base {
                 'border': 'none',
             },
             '.high': {
-                'color':`white`,
+                'color': `white`,
                 'background-color': `rgba(var(--col-active-dark-rgb), 0.8)`,
                 'border-radius': `2px`,
             }

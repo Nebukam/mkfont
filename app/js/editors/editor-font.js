@@ -1,3 +1,5 @@
+'use strict';
+
 const nkm = require(`@nkmjs/core`);
 const u = nkm.u;
 const ui = nkm.ui;
@@ -85,6 +87,14 @@ class FontEditor extends base {
         this.cmdGlyphPasteInPlace = this._commands.Create(mkfCmds.GlyphPasteInPlace, { shortcut: this.shortcuts.Create("Ctrl Shift V").Strict() });
         this.cmdGlyphPasteTransform = this._commands.Create(mkfCmds.GlyphPasteTransform, { shortcut: this.shortcuts.Create("Ctrl Alt V").Strict() });
 
+        this.cmdLayerAdd = this._commands.Create(mkfCmds.LayerAdd);
+        this.cmdLayerRemove = this._commands.Create(mkfCmds.LayerRemove);
+        this.cmdLayersOn = this._commands.Create(mkfCmds.LayerAllOn);
+        this.cmdLayersOff = this._commands.Create(mkfCmds.LayerAllOff);
+        this.cmdLayersCopy = this._commands.Create(mkfCmds.LayersCopy);
+        this.cmdLayersPaste = this._commands.Create(mkfCmds.LayersPaste);
+        this.cmdLayerAddComp = this._commands.Create(mkfCmds.LayerAddComp);
+
         this.cmdListImportMissing = this._commands.Create(mkfCmds.ImportListMissingGlyphs);
         this.cmdListExportUni = this._commands.Create(mkfCmds.ExportListUni);
         this.cmdListExportUniHex = this._commands.Create(mkfCmds.ExportListUniHex);
@@ -98,7 +108,12 @@ class FontEditor extends base {
 
         this.shortcuts.Create("Ctrl Z", this._actionStack.Undo);
         this.shortcuts.Create("Ctrl Y", this._actionStack.Redo);
-        this.shortcuts.Create("Ctrl A", { fn: () => { this._viewport._selectionStack.data.RequestSelectAll(); } }).Strict();
+        this.shortcuts.Create("Ctrl A", {
+            fn: () => {
+                this._viewport._selStack.data.RequestSelectAll();
+                nkm.ui.dom.ClearHighlightedText();
+            }
+        }).Strict();
 
     }
 
@@ -241,8 +256,21 @@ class FontEditor extends base {
     }
 
     SetActiveRange(p_rangeData) {
+
         this._displayRange = p_rangeData ? p_rangeData.options : null;
         this._viewport.displayRange = this._displayRange;
+
+        this._stateStack.Push({
+            oldRange: this._cachedRangeData,
+            newRange: p_rangeData,
+            restore: (p_self, p_forward) => {
+                let data = p_forward ? p_self.newRange : p_self.oldRange;
+                if (data) { this.SetActiveRange(data); }
+            }
+        }, true);
+
+        this._cachedRangeData = p_rangeData;
+
     }
 
     _OnLeftShelfHandleChanged(p_shelf, p_newHandle, p_oldHandle) {
@@ -268,15 +296,15 @@ class FontEditor extends base {
     _OnDataChanged(p_oldData) {
         super._OnDataChanged(p_oldData);
         let ar = UNICODE.instance._blockCatalog.At(0);
-        if (this._data) { 
-            this._OnDataValueChanged(this._data, mkfData.IDS.PREVIEW_SIZE, null); 
-            if(this._data._glyphs.count > 0){
+        if (this._data) {
+            this._OnDataValueChanged(this._data, mkfData.IDS.PREVIEW_SIZE, null);
+            if (this._data._glyphs.count > 0) {
                 ar = this._contentInspector._specialCatalog.At(0); //My Glyphs
             }
         }
 
-        this.SetActiveRange(ar);        
-        
+        this.SetActiveRange(ar);
+
         this._viewport._RefreshItems();
     }
 
@@ -367,7 +395,7 @@ class FontEditor extends base {
 
     _CleanUp() {
         this._bindingManager.Clear();
-        this._viewport._selectionStack.Clear();
+        this._viewport._selStack.Clear();
         super._CleanUp();
     }
 

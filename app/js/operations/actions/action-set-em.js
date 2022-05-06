@@ -8,15 +8,7 @@ const svgpath = require('svgpath');
 
 const ActionSetPropertyValue = require(`./action-set-property-value`);
 
-const familyIDs = [
-    mkfData.IDS.BASELINE,
-    mkfData.IDS.ASCENT,
-    mkfData.IDS.DESCENT,
-    mkfData.IDS.WIDTH,
-    mkfData.IDS.HEIGHT,
-    mkfData.IDS.X_HEIGHT,
-    mkfData.IDS.CAP_HEIGHT,
-];
+
 
 
 class ActionSetEM extends ActionSetPropertyValue {
@@ -31,55 +23,64 @@ class ActionSetEM extends ActionSetPropertyValue {
 
         if (resample) {
 
-            // Need to scale all family metrics
-            // - Ascent
-            // - Descent
-            // - Height
-            // - Width
-            // - Height
-            // Need to scale all glyph metrics
-            // - Width (even thought it's computed)
-            // - Shift
-            // - Push
-            // - Manual scale factor if any
-
             let family = p_target;
 
-            for (let s = 0; s < familyIDs.length; s++) {
-                let id = familyIDs[s],
-                    value = family.Get(id);
-                if (value != null) { family.Set(id, value * scaleFactor); }
-            }
+            family.BatchSet(mkfData.UTILS.Resample(
+                family.Values(mkfData.IDS.FAMILY_RESAMPLE_IDS),
+                mkfData.IDS.FAMILY_RESAMPLE_IDS,
+                scaleFactor), true);
 
-            let list = family._glyphs.internalArray;
+            family._transformSettings.BatchSet(mkfData.UTILS.Resample(
+                family._transformSettings.Values(mkfData.IDS.TR_RESAMPLE_IDS),
+                mkfData.IDS.TR_RESAMPLE_IDS,
+                scaleFactor), true);
 
-            for (let g = 0, n = list.length; g < n; g++) {
 
-                let variant = list[g].activeVariant,
-                    transform = variant._transformSettings,
-                    pathData = variant.Get(mkfData.IDS.PATH_DATA);
+            //mkfData.UTILS.ResampleValues(family._values, mkfData.IDS.FAMILY_RESAMPLE_IDS, scaleFactor, true);
+            //mkfData.UTILS.ResampleValues(family._transformSettings._values, mkfData.IDS.TR_RESAMPLE_IDS, scaleFactor, true);
 
-                if (pathData && !variant.Get(mkfData.IDS.EMPTY)) {
-                   // SVGOPS.ScalePathData(pathData, scaleFactor);
-                }
+            //family.CommitUpdate();
+            //family._transformSettings.CommitUpdate();
 
-                let idList = mkfData.IDS.GLYPH_RESAMPLE_IDS;
+            family._glyphs._array.forEach(glyph => {
+                glyph._variants.ForEach((variant) => {
 
-                for (let t = 0, tn = idList.length; t < tn; t++) {
-                    let id = idList[t],
-                        valueObj = variant._values[id];
-                    if (!Number.isNaN(valueObj.value)) { variant.Set(id, valueObj.value * scaleFactor); }
-                }
+                    // Glyph values
 
-                idList = mkfData.IDS.TR_RESAMPLE_IDS;
+                    variant.BatchSet(mkfData.UTILS.Resample(
+                        variant.Values(mkfData.IDS.GLYPH_RESAMPLE_IDS),
+                        mkfData.IDS.GLYPH_RESAMPLE_IDS,
+                        scaleFactor), true);
 
-                for (let t = 0, tn = idList.length; t < tn; t++) {
-                    let id = idList[t],
-                        value = transform.Get(id);
-                    if (value != null) { transform.Set(id, value * scaleFactor); }
-                }
 
-            }
+                    //mkfData.UTILS.ResampleValues(variant._values, mkfData.IDS.GLYPH_RESAMPLE_IDS, scaleFactor, true);
+
+                    // Glyph transforms
+
+                    let tr = variant._transformSettings;
+                    tr.BatchSet(mkfData.UTILS.Resample(
+                        tr.Values(mkfData.IDS.TR_RESAMPLE_IDS),
+                        mkfData.IDS.TR_RESAMPLE_IDS,
+                        scaleFactor), true);
+
+                    //mkfData.UTILS.ResampleValues(variant._transformSettings._values, mkfData.IDS.TR_RESAMPLE_IDS, scaleFactor, true);
+
+                    // Layers transforms
+                    variant._layers.ForEach(layer => {
+
+                        layer.BatchSet(mkfData.UTILS.Resample(
+                            layer.Values(mkfData.IDS.TR_RESAMPLE_IDS),
+                            mkfData.IDS.TR_RESAMPLE_IDS,
+                            scaleFactor), true);
+                        //mkfData.UTILS.ResampleValues(layer._values, mkfData.IDS.TR_RESAMPLE_IDS, scaleFactor, true);
+                        //layer.CommitUpdate();
+                    });
+
+                    variant.CommitUpdate();
+
+                });
+
+            });
 
         }
 

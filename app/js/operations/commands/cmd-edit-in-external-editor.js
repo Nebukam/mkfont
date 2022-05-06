@@ -1,4 +1,5 @@
-//
+'use strict';
+
 const nkm = require(`@nkmjs/core`);
 const actions = nkm.actions;
 const ui = nkm.ui;

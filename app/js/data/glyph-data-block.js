@@ -116,6 +116,23 @@ class GlyphDataBlock extends SimpleDataEx {
 
     //
 
+    _OnGlyphAddedToFamily(p_family) {
+        this.Broadcast(SIGNAL.GLYPH_ADDED, this);
+    }
+
+    _OnGlyphRemovedFromFamily(p_family) {
+        this.Broadcast(SIGNAL.GLYPH_REMOVED, this);
+        // Disconnect variant users
+        this._variants.ForEach((item, i) => {
+            for (let i = 0, n = item._layerUsers.count; i < n; i++) {
+                let user = item._layerUsers.last;
+                user.importedVariant = null;
+            }
+        });
+    }
+
+    //
+
     _ScheduleTransformationUpdate() {
         this._variants.ForEach((item, i) => { item._ScheduleTransformationUpdate(); });
     }
@@ -132,6 +149,8 @@ class GlyphDataBlock extends SimpleDataEx {
         }
 
         this._defaultGlyph.Reset(false, true); // will clear SVG stuff since family == null
+        this._defaultGlyph._ClearLayers();
+        
         this._unicode = null;
         this._unicodeInfos = null;
 

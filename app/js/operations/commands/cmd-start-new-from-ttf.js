@@ -1,4 +1,5 @@
-//
+'use strict';
+
 const nkm = require(`@nkmjs/core`);
 const actions = nkm.actions;
 
@@ -52,7 +53,7 @@ class CmdCreateFamilyDocFromTTF extends CmdCreateFamilyDoc {
             this._newFamily = mkfData.TTF.FamilyFromTTF(fs.readFileSync(p));
             let document = this._GetDoc(true),
                 deprecatedData = document.currentData;
-                
+
             document.currentData = this._newFamily;
             deprecatedData.Release();
 
@@ -66,7 +67,7 @@ class CmdCreateFamilyDocFromTTF extends CmdCreateFamilyDoc {
 
     }
 
-    _End(){
+    _End() {
         this._blockingDialog.Consume();
         super._End();
     }

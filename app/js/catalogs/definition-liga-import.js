@@ -1,3 +1,5 @@
+'use strict';
+
 const nkm = require(`@nkmjs/core`);
 
 class LigaImportDefinition extends nkm.data.catalogs.CatalogItem {

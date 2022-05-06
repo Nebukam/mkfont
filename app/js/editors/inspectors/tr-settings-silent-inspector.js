@@ -1,10 +1,7 @@
+'use strict';
+
 const nkm = require(`@nkmjs/core`);
 const ui = nkm.ui;
-const uilib = nkm.uilib;
-
-const UNICODE = require(`../../unicode`);
-const mkfData = require(`../../data`);
-const mkfWidgets = require(`../../widgets`);
 
 const TransformSettingsInspector = require(`./tr-settings-inspector`);
 
@@ -13,21 +10,21 @@ class TransformSettingsSilentInspector extends base {
     constructor() { super(); }
 
     static __controls = [...base.__controls];
+    static __trControls = [...base.__trControls];
 
-    _Init() {
-        super._Init();
-
-        this._builder.defaultControlClass = mkfWidgets.PropertyControl;
-        this._builder.defaultCSS = `control`;
-
-        for (let i = 0; i < base.__controls.length; i++) {
-            let config = base.__controls[i];
-            if (config.options) { config.options.directSet = true; }
-            else { config.options = { directSet: true }; }
-        }
-
+    static {
+        this.__DirectSet(this.__controls);
+        this.__DirectSet(this.__trControls);
     }
 
+    static __DirectSet(p_array) {
+        for (let i = 0; i < p_array.length; i++) {
+            let config = { ...p_array[i] };
+            if (config.options) { config.options = { ...config.options, directSet: true }; }
+            else { config.options = { directSet: true }; }
+            p_array[i] = config;
+        }
+    }
 
 }
 

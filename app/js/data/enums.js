@@ -26,6 +26,17 @@ class ENUMS {
         { name: `Black`, [nkm.com.IDS.VALUE]: 900 },
     ]);
 
+    static MIRROR_NONE = 0;
+    static MIRROR_H = 1;
+    static MIRROR_V = 2;
+    static MIRROR_H_AND_V = 3;
+
+    static MIRROR = nkm.data.catalogs.CreateFrom({ name: `Transform reference`, autoSort: false }, [
+        { name: `Mirror Horizontal`, [nkm.com.IDS.VALUE]: this.MIRROR_H, icon: 'mirror-hor' },
+        { name: `Mirror Vertical`, [nkm.com.IDS.VALUE]: this.MIRROR_V, icon: 'mirror-ver' },
+        { name: `Mirror Horizontal & Vertical`, [nkm.com.IDS.VALUE]: this.MIRROR_H_AND_V, icon: 'mirror-both' },
+        { name: `Don't mirror`, [nkm.com.IDS.VALUE]: this.MIRROR_NONE, icon: 'close-small' },
+    ]);
 
     static BOUNDS_OUTSIDE = 0;
     static BOUNDS_MIXED = 1;
@@ -57,7 +68,7 @@ class ENUMS {
         { name: `EM (from family Metrics)`, [nkm.com.IDS.VALUE]: this.SCALE_EM, icon: 'text-em' },
         { name: `Manual`, [nkm.com.IDS.VALUE]: this.SCALE_MANUAL, icon: 'edit' },
         { name: `Normalized (uses family Metrics)`, [nkm.com.IDS.VALUE]: this.SCALE_NORMALIZE, icon: 'scale' },
-        { name: `None `, [nkm.com.IDS.VALUE]: this.SCALE_NONE, icon: 'clear' },
+        { name: `None `, [nkm.com.IDS.VALUE]: this.SCALE_NONE, icon: 'close-small' },
     ]);
 
 
@@ -76,6 +87,27 @@ class ENUMS {
         //{ name: `To Value`, [nkm.com.IDS.VALUE]: 2, icon: 'edit' },
     ]);
 
+    static ANCHOR_TOP_LEFT = 0;
+    static ANCHOR_TOP = 1;
+    static ANCHOR_TOP_RIGHT = 2;
+    static ANCHOR_LEFT = 3;
+    static ANCHOR_CENTER = 4;
+    static ANCHOR_RIGHT = 5;
+    static ANCHOR_BOTTOM_LEFT = 6;
+    static ANCHOR_BOTTOM = 7;
+    static ANCHOR_BOTTOM_RIGHT = 8;
+
+    static ANCHORS = nkm.data.catalogs.CreateFrom({ name: `Anchoring alignment`, autoSort: false }, [
+        { name: `Top left `, [nkm.com.IDS.VALUE]: this.ANCHOR_TOP_LEFT, icon: 'placement-top-left' },
+        { name: `Top`, [nkm.com.IDS.VALUE]: this.ANCHOR_TOP, icon: 'placement-top' },
+        { name: `Top right`, [nkm.com.IDS.VALUE]: this.ANCHOR_TOP_RIGHT, icon: 'placement-top-right' },
+        { name: `Left `, [nkm.com.IDS.VALUE]: this.ANCHOR_TOP_LEFT, icon: 'placement-left' },
+        { name: `Center`, [nkm.com.IDS.VALUE]: this.ANCHOR_TOP, icon: 'placement-center' },
+        { name: `Right`, [nkm.com.IDS.VALUE]: this.ANCHOR_TOP_RIGHT, icon: 'placement-right' },
+        { name: `Bottom left `, [nkm.com.IDS.VALUE]: this.ANCHOR_TOP_LEFT, icon: 'placement-bottom-left' },
+        { name: `Bottom`, [nkm.com.IDS.VALUE]: this.ANCHOR_TOP, icon: 'placement-bottom' },
+        { name: `Bottom right`, [nkm.com.IDS.VALUE]: this.ANCHOR_TOP_RIGHT, icon: 'placement-bottom-right' },
+    ]);
 
     static VANCHOR_BOTTOM = 0;
     static VANCHOR_CENTER = 1;
@@ -138,17 +170,18 @@ class ENUMS {
         { name: `Preserve existing transforms`, [nkm.com.IDS.VALUE]: this.OVERLAP_PRESERVE },
         { name: `Don't import`, [nkm.com.IDS.VALUE]: this.OVERLAP_IGNORE },
     ]);
+    
 
     static ASSIGN_FILENAME = 0;
     static ASSIGN_SELECTION = 1;
-    static ASSIGN_SELECTION_RANGE = 2;
+    static ASSIGN_SEL_RANGE = 2;
     static ASSIGN_FROM_BLOCK = 3;
     static ASSIGN_FROM_BLOCK_RANGE = 4;
 
     static ASSIGN_IMPORT_MODE = nkm.data.catalogs.CreateFrom({ name: `Transform reference`, autoSort: false }, [
         { name: `From filename`, [nkm.com.IDS.VALUE]: this.ASSIGN_FILENAME, comment: `Use imported filename to drive glyph assignment` },
         //{ name: `Start from selection`, [nkm.com.IDS.VALUE]: this.ASSIGN_SELECTION, comment: `Use the start of the active selection and fill from there` },
-        { name: `To selection`, [nkm.com.IDS.VALUE]: this.ASSIGN_SELECTION_RANGE, comment: `Limit import to the current selection of glyphs` },
+        { name: `To selection`, [nkm.com.IDS.VALUE]: this.ASSIGN_SEL_RANGE, comment: `Limit import to the current selection of glyphs` },
         { name: `To block`, [nkm.com.IDS.VALUE]: this.ASSIGN_FROM_BLOCK, comment: `Limit import to the current selection of glyphs` },
         { name: `To block (constrained)`, [nkm.com.IDS.VALUE]: this.ASSIGN_FROM_BLOCK_RANGE, comment: `Limit import to the current selection of glyphs` },
     ]);
@@ -159,6 +192,40 @@ class ENUMS {
     static BLOCK_START_MODE = nkm.data.catalogs.CreateFrom({ name: `Block start mode`, autoSort: false }, [
         { name: `Block start`, [nkm.com.IDS.VALUE]: this.BLOCK_START_BEGIN },
         { name: `First empty slot`, [nkm.com.IDS.VALUE]: this.BLOCK_START_FIRST_AVAIL },
+    ]);
+
+    //
+
+    static LYR_BOUNDS_OUTSIDE = 0;
+    static LYR_BOUNDS_MIXED = 1;
+    static LYR_BOUNDS_INSIDE = 2;
+
+    static LYR_BOUNDS = nkm.data.catalogs.CreateFrom({ name: `Transform reference`, autoSort: false }, [
+        { name: `Imported bounds`, [nkm.com.IDS.VALUE]: this.LYR_BOUNDS_OUTSIDE, icon: 'bounds-outside' },
+        { name: `Mixed bounds`, [nkm.com.IDS.VALUE]: this.LYR_BOUNDS_MIXED, icon: 'bounds-mixed' },
+        { name: `Glyph bounds`, [nkm.com.IDS.VALUE]: this.LYR_BOUNDS_INSIDE, icon: 'bounds-inside' },
+    ]);
+
+    static LYR_SCALE = nkm.data.catalogs.CreateFrom({ name: `Scale`, autoSort: false }, [
+        { name: `Manual`, [nkm.com.IDS.VALUE]: this.SCALE_MANUAL, icon: 'edit' },
+        { name: `Normalized`, [nkm.com.IDS.VALUE]: this.SCALE_NORMALIZE, icon: 'scale' },
+        { name: `None `, [nkm.com.IDS.VALUE]: this.SCALE_NONE, icon: 'close-small' },
+    ]);
+
+    static SKR_ORDER_R_X_Y = 0;
+    static SKR_ORDER_R_Y_X = 1;
+    static SKR_ORDER_X_R_Y = 2;
+    static SKR_ORDER_Y_R_X = 3;
+    static SKR_ORDER_X_Y_R = 4;
+    static SKR_ORDER_Y_X_R = 5;
+
+    static SKR_ORDER = nkm.data.catalogs.CreateFrom({ name: `Rot & Skew order`, autoSort: false }, [
+        { name: `R, X, Y`, [nkm.com.IDS.VALUE]: this.SKR_ORDER_R_X_Y},
+        { name: `R, Y, X`, [nkm.com.IDS.VALUE]: this.SKR_ORDER_R_Y_X},
+        { name: `X, R, Y`, [nkm.com.IDS.VALUE]: this.SKR_ORDER_X_R_Y},
+        { name: `Y, R, X`, [nkm.com.IDS.VALUE]: this.SKR_ORDER_Y_R_X},
+        { name: `X, Y, R`, [nkm.com.IDS.VALUE]: this.SKR_ORDER_X_Y_R},
+        { name: `Y, X, R`, [nkm.com.IDS.VALUE]: this.SKR_ORDER_Y_X_R},
     ]);
 
 }

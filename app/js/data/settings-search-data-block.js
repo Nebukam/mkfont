@@ -94,7 +94,7 @@ class SettingsSearchDataBlock extends SimpleDataEx {
         this._addComps = this.Get(IDS_EXT.ADD_COMPOSITION);
         this._mustExists = this.Get(IDS_EXT.MUST_EXISTS);
 
-        this._terms = this.Get(IDS_EXT.SEARCH_TERM).split(` `);
+        this._terms = UNICODE.ResolveString(this.Get(IDS_EXT.SEARCH_TERM)).split(` `);
         this._upperTerms = [];
         this._upperIndexed = [];
         for (let i = 0; i < this._terms.length; i++) {

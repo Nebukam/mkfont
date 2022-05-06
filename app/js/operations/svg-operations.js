@@ -1,3 +1,5 @@
+'use strict';
+
 const nkm = require(`@nkmjs/core`);
 const css = nkm.style.CSS;
 const IDS = require(`../data/ids`);
@@ -8,6 +10,7 @@ const { optimize } = require('svgo');
 const ttf2svg = require('ttf2svg');
 const svg2ttf = require('svg2ttf');
 const svgpath = require('svgpath');
+const svgpathreverse = require('svg-path-reverse');
 
 const domparser = new DOMParser();
 /*
@@ -74,6 +77,7 @@ const __dummySVG = document.createElementNS("http://www.w3.org/2000/svg", "svg")
 __dummyDiv.appendChild(__dummySVG);
 document.body.appendChild(__dummyDiv);
 const __pathSVG = document.createElementNS("http://www.w3.org/2000/svg", "path");
+__dummySVG.appendChild(__pathSVG);
 
 SVGGraphicsElement.prototype.getBBox = function () {
     var rect;
@@ -219,13 +223,13 @@ class SVGOperations {
                         .toString();
 
                     result.path = mergedPaths;
-                    result.BBox = this.GetBBox(mergedPaths);
+                    result.bbox = this.GetBBox(mergedPaths);
 
 
                 } else {
 
                     result.path = mergedPaths;
-                    result.BBox = this.GetBBox(mergedPaths);
+                    result.bbox = this.GetBBox(mergedPaths);
 
                     let viewBox = svg.getAttribute(`viewBox`);
 
@@ -238,8 +242,8 @@ class SVGOperations {
                             wAtt = Number(svg.getAttribute(`width`)),
                             hAtt = Number(svg.getAttribute(`height`));
 
-                        result.width = Number.isNaN(wAtt) ? result.BBox.width : wAtt;
-                        result.height = Number.isNaN(hAtt) ? result.BBox.height : hAtt;
+                        result.width = Number.isNaN(wAtt) ? result.bbox.width : wAtt;
+                        result.height = Number.isNaN(hAtt) ? result.bbox.height : hAtt;
                     }
                 }
 
@@ -258,12 +262,12 @@ class SVGOperations {
     static EmptySVGStats() {
 
         let
-            path = `M 0 0 L 0 0 z`,
+            path = IDS.EMPTY_PATH_CONTENT,
             result = {
                 exists: true,
                 markedBBox: false,
                 path: path,
-                BBox: this.GetBBox(path),
+                bbox: this.GetBBox(path),
                 width: 0,
                 height: 0,
                 emptyPath: true
@@ -326,7 +330,7 @@ class SVGOperations {
     static GetBBox(p_path) {
 
         __pathSVG.setAttribute(`d`, p_path);
-        return __pathSVG.getBBox();
+        return __dummySVG.getBBox();
 
     }
 
@@ -349,7 +353,12 @@ class SVGOperations {
             autoWidth = p_settings.Get(IDS.TR_AUTO_WIDTH),
             ctxH = p_settings.ResolveVariant(IDS.HEIGHT, p_context.h),
             ctxW = p_settings.ResolveVariant(IDS.WIDTH, p_context.w),
-            mono = p_context.mono;
+            mono = p_context.mono,
+            mirror = p_settings.Get(IDS.TR_MIRROR),
+            rot = p_settings.Resolve(IDS.TR_ROTATION),
+            skx = p_settings.Resolve(IDS.TR_SKEW_X),
+            sky = p_settings.Resolve(IDS.TR_SKEW_Y),
+            doReverse = false;
 
         if (sShift == null) { sShift = p_context.xshift; }
         if (sPush == null) { sPush = p_context.xpush; }
@@ -359,32 +368,75 @@ class SVGOperations {
                 height: 0,
                 width: Math.max(sShift + sPush, 0),
                 path: p_svgStats.path,
-                bbox: p_svgStats.BBox
+                bbox: p_svgStats.bbox
             };
         }
 
         let
-            bbox = p_svgStats.BBox,
-            markedBBox = p_svgStats.markedBBox,
+            pathTransform = svgpath(path),
+            bbox = p_svgStats.bbox,
             scale = 1,
             heightRef = p_svgStats.height,
             widthRef = p_svgStats.width,
             offsetY = 0,
             offsetX = 0,
             fitH = heightRef,
-            fitW = widthRef;
+            fitW = widthRef,
+            anchor = p_settings.Get(IDS.TR_ANCHOR);
+
+        if (rot != 0 || skx != 0 || sky != 0) {
+            //rotate incoming SVG Path & update bbox
+
+            let
+                rotorder = p_settings.Resolve(IDS.TR_SKEW_ROT_ORDER),
+                ranchor = p_settings.Resolve(IDS.TR_ROTATION_ANCHOR),
+                tr = pathTransform;
+
+            switch (rotorder) {
+                case ENUMS.SKR_ORDER_R_X_Y: this._Rot(tr, rot, ranchor, widthRef, heightRef); this._SkewX(tr, skx); this._SkewY(tr, sky); break;
+                case ENUMS.SKR_ORDER_R_Y_X: this._Rot(tr, rot, ranchor, widthRef, heightRef); this._SkewY(tr, sky); this._SkewX(tr, skx); break;
+                case ENUMS.SKR_ORDER_X_R_Y: this._SkewX(tr, skx); this._Rot(tr, rot, ranchor, widthRef, heightRef); this._SkewY(tr, sky); break;
+                case ENUMS.SKR_ORDER_Y_R_X: this._SkewY(tr, sky); this._Rot(tr, rot, ranchor, widthRef, heightRef); this._SkewX(tr, skx); break;
+                case ENUMS.SKR_ORDER_X_Y_R: this._SkewX(tr, skx); this._SkewY(tr, sky); this._Rot(tr, rot, ranchor, widthRef, heightRef); break;
+                case ENUMS.SKR_ORDER_Y_X_R: this._SkewY(tr, sky); this._SkewX(tr, skx); this._Rot(tr, rot, ranchor, widthRef, heightRef); break;
+            }
+
+            if (refMode == ENUMS.BOUNDS_INSIDE || refMode == ENUMS.BOUNDS_MIXED) {
+                // This alone, super expensive ;_;
+                bbox = this.GetBBox(pathTransform.toString());
+            }
+
+        }
+
 
         if (refMode == ENUMS.BOUNDS_INSIDE) {
             fitH = heightRef = bbox.height;
             fitW = widthRef = bbox.width;
-            path = svgpath(path)
+            pathTransform
                 .translate(-bbox.x, -bbox.y)
                 .toString();
         } else if (refMode == ENUMS.BOUNDS_MIXED) {
             fitW = widthRef = bbox.width;
-            path = svgpath(path)
+            pathTransform
                 .translate(-bbox.x, 0)
                 .toString();
+        }
+
+        if (mirror != ENUMS.MIRROR_NONE) {
+
+            switch (mirror) {
+                case ENUMS.MIRROR_H:
+                    pathTransform.scale(-1, 1).translate(fitW, 0).toString();
+                    doReverse = true;
+                    break;
+                case ENUMS.MIRROR_V:
+                    pathTransform.scale(1, -1).translate(0, fitH).toString();
+                    doReverse = true;
+                    break;
+                case ENUMS.MIRROR_H_AND_V:
+                    pathTransform.scale(-1, -1).translate(fitW, fitH).toString();
+                    break;
+            }
         }
 
 
@@ -456,15 +508,23 @@ class SVGOperations {
                 break;
         }
 
-        switch (p_settings.Get(IDS.TR_VER_ALIGN_ANCHOR)) {
-            case ENUMS.VANCHOR_BOTTOM:
+
+
+        switch (anchor) {
+            case ENUMS.ANCHOR_BOTTOM_LEFT:
+            case ENUMS.ANCHOR_BOTTOM:
+            case ENUMS.ANCHOR_BOTTOM_RIGHT:
                 offsetY += 0;
                 break;
-            case ENUMS.VANCHOR_CENTER:
+            case ENUMS.ANCHOR_LEFT:
+            case ENUMS.ANCHOR_CENTER:
+            case ENUMS.ANCHOR_RIGHT:
                 offsetY += heightRef * 0.5;
                 break;
             default:
-            case ENUMS.VANCHOR_TOP:
+            case ENUMS.ANCHOR_TOP_LEFT:
+            case ENUMS.ANCHOR_TOP:
+            case ENUMS.ANCHOR_TOP_RIGHT:
                 offsetY += heightRef;
                 break;
         }
@@ -477,15 +537,21 @@ class SVGOperations {
 
         if (mono) { widthRef = p_context.w; }
 
-        switch (p_settings.Get(IDS.TR_HOR_ALIGN_ANCHOR)) {
-            case ENUMS.HANCHOR_LEFT:
+        switch (anchor) {
+            case ENUMS.ANCHOR_TOP_LEFT:
+            case ENUMS.ANCHOR_LEFT:
+            case ENUMS.ANCHOR_BOTTOM_LEFT:
                 offsetX += 0;
                 break;
-            case ENUMS.HANCHOR_CENTER:
+            case ENUMS.ANCHOR_TOP:
+            case ENUMS.ANCHOR_CENTER:
+            case ENUMS.ANCHOR_BOTTOM:
                 offsetX -= fitW * 0.5;
                 break;
             default:
-            case ENUMS.HANCHOR_RIGHT:
+            case ENUMS.ANCHOR_TOP_RIGHT:
+            case ENUMS.ANCHOR_RIGHT:
+            case ENUMS.ANCHOR_BOTTOM_RIGHT:
                 offsetX -= fitW;
                 break;
         }
@@ -505,10 +571,12 @@ class SVGOperations {
 
         offsetY += yUserOffset;
 
-        path = svgpath(path)
+        path = pathTransform
             .scale(scale)
             .translate(offsetX, offsetY)
             .toString();
+
+        if (doReverse) { path = svgpathreverse.reverse(path); }
 
         return {
             height: Math.max(heightRef, 0),
@@ -520,11 +588,265 @@ class SVGOperations {
 
     }
 
+    static FitLayerPath(p_settings, p_context, p_w, p_h, p_variantPath, p_cw, p_ch) {
+
+        let
+            path = p_variantPath,
+            ctxW = p_w,
+            ctxH = p_h,
+            pWidth = p_cw,
+            pHeight = p_ch,
+            offsetX = 0,
+            offsetY = 0,
+            scale = 1,
+            mirror = p_settings.Get(IDS.TR_MIRROR),
+            rot = p_settings.Get(IDS.TR_ROTATION),
+            skx = p_settings.Get(IDS.TR_SKEW_X),
+            sky = p_settings.Get(IDS.TR_SKEW_Y),
+            boundMode = p_settings.Get(IDS.TR_BOUNDS_MODE),
+            pathTransform = svgpath(path),
+            doReverse = false,
+            vbbox = null;
+
+        if (rot != 0 || skx != 0 || sky != 0) {
+            //rotate incoming SVG Path & update bbox
+
+            let
+                rotorder = p_settings.Get(IDS.TR_SKEW_ROT_ORDER),
+                ranchor = p_settings.Get(IDS.TR_ROTATION_ANCHOR),
+                tr = pathTransform;
+
+            switch (rotorder) {
+                case ENUMS.SKR_ORDER_R_X_Y: this._Rot(tr, rot, ranchor, pWidth, pHeight); this._SkewX(tr, skx); this._SkewY(tr, sky); break;
+                case ENUMS.SKR_ORDER_R_Y_X: this._Rot(tr, rot, ranchor, pWidth, pHeight); this._SkewY(tr, sky); this._SkewX(tr, skx); break;
+                case ENUMS.SKR_ORDER_X_R_Y: this._SkewX(tr, skx); this._Rot(tr, rot, ranchor, pWidth, pHeight); this._SkewY(tr, sky); break;
+                case ENUMS.SKR_ORDER_Y_R_X: this._SkewY(tr, sky); this._Rot(tr, rot, ranchor, pWidth, pHeight); this._SkewX(tr, skx); break;
+                case ENUMS.SKR_ORDER_X_Y_R: this._SkewX(tr, skx); this._SkewY(tr, sky); this._Rot(tr, rot, ranchor, pWidth, pHeight); break;
+                case ENUMS.SKR_ORDER_Y_X_R: this._SkewY(tr, sky); this._SkewX(tr, skx); this._Rot(tr, rot, ranchor, pWidth, pHeight); break;
+            }
+
+            if (boundMode != ENUMS.BOUNDS_OUTSIDE) {
+                // This alone, super expensive ;_;
+                vbbox = this.GetBBox(pathTransform.toString());
+                
+            }
+
+        }
+
+        switch (p_settings.Get(IDS.TR_LYR_BOUNDS_MODE)) {
+            case ENUMS.LYR_BOUNDS_OUTSIDE:
+                break;
+            case ENUMS.LYR_BOUNDS_MIXED:
+                offsetX = p_context.bbox.x;
+                ctxW = p_context.bbox.width;
+                break;
+            case ENUMS.LYR_BOUNDS_INSIDE:
+                offsetX = p_context.bbox.x;
+                offsetY = p_context.bbox.y;
+                ctxW = p_context.bbox.width;
+                ctxH = p_context.bbox.height;
+                break;
+        }
+
+        if (boundMode != ENUMS.BOUNDS_OUTSIDE) {
+            if (!vbbox) { vbbox = this.GetBBox(path); }
+            switch (boundMode) {
+                case ENUMS.BOUNDS_MIXED:
+                    pathTransform.translate(-vbbox.x, 0);
+                    pWidth = vbbox.width;
+                    break;
+                case ENUMS.BOUNDS_INSIDE:
+                    pathTransform.translate(-vbbox.x, -vbbox.y);
+                    pWidth = vbbox.width;
+                    pHeight = vbbox.height;
+                    break;
+            }
+        }
+
+        if (mirror != ENUMS.MIRROR_NONE) {
+            switch (mirror) {
+                case ENUMS.MIRROR_H:
+                    pathTransform.scale(-1, 1).translate(pWidth, 0);
+                    doReverse = true;
+                    break;
+                case ENUMS.MIRROR_V:
+                    pathTransform.scale(1, -1).translate(0, pHeight);
+                    doReverse = true;
+                    break;
+                case ENUMS.MIRROR_H_AND_V:
+                    pathTransform.scale(-1, -1).translate(pWidth, pHeight);
+                    break;
+            }
+        }
+
+        // Scale
+
+        switch (p_settings.Get(IDS.TR_LYR_SCALE_MODE)) {
+            case ENUMS.SCALE_MANUAL:
+                scale = p_settings.Get(IDS.TR_LYR_SCALE_FACTOR);
+                pWidth *= scale;
+                pHeight *= scale;
+                break;
+            case ENUMS.SCALE_NORMALIZE:
+                break;
+        }
+
+        let
+            ctxAnchor = p_settings.Get(IDS.TR_ANCHOR),
+            selfAnchor = p_settings.Get(IDS.TR_LYR_SELF_ANCHOR);
+        // Adjust offsetX based on context & input
+        // context
+        switch (ctxAnchor) {
+            case ENUMS.ANCHOR_TOP_LEFT:
+            case ENUMS.ANCHOR_LEFT:
+            case ENUMS.ANCHOR_BOTTOM_LEFT:
+                break;
+            case ENUMS.ANCHOR_TOP:
+            case ENUMS.ANCHOR_CENTER:
+            case ENUMS.ANCHOR_BOTTOM:
+                offsetX += ctxW * 0.5;
+                break;
+            case ENUMS.ANCHOR_TOP_RIGHT:
+            case ENUMS.ANCHOR_RIGHT:
+            case ENUMS.ANCHOR_BOTTOM_RIGHT:
+                offsetX += ctxW;
+                break;
+        }
+        // path
+        switch (selfAnchor) {
+            case ENUMS.ANCHOR_TOP_LEFT:
+            case ENUMS.ANCHOR_LEFT:
+            case ENUMS.ANCHOR_BOTTOM_LEFT:
+                break;
+            case ENUMS.ANCHOR_TOP:
+            case ENUMS.ANCHOR_CENTER:
+            case ENUMS.ANCHOR_BOTTOM:
+                offsetX -= pWidth * 0.5;
+                break;
+            case ENUMS.ANCHOR_TOP_RIGHT:
+            case ENUMS.ANCHOR_RIGHT:
+            case ENUMS.ANCHOR_BOTTOM_RIGHT:
+                offsetX -= pWidth;
+                break;
+        }
+
+        // Adjust offsetY based on context & input
+        // context
+        switch (ctxAnchor) {
+            case ENUMS.ANCHOR_TOP_LEFT:
+            case ENUMS.ANCHOR_TOP:
+            case ENUMS.ANCHOR_TOP_RIGHT:
+                break;
+            case ENUMS.ANCHOR_LEFT:
+            case ENUMS.ANCHOR_CENTER:
+            case ENUMS.ANCHOR_RIGHT:
+                offsetY += ctxH * 0.5;
+                break;
+            case ENUMS.ANCHOR_BOTTOM_LEFT:
+            case ENUMS.ANCHOR_BOTTOM:
+            case ENUMS.ANCHOR_BOTTOM_RIGHT:
+                offsetY += ctxH;
+                break;
+        }
+        // path
+        switch (selfAnchor) {
+            case ENUMS.ANCHOR_TOP_LEFT:
+            case ENUMS.ANCHOR_TOP:
+            case ENUMS.ANCHOR_TOP_RIGHT:
+                break;
+            case ENUMS.ANCHOR_LEFT:
+            case ENUMS.ANCHOR_CENTER:
+            case ENUMS.ANCHOR_RIGHT:
+                offsetY -= pHeight * 0.5;
+                break;
+            case ENUMS.ANCHOR_BOTTOM_LEFT:
+            case ENUMS.ANCHOR_BOTTOM:
+            case ENUMS.ANCHOR_BOTTOM_RIGHT:
+                offsetY -= pHeight;
+                break;
+        }
+
+        let yUserOffset = p_settings.Get(IDS.TR_Y_OFFSET);
+        offsetY += yUserOffset;
+        offsetX += p_settings.Get(IDS.TR_X_OFFSET);
+
+        path = pathTransform
+            .scale(scale)
+            .translate(offsetX, offsetY)
+            .toString();
+
+        if (doReverse) { path = svgpathreverse.reverse(path); }
+
+        return {
+            height: Math.max(pHeight, 0),
+            width: Math.max(pWidth, 0),
+            fit: { width: pWidth, height: pHeight, x: offsetX, y: offsetY, yoff: yUserOffset },
+            path: path,
+            bbox: this.GetBBox(path)
+        };
+
+    }
+
+    static _Rot(p_tr, p_rot, p_anchor, p_w, p_h) {
+
+        if (p_rot == 0) { return p_tr; }
+
+        let ox = 0, oy = 0;
+
+        switch (p_anchor) {
+            case ENUMS.ANCHOR_TOP:
+            case ENUMS.ANCHOR_CENTER:
+            case ENUMS.ANCHOR_BOTTOM:
+                ox = p_w * 0.5;
+                break;
+            case ENUMS.ANCHOR_TOP_RIGHT:
+            case ENUMS.ANCHOR_RIGHT:
+            case ENUMS.ANCHOR_BOTTOM_RIGHT:
+                ox = p_w;
+                break;
+        }
+
+        switch (p_anchor) {
+            case ENUMS.ANCHOR_BOTTOM_LEFT:
+            case ENUMS.ANCHOR_BOTTOM:
+            case ENUMS.ANCHOR_BOTTOM_RIGHT:
+                oy = p_h;
+                break;
+            case ENUMS.ANCHOR_LEFT:
+            case ENUMS.ANCHOR_CENTER:
+            case ENUMS.ANCHOR_RIGHT:
+                oy = p_h * 0.5;
+                break;
+        }
+
+        p_tr.rotate(p_rot, ox, oy);
+
+        return p_tr;
+    }
+
+    static _SkewX(p_tr, p_amnt) {
+        if (p_amnt == 0) { return p_tr; }
+        p_tr.skewX(p_amnt);
+        return p_tr;
+    }
+
+    static _SkewY(p_tr, p_amnt) {
+        if (p_amnt == 0) { return p_tr; }
+        p_tr.skewY(p_amnt);
+        return p_tr;
+    }
+
+    /**
+     * 
+     * @param {*} p_pathData 
+     * @param {*} p_scale 
+     * @deprecated isn't used anywhere, not maintained, you sure you need that?
+     */
     static ScalePathData(p_pathData, p_scale) {
         p_pathData.width *= p_scale;
         p_pathData.height *= p_scale;
         p_pathData.path = svgpath(p_pathData.path).scale(p_scale, p_scale).toString();
-        let bbox = p_pathData.BBox;
+        let bbox = p_pathData.bbox;
         bbox.x *= p_scale;
         bbox.y *= p_scale;
         bbox.width *= p_scale;

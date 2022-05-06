@@ -1,4 +1,5 @@
-//
+'use strict';
+
 const nkm = require(`@nkmjs/core`);
 const actions = nkm.actions;
 const u = nkm.u;
@@ -82,7 +83,7 @@ class CmdImportFileSingle extends actions.Command {
 
         if (glyph.isNull) {
             // Need to create a new glyph!
-            this._emitter.Do(mkfActions.CreateGlyph, {
+            this._emitter.Do(mkfActions.GlyphCreate, {
                 family: family,
                 unicode: unicodeInfos,
                 path: svgStats

@@ -35,6 +35,10 @@
     filter: grayscale(1);
 }
 
+.icon.expand{
+    cursor: pointer;
+}
+
 // ----> Host presets
 // Sizes
 @include for-each-host-selector('', $SIZES, '', '', $size_varnames) using ($index, $val) {

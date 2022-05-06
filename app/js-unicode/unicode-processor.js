@@ -173,7 +173,7 @@ let relMap = {};
 let charMap = {};
 let charList = [];
 let ci = 0;
-charloop : for (let i = 0; i < characterLines.length; i++) {
+charloop: for (let i = 0; i < characterLines.length; i++) {
     let
         entry = characterLines[i].split(`;`),
         charCode = entry[0].toLowerCase(),
@@ -186,8 +186,8 @@ charloop : for (let i = 0; i < characterLines.length; i++) {
         block = FindBlock(index),
         charData = { i: ci };
 
-    if (charName == `<control>`) { 
-        charName = entry[10]; 
+    if (charName == `<control>`) {
+        charName = entry[10];
         continue charloop; // IGNORE CONTROL CHARS FOR NOW
     }
     ci++;
@@ -211,6 +211,8 @@ charloop : for (let i = 0; i < characterLines.length; i++) {
 
     try {
 
+
+
         let refs = decomposition.split(` `);
         if (refs[0].includes(`<`)) {
             decomp = decompositions[refs[0]];
@@ -221,14 +223,16 @@ charloop : for (let i = 0; i < characterLines.length; i++) {
 
         if (refs.length != 0) {
 
-            charData.relatives = [];
+            if (refs.length >= 2) { charData.realRelatives = []; }
 
+            charData.relatives = [];
             for (let d = 0; d < refs.length; d++) {
 
-                let ref = refs[d];
+                let ref = refs[d].toLowerCase();
                 if (ref) {
 
                     charData.relatives.push(ref);
+                    if (charData.realRelatives) { charData.realRelatives.push(`'${ref}'`); }
 
                     if (charCode != ``) {
 
@@ -441,7 +445,12 @@ for (var p in charMap) {
         relstr = ` relatives:[${relMap[p].join(`, `)}],`;
     }
 
-    UNI_CHAR_MAP += `${tabs}'${p}':{ u:'${p}', i:${c.i}, name:'${c.name}',${catstr} ${relstr} canon:k.${c.canonical}, block:b[${c.block}]`;
+    let rl = ``;
+    if(c.realRelatives){
+        rl = `comp:[${c.realRelatives.join(`,`)}],`
+    }
+
+    UNI_CHAR_MAP += `${tabs}'${p}':{ u:'${p}', i:${c.i}, name:'${c.name}',${catstr} ${relstr} ${rl} canon:k.${c.canonical}, block:b[${c.block}]`;
     if (c.indexed) { UNI_CHAR_MAP += `, indexed:[${c.indexed.join(`,`)}]` }
     UNI_CHAR_MAP += `},`;
 }
@@ -489,11 +498,11 @@ for (let p in relMap) {
 }
 UNI_REL_MAPPING += `${tabs}}`;
 
-console.log(generalCategories);
-console.log(categories);
-console.log(canonicalClasses);
-console.log(decompositions);
-console.log(characterLines.length);
+//console.log(generalCategories);
+//console.log(categories);
+//console.log(canonicalClasses);
+//console.log(decompositions);
+//console.log(characterLines.length);
 //console.log(charMap);
 
 

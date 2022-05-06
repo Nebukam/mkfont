@@ -1,3 +1,5 @@
+'use strict';
+
 const nkm = require(`@nkmjs/core`);
 const u = nkm.u;
 const ui = nkm.ui;
@@ -17,7 +19,7 @@ class EditorMKFontImport extends base {
         super._Init();
         this._importList = [];
 
-        let dataSel = this._InitSelectionStack(true, true, {
+        nkm.ui.helpers.HostSelStack(this, true, true, {
             add: {
                 fn: (p_sel, p_index) => {
                     let widget = this._domStreamer.GetItemAt(p_index);
@@ -35,7 +37,10 @@ class EditorMKFontImport extends base {
             count: {
                 fn: (p_sel) => { return this._importList.length; }, thisArg: this
             },
-        }).data;
+            index: {
+                fn: (p_sel, p_data) => { return this._importList.indexOf(p_data); }, thisArg: this
+            },
+        });
 
     }
 
@@ -53,11 +58,11 @@ class EditorMKFontImport extends base {
             '.list': {
                 'position': 'relative',
                 'width': '800px',
-                'min-height':'100px',
+                'min-height': '100px',
                 //'padding': '10px',
                 'background-color': 'rgba(0,0,0,0.2)',
                 'overflow': 'auto',
-                
+
             },
         }, base._Style());
     }
@@ -93,7 +98,7 @@ class EditorMKFontImport extends base {
                     label: `Select all`,
                     trigger: {
                         fn: () => {
-                            this._importList.forEach(item => { item.selected = true;});
+                            this._importList.forEach(item => { item.selected = true; });
                             this._OnImportListUpdated();
                         }
                     },
@@ -103,7 +108,7 @@ class EditorMKFontImport extends base {
                     label: `Unselect all`,
                     trigger: {
                         fn: () => {
-                            this._importList.forEach(item => { item.selected = false;});
+                            this._importList.forEach(item => { item.selected = false; });
                             this._OnImportListUpdated();
                         }
                     },
@@ -113,7 +118,7 @@ class EditorMKFontImport extends base {
                     label: `Toggle selected glyphs`,
                     trigger: {
                         fn: () => {
-                            this._selectionStack.data.stack.ForEach(item => { item.selected = true;});
+                            this._selStack.data.stack.ForEach(item => { item.selected = true; });
                             this._OnImportListUpdated();
                         }
                     },
@@ -128,11 +133,11 @@ class EditorMKFontImport extends base {
     get family() { return this._family; }
     set family(p_value) { this._family = p_value; }
 
-    set importList(p_value){
+    set importList(p_value) {
 
         this._importList = p_value;
 
-        if(!p_value){
+        if (!p_value) {
             this._domStreamer.itemCount = 0;
             return;
         }
@@ -145,7 +150,7 @@ class EditorMKFontImport extends base {
         this._domStreamer._items.forEach((item) => { item.Update(); });
     }
 
-    _OnItemCleared(){}
+    _OnItemCleared() { }
 
     _OnItemRequested(p_streamer, p_index, p_fragment, p_returnFn) {
 

@@ -98,7 +98,7 @@ class AssignBaseControl extends base {
         if (!p_item.userDoImport || p_item.userDoCustom) {
             this._offsetIndex--;
             if (p_item.userDoCustom) {
-                p_item.targetUnicode = this._GetUnicodeStructure([p_item.userInput]);
+                p_item.targetUnicode = this._GetUnicodeStructure([UNICODE.ResolveString(p_item.userInput)]);
             }
         } else {
             this._InternalProcess(p_item, p_index);
@@ -146,21 +146,9 @@ class AssignBaseControl extends base {
 
     _SingleStructure(p_value, p_index) {
 
+        p_value = UNICODE.ResolveString(p_value);
+
         if (p_value.length == 1) { return [UNICODE.GetAddress(p_value)]; }
-        if (p_value.toUpperCase().includes(`U+`)) {
-
-            let
-                split = p_value.toUpperCase().split(`U+`),
-                results = [];
-
-            for (let i = 0; i < split.length; i++) {
-                let hex = split[i].trim();
-                if (nkm.u.isHex(hex, 4)) { results.push(hex); }
-            }
-
-            return results;
-
-        }
 
         let result = [];
         for (let i = 0; i < p_value.length; i++) { result.push(UNICODE.GetAddress(p_value.substr(i, 1))); }

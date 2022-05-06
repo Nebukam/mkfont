@@ -1,3 +1,5 @@
+'use strict';
+
 const nkm = require(`@nkmjs/core`);
 const u = nkm.u;
 const ui = nkm.ui;
@@ -21,7 +23,7 @@ class GlyphGroupFooter extends base {
                 },
                 inputOnly: true
             },
-            css:`slider`
+            css: `slider`
         },
     ];
 
@@ -36,22 +38,19 @@ class GlyphGroupFooter extends base {
             ':host': {
                 'min-height': 'auto',
                 'padding': '10px 20px',
-                'overflow': 'clip'
+                'overflow': 'clip',
+                'position': 'relative',
             },
             '.title': {
                 'margin-bottom': '10px'
             },
             '.control': {
-
+                'margin-bottom': '0',
             },
             '.slider': {
-                'width':`100px`
+                'width': `100px`
             }
         }, base._Style());
-    }
-
-    _Render() {
-        super._Render();
     }
 
     _OnEditorChanged(p_oldEditor) {

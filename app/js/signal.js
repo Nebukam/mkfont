@@ -56,7 +56,7 @@ class SIGNAL {
    * @type {symbol}
    * @customtag read-only
    */
-   static SEARCH_TOGGLED = Symbol(`search-toggled`);
+  static SEARCH_TOGGLED = Symbol(`search-toggled`);
 
   /**
    * @description TODO
@@ -77,7 +77,42 @@ class SIGNAL {
    * @type {symbol}
    * @customtag read-only
    */
-   static SEARCH_PROGRESS = Symbol(`search-progress`);
+  static SEARCH_PROGRESS = Symbol(`search-progress`);
+
+  /**
+   * @description TODO
+   * @type {symbol}
+   * @customtag read-only
+   */
+  static LAYER_ADDED = Symbol(`layer-added`);
+
+  /**
+   * @description TODO
+   * @type {symbol}
+   * @customtag read-only
+   */
+  static LAYER_REMOVED = Symbol(`layer-removed`);
+
+  /**
+  * @description TODO
+  * @type {symbol}
+  * @customtag read-only
+  */
+  static LAYERS_UPDATED = Symbol(`layers-updated`);
+
+  /**
+  * @description TODO
+  * @type {symbol}
+  * @customtag read-only
+  */
+   static SELECTED_LAYER_CHANGED = Symbol(`selected-layer-changed`);
+
+  /**
+  * @description TODO
+  * @type {symbol}
+  * @customtag read-only
+  */
+   static LAYER_VALUE_CHANGED = Symbol(`layer-value-changed`);
 
 }
 

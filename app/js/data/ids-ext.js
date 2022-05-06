@@ -208,7 +208,7 @@ class IDS_EXT {
 
         this.infos[this.LIGA_MIN] = {
             recompute: true,
-            inputType: inputs.Number,
+            inputType: inputs.NumberDrag,
             label: `Min length`,
             inputOptions: { size: ui.FLAGS.SIZE_XS, min: 2, max: 30 },
             desc: `The minimum number of siblings to look for.`
@@ -216,7 +216,7 @@ class IDS_EXT {
 
         this.infos[this.LIGA_MAX] = {
             recompute: true,
-            inputType: inputs.Number,
+            inputType: inputs.NumberDrag,
             label: `Max length`,
             inputOptions: { size: ui.FLAGS.SIZE_XS, min: 3, max: 30 },
             desc: `The maximum number of siblings to look for.`
@@ -224,7 +224,7 @@ class IDS_EXT {
 
         this.infos[this.LIGA_MIN_OCCURENCE] = {
             recompute: true,
-            inputType: inputs.Number,
+            inputType: inputs.NumberDrag,
             label: `Min occurences`,
             inputOptions: { size: ui.FLAGS.SIZE_XS, min: 1 },
             desc: `Minimum amount of time a ligature candidate must've been found to be shown.`

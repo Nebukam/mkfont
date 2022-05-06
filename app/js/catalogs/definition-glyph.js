@@ -1,3 +1,5 @@
+'use strict';
+
 const nkm = require(`@nkmjs/core`);
 
 class GlyhphDefinition extends nkm.data.catalogs.CatalogItem {

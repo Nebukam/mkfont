@@ -30,6 +30,11 @@ class GlyphVariantInspectorItem extends base {
         { cl: mkfWidgets.ControlHeader, options: { label: `Metrics` } },
         { options: { propertyId: mkfData.IDS.WIDTH }, disableWhen: { fn: shouldHideWIDTH } },
         { options: { propertyId: mkfData.IDS.HEIGHT } },
+        //{ cl: mkfWidgets.ControlHeader, options: { label: `Export` } },
+        //{ options: { propertyId: mkfData.IDS.EXPORT_GLYPH } },
+    ];
+
+    static __glyphControls = [
         { cl: mkfWidgets.ControlHeader, options: { label: `Export` } },
         { options: { propertyId: mkfData.IDS.EXPORT_GLYPH } },
     ];
@@ -38,14 +43,16 @@ class GlyphVariantInspectorItem extends base {
         super._Init();
 
         this._builder.defaultControlClass = mkfWidgets.PropertyControl;
-        this._builder.defaultCSS = `control`;
+        this._builder.defaultCSS = `foldout-item`;
 
         this._flags.Add(this, __nullGlyph, __hasPopout);
         this._obstructedPreview = false;
 
         this._rectTracker = new ui.helpers.RectTracker(this._Bind(this._OnPreviewRectUpdate));
 
-        this._dataObserver.Hook(SIGNAL.VARIANT_UPDATED, () => { this._OnDataUpdate(this._data); }, this);
+        this._dataObserver
+            .Hook(SIGNAL.SELECTED_LAYER_CHANGED, (p_variant, p_layer) => { this._UpdatePreviewLayer(p_layer); }, this)
+            .Hook(SIGNAL.VARIANT_UPDATED, () => { this._OnDataUpdate(this._data); }, this);
     }
 
     _OnPaintChange() {
@@ -61,15 +68,17 @@ class GlyphVariantInspectorItem extends base {
         return nkm.style.Extends({
             ':host': {
                 'display': 'flex',
-                'flex-flow': 'row wrap',
+                'flex-flow': 'column nowrap',
                 'justify-content': `space-between`,
+            },
+            '.item': {
+                'margin-bottom': '5px',
             },
             '.preview': {
                 'position': 'relative',
                 'display': 'flex',
-                'aspect-ratio': '1/1',// 'var(--preview-ratio)',
                 'flex': '1 1 auto',
-                'width': '100%',
+                'width': 'calc(100% - 6px)',
                 'overflow': 'hidden',
                 'background-color': 'rgba(0,0,0,0.5)',
                 'border-radius': '5px',
@@ -78,19 +87,17 @@ class GlyphVariantInspectorItem extends base {
             '.toolbar': {
                 'flex': `1 1 auto`,
                 'justify-content': `center`,
-                'margin-bottom': '5px',
                 'margin-top': '5px',
                 'padding': '4px',
                 'border-radius': '4px',
                 'background-color': `rgba(19, 19, 19, 0.25)`
             },
-            ':host(.null-glyph) .settings': { 'display': 'none' },
-            '.settings': {
+            ':host(.null-glyph) .drawer:not(.always-visible)': { 'display': 'none' },
+            '.drawer': {
                 'flex': '1 1 auto',
-                'margin-bottom': '10px',
-            },
-            '.control': {
-                'margin-bottom': '5px',
+                'padding': `10px`,
+                'background-color': `rgba(19, 19, 19, 0.25)`,
+                'border-radius': '4px',
             },
             '.binder': {
                 'width': '100%',
@@ -103,15 +110,10 @@ class GlyphVariantInspectorItem extends base {
 
     _Render() {
 
-        this._importToolbar = this.Attach(ui.WidgetBar, `toolbar`, this._host);
-        this._importToolbar.stretch = ui.WidgetBar.FLAG_STRETCH;
-
-        this._glyphPreview = this.Attach(mkfWidgets.GlyphPreview, `preview`, this._host);
-        this.forwardData.To(this._glyphPreview);
-        this._rectTracker.Add(this._glyphPreview);
-
+        this._importToolbar = this.Attach(ui.WidgetBar, `item toolbar`, this._host);
         this._importToolbar.options = {
             inline: true,
+            stretch: ui.WidgetBar.FLAG_STRETCH,
             defaultWidgetClass: nkm.uilib.buttons.Tool,
             handles: [
                 {
@@ -153,16 +155,92 @@ class GlyphVariantInspectorItem extends base {
             ]
         };
 
-        this._binder = this.Attach(mkfWidgets.ResourceBinding, `binder control`);
-        this._binder.visible = false;
-        this._transformInspector = this.Attach(TransformSettingsInspector, `settings`);
-        this.forwardData.To(this._transformInspector, { dataMember: `transformSettings` });
+        this._glyphPreview = this.Attach(mkfWidgets.GlyphPreview, `item preview`, this._host);
+        this.forwardData.To(this._glyphPreview);
+        this._rectTracker.Add(this._glyphPreview);
 
-        this._builder.host = ui.El(`div`, { class: `settings` }, this._host);
+        //Transforms
+
+        let foldout = this._Foldout(
+            {
+                title: `Transformations`, icon: `view-grid`, prefId: `transforms`, expanded: true, //TODO CHANGE BACK to true
+                handles: [
+                    {
+                        icon: 'clipboard-read', htitle: 'Paste transforms (Ctrl Alt V)',
+                        trigger: { fn: () => { this.editor.cmdGlyphPasteTransform.Execute(this._data); } },
+                    }
+                ]
+            },
+            [
+                { cl: TransformSettingsInspector, dataMember: `_transformSettings` },
+            ],
+        );
+
+        this._builder.host = foldout.body;
+
+        //Layers
+
+        foldout = this._Foldout(
+            {
+                title: `Layers`, icon: `three-lines`, prefId: `layers`, expanded: true,
+                handles: [
+                    {
+                        icon: 'clipboard-write', htitle: 'Copy layers',
+                        trigger: { fn: () => { this.editor.cmdLayersCopy.Execute(this._data); } },
+                    },
+                    {
+                        icon: 'clipboard-read', htitle: 'Paste layers (hold Alt to add instead of replace)',
+                        trigger: { fn: () => { this.editor.cmdLayersPaste.Execute(this._data); } },
+                    },
+                ]
+            },
+            [
+                { cl: mkfWidgets.LayersView, member: { owner: this, id: `_layers` } },
+            ]
+        );
+
+        // Settings
+
+        foldout = this._Foldout(
+            { title: `Settings`, icon: `gear`, prefId: `glyphSettings`, expanded: true },
+            [
+                //{ cl: mkfWidgets.ControlHeader, options: { label: `Export` } },
+                { options: { propertyId: mkfData.IDS.EXPORT_GLYPH } },
+            ]
+        );
+
+        this._binder = this.Attach(mkfWidgets.ResourceBinding, `foldout-item`, foldout);
+        this._binder.visible = false;
+
+        // Stats
+
+        foldout = this._Foldout(
+            { title: `Stats`, icon: `infos`, prefId: `glyph-infos`, expanded: true },
+            null, `always-visible`);
+
+        foldout.visible = false;
+
+        this._glyphStats = this.Attach(mkfWidgets.GlyphStats, `item`, foldout);
 
         super._Render();
 
         this.focusArea = this;
+    }
+
+    _Foldout(p_foldout, p_controls, p_css = ``, p_host = null) {
+
+        let foldout = this.Attach(nkm.uilib.widgets.Foldout, `item drawer${p_css ? ' '+p_css : ''}`, p_host || this);
+        foldout.options = p_foldout;
+
+        if (p_controls) {
+            let builder = new nkm.datacontrols.helpers.ControlBuilder(this);
+            builder.options = { host: foldout, cl: mkfWidgets.PropertyControl, css: `foldout-item` };
+            this.forwardData.To(builder);
+            builder.Build(p_controls);
+        }
+
+        return foldout;
+
     }
 
     get glyphInfos() { return this._glyphInfos; }
@@ -170,6 +248,7 @@ class GlyphVariantInspectorItem extends base {
         if (this._glyphInfos == p_value) { return; }
         this._glyphInfos = p_value;
         this._glyphPreview.glyphInfos = p_value;
+        this._glyphStats.data = p_value;
     }
 
     _OnPreviewRectUpdate(p_tracker) {
@@ -199,7 +278,7 @@ class GlyphVariantInspectorItem extends base {
             }
         } else {
             this._popoutPreview = uilib.modals.Simple.Pop({
-                anchor: this._transformInspector,
+                anchor: this.parent,
                 placement: ui.ANCHORING.LEFT,
                 origin: ui.ANCHORING.RIGHT,
                 keepWithinScreen: true,
@@ -208,6 +287,7 @@ class GlyphVariantInspectorItem extends base {
             });
             this._popoutPreview.content.data = this._data;
             this._popoutPreview.content.glyphInfos = this._glyphInfos;
+            this._UpdatePreviewLayer();
         }
 
     }
@@ -231,13 +311,20 @@ class GlyphVariantInspectorItem extends base {
             this._copyPathBtn.disabled = isNullGlyph;
             this._editInPlaceBtn.disabled = isNullGlyph;
             this._glyphDeleteBtn.disabled = isNullGlyph;
-            if (this._popoutPreview) { this._popoutPreview.content.glyphInfos = this._glyphInfos; }
+            if (this._popoutPreview) {
+                this._popoutPreview.content.glyphInfos = this._glyphInfos;
+            }
         } else {
             this._binder.data = null;
         }
 
         if (this._popoutPreview) { this._popoutPreview.content.data = this._data; }
 
+    }
+
+    _UpdatePreviewLayer(p_layer) {
+        this._glyphPreview.glyphLayer = this._data.selectedLayer;
+        if (this._popoutPreview) { this._popoutPreview.content.glyphLayer = this._data.selectedLayer; }
     }
 
     _OnDataUpdated(p_data) {
@@ -252,6 +339,7 @@ class GlyphVariantInspectorItem extends base {
             this._binder.data = binding;
             this._editInPlaceBtn.disabled = binding ? true : false;
         }
+        this._UpdatePreviewLayer();
     }
 
     _CleanUp() {

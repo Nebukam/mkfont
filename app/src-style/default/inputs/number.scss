@@ -6,7 +6,7 @@
 @import '../_variables';
 @import '../_mixins';
 
-:host(:hover){
+:host(:not(.no-arrows):hover){
 
     &::before, &::after{ 
         content:"";

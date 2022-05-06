@@ -1,3 +1,5 @@
+'use strict';
+
 const nkm = require(`@nkmjs/core`);
 const ui = nkm.ui;
 const uilib = nkm.uilib;
@@ -36,10 +38,10 @@ class BlockItem extends base {
 
     Activate(p_evt) {
         if (!super.Activate(p_evt)) { return false; }
-        
+
         let editor = nkm.datacontrols.FindEditor(this);
         //console.log(`Activated : `,editor);
-        if(editor){ editor.SetActiveRange(this._data); }
+        if (editor) { editor.SetActiveRange(this._data); }
 
         return true;
     }

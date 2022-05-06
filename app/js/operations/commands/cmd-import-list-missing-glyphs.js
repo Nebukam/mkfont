@@ -1,4 +1,5 @@
-//
+'use strict';
+
 const nkm = require(`@nkmjs/core`);
 const actions = nkm.actions;
 const u = nkm.u;
@@ -80,7 +81,7 @@ class CmdImportListMissingGlyphs extends CmdListProcessor {
         });
 
         for (let i = 0; i < list.length; i++) {
-            this._emitter.Do(mkfActions.CreateGlyph, {
+            this._emitter.Do(mkfActions.GlyphCreate, {
                 family: this._family,
                 unicode: list[i],
                 path: SVGOPS.EmptySVGStats(),

@@ -1,3 +1,5 @@
+'use strict';
+
 const nkm = require(`@nkmjs/core`);
 const u = nkm.u;
 const ui = nkm.ui;
@@ -16,6 +18,13 @@ class FontEditorFooter extends base {
         ContentUpdater.instance
             .Watch(nkm.com.SIGNAL.UPDATED, this._OnContentUpdate, this)
             .Watch(nkm.com.SIGNAL.READY, this._OnContentUpdateComplete, this);
+
+            nkm.env.APP.Watch(nkm.env.APP.SIGNAL_MEM_MONITOR, (p_data)=>{
+                let pc = (p_data.private / 4000000);
+                this._memBar.progress = pc;
+                this._memBar.setAttribute(`title`, `Ram usage : ${(pc * 100).toFixed(2)}% (${p_data.private/1000}Mo / 4000Mo)`);
+            });
+            
     }
 
     static _Style() {
@@ -23,11 +32,19 @@ class FontEditorFooter extends base {
             ':host': {
                 'display': 'flex',
                 'min-height': '8px',
-                'height': '8px'
+                'height': '8px',
+                'position':'relative'
             },
             '.progress': {
                 'position':'absolute',
                 'width': '100%',
+            },
+            '.membar': {
+                '@': ['absolute-right'],
+                'width': `100px`,
+                'height': `4px`,
+                'min-height': `4px`,
+                'margin-right': `10px`
             },
         }, base._Style());
     }
@@ -40,6 +57,10 @@ class FontEditorFooter extends base {
             flavor: nkm.com.FLAGS.LOADING
         }
         //this._progressLabel = new ui.manipulators.Text(ui.El(`div`, { class: `label` }, this._host));
+        this._memBar = this.Attach(nkm.uilib.bars.ProgressBar, `membar`);
+        this._memBar.style.setProperty(`--flavor-color`, `rgb(127,127,127)`);
+        this._memBar.style.setProperty(`--flavor-color-dark-rgb`, `127,127,127`);
+        this._memBar.setAttribute(`title`, `Ram usage : ---% (---mb/4000mb)`);
     }
 
     //

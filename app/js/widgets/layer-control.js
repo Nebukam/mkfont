@@ -1,0 +1,171 @@
+'use strict';
+
+const nkm = require(`@nkmjs/core`);
+const u = nkm.u;
+const ui = nkm.ui;
+
+const mkfData = require(`../data`);
+const mkfOperations = require(`../operations`);
+const mkfCmds = mkfOperations.commands;
+
+const PropertyControl = require(`./property-control`);
+const LayerTransformSettings = require(`./tr-layer-inspector`);
+
+const isMANUAL = (owner) => { return owner.data.Get(mkfData.IDS.TR_LYR_SCALE_MODE) == mkfData.ENUMS.LYR_SCALE_MANUAL; };
+const isNRM = (owner) => { return owner.data.Get(mkfData.IDS.TR_LYR_SCALE_MODE) == mkfData.ENUMS.LYR_SCALE_NORMALIZE; };
+
+const __circular = `circular`;
+const __false = `false`;
+
+const base = nkm.datacontrols.InspectorWidgetGroup;
+class LayerControl extends base {
+    constructor() { super(); }
+
+    static __widgetExpandData = false;
+    static __clearBuilderOnRelease = false;
+
+    static __controls = [
+        { cl: LayerTransformSettings, options: {} }
+    ];
+
+    _Init() {
+        super._Init();
+
+        this._flags.Add(this, __circular, __false);
+
+        this._builder.defaultControlClass = PropertyControl;
+        this._builder.defaultCSS = `control`;
+
+        this.focusArea = this;
+
+    }
+
+    _PostInit() {
+        super._PostInit();
+        this._builder.host = this._body;
+        this._extExpand.Setup(this, this._body, this._expandIcon.element);
+    }
+
+    static _Style() {
+        return nkm.style.Extends({
+            ':host': {
+                'padding': '5px',
+                'margin-bottom': '5px',
+                'background-color': `rgba(127,127,127,0.25)`,
+            },
+            ':host(.circular)': {
+                'background-color': `rgba(var(--col-error-dark-rgb),0.25)`,
+            },
+            ':host(.false) .label': {
+                'text-decoration': 'line-through var(--col-error-dark)',
+            },
+            '.body': {
+                'display': 'flex',
+                'width': `100%`,
+                'flex-flow': 'row wrap',
+                'align-content': 'flex-start',
+            },
+            '.control': {
+                'flex': '1 1 100%',
+                'min-height': 0
+            },
+            '.hdr': {
+                'margin': '5px 2px 5px 2px'
+            },
+            '.small': {
+                'flex': '1 1 45%'
+            },
+        }, base._Style());
+    }
+
+    _Render() {
+
+        super._Render();
+
+        this._toolbar.options = {
+            inline: true,
+            size: nkm.ui.FLAGS.SIZE_XS,
+            defaultWidgetClass: nkm.uilib.buttons.Tool,
+            handles: [
+                /*
+                {
+                    icon: `up-short`, htitle: `Move layer up`,
+                    variant: ui.FLAGS.MINIMAL,
+                    //trigger: { fn: () => { this.editor.cmdLayerAdd.Execute(this._data); } },
+                    group: `move`, member: { owner: this, id: `_moveUpBtn` }
+                },
+                {
+                    icon: `down-short`, htitle: `Move layer down`,
+                    variant: ui.FLAGS.MINIMAL,
+                    //trigger: { fn: () => { this.editor.cmdLayersOn.Execute(this._data); } },
+                    group: `move`, member: { owner: this, id: `_moveDownBtn` }
+                },
+                */
+                {
+                    icon: `link`, htitle: `Go to glyph`, variant: ui.FLAGS.MINIMAL, size: ui.FLAGS.SIZE_S, trigger: {
+                        fn: () => { if (this._data._glyphInfos) { this.editor.inspectedData.Set(this._data._glyphInfos); } },
+                        arg: ui.FLAGS.SELF
+                    }
+                },
+                {
+                    htitle: `Toggle visibility`,
+                    cl: nkm.uilib.inputs.Checkbox,
+                    iconOn: `visible`, iconOff: `hidden`,
+                    onSubmit: { fn: this._ToggleVisibility, thisArg: this },
+                    member: { owner: this, id: `_btnVisible` },
+                    group: `vis`,
+                },
+                {
+                    icon: `remove`, htitle: `Delete  this layer`,
+                    variant: ui.FLAGS.MINIMAL,
+                    trigger: { fn: this._DeleteLayer, thisArg: this },
+                    group: `remove`
+                },
+            ]
+        };
+
+    }
+
+    _ToggleVisibility(p_input, p_value) {
+        this.editor.Do(mkfOperations.actions.SetProperty, {
+            target: this._data,
+            id: mkfData.IDS.EXPORT_GLYPH,
+            value: p_value
+        });
+    }
+
+    _DeleteLayer() {
+        this.editor.cmdLayerRemove.Execute(this._data);
+    }
+
+    _OnDataUpdated(p_data) {
+        super._OnDataUpdated(p_data);
+        let char = p_data.Get(mkfData.IDS.CHARACTER_NAME);
+        if (p_data._useCount <= 0) { this._label.Set(char && char != `` ? `layer : ${char} ` : `(empty layer)`); }
+        else { this._label.Set(char && char != `` ? `layer (×${p_data._useCount}) : ${char}` : `(empty layer ×${p_data._useCount})`); }
+
+        this._flags.Set(__circular, p_data.Get(mkfData.IDS.CIRCULAR_REFERENCE));
+        let viz = p_data.Get(mkfData.IDS.EXPORT_GLYPH);
+        this._btnVisible.currentValue = viz;
+        this._flags.Set(__false, !viz);
+    }
+
+    _FocusGain() {
+        super._FocusGain();
+        if (this._data) { this._data._variant.selectedLayer = this._data; }
+    }
+
+    _FocusLost() {
+        super._FocusLost();
+        if (this._data && this._data._variant.selectedLayer == this._data) { this._data._variant.selectedLayer = null; }
+    }
+
+    _CleanUp() {
+        this._flags.Set(__circular, false);
+        super._CleanUp();
+    }
+
+}
+
+module.exports = LayerControl;
+ui.Register(`mkf-layer-control`, LayerControl);

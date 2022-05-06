@@ -1,3 +1,5 @@
+'use strict';
+
 const nkm = require(`@nkmjs/core`);
 const UniCategory = require(`./definition-uni-cat`);
 

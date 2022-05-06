@@ -1,3 +1,5 @@
+'use strict';
+
 const nkm = require(`@nkmjs/core`);
 const ui = nkm.ui;
 const uilib = nkm.uilib;
@@ -16,6 +18,7 @@ class InspectorHeader extends base {
     static _Style() {
         return nkm.style.Extends({
             ':host': {
+                '@': ['fade-in'],
                 'position': 'relative',
                 'height': '20px',
                 'min-height': '20px',
@@ -35,7 +38,7 @@ class InspectorHeader extends base {
                 'width': '50px',
                 'right': `0`,
                 'opacity': '0.1'
-            }
+            },
         }, base._Style());
     }
 

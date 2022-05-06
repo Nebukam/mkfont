@@ -19,6 +19,7 @@ const LigaImportSettings = require(`./settings-liga-import-data-block`);
 
 const ContentUpdater = require(`../content-updater`);
 const FamilyFontCache = require(`./family-font-cache`);
+const GlyphVariantRef = require(`./glyph-variant-data-block-reference`);
 
 const domparser = new DOMParser();
 const svgFontString =
@@ -61,6 +62,8 @@ class FamilyDataBlock extends SimpleDataEx {
         this._nullGlyph.isNull = true;
         this._nullGlyph._defaultGlyph._fontObject.remove();
 
+
+        Glyph.__defaultVariantClass = GlyphVariantRef;
         this._refGlyph = new Glyph();
         this._refGlyph.family = this;
         this._refGlyph.isNull = true;
@@ -68,9 +71,10 @@ class FamilyDataBlock extends SimpleDataEx {
 
         Glyph.__defaultVariantClass = GlyphVariantMissing;
         this._missingGlyph = new Glyph();
-        Glyph.__defaultVariantClass = GlyphVariant;
         this._missingGlyph.family = this;
         this._missingGlyph.activeVariant.Set(IDS.PATH_DATA, SVGOPS.EmptySVGStats());
+
+        Glyph.__defaultVariantClass = GlyphVariant;
 
         //
 
@@ -104,6 +108,8 @@ class FamilyDataBlock extends SimpleDataEx {
 
         this._transformSettings = new ImportSettings();
         this._transformSettings.Watch(nkm.com.SIGNAL.VALUE_CHANGED, this._OnTransformValueChanged, this);
+
+        this._delayedUpdateReferences = nkm.com.DelayedCall(this._Bind(this._UpdateLayerReferences));
 
     }
 
@@ -193,7 +199,11 @@ class FamilyDataBlock extends SimpleDataEx {
         ContentUpdater.Push(this, this._UpdateFontObject);
 
         this.Broadcast(SIGNAL.GLYPH_ADDED, this, p_glyph);
+        p_glyph._OnGlyphAddedToFamily(this);
         //ContentUpdater.instance.Broadcast(SIGNAL.GLYPH_ADDED, p_glyph);
+
+        //Need a way to find which layer might be referencing this glyph
+        this._delayedUpdateReferences.Schedule();
 
     }
 
@@ -218,12 +228,13 @@ class FamilyDataBlock extends SimpleDataEx {
 
         p_glyph.family = null;
 
-        //
-
         ContentUpdater.Push(this, this._UpdateFontObject);
 
         this.Broadcast(SIGNAL.GLYPH_REMOVED, this, g);
+        g._OnGlyphRemovedFromFamily(this);
         //ContentUpdater.instance.Broadcast(SIGNAL.GLYPH_REMOVED, g);
+
+        this._delayedUpdateReferences.Schedule();
 
     }
 
@@ -266,14 +277,16 @@ class FamilyDataBlock extends SimpleDataEx {
 
     _OnGlyphUpdated() { this._scheduledUpdate.Schedule(); }
 
-    _OnGlyphVariantUpdated(p_glyph, p_glyphVariant) { this._scheduledUpdate.Schedule(); }
+    _OnGlyphVariantUpdated(p_glyph, p_glyphVariant) {
+        this._scheduledUpdate.Schedule();
+    }
 
     //#endregion
 
     //#region properties update
 
     CommitUpdate() {
-        this._id.name = `${this.Get(IDS.FAMILY)}-${this.Get(IDS.FONT_STYLE)}`;
+        if (this._id) { this._id.name = `${this.Get(IDS.FAMILY)}-${this.Get(IDS.FONT_STYLE)}`; }
         super.CommitUpdate();
     }
 
@@ -293,6 +306,19 @@ class FamilyDataBlock extends SimpleDataEx {
             item._variants.ForEach((v) => {
                 if (v._transformSettings._values[p_id].value == null) { v._transformSettings.CommitUpdate(); }
             })
+        });
+    }
+
+    _UpdateLayerReferences() {
+
+        this._glyphs.ForEach(glyph => {
+            glyph._variants.ForEach(variant => {
+                if (!variant._layers.isEmpty) {
+                    variant._layers.ForEach(layer => {
+                        if (!layer.importedVariant) { layer._RetrieveGlyphInfos(); }
+                    });
+                }
+            });
         });
     }
 
@@ -372,6 +398,41 @@ class FamilyDataBlock extends SimpleDataEx {
 
     //#endregion
 
+    HasCircularDep(p_target, p_candidate) {
+
+        if (!p_candidate || !p_target) { return false; }
+        if (p_target == p_candidate) { return true; }
+        if (p_candidate._layers.isEmpty) { return false; }
+
+        let tempSet = new Set(),
+            result = this._HasCircularDep(p_target, p_candidate, tempSet);
+
+        tempSet.clear();
+        tempSet = null;
+
+        return result;
+
+    }
+
+    _HasCircularDep(p_target, p_candidate, p_set) {
+
+        if (p_set.has(p_candidate)) { return false; }
+        p_set.add(p_candidate);
+
+        if (!p_candidate || !p_target) { return false; }
+        if (p_target == p_candidate) { return true; }
+        if (p_candidate._layers.isEmpty) { return false; }
+
+        let layers = p_candidate._layers._array;
+
+        for (let i = 0, n = layers.length; i < n; i++) {
+            let layer = layers[i];
+            if (this._HasCircularDep(p_target, layer.importedVariant, p_set)) { return true; }
+        }
+
+        return false;
+    }
+
     _OnReset(p_individualSet, p_silent) {
 
         this._transformSettings.Reset(p_individualSet, p_silent);
@@ -394,6 +455,14 @@ class FamilyDataBlock extends SimpleDataEx {
             g.Release();
         }
 
+        this._nullGlyph.Reset(false, true);
+        this._nullGlyph._defaultGlyph.Reset(false, true);
+        this._nullGlyph._defaultGlyph._ClearLayers();
+
+        this._refGlyph.Reset(false, true);
+        this._refGlyph._defaultGlyph.Reset(false, true);
+        this._refGlyph._defaultGlyph._ClearLayers();
+        
         /////
         this._glyphs.Clear();
         this._glyphsMap = {};
@@ -402,6 +471,7 @@ class FamilyDataBlock extends SimpleDataEx {
 
         super._CleanUp();
     }
+
 
 }
 

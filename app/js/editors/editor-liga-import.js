@@ -1,3 +1,5 @@
+'use strict';
+
 const nkm = require(`@nkmjs/core`);
 const u = nkm.u;
 const ui = nkm.ui;
@@ -19,9 +21,8 @@ class EditorLigaImport extends base {
         super._Init();
 
         this._builder = new nkm.datacontrols.helpers.ControlBuilder(this);
-        this._builder._defaultControlClass = mkfWidgets.PropertyControl;
-        this._builder.defaultCSS = `control`;
-
+        this._builder.options = { cl:mkfWidgets.PropertyControl, css:`control` };
+        
         this.forwardData.To(this._builder);
 
         this._dataPreProcessor = (p_owner, p_data) => {
@@ -75,12 +76,9 @@ class EditorLigaImport extends base {
 
     _Render() {
 
-
-        this._inputs = ui.dom.El(`div`, { class: `inputs` }, this._host);
-        this._builder.host = this._inputs;
-
         super._Render();
 
+        this._inputs = ui.dom.El(`div`, { class: `inputs` }, this._host);
         this._builder.Build([
             { cl: mkfWidgets.ControlHeader, options: { label: `Text` } },
             { options: { propertyId: mkfData.IDS_EXT.LIGA_TEXT, inputOnly: true }, member: `_textBox` },
@@ -89,7 +87,7 @@ class EditorLigaImport extends base {
             { options: { propertyId: mkfData.IDS_EXT.LIGA_MIN }, disableWhen: { fn: isNEWLINE } },
             { options: { propertyId: mkfData.IDS_EXT.LIGA_MAX }, disableWhen: { fn: isNEWLINE } },
             { options: { propertyId: mkfData.IDS_EXT.LIGA_MIN_OCCURENCE }, disableWhen: { fn: isNEWLINE } },
-        ]);
+        ], this._inputs);
 
         this._list = ui.El(`div`, { class: `list` }, this);
 
@@ -142,11 +140,10 @@ class EditorLigaImport extends base {
             try {
                 input = input.match(/[^\r\n]+/g);
                 input = [...new Set(input)].sort();
-                console.log(input);
                 for (let i = 0; i < input.length; i++) {
                     let liga = input[i];
                     if (liga.length <= 1) { continue; }
-                    results.push({ export: (this._cached.has(liga) ? true : false), count: 1, ligature: liga });
+                    results.push({ export: (this._cached.has(liga) ? true : false), count: 1, ligature: UNICODE.ResolveString(liga) });
                 }
             } catch (e) {
                 console.log(e);
@@ -290,33 +287,7 @@ class EditorLigaImport extends base {
         }
         this._delayedPrintResult.Schedule();
     }
-
-
-    _GetUnicodeStructure(p_array) {
-
-        if (p_array.length == 1) {
-            return this._SingleStructure(p_array[0]);
-        }
-
-        let result = [];
-        for (let i = 0; i < p_array.length; i++) {
-            result.push(...this._SingleStructure(p_array[i]));
-        }
-
-
-        return result;
-
-    }
-
-    _SingleStructure(p_value) {
-        if (p_value.length == 1) { return [UNICODE.GetAddress(p_value)]; }
-        if (p_value.substr(0, 2) == `U+`) { return [p_value.substring(2)]; }
-
-        let result = [];
-        for (let i = 0; i < p_value.length; i++) { result.push(UNICODE.GetAddress(p_value.substr(i, 1))); }
-        return result;
-    }
-
+    
     _CleanUp() {
         this.catalog = null;
         super._CleanUp();

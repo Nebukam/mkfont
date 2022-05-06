@@ -1,4 +1,5 @@
-//
+'use strict';
+
 const nkm = require(`@nkmjs/core`);
 const actions = nkm.actions;
 const u = nkm.u;
@@ -98,7 +99,7 @@ class CmdImportLigatures extends actions.Command {
                 existingGlyph = family.GetGlyph(unicodeInfos.u);
 
             if (existingGlyph.isNull) {
-                this._emitter.Do(mkfActions.CreateGlyph, {
+                this._emitter.Do(mkfActions.GlyphCreate, {
                     family: family,
                     unicode: unicodeInfos,
                     path: SVGOPS.EmptySVGStats(),

@@ -1,3 +1,5 @@
+'use strict';
+
 const nkm = require(`@nkmjs/core`);
 const u = nkm.u;
 const ui = nkm.ui;
@@ -123,7 +125,7 @@ class GlyphGroupHeader extends base {
                 if (p_value.typeTag) {
                     this._typeTag.label = p_value.typeTag;
                 } else {
-                    let r = `U+${p_value.start.toString(16).padStart(4, `0`)} .. U+${(p_value.start + p_value.count).toString(16).padStart(4, `0`)}`;
+                    let r = `U+${p_value.start.toString(16).padStart(4, `0`)} ·· U+${(p_value.start + p_value.count).toString(16).padStart(4, `0`)}`;
                     //this._typeTag.label = `Unicode block ${r}`;
                     this._typeTag.label = `${r}`;
                 }

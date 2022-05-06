@@ -1,3 +1,5 @@
+'use strict';
+
 const nkm = require(`@nkmjs/core`);
 const u = nkm.u;
 const ui = nkm.ui;
@@ -18,7 +20,7 @@ class EditorListImport extends base {
         [mkfData.ENUMS.ASSIGN_FROM_BLOCK]: mkfWidgets.importation.AssignBlock,
         [mkfData.ENUMS.ASSIGN_FROM_BLOCK_RANGE]: mkfWidgets.importation.AssignBlockRange,
         [mkfData.ENUMS.ASSIGN_SELECTION]: mkfWidgets.importation.AssignSelection,
-        [mkfData.ENUMS.ASSIGN_SELECTION_RANGE]: mkfWidgets.importation.AssignSelectionRange,
+        [mkfData.ENUMS.ASSIGN_SEL_RANGE]: mkfWidgets.importation.AssignSelectionRange,
     };
 
     _Init() {
@@ -49,17 +51,13 @@ class EditorListImport extends base {
                 'flex': '1 1 auto',
                 'min-height': 0,
             },
+            '.frst': { 'width': `300px`, },
             '.list': {
                 'position': 'relative',
-                'width': '300px',
-                //'padding': '10px',
+                'width': '350px',
                 'background-color': 'rgba(0,0,0,0.2)',
                 'overflow': 'auto',
                 'min-height': '0',
-            },
-            '.settings': {
-                'width': '300px',
-                //'height': '376px'
             },
             '.preview': {
                 'position': 'relative',
@@ -72,28 +70,22 @@ class EditorListImport extends base {
                 'width': '100%',
                 'height': '100%',
             },
-            '.isover': {
-                'background-color': 'rgba(27,27,27,0.8)',
-            },
+            '.isover': { 'background-color': 'rgba(27,27,27,0.8)', },
             '.identity': {
                 'width': '100%',
-                'max-width':`330px`
+                'max-width': `330px`
             },
             '.header': {
                 'display': 'flex',
                 'flex-flow': 'column nowrap',
                 'flex': '1 1 auto',
                 'min-height': '0',
-                'max-width': '300px',
+                'width': `calc(100% - 22px)`,
                 'align-content': 'flex-start',
-            },
-            '.control': {
-                'flex': '0 1 auto',
-                'margin': '0 2px 5px 2px',
-                'max-width': '296px'
-            },
-            '.small': {
-                // 'flex': '1 1 45%'
+                'border-radius': '4px',
+                'padding': `10px`,
+                'border': `1px solid rgba(127, 127, 127, 0.25)`,
+                'margin-bottom': `10px`
             },
             '.tagbar': {
                 '@': ['absolute-bottom'],
@@ -108,16 +100,13 @@ class EditorListImport extends base {
 
         // First col
 
-        let column = ui.El(`div`, { class: `column` }, this._host);
-
+        let column = ui.El(`div`, { class: `column frst` }, this._host);
         this._header = ui.El(`div`, { class: `item header` }, column);
 
         let builder = new nkm.datacontrols.helpers.ControlBuilder(this);
+        builder.options = { host: this._header, cl: mkfWidgets.PropertyControl, css: `control` };
         this.forwardData.To(builder);
 
-        builder.defaultControlClass = mkfWidgets.PropertyControl;
-        builder.defaultCSS = `control`;
-        builder.host = column;
         builder.Build([
             { options: { propertyId: mkfData.IDS_EXT.IMPORT_OVERLAP_MODE } },
             { options: { propertyId: mkfData.IDS_EXT.IMPORT_ASSIGN_MODE } },
@@ -125,18 +114,16 @@ class EditorListImport extends base {
 
         this._builder = builder;
 
-        this._settingsInspector = this.Attach(mkfInspectors.TransformSettings, `item settings`, column);
-        this.forwardData.To(this._settingsInspector);
-
         builder = new nkm.datacontrols.helpers.ControlBuilder(this);
+        builder.options = { host: column, cl: mkfWidgets.PropertyControl, css: `control` };
         this.forwardData.To(builder);
 
-        builder.defaultControlClass = mkfWidgets.PropertyControl;
-        builder.defaultCSS = `control`;
-        builder.host = column;
         builder.Build([
             { options: { propertyId: mkfData.IDS_EXT.IMPORT_BIND_RESOURCE } },
         ]);
+
+        this._settingsInspector = this.Attach(mkfInspectors.TransformSettings, `item settings`, column);
+        this.forwardData.To(this._settingsInspector);
 
         // Second col
 

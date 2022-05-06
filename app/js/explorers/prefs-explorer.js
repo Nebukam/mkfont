@@ -11,35 +11,7 @@ const base = uilib.overlays.ControlDrawer;
 class PrefsExplorer extends base {
     constructor() { super(); }
 
-    static __controls = [
-        
-        { cl:mkfWidgets.ControlHeader, options:{ label:`-` }, css:`separator` },
-        { cl:mkfWidgets.ControlHeader, options:{ label:`Autosave` }, css:`separator` },
-        { options: { propertyId: mkfData.IDS_PREFS.AUTOSAVE } },
-        { options: { propertyId: mkfData.IDS_PREFS.AUTOSAVE_TIMER }, disableWhen: { fn: isAutoSave } },
-
-        { cl:mkfWidgets.ControlHeader, options:{ label:`-` }, css:`separator` },
-        { cl:mkfWidgets.ControlHeader, options:{ label:`Performance & display` }, css:`separator` },
-        { options: { propertyId: mkfData.IDS_PREFS.MANUAL_PREVIEW_REFRESH_THRESHOLD } },
-
-        { cl:mkfWidgets.ControlHeader, options:{ label:`-` }, css:`separator` },
-        { cl:mkfWidgets.ControlHeader, options:{ label:`Import` }, css:`separator` },
-        { options: { propertyId: mkfData.IDS_EXT.IMPORT_BIND_RESOURCE } },
-        { options: { propertyId: mkfData.IDS_PREFS.MARK_COLOR } },
-
-        { cl:mkfWidgets.ControlHeader, options:{ label:`-` }, css:`separator` },
-        { cl:mkfWidgets.ControlHeader, options:{ label:`Third parties` }, css:`separator` },
-        { options: { propertyId: mkfData.IDS_PREFS.SVG_EDITOR_PATH } },
-        { options: { propertyId: mkfData.IDS_PREFS.ILLU_PATH } },
-
-        { cl:mkfWidgets.ControlHeader, options:{ label:`-` }, css:`separator` },
-        { cl:mkfWidgets.ControlHeader, options:{ label:`Family Defaults` }, css:`separator` },
-        { options: { propertyId: mkfData.IDS.FAMILY } },
-        { options: { propertyId: mkfData.IDS.COPYRIGHT } },
-        { options: { propertyId: mkfData.IDS.DESCRIPTION } },
-        { options: { propertyId: mkfData.IDS.URL } },
-        { options: { propertyId: mkfData.IDS.PREVIEW_SIZE } },
-    ];
+    static __controls = [];
 
     _Init() {
         super._Init();
@@ -50,7 +22,7 @@ class PrefsExplorer extends base {
     static _Style() {
         return nkm.style.Extends({
             ':host': {
-                'min-width':'350px',
+                'min-width': '350px',
                 //'flex': '0 0 auto',
             },
             '.list': {
@@ -70,16 +42,79 @@ class PrefsExplorer extends base {
             },
             '.separator': {
                 //'border-top':'1px solid gray'
+            },
+            '.drawer': {
+                'flex': '1 1 auto',
+                'width': `350px`,
+                'padding': `10px`,
+                'background-color': `rgba(19, 19, 19, 0.15)`,
+                'border-radius': '4px',
+                'margin-bottom': '5px',
             }
         }, base._Style());
     }
 
     _Render() {
+
         super._Render();
 
-        // Preview align mode (left/center/right)
+        this._Foldout(
+            { title: `Autosave`, icon: `save`, prefId: `appsettings.autosave`, expanded: true },
+            [
+                { options: { propertyId: mkfData.IDS_PREFS.AUTOSAVE } },
+                { options: { propertyId: mkfData.IDS_PREFS.AUTOSAVE_TIMER }, disableWhen: { fn: isAutoSave } },
+            ]
+        );
 
-        // ...
+        this._Foldout(
+            { title: `Display`, icon: `gear`, prefId: `appsettings.display`, expanded: true },
+            [
+                { options: { propertyId: mkfData.IDS_PREFS.MANUAL_PREVIEW_REFRESH_THRESHOLD } },
+            ]
+        );
+
+        this._Foldout(
+            { title: `Resources`, icon: `directory-download-small`, prefId: `appsettings.rsc`, expanded: true },
+            [
+                { options: { propertyId: mkfData.IDS_EXT.IMPORT_BIND_RESOURCE } },
+                { options: { propertyId: mkfData.IDS_PREFS.MARK_COLOR } },
+            ]
+        );
+
+        this._Foldout(
+            { title: `Third-parties`, icon: `link`, prefId: `appsettings.third`, expanded: true },
+            [
+                { options: { propertyId: mkfData.IDS_PREFS.SVG_EDITOR_PATH } },
+                { options: { propertyId: mkfData.IDS_PREFS.ILLU_PATH } },
+            ]
+        );
+
+        this._Foldout(
+            { title: `Defaults`, icon: `font`, prefId: `appsettings.font`, expanded: true },
+            [
+                { options: { propertyId: mkfData.IDS.FAMILY } },
+                { options: { propertyId: mkfData.IDS.COPYRIGHT } },
+                { options: { propertyId: mkfData.IDS.DESCRIPTION } },
+                { options: { propertyId: mkfData.IDS.URL } },
+                { options: { propertyId: mkfData.IDS.PREVIEW_SIZE } },
+            ]
+        );
+
+    }
+
+    _Foldout(p_foldout, p_controls, p_css = ``, p_host = null) {
+
+        let foldout = this.Attach(nkm.uilib.widgets.Foldout, `item drawer${p_css ? ' ' + p_css : ''}`, p_host || this);
+        foldout.options = p_foldout;
+
+        if (p_controls) {
+            let builder = new nkm.datacontrols.helpers.ControlBuilder(this);
+            builder.options = { host: foldout, cl: mkfWidgets.PropertyControl, css: `foldout-item full` };
+            this.forwardData.To(builder);
+            builder.Build(p_controls);
+        }
+
+        return foldout;
 
     }
 

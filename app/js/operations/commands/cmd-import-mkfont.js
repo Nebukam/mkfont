@@ -1,4 +1,5 @@
-//
+'use strict';
+
 const nkm = require(`@nkmjs/core`);
 const actions = nkm.actions;
 const u = nkm.u;
@@ -135,7 +136,7 @@ class CmdImportMKFont extends actions.Command {
 
                 // Create glyph
 
-                this._emitter.Do(mkfActions.CreateGlyph, {
+                this._emitter.Do(mkfActions.GlyphCreate, {
                     family: family,
                     unicode: unicodeInfos,
                     path: svgStats,

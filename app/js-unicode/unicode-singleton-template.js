@@ -145,9 +145,11 @@ class UNICODE extends nkm.com.helpers.Singleton {
         if (!ligature) {
             if (!p_create) { return null; }
             let charPts = [];
-            lps.forEach((item) => { charPts.push(this.GetUnicodeCharacter(parseInt(item, 16))); });
 
-            ligature = { u: ligatureLookup, name: `LIGATURE ${ligatureLookup}`, cat: this.instance._categories.Liga, ligature: true, char: charPts.join('') };
+            lps.forEach((item) => { charPts.push(this.GetUnicodeCharacter(parseInt(item, 16))); });
+            charPts = charPts.join('');
+
+            ligature = { u: ligatureLookup, name: `LIGATURE ${charPts}`, cat: this.instance._categories.Liga, ligature: true, char: charPts };
             this.instance._charMap[ligatureLookup] = ligature;
         }
 
@@ -205,7 +207,7 @@ class UNICODE extends nkm.com.helpers.Singleton {
         if (p_infos.ligature) {
             let ulist = p_infos.u.split(`+`);
             for (let i = 0; i < ulist.length; i++) { ulist[i] = `U+${ulist[i]}`; }
-            return ulist.join(`_`);
+            return ulist.join(``);
         } else {
             return `U+${p_infos.u}`;
         }
@@ -224,6 +226,83 @@ class UNICODE extends nkm.com.helpers.Singleton {
         }
 
         return result;
+    }
+
+    /**
+     * 
+     * @param {string} p_string accepts : 'a', 'abc', 'aU+0000', 'abcU+0000', 'U+0000U+0000U+0000', 'U+0000-abU+0000U+0000'
+     * @returns 
+     */
+    static TryGetInfosFromString(p_string, p_createLigature = false, p_sep = `-`) {
+
+        if (!p_string || p_string == ``) { return null; }
+
+        let
+            glyphInfos = null,
+            resolved = this.ResolveString(p_string, p_sep),
+            unicodes = [];
+
+
+        for (let i = 0; i < resolved.length; i++) {
+            let uchar = resolved.substr(i, 1);
+            if (uchar == ``) { continue; }
+            unicodes.push(UNICODE.GetAddress(uchar));
+        }
+
+        glyphInfos = this.GetInfos(unicodes, p_createLigature);
+        unicodes.length = 0;
+        unicodes = null;
+
+        return glyphInfos;
+
+    }
+
+    /**
+     * 
+     * @param {string} p_string accepts : 'a', 'abc', 'aU+0000', 'abcU+0000', 'U+0000U+0000U+0000', 'U+0000-abU+0000U+0000'
+     * @returns 
+     */
+    static ResolveString(p_string, p_sep = `-`) {
+
+        if (!p_string || p_string == ``) { return ``; }
+
+        let
+            glyphInfos = null,
+            result = ``;
+
+        if (p_string.includes(`U+`)) {
+            let chunks = p_string.split(`U+`);
+
+            if (chunks.length >= 2) { // Prefixed chars : ...U+...
+                let prefix = chunks.shift();
+                if (prefix != '') { result += prefix; }
+            }
+
+            for (let i = 0; i < chunks.length; i++) {
+
+                let uchar = chunks[i];
+                if (uchar == ``) { continue; }
+
+                let
+                    cSplit = uchar.split(p_sep),
+                    uHex = cSplit.shift(),//extract what should be '0000'
+                    cPt = Number.parseInt(uHex, 16);
+
+                if (!Number.isNaN(cPt)) { result += String.fromCodePoint(cPt); }
+                else{ result += `U+${uHex}`; }
+
+                if (cSplit.length == 0) { continue; }
+                if (cSplit.length == 1 && cSplit[0] == ``) { continue; } // Trailing separator : U+0000-
+
+                result += cSplit.join(p_sep);
+
+            }
+        } else {
+            result += p_string;
+        }
+
+        return result;
+
     }
 
 }

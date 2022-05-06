@@ -56,12 +56,15 @@ class AssignSelectionFilenameControl extends base {
 
         let parseArray = p_string.split(prefix);
         parseArray = parseArray.length > 1 ? parseArray.pop() : parseArray[0];
-        parseArray = this._GetUnicodeStructure(parseArray.split(separator));
+        parseArray = separator != `` ? parseArray.split(separator) : [parseArray];
+        //parseArray.forEach((str, i) => { parseArray[i] = UNICODE.ResolveString(str); });
+        parseArray = this._GetUnicodeStructure(parseArray);
+
 
         return parseArray;
 
     }
-    
+
 
 }
 

@@ -13,7 +13,7 @@ class ActionSetPropertyValue extends actions.Action {
 
     CanMerge(p_operation) {
         //Also check if operation target is array, this mean it's a group op
-        return (this._operation.target == p_operation.target && this._operation.id == p_operation.id)
+        return (this._operation.target == p_operation.target && this._operation.id == p_operation.id);
     }
 
     // Expected operation format : { target:SimpleDataBlock, id:`ID`, value:* }

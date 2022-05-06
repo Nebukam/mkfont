@@ -1,3 +1,5 @@
+'use strict';
+
 const nkm = require(`@nkmjs/core`);
 const ui = nkm.ui;
 const uilib = nkm.uilib;
@@ -22,9 +24,9 @@ class PropertyControl extends base {
     };
 
     static __distribute = base.__distribute.Ext()
-        .To(`propertyId`)
+        .To(`propertyId`, null, null)
         .To(`subData`, null, null)
-        .To(`inputOnly`, null, null)
+        .To(`inputOnly`, null, false)
         .To(`onSubmit`, `_onSubmitFn`, null)
         .To(`invertInputOrder`, null, false)
         .To(`directSet`, `_directSet`, false)
@@ -37,6 +39,7 @@ class PropertyControl extends base {
         this._valueInfos = null;
         this._input = null;
         this._directSet = false;
+        this._subData = null;
 
         this._Bind(this._OnValueSubmit);
 
@@ -58,26 +61,32 @@ class PropertyControl extends base {
     static _Style() {
         return nkm.style.Extends({
             ':host': {
+                //'@': ['fade-in'],
                 'position': 'relative',
                 //'border':'1px solid gray',
                 'display': 'flex',
                 'flex-flow': 'row nowrap',
                 'align-items': 'center',
-                'flex': '1 1 auto'
+                'flex': '1 1 auto',
+
+                'margin': '0 2px 5px 2px',
             },
             ':host(.selected)': {
                 'background-color': 'rgba(127,127,127,0.25)'
             },
-
+            ':host(.input-first) .input-field': {
+                'flex': '0 0 auto'
+            },
             ':host(.inherited) .input-field, :host(.inherited) .label': {
                 //'pointer-events': 'none !important',
                 'opacity': '0.8'
             },
             '.label': {
-                //'text-overflow': 'ellipsis',
                 'white-space': 'nowrap',
                 'flex': '1 1 50%'
-                //'overflow': 'hidden',
+            },
+            '.label:not(:first-child)': {
+                'margin-left': `4px`
             },
             ':host(.false) .label': {
                 'text-decoration': 'line-through var(--col-error-dark)',
@@ -124,9 +133,11 @@ class PropertyControl extends base {
         if (p_value) {
             this._label._element.style.order = `1`;
             this._inputOrder = 0;
+            this.classList.add(`input-first`);
         } else {
             this._label._element.style.order = `0`;
             this._inputOrder = 1;
+            this.classList.remove(`input-first`);
         }
 
         if (this._input) { this._input.order = this._inputOrder; }
@@ -149,6 +160,8 @@ class PropertyControl extends base {
             this._input.Release();
             this._input = null;
         }
+
+        if (!p_id) { return; }
 
         this._label._element.setAttribute(`title`, this._valueInfos.desc);
         this._label.Set(this._valueInfos.label || this._valueID);
@@ -191,7 +204,7 @@ class PropertyControl extends base {
         this._cmd = p_value;
     }
 
-    set placeholderValue(p_value){
+    set placeholderValue(p_value) {
         this._input.placeholderValue = p_value;
     }
 
@@ -206,6 +219,7 @@ class PropertyControl extends base {
     }
 
     _OnDataUpdated(p_data) {
+
         super._OnDataUpdated(p_data);
 
         this._inherited = this._isNullable ? this.localValueObj.value == null : false;
@@ -229,6 +243,8 @@ class PropertyControl extends base {
 
     _OnValueSubmit(p_input, p_value) {
 
+        if (this._releasing || this._released || !this._data) { return; }
+
         if (this._directSet) {
             this._data.Set(this._valueID, p_value);
             return;
@@ -250,7 +266,7 @@ class PropertyControl extends base {
         let valueObj = this.localValueObj;
 
         if (this._directSet) {
-            this._data.Set(this._valueID, null);
+            valueObj.value = null;
             this._data.CommitValueUpdate(this._valueID, valueObj, null, false);
             return;
         }
@@ -264,8 +280,27 @@ class PropertyControl extends base {
     }
 
     _CleanUp() {
+
+        this.propertyId = null;
+
         this._onSubmitFn = null;
         this._cmd = null;
+
+        this._fallbackData = null;
+        this._valueID = null;
+        this._valueInfos = null;
+        this._directSet = false;
+
+        this._flags.Set(__flag_inherited, false);
+
+        this._onSubmitFn = null;
+        this._inherited = false;
+        this._inputOnly = false;
+
+        this._inputOrder = 1;
+
+        this._subData = null;
+
         super._CleanUp();
     }
 

@@ -1,3 +1,5 @@
+'use strict';
+
 const nkm = require(`@nkmjs/core`);
 const css = nkm.style.CSS;
 const Family = require(`./family-data-block`);
@@ -94,7 +96,7 @@ class TTFImport {
                 svgStats = {
                     width: gW, //bbox.width,
                     height: baseline, //bsl - bbox.y,
-                    BBox: bbox
+                    bbox: bbox
                 },
                 sShift = bbox.x,
                 sPush = gW - (bbox.width + sShift);
@@ -173,7 +175,7 @@ class TTFImport {
                 svgStats = {
                     width: bbox.width,
                     height: (ascent * scale),
-                    BBox: bbox,
+                    bbox: bbox,
                     path: svgpath(path).translate(-bbox.x, 0).toString()
                 },
                 sShift = bbox.x,
@@ -185,15 +187,17 @@ class TTFImport {
                 [IDS.GLYPH_NAME]: gName,
                 [IDS.UNICODE]: gU,
                 [IDS.PATH_DATA]: svgStats,
+                [IDS.WIDTH]:gW,
+                [IDS.HEIGHT]:gH,
                 transforms: {
                     // Make sure to push defaults
                     [IDS.TR_BOUNDS_MODE]: ENUMS.BOUNDS_MIXED,
                     [IDS.TR_SCALE_MODE]: ENUMS.SCALE_ASCENDER,
                     [IDS.TR_SCALE_FACTOR]: 1,
                     [IDS.TR_VER_ALIGN]: ENUMS.VALIGN_BASELINE,
-                    [IDS.TR_VER_ALIGN_ANCHOR]: ENUMS.VANCHOR_BOTTOM,
                     [IDS.TR_HOR_ALIGN]: ENUMS.HALIGN_XMIN,
-                    [IDS.TR_HOR_ALIGN_ANCHOR]: ENUMS.HANCHOR_LEFT,
+                    [IDS.TR_ANCHOR]: ENUMS.ANCHOR_BOTTOM_LEFT,
+                    [IDS.TR_AUTO_WIDTH]: true,
                     [IDS.TR_WIDTH_SHIFT]: sShift,
                     [IDS.TR_WIDTH_PUSH]: sPush,
                 }
