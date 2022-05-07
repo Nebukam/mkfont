@@ -25,8 +25,8 @@ class CmdLayerRemove extends actions.Command {
 
             this._emitter.StartActionGroup({
                 icon: `remove`,
-                name: `Remove layers`,
-                title: `Remove layers`
+                name: `Remove components`,
+                title: `Remove components on multiple glyphs`
             });
 
             this._context.forEach(layer => {

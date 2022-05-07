@@ -26,9 +26,9 @@ class CmdLayerAddComp extends actions.Command {
         if (u.isArray(this._context)) {
 
             this._emitter.StartActionGroup({
-                icon: `link`,
-                name: `Layer comp`,
-                title: `Creates layer from character decomposition`
+                icon: `component-new`,
+                name: `Composite`,
+                title: `Creates components from character decomposition`
             });
 
             this._context.forEach(variant => {

@@ -368,10 +368,10 @@ class IDS {
         };
 
         this.infos[this.SHOW_ALL_LAYERS] = {
-            label: `Show all shared layers`,
+            label: `Show all`,
             inputType: inputs.Boolean,
             inputOptions: { size: ui.FLAGS.SIZE_XS },
-            desc: `Show all shared layers, not just the ones shared by every glyph in the selection.`
+            desc: `Show all shared components, not just the ones shared by every glyph in the selection.`
         };
 
     }
@@ -508,7 +508,7 @@ class IDS {
             inputType: inputs.Anchor,
             label: `Anchor`,
             //inputOptions: { catalog: ENUMS.ANCHORS, itemKey: nkm.com.IDS.VALUE, size: ui.FLAGS.SIZE_M },
-            desc: `Defines the anchor point of the glyph within the typographic space.`
+            desc: `Defines the anchor point of the glyph within the typographic space.\n Used as reference for computing transformations.`
         };
 
 
@@ -578,6 +578,7 @@ class IDS {
     static CIRCULAR_REFERENCE = 'circ-dep';
 
     static USE_PREV_LAYER = 'lyr-bounds-lyr';
+    static CONTROL_LAYER = 'lyr-control';
 
     static {
 
@@ -596,8 +597,15 @@ class IDS {
         this.infos[this.USE_PREV_LAYER] = {
             inputType: inputs.Boolean,
             inputOptions: { size: ui.FLAGS.SIZE_XS },
-            label: `Rely on previous layer`,
-            desc: `If enabled, This layer use the first visible layer before it as bound reference.`
+            label: `Inherit prev. comp`,
+            desc: `If enabled, This component use the first visible component before it as bound reference.`
+        };
+
+        this.infos[this.CONTROL_LAYER] = {
+            inputType: inputs.Boolean,
+            inputOptions: { size: ui.FLAGS.SIZE_XS },
+            label: `Control layer`,
+            desc: `There can only be one control layer active at a time.\nIf enabled, the parent glyph will replicate the layer reference glyph settings before transformation.\nThis is only useful when working with glyphs that are empty except for layers.`
         };
 
         this.infos[this.TR_LYR_BOUNDS_MODE] = {
@@ -622,7 +630,7 @@ class IDS {
             inputType: inputs.NumberDrag,
             label: `Scale factor`,
             inputOptions: { min: 0.01, max: 2, step: 0.01, size: ui.FLAGS.SIZE_XS },
-            desc: `Factor by which the layer will be scaled.`
+            desc: `Factor by which the component will be scaled.`
         };
 
         this.infos[this.TR_LYR_SELF_ANCHOR] = {
@@ -630,7 +638,7 @@ class IDS {
             inputType: inputs.Anchor,
             label: `Self anchor`,
             //inputOptions: { changeOnInput: true, min: 0.01, max: 2, step: 0.01, size: ui.FLAGS.SIZE_XS },
-            desc: `Factor by which the layer will be scaled.`
+            desc: `The component' anchor point reference for transformations.`
         };
 
 
@@ -667,8 +675,6 @@ class IDS {
     ];
 
     //#endregion
-
-
 
     static GetInfos(p_id) {
         return p_id in this.infos ? this.infos[p_id] : null;

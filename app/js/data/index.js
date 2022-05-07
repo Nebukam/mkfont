@@ -1,10 +1,5 @@
 'use strict';
 
-const GlyphLayer = require(`./glyph-layer-data-block`);
-
-const __UTILS = require(`./utils`);
-__UTILS.__layerClass = GlyphLayer;
-
 module.exports = {
 
     serialization: require(`./serialization`),
@@ -13,11 +8,12 @@ module.exports = {
     IDS: require(`./ids`),
     IDS_EXT: require(`./ids-ext`),
     IDS_PREFS: require(`./ids-prefs`),
-    UTILS: __UTILS,
+    INFOS: require(`./infos`),
+    UTILS: require(`./utils`),
 
     Family: require(`./family-data-block`),
     
-    GlyphLayer: GlyphLayer,
+    GlyphLayer: require(`./glyph-layer-data-block`),
     GlyphVariant: require(`./glyph-variant-data-block`),
     Glyph: require(`./glyph-data-block`),
 

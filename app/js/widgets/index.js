@@ -8,6 +8,7 @@ module.exports = {
     GlyphSlot: require(`./glyph-slot`),
     GlyphCanvasRenderer: require(`./glyph-canvas-renderer`),
     GlyphPreview: require(`./glyph-preview`),
+    GlyphPreviewGroup: require(`./glyph-preview-group`),
     GlyphIdentity: require(`./glyph-identity`),
     GlyphStats: require(`./glyph-stats`),
     PropertyControl: require(`./property-control`),
@@ -21,4 +22,5 @@ module.exports = {
     LayerTransformSettings: require(`./tr-layer-inspector`),
     LayersView: require(`./layers-view`),
     LayersViewSilent: require(`./layers-view-silent`),
+    
 }

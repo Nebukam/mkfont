@@ -32,9 +32,9 @@ class ActionLayerAdd extends actions.Action {
 
     _UpdateDisplayInfos() {
         this.displayInfos = {
-            icon: `new`,
-            name: `Add layer`,
-            title: `Added new layer`
+            icon: `component-new`,
+            name: `Create component`,
+            title: `Added new component`
         };
     }
 

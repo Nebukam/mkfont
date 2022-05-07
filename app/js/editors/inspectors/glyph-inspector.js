@@ -2,14 +2,11 @@
 
 const nkm = require(`@nkmjs/core`);
 const ui = nkm.ui;
-const inputs = nkm.uilib.inputs;
-const operations = require(`../../operations/index`);
 
 const mkfData = require(`../../data`);
 const mkfWidgets = require(`../../widgets`);
 
 const SIGNAL = require(`../../signal`);
-const UNICODE = require(`../../unicode`);
 
 const GlyphIItem = require(`./glyph-iitem`);
 

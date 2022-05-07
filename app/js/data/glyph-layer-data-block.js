@@ -23,7 +23,7 @@ class GlyphLayerDataBlock extends SimpleDataEx {
 
         this._variant = null;
         this._index = 0;
-        this.expanded = false;
+        this.expanded = true;
 
         this._glyphInfos = null;
         this._isCircular = false;
@@ -159,7 +159,7 @@ class GlyphLayerDataBlock extends SimpleDataEx {
         this.importedVariant = null;
         this._variant = null;
         this._index = 0;
-        this.expanded = false;
+        this.expanded = true;
         this._glyphInfos = null;
         this._isCircular = false;
         super._CleanUp();

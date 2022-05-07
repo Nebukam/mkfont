@@ -30,8 +30,8 @@ class ActionLayerRemove extends actions.Action {
     _UpdateDisplayInfos() {
         this.displayInfos = {
             icon: `remove`,
-            name: `Remove layer`,
-            title: `Remove layer`
+            name: `Remove component`,
+            title: `Remove component.`
         };
     }
 

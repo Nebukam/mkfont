@@ -3,7 +3,7 @@
 // Set svg property of a given char in a given glyph
 const nkm = require(`@nkmjs/core`);
 const actions = nkm.actions;
-const data = require(`../../data`);
+const mkfData = require(`../../data`);
 
 class ActionSetPropertyValue extends actions.Action {
     constructor() { super(); }
@@ -51,9 +51,14 @@ class ActionSetPropertyValue extends actions.Action {
     }
 
     _UpdateDisplayInfos() {
+
+        let
+            pInfos = mkfData.INFOS.Get(this._operation.id),
+            label = pInfos ? pInfos.label : this._operation.id;
+
         this.displayInfos = {
-            name: `Set ${this._operation.id}`,
-            title: `${nkm.u.isArray(this._operation.target) ? 'Multiple' : this._operation.target + `'s`} ${this._operation.id}\n` +
+            name: `Set ${label}`,
+            title: `${nkm.u.isArray(this._operation.target) ? 'Multiple' : this._operation.target + `'s`} ${label}\n` +
                 `from : ${nkm.u.isArray(this._operation.oldValue) ? 'Multiple' : this._operation.oldValue}\n` +
                 `to: ${this._operation.value}`
         };

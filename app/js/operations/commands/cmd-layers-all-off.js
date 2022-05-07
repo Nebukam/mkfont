@@ -25,8 +25,8 @@ class CmdLayersOff extends actions.Command {
 
             this._emitter.StartActionGroup({
                 icon: `hidden`,
-                name: `All layers invisible`,
-                title: `Make all layers invisible.`
+                name: `Hide components`,
+                title: `Hides all components.`
             });
 
             this._context.forEach((variant) => {

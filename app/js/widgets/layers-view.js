@@ -91,25 +91,25 @@ class LayersView extends base {
             defaultWidgetClass: nkm.uilib.buttons.Tool,
             handles: [
                 {
-                    icon: `new`, htitle: `Create new layer`,
+                    icon: `component-new`, htitle: `Create new component`,
                     flavor: nkm.ui.FLAGS.CTA, variant: ui.FLAGS.MINIMAL,
                     trigger: { fn: () => { this.editor.cmdLayerAdd.Execute(this._data); } },
                     group: `create`
                 },
                 {
-                    icon: `visible`, htitle: `Show all layers`,
+                    icon: `visible`, htitle: `Show all components`,
                     variant: ui.FLAGS.MINIMAL,
                     trigger: { fn: () => { this.editor.cmdLayersOn.Execute(this._data); } },
                     group: `edit`
                 },
                 {
-                    icon: `hidden`, htitle: `Hide all layers`,
+                    icon: `hidden`, htitle: `Hide all components`,
                     variant: ui.FLAGS.MINIMAL,
                     trigger: { fn: () => { this.editor.cmdLayersOff.Execute(this._data); } },
                     group: `edit`
                 },
                 {
-                    icon: `link`, htitle: `Create composition layers.`,
+                    icon: `link`, htitle: `Create composition components.`,
                     variant: ui.FLAGS.MINIMAL,
                     trigger: { fn: () => { this.editor.cmdLayerAddComp.Execute(this._data); } },
                     group: `automate`, member: { owner: this, id: `_addCompBtn` }

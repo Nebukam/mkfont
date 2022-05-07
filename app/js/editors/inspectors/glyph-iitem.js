@@ -2,14 +2,12 @@
 
 const nkm = require(`@nkmjs/core`);
 const ui = nkm.ui;
-const inputs = nkm.uilib.inputs;
 const uilib = nkm.uilib;
 
-const UNICODE = require(`../../unicode`);
 const mkfData = require(`../../data`);
 const mkfWidgets = require(`../../widgets`);
-const mkfOperations = require(`../../operations`);
-const mkfCmds = mkfOperations.commands;
+
+const LOC = require(`../../locales`);
 
 const TransformSettingsInspector = require(`./tr-settings-inspector`);
 const SIGNAL = require("../../signal");
@@ -163,7 +161,7 @@ class GlyphVariantInspectorItem extends base {
 
         let foldout = this._Foldout(
             {
-                title: `Transformations`, icon: `view-grid`, prefId: `transforms`, expanded: true, //TODO CHANGE BACK to true
+                title: LOC.labelTr, icon: `view-grid`, prefId: `transforms`, expanded: true, //TODO CHANGE BACK to true
                 handles: [
                     {
                         icon: 'clipboard-read', htitle: 'Paste transforms (Ctrl Alt V)',
@@ -182,7 +180,7 @@ class GlyphVariantInspectorItem extends base {
 
         foldout = this._Foldout(
             {
-                title: `Layers`, icon: `three-lines`, prefId: `layers`, expanded: true,
+                title: LOC.labelLayers, icon: `component`, prefId: `layers`, expanded: true,
                 handles: [
                     {
                         icon: 'clipboard-write', htitle: 'Copy layers',
@@ -202,7 +200,7 @@ class GlyphVariantInspectorItem extends base {
         // Settings
 
         foldout = this._Foldout(
-            { title: `Settings`, icon: `gear`, prefId: `glyphSettings`, expanded: true },
+            { title: LOC.labelSettings, icon: `gear`, prefId: `glyphSettings`, expanded: true },
             [
                 //{ cl: mkfWidgets.ControlHeader, options: { label: `Export` } },
                 { options: { propertyId: mkfData.IDS.EXPORT_GLYPH } },
@@ -215,7 +213,7 @@ class GlyphVariantInspectorItem extends base {
         // Stats
 
         foldout = this._Foldout(
-            { title: `Stats`, icon: `infos`, prefId: `glyph-infos`, expanded: true },
+            { title: LOC.labelStats, icon: `infos`, prefId: `glyph-infos`, expanded: true },
             null, `always-visible`);
 
         foldout.visible = false;

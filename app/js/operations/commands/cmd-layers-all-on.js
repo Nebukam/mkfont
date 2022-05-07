@@ -35,8 +35,8 @@ class CmdLayersOn extends actions.Command {
 
                 this._emitter.StartActionGroup({
                     icon: `visible`,
-                    name: `All layers visible`,
-                    title: `Make all layers visible.`
+                    name: `Show components`,
+                    title: `Shows all components.`
                 });
 
                 this._emitter.Do(mkfActions.SetProperty, {

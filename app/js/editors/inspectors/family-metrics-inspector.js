@@ -2,17 +2,13 @@
 
 const nkm = require(`@nkmjs/core`);
 const ui = nkm.ui;
-const inputs = nkm.uilib.inputs;
-const operations = require(`../../operations/index`);
-
-const SIGNAL = require(`../../signal`);
 
 const mkfData = require(`../../data`);
 const mkfWidgets = require(`../../widgets`);
 const mkfOperations = require(`../../operations`);
 const mkfCmds = mkfOperations.commands;
 
-const GlyphVariantInspector = require(`./glyph-iitem`);
+const LOC = require(`../../locales`);
 
 const base = nkm.datacontrols.InspectorView;
 class FamilyMetricsInspector extends base {
@@ -111,7 +107,7 @@ class FamilyMetricsInspector extends base {
         super._Render();
 
         let foldout = this.Attach(nkm.uilib.widgets.Foldout, `control drawer`, this._body);
-        foldout.options = { title: `Default transforms`, icon: `gear`, prefId: `f-metrics-tr`, expanded: true };
+        foldout.options = { title: LOC.labelTrDefaults, icon: `gear`, prefId: `f-metrics-tr`, expanded: true };
         this._trBuilder.host = foldout;
         this._trBuilder.Build(this.constructor.__trControls);
     }

@@ -21,8 +21,7 @@ class ActionSetAscent extends ActionSetPropertyValue {
     _UpdateValue(p_target, p_from, p_to) {
         let
             resample = this._operation.resample,
-            scaleFactor = p_from / p_to;
-            
+            scaleFactor = p_from / p_to;            
 
         if (resample) {
             p_target.BatchSet(mkfData.UTILS.Resample(

@@ -24,9 +24,9 @@ class CmdLayerAdd extends actions.Command {
         if (u.isArray(this._context)) {
 
             this._emitter.StartActionGroup({
-                icon: `new`,
-                name: `Create new layer`,
-                title: `Create new layer on multiple glyphs.`
+                icon: `component-new`,
+                name: `New component`,
+                title: `Create new component on multiple glyphs.`
             });
 
             this._context.forEach(variant => {
