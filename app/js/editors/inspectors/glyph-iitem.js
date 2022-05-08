@@ -127,7 +127,7 @@ class GlyphVariantInspectorItem extends base {
                     group: `read`
                 },
                 {
-                    icon: `reset`, htitle: `Reset existing glyph or create an empty one if it doesn't exists.`,
+                    icon: `reset`, htitle: `Reset existing glyph or create an empty one if it doesn't exists.\n---\n+ [ Alt ] Also create components matching character decomposition.`,
                     variant: ui.FLAGS.MINIMAL,
                     trigger: { fn: () => { this.editor.cmdGlyphClear.Execute(this._data); } },
                     group: `read`, member: { owner: this, id: `_glyphClearBtn` }
@@ -139,7 +139,7 @@ class GlyphVariantInspectorItem extends base {
                     group: `write`, member: { owner: this, id: `_editInPlaceBtn` }
                 },
                 {
-                    icon: `clipboard-write`, htitle: `Copy glyph to clipboard (ctrl+c)`,
+                    icon: `clipboard-write`, htitle: `Copy glyph to clipboard  [ Ctrl C ]`,
                     variant: ui.FLAGS.MINIMAL,
                     trigger: { fn: () => { this.editor.cmdGlyphCopy.Execute(this._glyphInfos); } },
                     group: `write`, member: { owner: this, id: `_copyPathBtn` }
@@ -164,7 +164,7 @@ class GlyphVariantInspectorItem extends base {
                 title: LOC.labelTr, icon: `view-grid`, prefId: `transforms`, expanded: true, //TODO CHANGE BACK to true
                 handles: [
                     {
-                        icon: 'clipboard-read', htitle: 'Paste transforms (Ctrl Alt V)',
+                        icon: 'clipboard-read', htitle: 'Paste transforms  [ Ctrl Alt V ]',
                         trigger: { fn: () => { this.editor.cmdGlyphPasteTransform.Execute(this._data); } },
                     }
                 ]
@@ -183,11 +183,11 @@ class GlyphVariantInspectorItem extends base {
                 title: LOC.labelLayers, icon: `component`, prefId: `layers`, expanded: true,
                 handles: [
                     {
-                        icon: 'clipboard-write', htitle: 'Copy layers',
+                        icon: 'clipboard-write', htitle: 'Copy components',
                         trigger: { fn: () => { this.editor.cmdLayersCopy.Execute(this._data); } },
                     },
                     {
-                        icon: 'clipboard-read', htitle: 'Paste layers (hold Alt to add instead of replace)',
+                        icon: 'clipboard-read', htitle: 'Paste components\n---\n+ [ Shift ] Add instead of replace\n+ [ Alt ] Only copy transforms',
                         trigger: { fn: () => { this.editor.cmdLayersPaste.Execute(this._data); } },
                     },
                 ]

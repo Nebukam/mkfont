@@ -69,8 +69,8 @@ class ActionSetEM extends ActionSetPropertyValue {
                     variant._layers.ForEach(layer => {
 
                         layer.BatchSet(mkfData.UTILS.Resample(
-                            layer.Values(mkfData.IDS.TR_RESAMPLE_IDS),
-                            mkfData.IDS.TR_RESAMPLE_IDS,
+                            layer.Values(mkfData.IDS.LYR_RESAMPLE_IDS),
+                            mkfData.IDS.LYR_RESAMPLE_IDS,
                             scaleFactor), true);
                         //mkfData.UTILS.ResampleValues(layer._values, mkfData.IDS.TR_RESAMPLE_IDS, scaleFactor, true);
                         //layer.CommitUpdate();

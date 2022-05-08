@@ -33,8 +33,8 @@ class GlyphGroupHeader extends base {
             '.title': {
                 'margin-bottom': '10px'
             },
-            '.bar':{
-                'height':`32px`,
+            '.bar': {
+                'height': `32px`,
             },
             '.toolbar': {
                 'display': 'flex',
@@ -65,17 +65,17 @@ class GlyphGroupHeader extends base {
             size: ui.FLAGS.SIZE_S,
             handles: [
                 {
-                    icon: `new`, htitle: `Add all selected glyphs in font.\nWill create empty glyphs where none exists.`,
+                    icon: `new`, htitle: `Add all selected glyphs in font.\nWill create empty glyphs where none exists.\n---\n+ [ Alt ] Applied to viewport content instead of selection.`,
                     trigger: { fn: () => { this.editor.cmdListImportMissing.Execute(this.cmdContent); } },
                     group: `new`
                 },
                 {
-                    icon: `text-unicode-char`, htitle: `Copy current selection as unicodes characters to clipboard.\nEach value is separated by a '\\n' new line.`,
+                    icon: `text-unicode-char`, htitle: `Copy current selection as unicodes characters to clipboard. Each value is separated by a '\\n' new line.\n---\n+ [ Alt ] Use viewport content instead of selection.`,
                     trigger: { fn: () => { this.editor.cmdListExportUni.Execute(this.cmdContent); } },
                     group: `export`
                 },
                 {
-                    icon: `text-unicode`, htitle: `Copy current selection as hex values to clipboard.\nEach value is separated by a '\\n' new line.`,
+                    icon: `text-unicode`, htitle: `Copy current selection as hex values to clipboard.\nEach value is separated by a '\\n' new line.\n---\n+ [ Alt ] Use viewport content instead of selection.`,
                     trigger: { fn: () => { this.editor.cmdListExportUniHex.Execute(this.cmdContent); } },
                     group: `export`
                 },
@@ -85,7 +85,7 @@ class GlyphGroupHeader extends base {
                     group: `export`
                 },
                 {
-                    icon: `remove`, htitle: `Delete all selected glyphs.`,
+                    icon: `remove`, htitle: `Delete all selected glyphs.\n---s\n+ [ Alt ] Delete all viewport content instead of selection.`,
                     trigger: { fn: () => { this.editor.cmdGlyphDelete.Execute(this.cmdContent); } },
                     group: `remove`
                 }

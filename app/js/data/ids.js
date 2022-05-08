@@ -664,6 +664,13 @@ class IDS {
         this.TR_SCALE_FACTOR,
     ];
 
+    static LYR_RESAMPLE_IDS = [
+        //this.TR_WIDTH_SHIFT,
+        //this.TR_WIDTH_PUSH,
+        this.TR_Y_OFFSET,
+        this.TR_X_OFFSET,
+    ];
+
     static FAMILY_RESAMPLE_IDS = [
         this.BASELINE,
         this.ASCENT,

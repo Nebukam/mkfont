@@ -33,12 +33,28 @@ class CmdLayersPaste extends actions.Command {
 
         if (u.isArray(this._context)) {
 
-            if (!nkm.ui.INPUT.alt) {
+            if (nkm.ui.INPUT.alt) {
 
                 this._emitter.StartActionGroup({
                     icon: `clipboard-read`,
-                    name: `Replace layers`,
+                    name: `Copy comp. transforms`,
                     title: `Replaced layers`
+                });
+
+                this._context.forEach(variant => {
+                    if (variant != globalThis.__copySourceLayers) {
+                        SHARED_OPS.PasteLayersTransforms(this._emitter, variant, globalThis.__copySourceLayers, scaleFactor, false);
+                    }
+                });
+
+
+
+            } else if (!nkm.ui.INPUT.shift) {
+
+                this._emitter.StartActionGroup({
+                    icon: `clipboard-read`,
+                    name: `Replace components`,
+                    title: `Replaced components`
                 });
 
                 this._context.forEach(variant => {
@@ -52,8 +68,8 @@ class CmdLayersPaste extends actions.Command {
 
                 this._emitter.StartActionGroup({
                     icon: `clipboard-read`,
-                    name: `Paste layers`,
-                    title: `Pasted layers`
+                    name: `Paste components`,
+                    title: `Pasted components`
                 });
 
                 this._context.forEach(variant => {
@@ -74,24 +90,38 @@ class CmdLayersPaste extends actions.Command {
                 return;
             }
 
-            if (!nkm.ui.INPUT.alt) {
+            if (nkm.ui.INPUT.alt) {
 
                 this._emitter.StartActionGroup({
                     icon: `clipboard-read`,
-                    name: `Replace layers`,
+                    name: `Copy comp. transforms`,
                     title: `Replaced layers`
                 });
 
-                SHARED_OPS.RemoveLayers(this._emitter, this._context);
+                SHARED_OPS.PasteLayersTransforms(this._emitter, this._context, globalThis.__copySourceLayers, scaleFactor, false);
 
             } else {
-                this._emitter.StartActionGroup({
-                    icon: `clipboard-read`,
-                    name: `Paste layers`,
-                    title: `Pasted layers`
-                });
+
+                if (!nkm.ui.INPUT.shift) {
+
+                    this._emitter.StartActionGroup({
+                        icon: `clipboard-read`,
+                        name: `Replace components`,
+                        title: `Replaced components`
+                    });
+
+                    SHARED_OPS.RemoveLayers(this._emitter, this._context);
+
+                } else {
+                    this._emitter.StartActionGroup({
+                        icon: `clipboard-read`,
+                        name: `Paste components`,
+                        title: `Pasted components`
+                    });
+                }
+
+                SHARED_OPS.AddLayers(this._emitter, this._context, globalThis.__copySourceLayers, scaleFactor);
             }
-            SHARED_OPS.AddLayers(this._emitter, this._context, globalThis.__copySourceLayers, scaleFactor);
 
             this._emitter.EndActionGroup();
 

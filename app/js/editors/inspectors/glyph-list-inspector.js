@@ -149,8 +149,8 @@ class GlyphListInspector extends base {
                         icon: 'clipboard-read', htitle: 'Paste layers (hold Alt to add instead of replace)',
                         trigger: {
                             fn: () => {
-                                if (!this._cachedVariants || this._cachedVariants.length == 0) { return; }
-                                this.editor.cmdLayersPaste.Execute(this._cachedVariants);
+                                if (!this._surveyor._cachedVariants || this._surveyor._cachedVariants.length == 0) { return; }
+                                this.editor.cmdLayersPaste.Execute(this._surveyor._cachedVariants);
                             }
                         },
                     },

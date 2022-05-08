@@ -32,7 +32,7 @@ class SHARED_OPS {
             if (p_target.availSlots <= 0) { return; }
             p_editor.Do(mkfActions.LayerAdd, {
                 target: p_target,
-                layerValues: mkfData.UTILS.Resample(layer.Values(), mkfData.IDS.GLYPH_RESAMPLE_IDS, p_scaleFactor, true),
+                layerValues: mkfData.UTILS.Resample(layer.Values(), mkfData.IDS.LYR_RESAMPLE_IDS, p_scaleFactor, true),
                 expanded: p_expanded == null ? layer.expanded : p_expanded
             });
 
@@ -70,10 +70,35 @@ class SHARED_OPS {
             p_target.AddLayer(newLayer);
 
             if (resample) {
-                mkfData.UTILS.Resample(lyrValues, mkfData.IDS.GLYPH_RESAMPLE_IDS, p_scaleFactor, true);
+                mkfData.UTILS.Resample(lyrValues, mkfData.IDS.LYR_RESAMPLE_IDS, p_scaleFactor, true);
             }
 
             newLayer.BatchSet(lyrValues);
+
+        });
+
+    }
+
+    static PasteLayersTransforms(p_editor, p_target, p_source, p_scaleFactor = 1) {
+
+        let resample = p_scaleFactor != 1;
+
+        p_source._layers._array.forEach(layerSource => {
+
+            if (p_target.availSlots <= 0) { return; }
+
+            let srcId = layerSource.Get(mkfData.IDS.LYR_CHARACTER_NAME);
+
+            p_target._layers.ForEach(layerTarget => {
+                if (layerTarget.Get(mkfData.IDS.LYR_CHARACTER_NAME) == srcId) {
+                    let lyrValues = layerSource.Values();
+                    if (resample) { mkfData.UTILS.Resample(lyrValues, mkfData.IDS.LYR_RESAMPLE_IDS, p_scaleFactor, true); }
+                    p_editor.Do(mkfActions.SetPropertyMultiple, {
+                        target: layerTarget,
+                        values: lyrValues
+                    });
+                }
+            });
 
         });
 
