@@ -34,12 +34,14 @@ class LayerControlSilent extends base {
     }
 
     _ToggleVisibility(p_input, p_value) {
-        this._data.Set(mkfData.IDS.EXPORT_GLYPH, p_value);
+        this._data.Set(mkfData.IDS.DO_EXPORT, p_value);
     }
 
-    _DeleteLayer() {
-        this._data._variant.RemoveLayer(this._data);
-    }
+    _DeleteLayer() { this._data._variant.RemoveLayer(this._data); }
+
+    _MoveLayerUp() { this.editor.cmdLayerUp.Execute(this._data.surveyedList); }
+
+    _MoveLayerDown() { this.editor.cmdLayerDown.Execute(this._data.surveyedList); }
 
 }
 

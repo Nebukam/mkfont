@@ -23,7 +23,7 @@ class GlyphLayerDataBlock extends SimpleDataEx {
 
         this._variant = null;
         this._index = 0;
-        this.expanded = true;
+        this.expanded = false;
 
         this._glyphInfos = null;
         this._isCircular = false;
@@ -39,15 +39,17 @@ class GlyphLayerDataBlock extends SimpleDataEx {
         // Base bs
         p_values[IDS.PATH] = { value: '' };
         p_values[IDS.INVERTED] = { value: false };
+        p_values[IDS.LYR_IS_CONTROL_LAYER] = { value: false };
         p_values[IDS.CIRCULAR_REFERENCE] = { value: false };
-        p_values[IDS.CHARACTER_NAME] = { value: null };
-        p_values[IDS.EXPORT_GLYPH] = { value: true };
+        p_values[IDS.LYR_CHARACTER_NAME] = { value: null };
+        p_values[IDS.DO_EXPORT] = { value: true };
+        p_values[IDS.LYR_INDEX] = { value: 0 };
 
         // Transform settings
-        p_values[IDS.USE_PREV_LAYER] = { value: false };
+        p_values[IDS.LYR_USE_PREV_LAYER] = { value: false };
         p_values[IDS.TR_LYR_BOUNDS_MODE] = { value: ENUMS.LYR_BOUNDS_OUTSIDE };
         p_values[IDS.TR_BOUNDS_MODE] = { value: ENUMS.BOUNDS_OUTSIDE };
-        p_values[IDS.TR_LYR_SCALE_MODE] = { value: ENUMS.SCALE_NONE };
+        p_values[IDS.TR_LYR_SCALE_MODE] = { value: ENUMS.SCALE_MANUAL };
         p_values[IDS.TR_LYR_SCALE_FACTOR] = { value: 1 };
         p_values[IDS.TR_NRM_FACTOR] = { value: 0 };
         p_values[IDS.TR_ANCHOR] = { value: ENUMS.ANCHOR_CENTER };
@@ -71,6 +73,7 @@ class GlyphLayerDataBlock extends SimpleDataEx {
     set index(p_value) {
         if (this._index == p_value) { return; }
         this._index = p_value;
+        this._values[IDS.LYR_INDEX].value = p_value;
         if (this._variant) { this._DirtyLayer(); }
     }
 
@@ -97,6 +100,9 @@ class GlyphLayerDataBlock extends SimpleDataEx {
             this.Set(IDS.PATH, null); //Clear path
         }
 
+        //Some update do require to recompute the whole chain (value updates coming from imported layers)
+        //while local transforms only require the variant to recompute its transform
+
         this._DirtyLayer();
 
     }
@@ -106,7 +112,7 @@ class GlyphLayerDataBlock extends SimpleDataEx {
     }
 
     _RetrieveGlyphInfos() {
-        this._glyphInfos = UNICODE.TryGetInfosFromString(this.Get(IDS.CHARACTER_NAME));
+        this._glyphInfos = UNICODE.TryGetInfosFromString(this.Get(IDS.LYR_CHARACTER_NAME));
         this._RetrieveImportedVariant();
     }
 
@@ -136,14 +142,18 @@ class GlyphLayerDataBlock extends SimpleDataEx {
     }
 
     CommitValueUpdate(p_id, p_valueObj, p_oldValue, p_silent = false) {
-        if (p_id == IDS.CHARACTER_NAME) { this._RetrieveGlyphInfos(); }
+        if (p_id == IDS.LYR_CHARACTER_NAME) { this._RetrieveGlyphInfos(); }
+        if (p_id == IDS.LYR_IS_CONTROL_LAYER) {
+            if (p_valueObj.value) { this._variant.controlLayer = this; }
+            else if (this._variant.controlLayer == this) { this._variant.controlLayer = null; }
+        }
         super.CommitValueUpdate(p_id, p_valueObj, p_oldValue, p_silent);
     }
 
     _DirtyLayer() {
         if (this._isCircular) { return; }
         this._dirtyLayer = true;
-        this._variant._ScheduleTransformationUpdate();
+        this._variant._PushUpdate(true);
     }
 
     CommitUpdate() {
@@ -154,12 +164,13 @@ class GlyphLayerDataBlock extends SimpleDataEx {
     _CleanLayer() { this._dirtyLayer = false; }
 
     _CleanUp() {
+        this.surveyedList = null;
         this._computedPath = null;
         this._useCount = -1;
         this.importedVariant = null;
         this._variant = null;
         this._index = 0;
-        this.expanded = true;
+        this.expanded = false;
         this._glyphInfos = null;
         this._isCircular = false;
         super._CleanUp();

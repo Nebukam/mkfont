@@ -10,6 +10,10 @@ class ActionCreateGlyph extends actions.Action {
 
     // Expected operation format : { family:FamilyDataBlock, unicode:`abc`, path:pathData, transforms:{} }
 
+    static __deepCleanFn(p_action) {
+        if (p_action._undone) { p_action._operation.glyph.Release(); }
+    }
+
     _InternalDo(p_operation, p_merge = false) {
 
         let

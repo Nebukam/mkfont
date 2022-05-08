@@ -9,8 +9,8 @@ const mkfData = require(`../../data`);
 class ActionLayerRemove extends actions.Action {
     constructor() { super(); }
 
-    static __deepCleanFn(p_action){
-        p_action._operation.target.Release();
+    static __deepCleanFn(p_action) {
+        if (!p_action._undone) { p_action._operation.target.Release(); }
     }
 
     _InternalDo(p_operation, p_merge = false) {
@@ -18,10 +18,11 @@ class ActionLayerRemove extends actions.Action {
         let
             layer = p_operation.target,
             glyphVariant = layer._variant,
-            index = glyphVariant.layers.IndexOf(layer);
+            index = layer.Get(mkfData.IDS.LYR_INDEX);
 
         p_operation.variant = glyphVariant;
-        
+        p_operation.index = index;
+
         glyphVariant.RemoveLayer(layer);
         glyphVariant.CommitUpdate();
 
@@ -43,6 +44,7 @@ class ActionLayerRemove extends actions.Action {
         //TODO : Index!
 
         glyphVariant.AddLayer(layer);
+        glyphVariant.MoveLayer(layer, this._operation.index);
     }
 
     _InternalRedo() {

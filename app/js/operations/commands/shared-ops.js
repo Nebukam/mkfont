@@ -29,7 +29,7 @@ class SHARED_OPS {
     static AddLayers(p_editor, p_target, p_source, p_scaleFactor = 1, p_expanded = null) {
 
         p_source._layers._array.forEach(layer => {
-
+            if (p_target.availSlots <= 0) { return; }
             p_editor.Do(mkfActions.LayerAdd, {
                 target: p_target,
                 layerValues: mkfData.UTILS.Resample(layer.Values(), mkfData.IDS.GLYPH_RESAMPLE_IDS, p_scaleFactor, true),
@@ -40,11 +40,14 @@ class SHARED_OPS {
 
     }
 
-    static CopyLayers(p_target, p_source, p_scaleFactor = 1) {
+    static PasteLayers(p_target, p_source, p_scaleFactor = 1) {
 
         let resample = p_scaleFactor != 1;
 
         p_source._layers._array.forEach(layerSource => {
+
+            if (p_target.availSlots <= 0) { return; }
+
             let
                 newLayer = nkm.com.Rent(mkfData.GlyphLayer),
                 lyrValues = layerSource.Values();
@@ -69,14 +72,20 @@ class SHARED_OPS {
             maxw = 0,
             hasLayersAlready = !p_target._layers.isEmpty;
 
-        p_uInfos.comp.forEach(c => {
+        p_uInfos.comp.forEach((c, i) => {
+
+            if (p_target.availSlots <= 0) { return; }
+
             let ch = UNICODE.GetUnicodeCharacter(Number.parseInt(c, 16));
             if (!this._HasLayer(p_target, ch, `U+${c}`)) {
                 p_editor.Do(mkfActions.LayerAdd, {
                     target: p_target,
-                    layerValues: { [mkfData.IDS.CHARACTER_NAME]: ch },
+                    layerValues: {
+                        [mkfData.IDS.LYR_CHARACTER_NAME]: ch,
+                        [mkfData.IDS.LYR_IS_CONTROL_LAYER]: hasLayersAlready ? false : (i == 0) ? true : false
+                    },
                     index: -1,
-                    expanded:false
+                    expanded: false,
                 });
                 let g = p_target.glyph.family.GetGlyph(c);
                 if (!g.isNull) { maxw = Math.max(maxw, g.activeVariant.Get(mkfData.IDS.EXPORTED_WIDTH)); }
@@ -100,7 +109,7 @@ class SHARED_OPS {
         for (let i = 0, n = p_variant._layers.count; i < n; i++) {
             let
                 layer = p_variant._layers.At(i),
-                cval = layer.Get(mkfData.IDS.CHARACTER_NAME);
+                cval = layer.Get(mkfData.IDS.LYR_CHARACTER_NAME);
 
             if (cval == p_char || cval == p_uni) { return true; }
         }

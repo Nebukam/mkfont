@@ -69,7 +69,6 @@ class CmdLayersPaste extends actions.Command {
         } else {
 
             //Solo !
-
             if (this._context == globalThis.__copySourceLayers) {
                 this._Cancel();
                 return;
@@ -92,7 +91,6 @@ class CmdLayersPaste extends actions.Command {
                     title: `Pasted layers`
                 });
             }
-
             SHARED_OPS.AddLayers(this._emitter, this._context, globalThis.__copySourceLayers, scaleFactor);
 
             this._emitter.EndActionGroup();

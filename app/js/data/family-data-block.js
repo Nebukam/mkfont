@@ -196,7 +196,7 @@ class FamilyDataBlock extends SimpleDataEx {
             .Watch(SIGNAL.VARIANT_UPDATED, this._OnGlyphVariantUpdated)
             .Watch(nkm.com.SIGNAL.UPDATED, this._OnGlyphUpdated);
 
-        ContentUpdater.Push(this, this._UpdateFontObject);
+        this._scheduledObjectUpdate.Bump();
 
         this.Broadcast(SIGNAL.GLYPH_ADDED, this, p_glyph);
         p_glyph._OnGlyphAddedToFamily(this);
@@ -228,7 +228,7 @@ class FamilyDataBlock extends SimpleDataEx {
 
         p_glyph.family = null;
 
-        ContentUpdater.Push(this, this._UpdateFontObject);
+        this._scheduledObjectUpdate.Bump();
 
         this.Broadcast(SIGNAL.GLYPH_REMOVED, this, g);
         g._OnGlyphRemovedFromFamily(this);
@@ -271,7 +271,7 @@ class FamilyDataBlock extends SimpleDataEx {
         if (p_glyph.isLigature) { this._ligatureSet.add(p_glyph); }
         else { this._ligatureSet.delete(p_glyph); }
 
-        ContentUpdater.Push(this, this._UpdateFontObject);
+        this._scheduledObjectUpdate.Bump();
 
     }
 
@@ -294,7 +294,7 @@ class FamilyDataBlock extends SimpleDataEx {
         super.CommitValueUpdate(p_id, p_valueObj, p_oldValue, p_silent);
         let infos = IDS.GetInfos(p_id);
         if (!infos || !infos.recompute || !p_valueObj.propagate) { return; }
-        this._glyphs.ForEach((item, i) => { item._ScheduleTransformationUpdate(); });
+        this._glyphs.ForEach((item, i) => { item._PushUpdate(); });
     }
 
     _OnTransformValueChanged(p_data, p_id, p_valueObj, p_oldValue) {

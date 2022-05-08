@@ -34,9 +34,6 @@ class MKFont extends nkm.app.AppBase {
             { id: `mainLayout`, cl: require(`./main-layout`) }
         ];
 
-        //ui.Preload(mkfWidgets.GlyphSlot, 100);
-        //ui.Preload(mkfWidgets.LigaButton, 100);
-
         nkm.documents.DOCUMENTS.Watch(nkm.data.SIGNAL.NO_ACTIVE_EDITOR, this._OnDocDataRoaming, this);
 
         this._prefDataObject = com.Rent(mkfData.Prefs);
@@ -47,7 +44,7 @@ class MKFont extends nkm.app.AppBase {
             .Watch(mkfData.IDS_PREFS.AUTOSAVE_TIMER, () => {
                 nkm.documents.ToggleAutoSave(
                     nkm.env.APP.PGet(mkfData.IDS_PREFS.AUTOSAVE),
-                     nkm.env.APP.PGet(mkfData.IDS_PREFS.AUTOSAVE_TIMER) * 1000 * 60 );
+                    nkm.env.APP.PGet(mkfData.IDS_PREFS.AUTOSAVE_TIMER) * 1000 * 60);
             })
 
         this._defaultUserPreferences = {
@@ -75,7 +72,12 @@ class MKFont extends nkm.app.AppBase {
     PSet(p_id, p_value, p_silent = false) { return this._prefDataObject.Set(p_id, p_value, p_silent); }
 
     AppReady() {
-
+/*
+        ui.Preload(mkfWidgets.GlyphSlot, 50);
+        ui.Preload(mkfWidgets.LigaButton, 50);
+        ui.Preload(mkfWidgets.LayerControl, 50);
+        ui.Preload(mkfWidgets.LayerControlSilent, 50);
+*/
         super.AppReady();
 
         let cols = {
@@ -136,7 +138,7 @@ class MKFont extends nkm.app.AppBase {
         //nkm.actions.KeystrokeEx.CreateFromString(`Ctrl E`, { fn: this._Bind(this._WriteTTF) }).Enable();
 
         //this._EmptyFamily();
-        //this._FamilyFromTTF();
+        this._FamilyFromTTF();
         //mkfCmds.OpenPrefs.Execute();
 
     }
@@ -172,6 +174,24 @@ class MKFont extends nkm.app.AppBase {
     _FamilyFromTTF() {
 
         let family = mkfData.TTF.FamilyFromTTF(fs.readFileSync(`./assets-dev/${__fontName}.ttf`));
+
+        let gCount = family._glyphs.count;
+        family._glyphs.ForEach(glyph => {
+            for (let i = 0; i < 5; i++) {
+
+                if (Math.random() > 0.2) { continue; }
+
+                let
+                    newLayer = nkm.com.Rent(mkfData.GlyphLayer),
+                    g = family._glyphs.At(Math.round(Math.random() * (gCount - 1)));
+
+                glyph.activeVariant.AddLayer(newLayer);
+                newLayer.expanded = false;
+                newLayer.Set(mkfData.IDS.LYR_CHARACTER_NAME, g.unicodeInfos.char);
+
+            }
+        });
+
         nkm.actions.Emit(nkm.actions.REQUEST.EDIT, { data: family },
             this, this._Success, this._Fail);
 

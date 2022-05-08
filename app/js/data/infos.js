@@ -11,6 +11,8 @@ class INFOS {
         return IDS.GetInfos(p_id) || IDS_EXT.GetInfos(p_id) || IDS_PREFS.GetInfos(p_id) || null;
     }
 
+    static LAYER_LIMIT = 20;
+
 }
 
 module.exports = INFOS;

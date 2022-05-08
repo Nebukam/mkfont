@@ -344,10 +344,12 @@ class GlyphCanvasRenderer extends __BASE__ {
             ctx.strokeStyle = `rgba(255,255,255,0.1)`;
 
             // family width
+            ctx.setLineDash([iscale * 2, iscale * 4]);
             ctx.beginPath();
             ctx.moveTo(f.w, miny);
             ctx.lineTo(f.w, maxy);
             ctx.stroke();
+            ctx.setLineDash([]);
 
             if (this._drawLabels) {
                 ctx.fillText('X', txoff, bsl - f.xh + tyoff);
@@ -376,7 +378,7 @@ class GlyphCanvasRenderer extends __BASE__ {
             ctx.stroke();
 
             ctx.strokeStyle = `rgba(255,255,255,0.5)`;
-            ctx.lineWidth = iscale * 2;
+            ctx.lineWidth = iscale * 3;
             ctx.beginPath();
             ctx.moveTo(-10 * iscale, 0);
             ctx.lineTo(0, 0);

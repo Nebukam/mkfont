@@ -2,13 +2,14 @@
 
 module.exports = {
 
-    SetEM: require(`./action-set-em`),
+    SetProperty: require(`./action-set-property-value`),
+    SetPropertyMultiple: require(`./action-set-property-value-multiple`),
     SetAscent: require(`./action-set-ascent`),
+    SetEM: require(`./action-set-em`),
+    SetLayerIndex: require(`./action-set-layer-index`),
     GlyphCreate: require(`./action-glyph-create`),
     GlyphDelete: require(`./action-glyph-delete`),
     LayerAdd: require(`./action-layer-add`),
     LayerRemove: require(`./action-layer-remove`),
-    SetProperty: require(`./action-set-property-value`),
-    SetPropertyMultiple: require(`./action-set-property-value-multiple`),
-    
+
 }

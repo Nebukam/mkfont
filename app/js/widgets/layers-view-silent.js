@@ -27,6 +27,14 @@ class LayersViewSilent extends base {
         this._toolbar.Clear();
     }
 
+    _RefreshLayerOrder() {
+        this._delayedReorder.Cancel();
+        this._layerCtrls.forEach((ctrl, i) => {
+            ctrl.style.setProperty(`order`, i);
+        });
+        this._flags.Set(__nolayer, this._layerCtrls.length <= 0);
+    }
+
 
 }
 

@@ -89,7 +89,7 @@ class CmdGlyphPaste extends actions.Command {
 
             if (layers) {
                 let variant = family.GetGlyph(unicodeInfos.u).activeVariant;
-                SHARED_OPS.CopyLayers(variant, globalThis.__copySourceVariant, scaleFactor);
+                SHARED_OPS.PasteLayers(variant, globalThis.__copySourceVariant, scaleFactor);
             }
 
         } else {

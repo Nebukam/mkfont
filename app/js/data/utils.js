@@ -35,7 +35,6 @@ class UTILS {
 
     static FindCommonValues(p_reference, p_dataList, p_dataMember = null, backupList = null) {
 
-
         let
             refValues = p_reference._values,
             commonValues = {},
@@ -92,11 +91,7 @@ class UTILS {
 
         if (searchState == 2) {
             if (ignoreCount == valCount) { return false; }
-
-            for (var v in commonValues) {
-                refValues[v].value = commonValues[v];
-            }
-
+            for (var v in commonValues) { refValues[v].value = commonValues[v]; }
             return true;
         }
 

@@ -115,6 +115,7 @@ class CmdGlyphClear extends actions.Command {
             if (nkm.ui.INPUT.alt) { this._emitter.cmdLayerAddComp.Execute(p_variant); }
 
             if (!p_inGroup) { this._emitter.EndActionGroup(); }
+            
         }
 
         this._emitter._bindingManager.Unbind(p_variant);

@@ -33,7 +33,7 @@ class GlyphSlot extends base {
         this._glyhpVariant = null;
         this._glyphInfos = null;
 
-        this._flags.Add(this, mkfData.IDS.OUT_OF_BOUNDS, mkfData.IDS.EMPTY, mkfData.IDS.EXPORT_GLYPH, __rscBound);
+        this._flags.Add(this, mkfData.IDS.OUT_OF_BOUNDS, mkfData.IDS.EMPTY, mkfData.IDS.DO_EXPORT, __rscBound);
 
         this._dataObserver.Hook(SIGNAL.VARIANT_UPDATED, this._UpdateGlyphPreview, this);
 
@@ -141,7 +141,7 @@ class GlyphSlot extends base {
                 '@': ['absolute-top-left'],
                 'margin': '5px'
             },
-            ':host(.exists:not(.export-glyph)) .preview:before': {
+            ':host(.exists:not(.do-export)) .preview:before': {
                 'content': `""`,
                 'position': `absolute`,
                 'top': '50%', 'left': '50%',
@@ -247,12 +247,12 @@ class GlyphSlot extends base {
             this.classList.add(`exists`);
             this._flags.Set(mkfData.IDS.OUT_OF_BOUNDS, this._glyhpVariant.Get(mkfData.IDS.OUT_OF_BOUNDS));
             this._flags.Set(mkfData.IDS.EMPTY, this._glyhpVariant.Get(mkfData.IDS.EMPTY));
-            this._flags.Set(mkfData.IDS.EXPORT_GLYPH, this._glyhpVariant.Get(mkfData.IDS.EXPORT_GLYPH));
+            this._flags.Set(mkfData.IDS.DO_EXPORT, this._glyhpVariant.Get(mkfData.IDS.DO_EXPORT));
         } else {
             delete this._glyphPlaceholder._element.style.display;
             this._flags.Set(mkfData.IDS.OUT_OF_BOUNDS, false);
             this._flags.Set(mkfData.IDS.EMPTY, false);
-            this._flags.Set(mkfData.IDS.EXPORT_GLYPH, false);
+            this._flags.Set(mkfData.IDS.DO_EXPORT, false);
             this.classList.remove(`exists`);
         }
 

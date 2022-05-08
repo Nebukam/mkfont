@@ -20,6 +20,8 @@ module.exports = {
     FamilyGlyphMonitor: require(`./family-glyph-monitor`),
     ResourceBinding: require(`./resource-binding`),
     LayerTransformSettings: require(`./tr-layer-inspector`),
+    LayerControl:require(`./layer-control`),
+    LayerControlSilent:require(`./layer-control-silent`),
     LayersView: require(`./layers-view`),
     LayersViewSilent: require(`./layers-view-silent`),
     

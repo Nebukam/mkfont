@@ -13,7 +13,7 @@ class ContentUpdater extends nkm.com.helpers.SingletonEx {
         super._Init();
 
         this._data = [];
-        this._methods = new Map();
+        this._dataMap = new Map();
         this._totalCount = 0;
         this._processedCount = 0;
         this._ready = false;
@@ -26,17 +26,17 @@ class ContentUpdater extends nkm.com.helpers.SingletonEx {
         this.instance._Push(p_data, p_method);
     }
 
-    static get ready(){ return this.instance._ready; }
+    static get ready() { return this.instance._ready; }
 
     _Push(p_data, p_method) {
 
-        let array = this._methods.get(p_data);
+        let array = this._dataMap.get(p_data);
 
         if (!array) {
             array = [];
-            this._methods.set(p_data, array);
+            this._dataMap.set(p_data, array);
             this._data.push(p_data);
-            this._totalCount ++;
+            this._totalCount++;
             this._ready = false;
         }
 
@@ -53,9 +53,9 @@ class ContentUpdater extends nkm.com.helpers.SingletonEx {
         for (let i = 0; i < updateCount; i++) {
 
             let data = this._data.shift(),
-                methods = this._methods.get(data);
+                methods = this._dataMap.get(data);
 
-            this._methods.delete(data);
+            this._dataMap.delete(data);
             for (let m = 0; m < methods.length; m++) {
                 methods[m].call(data);
             }
@@ -67,7 +67,7 @@ class ContentUpdater extends nkm.com.helpers.SingletonEx {
         if (this._data.length != 0) {
             this._delayedUpdate.Schedule();
             this._ready = false;
-        }else{
+        } else {
             this._processedCount = 0;
             this._totalCount = 0;
             this._ready = true;

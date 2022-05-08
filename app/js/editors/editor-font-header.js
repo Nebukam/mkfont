@@ -45,7 +45,7 @@ class FontEditorHeader extends base {
     static _Style() {
         return nkm.style.Extends({
             ':host': {
-                'position':'relative',
+                'position': 'relative',
                 'display': 'flex',
                 'flex-flow': 'row nowrap',
                 'align-items': 'center',
@@ -64,9 +64,9 @@ class FontEditorHeader extends base {
             '.toolbar': {
 
             },
-            '.monitor':{
-                '@':[`absolute-right`],
-                'margin-right':'10px'
+            '.monitor': {
+                '@': [`absolute-right`],
+                'margin-right': '10px'
             }
         }, base._Style());
     }
@@ -81,6 +81,14 @@ class FontEditorHeader extends base {
             //size: ui.FLAGS.SIZE_S,
             defaultWidgetClass: nkm.uilib.buttons.Button,
             handles: [
+                {
+                    icon: `right`, htitle: `Previous`, cl: nkm.uilib.buttons.Tool,
+                    group: `nav`, member: { owner: this, id: `_navPrevBtn` }
+                },
+                {
+                    icon: `left`, htitle: `Next`, cl: nkm.uilib.buttons.Tool,
+                    group: `nav`, member: { owner: this, id: `_navNextBtn` }
+                },
                 {
                     label: `Save`, icon: `save`, htitle: `Save`,
                     flavor: ui.FLAGS.CTA,// variant:ui.FLAGS.FRAME,

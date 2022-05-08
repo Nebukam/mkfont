@@ -8,8 +8,8 @@ const mkfData = require(`../../data`);
 class ActionGlyphDelete extends actions.Action {
     constructor() { super(); }
 
-    static __deepCleanFn(p_action){
-        p_action._operation.glyph.Release();
+    static __deepCleanFn(p_action) {
+        if (!p_action._undone) { p_action._operation.glyph.Release(); }
     }
 
     // Expected operation format : { family:FamilyDataBlock, glyph:GlyphDataBlock, path:pathData }

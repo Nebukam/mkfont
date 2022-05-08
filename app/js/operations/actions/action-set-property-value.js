@@ -64,7 +64,7 @@ class ActionSetPropertyValue extends actions.Action {
         };
     }
 
-    _UpdateValue(p_target, p_from, p_to) { }
+    _UpdateValue(p_target, p_new, p_old) { }
 
     _InternalUndo() {
         let

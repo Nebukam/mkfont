@@ -18,8 +18,7 @@ class TransformSettingsDataBlock extends SimpleDataEx {
     _Init() {
 
         super._Init();
-        this._glyphVariantOwner = null;
-        this._waitingForUpdate = false;
+        this._variant = null;
 
     }
 
@@ -45,16 +44,16 @@ class TransformSettingsDataBlock extends SimpleDataEx {
 
     }
 
-    set glyphVariantOwner(p_value) { this._glyphVariantOwner = p_value; }
+    set variant(p_value) { this._variant = p_value; }
 
     get resolutionFallbacks() {
-        if (this._glyphVariantOwner) { return [this._glyphVariantOwner._family._transformSettings]; }
+        if (this._variant) { return [this._variant._family._transformSettings]; }
         else { return []; }
     }
 
     ResolveVariant(p_id, p_fallback) {
-        if (this._glyphVariantOwner) {
-            let val = this._glyphVariantOwner.Resolve(p_id);
+        if (this._variant) {
+            let val = this._variant.Resolve(p_id);
             if (val == null || val == undefined) { return p_fallback; }
             return val;
         }
@@ -63,43 +62,54 @@ class TransformSettingsDataBlock extends SimpleDataEx {
 
     CommitUpdate() {
         super.CommitUpdate();
-        if (this._glyphVariantOwner) { this.UpdateTransform(); }
+        if (this._variant) { this.UpdateTransform(); }
     }
 
     UpdateTransform() {
 
-        this._waitingForUpdate = false;
+        let pathData = this._variant.Get(IDS.PATH_DATA);
 
-        let pathData = this._glyphVariantOwner.Get(IDS.PATH_DATA);
-
-        if (!pathData || !this._glyphVariantOwner._family) { return; }
+        if (!pathData || !this._variant._family) { return; }
 
         let
-            rw = this._glyphVariantOwner.Get(IDS.WIDTH),
-            path = SVGOPS.FitPath(this, this._glyphVariantOwner.family._contextInfos, pathData),
-            w = 0;
+            rw = this._variant.Resolve(IDS.WIDTH),
+            path = SVGOPS.FitPath(this, this._variant.family._contextInfos, pathData),
+            w = 0,
+            h = this._variant.Resolve(IDS.HEIGHT),
+            controlVariant = null;
 
-
-        if (this.Get(IDS.TR_AUTO_WIDTH)) {
-            w = path.width;
-        } else {
-            w = this._glyphVariantOwner.Resolve(IDS.WIDTH);
+        if (this._variant.controlLayer &&
+            this._variant.controlLayer.importedVariant &&
+            !this._variant.controlLayer._isCircular) {
+            controlVariant = this._variant.controlLayer.importedVariant;
         }
 
-        this._glyphVariantOwner._computedPath = path;
+        if (controlVariant) {
+            w = controlVariant.Get(IDS.EXPORTED_WIDTH);
+            h = controlVariant.Resolve(IDS.HEIGHT);
+        } else {
+            if (this.Get(IDS.TR_AUTO_WIDTH)) {
+                w = path.width;
+            } else {
+                w = rw;
+            }
+        }
+
+        this._variant._computedPath = path;
 
         let
             bbmin = Math.min(path.bbox.left, path.bbox.right, path.bbox.top, path.bbox.bottom),
             bbmax = Math.max(path.bbox.left, path.bbox.right, path.bbox.top, path.bbox.bottom);
 
 
-        if (!this._glyphVariantOwner.layers.isEmpty) {
+        if (!this._variant.layers.isEmpty) {
             let
                 prevLayer = null,
                 prevLayerData = null;
-            this._glyphVariantOwner.layers.ForEach(item => {
+
+            this._variant.layers.ForEach(item => {
                 let ref = item.importedVariant;
-                if (ref && !item._isCircular && item.Get(IDS.EXPORT_GLYPH)) {
+                if (ref && !item._isCircular && item.Get(IDS.DO_EXPORT)) {
 
                     let
                         layerCP = item.Get(IDS.PATH),
@@ -107,13 +117,13 @@ class TransformSettingsDataBlock extends SimpleDataEx {
 
                     if (item.Get(IDS.INVERTED)) { layerPath = svgpr.reverse(layerPath); }
 
-                    if (item.Get(IDS.USE_PREV_LAYER) && prevLayerData) {
+                    if (item.Get(IDS.LYR_USE_PREV_LAYER) && prevLayerData) {
                         layerCP = SVGOPS.FitLayerPath(
                             item, prevLayerData, prevLayerData.width, prevLayerData.HEIGHT,
                             layerPath, ref.Get(IDS.EXPORTED_WIDTH), ref.Resolve(IDS.HEIGHT));
                     } else {
                         layerCP = SVGOPS.FitLayerPath(
-                            item, path, w, this._glyphVariantOwner.Resolve(IDS.HEIGHT),
+                            item, path, w, h,
                             layerPath, ref.Get(IDS.EXPORTED_WIDTH), ref.Resolve(IDS.HEIGHT));
                     }
 
@@ -136,10 +146,10 @@ class TransformSettingsDataBlock extends SimpleDataEx {
         }
 
         let
-            pathConcat = this._glyphVariantOwner._ConcatPaths(path.path),
+            pathConcat = this._variant._ConcatPaths(path.path),
             oob = (bbmin < -24000 || bbmax < -24000 || bbmin > 24000 || bbmax > 24000);
 
-        this._glyphVariantOwner.BatchSet({
+        this._variant.BatchSet({
             //[IDS.WIDTH]: rw,
             [IDS.EXPORTED_WIDTH]: w,
             [IDS.PATH]: pathConcat, //path.pathReversed || path.path,
@@ -148,12 +158,6 @@ class TransformSettingsDataBlock extends SimpleDataEx {
         });
 
     }
-
-    _CleanUp() {
-        this._waitingForUpdate = false;
-        super._CleanUp();
-    }
-
 
 }
 

@@ -327,7 +327,7 @@ class IDS {
 
     static OUT_OF_BOUNDS = 'out-of-bounds';
     static EMPTY = 'empty';
-    static EXPORT_GLYPH = 'export-glyph';
+    static DO_EXPORT = 'do-export';
 
     static SHOW_ALL_LAYERS = 'show-all-layers';
 
@@ -349,7 +349,7 @@ class IDS {
             desc: `Define the size of individual items in the list.`
         };
 
-        this.infos[this.EXPORT_GLYPH] = {
+        this.infos[this.DO_EXPORT] = {
             recompute: true,
             label: `Export glyph`,
             inputType: inputs.Boolean,
@@ -368,10 +368,10 @@ class IDS {
         };
 
         this.infos[this.SHOW_ALL_LAYERS] = {
-            label: `Show all`,
+            label: `Include partial matches`,
             inputType: inputs.Boolean,
             inputOptions: { size: ui.FLAGS.SIZE_XS },
-            desc: `Show all shared components, not just the ones shared by every glyph in the selection.`
+            desc: `Show all shared components (at least used twice), not just the ones shared by every glyph in the selection.`
         };
 
     }
@@ -573,35 +573,35 @@ class IDS {
 
     static TR_LYR_SELF_ANCHOR = 'lyr-anchor';
 
-    static CHARACTER_NAME = 'lyr-char';
-    static CHARACTER_STRUCT = 'lyr-struct';
+    static LYR_CHARACTER_NAME = 'lyr-char';
+    static LYR_INDEX = 'lyr-index';
     static CIRCULAR_REFERENCE = 'circ-dep';
 
-    static USE_PREV_LAYER = 'lyr-bounds-lyr';
-    static CONTROL_LAYER = 'lyr-control';
+    static LYR_USE_PREV_LAYER = 'lyr-bounds-lyr';
+    static LYR_IS_CONTROL_LAYER = 'lyr-control';
 
     static {
 
-        this.infos[this.CHARACTER_NAME] = {
+        this.infos[this.LYR_CHARACTER_NAME] = {
             inputType: inputs.Text,
             inputOptions: { placeholder: `A, U+0041, ...` },
-            label: `Character`,
+            label: `Import glyph`,
             desc: `Single character, ligature, or U+0000 formatted name`
         };
 
-        this.infos[this.CHARACTER_STRUCT] = {
-            label: `Character struct`,
-            desc: `Single character, ligature, or U+0000 formatted name`
+        this.infos[this.LYR_INDEX] = {
+            label: `Index`,
+            desc: `Component index`
         };
 
-        this.infos[this.USE_PREV_LAYER] = {
+        this.infos[this.LYR_USE_PREV_LAYER] = {
             inputType: inputs.Boolean,
             inputOptions: { size: ui.FLAGS.SIZE_XS },
             label: `Inherit prev. comp`,
             desc: `If enabled, This component use the first visible component before it as bound reference.`
         };
 
-        this.infos[this.CONTROL_LAYER] = {
+        this.infos[this.LYR_IS_CONTROL_LAYER] = {
             inputType: inputs.Boolean,
             inputOptions: { size: ui.FLAGS.SIZE_XS },
             label: `Control layer`,
@@ -629,7 +629,7 @@ class IDS {
             transform: true,
             inputType: inputs.NumberDrag,
             label: `Scale factor`,
-            inputOptions: { min: 0.01, max: 2, step: 0.01, size: ui.FLAGS.SIZE_XS },
+            inputOptions: { min: 0.01, max: 100, step: 0.01, size: ui.FLAGS.SIZE_XS },
             desc: `Factor by which the component will be scaled.`
         };
 

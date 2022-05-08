@@ -2,9 +2,9 @@
 
 const nkm = require(`@nkmjs/core`);
 const ui = nkm.ui;
-const uilib = nkm.uilib;
 
-const UNICODE = require(`../unicode`);
+const mkfOperations = require(`../operations`);
+const mkfCmds = mkfOperations.commands;
 const mkfData = require(`../data`);
 
 // Manages what is shown & selectable in the viewport.
@@ -20,17 +20,15 @@ class LayerTransformSettingsInspector extends base {
     constructor() { super(); }
 
     static __controls = [
-        { cl: ControlHeader, options: { label: `Glyph name` }, css: 'hdr' },
-
-        { options: { propertyId: mkfData.IDS.CHARACTER_NAME }, css: 'small' },
+        { options: { propertyId: mkfData.IDS.LYR_CHARACTER_NAME }, css: 'small' },
+        /*
         {
             cl: nkm.uilib.buttons.Tool, options: {
                 icon: `search-small`, htitle: `Search in glyphs`, variant: ui.FLAGS.MINIMAL, size: ui.FLAGS.SIZE_S,
             }, css: 'btn'
         },
 
-        { options: { propertyId: mkfData.IDS.INVERTED } },
-        { options: { propertyId: mkfData.IDS.USE_PREV_LAYER } },
+        */
 
         { cl: ControlHeader, options: { label: `Context`, label2: `Layer` }, css: 'hdr' },
         { options: { propertyId: mkfData.IDS.TR_ANCHOR, inputOnly: true }, css: 'vsmall' },
@@ -39,17 +37,20 @@ class LayerTransformSettingsInspector extends base {
         { options: { propertyId: mkfData.IDS.TR_LYR_SELF_ANCHOR, inputOnly: true }, css: 'vsmall' },
         { options: { propertyId: mkfData.IDS.TR_BOUNDS_MODE, inputOnly: true }, css: 'small' },
 
-        { options: { propertyId: mkfData.IDS.TR_LYR_SCALE_MODE, inputOnly: true }, css: 'small' },
-        { options: { propertyId: mkfData.IDS.TR_LYR_SCALE_FACTOR }, requireData: true, hideWhen: { fn: isMANUAL } },
-
+        //{ options: { propertyId: mkfData.IDS.TR_LYR_SCALE_MODE, inputOnly: true }, css: 'small' },
         { cl: ControlHeader, options: { label: `Offsets` }, css: 'hdr', requireData: true },
+        { options: { propertyId: mkfData.IDS.TR_LYR_SCALE_FACTOR }, css: 'full', requireData: true }, //, hideWhen: { fn: isMANUAL }
         { options: { propertyId: mkfData.IDS.TR_X_OFFSET }, requireData: true },
-        { options: { propertyId: mkfData.IDS.TR_Y_OFFSET }, requireData: true },        
-                
+        { options: { propertyId: mkfData.IDS.TR_Y_OFFSET }, requireData: true },
+
 
     ];
 
     static __trControls = [
+        { options: { propertyId: mkfData.IDS.INVERTED } },
+        { options: { propertyId: mkfData.IDS.LYR_USE_PREV_LAYER } },
+        { options: { propertyId: mkfData.IDS.LYR_IS_CONTROL_LAYER, command: mkfCmds.SetLayerControl, directHidden: true } },
+        { cl: ControlHeader, options: { label: `Transforms` }, css: 'full' },
         { options: { propertyId: mkfData.IDS.TR_MIRROR, inputOnly: true }, css: 'full' },
         { options: { propertyId: mkfData.IDS.TR_SKEW_ROT_ORDER }, css: `full` },
         { options: { propertyId: mkfData.IDS.TR_ROTATION_ANCHOR, inputOnly: true }, css: `vsmall` },

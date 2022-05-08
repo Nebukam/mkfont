@@ -46,7 +46,7 @@ class Surveyor extends base {
             .Hook(nkm.com.SIGNAL.VALUE_CHANGED, this._OnTransformValueChanged, this);
         this._trRefObserver.enabled = false;
 
-        this._delayedUpdate = nkm.com.DelayedCall(this._Bind(this._Update));
+        this._delayedUpdate = nkm.com.DelayedCall(this._Bind(this._Update), 16);
 
         this._cachedTransforms = null;
         this._cachedVariants = null;
@@ -96,9 +96,9 @@ class Surveyor extends base {
 
     _OnDataUpdated(p_data) { this._Update(); }
 
-    _OnGlyphAdded(p_family, p_glyph) { this._delayedUpdate.Schedule(); }
-    _OnGlyphRemoved(p_family, p_glyph) { this._delayedUpdate.Schedule(); }
-    _OnContextUpdated(p_family) { this._delayedUpdate.Schedule(); }
+    _OnGlyphAdded(p_family, p_glyph) { this._delayedUpdate.Bump(); }
+    _OnGlyphRemoved(p_family, p_glyph) { this._delayedUpdate.Bump(); }
+    _OnContextUpdated(p_family) { this._delayedUpdate.Bump(); }
 
     _Update() {
 
@@ -145,10 +145,7 @@ class Surveyor extends base {
             mkfData.UTILS.FindCommonValues(this._refVariant, this._cachedVariants, null, [mkfData.IDS.SHOW_ALL_LAYERS]);
             mkfData.UTILS.FindCommonValues(this._refTransform, this._cachedTransforms);
 
-            // Update layers as well
-            this._refVariant._layers.ForEach(refLayer => {
-                mkfData.UTILS.FindCommonValues(refLayer, this._cachedLayers.get(refLayer));
-            });
+            // Note : Layers are updated along with the cache
 
             // Check if any variant is currently bound to a resource
             for (let i = 0; i < this._cachedVariants.length; i++) {
@@ -197,7 +194,7 @@ class Surveyor extends base {
         if (!rebuild) {
             if (this._cachedVariants) {
                 // Still need to check layer cache...
-                this._RebuildLayerCache(this._refVariant.Get(mkfData.IDS.SHOW_ALL_LAYERS));
+                this._RebuildLayerCache();
             }
             return;
         }
@@ -215,16 +212,19 @@ class Surveyor extends base {
             this._cachedTransforms.push(variant._transformSettings);
         });
 
-        this._RebuildLayerCache(this._refVariant.Get(mkfData.IDS.SHOW_ALL_LAYERS));
+        this._RebuildLayerCache();
 
     }
 
-    _RebuildLayerCache(p_includeAll = false) {
+    _RebuildLayerCache() {
 
         let
+            includeAll = this._refVariant.Get(mkfData.IDS.SHOW_ALL_LAYERS),
             layerIds = {},
-            encounters = 0,
+            layerStack = [],
+            validSet = new Set(),
             vCount = this._cachedVariants.length,
+            refLayerList = this._refVariant._layers._array,
             needRebuild = true;
 
         // Organize layer by names & count
@@ -234,57 +234,57 @@ class Surveyor extends base {
             variant._layers.ForEach(layer => {
 
                 let
-                    id = layer.Get(mkfData.IDS.CHARACTER_NAME) || `____null___`,
+                    id = layer.Get(mkfData.IDS.LYR_CHARACTER_NAME) || `____null___`,
                     obj = layerIds[id];
 
                 if (!obj) {
-                    obj = { count: 0, layers: [], nfos: layer._glyphInfos };
+                    obj = { id: id, count: 0, layers: [], nfos: layer._glyphInfos, expanded: true };
                     layerIds[id] = obj;
-                    encounters++;
+                    layerStack.push(obj);
                 }
 
                 obj.count += 1;
                 obj.layers.push(layer);
 
-                if (layer.expanded) { obj.expanded = true; }
+                if ((includeAll || obj.count == vCount) && obj.count >= 2) { validSet.add(obj); }
+
+                if (!layer.expanded) { obj.expanded = false; }
 
             });
 
         });
 
-        //TODO : Can use _refVariant._layers directly here.
-
-
         //Before replacing the layerMap, check if the provided one (if any) is still valid
-        if (this._cachedLayers && this._cachedLayers.size == encounters) {
+        if (this._cachedLayers && refLayerList.length == validSet.size) {
 
             // Number of layer still matches.
             needRebuild = false;
-            let existingLayers = Array.from(this._cachedLayers.keys());
 
-            for (let m = 0, mn = this._cachedLayers.size; m < mn; m++) {
+            for (let m = 0, mn = refLayerList.length; m < mn; m++) {
                 let
-                    layer = existingLayers[m],
-                    id = layer.Get(mkfData.IDS.CHARACTER_NAME) || `____null___`;
-                // For each reference layer :
-                // Does its ID still exists ?
-                if (!(id in layerIds)) { needRebuild = true; break; }
+                    layer = refLayerList[m],
+                    id = layer.Get(mkfData.IDS.LYR_CHARACTER_NAME) || `____null___`;
+
+                if (!(id in layerIds)) {
+                    // Some ID couldn't be found.
+                    needRebuild = true; break;
+                }
             }
+
 
             if (!needRebuild) {
 
                 // Refresh common values, since we don't need to rebuild everything (great)
-                existingLayers.forEach(ref => {
+                refLayerList.forEach(ref => {
                     let
-                        id = ref.Get(mkfData.IDS.CHARACTER_NAME) || `____null___`,
+                        id = ref.Get(mkfData.IDS.LYR_CHARACTER_NAME) || `____null___`,
                         layerInfos = layerIds[id],
-                        existingArray = this._cachedLayers.get(ref),
                         newArray = layerInfos.layers,
                         sameContent = true;
 
-                    if (existingArray.length == newArray.length) {
-                        for (let i = 0, n = existingArray.length; i < n; i++) {
-                            if (!newArray.includes(existingArray[i])) {
+                    if (ref.surveyedList.length == newArray.length) {
+                        for (let i = 0, n = ref.surveyedList.length; i < n; i++) {
+                            if (!newArray.includes(ref.surveyedList[i])) {
                                 sameContent = false; break;
                             }
                         }
@@ -292,12 +292,16 @@ class Surveyor extends base {
                         sameContent = false;
                     }
 
-                    if (sameContent) { newArray = existingArray; }
+                    if (sameContent) { newArray = ref.surveyedList; }
 
                     ref._useCount = newArray.length;
                     ref._glyphInfos = layerInfos.nfos;
                     ref.expanded = layerInfos.expanded;
                     this._cachedLayers.set(ref, newArray);
+                    ref.surveyedList = newArray;
+
+                    mkfData.UTILS.FindCommonValues(ref, newArray);
+                    ref.CommitUpdate();
 
                 });
 
@@ -311,21 +315,31 @@ class Surveyor extends base {
             this._cachedLayers = null;
         }
 
+        layerStack.sort((a, b) => { return b.count - a.count });
+
         this._refVariant._ClearLayers();
         this._cachedLayers = new Map();
 
-        for (var lid in layerIds) {
-            let obj = layerIds[lid];
-            if ((p_includeAll || obj.count == vCount) && obj.count >= 2) {
+        // Sort layers by count
+
+        for (let i = 0, n = layerStack.length; i < n; i++) {
+            let obj = layerStack[i];
+            if ((includeAll || obj.count == vCount) && obj.count >= 2) {
                 let newLayer = nkm.com.Rent(mkfData.GlyphLayer);
-                this._refVariant.AddLayer(newLayer);
+
                 newLayer.expanded = obj.expanded;
-                newLayer._useCount = obj.layers.length;
+                newLayer._useCount = obj.count;
                 newLayer._glyphInfos = obj.nfos;
+                newLayer.surveyedList = obj.layers;
+
+                this._refVariant.AddLayer(newLayer);
+
                 this._cachedLayers.set(newLayer, obj.layers);
+
+                mkfData.UTILS.FindCommonValues(newLayer, obj.layers);
+                newLayer.CommitUpdate();
             }
         }
-
     }
 
     _ClearRscBindings() {
@@ -347,6 +361,11 @@ class Surveyor extends base {
 
     _OnRefGlyphValueChanged(p_data, p_id, p_valueObj, p_oldValue) {
 
+        if (p_id == mkfData.IDS.SHOW_ALL_LAYERS) {
+            this._RebuildLayerCache();
+            return;
+        }
+
         this._editor.Do(
             mkfOperations.actions.SetProperty, {
             target: this._cachedVariants, id: p_id, value: p_valueObj.value
@@ -356,10 +375,12 @@ class Surveyor extends base {
 
     _OnRefLayerValueChanged(p_variant, p_layer, p_id, p_valueObj, p_oldValue) {
 
+        if (p_id == mkfData.IDS.LYR_INDEX || p_id == mkfData.IDS.LYR_IS_CONTROL_LAYER) { return; }
+
         let layerList = null;
 
-        layerList = this._cachedLayers.get(p_layer);
-        layerList.forEach(lyr => { lyr.expanded = p_layer.expanded; });
+        layerList = p_layer.surveyedList;
+        //layerList.forEach(lyr => { lyr.expanded = p_layer.expanded; });
 
         this._editor.Do(
             mkfOperations.actions.SetProperty, {
@@ -370,7 +391,7 @@ class Surveyor extends base {
 
     _OnRefLayerRemoved(p_variant, p_layer) {
         if (!this._cachedLayers) { return; }
-        this._editor.cmdLayerRemove.Execute(this._cachedLayers.get(p_layer));
+        this._editor.cmdLayerRemove.Execute(p_layer.surveyedList);
     }
 
     _RefLayerSelected(p_variant, p_layer) {

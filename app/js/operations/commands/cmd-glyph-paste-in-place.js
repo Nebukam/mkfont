@@ -83,7 +83,7 @@ class CmdGlyphPasteInPlace extends actions.Command {
 
             targetVariant = p_family.GetGlyph(unicodeInfos.u).activeVariant;
 
-            SHARED_OPS.CopyLayers(targetVariant, sourceVariant);
+            SHARED_OPS.PasteLayers(targetVariant, sourceVariant);
 
         } else {
             /*

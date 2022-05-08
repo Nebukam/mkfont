@@ -19,7 +19,7 @@ class GlyphInspectorPlaceholder extends base {
 
     static __controls = [
         //{ cl: mkfWidgets.ControlHeader, options: { label: `Export` } },
-        //{ options: { propertyId: mkfData.IDS.EXPORT_GLYPH } },
+        //{ options: { propertyId: mkfData.IDS.DO_EXPORT } },
         //{ options: { propertyId: mkfData.IDS.GLYPH_NAME } },//, css:'separator' 
     ];
 

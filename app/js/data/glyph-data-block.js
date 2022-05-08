@@ -42,7 +42,7 @@ class GlyphDataBlock extends SimpleDataEx {
     _ResetValues(p_values) {
         p_values[IDS.GLYPH_NAME] = { value: '' };
         p_values[IDS.UNICODE] = { value: null };
-        //p_values[IDS.EXPORT_GLYPH] = { value: true };
+        //p_values[IDS.DO_EXPORT] = { value: true };
     }
 
     get resolutionFallbacks() { return [this._family]; }
@@ -133,8 +133,8 @@ class GlyphDataBlock extends SimpleDataEx {
 
     //
 
-    _ScheduleTransformationUpdate() {
-        this._variants.ForEach((item, i) => { item._ScheduleTransformationUpdate(); });
+    _PushUpdate() {
+        this._variants.ForEach((item, i) => { item._PushUpdate(); });
     }
 
     _CleanUp() {

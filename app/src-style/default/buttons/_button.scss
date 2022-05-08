@@ -227,6 +227,7 @@ $pad: 0px;
 $pad2: $pad * 2;
 
 .ripple-wrapper{
+    pointer-events: none;
     position: absolute;
     top:-#{$pad};
     left:-#{$pad};
@@ -238,6 +239,7 @@ $pad2: $pad * 2;
 }
 
 .ripple-wrapper .ripple {
+    pointer-events: none;
     position: absolute;
     border-radius: 50%;
     opacity: 1;

@@ -89,6 +89,8 @@ class FontEditor extends base {
 
         this.cmdLayerAdd = this._commands.Create(mkfCmds.LayerAdd);
         this.cmdLayerRemove = this._commands.Create(mkfCmds.LayerRemove);
+        this.cmdLayerUp = this._commands.Create(mkfCmds.LayerUp);
+        this.cmdLayerDown = this._commands.Create(mkfCmds.LayerDown);
         this.cmdLayersOn = this._commands.Create(mkfCmds.LayerAllOn);
         this.cmdLayersOff = this._commands.Create(mkfCmds.LayerAllOff);
         this.cmdLayersCopy = this._commands.Create(mkfCmds.LayersCopy);
@@ -253,6 +255,9 @@ class FontEditor extends base {
         ui.dom.AttachFirst(this._pangramViewport, this._body, false);
         ui.dom.AttachFirst(this._leftShelf, this._body, false);
 
+        this._stateStack.HookButtons(this._header._navPrevBtn, this._header._navNextBtn);
+        this._header._navPrevBtn.trigger = this._stateStack.Previous;
+        this._header._navNextBtn.trigger = this._stateStack.Next;
     }
 
     SetActiveRange(p_rangeData) {
