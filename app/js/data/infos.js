@@ -11,7 +11,7 @@ class INFOS {
         return IDS.GetInfos(p_id) || IDS_EXT.GetInfos(p_id) || IDS_PREFS.GetInfos(p_id) || null;
     }
 
-    static LAYER_LIMIT = 20;
+    static LAYER_LIMIT = 50;
 
     static get MARK_COLOR() {
         let col = nkm.env.APP.PGet(IDS_PREFS.MARK_COLOR, `FF00FF`);

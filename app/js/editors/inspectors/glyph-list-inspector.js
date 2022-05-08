@@ -334,11 +334,11 @@ class GlyphListInspector extends base {
                 origin: ui.ANCHORING.RIGHT,
                 keepWithinScreen: true,
                 static: true,
-                content: mkfWidgets.GlyphPreview
+                content: mkfWidgets.GlyphPreviewGroup
             });
 
-            this._popoutPreview.content.data = atop;
-            this._popoutPreview.content.glyphInfos = atop ? atop.glyph.unicodeInfos : null;
+            this._popoutPreview.content.data = this._data ? this._data.analytics.existing : null;
+            //this._popoutPreview.content.glyphInfos = atop ? atop.glyph.unicodeInfos : null;
             //this._UpdatePreviewLayer();
         }
 
@@ -356,7 +356,7 @@ class GlyphListInspector extends base {
 
     _UpdatePreviewLayer(p_layer) {
         this._glyphPreview.glyphLayer = this._data.selectedLayer;
-        if (this._popoutPreview) { this._popoutPreview.content.glyphLayer = this._data.selectedLayer; }
+        //if (this._popoutPreview) { this._popoutPreview.content.glyphLayer = this._data.selectedLayer; }
     }
 
     //#endregion

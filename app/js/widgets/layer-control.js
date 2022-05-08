@@ -50,7 +50,7 @@ class LayerControl extends base {
     static _Style() {
         return nkm.style.Extends({
             ':host': {
-                '@': [`fade-in`],
+                //'@': [`fade-in`],
                 'padding': '5px',
                 'margin-bottom': '5px',
                 'background-color': `rgba(127,127,127,0.25)`,

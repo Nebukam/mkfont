@@ -19,7 +19,7 @@
 }
 
 :host{
-    //transition: $transition_opacity;
+    transition: $transition_opacity;
 }
 
 :host(:not(.unpainted)){

@@ -90,6 +90,9 @@ class LayersView extends base {
                 //'background-color':`rgba(19,19,19,0.25)`,
                 'border-radius': `3px`
             },
+            '.item.collapsed': {
+                'height': '38px'
+            },
             '.item': {
                 'flex': '0 1 auto',
                 'margin': `3px`,
@@ -186,7 +189,8 @@ class LayersView extends base {
             return;
         }
         this._data._layers.ForEach(lyr => { this._OnLayerAdded(this._data, lyr); });
-        this._RefreshLayerOrder();
+        this._AttachFragment();
+        //this._RefreshLayerOrder();
     }
 
     _OnLayerAdded(p_variant, p_layer) {
@@ -207,8 +211,10 @@ class LayersView extends base {
     }
 
     _AttachFragment() {
+        this._delayedAttachFragment.Cancel();
         if (!this._fragment) { return; }
         ui.dom.Attach(this._fragment, this._listCtnr);
+        this._fragment = null;
         this._RefreshLayerOrder();
     }
 

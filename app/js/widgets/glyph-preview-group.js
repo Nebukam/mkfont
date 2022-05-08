@@ -30,7 +30,7 @@ class GlyphPreviewGroup extends base {
     static _Style() {
         return nkm.style.Extends({
             ':host': {
-                //'@': ['fade-in'],
+                '@': ['fade-in'],
                 'position': 'relative',
                 'grid-gap': `10px`,
                 'display': 'grid',
@@ -38,7 +38,6 @@ class GlyphPreviewGroup extends base {
                 'grid-template-rows': 'auto auto',
                 'justify-content': `center`,
                 'align-content': `space-between`, //center
-                'margin-bottom': '5px',
             },
             '.box': {
                 'position': 'relative',
@@ -76,7 +75,7 @@ class GlyphPreviewGroup extends base {
 
     }
 
-    set glyphLayer(p_value) { this._glyphRenderer.layer = p_value; }
+    set glyphLayer(p_value) { }
 
     _OnDataChanged(p_oldData) {
         super._OnDataChanged(p_oldData);
