@@ -12,7 +12,13 @@ const nkmElectron = require('@nkmjs/core/electron');
 const UNICODE = require(`../../unicode`);
 const mkfData = require(`../../data`);
 const mkfActions = require(`../actions`);
+const SHARED_OPS = require('./shared-ops');
 
+const __groupInfos = {
+    icon: `document-download-small`,
+    name: `Import SVG`,
+    title: `Imported SVGs with components`
+};
 
 class CmdEditInPlace extends actions.Command {
     constructor() { super(); }
@@ -105,16 +111,23 @@ class CmdEditInPlace extends actions.Command {
         let svgStats = { exists: false };
 
         try {
-            svgStats = SVGOPS.SVGStats(p_rsc.raw);
+            svgStats = SVGOPS.SVGStats(p_rsc.raw, mkfData.INFOS.MARK_COLOR);
         } catch (e) { console.log(e); }
 
         if (!svgStats.exists) { return; }
+
+        if (svgStats.layers) { this._emitter.StartActionGroup(__groupInfos); }
 
         this._emitter.Do(mkfActions.SetProperty, {
             target: this._cachedContext,
             id: mkfData.IDS.PATH_DATA,
             value: svgStats
         });
+
+        if (svgStats.layers) {
+            SHARED_OPS.AddLayersFromNameList(this._emitter, this._cachedContext, svgStats.layers);
+            this._emitter.EndActionGroup();
+        }
 
     }
 

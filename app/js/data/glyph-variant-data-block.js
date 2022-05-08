@@ -11,8 +11,8 @@ const TransformSettings = require(`./settings-transforms-data-block`);
 
 const svgpath = require('svgpath');
 const ContentUpdater = require(`../content-updater`);
-const UNICODE = require('../unicode');
 const SIGNAL = require('../signal');
+const INFOS = require('./infos');
 
 const domparser = new DOMParser();
 const svgString = `<glyph ${IDS.GLYPH_NAME}="" ${IDS.UNICODE}="" d="" ${IDS.WIDTH}="" ${IDS.HEIGHT}="" ></glyph>`;
@@ -28,7 +28,7 @@ class GlyphVariantDataBlock extends SimpleDataEx {
         super._Init();
 
         this._transformSettings = new TransformSettings();
-        this._transformSettings.glyphVariantOwner = this;
+        this._transformSettings.variant = this;
 
         this._family = null;
         this._glyph = null;
@@ -36,11 +36,12 @@ class GlyphVariantDataBlock extends SimpleDataEx {
         this._index = 0;
         this._layers = new nkm.collections.List();
 
+        this._controlLayer = null;
         this._selectedLayer = null;
 
         this._layerObserver = new nkm.com.signals.Observer();
         this._layerObserver
-            .Hook(nkm.com.SIGNAL.UPDATED, this._ScheduleTransformationUpdate, this)
+            .Hook(nkm.com.SIGNAL.UPDATED, this._PushUpdate, this)
             .Hook(nkm.com.SIGNAL.VALUE_CHANGED, this._OnLayerValueChanged, this);
 
         this._layerUsers = new nkm.collections.List();
@@ -49,11 +50,20 @@ class GlyphVariantDataBlock extends SimpleDataEx {
 
     get layerUsers() { return this._layerUsers; }
 
+    get availSlots() { return INFOS.LAYER_LIMIT - this._layers.count; }
+
     get index() { return this._index; }
     set index(p_value) {
         if (this._index == p_value) { return; }
         this._index = p_value;
-        this._scheduledObjectUpdate.Schedule();
+        this._PushUpdate();
+    }
+
+    get controlLayer() { return this._controlLayer; }
+    set controlLayer(p_value) {
+        if (this._controlLayer == p_value) { return; }
+        this._controlLayer = p_value;
+        this._PushUpdate();
     }
 
     _ResetValues(p_values) {
@@ -68,22 +78,22 @@ class GlyphVariantDataBlock extends SimpleDataEx {
         p_values[IDS.PATH_DATA] = { value: null };
         p_values[IDS.OUT_OF_BOUNDS] = { value: false };
         p_values[IDS.EMPTY] = { value: false };
-        p_values[IDS.EXPORT_GLYPH] = { value: true };
+        p_values[IDS.DO_EXPORT] = { value: true };
     }
 
     get layers() { return this._layers; }
 
     //#region Layer management
 
-    AddLayer(p_layer) {
+    AddLayer(p_layer, p_index = -1) {
         if (!this._layers.Add(p_layer)) { return p_layer; }
         p_layer._variant = this;
-        this._layers.ForEach((item, i) => { item.index = i; });
+        p_layer.index = this._layers.count - 1;
         p_layer._RetrieveImportedVariant();
         this._layerObserver.Observe(p_layer);
         this.Broadcast(SIGNAL.LAYER_ADDED, this, p_layer);
         this.Broadcast(SIGNAL.LAYERS_UPDATED, this);
-        this._ScheduleTransformationUpdate();
+        this._PushUpdate();
         return p_layer;
     }
 
@@ -95,24 +105,27 @@ class GlyphVariantDataBlock extends SimpleDataEx {
         this._layers.ForEach((item, i) => { item.index = i; });
         this.Broadcast(SIGNAL.LAYER_REMOVED, this, p_layer);
         this.Broadcast(SIGNAL.LAYERS_UPDATED, this);
-        this._ScheduleTransformationUpdate();
+        this._PushUpdate();
         return p_layer;
     }
 
     MoveLayer(p_layer, p_index) {
         if (!this._layers.Contains(p_layer)) { return; }
+        console.log(`Move layer from (${p_layer.index} / ${this._layers.IndexOf(p_layer)}) // ${p_index}`);
+
         this._layers.Move(p_layer, p_index);
         this._layers.ForEach((item, i) => { item.index = i; });
         this.Broadcast(SIGNAL.LAYERS_UPDATED, this);
-        this._ScheduleTransformationUpdate();
+        this._PushUpdate();
         return p_layer;
     }
 
     //#endregion
 
     _OnLayerUpdated() {
-        if (this._transformSettings._waitingForUpdate) { return; }
+        if (this._applyScheduled) { return; }
         //this.Set(IDS.PATH, this._ConcatPaths(this.Get(IDS.PATH_DATA).path));
+        this._PushUpdate();
     }
 
     _BuildFontObject() { return svgGlyphRef.cloneNode(true); }
@@ -169,7 +182,7 @@ class GlyphVariantDataBlock extends SimpleDataEx {
 
         svgGlyph.setAttribute(SVGOPS.ATT_PATH, glyphPath);
 
-        if (this.Get(IDS.OUT_OF_BOUNDS) || !this.Resolve(IDS.EXPORT_GLYPH) || this._glyph.isNull) {
+        if (this.Get(IDS.OUT_OF_BOUNDS) || !this.Resolve(IDS.DO_EXPORT) || this._glyph.isNull) {
             this._fontObject.remove();
         } else if (this._family) {
             this._family.fontObject.appendChild(this._fontObject);
@@ -181,23 +194,33 @@ class GlyphVariantDataBlock extends SimpleDataEx {
         super.CommitValueUpdate(p_id, p_valueObj, p_oldValue, p_silent);
         let infos = IDS.GetInfos(p_id);
         if (!infos) { return; }
-        if (infos.recompute && this._family) { this._ScheduleTransformationUpdate(); }
+        if (infos.recompute && this._family) { this._PushUpdate(); }
     }
 
     _OnLayerValueChanged(p_layer, p_id, p_valueObj, p_oldValue) {
         this.Broadcast(SIGNAL.LAYER_VALUE_CHANGED, this, p_layer, p_id, p_valueObj, p_oldValue);
+        this._PushUpdate();
     }
 
-    _ScheduleTransformationUpdate() {
-        this._transformSettings._waitingForUpdate = true;
-        ContentUpdater.Push(this, this._ApplyTransformUpdate);
+    _PushUpdate(p_from_layer = false) {
+
+        if (!this._applyScheduled) {
+            this._applyScheduled = true;
+            ContentUpdater.Push(this, this._ApplyUpdate);
+        }
+
+        //When pushing update, make sure to notify layers that
+        //reference this variant, as they will need to be updated as well.
+        //but only after this specific variant has been updated.
         this._layerUsers.ForEach((item) => {
-            if (!item._isCircular) { item._variant._ScheduleTransformationUpdate(); }
+            if (!item._isCircular) { item._variant._PushUpdate(true); }
         });
+
     }
 
-    _ApplyTransformUpdate() {
+    _ApplyUpdate() {
         this._transformSettings.UpdateTransform();
+        this._applyScheduled = false;
     }
 
     _OnReset(p_individualSet, p_silent) {
@@ -217,8 +240,23 @@ class GlyphVariantDataBlock extends SimpleDataEx {
         this.Broadcast(SIGNAL.SELECTED_LAYER_CHANGED, this, this._selectedLayer);
     }
 
+    HasLayer(p_char, p_uni = null) {
+
+        if (this._layers.isEmpty) { return false; }
+        
+        for (let i = 0, n = this._layers.count; i < n; i++) {
+            let cval = this._layers.At(i).Get(IDS.LYR_CHARACTER_NAME);
+            if (cval == p_char || cval == p_uni) { return true; }
+        }
+
+        return false;
+        
+    }
+
     _CleanUp() {
+        this._applyScheduled = false;
         this.selectedLayer = null;
+        this.controlLayer = null;
         this._ClearLayers();
         this.glyph = null;
         super._CleanUp();

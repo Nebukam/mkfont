@@ -12,6 +12,12 @@ const mkfData = require(`../../data`);
 const mkfActions = require(`../actions`);
 const SHARED_OPS = require('./shared-ops');
 
+const __groupInfos = {
+    icon: `clipboard-read`,
+    name: `Pasted glyph`,
+    title: `Pasted an glyph with its transforms`
+};
+
 class CmdGlyphPaste extends actions.Command {
     constructor() { super(); }
 
@@ -24,7 +30,7 @@ class CmdGlyphPaste extends actions.Command {
             svgString = clipboard.readText();
 
         try {
-            svgStats = SVGOPS.SVGStats(svgString);
+            svgStats = SVGOPS.SVGStats(svgString, mkfData.INFOS.MARK_COLOR);
         } catch (e) { console.log(e); }
 
         //console.log(svgStats);
@@ -89,16 +95,12 @@ class CmdGlyphPaste extends actions.Command {
 
             if (layers) {
                 let variant = family.GetGlyph(unicodeInfos.u).activeVariant;
-                SHARED_OPS.CopyLayers(variant, globalThis.__copySourceVariant, scaleFactor);
+                SHARED_OPS.PasteLayers(variant, globalThis.__copySourceVariant, scaleFactor);
             }
 
         } else {
 
-            this._emitter.StartActionGroup({
-                icon: `clipboard-read`,
-                name: `Pasted glyph`,
-                title: `Pasted an glyph with its transforms`
-            });
+            this._emitter.StartActionGroup(__groupInfos);
 
             this._emitter.Do(mkfActions.SetProperty,
                 { target: variant, id: mkfData.IDS.PATH_DATA, value: svgStats }
@@ -122,6 +124,8 @@ class CmdGlyphPaste extends actions.Command {
                 SHARED_OPS.RemoveLayers(this._emitter, variant);
                 SHARED_OPS.AddLayers(this._emitter, variant, globalThis.__copySourceVariant, this._scaleFactor);
             }
+
+            //SHARED_OPS.AddLayersFromNameList(this._emitter, variant, svgStats.layers);
 
             this._emitter.EndActionGroup();
 

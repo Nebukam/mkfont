@@ -10,6 +10,7 @@ const fs = require('fs');
 const UNICODE = require(`../../unicode`);
 const mkfData = require(`../../data`);
 const mkfActions = require(`../actions`);
+const SHARED_OPS = require('./shared-ops');
 
 class CmdLayerAddComp extends actions.Command {
     constructor() { super(); }
@@ -32,7 +33,7 @@ class CmdLayerAddComp extends actions.Command {
             });
 
             this._context.forEach(variant => {
-                SVGOPS.BoostrapComp(this._emitter, variant, variant.glyph.unicodeInfos);
+                SHARED_OPS.BoostrapComp(this._emitter, variant, variant.glyph.unicodeInfos);
             });
 
             this._emitter.EndActionGroup();
@@ -52,7 +53,7 @@ class CmdLayerAddComp extends actions.Command {
                 title: `Creates layer from character decomposition`
             });
 
-            SVGOPS.BoostrapComp(this._emitter, this._context, unicodeInfos);
+            SHARED_OPS.BoostrapComp(this._emitter, this._context, unicodeInfos);
 
             this._emitter.EndActionGroup();
 

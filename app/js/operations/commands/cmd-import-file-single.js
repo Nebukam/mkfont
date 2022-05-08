@@ -10,6 +10,13 @@ const fs = require('fs');
 const UNICODE = require(`../../unicode`);
 const mkfData = require(`../../data`);
 const mkfActions = require(`../actions`);
+const SHARED_OPS = require('./shared-ops');
+
+const __groupInfos = {
+    icon: `document-download-small`,
+    name: `Import SVG`,
+    title: `Imported SVGs with components`
+};
 
 class CmdImportFileSingle extends actions.Command {
     constructor() { super(); }
@@ -57,9 +64,31 @@ class CmdImportFileSingle extends actions.Command {
         try { svgString = fs.readFileSync(filepath, 'utf8'); }
         catch (e) { svgString = null; console.error(e); }
 
-        svgStats = SVGOPS.SVGStats(svgString);
+        svgStats = SVGOPS.SVGStats(svgString, mkfData.INFOS.MARK_COLOR);
 
         if (!svgStats.exists) {
+
+            if (svgStats.layers) {
+
+                let
+                    variant = this._context,
+                    glyph = variant.glyph;
+
+                this._emitter.StartActionGroup(__groupInfos);
+
+                if (glyph.isNull) {
+                    this._emitter.Do(mkfActions.GlyphCreate, { family: family, unicode: unicodeInfos, path: svgStats });
+                    variant = family.GetGlyph(unicodeInfos.u).activeVariant;
+                } else {
+                    SHARED_OPS.AddLayersFromNameList(this._emitter, variant, svgStats.layers);
+                }
+
+                this._emitter.EndActionGroup();
+
+                this._Success();
+                return;
+            }
+
             nkm.dialog.Push({
                 title: `Invalid content`,
                 message: `Couldn't find how to use the selected file :()`,
@@ -81,19 +110,18 @@ class CmdImportFileSingle extends actions.Command {
             glyph = variant.glyph,
             unicodeInfos = glyph.unicodeInfos;
 
+        // Need to create a new glyph!
         if (glyph.isNull) {
-            // Need to create a new glyph!
-            this._emitter.Do(mkfActions.GlyphCreate, {
-                family: family,
-                unicode: unicodeInfos,
-                path: svgStats
-            });
+            this._emitter.Do(mkfActions.GlyphCreate, { family: family, unicode: unicodeInfos, path: svgStats });
         } else {
-            this._emitter.Do(mkfActions.SetProperty, {
-                target: variant,
-                id: mkfData.IDS.PATH_DATA,
-                value: svgStats
-            });
+            if (svgStats.layers) { this._emitter.StartActionGroup(__groupInfos); }
+
+            this._emitter.Do(mkfActions.SetProperty, { target: variant, id: mkfData.IDS.PATH_DATA, value: svgStats });
+
+            if (svgStats.layers) {
+                SHARED_OPS.AddLayersFromNameList(this._emitter, variant, svgStats.layers);
+                this._emitter.EndActionGroup();
+            }
         }
 
         if (doBinding) {

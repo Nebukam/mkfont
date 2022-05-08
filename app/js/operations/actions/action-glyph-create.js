@@ -4,11 +4,16 @@
 const nkm = require(`@nkmjs/core`);
 const actions = nkm.actions;
 const mkfData = require(`../../data`);
+const UNICODE = require("../../unicode");
 
 class ActionCreateGlyph extends actions.Action {
     constructor() { super(); }
 
     // Expected operation format : { family:FamilyDataBlock, unicode:`abc`, path:pathData, transforms:{} }
+
+    static __deepCleanFn(p_action) {
+        if (p_action._undone) { p_action._operation.glyph.Release(); }
+    }
 
     _InternalDo(p_operation, p_merge = false) {
 
@@ -30,7 +35,26 @@ class ActionCreateGlyph extends actions.Action {
         if (glyphValues) { newGlyph.BatchSet(glyphValues); }
 
         if (variantValues) { glyphVariant.BatchSet(variantValues); }
-        if (path) { glyphVariant.Set(mkfData.IDS.PATH_DATA, path); }
+        if (path) {
+
+            glyphVariant.Set(mkfData.IDS.PATH_DATA, path);
+
+            if (path.layers) {
+                path.layers.forEach(name => {
+
+                    if (glyphVariant.availSlots <= 0) { return; }
+                    let resolvedChar = UNICODE.ResolveString(name);
+                    if (glyphVariant.HasLayer(resolvedChar)) { return; }
+                    let newLayer = nkm.com.Rent(mkfData.GlyphLayer);
+                    glyphVariant.AddLayer(newLayer);
+                    newLayer.Set(mkfData.IDS.LYR_CHARACTER_NAME, resolvedChar);
+                    newLayer.expanded = false;
+
+                });
+                delete path.layers;
+            }
+            
+        }
 
         glyphVariant.transformSettings.BatchSet(defaultTr);
         glyphVariant.transformSettings.BatchSet(transforms);

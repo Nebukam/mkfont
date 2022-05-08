@@ -29,6 +29,7 @@ class PropertyControl extends base {
         .To(`inputOnly`, null, false)
         .To(`onSubmit`, `_onSubmitFn`, null)
         .To(`invertInputOrder`, null, false)
+        .To(`directHidden`, `_directHidden`, false)
         .To(`directSet`, `_directSet`, false)
         .To(`command`, null, mkfCmds.SetProperty);
 
@@ -39,6 +40,7 @@ class PropertyControl extends base {
         this._valueInfos = null;
         this._input = null;
         this._directSet = false;
+        this._directHidden = false;
         this._subData = null;
 
         this._Bind(this._OnValueSubmit);
@@ -74,9 +76,8 @@ class PropertyControl extends base {
             ':host(.selected)': {
                 'background-color': 'rgba(127,127,127,0.25)'
             },
-            ':host(.input-first) .input-field': {
-                'flex': '0 0 auto'
-            },
+            ':host(.input-first) .input-field': { 'flex': '0 0 auto' },
+            ':host(.input-first) .label': { 'margin-left': '10px' },
             ':host(.inherited) .input-field, :host(.inherited) .label': {
                 //'pointer-events': 'none !important',
                 'opacity': '0.8'
@@ -100,7 +101,7 @@ class PropertyControl extends base {
                 'opacity': '0.5'
             },
             '.input-field': {
-                'flex': '1 0 50%'
+                'flex': '1 1 50%'
             },
             '.nullify': {
                 //'width': '30px',
@@ -216,6 +217,10 @@ class PropertyControl extends base {
         } else {
             this.isNullable = false;
         }
+
+        if (this._directSet && this._directHidden) { this.visible = false; }
+        else { this.visible = true; }
+
     }
 
     _OnDataUpdated(p_data) {
@@ -235,7 +240,7 @@ class PropertyControl extends base {
 
         // Red strikethrough on boolean input
         this.classList.remove(`false`);
-        if (nkm.u.isInstanceOf(this._input, uilib.inputs.Boolean)) {
+        if (nkm.u.isInstanceOf(this._input, uilib.inputs.Boolean) || nkm.u.isInstanceOf(this._input, uilib.inputs.Checkbox)) {
             if (!this._input.currentValue) { this.classList.add(`false`); }
         }
 
@@ -289,6 +294,7 @@ class PropertyControl extends base {
         this._fallbackData = null;
         this._valueID = null;
         this._valueInfos = null;
+        this._directHidden = false;
         this._directSet = false;
 
         this._flags.Set(__flag_inherited, false);

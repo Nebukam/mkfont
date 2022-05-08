@@ -16,11 +16,13 @@ docCmds.DocumentRelease.Rent(mkDocInfos, true);
 
 module.exports = {
 
-    OpenPrefs: new (require(`./cmd-open-prefs`))(),
+    OpenPrefs: new (require(`./cmd-open-prefs`))(), 
 
+    //Single instances are to be used with PropertyControl
     SetProperty: new (require(`./cmd-action-set-property`))(), //Single instance
     SetEM: new (require(`./cmd-action-set-em`))(), //Single instance
     SetAscent: new (require(`./cmd-action-set-ascent`))(), //Single instance
+    SetLayerControl: new (require(`./cmd-action-set-control`))(), //Single instance
 
     GlyphDelete: require(`./cmd-glyph-delete`),
     GlyphClear: require(`./cmd-glyph-clear`),
@@ -34,6 +36,8 @@ module.exports = {
     LayerRemove: require(`./cmd-layer-remove`),
     LayerAllOff: require(`./cmd-layers-all-off`),
     LayerAllOn: require(`./cmd-layers-all-on`),
+    LayerUp: require(`./cmd-layer-move-up`),
+    LayerDown: require(`./cmd-layer-move-down`),
     LayersCopy: require(`./cmd-layers-copy`),
     LayersPaste: require(`./cmd-layers-paste`),
     LayerAddComp: require(`./cmd-layer-add-comp`),

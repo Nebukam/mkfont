@@ -20,7 +20,7 @@ class SimpleDataEx extends nkm.data.SimpleDataBlock {
 
         this._fontObject = this._BuildFontObject();
         this._scheduledUpdate = nkm.com.DelayedCall(this._Bind(this.CommitUpdate));
-        this._scheduledObjectUpdate = nkm.com.DelayedCall(this._Bind(this._UpdateFontObject));
+        this._scheduledObjectUpdate = nkm.com.DelayedCall(this._Bind(this._UpdateFontObject), 16);
         this._isDefault = false;
 
     }

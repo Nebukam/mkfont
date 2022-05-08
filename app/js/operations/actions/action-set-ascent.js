@@ -18,10 +18,10 @@ class ActionSetAscent extends ActionSetPropertyValue {
 
     // Expected operation format : { target:SimpleDataBlock, id:`ID`, value:*, resample:bool }
 
-    _UpdateValue(p_target, p_from, p_to) {
+    _UpdateValue(p_target, p_new, p_old) {
         let
             resample = this._operation.resample,
-            scaleFactor = p_from / p_to;            
+            scaleFactor = p_new / p_old;            
 
         if (resample) {
             p_target.BatchSet(mkfData.UTILS.Resample(

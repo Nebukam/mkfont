@@ -21,12 +21,12 @@ class FamilyMetricsInspector extends base {
 
         { cl: mkfWidgets.ControlHeader, options: { label: `Resolution` } },
         { options: { propertyId: mkfData.IDS.EM_UNITS, command: mkfCmds.SetEM } },
-        { options: { propertyId: mkfData.IDS.EM_RESAMPLE } },
+        { options: { propertyId: mkfData.IDS.EM_RESAMPLE, invertInputOrder:true } },
 
         { cl: mkfWidgets.ControlHeader, options: { label: `Metrics` } },
         { options: { propertyId: mkfData.IDS.BASELINE } },
         { options: { propertyId: mkfData.IDS.ASCENT, command: mkfCmds.SetAscent } },
-        { options: { propertyId: mkfData.IDS.ASC_RESAMPLE } },
+        { options: { propertyId: mkfData.IDS.ASC_RESAMPLE, invertInputOrder:true } },
         { options: { propertyId: mkfData.IDS.DESCENT } },
 
         { cl: mkfWidgets.ControlHeader, options: { label: `Control metrics` } },
@@ -34,7 +34,7 @@ class FamilyMetricsInspector extends base {
         { options: { propertyId: mkfData.IDS.CAP_HEIGHT } },
         { options: { propertyId: mkfData.IDS.HEIGHT } },
         { options: { propertyId: mkfData.IDS.WIDTH } },
-        { options: { propertyId: mkfData.IDS.MONOSPACE } },
+        { options: { propertyId: mkfData.IDS.MONOSPACE, invertInputOrder:true } },
         //{ options:{ propertyId:mkfData.IDS.UNDERLINE_POSITION } },
         //{ options:{ propertyId:mkfData.IDS.UNDERLINE_THICKNESS } },
         //{ options:{ propertyId:mkfData.IDS.H_ORIGIN_X } },

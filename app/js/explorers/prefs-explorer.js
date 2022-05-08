@@ -61,7 +61,7 @@ class PrefsExplorer extends base {
         this._Foldout(
             { title: `Autosave`, icon: `save`, prefId: `appsettings.autosave`, expanded: true },
             [
-                { options: { propertyId: mkfData.IDS_PREFS.AUTOSAVE } },
+                { options: { propertyId: mkfData.IDS_PREFS.AUTOSAVE, invertInputOrder:true } },
                 { options: { propertyId: mkfData.IDS_PREFS.AUTOSAVE_TIMER }, disableWhen: { fn: isAutoSave } },
             ]
         );

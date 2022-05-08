@@ -10,6 +10,7 @@ const UNICODE = require(`../unicode`);
 const mkfData = require(`../data`);
 const mkfInspectors = require(`./inspectors`);
 const mkfWidgets = require(`../widgets`);
+const LOC = require('../locales');
 
 const base = nkm.datacontrols.Editor;
 class EditorListImport extends base {
@@ -119,7 +120,9 @@ class EditorListImport extends base {
         this.forwardData.To(builder);
 
         builder.Build([
-            { options: { propertyId: mkfData.IDS_EXT.IMPORT_BIND_RESOURCE } },
+            { options: { propertyId: mkfData.IDS_EXT.IMPORT_BIND_RESOURCE, invertInputOrder:true } },
+            { options: { propertyId: mkfData.IDS_EXT.IMPORT_TEXT_AS_LAYERS, invertInputOrder:true } },
+            { cl: mkfWidgets.ControlHeader, options: { label: LOC.labelTr } },
         ]);
 
         this._settingsInspector = this.Attach(mkfInspectors.TransformSettings, `item settings`, column);

@@ -169,6 +169,12 @@ class GlyphListInspector extends base {
                 group: `create`
             },
             {
+                icon: `minus`, htitle: `Collapse all`,
+                variant: ui.FLAGS.MINIMAL,
+                trigger: { fn: () => { this._layersView._CollapseAll(); } },
+                group: `ui`
+            },
+            {
                 icon: `visible`, htitle: `Show all components`,
                 variant: ui.FLAGS.MINIMAL,
                 trigger: { fn: () => { this.editor.cmdLayersOn.Execute(this._data.analytics.existing); } },
@@ -194,7 +200,7 @@ class GlyphListInspector extends base {
             { title: LOC.labelSettings, icon: `gear`, prefId: `glyphSettings`, expanded: true },
             [
                 { cl: mkfWidgets.ControlHeader, options: { label: `Export` } },
-                { options: { propertyId: mkfData.IDS.EXPORT_GLYPH }, css:`full` },
+                { options: { propertyId: mkfData.IDS.DO_EXPORT }, css: `full` },
             ]
         );
 
@@ -233,8 +239,6 @@ class GlyphListInspector extends base {
 
     _OnSurveyorUpdate(p_hasContent = false) {
 
-        this._FlushData();
-
         if (!this._data) { return; }
 
         this._flags.Set(__invalidSelection, !p_hasContent);
@@ -249,6 +253,8 @@ class GlyphListInspector extends base {
 
         } else {
 
+            this._FlushData();
+            
             let label = `${an.total} glyphs currently selected.<br><br>`;
             if (an.existingGlyphs <= 1) {
                 label += `<i>Select more <b>existing</b> glyphs to edit their properties.</i>`;
@@ -276,7 +282,7 @@ class GlyphListInspector extends base {
         this._groupPreview.data = this._data ? this._data.analytics.existing : null;
         //Would need to update popout there, too
     }
-    
+
     _OnGlyphBumped(p_data, p_infos) { this._UpdatePreviews(); }
 
     //#region popout

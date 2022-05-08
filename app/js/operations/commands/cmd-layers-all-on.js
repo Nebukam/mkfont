@@ -29,7 +29,7 @@ class CmdLayersOn extends actions.Command {
                     layerList = variant.layers._array,
                     ignore = true;
 
-                layerList.forEach(element => { if (!element.Get(mkfData.IDS.EXPORT_GLYPH)) { ignore = false; } });
+                layerList.forEach(element => { if (!element.Get(mkfData.IDS.DO_EXPORT)) { ignore = false; } });
 
                 if (ignore) { return; }
 
@@ -41,7 +41,7 @@ class CmdLayersOn extends actions.Command {
 
                 this._emitter.Do(mkfActions.SetProperty, {
                     target: layerList,
-                    id: mkfData.IDS.EXPORT_GLYPH,
+                    id: mkfData.IDS.DO_EXPORT,
                     value: true
                 });
 
@@ -55,7 +55,7 @@ class CmdLayersOn extends actions.Command {
                 layerList = variant.layers._array,
                 ignore = true;
 
-            layerList.forEach(element => { if (!element.Get(mkfData.IDS.EXPORT_GLYPH)) { ignore = false; } });
+            layerList.forEach(element => { if (!element.Get(mkfData.IDS.DO_EXPORT)) { ignore = false; } });
 
             if (ignore) {
                 this._Cancel();
@@ -70,7 +70,7 @@ class CmdLayersOn extends actions.Command {
 
             this._emitter.Do(mkfActions.SetProperty, {
                 target: layerList,
-                id: mkfData.IDS.EXPORT_GLYPH,
+                id: mkfData.IDS.DO_EXPORT,
                 value: true
             });
 

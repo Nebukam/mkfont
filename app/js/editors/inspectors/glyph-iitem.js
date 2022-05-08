@@ -29,12 +29,12 @@ class GlyphVariantInspectorItem extends base {
         { options: { propertyId: mkfData.IDS.WIDTH }, disableWhen: { fn: shouldHideWIDTH } },
         { options: { propertyId: mkfData.IDS.HEIGHT } },
         //{ cl: mkfWidgets.ControlHeader, options: { label: `Export` } },
-        //{ options: { propertyId: mkfData.IDS.EXPORT_GLYPH } },
+        //{ options: { propertyId: mkfData.IDS.DO_EXPORT } },
     ];
 
     static __glyphControls = [
         { cl: mkfWidgets.ControlHeader, options: { label: `Export` } },
-        { options: { propertyId: mkfData.IDS.EXPORT_GLYPH }, css:`full` },
+        { options: { propertyId: mkfData.IDS.DO_EXPORT }, css:`full` },
     ];
 
     _Init() {
@@ -203,7 +203,7 @@ class GlyphVariantInspectorItem extends base {
             { title: LOC.labelSettings, icon: `gear`, prefId: `glyphSettings`, expanded: true },
             [
                 //{ cl: mkfWidgets.ControlHeader, options: { label: `Export` } },
-                { options: { propertyId: mkfData.IDS.EXPORT_GLYPH } },
+                { options: { propertyId: mkfData.IDS.DO_EXPORT } },
             ]
         );
 

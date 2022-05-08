@@ -33,6 +33,7 @@ class ImportSettingsDataBlock extends TransformSettingsDataBlock {
         p_values[IDS_EXT.IMPORT_BLOCK_START] = { value: ENUMS.BLOCK_START_BEGIN };
 
         p_values[IDS_EXT.IMPORT_BIND_RESOURCE] = { value: true };
+        p_values[IDS_EXT.IMPORT_TEXT_AS_LAYERS] = { value: true };
 
     }
 

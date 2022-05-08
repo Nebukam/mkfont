@@ -2,11 +2,10 @@
 
 const nkm = require(`@nkmjs/core`);
 const SIGNAL = require("../signal");
-const u = nkm.u;
 const ui = nkm.ui;
 
-const ControlHeader = require(`./control-header`);
-const PropertyControl= require(`./property-control`);
+const mkfData = require(`../data`);
+const PropertyControl = require(`./property-control`);
 const LayerControl = require(`./layer-control`);
 
 const __nolayer = `nolayer`;
@@ -24,9 +23,22 @@ class LayersView extends base {
         this._builder.defaultControlClass = PropertyControl;
         this._builder.defaultCSS = `control`;
 
-        this._dataObserver.Hook(SIGNAL.LAYERS_UPDATED, this._Bind(this._RefreshLayerControls));
+        this._layerCtrls = [];
 
-        this._items = [];
+        //.Hook(SIGNAL.LAYERS_UPDATED, this._Bind(this._RefreshLayerControls));
+
+        this._delayedReorder = nkm.com.DelayedCall(this._Bind(this._RefreshLayerOrder));
+        this._delayedAttachFragment = nkm.com.DelayedCall(this._Bind(this._AttachFragment), 16);
+
+        this._dataObserver
+            .Hook(SIGNAL.LAYER_ADDED, this._Bind(this._OnLayerAdded))
+            .Hook(SIGNAL.LAYER_REMOVED, this._Bind(this._OnLayerRemoved))
+            .Hook(SIGNAL.LAYERS_UPDATED, this._delayedReorder.Schedule);
+
+        this._flags.Add(this, __nolayer);
+
+        this._fragment = null;
+
     }
 
     static _Style() {
@@ -56,6 +68,7 @@ class LayersView extends base {
                 'flex': '1 1 auto',
                 'text-align': 'center'
             },
+            ':host(:not(.nolayer)) .label': { 'display': `none` },
             '.btn': {
                 'margin': '3px'
             },
@@ -76,7 +89,7 @@ class LayersView extends base {
                 'user-select': 'none',
                 'border-radius': '4px',
             },
-            '.toolbar':{
+            '.toolbar': {
                 'align-self': `center`
             }
         }, base._Style());
@@ -94,19 +107,25 @@ class LayersView extends base {
                     icon: `component-new`, htitle: `Create new component`,
                     flavor: nkm.ui.FLAGS.CTA, variant: ui.FLAGS.MINIMAL,
                     trigger: { fn: () => { this.editor.cmdLayerAdd.Execute(this._data); } },
-                    group: `create`
+                    group: `create`, member: { owner: this, id: `_createBtn` }
+                },
+                {
+                    icon: `minus`, htitle: `Collapse all`,
+                    variant: ui.FLAGS.MINIMAL,
+                    trigger: { fn: () => { this._CollapseAll(); } },
+                    group: `ui`, member: { owner: this, id: `_collapseAllBtn` }
                 },
                 {
                     icon: `visible`, htitle: `Show all components`,
                     variant: ui.FLAGS.MINIMAL,
                     trigger: { fn: () => { this.editor.cmdLayersOn.Execute(this._data); } },
-                    group: `edit`
+                    group: `edit`, member: { owner: this, id: `_showAllBtn` }
                 },
                 {
                     icon: `hidden`, htitle: `Hide all components`,
                     variant: ui.FLAGS.MINIMAL,
                     trigger: { fn: () => { this.editor.cmdLayersOff.Execute(this._data); } },
-                    group: `edit`
+                    group: `edit`, member: { owner: this, id: `_hideAllBtn` }
                 },
                 {
                     icon: `link`, htitle: `Create composition components.`,
@@ -124,7 +143,7 @@ class LayersView extends base {
 
     _OnDataChanged(p_oldData) {
         super._OnDataChanged(p_oldData);
-        this._RefreshLayerControls();
+        this._RebuildControls();
     }
 
     _OnDataUpdated(p_data) {
@@ -137,44 +156,87 @@ class LayersView extends base {
         this._addCompBtn.disabled = !hasComp;
     }
 
-    _RefreshLayerControls() {
-
-
-        this._label._element.style.removeProperty(`display`);
-
-        if (!this._data) {
-
-            //this._items.forEach((item) => { item.Release(); });
-            //this._items.length = 0;
-            return;
-        }
-
-        let
-            layerList = this._data.layers._array,
-            diff = this._items.length - layerList.length;
-
-        if (diff != 0) {
-            if (diff > 0) {
-                for (let i = 0; i < diff; i++) { this._items[layerList.length + i].Release(); }
-            } else {
-                diff = Math.abs(diff);
-                for (let i = 0; i < diff; i++) {
-                    let item = this.Attach(this.constructor.__layerControlClass, `item`, this._listCtnr);
-                    item.editor = this.editor;
-                    item.context = this._data;
-                    this._items.push(item);
-                }
-            }
-            this._items.length = layerList.length;
-        }
-
-        for (let i = 0, n = layerList.length; i < n; i++) { this._items[(n - 1) - i].data = layerList[i]; }
-        if (layerList.length > 0) { this._label._element.style.setProperty(`display`, `none`); }
+    _CollapseAll() {
+        if (!this._data) { return; }
+        this._data._layers.ForEach(lyr => { lyr.expanded = false; });
+        this._layerCtrls.forEach(item => { item.Collapse(); });
     }
 
-    _CleanUp(){
-        this._items.forEach((item) => { item.Release(); });
-        this._items.length = 0;
+    _ClearControls() {
+        this._layerCtrls.forEach(ctrl => { ctrl.Release(); });
+        this._layerCtrls.length = 0;
+        this._flags.Set(__nolayer, true);
+    }
+
+    _RebuildControls() {
+        this._ClearControls();
+        if (!this._data) { return; }
+        this._data._layers.ForEach(lyr => { this._OnLayerAdded(this._data, lyr); });
+        this._RefreshLayerOrder();
+    }
+
+    _OnLayerAdded(p_variant, p_layer) {
+
+        // Hard cap 20 layers to preserve memory.
+        if (this._layerCtrls.length >= mkfData.INFOS.LAYER_LIMIT) {
+            this._createBtn.disabled = true;
+            return;
+        } else {
+            this._createBtn.disabled = false;
+        }
+
+        if (!this._fragment) { this._fragment = document.createDocumentFragment(); }
+
+        let ctrl = this.Attach(this.constructor.__layerControlClass, `item`, this._fragment);
+        ctrl.editor = this.editor;
+        ctrl.context = this._data;
+        ctrl.data = p_layer;
+
+        this._layerCtrls.push(ctrl);
+        this._delayedAttachFragment.Bump();
+
+    }
+
+    _AttachFragment() {
+        if (!this._fragment) { return; }
+        ui.dom.Attach(this._fragment, this._listCtnr);
+        this._RefreshLayerOrder();
+    }
+
+    _OnLayerRemoved(p_variant, p_layer) {
+
+        let
+            ctrl = null,
+            index = -1;
+
+        this._layerCtrls.forEach((item, i) => {
+            if (item.data == p_layer) {
+                ctrl = item;
+                index = i;
+            }
+        });
+
+        if (ctrl) {
+            this._layerCtrls.splice(index, 1);
+            ctrl.Release();
+            this._delayedReorder.Schedule();
+        }
+
+    }
+
+    _RefreshLayerOrder() {
+        this._delayedReorder.Cancel();
+        let ttl = this._layerCtrls.length - 1;
+        this._layerCtrls.forEach((ctrl, i) => {
+            ctrl.isFirstLayer = ctrl.data.index == 0;
+            ctrl.isLastLayer = ctrl.data.index == ttl;
+            ctrl.style.setProperty(`order`, ttl - ctrl.data.index);
+        });
+        this._flags.Set(__nolayer, this._layerCtrls.length <= 0);
+    }
+
+    _CleanUp() {
+        this._ClearControls();
         super._CleanUp();
     }
 

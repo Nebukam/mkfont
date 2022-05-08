@@ -194,17 +194,23 @@ class PangramInspector extends base {
 
         ui.dom.ClearHighlightedText();
 
+
         let addresses = UNICODE.GetAddressesFromText(p_text);
 
         if (addresses.length == 0) { return; }
 
         let data = [];
-        for (let i = 0; i < addresses.length; i++) {
-            let glyph = this._data.GetGlyph(addresses[i]);
-            if (glyph.isNull) { continue; }
-            data.push(glyph.unicodeInfos);
-        }
-
+        addresses.forEach(add => {
+            let nfos = UNICODE.GetInfos(add, false);
+            if (nfos) { data.push(nfos) }
+        });
+        /*
+                for (let i = 0; i < addresses.length; i++) {
+                    let glyph = this._data.GetGlyph(addresses[i]);
+                    if (glyph.isNull) { continue; }
+                    data.push(glyph.unicodeInfos);
+                }
+        */
         if (data.length == 0) { return; }
 
         this.editor.viewport.selectionStack.Clear();

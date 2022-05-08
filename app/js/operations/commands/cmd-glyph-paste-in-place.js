@@ -45,6 +45,10 @@ class CmdGlyphPasteInPlace extends actions.Command {
             title: `Pasted glyphs from an mkfont to another`
         });
 
+        // Create missing layer dependencies to make the paste the most complete possible
+        let layerDependencies = SHARED_OPS.GetGlyphListDependencies(globalThis.__copySourceGlyphs, family);
+        layerDependencies.forEach(dep =>{ this.PasteInPlace(family, dep, resample); });
+
         for (let i = 0; i < globalThis.__copySourceGlyphs.length; i++) {
             let g = globalThis.__copySourceGlyphs[i];
             if (g.isNull) { continue; }
@@ -83,7 +87,7 @@ class CmdGlyphPasteInPlace extends actions.Command {
 
             targetVariant = p_family.GetGlyph(unicodeInfos.u).activeVariant;
 
-            SHARED_OPS.CopyLayers(targetVariant, sourceVariant);
+            SHARED_OPS.PasteLayers(targetVariant, sourceVariant);
 
         } else {
             /*

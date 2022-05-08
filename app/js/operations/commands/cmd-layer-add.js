@@ -21,6 +21,8 @@ class CmdLayerAdd extends actions.Command {
 
     _InternalExecute() {
 
+
+
         if (u.isArray(this._context)) {
 
             this._emitter.StartActionGroup({
@@ -30,6 +32,7 @@ class CmdLayerAdd extends actions.Command {
             });
 
             this._context.forEach(variant => {
+                if (variant.availSlots <= 0) { return; }
                 this._emitter.Do(mkfActions.LayerAdd, {
                     target: variant,
                     index: -1
@@ -40,10 +43,15 @@ class CmdLayerAdd extends actions.Command {
 
         } else {
             let variant = this._context;
-            this._emitter.Do(mkfActions.LayerAdd, {
-                target: variant,
-                index: -1
-            });
+            if (variant.availSlots <= 0) {
+                this._Cancel();
+                return;
+            }
+            if (this._context)
+                this._emitter.Do(mkfActions.LayerAdd, {
+                    target: variant,
+                    index: -1
+                });
         }
 
 
