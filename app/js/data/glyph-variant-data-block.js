@@ -61,7 +61,7 @@ class GlyphVariantDataBlock extends SimpleDataEx {
 
     get controlLayer() { return this._controlLayer; }
     set controlLayer(p_value) {
-        if (this.glyph == this.glyph.family._refGlyph) { return; }//ignore this if reference variant.
+        if (this.glyph && this.glyph.family && this.glyph == this.glyph.family._refGlyph) { return; }//ignore this if reference variant.
         if (this._controlLayer == p_value) { return; }
         this._controlLayer = p_value;
         this._PushUpdate();
@@ -103,6 +103,7 @@ class GlyphVariantDataBlock extends SimpleDataEx {
         this._layerObserver.Unobserve(p_layer);
         p_layer.importedVariant = null;
         p_layer._variant = null;
+        if (this._controlLayer == p_layer) { this.controlLayer = null; }
         this._layers.ForEach((item, i) => { item.index = i; });
         this.Broadcast(SIGNAL.LAYER_REMOVED, this, p_layer);
         this.Broadcast(SIGNAL.LAYERS_UPDATED, this);
@@ -230,6 +231,7 @@ class GlyphVariantDataBlock extends SimpleDataEx {
     _ClearLayers() {
         this.selectedLayer = null;
         while (!this._layers.isEmpty) { this.RemoveLayer(this._layers.last).Release(); }
+        this.controlLayer = null;
     }
 
     get selectedLayer() { return this._selectedLayer; }
@@ -255,7 +257,7 @@ class GlyphVariantDataBlock extends SimpleDataEx {
     _CleanUp() {
         this._applyScheduled = false;
         this.selectedLayer = null;
-        this.controlLayer = null;
+        this._controlLayer = null;
         this._ClearLayers();
         this.glyph = null;
         super._CleanUp();

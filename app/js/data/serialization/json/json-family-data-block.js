@@ -89,12 +89,17 @@ class FamilyDataBlockJSONSerializer extends nkm.data.serialization.json.DataBloc
                     let layers = [];
                     variantObj[__ID_lyrs] = layers;
                     variant._layers.ForEach(lyr => {
+                        let lv = lyr.Values();
+                        if (variant.controlLayer == lyr) { lv[IDS.LYR_IS_CONTROL_LAYER] = true; }
+                        else { delete lv[IDS.LYR_IS_CONTROL_LAYER]; }
                         layers.push({
-                            [__ID_values]: lyr.Values(),
-                            expanded:lyr.expanded
+                            [__ID_values]: lv,
+                            expanded: lyr.expanded
                         });
                     });
                 }
+
+                //TODO : Flag variant.layerControl as the ONLY one with [control = true]
 
                 // cleanup runtime-computed values
                 delete variantObj[__ID_values][IDS.PATH];
@@ -170,11 +175,18 @@ class FamilyDataBlockJSONSerializer extends nkm.data.serialization.json.DataBloc
         layeredVariants.forEach((variant, i) => {
             let layers = layerInfos[i];
             layers.forEach(layer => {
-                let layerInstance = nkm.com.Rent(GlyphLayer);
+                let
+                    layerInstance = nkm.com.Rent(GlyphLayer),
+                    lv = layer[__ID_values];
+
                 layerInstance.expanded = layer.expanded;
                 variant.AddLayer(layerInstance);
-                layerInstance.BatchSet(layer[__ID_values]);
+                layerInstance.BatchSet(lv);
+
+                if (IDS.LYR_IS_CONTROL_LAYER in lv) { variant.controlLayer = layerInstance; }
+
             });
+            //TODO : restore layerControl if any
         });
 
     }

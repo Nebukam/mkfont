@@ -192,6 +192,7 @@ class LayersView extends base {
     _OnLayerAdded(p_variant, p_layer) {
 
         // Hard cap 20 layers to preserve memory.
+        if (this._layerCtrls.length >= mkfData.INFOS.LAYER_LIMIT) { return; }
 
         if (!this._fragment) { this._fragment = document.createDocumentFragment(); }
 

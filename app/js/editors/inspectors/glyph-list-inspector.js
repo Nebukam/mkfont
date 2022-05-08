@@ -362,6 +362,7 @@ class GlyphListInspector extends base {
     //#endregion
 
     _CleanUp() {
+        this._FlushData();
         this._obstructedPreview = false;
         this._TogglePopOutPreview(false);
         super._CleanUp();
