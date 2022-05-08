@@ -162,9 +162,20 @@ class SVGOperations {
 
             let
                 paths = svg.getElementsByTagName(`path`),
+                texts = svg.getElementsByTagName(`text`),
                 mergedPaths = ``,
                 markedBBox = null,
                 markPath = null;
+
+            if (texts.length > 0) {
+                for (let i = 0; i < texts.length; i++) {
+                    let textContent = texts[i].textContent;
+                    if (textContent && textContent != ``) {
+                        if (!result.layers) { result.layers = []; }
+                        if (!result.layers.includes(textContent)) { result.layers.push(textContent); }
+                    }
+                }
+            }
 
             if (paths.length > 0) {
 
@@ -628,7 +639,7 @@ class SVGOperations {
             if (boundMode != ENUMS.BOUNDS_OUTSIDE) {
                 // This alone, super expensive ;_;
                 vbbox = this.GetBBox(pathTransform.toString());
-                
+
             }
 
         }
@@ -859,7 +870,7 @@ class SVGOperations {
 
     //#endregion
 
-    static SVGFromGlyphVariant(p_variant, p_includeMark = true) {
+    static SVGFromGlyphVariant(p_variant, p_includeMark = true, p_markCol = `FF00FF`) {
 
         let
             inlined = `mkf-em="${p_variant.family.Get(IDS.EM_UNITS)}" `,
@@ -879,7 +890,7 @@ class SVGOperations {
         }
 
         if (p_includeMark) {
-            markedPath = `<path style="stroke:#FF00FF;fill:none" d="M 0 0 L ${p.width} 0 L ${p.width} ${p.height} L 0 ${p.height} z"></path>`;
+            markedPath = `<path style="stroke:#${p_markCol};fill:none" d="M 0 0 L ${p.width} 0 L ${p.width} ${p.height} L 0 ${p.height} z"></path>`;
         }
 
         return `<svg viewBox="0 0 ${p.width} ${p.height}" ${inlined}><path d="${p.path}"></path>${markedPath}</svg>`;

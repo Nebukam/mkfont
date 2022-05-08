@@ -11,6 +11,13 @@ const UNICODE = require(`../../unicode`);
 const mkfData = require(`../../data`);
 const mkfCatalog = require(`../../catalogs`);
 const mkfActions = require(`../actions`);
+const SHARED_OPS = require('./shared-ops');
+
+const __groupInfos = {
+    icon: `directory-download`,
+    name: `Import SVGs`,
+    title: `Imported SVGs as glyph`
+};
 
 class CmdImportFileList extends actions.Command {
     constructor() { super(); }
@@ -69,7 +76,7 @@ class CmdImportFileList extends actions.Command {
 
         this._PreprocessFileList(list);
         this._importList.length = 0;
-        
+
         for (let i = 0; i < list.length; i++) {
 
             let filePath = list[i];
@@ -78,9 +85,9 @@ class CmdImportFileList extends actions.Command {
 
                 let
                     svgString = fs.readFileSync(filePath, 'utf8'),
-                    svgStats = SVGOPS.SVGStats(svgString);
+                    svgStats = SVGOPS.SVGStats(svgString, mkfData.INFOS.MARK_COLOR);
 
-                if (!svgStats.exists) { continue; }
+                if (!svgStats.exists && !svgStats.layers) { continue; }
 
 
                 let fname = nkm.u.PATH.name(filePath),
@@ -149,11 +156,7 @@ class CmdImportFileList extends actions.Command {
             overlapMode = this._importTransformationSettings.Get(mkfData.IDS_EXT.IMPORT_OVERLAP_MODE),
             doBinding = this._importTransformationSettings.Get(mkfData.IDS_EXT.IMPORT_BIND_RESOURCE);
 
-        this._emitter.StartActionGroup({
-            icon: `directory-download`,
-            name: `Import SVGs`,
-            title: `Imported SVGs as glyph`
-        });
+        this._emitter.StartActionGroup(__groupInfos);
 
         for (let i = 0; i < this._importList.length; i++) {
             let
@@ -171,7 +174,9 @@ class CmdImportFileList extends actions.Command {
 
             if (!unicodeInfos) { continue; }
 
-            let existingGlyph = family.GetGlyph(unicodeInfos.u);
+            let
+                existingGlyph = family.GetGlyph(unicodeInfos.u),
+                variant = null;
 
             if (existingGlyph.isNull) {
 
@@ -182,9 +187,12 @@ class CmdImportFileList extends actions.Command {
                     transforms: trValues
                 });
 
+                variant = family.GetGlyph(unicodeInfos.u).activeVariant;
+
             } else {
 
-                let variant = existingGlyph.activeVariant;
+                variant = existingGlyph.activeVariant;
+
                 this._emitter.Do(mkfActions.SetProperty, {
                     target: variant,
                     id: mkfData.IDS.PATH_DATA,
@@ -197,6 +205,8 @@ class CmdImportFileList extends actions.Command {
                         values: trValues
                     });
                 }
+
+                SHARED_OPS.AddLayersFromNameList(this._emitter, variant, svgStats.layers);
 
             }
 

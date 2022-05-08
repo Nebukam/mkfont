@@ -18,7 +18,7 @@ const mkfWidgets = require(`./widgets`);
 const UNICODE = require(`./unicode`);
 const fs = require('fs');
 
-const __fontName = `Basement-Medium`;// `Basement-Medium`;// `Meticula`; //`Inter-Regular`
+const __fontName = `Meticula`;// `Basement-Medium`;// `Meticula`; //`Inter-Regular`
 
 /**
  * SteamGameFinder allows you to find which multiplayer games are shared within a group of steam users
@@ -72,12 +72,12 @@ class MKFont extends nkm.app.AppBase {
     PSet(p_id, p_value, p_silent = false) { return this._prefDataObject.Set(p_id, p_value, p_silent); }
 
     AppReady() {
-/*
-        ui.Preload(mkfWidgets.GlyphSlot, 50);
-        ui.Preload(mkfWidgets.LigaButton, 50);
-        ui.Preload(mkfWidgets.LayerControl, 50);
-        ui.Preload(mkfWidgets.LayerControlSilent, 50);
-*/
+        /*
+                ui.Preload(mkfWidgets.GlyphSlot, 50);
+                ui.Preload(mkfWidgets.LigaButton, 50);
+                ui.Preload(mkfWidgets.LayerControl, 50);
+                ui.Preload(mkfWidgets.LayerControlSilent, 50);
+        */
         super.AppReady();
 
         let cols = {
@@ -138,7 +138,7 @@ class MKFont extends nkm.app.AppBase {
         //nkm.actions.KeystrokeEx.CreateFromString(`Ctrl E`, { fn: this._Bind(this._WriteTTF) }).Enable();
 
         //this._EmptyFamily();
-        this._FamilyFromTTF();
+        //this._FamilyFromTTF();
         //mkfCmds.OpenPrefs.Execute();
 
     }

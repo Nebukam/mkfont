@@ -40,6 +40,21 @@ class SHARED_OPS {
 
     }
 
+    static AddLayersFromNameList(p_editor, p_target, p_nameList) {
+        if (!p_nameList) { return; }
+        p_nameList.forEach(name => {
+            if (p_target.availSlots <= 0) { return; }
+            let resolvedChar = UNICODE.ResolveString(name);
+            if (p_target.HasLayer(resolvedChar)) { return; }
+            p_editor.Do(mkfActions.LayerAdd, {
+                target: p_target,
+                layerValues: { [mkfData.IDS.LYR_CHARACTER_NAME]: resolvedChar },
+                expanded: false
+            });
+        });
+    }
+
+
     static PasteLayers(p_target, p_source, p_scaleFactor = 1) {
 
         let resample = p_scaleFactor != 1;
@@ -77,7 +92,7 @@ class SHARED_OPS {
             if (p_target.availSlots <= 0) { return; }
 
             let ch = UNICODE.GetUnicodeCharacter(Number.parseInt(c, 16));
-            if (!this._HasLayer(p_target, ch, `U+${c}`)) {
+            if (!p_target.HasLayer(ch, `U+${c}`)) {
                 p_editor.Do(mkfActions.LayerAdd, {
                     target: p_target,
                     layerValues: {
@@ -104,17 +119,30 @@ class SHARED_OPS {
 
     }
 
-    static _HasLayer(p_variant, p_char, p_uni) {
-        if (p_variant._layers.isEmpty) { return false; }
-        for (let i = 0, n = p_variant._layers.count; i < n; i++) {
-            let
-                layer = p_variant._layers.At(i),
-                cval = layer.Get(mkfData.IDS.LYR_CHARACTER_NAME);
+    static GetGlyphListDependencies(p_sources, p_destFamily) {
+        let result = [];
+        p_sources.forEach(g => {
+            this.GetGlyphDependencies(g, result, p_sources, p_destFamily);
+        });
+        return result;
+    }
 
-            if (cval == p_char || cval == p_uni) { return true; }
-        }
-
-        return false;
+    static GetGlyphDependencies(p_glyph, p_pool, p_exclude, p_destFamily) {
+        if (p_glyph.isNull) { return; }
+        p_glyph.activeVariant._layers.ForEach(layer => {
+            if (layer._glyphInfos && layer.importedVariant) {
+                let g = layer.importedVariant.glyph;
+                if (!g.isNull && !p_exclude.includes(g)) {
+                    let destGlyph = p_destFamily.GetGlyph(layer._glyphInfos.u);
+                    if (destGlyph.isNull) {
+                        if (!p_pool.includes(g)) {
+                            p_pool.push(g);
+                            this.GetGlyphDependencies(g, p_pool, p_exclude, p_destFamily);
+                        }
+                    }
+                }
+            }
+        });
     }
 
 }

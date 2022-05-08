@@ -87,10 +87,11 @@ class IDS_EXT {
 
     static IMPORT_BLOCK = 'import-block';
     static IMPORT_BLOCK_START = 'import-block-start';
-       
+
     static IMPORT_JUMP_OVER = 'import-jump-over';
 
     static IMPORT_BIND_RESOURCE = 'import-bind';
+    static IMPORT_TEXT_AS_LAYERS = 'import-text-as-layers';
 
     static {
 
@@ -144,7 +145,15 @@ class IDS_EXT {
             inputOptions: { placeholder: `...`, size: ui.FLAGS.SIZE_XS },
             desc: `Imported files will become bound to their glyphs.\nThis means that each time the files are updated outside the app, the glyph will be re-imported.\nNote that you remove that binding at any time.`,
         };
-        
+
+        this.infos[this.IMPORT_TEXT_AS_LAYERS] = {
+            import: true,
+            inputType: inputs.Boolean,
+            label: `Text as components`,
+            inputOptions: { placeholder: `...`, size: ui.FLAGS.SIZE_XS },
+            desc: `When enabled, text element within the SVG will create components named after that text' content.`,
+        };
+
         this.infos[this.IMPORT_PREFIX] = {
             import: true,
             inputType: inputs.Text,

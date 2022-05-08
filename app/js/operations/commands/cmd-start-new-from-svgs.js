@@ -78,7 +78,7 @@ class CmdCreateFamilyDocFromSVGs extends CmdCreateFamilyDoc {
 
                 let
                     svgString = fs.readFileSync(filePath, 'utf8'),
-                    svgStats = SVGOPS.SVGStats(svgString);
+                    svgStats = SVGOPS.SVGStats(svgString, mkfData.INFOS.MARK_COLOR);
 
                 if (!svgStats.exists) { continue; }
 

@@ -13,6 +13,8 @@ class INFOS {
 
     static LAYER_LIMIT = 20;
 
+    static get MARK_COLOR() { return nkm.env.APP.PGet(IDS_EXT.IMPORT_MARK_COL, `FF00FF`); }
+
 }
 
 module.exports = INFOS;

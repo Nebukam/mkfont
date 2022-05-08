@@ -106,7 +106,7 @@ class BindingManager extends base {
         let svgStats = { exists: false };
 
         try {
-            svgStats = SVGOPS.SVGStats(p_rsc.raw);
+            svgStats = SVGOPS.SVGStats(p_rsc.raw, mkfData.INFOS.MARK_COLOR);
         } catch (e) { console.log(e); }
 
         if (!svgStats.exists) { return; }

@@ -240,6 +240,19 @@ class GlyphVariantDataBlock extends SimpleDataEx {
         this.Broadcast(SIGNAL.SELECTED_LAYER_CHANGED, this, this._selectedLayer);
     }
 
+    HasLayer(p_char, p_uni = null) {
+
+        if (this._layers.isEmpty) { return false; }
+        
+        for (let i = 0, n = this._layers.count; i < n; i++) {
+            let cval = this._layers.At(i).Get(IDS.LYR_CHARACTER_NAME);
+            if (cval == p_char || cval == p_uni) { return true; }
+        }
+
+        return false;
+        
+    }
+
     _CleanUp() {
         this._applyScheduled = false;
         this.selectedLayer = null;
