@@ -49,7 +49,7 @@ class LayerTransformSettingsInspector extends base {
     static __trControls = [
         { options: { propertyId: mkfData.IDS.INVERTED } },
         { options: { propertyId: mkfData.IDS.LYR_USE_PREV_LAYER } },
-        { options: { propertyId: mkfData.IDS.LYR_IS_CONTROL_LAYER, command: mkfCmds.SetLayerControl, directHidden: true } },
+        { options: { propertyId: mkfData.IDS.LYR_IS_CONTROL_LAYER, command: mkfCmds.SetLayerControl, } },//directHidden: true 
         { cl: ControlHeader, options: { label: `Transforms` }, css: 'full' },
         { options: { propertyId: mkfData.IDS.TR_MIRROR, inputOnly: true }, css: 'full' },
         { options: { propertyId: mkfData.IDS.TR_SKEW_ROT_ORDER }, css: `full` },

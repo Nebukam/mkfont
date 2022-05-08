@@ -33,9 +33,12 @@ class GlyphGroupHeader extends base {
             '.title': {
                 'margin-bottom': '10px'
             },
+            '.bar':{
+                'height':`32px`,
+            },
             '.toolbar': {
                 'display': 'flex',
-                'flex-flow': 'row nowrap',
+                'flex-flow': 'row wrap',
                 'justify-content': 'space-between'
             }
         }, base._Style());
@@ -50,13 +53,13 @@ class GlyphGroupHeader extends base {
 
         let toolbar = ui.El(`div`, { class: `toolbar` }, this._host);
 
-        this._tagBar = this.Attach(ui.WidgetBar, `tagbar left`, toolbar);
+        this._tagBar = this.Attach(ui.WidgetBar, `bar tagbar left`, toolbar);
         this._tagBar.options = {
             defaultWidgetClass: nkm.uilib.widgets.Tag,
             size: ui.FLAGS.SIZE_XS
         };
 
-        this._optionsBar = this.Attach(ui.WidgetBar, `right`, toolbar);
+        this._optionsBar = this.Attach(ui.WidgetBar, `bar right`, toolbar);
         this._optionsBar.options = {
             defaultWidgetClass: nkm.uilib.buttons.Tool,
             size: ui.FLAGS.SIZE_S,

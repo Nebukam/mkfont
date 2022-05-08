@@ -34,6 +34,7 @@ module.exports = {
 
     LayerAdd: require(`./cmd-layer-add`),
     LayerRemove: require(`./cmd-layer-remove`),
+    LayerSetControlBatch: require(`./cmd-action-set-control-batch`),
     LayerAllOff: require(`./cmd-layers-all-off`),
     LayerAllOn: require(`./cmd-layers-all-on`),
     LayerUp: require(`./cmd-layer-move-up`),

@@ -11,6 +11,7 @@ const LayersView = require(`./layers-view`);
 const LayerControlSilent = require(`./layer-control-silent`);
 
 const __nolayer = `nolayer`;
+const __limitReached = `limit-reached`;
 
 const base = LayersView;
 class LayersViewSilent extends base {
@@ -32,7 +33,17 @@ class LayersViewSilent extends base {
         this._layerCtrls.forEach((ctrl, i) => {
             ctrl.style.setProperty(`order`, i);
         });
-        this._flags.Set(__nolayer, this._layerCtrls.length <= 0);
+
+        if(this._layerCtrls.length >= mkfData.INFOS.LAYER_LIMIT){
+            this._flags.Set(__limitReached, true);
+            this._limitLabel.Set(`<i>Only the first ${mkfData.INFOS.LAYER_LIMIT} most used components are shown.</i>`);
+            this._createBtn.disabled = true;
+        }else{
+            this._flags.Set(__limitReached, false);
+            this._limitLabel.Set(null);
+            this._createBtn.disabled = false;
+        }
+        
     }
 
 

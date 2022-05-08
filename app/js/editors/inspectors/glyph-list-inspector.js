@@ -254,7 +254,7 @@ class GlyphListInspector extends base {
         } else {
 
             this._FlushData();
-            
+
             let label = `${an.total} glyphs currently selected.<br><br>`;
             if (an.existingGlyphs <= 1) {
                 label += `<i>Select more <b>existing</b> glyphs to edit their properties.</i>`;

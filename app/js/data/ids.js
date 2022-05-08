@@ -368,7 +368,7 @@ class IDS {
         };
 
         this.infos[this.SHOW_ALL_LAYERS] = {
-            label: `Include partial matches`,
+            label: `Show partial matches`,
             inputType: inputs.Boolean,
             inputOptions: { size: ui.FLAGS.SIZE_XS },
             desc: `Show all shared components (at least used twice), not just the ones shared by every glyph in the selection.`

@@ -41,6 +41,10 @@ class Surveyor extends base {
             .Hook(SIGNAL.SELECTED_LAYER_CHANGED, this._RefLayerSelected, this);
         this._refObserver.enabled = false;
 
+        this._cachedVariantsObserver = new nkm.com.signals.Observer();
+        this._cachedVariantsObserver
+            .Hook(SIGNAL.LAYERS_UPDATED, this._OnCachedVariantLayerUpdate, this);
+
         this._trRefObserver = new nkm.com.signals.Observer();
         this._trRefObserver
             .Hook(nkm.com.SIGNAL.VALUE_CHANGED, this._OnTransformValueChanged, this);
@@ -106,6 +110,7 @@ class Surveyor extends base {
         // Mute observer for the duration of the update
         this._trRefObserver.enabled = false;
         this._refObserver.enabled = false;
+        this._cachedVariantsObserver.Flush();
 
         this._delayedUpdate.Cancel();
         let hasContent = false;
@@ -156,6 +161,9 @@ class Surveyor extends base {
 
             this._trRefObserver.enabled = true;
             this._refObserver.enabled = true;
+            this._cachedVariantsObserver.enabled = true;
+
+            this._cachedVariants.forEach(v => { this._cachedVariantsObserver.Observe(v); });
 
         } else {
 
@@ -217,6 +225,8 @@ class Surveyor extends base {
     }
 
     _RebuildLayerCache() {
+
+        this._rebuildingLayers = true;
 
         let
             includeAll = this._refVariant.Get(mkfData.IDS.SHOW_ALL_LAYERS),
@@ -305,6 +315,7 @@ class Surveyor extends base {
 
                 });
 
+                this._rebuildingLayers = false;
                 return;
             }
 
@@ -340,6 +351,9 @@ class Surveyor extends base {
                 newLayer.CommitUpdate();
             }
         }
+
+        this._rebuildingLayers = false;
+
     }
 
     _ClearRscBindings() {
@@ -375,11 +389,17 @@ class Surveyor extends base {
 
     _OnRefLayerValueChanged(p_variant, p_layer, p_id, p_valueObj, p_oldValue) {
 
-        if (p_id == mkfData.IDS.LYR_INDEX || p_id == mkfData.IDS.LYR_IS_CONTROL_LAYER) { return; }
+        if (p_id == mkfData.IDS.LYR_INDEX) { return; } //p_id == mkfData.IDS.LYR_IS_CONTROL_LAYER
 
-        let layerList = null;
+        let layerList = p_layer.surveyedList;
 
-        layerList = p_layer.surveyedList;
+        if (layerList.length == 0) { return; }
+
+        if (p_id == mkfData.IDS.LYR_IS_CONTROL_LAYER) {
+            this._editor.cmdLayerControl.toggle = p_valueObj.value;
+            this._editor.cmdLayerControl.Execute(layerList);
+            return;
+        }
         //layerList.forEach(lyr => { lyr.expanded = p_layer.expanded; });
 
         this._editor.Do(
@@ -387,6 +407,10 @@ class Surveyor extends base {
             target: layerList, id: p_id, value: p_valueObj.value
         });
 
+    }
+
+    _OnCachedVariantLayerUpdate(p_variant, p_layer) {
+        this._delayedUpdate.Bump();
     }
 
     _OnRefLayerRemoved(p_variant, p_layer) {

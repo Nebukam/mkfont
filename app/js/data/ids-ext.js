@@ -42,7 +42,7 @@ class IDS_EXT {
             recompute: true,
             inputType: inputs.Search,
             label: `Search`,
-            inputOptions: { placeholder: `search`, changeOnInput: true, submitOnChange: true, },
+            inputOptions: { placeholder: `a b c square...`, changeOnInput: true, submitOnChange: true, },
             desc: `Search for characters within Unicode.\nSeparate search terms with a space.`
         };
 

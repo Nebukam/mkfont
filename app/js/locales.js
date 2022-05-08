@@ -4,6 +4,7 @@ class LOC {
     constructor() { }
 
     static labelStats = `Stats`;
+    static labelDetails = `Details`;
 
     static labelSettings = `Settings`;
 

@@ -9,6 +9,7 @@ const PropertyControl = require(`./property-control`);
 const LayerControl = require(`./layer-control`);
 
 const __nolayer = `nolayer`;
+const __limitReached = `limit-reached`;
 
 const base = nkm.datacontrols.ControlView;
 class LayersView extends base {
@@ -35,7 +36,7 @@ class LayersView extends base {
             .Hook(SIGNAL.LAYER_REMOVED, this._Bind(this._OnLayerRemoved))
             .Hook(SIGNAL.LAYERS_UPDATED, this._delayedReorder.Schedule);
 
-        this._flags.Add(this, __nolayer);
+        this._flags.Add(this, __nolayer, __limitReached);
 
         this._fragment = null;
 
@@ -52,6 +53,7 @@ class LayersView extends base {
                 'flex-flow': 'column nowrap',
                 //'padding': '5px',
                 'margin-bottom': '5px',
+                '--limit': `0.5`,
             },
             '.control': {
                 'flex': '1 1 auto',
@@ -68,7 +70,12 @@ class LayersView extends base {
                 'flex': '1 1 auto',
                 'text-align': 'center'
             },
-            ':host(:not(.nolayer)) .label': { 'display': `none` },
+            '.label.limit': { order: -1, 'margin-bottom': `3px`, opacity: `var(--limit)` },
+            ':host(:not(.nolayer)) .label:not(.limit)': { 'display': `none` },
+
+            ':host(.limit-reached) .label': { 'color': `var(--col-warning)`, },
+            ':host(:not(.limit-reached)) .label:not(.limit)': { 'display': `none`, },
+
             '.btn': {
                 'margin': '3px'
             },
@@ -137,8 +144,12 @@ class LayersView extends base {
         };
 
         this._listCtnr = ui.El(`div`, { class: `list` }, this._host);
-        this._label = new ui.manipulators.Text(ui.dom.El(`div`, { class: `label font-xsmall` }, this._listCtnr), false, false);
-        this._label.Set(`<i>no layers</i>`);
+        this._label = new ui.manipulators.Text(ui.dom.El(`div`, { class: `label font-xsmall` }, this._listCtnr), true, false);
+        //this._label.Set(`<i>no components</i>`);
+        this._label.Set(null);
+
+        this._limitLabel = new ui.manipulators.Text(ui.dom.El(`div`, { class: `limit label font-xsmall` }, this._listCtnr), false, false);
+        this._limitLabel.Set(`<i>${mkfData.INFOS.LAYER_LIMIT} available.</i>`);
     }
 
     _OnDataChanged(p_oldData) {
@@ -170,7 +181,10 @@ class LayersView extends base {
 
     _RebuildControls() {
         this._ClearControls();
-        if (!this._data) { return; }
+        if (!this._data) {
+            this._RefreshLayerOrder();
+            return;
+        }
         this._data._layers.ForEach(lyr => { this._OnLayerAdded(this._data, lyr); });
         this._RefreshLayerOrder();
     }
@@ -178,12 +192,6 @@ class LayersView extends base {
     _OnLayerAdded(p_variant, p_layer) {
 
         // Hard cap 20 layers to preserve memory.
-        if (this._layerCtrls.length >= mkfData.INFOS.LAYER_LIMIT) {
-            this._createBtn.disabled = true;
-            return;
-        } else {
-            this._createBtn.disabled = false;
-        }
 
         if (!this._fragment) { this._fragment = document.createDocumentFragment(); }
 
@@ -225,6 +233,7 @@ class LayersView extends base {
     }
 
     _RefreshLayerOrder() {
+
         this._delayedReorder.Cancel();
         let ttl = this._layerCtrls.length - 1;
         this._layerCtrls.forEach((ctrl, i) => {
@@ -232,10 +241,25 @@ class LayersView extends base {
             ctrl.isLastLayer = ctrl.data.index == ttl;
             ctrl.style.setProperty(`order`, ttl - ctrl.data.index);
         });
+
         this._flags.Set(__nolayer, this._layerCtrls.length <= 0);
+
+        let limit = mkfData.INFOS.LAYER_LIMIT - this._layerCtrls.length;
+        if (limit != 0) {
+            this._flags.Set(__limitReached, false);
+            this._limitLabel.Set(`<i>can hold ${limit} more</i>`);
+            this._createBtn.disabled = false;
+        } else {
+            this._flags.Set(__limitReached, true);
+            this._limitLabel.Set(`<i>limit of ${mkfData.INFOS.LAYER_LIMIT} components reached.</i>`);
+            this._createBtn.disabled = true;
+        }
+        this.style.setProperty(`--limit`, 0.5 + (this._layerCtrls.length / mkfData.INFOS.LAYER_LIMIT) * 0.5);
+
     }
 
     _CleanUp() {
+        this._flags.Set(__limitReached, false);
         this._ClearControls();
         super._CleanUp();
     }

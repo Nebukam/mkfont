@@ -115,6 +115,7 @@ class PropertyControl extends base {
         super._Render();
 
         this._label = new ui.manipulators.Text(ui.dom.El(`span`, { class: `label` }, this._host), false, false);
+        this._label.ellipsis = true;
 
         this._nullifyBtn = this.Attach(nkm.uilib.buttons.Tool, `nullify`, this._host);
         this._nullifyBtn.options = {

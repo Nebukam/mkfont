@@ -6,6 +6,7 @@ const ui = nkm.ui;
 const mkfData = require(`../../data`);
 const mkfWidgets = require(`../../widgets`);
 
+const LOC = require(`../../locales`);
 const SIGNAL = require(`../../signal`);
 
 const GlyphIItem = require(`./glyph-iitem`);
@@ -56,14 +57,16 @@ class GlyphInspector extends base {
                 'margin-bottom': '0',
             },
             '.body': {
-                
-            },
-            '.settings': {
-                'flex': '1 0 auto',
-                'margin-bottom': '10px'
+
             },
             '.control': {
                 'margin-bottom': '5px',
+            },
+            '.drawer': {
+                'flex': '0 0 auto',
+                'padding': `10px`,
+                'background-color': `rgba(19, 19, 19, 0.25)`,
+                'border-radius': '4px',
             }
         }, base._Style());
     }
@@ -75,9 +78,16 @@ class GlyphInspector extends base {
         this._variantCtrl = this.Attach(GlyphIItem, `variant`, this._host);
         this.forwardContext.To(this._variantCtrl);
 
-        this._builder.host = ui.El(`div`, { class: `settings` }, this._host);
-
         super._Render();
+
+        // Stats
+
+        let foldout = this.Attach(nkm.uilib.widgets.Foldout, `item drawer`, this._host);
+        foldout.options = { title: LOC.labelDetails, icon: `placement-center`, prefId: `glyph-infos`, expanded: true };
+
+        this._glyphStats = this.Attach(mkfWidgets.GlyphStats, `foldout-item`, foldout);
+        this.forwardContext.To(this._glyphStats);
+        this.forwardEditor.To(this._glyphStats);
 
     }
 
@@ -89,20 +99,23 @@ class GlyphInspector extends base {
             this._variantCtrl.data = null;
         } else {
             this._glyphIdentity.data = this._data;
+
             let glyph = this._GetGlyph(this._data);
 
             if (glyph.isNull) {
                 glyph.unicodeInfos = this._data;
-                this._builder.host.style.setProperty(`display`, `none`);
                 this._variantCtrl.data = null; // Ensure refresh
-            } else {
-                this._builder.host.style.removeProperty(`display`);
             }
 
             this._variantCtrl.glyphInfos = this._data;
             this._variantCtrl.data = glyph.activeVariant;
 
+            this._glyphStats.data = glyph.activeVariant
+
         }
+
+        this._glyphStats.glyphInfos = this._data;
+
     }
 
     _GetGlyph(p_unicodeInfos) {

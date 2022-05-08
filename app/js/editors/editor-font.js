@@ -96,6 +96,8 @@ class FontEditor extends base {
         this.cmdLayersCopy = this._commands.Create(mkfCmds.LayersCopy);
         this.cmdLayersPaste = this._commands.Create(mkfCmds.LayersPaste);
         this.cmdLayerAddComp = this._commands.Create(mkfCmds.LayerAddComp);
+        this.cmdLayerControl = this._commands.Create(mkfCmds.LayerSetControlBatch);
+        
 
         this.cmdListImportMissing = this._commands.Create(mkfCmds.ImportListMissingGlyphs);
         this.cmdListExportUni = this._commands.Create(mkfCmds.ExportListUni);

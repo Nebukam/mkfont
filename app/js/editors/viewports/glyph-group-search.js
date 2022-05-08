@@ -15,8 +15,8 @@ class GlyphGroupSearch extends base {
 
     static __controls = [
         //{ cl: mkfWidgets.ControlHeader, options: { label: `Boundaries` }, css: 'header' },
-        { options: { propertyId: mkfData.IDS_EXT.SEARCH_ENABLED }, css: `main-toggle` },
-        { options: { propertyId: mkfData.IDS_EXT.SEARCH_TERM, inputOnly: true } },
+        { options: { propertyId: mkfData.IDS_EXT.SEARCH_ENABLED, invertInputOrder:true }, css: `main-toggle` },
+        { options: { propertyId: mkfData.IDS_EXT.SEARCH_TERM, inputOnly: true }, css: `search` },
         //{ options: { propertyId: mkfData.IDS_EXT.CASE_INSENSITIVE, invertInputOrder: true }, css: `large` },
         { options: { propertyId: mkfData.IDS_EXT.ADD_COMPOSITION, invertInputOrder: true }, css: `large` },
         { options: { propertyId: mkfData.IDS_EXT.MUST_EXISTS, invertInputOrder: true }, css: `large` },
@@ -52,22 +52,24 @@ class GlyphGroupSearch extends base {
                 'position': 'relative',
                 '@': ['fade-in'],
                 'display': 'flex',
-                'flex-flow': 'row nowrap',
+                'flex-flow': 'row wrap',
                 //'min-height': '0',
                 //'overflow': 'auto',
                 //'padding': '10px',
                 'align-content': 'flex-start',
                 'background-color': 'rgba(46,46,46,0.5)',
-                'padding': '10px 20px',
+                'padding': '10px 20px 5px 20px',
                 'min-height': '28px',
                 //'border-radius':'5px',
                 //'margin':'0 10px'
             },
             '.control': {
-                'flex': '0 1 auto',
-                'margin-right': '10px'
+                'flex': '0 0 auto',
+                'margin-right': '10px',
+                //'margin-bottom': '0'',
             },
-            '.main-toggle': { 'min-width': '100px', },
+            '.main-toggle': { 'flex': '0 0 115px' },
+            '.search': { 'flex': '1 1 auto' },
             '.large': { 'margin-right': '10px' },
 
             ':host(.enabled)': { 'background-color': 'rgba(var(--col-active-dark-rgb),0.5)', },

@@ -8,6 +8,7 @@ const UNICODE = require(`../unicode`);
 
 const mkfOperations = require(`../operations`);
 const mkfCmds = mkfOperations.commands;
+const GlyphMiniPreview = require(`./glyph-mini-preview`);
 
 const base = ui.Widget;
 class GlyphStats extends base {
@@ -15,7 +16,9 @@ class GlyphStats extends base {
 
     _Init() {
         super._Init();
-        this._multi = null;
+        this._glyphInfos = null;
+        this._decomposition = [];
+        this._relatives = [];
     }
 
     static _Style() {
@@ -43,6 +46,20 @@ class GlyphStats extends base {
             },
             '.toolbar': {
 
+            },
+            '.hdr': {
+                'text-transform': `uppercase`,
+                //'opacity': `0.5`,
+                'margin': `5px`,
+            },
+            '.shortcuts': {
+                'flex': `1 1 auto`,
+                'display': 'grid',
+                'grid-template-columns': 'repeat(4, 1fr)',
+                'grid-gap': '10px'
+            },
+            '.shortcut-item': {
+                'aspect-ratio': `1/1`
             }
         }, base._Style());
     }
@@ -51,44 +68,37 @@ class GlyphStats extends base {
 
         super._Render();
 
-        this._title = new ui.manipulators.Text(ui.dom.El("code", { class: "long-name" }, this), false);
-        this._title.Set("---");
+        this._refTitle = new ui.manipulators.Text(ui.dom.El("div", { class: "hdr label font-small" }, this), true);
+        this._refTitle.Set(null);
 
-        this._tagBar = this.Attach(ui.WidgetBar, `tagbar`);
-        this._tagBar.options = {
-            defaultWidgetClass: nkm.uilib.widgets.Tag,
-            size: ui.FLAGS.SIZE_XS
-        };
-
-        let hexCtnr = this._tagBar.CreateHandle({ cl: ui.WidgetButton });
-        hexCtnr.options = {
-            htitle: `Copy value to clipboard`,
+        this._selectAllUsers = this.Attach(nkm.uilib.buttons.Button, `btn`, this);
+        this._selectAllUsers.options = {
+            icon: `shortcut`, label: `Select all`, variant: ui.FLAGS.FRAME,
             trigger: {
                 fn: () => {
-                    mkfCmds.ExportSingleUniHex.Execute(this._multi ? this._multi : this._data);
-                }, thisArg: this
+                    let list = [];
+                    this._data.layerUsers.ForEach(user => {
+                        if (!user._variant || !user._variant.glyph) { return; }
+                        list.push(user._variant.glyph.unicodeInfos);
+                    });
+                    this._editor.inspectedData.SetList(list);
+                }
             }
         }
-        this._hexTag = hexCtnr.Attach(nkm.uilib.widgets.Tag, `tag`);
-        this._hexTag.bgColor = `rgba(var(--col-cta-rgb),0.5)`;
-        this._hexTag.maxWidth = `100px`;
 
-        this._blockTag = this._tagBar.CreateHandle();
-        this._blockTag.bgColor = `black`;
-        this._blockTag.maxWidth = `100px`;
+        this._refText = new ui.manipulators.Text(ui.dom.El("span", { class: "label" }, this), false);
+        this._refText.Set(null);
 
-        this._catTag = this._tagBar.CreateHandle();
-        this._catTag.bgColor = `black`;
-        this._catTag.maxWidth = `100px`;
+        this._decompTitle = new ui.manipulators.Text(ui.dom.El("div", { class: "hdr label font-small" }, this), true);
+        this._decompTitle.Set(null);
 
-    }
+        this._decompCtnr = ui.dom.El("div", { class: `shortcuts decomp` }, this);
 
-    _DisplayNull(p_title = `UNKNOWN`) {
-        this._title.Set(p_title);
-        this._blockTag.label = `---`; this._blockTag.htitle = null;
-        this._catTag.label = `---`;
-        this._hexTag.label = `-`;
-        this._catTag.textColor = `var(--col-error)`;
+        this._relTitle = new ui.manipulators.Text(ui.dom.El("div", { class: "hdr label font-small" }, this), true);
+        this._relTitle.Set(null);
+
+        this._relativesCtnr = ui.dom.El("div", { class: `shortcuts relatives` }, this);
+
     }
 
     _OnDataChanged(p_oldData) {
@@ -96,30 +106,84 @@ class GlyphStats extends base {
         if (!this._data) { this._DisplayNull(); }
     }
 
-    _OnDataUpdated(p_data) {
+    set context(p_value) { this._family = p_value; }
+    set editor(p_value) { this._editor = p_value; }
 
-        if (!p_data) {
-            this._DisplayNull();
+    set glyphInfos(p_value) {
+        if (this._glyphInfos == p_value) { return; }
+        this._glyphInfos = p_value;
+        this._RebuildDecomposition();
+        this._RebuildRelatives();
+    }
+
+    _RebuildDecomposition() {
+
+        this._decomposition.forEach(item => { item.Release(); });
+        this._decomposition.length = 0;
+
+        if (!this._family || !this._glyphInfos) { return; }
+        if (!this._glyphInfos.comp) {
+            this._decompTitle.Set(null);
             return;
         }
 
-        this._title.Set((p_data.name || `U+${p_data.u}`).substr(0, 80));
+        this._decompTitle.Set(`Decomposition (${this._glyphInfos.comp.length})`);
+        this._glyphInfos.comp.forEach(decomp => {
+            let
+                decompItem = this.Attach(GlyphMiniPreview, `shortcut-item`, this._decompCtnr),
+                unicodeInfos = UNICODE.GetInfos(decomp, false),
+                glyph = this._family.GetGlyph(unicodeInfos.u);
 
-        this._hexTag.label = UNICODE.UUni(p_data);
+            decompItem.glyphInfos = unicodeInfos;
+            decompItem.data = glyph.activeVariant;
 
-        if (p_data.block) {
-            this._blockTag.label = p_data.block.name;
-            this._blockTag.htitle = p_data.block.name;
-        } else {
-            this._blockTag.label = `unknown block`;
+            this._decomposition.push(decompItem);
+        });
+
+
+    }
+
+    _RebuildRelatives() {
+
+        this._relatives.forEach(item => { item.Release(); });
+        this._relatives.length = 0;
+
+        if (!this._family || !this._glyphInfos) { return; }
+        if (!this._glyphInfos.relatives) {
+            this._relTitle.Set(null);
+            return;
         }
 
-        if (p_data.cat) {
-            this._catTag.label = p_data.cat.name;
-            this._catTag.textColor = `var(--col-${p_data.cat.col})`;
-            this._catTag.visible = true;
+        let count = 0;
+        this._glyphInfos.relatives.forEach(decomp => {
+
+            if (this._glyphInfos.comp && this._glyphInfos.comp.includes(decomp)) { return; }
+            count++;
+            let
+                relItem = this.Attach(GlyphMiniPreview, `shortcut-item`, this._relativesCtnr),
+                unicodeInfos = UNICODE.GetInfos(decomp, false),
+                glyph = this._family.GetGlyph(unicodeInfos.u);
+
+            relItem.glyphInfos = unicodeInfos;
+            relItem.data = glyph.activeVariant;
+
+            this._relatives.push(relItem);
+        });
+
+        this._relTitle.Set(count > 0 ? `Relatives (${count})` : null);
+
+
+    }
+
+    _OnDataUpdated(p_data) {
+        super._OnDataUpdated(p_data);
+        let users = p_data.layerUsers;
+        if (users.count == 0) {
+            this._refTitle.Set(null);
+            this._selectAllUsers.visible = false;
         } else {
-            this._catTag.visible = false;
+            this._refTitle.Set(`Used as component  ×${users.count}`);
+            this._selectAllUsers.visible = true;
         }
     }
 

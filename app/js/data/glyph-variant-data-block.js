@@ -61,6 +61,7 @@ class GlyphVariantDataBlock extends SimpleDataEx {
 
     get controlLayer() { return this._controlLayer; }
     set controlLayer(p_value) {
+        if (this.glyph == this.glyph.family._refGlyph) { return; }//ignore this if reference variant.
         if (this._controlLayer == p_value) { return; }
         this._controlLayer = p_value;
         this._PushUpdate();
@@ -111,8 +112,6 @@ class GlyphVariantDataBlock extends SimpleDataEx {
 
     MoveLayer(p_layer, p_index) {
         if (!this._layers.Contains(p_layer)) { return; }
-        console.log(`Move layer from (${p_layer.index} / ${this._layers.IndexOf(p_layer)}) // ${p_index}`);
-
         this._layers.Move(p_layer, p_index);
         this._layers.ForEach((item, i) => { item.index = i; });
         this.Broadcast(SIGNAL.LAYERS_UPDATED, this);
@@ -243,14 +242,14 @@ class GlyphVariantDataBlock extends SimpleDataEx {
     HasLayer(p_char, p_uni = null) {
 
         if (this._layers.isEmpty) { return false; }
-        
+
         for (let i = 0, n = this._layers.count; i < n; i++) {
             let cval = this._layers.At(i).Get(IDS.LYR_CHARACTER_NAME);
             if (cval == p_char || cval == p_uni) { return true; }
         }
 
         return false;
-        
+
     }
 
     _CleanUp() {

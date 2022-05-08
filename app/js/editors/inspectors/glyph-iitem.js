@@ -210,16 +210,6 @@ class GlyphVariantInspectorItem extends base {
         this._binder = this.Attach(mkfWidgets.ResourceBinding, `foldout-item full`, foldout);
         this._binder.visible = false;
 
-        // Stats
-
-        foldout = this._Foldout(
-            { title: LOC.labelStats, icon: `infos`, prefId: `glyph-infos`, expanded: true },
-            null, `always-visible`);
-
-        foldout.visible = false;
-
-        this._glyphStats = this.Attach(mkfWidgets.GlyphStats, `item`, foldout);
-
         super._Render();
 
         this.focusArea = this;
@@ -246,7 +236,6 @@ class GlyphVariantInspectorItem extends base {
         if (this._glyphInfos == p_value) { return; }
         this._glyphInfos = p_value;
         this._glyphPreview.glyphInfos = p_value;
-        this._glyphStats.data = p_value;
     }
 
     _OnPreviewRectUpdate(p_tracker) {
