@@ -76,7 +76,7 @@ class PrefsExplorer extends base {
         this._Foldout(
             { title: `Resources`, icon: `directory-download-small`, prefId: `appsettings.rsc`, expanded: true },
             [
-                { options: { propertyId: mkfData.IDS_EXT.IMPORT_BIND_RESOURCE } },
+                { options: { propertyId: mkfData.IDS_EXT.IMPORT_BIND_RESOURCE, invertInputOrder:true } },
                 { options: { propertyId: mkfData.IDS_PREFS.MARK_COLOR } },
             ]
         );
