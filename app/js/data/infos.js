@@ -13,7 +13,11 @@ class INFOS {
 
     static LAYER_LIMIT = 20;
 
-    static get MARK_COLOR() { return nkm.env.APP.PGet(IDS_EXT.IMPORT_MARK_COL, `FF00FF`); }
+    static get MARK_COLOR() {
+        let col = nkm.env.APP.PGet(IDS_PREFS.MARK_COLOR, `FF00FF`);
+        if (col.substr(0, 1) == `#`) { col = col.substr(1); }
+        return col.toLowerCase();
+    }
 
 }
 

@@ -12,7 +12,7 @@ const UNICODE = require(`../unicode`);
  * @hideconstructor
  * @memberof ui.core
  */
-class IDS_EXT {
+class IDS_PREFS {
     constructor() { }
 
     static infos = {};
@@ -76,4 +76,4 @@ class IDS_EXT {
 
 }
 
-module.exports = IDS_EXT;
+module.exports = IDS_PREFS;
