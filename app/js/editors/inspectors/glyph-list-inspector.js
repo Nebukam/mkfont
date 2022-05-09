@@ -130,7 +130,7 @@ class GlyphListInspector extends base {
         // Transforms + local properties
 
         let foldout = this._Foldout(
-            { title: LOC.labelTr, icon: `view-grid`, prefId: `transforms`, expanded: true },
+            { title: LOC.labelTr, icon: `font-bounds`, prefId: `transforms`, expanded: true },
             [
                 { cl: TransformSettingsSilent, dataMember: `_transformSettings` },
                 { cl: mkfWidgets.ControlHeader, options: { label: `Metrics` } },

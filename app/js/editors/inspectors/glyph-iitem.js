@@ -161,7 +161,7 @@ class GlyphVariantInspectorItem extends base {
 
         let foldout = this._Foldout(
             {
-                title: LOC.labelTr, icon: `view-grid`, prefId: `transforms`, expanded: true, //TODO CHANGE BACK to true
+                title: LOC.labelTr, icon: `font-bounds`, prefId: `transforms`, expanded: true, //TODO CHANGE BACK to true
                 handles: [
                     {
                         icon: 'clipboard-read', htitle: 'Paste transforms  [ Ctrl Alt V ]',
