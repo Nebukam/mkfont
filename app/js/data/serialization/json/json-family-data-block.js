@@ -8,6 +8,7 @@ const GlyphLayer = require(`../../glyph-layer-data-block`);
 
 const __ID_tr = `transforms`;
 const __ID_values = `values`;
+const __ID_selections = `selections`;
 const __ID_glyphs = `glyphs`;
 const __ID_variants = `variants`;
 const __ID_isLigature = `isLiga`;
@@ -54,6 +55,7 @@ class FamilyDataBlockJSONSerializer extends nkm.data.serialization.json.DataBloc
 
         fontObj[__ID_values] = p_data.Values();
         fontObj[__ID_tr] = p_data._transformSettings.Values(refValueIds);
+        fontObj[__ID_selections] = p_data._selectionPresets;
 
         // Glyphs
         let glyphs = [];
@@ -128,6 +130,7 @@ class FamilyDataBlockJSONSerializer extends nkm.data.serialization.json.DataBloc
         // First load family data specifics
         p_data.BatchSet(p_serial[__ID_values]);
         p_data._transformSettings.BatchSet(p_serial[__ID_tr]);
+        p_data._selectionPresets = p_serial[__ID_selections];
 
         let
             layeredVariants = [],

@@ -97,7 +97,7 @@ class FontEditor extends base {
         this.cmdLayersPaste = this._commands.Create(mkfCmds.LayersPaste);
         this.cmdLayerAddComp = this._commands.Create(mkfCmds.LayerAddComp);
         this.cmdLayerControl = this._commands.Create(mkfCmds.LayerSetControlBatch);
-        
+
 
         this.cmdListImportMissing = this._commands.Create(mkfCmds.ImportListMissingGlyphs);
         this.cmdListExportUni = this._commands.Create(mkfCmds.ExportListUni);
@@ -119,6 +119,28 @@ class FontEditor extends base {
             }
         }).Strict();
 
+        for (let i = 0; i < 10; i++) {
+            this.shortcuts.Create(`Ctrl ${i}`, () => { this._StoreSelectionPreset(i); });
+            this.shortcuts.Create(`${i}`, () => { this._RestoreSelectionPreset(i); });
+        }
+
+    }
+
+    _StoreSelectionPreset(p_index) {
+        if (!this._data) { return; }
+        let preset = [];
+        for (let i = 0; i < this._inspectedData.stack.count; i++) { preset.push(this._inspectedData.stack.At(i).u); }
+        this._data._selectionPresets[p_index] = preset;
+    }
+
+    _RestoreSelectionPreset(p_index) {
+        if (!this._data) { return; }
+        let preset = this._data._selectionPresets[p_index];
+        if (!preset || preset.length == 0) { return; }
+        let restored = [];
+        for (let i = 0; i < preset.length; i++) { restored.push(UNICODE.GetInfos(preset[i])); }
+        if (restored.length == 0) { return; }
+        this._inspectedData.SetList(restored);
     }
 
     _OnDisplayGain() {

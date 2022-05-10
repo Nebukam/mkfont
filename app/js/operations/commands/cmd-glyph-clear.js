@@ -80,7 +80,7 @@ class CmdGlyphClear extends actions.Command {
                 }
             });
 
-            if (nkm.ui.INPUT.alt) {
+            if (nkm.ui.INPUT.shift) {
                 SHARED_OPS.BoostrapComp(this._emitter, f.GetGlyph(p_infos.u).activeVariant, p_infos);
             }
 
@@ -110,12 +110,16 @@ class CmdGlyphClear extends actions.Command {
                 value: false
             });
 
-            SHARED_OPS.RemoveLayers(this._emitter, p_variant);
+            if (!nkm.ui.INPUT.alt) {
+                
+                SHARED_OPS.RemoveLayers(this._emitter, p_variant);
 
-            if (nkm.ui.INPUT.alt) { this._emitter.cmdLayerAddComp.Execute(p_variant); }
+                if (nkm.ui.INPUT.shift) { this._emitter.cmdLayerAddComp.Execute(p_variant); }
+                
+            }
 
             if (!p_inGroup) { this._emitter.EndActionGroup(); }
-            
+
         }
 
         this._emitter._bindingManager.Unbind(p_variant);

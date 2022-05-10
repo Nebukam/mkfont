@@ -105,7 +105,7 @@ class GlyphListInspector extends base {
             defaultWidgetClass: nkm.uilib.buttons.Tool,
             handles: [
                 {
-                    icon: `reset`, htitle: `Reset existing glyphs & create missing ones.`,
+                    icon: `reset`, htitle: `Reset existing glyphs & create missing ones.\n+ [ Shift ] Also create components matching character decomposition.\n+ [ Alt ] Reset the glyphs path while preserving everything else.`,
                     variant: ui.FLAGS.MINIMAL,
                     trigger: { fn: () => { this.editor.cmdGlyphClear.Execute(this._data.stack._array); } },
                     group: `read`
