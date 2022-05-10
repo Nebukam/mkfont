@@ -24,8 +24,8 @@ tagline: Make more with less.
 description: >- # this means to ignore newlines until "baseurl:"
   Free (libre) app to make modular fonts with vector graphics. 
   Ultra-smooth workflow, with advanced & non-destructive features.
-baseurl: "" # the subpath of your site, e.g. /blog
-url: "https://nebukam.github.io/mkfont" # the base hostname & protocol for your site, e.g. http://example.com
+baseurl: "/mkfont" # the subpath of your site, e.g. /blog
+url: "https://nebukam.github.io" # the base hostname & protocol for your site, e.g. http://example.com
 twitter_username: nebukam
 github_username:  nebukam
 
