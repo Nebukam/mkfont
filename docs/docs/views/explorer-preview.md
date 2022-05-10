@@ -13,13 +13,13 @@ tagged: explorer
 nav_order: 4
 ---
 
-{% include header_card.html %}
+{% include header_card %}
 
 >The preview explorer is a small space where you can preview your font.  
 >It also pair as another way to select your glyphs, which is very handy when you want to do some contextual tweaks.
 {: .infos }
 
-{% include img_toc.html %}
+{% include img_toc %}
 
 ## Preview box
 This is not where you edit the text -- **it is however, where you can select glyphs to edit by simply highlighting them as you would in any text editor :)**
@@ -37,17 +37,17 @@ There a few basic controls & modifier you can apply to the previewed blurb :
 
 | Option       | Comment          |
 |:-------------|:------------------|
-| {% include btn.html ico="text-direction-ltr" %} | Text direction is set to LTR (left-to-right) |
-| {% include btn.html ico="text-direction-rtl" %} | Text direction is set to RTL (right-to-left) |
+| {% include btn ico="text-direction-ltr" %} | Text direction is set to LTR (left-to-right) |
+| {% include btn ico="text-direction-rtl" %} | Text direction is set to RTL (right-to-left) |
 
 ### Text align
 
 | Option       | Comment          |
 |:-------------|:------------------|
-| {% include btn.html ico="text-align-left" %} | Align text to the left |
-| {% include btn.html ico="text-align-center" %} | Center text align |
-| {% include btn.html ico="text-align-right" %} | Align text to the right |
-| {% include btn.html ico="text-align-justify" %} | Justifies text |
+| {% include btn ico="text-align-left" %} | Align text to the left |
+| {% include btn ico="text-align-center" %} | Center text align |
+| {% include btn ico="text-align-right" %} | Align text to the right |
+| {% include btn ico="text-align-justify" %} | Justifies text |
 
 ### Text transformation (case)
 
@@ -55,10 +55,10 @@ There a few basic controls & modifier you can apply to the previewed blurb :
 
 | Option       | Comment          |
 |:-------------|:------------------|
-| {% include btn.html ico="case-sentence" %} | No transformation is applied : text is shown as it is in the textarea below. `Like that`. |
-| {% include btn.html ico="case-uppercase" %} | All text is transformed to uppercase. `LIKE THAT`. |
-| {% include btn.html ico="case-lowercase" %} | All text is transformed to lowercase. `like that`. |
-| {% include btn.html ico="case-capitalize" %} | Capitalize the first letter of every word. `Why Would You Want That?` |
+| {% include btn ico="case-sentence" %} | No transformation is applied : text is shown as it is in the textarea below. `Like that`. |
+| {% include btn ico="case-uppercase" %} | All text is transformed to uppercase. `LIKE THAT`. |
+| {% include btn ico="case-lowercase" %} | All text is transformed to lowercase. `like that`. |
+| {% include btn ico="case-capitalize" %} | Capitalize the first letter of every word. `Why Would You Want That?` |
 
 ### Metrics
 
@@ -72,7 +72,7 @@ This is where you type whatever text you want to preview.
 
 ### Refresh preview
 
->If your font has more glyph than the threshold set in the [App Settings](/docs/dialogs/app-settings), you will need to click that button in order to recompute the preview.
+>If your font has more glyph than the threshold set in the [App Settings]({{ '/docs/dialogs/app-settings' | relative_url }}), you will need to click that button in order to recompute the preview.
 {: .warning}
 
 Or simply if you doubt the preview has updated automatically.

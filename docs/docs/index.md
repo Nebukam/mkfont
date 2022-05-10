@@ -9,6 +9,6 @@ nav_order: 3
 has_children: true
 ---
 
-{% include header_card.html %}
+{% include header_card %}
 
-{% include card_childs.html wrappercss="duo" %}
+{% include card_childs wrappercss="duo" %}

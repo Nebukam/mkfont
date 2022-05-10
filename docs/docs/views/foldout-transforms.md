@@ -13,12 +13,12 @@ tagged: foldout
 nav_order: 7
 ---
 
-{% include header_card.html %}
+{% include header_card %}
 
 >This inspector can be seen in a multiple places across the app, and always behave the same way.
 {: .comment}
 
-{% include img_toc.html %}
+{% include img_toc %}
 
 Generally speaking, transformation are applied in the same order they are displayed : selected options will affect any other setting below it.  
 
@@ -31,9 +31,9 @@ Which boundaries to use to compute glyph transformations & anchoring.
 
 | Selection       | Effect          |
 |:-------------|:------------------|
-| {% include btn.html ico="bounds-outside" %} | Use the imported bounds (either svg viewBox, or marked path) |
-| {% include btn.html ico="bounds-mixed" %} | Uses mixed bounds : height from the imported bounds, width from the glyph. |
-| {% include btn.html ico="bounds-inside" %} | Ignore imported bounds & uses the glyph tight bounding box. |
+| {% include btn ico="bounds-outside" %} | Use the imported bounds (either svg viewBox, or marked path) |
+| {% include btn ico="bounds-mixed" %} | Uses mixed bounds : height from the imported bounds, width from the glyph. |
+| {% include btn ico="bounds-inside" %} | Ignore imported bounds & uses the glyph tight bounding box. |
 
 >Check out [Assets Preparation](/guides/assets-prep#glyph-boundaries) to get a better understanding of what is considered 'boundaries'.
 {: .comment}
@@ -47,16 +47,16 @@ Scaling determines how the glyph is fitted within the typographic space.
 | Selection       | Effect          |
 |:-------------|:------------------|
 |: **Driven by the [Family Metrics](dialogs/family-metrics)** :||
-| {% include btn.html ico="font-ascender" %} | Use distance between baseline and ascender. |
-| {% include btn.html ico="font-bounds-h" %} | Use distance between ascender and descender. |
-| {% include btn.html ico="font-x-height" %} | Use the X height |
-| {% include btn.html ico="font-cap-height" %} | Use the Cap height |
-| {% include btn.html ico="spread-ver" %} | Use the family's **Height** value |
-| {% include btn.html ico="text-em" %} | Use the family's **EM** value |
+| {% include btn ico="font-ascender" %} | Use distance between baseline and ascender. |
+| {% include btn ico="font-bounds-h" %} | Use distance between ascender and descender. |
+| {% include btn ico="font-x-height" %} | Use the X height |
+| {% include btn ico="font-cap-height" %} | Use the Cap height |
+| {% include btn ico="spread-ver" %} | Use the family's **Height** value |
+| {% include btn ico="text-em" %} | Use the family's **EM** value |
 |: **Custom scaling** :||
-| {% include btn.html ico="edit" %} | User-defined scale factor |
-| {% include btn.html ico="scale" %} | Normalize the glyph's scale. The normalization space is determined by the glyph width & height, either custom or driven by Family Metrics. |
-| {% include btn.html ico="close-small" %} | No scaling will be applied. *(rarely useful)* |
+| {% include btn ico="edit" %} | User-defined scale factor |
+| {% include btn ico="scale" %} | Normalize the glyph's scale. The normalization space is determined by the glyph width & height, either custom or driven by Family Metrics. |
+| {% include btn ico="close-small" %} | No scaling will be applied. *(rarely useful)* |
 
 ---
 
@@ -66,7 +66,7 @@ Scaling determines how the glyph is fitted within the typographic space.
 
 Anchoring defines the origin point of the imported graphics within the chosen boudaries.
 
-{% include btn.html ico="placement-top-left" %} {% include btn.html ico="placement-top" %} {% include btn.html ico="placement-top-right" %} {% include btn.html ico="placement-left" %} {% include btn.html ico="placement-center" %} {% include btn.html ico="placement-right" %} {% include btn.html ico="placement-bottom-left" %} {% include btn.html ico="placement-bottom" %} {% include btn.html ico="placement-bottom-right" %}
+{% include btn ico="placement-top-left" %} {% include btn ico="placement-top" %} {% include btn ico="placement-top-right" %} {% include btn ico="placement-left" %} {% include btn ico="placement-center" %} {% include btn ico="placement-right" %} {% include btn ico="placement-bottom-left" %} {% include btn ico="placement-bottom" %} {% include btn ico="placement-bottom-right" %}
 
 ![Bounds anchor](/assets/images/dialogs/bounds-anchors.png)
 
@@ -81,29 +81,29 @@ Horizontal one is based on either input values or [Family Metrics](dialogs/famil
 | Selection       | Effect          |
 |:-------------|:------------------|
 |: **Vertical**   :||
-| {% include btn.html ico="font-ascender" %} | Align with top (*ascender*) |
-| {% include btn.html ico="font-baseline" %} | Align with baseline |
-| {% include btn.html ico="font-descender" %} | Align with descender |
-| {% include btn.html ico="center-ver" %} | Align with center of the vertical spread (*EM*) |
-| {% include btn.html ico="text-em" %} | Align with bottom (*EM*) |
+| {% include btn ico="font-ascender" %} | Align with top (*ascender*) |
+| {% include btn ico="font-baseline" %} | Align with baseline |
+| {% include btn ico="font-descender" %} | Align with descender |
+| {% include btn ico="center-ver" %} | Align with center of the vertical spread (*EM*) |
+| {% include btn ico="text-em" %} | Align with bottom (*EM*) |
 |: **Horizontal**   :||
-| {% include btn.html ico="font-bounds-xmin" %} | Zero. The origin of the typographic space. |
-| {% include btn.html ico="font-bounds-xmax" %} | Align with the width of the glyph as defined by the user or Family Metrics. |
-| {% include btn.html ico="center-hor" %} | Align with the center of the glyph width. |
+| {% include btn ico="font-bounds-xmin" %} | Zero. The origin of the typographic space. |
+| {% include btn ico="font-bounds-xmax" %} | Align with the width of the glyph as defined by the user or Family Metrics. |
+| {% include btn ico="center-hor" %} | Align with the center of the glyph width. |
 
 >Note that depending on which alignment you choose, you may need to turn off the auto-width property & manully set the glyph's width to have better control over the horizontal alignment.
 {: .warning}
 
 ---
 
-**Most of the properties are preceeded with an {% include btn.html ico="remove" %} button.**  
-**This button clears the 'local' value (the one stored within the glyph), and it instead becomes bound to the value set in the [Family Metrics](/docs/dialogs/family-metrics)** for that specific property.The field becomes greyed out and displays the value currently in use.  
+**Most of the properties are preceeded with an {% include btn ico="remove" %} button.**  
+**This button clears the 'local' value (the one stored within the glyph), and it instead becomes bound to the value set in the [Family Metrics]({{ '/docs/dialogs/family-metrics' | relative_url }})** for that specific property.The field becomes greyed out and displays the value currently in use.  
 
 ## Translation
 
 Translations are numerical value that affect the final glyph in many ways.
 
->Using [Family Metrics](/docs/dialogs/family-metrics) to control glyph is super powerful, but can sometimes lead to unexpected results : updating family metrics will update all glyphs that are using them.
+>Using [Family Metrics]({{ '/docs/dialogs/family-metrics' | relative_url }}) to control glyph is super powerful, but can sometimes lead to unexpected results : updating family metrics will update all glyphs that are using them.
 {: .warning}
 
 ![Boundaries-offsets](/assets/images/dialogs/bounds-offsets.png)
@@ -123,7 +123,7 @@ Offsets offer control over the width of the glyph and its vertical positioning w
 
 ## Advanced
 
-Advanced transforms are applied before any other transform and will affect the glyph local boundaries. *Unless you're using the boundaries imported with the file ({% include btn.html ico="bounds-outside" %}), expect to do a bit of back'n forth between parameters.*
+Advanced transforms are applied before any other transform and will affect the glyph local boundaries. *Unless you're using the boundaries imported with the file ({% include btn ico="bounds-outside" %}), expect to do a bit of back'n forth between parameters.*
 
 ![Boundaries-offsets](/assets/images/dialogs/glyph-tr-advanced.png)
 
@@ -131,10 +131,10 @@ Advanced transforms are applied before any other transform and will affect the g
 
 | Property       | Effect          |
 |:-------------|:------------------|
-| {% include btn.html ico="mirror-hor" %} | Flips the glyph horizontally |
-| {% include btn.html ico="mirror-ver" %}  | Flips the glyph vertically |
-| {% include btn.html ico="mirror-both" %}  | Flips the glyph both horizontally & vertically. *Same as doing a 180deg rotation* |
-| {% include btn.html ico="close-small" %} | No scaling will be applied. *(rarely useful)* |
+| {% include btn ico="mirror-hor" %} | Flips the glyph horizontally |
+| {% include btn ico="mirror-ver" %}  | Flips the glyph vertically |
+| {% include btn ico="mirror-both" %}  | Flips the glyph both horizontally & vertically. *Same as doing a 180deg rotation* |
+| {% include btn ico="close-small" %} | No scaling will be applied. *(rarely useful)* |
 
 ### Rotation & Skew
 
@@ -146,7 +146,7 @@ Shorthand in the drop-down menu are :
 - X = Skew on X axis
 - Y = Skew on Y axis
 
-You may also control which anchor point within the glyph will be used to apply the rotation. Effects might not be much visible depending on which parameters are set before -- specifically when using the glyph drawing bounds ({% include btn.html ico="bounds-inside" %}), which anchor is selected makes no visual difference.
+You may also control which anchor point within the glyph will be used to apply the rotation. Effects might not be much visible depending on which parameters are set before -- specifically when using the glyph drawing bounds ({% include btn ico="bounds-inside" %}), which anchor is selected makes no visual difference.
 
 ---
 
@@ -158,7 +158,7 @@ Last but not least, raw font metrics.
 
 | Property       | Effect          |
 |:-------------|:------------------|
-| Width | Manually sets the width of the glyph. *Width represent how much the glyph advances the renderer horizontally.*<br>Note that most of the time you will want to leave this value alone and use Automatic Width. If working with `monospace` fonts, there is a toggle that override everything at the output level within the [Family Metrics](/docs/dialogs/family-metrics). |
+| Width | Manually sets the width of the glyph. *Width represent how much the glyph advances the renderer horizontally.*<br>Note that most of the time you will want to leave this value alone and use Automatic Width. If working with `monospace` fonts, there is a toggle that override everything at the output level within the [Family Metrics]({{ '/docs/dialogs/family-metrics' | relative_url }}). |
 | Height | Manually sets the height of the glyph -- *it's very likely you won't care about this one, since the actual height within the font is controlled by the EM value. It becomes useful when the glyph is used solely as a component.* |
 
 ### Export

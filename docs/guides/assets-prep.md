@@ -10,7 +10,7 @@ nav_order: 1
 color: red
 ---
 
-{% include header_card.html %}
+{% include header_card %}
 
 #### Checklist
 {: .no_toc }
@@ -26,14 +26,14 @@ color: red
 
 # Glyph Boundaries
 
-One of the pillar of MkFont when it comes to [Glyph Transformations](/docs/views/foldout-transforms) is its reliance on user-defined glyph boundaries prior to their use inside MkFont.  
+One of the pillar of MkFont when it comes to [Glyph Transformations]({{ '/docs/views/foldout-transforms' | relative_url }}) is its reliance on user-defined glyph boundaries prior to their use inside MkFont.  
 Basically you operate transformations based on something that doesn't have to be the glyph shape.  
 There are only two ways I can know about the relation of your path to the typographic space :
 1. The SVG `viewBox`
 2. A custom path that will be used as a reference
 
 Now you don't need to bother too much about the technicalities : the viewBox is usually automatically set by your editing software on import. i.e, in the case of Adobe Illustrator, artboards are the `viewBox`.  
-The one case where there isn't a `viewBox` is when you {% include shortcut.html keys="Ctrl C" %} in illustrator, and {% include shortcut.html keys="Ctrl V" %} in MkFont : the vector information is added to the clipboard without any `viewBox` : instead, it fits tight with your selection within Illustrator. While not a deal breaker, this will limit your ability to really take advantage of MkFont.
+The one case where there isn't a `viewBox` is when you {% include shortcut keys="Ctrl C" %} in illustrator, and {% include shortcut keys="Ctrl V" %} in MkFont : the vector information is added to the clipboard without any `viewBox` : instead, it fits tight with your selection within Illustrator. While not a deal breaker, this will limit your ability to really take advantage of MkFont.
 
 >**the bottom edge of the SVG viewBox (if it exists) represents the baseline of the (font) glyph, while the top edge is the height of the character within the font.**.  
 >This doesn't have to be true, but most of the scale & fit options rely on some consistent logic in the way you author your SVGs.
@@ -49,9 +49,9 @@ An image is worth a thousand words; here are the difference :
 
 | Boundary mode       | With viewBox          | Without viewBox |
 |:-------------|:------------------|:-----------|
-| {% include btn.html ico="bounds-outside" %} `imported bounds`| ![Viewport Header](/assets/images/dialogs/bound-imported.png) | ![Viewport Header](/assets/images/dialogs/pasted-glyph.png) |
-| {% include btn.html ico="bounds-mixed" %} `mixed bounds` |  ![Viewport Header](/assets/images/dialogs/bound-mixed.png) | ![Viewport Header](/assets/images/dialogs/pasted-mixed.png) |
-| {% include btn.html ico="bounds-inside" %} `glyph bound` |  ![Viewport Header](/assets/images/dialogs/bound-glyph.png) | ![Viewport Header](/assets/images/dialogs/pasted-tight.png) |
+| {% include btn ico="bounds-outside" %} `imported bounds`| ![Viewport Header](/assets/images/dialogs/bound-imported.png) | ![Viewport Header](/assets/images/dialogs/pasted-glyph.png) |
+| {% include btn ico="bounds-mixed" %} `mixed bounds` |  ![Viewport Header](/assets/images/dialogs/bound-mixed.png) | ![Viewport Header](/assets/images/dialogs/pasted-mixed.png) |
+| {% include btn ico="bounds-inside" %} `glyph bound` |  ![Viewport Header](/assets/images/dialogs/bound-glyph.png) | ![Viewport Header](/assets/images/dialogs/pasted-tight.png) |
 
 >You can technically achieve the same results with a combination of `Shift`, `Push`, `Vertical Offset` & `Scale` -- but it becomes super clunky.
 {: .comment}
@@ -99,5 +99,5 @@ Bottom line :
 
 # Naming conventions
 
-If you intend to make good use of the [Batch import](/docs/dialogs/list-import) feature, do check out how the [automation using filename](/docs/dialogs/list-import#from-filename) works.  
-And if you don't want to bother too much with that and don't have everything setup for your assets, you can take great advantage of the [Illustrator Artboard creation](/docs/views/viewport-unicode#actions) action.
+If you intend to make good use of the [Batch import]({{ '/docs/dialogs/list-import' | relative_url }}) feature, do check out how the [automation using filename]({{ '/docs/dialogs/list-import#from-filename' | relative_url }}) works.  
+And if you don't want to bother too much with that and don't have everything setup for your assets, you can take great advantage of the [Illustrator Artboard creation]({{ '/docs/views/viewport-unicode#actions' | relative_url }}) action.

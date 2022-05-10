@@ -11,12 +11,12 @@ toc_img: dialogs/family-metrics.png
 #nav_order: 4
 ---
 
-{% include header_card.html %}
+{% include header_card %}
 
 >This is a key dialog in the app, it controls critical values that affect **every single glyph** within the font, and act as fallback values for glyphs transformations values that are left empty.
 {: .warning }
 
-{% include img_toc.html %}
+{% include img_toc %}
 
 ## Resolution
 
@@ -51,13 +51,13 @@ EM Size is ultimately responsible for how much precision you can squeeze out of 
 
 </details>
 
->Note that the viewport won't show the distortion, only the exported font will, as well as the [Preview Explorer](/docs/views/explorer-preview).
+>Note that the viewport won't show the distortion, only the exported font will, as well as the [Preview Explorer]({{ '/docs/views/explorer-preview' | relative_url }}).
 {: .warning }
 
 
 ## Metrics
 
-The **Metrics**, as well as **Control Metrics** are the values that drive every single [Glyphs Transformations](/docs/views/foldout-transforms).  
+The **Metrics**, as well as **Control Metrics** are the values that drive every single [Glyphs Transformations]({{ '/docs/views/foldout-transforms' | relative_url }}).  
 They also act as fallback values for matching glyph parameters, such as `Height`, `Width`, `Shift`, `Push`, & `Vertical Offset`.
 
 | Property       | Comment          |
@@ -73,11 +73,11 @@ They also act as fallback values for matching glyph parameters, such as `Height`
 |:-------------|:------------------|
 | X height |![EM Size <](/assets/images/dialogs/metrics-x.png) The X height is an abstract horizontal axis, offset upward from the baseline.<br>It controls the size of the glyphs which scaling mode is set to `x-height` |
 | CAP height |![EM Size <](/assets/images/dialogs/metrics-cap.png) The CAP height is an abstract horizontal axis, offset upward from the baseline.<br>It controls the size of the glyphs which scaling mode is set to `cap-height` |
-| Height | Default glyph height. This is only useful for specific [scaling modes](/docs/views/foldout-transforms#scaling), and does not represent the height of your font. That would be the EM Size. |
-| Width | Default glyph width. This is used by various [Glyphs Transformations](/docs/views/foldout-transforms), acts as a default value when a glyph's `width` is empty. |
+| Height | Default glyph height. This is only useful for specific [scaling modes]({{ '/docs/views/foldout-transforms#scaling' | relative_url }}), and does not represent the height of your font. That would be the EM Size. |
+| Width | Default glyph width. This is used by various [Glyphs Transformations]({{ '/docs/views/foldout-transforms' | relative_url }}), acts as a default value when a glyph's `width` is empty. |
 | Monospace | When set to true, the width of *every single glyph* within your font will have the width set in the Control Metrics. |
 
 ## Default Transformations
 >These define the base & default values used by any glyph that doesn't have a value set for these properties.  
->For more details, check out the [**Glyph transformation**](/docs/views/foldout-transforms#advanced) doc.
+>For more details, check out the [**Glyph transformation**]({{ '/docs/views/foldout-transforms#advanced' | relative_url }}) doc.
 {: .error}

@@ -10,7 +10,7 @@ color: white
 nav_order: 3
 ---
 
-{% include header_card.html %}
+{% include header_card %}
 
 > **While not required**, this guide assume that you have made yourself familiar with the [Assets Preparation](/guides/assets-prep).
 {: .error}

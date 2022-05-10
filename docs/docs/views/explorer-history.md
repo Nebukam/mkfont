@@ -12,7 +12,7 @@ tagged: explorer
 nav_order: 5
 ---
 
-{% include header_card.html %}
+{% include header_card %}
 
 >The history explorer is where you can see all the commands that have been executed within the editor since the beginning of the session.  
 {: .infos }
@@ -20,7 +20,7 @@ nav_order: 5
 ## Fast back'n forth
 
 You can click any action to go back to that point in time.  
-You can also use {% include shortcut.html keys="Ctrl Z" %} / {% include shortcut.html keys="Ctrl Y" %} to Undo/Redo actions in order.  
+You can also use {% include shortcut keys="Ctrl Z" %} / {% include shortcut keys="Ctrl Y" %} to Undo/Redo actions in order.  
 
 ![Preview Explorer Select](/assets/images/views/action-stack-rewind.png)
 

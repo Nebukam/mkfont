@@ -13,14 +13,14 @@
 {% else %}
     {% assign lurl = baseurl: | append: childPage.url %}
 {% endif %}
-<div class="card large gradient"><div class="preview" style="--img:url('/assets/images/{{ childPage.preview_img }}'); --ico:url('/assets/{{ childPage.splash }}');"></div><div class="infos {{ childPage.color | default:'blue' }}" markdown="1">
+<div class="card large gradient"><div class="preview" style="--img:url('{{ baseurl }}/assets/images/{{ childPage.preview_img }}'); --ico:url('{{ baseurl }}/assets/{{ childPage.splash }}');"></div><div class="infos {{ childPage.color | default:'blue' }}" markdown="1">
 
 ## [{{ childPage.title }}]({{ lurl }})
 {{ childPage.subtitle }}
 {: .fs-5 .fw-300 }
 {{ childPage.summary }}
 
-<a href="{{ lurl }}" class="link-more {{ childPage.color | default:'blue' }}"><img class="icon" src="/assets/{{ childPage.splash | default:'icons/icon_plus.svg'}}"></a>
+<a href="{{ lurl }}" class="link-more {{ childPage.color | default:'blue' }}"><img class="icon" src="{{ baseurl }}/assets/{{ childPage.splash | default:'icons/icon_plus.svg'}}"></a>
 </div></div>
 {% endunless %}
 {% endfor %}

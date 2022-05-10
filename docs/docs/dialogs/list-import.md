@@ -11,19 +11,19 @@ toc_img: dialogs/list-import-a.png
 #nav_order: 4
 ---
 
-{% include header_card.html %}
+{% include header_card %}
 
 >This is the dialog for importing a list of SVG files and assigning them to specific glyph slots.
 
-{% include img_toc.html %}
+{% include img_toc %}
 
 ## Glyph Transformation
 
->**Important note** : when batch-importing, the [Glyph Transformations](/docs/views/foldout-transforms) are on a **one-for-all** basis.  
+>**Important note** : when batch-importing, the [Glyph Transformations]({{ '/docs/views/foldout-transforms' | relative_url }}) are on a **one-for-all** basis.  
 >*Per-glyph tweaks can be done after import.*
 {: .warning}
 
-It is also important to highlight that the preview on the right show what the glyph will look like *after* being imported; hence it's very easy to check whether or not you want to keep or overwrite existing transforms. See [Glyph Transformations](/docs/glyphs-transforms) for a detailed overview of the transformation options.
+It is also important to highlight that the preview on the right show what the glyph will look like *after* being imported; hence it's very easy to check whether or not you want to keep or overwrite existing transforms. See [Glyph Transformations]({{ '/docs/glyphs-transforms' | relative_url }}) for a detailed overview of the transformation options.
 
 
 ## Overlap 
@@ -95,7 +95,7 @@ Separator : `_`
 ...And so on.
 *Everything before `char` will be ignored, and everything after is extracted at each '_'*  
 
->The `U+0000` can be added to your clipboard from multiple places in the app. Look for {% include btn.html ico="text-unicode" %}.
+>The `U+0000` can be added to your clipboard from multiple places in the app. Look for {% include btn ico="text-unicode" %}.
 {: .infos}
 
 </details>

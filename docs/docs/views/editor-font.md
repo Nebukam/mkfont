@@ -12,12 +12,12 @@ tagged: editor
 nav_order: 1
 ---
 
-{% include header_card.html %}
+{% include header_card %}
 
 >This is an overview of the Font Editor.
 {: .comment}
 
-{% include img_toc.html %}
+{% include img_toc %}
 
 ## Breakdown
 
@@ -27,13 +27,13 @@ The Font Editor is broken down into three main areas, covered in length in their
 
 ### Editor explorers
 <br>
-{% include card_any.html tagged="explorer" %}
+{% include card_any tagged="explorer" %}
 
 ### Viewport & glyph editor
 <br>
 <div class="card-ctnr" markdown="1">
-{% include card_single.html reference="Font viewport" %}
-{% include card_single.html reference="Glyph inspector" %}
+{% include card_single reference="Font viewport" %}
+{% include card_single reference="Glyph inspector" %}
 </div>
 
 #### Explorers
@@ -42,9 +42,9 @@ Allows you to naviguate between different explorers, each of which has its dedic
 
 | Explorer       | Purpose          |
 |:-------------|:------------------|
-| {% include btn.html ico="text-style" %} [Content Explorer](explorer-content) | Browse through your font glyphs, Unicode blocks and categories. |
-| {% include btn.html ico="text" %} [Preview Explorer](explorer-preview) | A minimalistic preview tool to preview your font. |
-| {% include btn.html ico="refresh" %} [History Explorer](explorer-history) | Everything you did since you opened the editor. It's a memory-hungry time machine. Flush it out from time to time. |
+| {% include btn ico="text-style" %} [Content Explorer](explorer-content) | Browse through your font glyphs, Unicode blocks and categories. |
+| {% include btn ico="text" %} [Preview Explorer](explorer-preview) | A minimalistic preview tool to preview your font. |
+| {% include btn ico="refresh" %} [History Explorer](explorer-history) | Everything you did since you opened the editor. It's a memory-hungry time machine. Flush it out from time to time. |
 
 ## Header actions
 
@@ -53,33 +53,33 @@ Allows you to naviguate between different explorers, each of which has its dedic
 | Button       | Action          |
 |:-------------|:------------------|
 |: **Navigation** :||
-| {% include btn.html ico="right" %} | Navigate to the previous editor state |
-| {% include btn.html ico="left" %} | Navigate to the next editor state |
+| {% include btn ico="right" %} | Navigate to the previous editor state |
+| {% include btn ico="left" %} | Navigate to the next editor state |
 |: **Writing files** :||
-| {% include btn.html ico="save-small" label="Save" %} | Save the current file. If it does not exist on disk already, will prompt for a location & filename. Can be activated using {% include shortcut.html keys="Ctrl S" %}. |
-| {% include btn.html ico="upload" label="Export" %} | Export the current font as a .ttf file. You will be prompted for a location & filename each time. |
+| {% include btn ico="save-small" label="Save" %} | Save the current file. If it does not exist on disk already, will prompt for a location & filename. Can be activated using {% include shortcut keys="Ctrl S" %}. |
+| {% include btn ico="upload" label="Export" %} | Export the current font as a .ttf file. You will be prompted for a location & filename each time. |
 |: **Family settings** :||
-| {% include btn.html ico="font" label="Infos" %} | Brings up the [Family Infos](/docs/dialogs/family-infos) inspector. |
-| {% include btn.html ico="layout" label="Metrics" %} | Brings up the [Family Metrics](../dialogs/family-metrics) inspector. |
+| {% include btn ico="font" label="Infos" %} | Brings up the [Family Infos]({{ '/docs/dialogs/family-infos' | relative_url }}) inspector. |
+| {% include btn ico="layout" label="Metrics" %} | Brings up the [Family Metrics](../dialogs/family-metrics' | relative_url }}) inspector. |
 |: **Importing content** :||
-| {% include btn.html ico="text-liga" label="Ligatures" %} | Brings up the [Ligature Finder](/docs/dialogs/ligatures-finder) dialog. |
-| {% include btn.html ico="directory-download-small" label="SVGs" %} | Brings up the [List Import](/docs/dialogs/list-import) dialog. |
-| {% include btn.html ico="directory-download-small" label="TTF" %} | You will be prompted to select a .ttf file, and its glyphs will be imported (and resampled to match the current Family Metrics) |
+| {% include btn ico="text-liga" label="Ligatures" %} | Brings up the [Ligature Finder]({{ '/docs/dialogs/ligatures-finder' | relative_url }}) dialog. |
+| {% include btn ico="directory-download-small" label="SVGs" %} | Brings up the [List Import]({{ '/docs/dialogs/list-import' | relative_url }}) dialog. |
+| {% include btn ico="directory-download-small" label="TTF" %} | You will be prompted to select a .ttf file, and its glyphs will be imported (and resampled to match the current Family Metrics) |
 
 ## Shortcuts
 
 | Shortcut       | Action          |
 |:-------------|:------------------|
 |: **Actions** :||
-| {% include shortcut.html keys="Ctrl S" %}           | Saves the currently edited mkfont file. Prompts a dialog if the file has never been saved before. |
-| {% include shortcut.html keys="Ctrl Z" %}           | Undo last action |
-| {% include shortcut.html keys="Ctrl Y" %}           | Redo last action |
+| {% include shortcut keys="Ctrl S" %}           | Saves the currently edited mkfont file. Prompts a dialog if the file has never been saved before. |
+| {% include shortcut keys="Ctrl Z" %}           | Undo last action |
+| {% include shortcut keys="Ctrl Y" %}           | Redo last action |
 |: **Navigation** :||
-| {% include shortcut.html keys="Mouse3" %}           | Previous nav state *(should be the same as in a regular browser)* |
-| {% include shortcut.html keys="Mouse4" %}           | Next nav state *(should be the same as in a regular browser)* |
+| {% include shortcut keys="Mouse3" %}           | Previous nav state *(should be the same as in a regular browser)* |
+| {% include shortcut keys="Mouse4" %}           | Next nav state *(should be the same as in a regular browser)* |
 |: **Selection** :||
-| {% include shortcut.html keys="Ctrl A" %}           | Selects all glyphs currently displayed in the viewport. |
-| {% include shortcut.html keys="ESC" %}           | Clears the current selection |
-| {% include shortcut.html keys="Ctrl 0··9" %}           | Store the current selection as a shortcut. |
-| {% include shortcut.html keys="0··9" %}           | Restore the selection previously stored |
-| {% include shortcut.html keys="Shift 0··9" %}           | Appends the selection previously stored to the current selection |
+| {% include shortcut keys="Ctrl A" %}           | Selects all glyphs currently displayed in the viewport. |
+| {% include shortcut keys="ESC" %}           | Clears the current selection |
+| {% include shortcut keys="Ctrl 0··9" %}           | Store the current selection as a shortcut. |
+| {% include shortcut keys="0··9" %}           | Restore the selection previously stored |
+| {% include shortcut keys="Shift 0··9" %}           | Appends the selection previously stored to the current selection |

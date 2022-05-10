@@ -10,4 +10,4 @@ nav_order: 2
 #nav_exclude: true
 ---
 
-{% include header_card.html %}
+{% include header_card %}

@@ -10,12 +10,12 @@ preview_img: placeholder.jpg
 has_children: true
 ---
 
-{% include header_card.html %}
+{% include header_card %}
   
 ## Windows  
    
-{% include link_btn.html title="MkFont 0.5.4 ➜ x64 installer (.exe)" color="red" link="downloads" icon="load-arrow" %}
-{% include link_btn.html title="MkFont 0.5.4 ➜ Unpackaged (.zip" color="lowkey" link="downloads" icon="load-arrow" %}
+{% include link_btn title="MkFont 0.5.4 ➜ x64 installer (.exe)" color="red" link="downloads" icon="load-arrow" %}
+{% include link_btn title="MkFont 0.5.4 ➜ Unpackaged (.zip" color="lowkey" link="downloads" icon="load-arrow" %}
 
 ---
 

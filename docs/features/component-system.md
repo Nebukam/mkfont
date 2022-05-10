@@ -10,6 +10,6 @@ card_url: /docs/views/foldout-components
 nav_order: 0
 ---
 
-{% include header_card.html %}
+{% include header_card %}
 
 ---

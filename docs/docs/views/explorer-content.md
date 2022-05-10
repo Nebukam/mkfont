@@ -12,14 +12,14 @@ tagged: explorer
 nav_order: 3
 ---
 
-{% include header_card.html %}
+{% include header_card %}
 
 >This is an overview of the Content Explorer. Selecting items in here will change the contents of the [Font Viewport](viewport-unicode).  
 >It allows you to quickly find your way through the ton of existing Unicode slots & code points, and easily select which you want to include in your font.
 >*Any active selection will be reset*
 {: .comment}
 
-{% include img_toc.html %}
+{% include img_toc %}
 
 The Content explorer is split in three main folders :
 1. Quick access
@@ -33,9 +33,9 @@ The Content explorer is split in three main folders :
 
 | Range       | Content          |
 |:-------------|:------------------|
-| {% include btn.html ico="text-style" label="My Glyphs" %} | Shows all the glyphs that currently exists within your font, no matter their state. |
-| {% include btn.html ico="text-liga" label="Ligatures" %} | Shows all the ligatures that currently exists within your font, no matter their state. |
-| {% include btn.html ico="text" label="All Unicodes" %} | Shows all 'known' Unicode points.<br>'Known' meaning 'explicitely documented' : they have an identity, name, etc.<br>*Note that some documented ranges have undocumented slots* |
+| {% include btn ico="text-style" label="My Glyphs" %} | Shows all the glyphs that currently exists within your font, no matter their state. |
+| {% include btn ico="text-liga" label="Ligatures" %} | Shows all the ligatures that currently exists within your font, no matter their state. |
+| {% include btn ico="text" label="All Unicodes" %} | Shows all 'known' Unicode points.<br>'Known' meaning 'explicitely documented' : they have an identity, name, etc.<br>*Note that some documented ranges have undocumented slots* |
 
 ## Categories
 Categories is where glyphs are ordered by **semantic**.  

@@ -5,7 +5,7 @@
 {% else %}
     {% assign lurl = baseurl: | append: somePage.url %}
 {% endif %}
-<div class="card large gradient"><div class="preview" style="--img:url('/assets/images/{{ somePage.preview_img }}'); --ico:url('/assets/{{ somePage.splash }}');"></div><div class="infos {{ childPage.color | default:'blue' }}" markdown="1">
+<div class="card large gradient"><div class="preview" style="--img:url('{{ baseurl }}/assets/images/{{ somePage.preview_img }}'); --ico:url('{{ baseurl }}/assets/{{ somePage.splash }}');"></div><div class="infos {{ childPage.color | default:'blue' }}" markdown="1">
 
 ## [{{ somePage.title }}]({{ lurl }})
 {{ somePage.subtitle }}

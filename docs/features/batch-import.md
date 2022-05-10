@@ -10,6 +10,6 @@ card_url: /docs/dialogs/list-import
 nav_order: 6
 ---
 
-{% include header_card.html %}
+{% include header_card %}
 
 ---

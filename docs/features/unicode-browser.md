@@ -10,6 +10,6 @@ card_url: /docs/views/viewport-unicode
 nav_order: 1
 ---
 
-{% include header_card.html %}
+{% include header_card %}
 
 ---

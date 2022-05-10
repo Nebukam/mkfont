@@ -11,6 +11,6 @@ nav_exclude: true
 nav_order: 8
 ---
 
-{% include header_card.html %}
+{% include header_card %}
 
 ---

@@ -11,11 +11,11 @@ toc_img: dialogs/ligatures-text.png
 #nav_order: 4
 ---
 
-{% include header_card.html %}
+{% include header_card %}
 
 >The ligature finder has two main input modes : text analysis, and manual input. You can switch between the two simply by toggling the `Each line is a ligature` `on` or `off`.
 
-{% include img_toc.html %}
+{% include img_toc %}
 
 ## Text analysis
 Ok, analysis is a big word, there's no real analysis going on here, just brute force statistical extraction.  
@@ -41,4 +41,4 @@ The results can be narrowed down & limited by a few parameters :
 In this mode, simply input the target ligature on each line to manually produce results.  
 Other parameters will be ignored.  
 
-*Use {% include shortcut.html keys="Shift Enter" %} to do a line break*
+*Use {% include shortcut keys="Shift Enter" %} to do a line break*

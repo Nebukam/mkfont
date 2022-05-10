@@ -7,7 +7,7 @@ has_children: true
 nav_exclude: true
 ---
 
-{% include header_card.html %}
+{% include header_card %}
 
 ### Disclaimer
 MkFont is under **active development**, as such you may encounter issues. In the unlikely event that you would, please [report an issue](https://github.com/Nebukam/mkfont/issues) on github!  
@@ -15,7 +15,7 @@ Same place if you would like to suggest enhancements & features that would make 
 
 ---
 
-{% include card_childs.html %}
+{% include card_childs %}
 
 ## And more!
 

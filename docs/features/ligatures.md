@@ -10,6 +10,6 @@ card_url: /docs/dialogs/ligatures-finder
 nav_order: 5
 ---
 
-{% include header_card.html %}
+{% include header_card %}
 
 ---

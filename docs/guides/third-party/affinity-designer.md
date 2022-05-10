@@ -10,7 +10,7 @@ preview_img: placeholder.jpg
 #nav_order: 4
 ---
 
-{% include header_card.html %}
+{% include header_card %}
 
 ># **TBD**
 >At the moment, Affinity Designer doesn't have an API to automate artboard creation.  

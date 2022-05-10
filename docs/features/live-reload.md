@@ -10,6 +10,6 @@ card_url: none
 nav_order: 2
 ---
 
-{% include header_card.html %}
+{% include header_card %}
 
 ---

@@ -11,14 +11,14 @@ toc_img: dialogs/family-infos.png
 #nav_order: 4
 ---
 
-{% include header_card.html %}
+{% include header_card %}
 
 ![List import modes](/assets/images/dialogs/family-infos.png)
 
 There's not much to expand on here -- Family infos are metadata that will be embedded into the exported `.ttf` file.
 
 >The final family name is a concatenation of the `Family Name` and the `Sub Family`.  
->It is shown at all times on the top right corner of the [Font Editor](/docs/views/editor-font).
+>It is shown at all times on the top right corner of the [Font Editor]({{ '/docs/views/editor-font' | relative_url }}).
 {: .infos }
 
 | State       | Meaning          |

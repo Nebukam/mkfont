@@ -12,13 +12,13 @@ tagged: editor
 nav_order: 6
 ---
 
-{% include header_card.html %}
+{% include header_card %}
 
 > For the various foldouts in full details, see
-> - [Transformations](/docs/views/foldout-transforms)
+> - [Transformations]({{ '/docs/views/foldout-transforms' | relative_url }})
 {: .infos}
 
-{% include img_toc.html %}
+{% include img_toc %}
 
 ---
 
@@ -28,7 +28,7 @@ The glyph preview is non-interactive, and shows the all the metrics & guides tha
 
 ![Empty Glyph Inspector](/assets/images/views/glyph-inspector-previews.png)
 
->*The blue boundary box shows the glyph boundaries as currently seen by the transformation algorithm, according to the active transformation settings. If this is not what you were expecting, either play around with the [selected boundary options](/docs/views/foldout-transforms#boundaries), or check your source file.*
+>*The blue boundary box shows the glyph boundaries as currently seen by the transformation algorithm, according to the active transformation settings. If this is not what you were expecting, either play around with the [selected boundary options]({{ '/docs/views/foldout-transforms#boundaries' | relative_url }}), or check your source file.*
 {: .comment }
 
 ---
@@ -48,12 +48,12 @@ Actions are limited to the following when editing an empty slot :
 | Action       | Effect          |
 |:-------------|:------------------|
 |: **Glyph identity** :||
-| {% include shortcut.html keys="U+0000" %} | Copy the unicode address of the glyph to the clipboard. Ligatures will show as '_'-joint Unicode hex values. |
+| {% include shortcut keys="U+0000" %} | Copy the unicode address of the glyph to the clipboard. Ligatures will show as '_'-joint Unicode hex values. |
 |: **Glyph actions** :||
-| {% include btn.html ico="document-download" %} | Create new glyph by importing an SVG from an external file. *File will become bound for the session according to the app settings* |
-| {% include btn.html ico="clipboard-read" %} | Create new glyph by importing clipboard content. Same as using {% include shortcut.html keys="Ctrl V" %}. |
-| {% include btn.html ico="reset" %} | Create a new empty glyph. It becomes an customizable void. |
-| {% include shortcut.html keys="Shift" %} + {% include btn.html ico="reset" %}  | Create a new glyph along with components matching the glyph composition, if any. |
+| {% include btn ico="document-download" %} | Create new glyph by importing an SVG from an external file. *File will become bound for the session according to the app settings* |
+| {% include btn ico="clipboard-read" %} | Create new glyph by importing clipboard content. Same as using {% include shortcut keys="Ctrl V" %}. |
+| {% include btn ico="reset" %} | Create a new empty glyph. It becomes an customizable void. |
+| {% include shortcut keys="Shift" %} + {% include btn ico="reset" %}  | Create a new glyph along with components matching the glyph composition, if any. |
 
 ---
 
@@ -68,23 +68,23 @@ Action available in the inspector's header are the following
 | Action       | Effect          |
 |:-------------|:------------------|
 |: **Glyph identity** :||
-| {% include shortcut.html keys="U+0000" %} | Copy the unicode address of the glyph to the clipboard. Ligatures will show as '_'-joint Unicode hex values. |
+| {% include shortcut keys="U+0000" %} | Copy the unicode address of the glyph to the clipboard. Ligatures will show as '_'-joint Unicode hex values. |
 |: **Glyph actions** :||
-| {% include btn.html ico="document-download" %} | Import an SVG from an external file. *File will become bound for the session according to the app settings* |
-| {% include btn.html ico="clipboard-read" %} | Import clipboard content. Same as using {% include shortcut.html keys="Ctrl V" %}. |
-| {% include btn.html ico="reset" %} | Resets the glyph's contents to `empty`, but does not delete the glyph. It becomes an customizable void. |
-| {% include shortcut.html keys="Shift" %} + {% include btn.html ico="reset" %}  | Resets the glyph contents & create components matching the glyph composition, if any. |
-| {% include shortcut.html keys="Alt" %} + {% include btn.html ico="reset" %}  | Resets the glyph contents but keeps existing components. |
-| {% include btn.html ico="document-edit" %} | Edit in place : create a temp SVG file with the glyph's contents, and open the default SVG editor on your system. Saving the SVG from said editor will update the asset within MkFont. *Note that if the glyph is currently bound to a file, this option is disabled. In order to make it available again, simply unlink the glyph from its file resource.* |
-| {% include btn.html ico="clipboard-write" %} | Export glyph to clipboard. Same as using {% include shortcut.html keys="Ctrl C" %}. |
-| {% include btn.html ico="remove" %} | Delete the glyph and its content. It won't be part of the font anymore. |
+| {% include btn ico="document-download" %} | Import an SVG from an external file. *File will become bound for the session according to the app settings* |
+| {% include btn ico="clipboard-read" %} | Import clipboard content. Same as using {% include shortcut keys="Ctrl V" %}. |
+| {% include btn ico="reset" %} | Resets the glyph's contents to `empty`, but does not delete the glyph. It becomes an customizable void. |
+| {% include shortcut keys="Shift" %} + {% include btn ico="reset" %}  | Resets the glyph contents & create components matching the glyph composition, if any. |
+| {% include shortcut keys="Alt" %} + {% include btn ico="reset" %}  | Resets the glyph contents but keeps existing components. |
+| {% include btn ico="document-edit" %} | Edit in place : create a temp SVG file with the glyph's contents, and open the default SVG editor on your system. Saving the SVG from said editor will update the asset within MkFont. *Note that if the glyph is currently bound to a file, this option is disabled. In order to make it available again, simply unlink the glyph from its file resource.* |
+| {% include btn ico="clipboard-write" %} | Export glyph to clipboard. Same as using {% include shortcut keys="Ctrl C" %}. |
+| {% include btn ico="remove" %} | Delete the glyph and its content. It won't be part of the font anymore. |
 
 ---
 
 ## Inspector blocks
 Each foldout has its own dedicated page.
 
-{% include card_any.html tagged="foldout" %}
+{% include card_any tagged="foldout" %}
 
 ---
 
@@ -100,7 +100,7 @@ Each foldout has its own dedicated page.
 
 ![Empty Glyph Inspector](/assets/images/views/glyph-binding.png)
 
-If the glyph is currently bound to a file, the binding and the ability to break it ( {% include btn.html ico="remove" %} ) will show under the preview. Bindings are created during external file imports, either individually using {% include btn.html ico="document-edit" %}, or during batch import.
+If the glyph is currently bound to a file, the binding and the ability to break it ( {% include btn ico="remove" %} ) will show under the preview. Bindings are created during external file imports, either individually using {% include btn ico="document-edit" %}, or during batch import.
 
 >A glyph bound to a resource will re-import itself whenever the file is updated.
 >- Empty path will be ignored *(i.e, if the file previously had content but not anymore)* and won't 'reset' the glyph. 
@@ -128,12 +128,12 @@ Actions are limited to the following when editing groups :
 | Action       | Effect          |
 |:-------------|:------------------|
 |: **Glyph identity** :||
-| {% include shortcut.html keys="U+0000, U+0001" %} | Copy the unicode address of all the selected glyph to the clipboard, separated by `, `.<br>i.e : `U+006B, U+006C, U+006D` |
+| {% include shortcut keys="U+0000, U+0001" %} | Copy the unicode address of all the selected glyph to the clipboard, separated by `, `.<br>i.e : `U+006B, U+006C, U+006D` |
 |: **Glyph actions** :||
-| {% include btn.html ico="reset" %} | Resets the glyphs' contents to `empty`, but does not delete them. |
-| {% include shortcut.html keys="Shift" %} + {% include btn.html ico="reset" %}  | Resets the all the glyphs in the selection & create components matching the glyph composition, if any. |
-| {% include shortcut.html keys="Alt" %} + {% include btn.html ico="reset" %}  | Resets all the glyphs in the selection but keeps their existing components. |
-| {% include btn.html ico="remove" %} | Delete the glyphs and their content. |
+| {% include btn ico="reset" %} | Resets the glyphs' contents to `empty`, but does not delete them. |
+| {% include shortcut keys="Shift" %} + {% include btn ico="reset" %}  | Resets the all the glyphs in the selection & create components matching the glyph composition, if any. |
+| {% include shortcut keys="Alt" %} + {% include btn ico="reset" %}  | Resets all the glyphs in the selection but keeps their existing components. |
+| {% include btn ico="remove" %} | Delete the glyphs and their content. |
 
 
 > If any glyph within the selection is bound to a file, a button will show at the very bottom of the inspector. When clicked, every bound item within the active selection will be disconnected from its resource on disk.

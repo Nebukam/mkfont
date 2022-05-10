@@ -12,7 +12,7 @@ tagged: editor
 nav_order: 2
 ---
 
-{% include header_card.html %}
+{% include header_card %}
 
 >## Bound the the [Content explorer](explorer-content)
 >{: .no_toc :}
@@ -20,7 +20,7 @@ nav_order: 2
 >Actions & search are applied within the limits of the selected range. Note that some ranges represent all glyphs within your font, or even all known Unicode points, so be careful!
 {: .infos}
 
-{% include img_toc.html %}
+{% include img_toc %}
 
 
 ## Header
@@ -39,32 +39,32 @@ The Font Viewport has a few available actions, displayed on the bottom right of 
 | Modifier       | Action          |
 |:-------------|:------------------|
 |: **Create glyphs** :||
-| {% include btn.html ico="new" %} | Create empty glyphs in Unicode slots that have no glyph yet. Does **not** overwrite existing ones. |
-| {% include shortcut.html keys="Shift" %} + {% include btn.html ico="new" %} | Same as above, applied to the entire viewport content. |
+| {% include btn ico="new" %} | Create empty glyphs in Unicode slots that have no glyph yet. Does **not** overwrite existing ones. |
+| {% include shortcut keys="Shift" %} + {% include btn ico="new" %} | Same as above, applied to the entire viewport content. |
 |: **Text references** :||
-| {% include btn.html ico="text-unicode-char" %} | Copy the unicode characters to the clipboard, with each value separated by a newline character : `\n`. *(see [note](#note-on-unicode-lists))* |
-| {% include shortcut.html keys="Shift" %} + {% include btn.html ico="text-unicode-char" %} | Same as above, applied to the entire viewport content. |
-| {% include btn.html ico="text-unicode" %} | Copy the unicode hex values to the clipboard, with each value separated by a newline character : `\n`. *(see [note](#note-on-unicode-lists))* |
-| {% include shortcut.html keys="Shift" %} + {% include btn.html ico="text-unicode" %} | Same as above, applied to the entire viewport content. |
+| {% include btn ico="text-unicode-char" %} | Copy the unicode characters to the clipboard, with each value separated by a newline character : `\n`. *(see [note](#note-on-unicode-lists))* |
+| {% include shortcut keys="Shift" %} + {% include btn ico="text-unicode-char" %} | Same as above, applied to the entire viewport content. |
+| {% include btn ico="text-unicode" %} | Copy the unicode hex values to the clipboard, with each value separated by a newline character : `\n`. *(see [note](#note-on-unicode-lists))* |
+| {% include shortcut keys="Shift" %} + {% include btn ico="text-unicode" %} | Same as above, applied to the entire viewport content. |
 |: **Third parties** :||
-| {% include btn.html ico="app-illustrator" %} | Create & execute a JSX script that will prompt Adobe© Illustrator to create a new document with artboard set-up for each selected glyph, properly named in order to be exported easily. *(see [third party](/features/third-party))* |
-| {% include shortcut.html keys="Shift" %} + {% include btn.html ico="app-illustrator" %}| Same as above, applied to the entire viewport content.  |
+| {% include btn ico="app-illustrator" %} | Create & execute a JSX script that will prompt Adobe© Illustrator to create a new document with artboard set-up for each selected glyph, properly named in order to be exported easily. *(see [third party](/features/third-party))* |
+| {% include shortcut keys="Shift" %} + {% include btn ico="app-illustrator" %}| Same as above, applied to the entire viewport content.  |
 |: **Deletion** :||
-| {% include btn.html ico="remove" %} | Delete selected glyphs. |
-| {% include shortcut.html keys="Shift" %} + {% include btn.html ico="remove" %}| Same as above, applied to the entire viewport content. |
+| {% include btn ico="remove" %} | Delete selected glyphs. |
+| {% include shortcut keys="Shift" %} + {% include btn ico="remove" %}| Same as above, applied to the entire viewport content. |
 
 ## Search
 
 ![Viewport Search](/assets/images/views/viewport-search-abc.png)
 
 The search feature is rather simple in its form, yet quite powerful.
-**It's important to note that the search results are constrained by the currently selected range.** Hence, if you want your search to be as broad as it can possibly be, select the {% include btn.html ico="text" label="All Unicode" %} range.  
+**It's important to note that the search results are constrained by the currently selected range.** Hence, if you want your search to be as broad as it can possibly be, select the {% include btn ico="text" label="All Unicode" %} range.  
 The search needs to be enabled to produce results.
 
 > Search is **inclusive**, not *exclusive*. That means that the more terms you search for, the more results you'll get -- not the other way around.
 {: .warning}
 
-> If you want to search through **all known & referenced Unicode**, select the {% include btn.html ico="text" label="All Unicodes" %} range within the [Content Explorer](explorer-content).
+> If you want to search through **all known & referenced Unicode**, select the {% include btn ico="text" label="All Unicodes" %} range within the [Content Explorer](explorer-content).
 {: .infos}
 
 ### Search terms
@@ -87,9 +87,9 @@ The search needs to be enabled to produce results.
 
 Selecting slots within the viewport is done using the mouse.  
 Expected selection behaviors apply :
-- Holding {% include shortcut.html keys="Ctrl" %} toggle a slot selection state. i.e, if it's selected it will be unselected, and vice-versa.
-- Holding {% include shortcut.html keys="Shift" %} while selecting another slot will select all the slot between the last selected slot and the new one.
-- {% include shortcut.html keys="Ctrl A" %} will select everything available within the range.
+- Holding {% include shortcut keys="Ctrl" %} toggle a slot selection state. i.e, if it's selected it will be unselected, and vice-versa.
+- Holding {% include shortcut keys="Shift" %} while selecting another slot will select all the slot between the last selected slot and the new one.
+- {% include shortcut keys="Ctrl A" %} will select everything available within the range.
 - See [Shortcuts](../shortcuts#in-the-viewport-unicode) for more infos.
 
 > *Note that selection isn't lost if you click on an already selected item : this is by design. Instead, it will "bump" that item so it becomes the first item in the active selection. This is especially useful when editing large selection, as it allow you to change which glyphs are previewed in the [Glyph Inspector](inspector-glyph).*
@@ -119,9 +119,9 @@ When a slot is selected, a quick menu shows up on hover, with the following opti
 
 | Icon       | Action          |
 |:-------------|:------------------|
-| {% include btn.html ico="new" %} | Creates an empty glyph. |
-| {% include btn.html ico="remove" %} | Removes the glyph. |
-| {% include btn.html ico="text-unicode" %} | Copy that glyph unicode hex value to the clipboard, in the form `U+0000`. *This is mostly useful to quickly find a glyph hex ID for automation & artboards*|
+| {% include btn ico="new" %} | Creates an empty glyph. |
+| {% include btn ico="remove" %} | Removes the glyph. |
+| {% include btn ico="text-unicode" %} | Copy that glyph unicode hex value to the clipboard, in the form `U+0000`. *This is mostly useful to quickly find a glyph hex ID for automation & artboards*|
 
 ---
 
@@ -136,14 +136,14 @@ For now there is only one preview option : preview size. Yes, that small lonely 
 
 Copying glyph characters is especially useful when you need to generate narrowed down atlases for your font, or simply need a quick wait to generate a parse-able list of glyphs.  
 
-The {% include btn.html ico="text-unicode-char" %} action will generate this kind of results :
+The {% include btn ico="text-unicode-char" %} action will generate this kind of results :
 
     A
     B
     C
     D
 
-The {% include btn.html ico="text-unicode" %} action will generate this kind of results :
+The {% include btn ico="text-unicode" %} action will generate this kind of results :
 
     U+0041
     U+0042
@@ -154,12 +154,12 @@ The {% include btn.html ico="text-unicode" %} action will generate this kind of 
 
 | Shortcut       | Action          |
 |:-------------|:------------------|
-| {% include shortcut.html keys="Ctrl C" %}           | Copy a single glyph to the clipboard* |
-| {% include shortcut.html keys="Ctrl V" %}           | Paste the content of the clipboard in the selected glyph slot.<br>Supports pasting directly from Adobe Illustrator! |
-| {% include shortcut.html keys="Ctrl Shift C" %}           | Copy the selected glyphs & their unicode position in memory* |
-| {% include shortcut.html keys="Ctrl Shift V" %}           | Paste the glyphs copied using {% include shortcut.html keys="Ctrl Shift C" %} to their matching unicode slots. This is especially *(if not only)* useful to paste glyphs from an .mkfont to another in batch, while retaining their unicode positions. |
-| {% include shortcut.html keys="Ctrl Alt V" %}           | Applies the transform of the glyph stored in memory using {% include shortcut.html keys="Ctrl C" %} to all glyphs in the active selection. Does **not** affect the path. |
-| {% include shortcut.html keys="DEL" %}           | Deletes the selected glyphs |
+| {% include shortcut keys="Ctrl C" %}           | Copy a single glyph to the clipboard* |
+| {% include shortcut keys="Ctrl V" %}           | Paste the content of the clipboard in the selected glyph slot.<br>Supports pasting directly from Adobe Illustrator! |
+| {% include shortcut keys="Ctrl Shift C" %}           | Copy the selected glyphs & their unicode position in memory* |
+| {% include shortcut keys="Ctrl Shift V" %}           | Paste the glyphs copied using {% include shortcut keys="Ctrl Shift C" %} to their matching unicode slots. This is especially *(if not only)* useful to paste glyphs from an .mkfont to another in batch, while retaining their unicode positions. |
+| {% include shortcut keys="Ctrl Alt V" %}           | Applies the transform of the glyph stored in memory using {% include shortcut keys="Ctrl C" %} to all glyphs in the active selection. Does **not** affect the path. |
+| {% include shortcut keys="DEL" %}           | Deletes the selected glyphs |
 
 >Note on copy/pasting glyphs : glyphs are copied into SVG format, with transform information embedded as SVG attributes. This means that you can safely use the clipboard's content in any SVG-friendly app, and that casually pasting within MkFont will retain transform settings.
 {: .comment }

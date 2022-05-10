@@ -11,6 +11,6 @@ card_url: none
 nav_exclude: true
 ---
 
-{% include header_card.html %}
+{% include header_card %}
 
 ---

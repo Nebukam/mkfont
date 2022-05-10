@@ -1,5 +1,5 @@
 {% if page.splash %}
-<div class="product-header" style="--img:url('/assets/{{ page.splash }}');"><div class="infos" markdown="1">
+<div class="product-header" style="--img:url('{{ baseurl }}/assets/{{ page.splash }}');"><div class="infos" markdown="1">
 # {{ page.title }}
 {: .no_toc }
 **{{ page.subtitle }}**  

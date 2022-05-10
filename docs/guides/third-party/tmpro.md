@@ -10,7 +10,7 @@ preview_img: placeholder.jpg
 #nav_order: 4
 ---
 
-{% include header_card.html %}
+{% include header_card %}
 
 >## WORK IN PROGRESS.
 >Come back later (～￣▽￣)～ 

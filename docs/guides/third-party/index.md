@@ -10,7 +10,7 @@ nav_order: 9
 has_children: true
 ---
 
-{% include header_card.html %}
+{% include header_card %}
 
 >## Third-party doc is mostly WIP.
 >Come back later (～￣▽￣)～ 

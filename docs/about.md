@@ -4,7 +4,7 @@ title: About
 nav_order: 10
 permalink: /about/
 ---
-<div class="product-header" style="--img:url('/assets/images/placeholder.jpg');"><div class="infos" markdown="1">
+<div class="product-header" style="--img:url('{{ baseurl }}/assets/images/placeholder.jpg');"><div class="infos" markdown="1">
 # I'm Tim!
 I made this.
 {: .fs-6 .fw-300 } 

@@ -79,7 +79,7 @@
   },"13": {
     "doc": "App settings",
     "title": "Family defaults",
-    "content": "The following settings are the defaults/boilerplate values for every new .mkfont document you’re creating. They can all be edited individually using the Family Infos inspector. This data is added to the font when exported to .ttf. | Setting | Comment | . | : **Family defaults** :| |   | . | Family name | Default family name. | . | Copyright | Default copyright notice. | . | Description | Default description. | . | URL | Default URL. | . | Preview size | Default glyph preview size in the [Font Viewport](/docs/views/viewport-unicode). | . ",
+    "content": "The following settings are the defaults/boilerplate values for every new .mkfont document you’re creating. They can all be edited individually using the Family Infos inspector. This data is added to the font when exported to .ttf. | Setting | Comment | . | : **Family defaults** :| |   | . | Family name | Default family name. | . | Copyright | Default copyright notice. | . | Description | Default description. | . | URL | Default URL. | . | Preview size | Default glyph preview size in the [Font Viewport]({{ '/docs/views/viewport-unicode). | . ",
     "url": "http://localhost:4000/docs/dialogs/app-settings.html#family-defaults",
     "relUrl": "/docs/dialogs/app-settings.html#family-defaults"
   },"14": {
@@ -199,7 +199,7 @@
   },"33": {
     "doc": "Font editor",
     "title": "Header actions",
-    "content": ". | Button | Action | . | : **Navigation** :| |   | . | | Navigate to the previous editor state | . | | Navigate to the next editor state | . | : **Writing files** :| |   | . | Save | Save the current file. If it does not exist on disk already, will prompt for a location &amp; filename. Can be activated using . | . | Export | Export the current font as a .ttf file. You will be prompted for a location &amp; filename each time. | . | : **Family settings** :| |   | . | Infos | Brings up the [Family Infos](/docs/dialogs/family-infos) inspector. | . | Metrics | Brings up the [Family Metrics](../dialogs/family-metrics) inspector. | . | : **Importing content** :| |   | . | Ligatures | Brings up the [Ligature Finder](/docs/dialogs/ligatures-finder) dialog. | . | SVGs | Brings up the [List Import](/docs/dialogs/list-import) dialog. | . | TTF | You will be prompted to select a .ttf file, and its glyphs will be imported (and resampled to match the current Family Metrics) | . ",
+    "content": ". | Button | Action | . | : **Navigation** :| |   | . | | Navigate to the previous editor state | . | | Navigate to the next editor state | . | : **Writing files** :| |   | . | Save | Save the current file. If it does not exist on disk already, will prompt for a location &amp; filename. Can be activated using . | . | Export | Export the current font as a .ttf file. You will be prompted for a location &amp; filename each time. | . | : **Family settings** :| |   | . | Infos | Brings up the [Family Infos]({{ '/docs/dialogs/family-infos) inspector. | . | Metrics | Brings up the [Family Metrics](../dialogs/family-metrics) inspector. | . | : **Importing content** :| |   | . | Ligatures | Brings up the [Ligature Finder]({{ '/docs/dialogs/ligatures-finder) dialog. | . | SVGs | Brings up the [List Import]({{ '/docs/dialogs/list-import) dialog. | . | TTF | You will be prompted to select a .ttf file, and its glyphs will be imported (and resampled to match the current Family Metrics) | . ",
     "url": "http://localhost:4000/docs/views/editor-font.html#header-actions",
     "relUrl": "/docs/views/editor-font.html#header-actions"
   },"34": {
@@ -379,7 +379,7 @@
   },"63": {
     "doc": "Glyph transformations",
     "title": "Others",
-    "content": "Last but not least, raw font metrics. Metrics . | Property | Effect | . | Width | Manually sets the width of the glyph. *Width represent how much the glyph advances the renderer horizontally.*Note that most of the time you will want to leave this value alone and use Automatic Width. If working with monospace fonts, there is a toggle that override everything at the output level within the [Family Metrics](/docs/dialogs/family-metrics). | . | Height | Manually sets the height of the glyph – *it’s very likely you won’t care about this one, since the actual height within the font is controlled by the EM value. It becomes useful when the glyph is used solely as a component.* | . Export . | Property | Effect | . | Export | Whether or not to include the glyph in the exported font. | . ",
+    "content": "Last but not least, raw font metrics. Metrics . | Property | Effect | . | Width | Manually sets the width of the glyph. *Width represent how much the glyph advances the renderer horizontally.*Note that most of the time you will want to leave this value alone and use Automatic Width. If working with monospace fonts, there is a toggle that override everything at the output level within the [Family Metrics]({{ '/docs/dialogs/family-metrics). | . | Height | Manually sets the height of the glyph – *it’s very likely you won’t care about this one, since the actual height within the font is controlled by the EM value. It becomes useful when the glyph is used solely as a component.* | . Export . | Property | Effect | . | Export | Whether or not to include the glyph in the exported font. | . ",
     "url": "http://localhost:4000/docs/views/foldout-transforms.html#others",
     "relUrl": "/docs/views/foldout-transforms.html#others"
   },"64": {
@@ -415,7 +415,7 @@
   },"69": {
     "doc": "Home",
     "title": "Home",
-    "content": "The landing screen. Table of content . | Primary actions | Action | . | : **MkFont** :| |   | . | New .mkfont | Creates a new .mkfont in memory. You will need to save it on disk for the autosave to work.*If you don’t, you will be assaulted by a modal when the timer runs out.* | . | Load .mkfont | Loads an existing .mkfont file. | . | : **Import** :| |   | . | Load TTF | Creates a new .mkfont from an existing TTF file. | . | Secondary actions | Action | . | About | Open the very same documentation you’re reading right now, but on the [About](/about) page. | . | Help | Open the very same documentation you’re reading right now. | . | App Settings | Open the [App Settings](/docs/dialogs/app-settings) panel. | . ",
+    "content": "The landing screen. Table of content . | Primary actions | Action | . | : **MkFont** :| |   | . | New .mkfont | Creates a new .mkfont in memory. You will need to save it on disk for the autosave to work.*If you don’t, you will be assaulted by a modal when the timer runs out.* | . | Load .mkfont | Loads an existing .mkfont file. | . | : **Import** :| |   | . | Load TTF | Creates a new .mkfont from an existing TTF file. | . | Secondary actions | Action | . | About | Open the very same documentation you’re reading right now, but on the [About](/about) page. | . | Help | Open the very same documentation you’re reading right now. | . | App Settings | Open the [App Settings]({{ '/docs/dialogs/app-settings) panel. | . ",
     "url": "http://localhost:4000/docs/views/home-view.html#home",
     "relUrl": "/docs/views/home-view.html#home"
   },"70": {

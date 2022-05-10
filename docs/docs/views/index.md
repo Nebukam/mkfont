@@ -10,17 +10,17 @@ nav_order: 2
 has_children: true
 ---
 
-{% include header_card.html %}
+{% include header_card %}
 # Editors
 <br>
-{% include card_childs.html tagged="editor" %}
+{% include card_childs tagged="editor" %}
 
 ---
 # Explorers  
 <br>
-{% include card_childs.html tagged="explorer" %}
+{% include card_childs tagged="explorer" %}
 
 ---
 # Foldouts  
 <br>
-{% include card_childs.html tagged="foldout" %}
+{% include card_childs tagged="foldout" %}

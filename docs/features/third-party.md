@@ -10,6 +10,6 @@ card_url: /guides/third-party
 nav_order: 10
 ---
 
-{% include header_card.html %}
+{% include header_card %}
 
 ---
