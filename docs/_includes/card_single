@@ -6,6 +6,6 @@
     {% assign url = site.baseurl | append: somePage.url %}
 {% endif %}
 
-{% include card_layout page=childPage lk=url %}
+{% include card_layout page=somePage lk=url %}
 
 {% endfor %}
