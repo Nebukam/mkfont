@@ -48,6 +48,8 @@ class FamilyDataBlock extends SimpleDataEx {
         this._Bind(this._OnGlyphVariantUpdated);
         this._Bind(this._OnGlyphUpdated);
 
+        this._ResetSelectionPresets();
+
         this._transformSettings = nkm.com.Rent(ImportSettings);
         this._searchSettings = nkm.com.Rent(SearchSettings);
         this._searchSettings.family = this;
@@ -61,6 +63,7 @@ class FamilyDataBlock extends SimpleDataEx {
         this._nullGlyph.family = this;
         this._nullGlyph.isNull = true;
         this._nullGlyph._defaultGlyph._fontObject.remove();
+
 
 
         Glyph.__defaultVariantClass = GlyphVariantRef;
@@ -445,9 +448,16 @@ class FamilyDataBlock extends SimpleDataEx {
         super._OnReset();
     }
 
+    _ResetSelectionPresets() {
+        this._selectionPresets = [];
+        for (let i = 0; i < 10; i++) { this._selectionPresets.push(null); }
+    }
+
     _CleanUp() {
 
         //TODO : Cleanup up subFamilies, glyphs, and their variant
+
+        this._ResetSelectionPresets();
 
         while (!this._glyphs.isEmpty) {
             let g = this._glyphs.last;
@@ -462,7 +472,7 @@ class FamilyDataBlock extends SimpleDataEx {
         this._refGlyph.Reset(false, true);
         this._refGlyph._defaultGlyph.Reset(false, true);
         this._refGlyph._defaultGlyph._ClearLayers();
-        
+
         /////
         this._glyphs.Clear();
         this._glyphsMap = {};
