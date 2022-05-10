@@ -31,6 +31,7 @@ github_username:  nebukam
 
 # Build settings
 #theme: just-the-docs
+
 color_scheme: dark
 logo: "/assets/images/logo-inline.png"
 plugins:
