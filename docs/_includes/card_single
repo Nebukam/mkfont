@@ -1,17 +1,11 @@
 {% assign pages = site.pages | where: 'title', include.reference %}
 {% for somePage in pages %}
 {% if somePage.card_url %}
-    {% assign lurl = baseurl: | append: somePage.card_url %}
+    {% assign url = site.baseurl | append: somePage.card_url %}
 {% else %}
-    {% assign lurl = baseurl: | append: somePage.url %}
+    {% assign url = site.baseurl | append: somePage.url %}
 {% endif %}
-<div class="card large gradient"><div class="preview" style="--img:url('{{ baseurl }}/assets/images/{{ somePage.preview_img }}'); --ico:url('{{ baseurl }}/assets/{{ somePage.splash }}');"></div><div class="infos {{ childPage.color | default:'blue' }}" markdown="1">
 
-## [{{ somePage.title }}]({{ lurl }})
-{{ somePage.subtitle }}
-{: .fs-5 .fw-300 }
-{{ somePage.summary }}
+{% include card_layout page=childPage lk=url %}
 
-<a href="{{ lurl }}" class="link-more {{ somePage.color | default:'blue' }}"><img class="icon" src="/assets/{{ somePage.splash | default:'icons/icon_plus.svg'}}"></a>
-</div></div>
 {% endfor %}
