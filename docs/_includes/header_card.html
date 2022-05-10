@@ -1,0 +1,20 @@
+{% if page.splash %}
+<div class="product-header" style="--img:url('/assets/{{ page.splash }}');"><div class="infos" markdown="1">
+# {{ page.title }}
+{: .no_toc }
+**{{ page.subtitle }}**  
+{: .fs-6 .fw-300 }
+{{ page.summary }}
+{: .fs-5 .fw-300 }  
+</div></div>
+{% else %}
+
+# {{ page.title }}
+{: .no_toc }
+**{{ page.subtitle }}**  
+{: .fs-6 .fw-300 }
+{{ page.summary }}
+{: .fs-5 .fw-300 }  
+
+{% endif %}
+---

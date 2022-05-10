@@ -1,0 +1,36 @@
+
+<div class="card-ctnr {{ include.wrappercss }}" markdown="1">
+{% if include.reference %}
+    {% assign subpages = site.pages | where: 'parent', include.reference | where: 'tagged', include.tagged | sort: "nav_order" %}
+{% else %}
+    {% assign subpages = site.pages | where: "parent", page.title | where: 'tagged', include.tagged | sort: "nav_order" %}
+{% endif %}
+
+{% for childPage in subpages %}
+{% unless childPage.card_exclude %}
+{% if childPage.card_url %}
+    {% assign lurl = baseurl: | append: childPage.card_url %}
+{% else %}
+    {% assign lurl = baseurl: | append: childPage.url %}
+{% endif %}
+<div class="card large gradient"><div class="preview" style="--img:url('/assets/images/{{ childPage.preview_img }}'); --ico:url('/assets/{{ childPage.splash }}');"></div><div class="infos {{ childPage.color | default:'blue' }}" markdown="1">
+
+{% if childPage.card_url == 'none' %}
+## {{ childPage.title }}
+{% else %}
+## [{{ childPage.title }}]({{ lurl }})
+{% endif %}
+{{ childPage.subtitle }}
+{: .fs-5 .fw-300 }
+{{ childPage.summary }}
+
+{% if childPage.card_url == 'none' %}
+<a class="link-more {{ childPage.color | default:'blue' }}"><img class="icon" src="/assets/{{ childPage.splash | default:'icons/icon_plus.svg'}}"></a>
+{% else %}
+<a href="{{ lurl }}" class="link-more {{ childPage.color | default:'blue' }}"><img class="icon" src="/assets/{{ childPage.splash | default:'icons/icon_plus.svg'}}"></a>
+{% endif %}
+</div></div>
+{% endunless %}
+{% endfor %}
+
+</div>
