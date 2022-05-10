@@ -119,9 +119,12 @@ class FontEditor extends base {
             }
         }).Strict();
 
+        this.shortcuts.Create("escape", ()=>{ this._inspectedData.Clear(); });
+
         for (let i = 0; i < 10; i++) {
             this.shortcuts.Create(`Ctrl ${i}`, () => { this._StoreSelectionPreset(i); });
-            this.shortcuts.Create(`${i}`, () => { this._RestoreSelectionPreset(i); });
+            this.shortcuts.Create(`Shift ${i}`, () => { this._RestoreSelectionPreset(i, true); });
+            this.shortcuts.Create(`${i}`, () => { this._RestoreSelectionPreset(i, false); });
         }
 
     }
@@ -133,11 +136,13 @@ class FontEditor extends base {
         this._data._selectionPresets[p_index] = preset;
     }
 
-    _RestoreSelectionPreset(p_index) {
+    _RestoreSelectionPreset(p_index, p_append = false) {
         if (!this._data) { return; }
         let preset = this._data._selectionPresets[p_index];
         if (!preset || preset.length == 0) { return; }
-        let restored = [];
+        let restored;
+        if (p_append) { restored = [...this._inspectedData.stack._array]; }
+        else { restored = []; }
         for (let i = 0; i < preset.length; i++) { restored.push(UNICODE.GetInfos(preset[i])); }
         if (restored.length == 0) { return; }
         this._inspectedData.SetList(restored);
