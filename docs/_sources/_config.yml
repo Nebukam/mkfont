@@ -32,7 +32,7 @@ github_username:  nebukam
 # Build settings
 theme: just-the-docs
 color_scheme: dark
-logo: "/assets/splash.png" 
+logo: "/assets/images/splash.png" 
 plugins:
   - jekyll-feed
   - jekyll-spaceship
