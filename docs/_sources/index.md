@@ -6,8 +6,8 @@ nav_order: 1
 ---
 <div class="product-header large" style="--img:url('{{ site.baseurl }}/assets/images/logo.png');"><div class="infos" markdown="1">
 # MkFont {% include github.html repo="mkfont" %}  
-**Make fonts with vector graphic files.**  
-Ultra-smooth workflow, with advanced features to nit-pick & tweak metrics in a non-destructive way.
+**Export fonts. With a twist.**  
+Component-based workflow, with advanced features to nit-pick & tweak metrics in a non-destructive way.
 {: .fs-6 .fw-300 }  
    
 {% include link_btn title="Download" color="red" link="downloads" %} 
