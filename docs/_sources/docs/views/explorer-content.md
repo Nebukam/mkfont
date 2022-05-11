@@ -6,7 +6,7 @@ title: Content explorer
 subtitle: Unicode. All of it.
 #summary: summary_goes_here
 splash: icons/icon_text-style.svg
-preview_img: previews/content-explorer
+preview_img: previews/content-explorer.png
 toc_img: views/content-explorer.png
 tagged: explorer
 nav_order: 3
@@ -14,7 +14,7 @@ nav_order: 3
 
 {% include header_card %}
 
->This is an overview of the Content Explorer. Selecting items in here will change the contents of the [Font Viewport](viewport-unicode).  
+>This is an overview of the Content Explorer. Selecting items in here will change the contents of the {% include lk id='Font viewport' %}.  
 >It allows you to quickly find your way through the ton of existing Unicode slots & code points, and easily select which you want to include in your font.
 >*Any active selection will be reset*
 {: .comment}
@@ -46,7 +46,7 @@ There are many categories, some very broad, some very narrow. Certain glyphs can
 >Hence, if planning on doing icon font, I recommend using either ligatures or the `Private use areas` blocks.
 {: .comment }
 
-They have color associated, which can also be seen in the [Font Viewport](viewport-unicode) individual slots. (Yes, that's what the small colored dot is!)
+They have color associated, which can also be seen in the {% include lk id='Font viewport' %}'s individual slots. (Yes, that's what the small colored dot is!)
 
 ## Unicode blocks
 Unicode blocks contains all the unicode blocks document in the Unicode Standards. (there's 400+ of them)  

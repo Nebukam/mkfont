@@ -11,3 +11,7 @@ nav_order: 2
 ---
 
 {% include header_card %}
+
+>## WORK IN PROGRESS.
+>Come back later (～￣▽￣)～ 
+{: .error}

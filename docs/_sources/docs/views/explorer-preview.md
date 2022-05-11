@@ -24,7 +24,7 @@ nav_order: 4
 ## Preview box
 This is not where you edit the text -- **it is however, where you can select glyphs to edit by simply highlighting them as you would in any text editor :)**
 
-![Preview Explorer Select](/assets/images/views/preview-explorer-select.png)
+{% include img a='views/preview-explorer-select.png' %}
 
 >At the time of writing, this won't select ligatures, but instead the individual glyphs they encapsulate.
 {: .comment }
@@ -72,7 +72,7 @@ This is where you type whatever text you want to preview.
 
 ### Refresh preview
 
->If your font has more glyph than the threshold set in the [App Settings]({{ '/docs/dialogs/app-settings' | relative_url }}), you will need to click that button in order to recompute the preview.
+>If your font has more glyph than the threshold set in the {% include lk id='App settings' %}, you will need to click that button in order to recompute the preview.
 {: .warning}
 
 Or simply if you doubt the preview has updated automatically.

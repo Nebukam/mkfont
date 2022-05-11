@@ -10,9 +10,9 @@
 {{ include.page.summary }}
 
 {% if childPage.card_url == 'none' %}
-<a class="link-more {{ include.page.color | default:'blue' }}"><img class="icon" src="{{ site.baseurl }}/assets/{{ include.page..splash | default:'icons/icon_plus.svg'}}"></a>
+<a class="link-more {{ include.page.color | default:'blue' }}"><img class="icon" src="{{ site.baseurl }}/assets/{{ include.page.splash | default:'icons/icon_plus.svg'}}"></a>
 {% else %}
-<a href="{{ include.lk }}" class="link-more {{ include.page.color | default:'blue' }}"><img class="icon" src="{{ site.baseurl }}/assets/{{ include.page..splash | default:'icons/icon_plus.svg'}}"></a>
+<a href="{{ include.lk }}" class="link-more {{ include.page.color | default:'blue' }}"><img class="icon" src="{{ site.baseurl }}/assets/{{ include.page.splash | default:'icons/icon_plus.svg'}}"></a>
 {% endif %}
 
 </div></div>

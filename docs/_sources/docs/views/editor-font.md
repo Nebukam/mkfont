@@ -6,7 +6,7 @@ title: Font editor
 subtitle: Where you spend 100% of your time within MkFont.
 #summary: summary_goes_here
 splash: icons/icon_view-grid.svg
-preview_img: previews/editor-font.png
+preview_img: previews/font-editor.png
 toc_img: views/editor-a.png
 tagged: editor
 nav_order: 1
@@ -21,7 +21,7 @@ nav_order: 1
 
 ## Breakdown
 
-![Font Editor](/assets/images/views/editor-breakdown.png)
+{% include img a='views/editor-breakdown.png' %}
 
 The Font Editor is broken down into three main areas, covered in length in their own sections :
 
@@ -36,19 +36,9 @@ The Font Editor is broken down into three main areas, covered in length in their
 {% include card_single reference="Glyph inspector" %}
 </div>
 
-#### Explorers
-{: .no_toc }
-Allows you to naviguate between different explorers, each of which has its dedicated page :
-
-| Explorer       | Purpose          |
-|:-------------|:------------------|
-| {% include btn ico="text-style" %} [Content Explorer](explorer-content) | Browse through your font glyphs, Unicode blocks and categories. |
-| {% include btn ico="text" %} [Preview Explorer](explorer-preview) | A minimalistic preview tool to preview your font. |
-| {% include btn ico="refresh" %} [History Explorer](explorer-history) | Everything you did since you opened the editor. It's a memory-hungry time machine. Flush it out from time to time. |
-
 ## Header actions
 
-![Font Editor](/assets/images/views/editor-header.png)
+{% include img a='views/editor-header.png' %}
 
 | Button       | Action          |
 |:-------------|:------------------|
@@ -59,12 +49,12 @@ Allows you to naviguate between different explorers, each of which has its dedic
 | {% include btn ico="save-small" label="Save" %} | Save the current file. If it does not exist on disk already, will prompt for a location & filename. Can be activated using {% include shortcut keys="Ctrl S" %}. |
 | {% include btn ico="upload" label="Export" %} | Export the current font as a .ttf file. You will be prompted for a location & filename each time. |
 |: **Family settings** :||
-| {% include btn ico="font" label="Infos" %} | Brings up the [Family Infos]({{ '/docs/dialogs/family-infos' | relative_url }}) inspector. |
-| {% include btn ico="layout" label="Metrics" %} | Brings up the [Family Metrics](../dialogs/family-metrics' | relative_url }}) inspector. |
+| {% include btn ico="font" label="Infos" %} | Brings up the {% include lk id='Family infos' %} inspector. |
+| {% include btn ico="layout" label="Metrics" %} | Brings up the {% include lk id='Family metrics' %} inspector. |
 |: **Importing content** :||
-| {% include btn ico="text-liga" label="Ligatures" %} | Brings up the [Ligature Finder]({{ '/docs/dialogs/ligatures-finder' | relative_url }}) dialog. |
-| {% include btn ico="directory-download-small" label="SVGs" %} | Brings up the [List Import]({{ '/docs/dialogs/list-import' | relative_url }}) dialog. |
-| {% include btn ico="directory-download-small" label="TTF" %} | You will be prompted to select a .ttf file, and its glyphs will be imported (and resampled to match the current Family Metrics) |
+| {% include btn ico="text-liga" label="Ligatures" %} | Brings up the {% include lk id='Ligatures finder' %} dialog. |
+| {% include btn ico="directory-download-small" label="SVGs" %} | Brings up the {% include lk id='List import' %} dialog. |
+| {% include btn ico="directory-download-small" label="TTF" %} | You will be prompted to select a .ttf file, and its glyphs will be imported (and resampled to match the current Family metrics) |
 
 ## Shortcuts
 

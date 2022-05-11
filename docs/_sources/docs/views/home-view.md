@@ -26,6 +26,6 @@ nav_order: 50
 
 | Secondary actions       | Action          |
 |:-------------|:------------------|
-| About | Open the very same documentation you're reading right now, but on the [About](/about) page. |
+| About | Open the very same documentation you're reading right now, but on the {% include lk id='About' %} page. |
 | Help | Open the very same documentation you're reading right now. |
-| {% include btn ico="gear" label="App Settings" %} | Open the [App Settings]({{ '/docs/dialogs/app-settings' | relative_url }}) panel. |
+| {% include btn ico="gear" label="App Settings" %} | Open the {% include lk id='App settings' %} panel. |

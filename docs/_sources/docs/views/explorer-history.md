@@ -7,7 +7,7 @@ subtitle: Your friendly time machine.
 #summary: summary_goes_here
 splash: icons/icon_refresh.svg
 toc_img: views/action-stack-full.png
-preview_img: previews/explorer-history.png
+preview_img: previews/history-explorer.png
 tagged: explorer
 nav_order: 5
 ---
@@ -22,7 +22,7 @@ nav_order: 5
 You can click any action to go back to that point in time.  
 You can also use {% include shortcut keys="Ctrl Z" %} / {% include shortcut keys="Ctrl Y" %} to Undo/Redo actions in order.  
 
-![Preview Explorer Select](/assets/images/views/action-stack-rewind.png)
+{% include img a='views/action-stack-rewind.png' %}
 
 
 ## Flush.

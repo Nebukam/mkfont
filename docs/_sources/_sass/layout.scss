@@ -43,7 +43,8 @@
   @include container;
   padding-top: $gutter-spacing-sm;
   padding-bottom: $gutter-spacing-sm;
-
+  display: flow-root;
+  overflow-x: hidden;
   @include mq(md) {
     padding-top: $gutter-spacing;
     padding-bottom: $gutter-spacing;
@@ -127,16 +128,15 @@
   }
 }
 
-@if variable-exists(logo) {
   .site-logo {
     width: 100%;
     height: 100%;
-    background-image: url($logo);
+    background-image: url(/mkfont/assets/images/logo-inline.png);
     background-repeat: no-repeat;
     background-position: left center;
     background-size: contain;
   }
-}
+
 
 .site-button {
   display: flex;

@@ -2,9 +2,10 @@
 layout: page
 title: About
 nav_order: 10
+splash: images/vatar.png
 permalink: /about/
 ---
-<div class="product-header" style="--img:url('{{ baseurl }}/assets/images/placeholder.jpg');"><div class="infos" markdown="1">
+<div class="product-header" style="--img:url('{{ site.baseurl }}/assets/images/vatar.png');"><div class="infos" markdown="1">
 # I'm Tim!
 I made this.
 {: .fs-6 .fw-300 } 
@@ -12,8 +13,8 @@ I made this.
 </div></div>
 ---
 
-I made **MkFont** as a way to easily export font out of SVG files.  
-There are tons of tools out there that do similar things, even fully fledged glyph editors; but nothing in between.  
+I made **MkFont** as a way to easily tweak and build fonts out of SVG files.  
+There are tons of tools out there that do similar things, from CLI tools to awesome glyph editors; but nothing in between.  
 {: .fs-6 .fw-300 }
 **MkFont attempts to fill the gap.**
 {: .fs-6 .fw-300 }

@@ -14,8 +14,10 @@ has_children: true
   
 ## Windows  
    
-{% include link_btn title="MkFont 0.5.4 ➜ x64 installer (.exe)" color="red" link="downloads" icon="load-arrow" %}
-{% include link_btn title="MkFont 0.5.4 ➜ Unpackaged (.zip" color="lowkey" link="downloads" icon="load-arrow" %}
+{% include link_btn title="MkFont Setup (.exe)" color="red" link="https://github.com/Nebukam/mkfont/releases/latest/download/mkfont-Setup.exe" icon="load-arrow" %}
+{% include link_btn title="Unpacked (.zip)" color="lowkey" link="https://github.com/Nebukam/mkfont/releases/latest/download/awin-unpacked.zip" icon="load-arrow" %}
+
+[Releases history](https://github.com/Nebukam/mkfont/releases)
 
 ---
 
@@ -31,4 +33,4 @@ has_children: true
 
 ---
 
-## Sources available on [Github](https://github.com/Nebukam/mkfont), under MIT license.
+## Sources available on [Github](https://github.com/Nebukam/mkfont).

@@ -190,15 +190,17 @@ $cornerr: 5px;
 
 .kbkey {
 
-    padding: 3px 6px;
+    padding: 1px 8px;
     margin: 0px 3px;
     border-radius: 3px;
     background-color: $grey-dk-200;
 
+    display:inline-block;
+
     -webkit-box-shadow: 0px 3px 0px 1px rgba(0, 0, 0, 0.5);
     box-shadow: 0px 3px 0px 1px rgba(0, 0, 0, 0.5);
 
-    border: 1px solid $grey-dk-100;
+    border-bottom: 1px solid $grey-dk-100;
 
     font-family: monospace;
     //font-weight: bold;
@@ -206,10 +208,11 @@ $cornerr: 5px;
     & img {
         margin-bottom: -3px;
         border: none !important;
+        box-shadow: none;
     }
 
     &.ico {
-        padding: 3px 3px;
+        padding: 1px 5px;
     }
 
 }

@@ -3,7 +3,7 @@ layout: page
 parent: Guides
 title: Asset preparation
 subtitle: How to prepare assets
-summary: Covers some basics yet crucial things regarding asset preparation
+summary: Covers some basics yet important things regarding asset preparation
 splash: icons/icon_edit.svg
 preview_img: placeholder.jpg
 nav_order: 1
@@ -26,7 +26,7 @@ color: red
 
 # Glyph Boundaries
 
-One of the pillar of MkFont when it comes to [Glyph Transformations]({{ '/docs/views/foldout-transforms' | relative_url }}) is its reliance on user-defined glyph boundaries prior to their use inside MkFont.  
+One of the pillar of MkFont when it comes to {% include lk id='Glyph transformations' %} is its reliance on user-defined glyph boundaries prior to their use inside MkFont.  
 Basically you operate transformations based on something that doesn't have to be the glyph shape.  
 There are only two ways I can know about the relation of your path to the typographic space :
 1. The SVG `viewBox`
@@ -39,37 +39,38 @@ The one case where there isn't a `viewBox` is when you {% include shortcut keys=
 >This doesn't have to be true, but most of the scale & fit options rely on some consistent logic in the way you author your SVGs.
 {: .warning }
 
-## ViewBox?
-
-An image is worth a thousand words; here are the difference :  
+## viewBox?
+ 
 **TL;DR : you loose flexibility without the viewBox!**
+An image is worth a thousand words; here are the differences : 
 
-![Artboard](/assets/images/dialogs/bound-illustrator.png)  
+{% include img a='dialogs/bound-illustrator.png' %} 
+
 *(A path bleeding outside an artboard. This is what will be imported.)*
 
 | Boundary mode       | With viewBox          | Without viewBox |
 |:-------------|:------------------|:-----------|
-| {% include btn ico="bounds-outside" %} `imported bounds`| ![Viewport Header](/assets/images/dialogs/bound-imported.png) | ![Viewport Header](/assets/images/dialogs/pasted-glyph.png) |
-| {% include btn ico="bounds-mixed" %} `mixed bounds` |  ![Viewport Header](/assets/images/dialogs/bound-mixed.png) | ![Viewport Header](/assets/images/dialogs/pasted-mixed.png) |
-| {% include btn ico="bounds-inside" %} `glyph bound` |  ![Viewport Header](/assets/images/dialogs/bound-glyph.png) | ![Viewport Header](/assets/images/dialogs/pasted-tight.png) |
+| {% include btn ico="bounds-outside" %} `imported bounds`| {% include img a='dialogs/bound-imported.png' %} | {% include img a='dialogs/pasted-glyph.png' %} |
+| {% include btn ico="bounds-mixed" %} `mixed bounds` |  {% include img a='dialogs/bound-mixed.png' %} | {% include img a='dialogs/pasted-mixed.png' %} |
+| {% include btn ico="bounds-inside" %} `glyph bound` |  {% include img a='dialogs/bound-glyph.png' %} | {% include img a='dialogs/pasted-tight.png' %} |
 
 >You can technically achieve the same results with a combination of `Shift`, `Push`, `Vertical Offset` & `Scale` -- but it becomes super clunky.
 {: .comment}
 
-## Custom path?
+## Custom path as viewBox?
 
 When pasting content directly from your editing software, it won't have the `viewBox` information.  
-In order to work around that (*knowing it is **not** mandatory, it's more of a QoL thing.*), any path and/or vector information that has a magenta color will be considered as being the `viewBox`.  
+In order to work around that (*knowing it is **not** mandatory, it's more of a QoL thing.*), any path and/or vector information that has a magenta color will be considered as being the `viewBox`.  **This color can be customized in the {% include lk id='App settings' %}!**
 Magenta is `rgb(255,0,255)`, `#FF00FF`, or `#F0F`.  
 
 >If both info exist within a file (i.e it has both a magenta path AND a `viewBox`), **the magenta path takes over** at is is considered more intentional by design.
 {: .warning}
 
 this :  
-![Artboard](/assets/images/dialogs/bound-illustrator-no-artboard.png)
+{% include img a='dialogs/bound-illustrator-no-artboard.png' %}
 
 will be interpreted exactly the same way as this :  
-![Artboard](/assets/images/dialogs/bound-illustrator.png) 
+{% include img a='dialogs/bound-illustrator.png' %}
 
 ---
 
@@ -80,12 +81,14 @@ will be interpreted exactly the same way as this :
 >Here are a few situational examples :
 {: .warning}
 
+
+
 | Illustrator viewport       | Wireframe view          | MkFont |
 |:-------------|:------------------|:-----------|
-| ![A](/assets/images/dialogs/ill-closedpath.png)| ![B](/assets/images/dialogs/ill-closedpath-wire.png) | ![C](/assets/images/dialogs/final-closedpath.png) |
-| ![A](/assets/images/dialogs/ill-closedpath-kept.png)| ![B](/assets/images/dialogs/ill-closedpath-wire.png) | ![C](/assets/images/dialogs/final-closedpath.png) |
-| ![A](/assets/images/dialogs/ill-openpath-kept.png)| ![B](/assets/images/dialogs/ill-openpath-kept-wire.png) | ![C](/assets/images/dialogs/final-openpath-kept.png) |
-| ![A](/assets/images/dialogs/ill-openpath-kept.png)| ![B](/assets/images/dialogs/ill-openpath-expanded-wire.png) | ![C](/assets/images/dialogs/final-openpath-expanded.png) |
+| {% include img a='dialogs/ill-closedpath.png' %} | {% include img a='dialogs/ill-closedpath-wire.png' %} | {% include img a='dialogs/final-closedpath.png' %} |
+| {% include img a='dialogs/ill-closedpath-kept.png' %} | {% include img a='dialogs/ill-closedpath-wire.png' %} | {% include img a='dialogs/final-closedpath.png' %} |
+| {% include img a='dialogs/ill-openpath-kept.png' %} | {% include img a='dialogs/ill-openpath-kept-wire.png' %} | {% include img a='dialogs/final-openpath-kept.png' %} |
+| {% include img a='dialogs/ill-openpath-kept.png' %} | {% include img a='dialogs/ill-openpath-expanded-wire.png' %} | {% include img a='dialogs/final-openpath-expanded.png' %} |
 
 Bottom line :
 - Closed path work fine
@@ -99,5 +102,6 @@ Bottom line :
 
 # Naming conventions
 
-If you intend to make good use of the [Batch import]({{ '/docs/dialogs/list-import' | relative_url }}) feature, do check out how the [automation using filename]({{ '/docs/dialogs/list-import#from-filename' | relative_url }}) works.  
-And if you don't want to bother too much with that and don't have everything setup for your assets, you can take great advantage of the [Illustrator Artboard creation]({{ '/docs/views/viewport-unicode#actions' | relative_url }}) action.
+If you intend to make good use of the {% include lk id='Batch import' %} feature, do check out how the [automation using filename]({{ '/docs/dialogs/list-import#from-filename' | relative_url }}) works.  
+And if you don't want to bother too much with that and don't have everything setup for your assets, you can take great advantage of the {% include lk id='Font viewport' t='Illustrator Artboard creation' a='#actions' %} action.
+

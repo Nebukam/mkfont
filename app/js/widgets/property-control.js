@@ -120,8 +120,8 @@ class PropertyControl extends base {
         this._nullifyBtn = this.Attach(nkm.uilib.buttons.Tool, `nullify`, this._host);
         this._nullifyBtn.options = {
             size: nkm.ui.FLAGS.SIZE_XS, trigger: { fn: this._Bind(this._NullifyValue) },
-            htitle: `Set value to null.\nDoing so will force this parameter to be inherited from its hierarchy.`,
-            icon: `remove`
+            htitle: `Link to Family Metrics.`,
+            icon: `link`
         }
 
     }
@@ -235,8 +235,12 @@ class PropertyControl extends base {
         if (this._inherited) {
             this._input.currentValue = null;
             if (this.exportedValue != null) { this._input.placeholderValue = this.exportedValue; }
+            this._nullifyBtn.icon = `font`;
+            this._nullifyBtn.disabled = true;
         } else {
             this._input.currentValue = this.localValue;
+            this._nullifyBtn.icon = `link`;
+            this._nullifyBtn.disabled = false;
         }
 
         // Red strikethrough on boolean input

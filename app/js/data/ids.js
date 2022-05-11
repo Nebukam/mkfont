@@ -578,6 +578,7 @@ class IDS {
     static CIRCULAR_REFERENCE = 'circ-dep';
 
     static LYR_USE_PREV_LAYER = 'lyr-bounds-lyr';
+    static LYR_PREV_LAYER_NAME = 'lyr-ref-lyr';
     static LYR_IS_CONTROL_LAYER = 'lyr-control';
 
     static {

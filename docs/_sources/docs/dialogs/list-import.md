@@ -19,11 +19,11 @@ toc_img: dialogs/list-import-a.png
 
 ## Glyph Transformation
 
->**Important note** : when batch-importing, the [Glyph Transformations]({{ '/docs/views/foldout-transforms' | relative_url }}) are on a **one-for-all** basis.  
+>**Important note** : when batch-importing, the {% include lk id='Glyph transformations' %} are on a **one-for-all** basis.  
 >*Per-glyph tweaks can be done after import.*
 {: .warning}
 
-It is also important to highlight that the preview on the right show what the glyph will look like *after* being imported; hence it's very easy to check whether or not you want to keep or overwrite existing transforms. See [Glyph Transformations]({{ '/docs/glyphs-transforms' | relative_url }}) for a detailed overview of the transformation options.
+It is also important to highlight that the preview on the right show what the glyph will look like *after* being imported; hence it's very easy to check whether or not you want to keep or overwrite existing transforms. See {% include lk id='Glyph transformations' %} for a detailed overview of the transformation options.
 
 
 ## Overlap 
@@ -45,7 +45,7 @@ Assignation determines how an imported SVG will be *assigned* to a unicode slot.
 Which option to choose from is highly specific to how you like to work, and the type of font you're working on.  
 **File list is internally sorted on import to ensure consistent & predictable behavior.**  
 
-![List import modes](/assets/images/dialogs/list-import-mode.png)
+{% include img a='dialogs/list-import-mode.png' %}
 
 >When working with regular font, I highly recommend using **From filename** and maintain strict naming conventions to avoid wondering whether a glyph should be here or there.
 >However, when working with icon font, it can be preferable to select **To block**.
@@ -136,10 +136,10 @@ Each item offer the ability for [manual assignation](#manually-assign-a-slot).
 
 | State       | Meaning          |
 |:-------------|:------------------|
-|  New glyph |![Slot new <](/assets/images/dialogs/list-item-new.png) *Glyph will be imported in the U+0048 slot, a.k.a `F`, a.k.a LATIN CAPITAL LETTER K* |
-|  Overwrite glyph |![Slot overwrite <](/assets/images/dialogs/list-item-import-on-existing.png) *Glyph will be imported in the U+003F slot, a.k.a `?`, a.k.a QUESTION MARK*|
-|  Overwrite custom glyph |![Slot overwrite cutom <](/assets/images/dialogs/list-item-import-on-existing-override.png) *Glyph will be imported in the U+0041 slot, a.k.a `A`, a.k.a LATIN CAPITAL LETTER A* |
-|  Not imported |![Slot Not Exported <](/assets/images/dialogs/list-item-not-imported.png) *Glyph will not be imported.* |
+|  New glyph |{% include img a='dialogs/list-item-new.png' f='<' %} *Glyph will be imported in the U+0048 slot, a.k.a `F`, a.k.a LATIN CAPITAL LETTER K* |
+|  Overwrite glyph |{% include img a='dialogs/list-item-import-on-existing.png' f='<' %} *Glyph will be imported in the U+003F slot, a.k.a `?`, a.k.a QUESTION MARK*|
+|  Overwrite custom glyph |{% include img a='dialogs/list-item-import-on-existing-override.png' f='<' %} *Glyph will be imported in the U+0041 slot, a.k.a `A`, a.k.a LATIN CAPITAL LETTER A* |
+|  Not imported |{% include img a='dialogs/list-item-import-not-imported.png' f='<' %} *Glyph will not be imported.* |
 
 ### Manually assign a slot
 
@@ -168,4 +168,4 @@ No matter what happens, the item will preview the final destination slot right b
 
 When overwriting an existing glyph, preview will show a faint version of the currently existing glyph behind the new one, so you get a better sense of the update you're about to apply.
 
-![List import alt](/assets/images/dialogs/list-import-b.png)
+{% include img a='dialogs/list-import-b.png' %}

@@ -36,7 +36,7 @@ The results can be narrowed down & limited by a few parameters :
 
 ## One ligature per line
 
-![Ligature line break](/assets/images/dialogs/ligatures-line-break.png)
+{% include img a='dialogs/ligatures-line-break.png' %}
 
 In this mode, simply input the target ligature on each line to manually produce results.  
 Other parameters will be ignored.  

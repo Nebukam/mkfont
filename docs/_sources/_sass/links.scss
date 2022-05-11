@@ -2,6 +2,14 @@
 // Links box
 //
 
+.icon{
+  &.emb{
+    height: 1em;
+    transform: translateY(0.15em);
+    margin-right: 0.1em;
+  }
+}
+
 .link-more {
   position: absolute;
   top: 250px;

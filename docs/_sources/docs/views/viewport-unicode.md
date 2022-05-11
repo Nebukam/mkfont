@@ -6,7 +6,7 @@ title: Font viewport
 subtitle: Navigate & search through Unicode slots.
 #summary: summary_goes_here
 splash: icons/icon_view-grid.svg
-preview_img: previews/viewport-unicode.png
+preview_img: previews/font-viewport.png
 toc_img: views/viewport-full.png
 tagged: editor
 nav_order: 2
@@ -14,9 +14,9 @@ nav_order: 2
 
 {% include header_card %}
 
->## Bound the the [Content explorer](explorer-content)
+>## Bound the the {% include lk id='Content explorer' %}
 >{: .no_toc :}
->The contents of the viewport is determined by the items selected within the [Content explorer](explorer-content).  
+>The contents of the viewport is determined by the items selected within the {% include lk id='Content explorer' %}.  
 >Actions & search are applied within the limits of the selected range. Note that some ranges represent all glyphs within your font, or even all known Unicode points, so be careful!
 {: .infos}
 
@@ -27,11 +27,11 @@ nav_order: 2
 
 The header is rather straightfoward : the name displayed is the one of the range currently displayed; as well as it's type and number of glyphs it covers.  
 If the type is a named Unicode range, the first tag will show the start & end address of the block in hexadecimal form. *For example, Basic Latin goes from U+0020 to U+007F. (control characters are omitted)*
-The second tag shows how many glyphs are contained within the active range. *(This is important because [modified actions](#action-modifiers) affect ALL the glyphs within the range, no matter the active selection)*
+The second tag shows how many glyphs are contained within the viewport.
 
 ### Actions
 
-![Viewport Header](/assets/images/views/viewport-header.png)
+{% include img a='views/viewport-header.png' %}
 
 The Font Viewport has a few available actions, displayed on the bottom right of the header.  
 **By default, these actions are applied to the active selection of glyph within the viewport.**
@@ -47,7 +47,7 @@ The Font Viewport has a few available actions, displayed on the bottom right of 
 | {% include btn ico="text-unicode" %} | Copy the unicode hex values to the clipboard, with each value separated by a newline character : `\n`. *(see [note](#note-on-unicode-lists))* |
 | {% include shortcut keys="Shift" %} + {% include btn ico="text-unicode" %} | Same as above, applied to the entire viewport content. |
 |: **Third parties** :||
-| {% include btn ico="app-illustrator" %} | Create & execute a JSX script that will prompt Adobe© Illustrator to create a new document with artboard set-up for each selected glyph, properly named in order to be exported easily. *(see [third party](/features/third-party))* |
+| {% include btn ico="app-illustrator" %} | Create & execute a JSX script that will prompt Adobe© Illustrator to create a new document with artboard set-up for each selected glyph, properly named in order to be exported easily. *(see {% include lk id='Third parties' %})* |
 | {% include shortcut keys="Shift" %} + {% include btn ico="app-illustrator" %}| Same as above, applied to the entire viewport content.  |
 |: **Deletion** :||
 | {% include btn ico="remove" %} | Delete selected glyphs. |
@@ -55,7 +55,7 @@ The Font Viewport has a few available actions, displayed on the bottom right of 
 
 ## Search
 
-![Viewport Search](/assets/images/views/viewport-search-abc.png)
+{% include img a='views/viewport-search-abc.png' %}
 
 The search feature is rather simple in its form, yet quite powerful.
 **It's important to note that the search results are constrained by the currently selected range.** Hence, if you want your search to be as broad as it can possibly be, select the {% include btn ico="text" label="All Unicode" %} range.  
@@ -64,7 +64,7 @@ The search needs to be enabled to produce results.
 > Search is **inclusive**, not *exclusive*. That means that the more terms you search for, the more results you'll get -- not the other way around.
 {: .warning}
 
-> If you want to search through **all known & referenced Unicode**, select the {% include btn ico="text" label="All Unicodes" %} range within the [Content Explorer](explorer-content).
+> If you want to search through **all known & referenced Unicode**, select the {% include btn ico="text" label="All Unicodes" %} range within the {% include lk id='Content explorer' %}.
 {: .infos}
 
 ### Search terms
@@ -73,15 +73,15 @@ The search needs to be enabled to produce results.
 |:-------------|:------------------|
 | unique character : `a`, `0` | Will find any glyph that match in either its character representation, or isolated in its name.<br>*In the case of ligatures, each linked character is looked at individually.* |
 | space-separated individual characters : `a b c`, `0 a N` | Same as unique search, but will combine the results |
-| Chain of characters : `circle`, `letter`, `lowercase` | These are compared against a glyph *identity*, as shown at the very top of the [Glyph Inspector](inspector-glyph). |
+| Chain of characters : `circle`, `letter`, `lowercase` | These are compared against a glyph *identity*, as shown at the very top of the {% include lk id='Glyph inspector' %}. |
 | Any combination | Will work. |
 
 ### Search modifier
 
 | Modifier       | Result          |
 |:-------------|:------------------|
-| **Relatives** | Search will include all related glyphs to the initial result of your search.<br>*Relatives search looks outside the current viewport range.*<br>![Viewport Search](/assets/images/views/viewport-search-relatives.png) |
-| **Exists** | Limit the results to glyphs that actually exists within your font.<br>*If the search terms are empty but this is enabled, the search will show all existing glyphs within the current viewport range.*<br>![Viewport Search](/assets/images/views/viewport-search-exists.png) |
+| **Relatives** | Search will include all related glyphs to the initial result of your search.<br>*Relatives search looks outside the current viewport range.*<br>{% include img a='views/viewport-search-relatives.png' %} |
+| **Exists** | Limit the results to glyphs that actually exists within your font.<br>*If the search terms are empty but this is enabled, the search will show all existing glyphs within the current viewport range.*<br>{% include img a='views/viewport-search-exists.png' %} |
 
 ## Selection
 
@@ -90,9 +90,9 @@ Expected selection behaviors apply :
 - Holding {% include shortcut keys="Ctrl" %} toggle a slot selection state. i.e, if it's selected it will be unselected, and vice-versa.
 - Holding {% include shortcut keys="Shift" %} while selecting another slot will select all the slot between the last selected slot and the new one.
 - {% include shortcut keys="Ctrl A" %} will select everything available within the range.
-- See [Shortcuts](../shortcuts#in-the-viewport-unicode) for more infos.
+- See {% include lk id='Shortcuts' %} for more infos.
 
-> *Note that selection isn't lost if you click on an already selected item : this is by design. Instead, it will "bump" that item so it becomes the first item in the active selection. This is especially useful when editing large selection, as it allow you to change which glyphs are previewed in the [Glyph Inspector](inspector-glyph).*
+> *Note that selection isn't lost if you click on an already selected item : this is by design. Instead, it will "bump" that item so it becomes the first item in the active selection. This is especially useful when editing large selection, as it allow you to change which glyphs are previewed in the {% include lk id='Glyph inspector' %}.*
 {: .comment}
 
 ## Slots
@@ -101,11 +101,11 @@ Expected selection behaviors apply :
 
 | State       | Meaning          |
 |:-------------|:------------------|
-| ![Slot Null](/assets/images/views/slot-null.png) | Glyph does not exists; default character preview is shown. |
-| ![Slot Empty](/assets/images/views/slot-empty.png) | Glyph exists and is empty. |
-| ![Slot Exists](/assets/images/views/slot-idle.png) | Glyph exists and has a path. |
-| ![Slot Not Exported](/assets/images/views/slot-no-export.png) | Glyph exists and has a path, but is flagged to be ignored during export. |
-| ![Slot Out of Bounds](/assets/images/views/slot-oob.png) | Glyph exists and has a path, but it is out-of-bounds.<br>As such, it won't be exported. |
+| {% include img a='views/slot-null.png' %} | Glyph does not exists; default character preview is shown. |
+| {% include img a='views/slot-empty.png' %} | Glyph exists and is empty. |
+| {% include img a='views/slot-idle.png' %} | Glyph exists and has a path. |
+| {% include img a='views/slot-no-export.png' %} | Glyph exists and has a path, but is flagged to be ignored during export. |
+| {% include img a='views/slot-oob.png' %} | Glyph exists and has a path, but it is out-of-bounds.<br>As such, it won't be exported. |
 
 > An out-of-bound glyph highlights a path that is so big in size it can't fit : **glyph path must be kept within `-16,000` & `16,000` after transformation**. Some reasons your glyph is OoB :
 > - Your EM value in the font metrics is too large

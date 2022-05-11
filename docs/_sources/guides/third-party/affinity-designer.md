@@ -1,6 +1,6 @@
 ---
 layout: page
-parent: Third Parties
+parent: Third parties
 grand_parent: Guides
 title: Affinity Designer
 subtitle: ···

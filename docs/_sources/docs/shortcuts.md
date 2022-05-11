@@ -2,7 +2,7 @@
 layout: page
 parent: Documentation
 title: Shortcuts
-subtitle: MkFont shortcuts, do they do things, let's find out!
+subtitle: MkFont shortcuts, what do they do, do they do things, let's find out!
 #summary: Summary it is!
 splash: icons/icon_action.svg
 preview_img: previews/shortcuts.png
@@ -20,7 +20,7 @@ color: red
 >On the contrary, {% include shortcut keys="Alt" %} has a lesser effect, and often means the action will only execute a subset of its normal instructions.
 {: .warning }
 
-## In the [Font Editor]({{ '/docs/views/editor-font' | relative_url }})
+## In the {% include lk id='Font editor' %}
 
 | Shortcut       | Action          |
 |:-------------|:------------------|
@@ -40,7 +40,7 @@ color: red
 
 ---
 
-## In the [Font Viewport]({{ '/docs/views/viewport-unicode' | relative_url }})
+## In the {% include lk id='Font viewport' %}
 
 | Shortcut       | Action          |
 |:-------------|:------------------|
@@ -64,12 +64,12 @@ Modifiers are applied when a key is pressed along with a specific button.
 | {% include shortcut keys="Shift" %} + {% include btn ico="new" %}  | Create empty glyphs in Unicode slots that have no glyph yet. Does **not** overwrite existing ones. |
 | {% include shortcut keys="Shift" %} + {% include btn ico="text-unicode-char" %} | Copy the unicode characters to the clipboard, with each value separated by a newline character : `\n`. *(see [note](#note-on-unicode-lists))* |
 | {% include shortcut keys="Shift" %} + {% include btn ico="text-unicode" %} | Copy the unicode hex values to the clipboard, with each value separated by a newline character : `\n`. *(see [note](#note-on-unicode-lists))* |
-| {% include shortcut keys="Shift" %} + {% include btn ico="app-illustrator" %} | Create & execute a JSX script that will prompt Adobe© Illustrator to create a new document with artboard set-up for each glyph within the range (up to 1000), properly named in order to be exported easily. *(see [third party](/features/third-party))*  |
+| {% include shortcut keys="Shift" %} + {% include btn ico="app-illustrator" %} | Create & execute a JSX script that will prompt Adobe© Illustrator to create a new document with artboard set-up for each glyph within the range (up to 1000), properly named in order to be exported easily. *(see {% include lk id='Third parties' %} )*  |
 | {% include shortcut keys="Shift" %} + {% include btn ico="remove" %} | Delete all glyphs within the range. |
 
 ---
 
-## In the [Glyph Inspector]({{ '/docs/views/inspector-glyph ' | relative_url }})
+## In the {% include lk id='Glyph inspector' %}
 
 ### Header actions
 

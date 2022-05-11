@@ -32,7 +32,7 @@ github_username:  nebukam
 # Build settings
 theme: just-the-docs
 color_scheme: dark
-logo: "/mkfont/assets/images/logo-inline.png"
+logo: "/assets/splash.png" 
 plugins:
   - jekyll-feed
   - jekyll-spaceship
@@ -43,6 +43,12 @@ aux_links:
     - "https://twitter.com/nebukam"
   "LinkedIn":
     - "https://ca.linkedin.com/in/timothelapetite/en"
+
+defaults:
+  - scope:
+      path: ""
+    values:
+      image: /assets/splash.png
 
 # Exclude from processing.
 # The following items will not be processed, by default.

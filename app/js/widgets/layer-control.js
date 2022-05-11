@@ -139,6 +139,8 @@ class LayerControl extends base {
             ]
         };
 
+        this._label.ellipsis = true;
+
     }
 
     _ToggleVisibility(p_input, p_value) {
@@ -160,8 +162,8 @@ class LayerControl extends base {
         super._OnDataUpdated(p_data);
 
         let char = p_data.Get(mkfData.IDS.LYR_CHARACTER_NAME);
-        if (p_data._useCount <= 0) { this._label.Set(char && char != `` ? `layer : ${char} ` : `(empty layer)`); }
-        else { this._label.Set(char && char != `` ? `${char} (×${p_data._useCount})` : `(empty layer ×${p_data._useCount})`); }
+        if (p_data._useCount <= 0) { this._label.Set(char && char != `` ? `${char} ` : `(empty component)`); }
+        else { this._label.Set(char && char != `` ? `${char} (×${p_data._useCount})` : `(empty component ×${p_data._useCount})`); }
 
         this._flags.Set(__circular, p_data.Get(mkfData.IDS.CIRCULAR_REFERENCE));
         let viz = p_data.Get(mkfData.IDS.DO_EXPORT);

@@ -11,10 +11,6 @@ nav_order: 20
 
 {% include header_card %}
 
->## WORK IN PROGRESS.
->Come back later (～￣▽￣)～ 
-{: .error}
-
 ## Using separate .mkfont files as re-usable libraries
 
 There is currently no way to import an MkFont file into another, by design : you can copy/paste-in-place glyphs from an open document to another.  
@@ -24,3 +20,16 @@ What I tend to do is keep sets of glyphs in separate .mkfont files that I use as
 {: .infos}
 
 ---
+
+## Using non-exported ligatures as re-usable named components
+
+Since components work by importing existing glyphs, it comes in handy to create ligatures with human-readable names *(like you would with layers in a tidy photoshop document)*, set them to not be exported along with the font, and voila, you got yourself a component library!
+
+> This is especially useful when working with complex icon sets, or when naming artboards as Unicode value isn't an option. The {% include lk id='Complex icon font' %} guide is a good demonstration of that.
+{: .infos}
+
+---
+
+>## WORK IN PROGRESS.
+>Come back later (～￣▽￣)～ 
+{: .error}

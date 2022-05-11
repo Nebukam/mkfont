@@ -1,7 +1,7 @@
 ---
 layout: page
 parent: Guides
-title: Third Parties
+title: Third parties
 subtitle: Interaction with external apps
 summary: How to make the most out of MkFont using supported third party applications
 splash: icons/icon_view-grid.svg

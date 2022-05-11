@@ -130,7 +130,7 @@ class WelcomeView extends base {
                     variant: ui.FLAGS.MINIMAL, flavor: ui.FLAGS.CTA,
                     group: `about`,
                     trigger: {
-                        fn: () => { shell.openExternal("https://github.com/Nebukam/mkfont") }
+                        fn: () => { shell.openExternal("https://nebukam.github.io/mkfont/about/") }
                     }
                 },
                 {
@@ -138,7 +138,7 @@ class WelcomeView extends base {
                     variant: ui.FLAGS.MINIMAL,
                     group: `help`,
                     trigger: {
-                        fn: () => { shell.openExternal("https://github.com/Nebukam/mkfont/wiki") }
+                        fn: () => { shell.openExternal("https://nebukam.github.io/mkfont/docs/") }
                     }
                 },
                 {

@@ -15,7 +15,7 @@ nav_order: 6
 {% include header_card %}
 
 > For the various foldouts in full details, see
-> - [Transformations]({{ '/docs/views/foldout-transforms' | relative_url }})
+> - {% include lk id='Glyph transformations' %}
 {: .infos}
 
 {% include img_toc %}
@@ -26,7 +26,7 @@ nav_order: 6
 
 The glyph preview is non-interactive, and shows the all the metrics & guides that currently define the typographic space.
 
-![Empty Glyph Inspector](/assets/images/views/glyph-inspector-previews.png)
+{% include img a='views/glyph-inspector-previews.png' %}
 
 >*The blue boundary box shows the glyph boundaries as currently seen by the transformation algorithm, according to the active transformation settings. If this is not what you were expecting, either play around with the [selected boundary options]({{ '/docs/views/foldout-transforms#boundaries' | relative_url }}), or check your source file.*
 {: .comment }
@@ -39,7 +39,7 @@ The glyph preview is non-interactive, and shows the all the metrics & guides tha
 >Unless you started your doc by importing a `.ttf`, this is likely the first thing you'll interact with.
 {: .comment }
 
-![Empty Slot Inspector](/assets/images/views/glyph-inspector-null.png)
+{% include img a='views/glyph-inspector-null.png' %}
 
 ## Header actions
 
@@ -59,7 +59,7 @@ Actions are limited to the following when editing an empty slot :
 
 # Single glyph inspection
 
-![Single Slot Inspector](/assets/images/views/glyph-inspector-preview.png)
+{% include img a='views/glyph-inspector-preview.png' %}
 
 ## Header actions
 
@@ -86,6 +86,14 @@ Each foldout has its own dedicated page.
 
 {% include card_any tagged="foldout" %}
 
+### Shortcut & actions
+When displayed in the glyph inspector, the {% include lk id='Glyph transformations' %} has some additional actions available :
+
+| Modifier       | Action          |
+|:-------------|:------------------|
+| {% include btn ico="clipboard-read" %} | Paste transforms from clipboard |
+| {% include shortcut keys="Ctrl Alt V" %} | Paste transforms from clipboard |
+
 ---
 
 ## Settings
@@ -98,7 +106,7 @@ Each foldout has its own dedicated page.
 
 ### Resource binding
 
-![Empty Glyph Inspector](/assets/images/views/glyph-binding.png)
+{% include img a='views/glyph-binding.png' %}
 
 If the glyph is currently bound to a file, the binding and the ability to break it ( {% include btn ico="remove" %} ) will show under the preview. Bindings are created during external file imports, either individually using {% include btn ico="document-edit" %}, or during batch import.
 
@@ -116,7 +124,7 @@ If the glyph is currently bound to a file, the binding and the ability to break 
 >If you have empty slot within your selection, they will be ignored.
 {: .warning }
 
-![Multi Glyph Inspector](/assets/images/views/glyph-inspector-multiple.png)
+{% include img a='views/glyph-inspector-multiple.png' %}
 
 When multiple glyphs are selected, changing parameters will apply to all the selected glyphs.  
 You can click on any selected glyph within the viewport in order to "bump" it so it shows first within the first four previews.
@@ -145,7 +153,7 @@ Actions are limited to the following when editing groups :
 >An empty glyph is a glyph that exists and takes space within a sentence. The actual space it will take is represented by an orange placeholder box.
 {: .comment }
 
-![Empty Glyph Inspector](/assets/images/views/glyph-inspector-empty.png)
+{% include img a='views/glyph-inspector-empty.png' %}
 
 *Not much to see here.*  
 Empty glyph width can be changed by either tweaking the glyph' **Width**, **Shift** or **Push**
