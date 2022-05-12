@@ -18,6 +18,7 @@ class IDS {
     static infos = {};
 
     static EMPTY_PATH_CONTENT = `M 0 0 L 0 0 z`;
+    static isEmptyPathContent(p_path) { return p_path == this.EMPTY_PATH_CONTENT || p_path == `M0 0L0 0z`; }
 
     //#region family properties 
 
@@ -331,6 +332,9 @@ class IDS {
 
     static SHOW_ALL_LAYERS = 'show-all-layers';
 
+    static FLATTEN_LAYERS = 'flatten-layers';
+    static FLATTEN_MODE = 'flatten-mode';
+
     static {
 
         this.infos[this.COLOR_PREVIEW] = {
@@ -374,6 +378,22 @@ class IDS {
             desc: `Show all shared components (at least used twice), not just the ones shared by every glyph in the selection.`
         };
 
+        this.infos[this.FLATTEN_LAYERS] = {
+            recompute: true,
+            label: `Flatten comps`,
+            inputType: inputs.Boolean,
+            inputOptions: { size: ui.FLAGS.SIZE_XS },
+            desc: `Will flatten layers as if they were a single block.\nUses EM Square as transform space.`
+        };
+        this.infos[this.FLATTEN_MODE] = {
+            inputType: inputs.Select,
+            recompute: true,
+            enum: ENUMS.WEIGHTS,
+            label: `Flattening mode`,
+            inputOptions: { catalog: ENUMS.FLATTEN_MODE, itemKey: nkm.com.IDS.VALUE, placeholder: `· · ·` },
+            desc: `Defines how the boundaries of the flattened result are computed`
+        };
+
     }
 
     //#endregion
@@ -403,8 +423,6 @@ class IDS {
     static TR_SKEW_X = 'skew-x';
     static TR_SKEW_Y = 'skew-y';
     static TR_SKEW_ROT_ORDER = 'skew-rot-order';
-
-
 
     static {
 

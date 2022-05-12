@@ -106,6 +106,7 @@ class FamilyDataBlockJSONSerializer extends nkm.data.serialization.json.DataBloc
                 // cleanup runtime-computed values
                 delete variantObj[__ID_values][IDS.PATH];
                 delete variantObj[__ID_values][IDS.OUT_OF_BOUNDS];
+                delete variantObj[__ID_values][IDS.EXPORTED_WIDTH];
 
                 variants.push(variantObj);
             }

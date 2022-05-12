@@ -22,7 +22,6 @@ nav_order: 2
 
 {% include img_toc %}
 
-
 ## Header
 
 The header is rather straightfoward : the name displayed is the one of the range currently displayed; as well as it's type and number of glyphs it covers.  
@@ -52,6 +51,8 @@ The Font Viewport has a few available actions, displayed on the bottom right of 
 |: **Deletion** :||
 | {% include btn ico="remove" %} | Delete selected glyphs. |
 | {% include shortcut keys="Shift" %} + {% include btn ico="remove" %}| Same as above, applied to the entire viewport content. |
+
+---
 
 ## Search
 
@@ -83,6 +84,8 @@ The search needs to be enabled to produce results.
 | **Relatives** | Search will include all related glyphs to the initial result of your search.<br>*Relatives search looks outside the current viewport range.*<br>{% include img a='views/viewport-search-relatives.png' %} |
 | **Exists** | Limit the results to glyphs that actually exists within your font.<br>*If the search terms are empty but this is enabled, the search will show all existing glyphs within the current viewport range.*<br>{% include img a='views/viewport-search-exists.png' %} |
 
+---
+
 ## Selection
 
 Selecting slots within the viewport is done using the mouse.  
@@ -94,6 +97,8 @@ Expected selection behaviors apply :
 
 > *Note that selection isn't lost if you click on an already selected item : this is by design. Instead, it will "bump" that item so it becomes the first item in the active selection. This is especially useful when editing large selection, as it allow you to change which glyphs are previewed in the {% include lk id='Glyph inspector' %}.*
 {: .comment}
+
+---
 
 ## Slots
 
@@ -150,12 +155,14 @@ The {% include btn ico="text-unicode" %} action will generate this kind of resul
     U+0043
     U+0044
 
+---
+
 ## Shortcuts
 
 | Shortcut       | Action          |
 |:-------------|:------------------|
 | {% include shortcut keys="Ctrl C" %}           | Copy a single glyph to the clipboard* |
-| {% include shortcut keys="Ctrl V" %}           | Paste the content of the clipboard in the selected glyph slot.<br>Supports pasting directly from Adobe Illustrator! |
+| {% include shortcut keys="Ctrl V" %}           | Paste the content of the clipboard in the selected glyph slot.<br>Supports pasting directly from Adobe© Illustrator! |
 | {% include shortcut keys="Ctrl Shift C" %}           | Copy the selected glyphs & their unicode position in memory* |
 | {% include shortcut keys="Ctrl Shift V" %}           | Paste the glyphs copied using {% include shortcut keys="Ctrl Shift C" %} to their matching unicode slots. This is especially *(if not only)* useful to paste glyphs from an .mkfont to another in batch, while retaining their unicode positions. |
 | {% include shortcut keys="Ctrl Alt V" %}           | Applies the transform of the glyph stored in memory using {% include shortcut keys="Ctrl C" %} to all glyphs in the active selection. Does **not** affect the path. |

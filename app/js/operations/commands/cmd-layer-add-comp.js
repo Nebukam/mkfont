@@ -22,7 +22,11 @@ class CmdLayerAddComp extends actions.Command {
 
     _InternalExecute() {
 
-        let unicodeInfos;
+        let
+            unicodeInfos,
+            createMissing = !nkm.ui.INPUT.alt,
+            createRecursive = nkm.ui.INPUT.shift;
+
 
         if (u.isArray(this._context)) {
 
@@ -33,7 +37,7 @@ class CmdLayerAddComp extends actions.Command {
             });
 
             this._context.forEach(variant => {
-                SHARED_OPS.BoostrapComp(this._emitter, variant, variant.glyph.unicodeInfos);
+                SHARED_OPS.BoostrapComp(this._emitter, variant, variant.glyph.unicodeInfos, createMissing, createRecursive);
             });
 
             this._emitter.EndActionGroup();
@@ -48,12 +52,15 @@ class CmdLayerAddComp extends actions.Command {
             }
 
             this._emitter.StartActionGroup({
-                icon: `link`,
-                name: `Layer comp`,
-                title: `Creates layer from character decomposition`
+                icon: `component-new`,
+                name: `Composite`,
+                title: `Creates components from character decomposition`
             });
 
-            SHARED_OPS.BoostrapComp(this._emitter, this._context, unicodeInfos);
+            // ALT - Only create layers, not create new glyphs
+            // SHIFT - Recursive bootstrap
+
+            SHARED_OPS.BoostrapComp(this._emitter, this._context, unicodeInfos, createMissing, createRecursive);
 
             this._emitter.EndActionGroup();
 

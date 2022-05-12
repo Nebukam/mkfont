@@ -5,7 +5,7 @@ title: Components
 subtitle: Make more with less!
 summary: A powerful component & compositing system, allowing for clever automation and infinite possibilities.
 splash: icons/icon_component.svg
-preview_img: placeholder.jpg
+preview_img: previews/components-anim.gif
 card_url: /docs/views/foldout-components
 nav_order: 0
 ---

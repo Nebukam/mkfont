@@ -10,7 +10,7 @@ const IDS = require(`./ids`);
 const TransformSettings = require(`./settings-transforms-data-block`);
 
 const svgpath = require('svgpath');
-const ContentUpdater = require(`../content-updater`);
+const ContentManager = require(`../content-manager`);
 const UNICODE = require('../unicode');
 const SIGNAL = require('../signal');
 

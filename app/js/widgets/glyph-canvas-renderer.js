@@ -100,7 +100,7 @@ class GlyphCanvasRenderer extends __BASE__ {
         this._computedPath = p_value;
         this._emptyGlyph = false;
         if (this._computedPath) {
-            if (this._computedPath.path == IDS.EMPTY_PATH_CONTENT) { this._emptyGlyph = true; }
+            if (IDS.isEmptyPathContent(this._computedPath.path)) { this._emptyGlyph = true; }
         }
     }
 

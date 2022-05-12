@@ -21,7 +21,7 @@ nav_order: 8
 
 ## What is a component?
 
->Generally speaking, components are kindda like layers, or illustrator Symbols, or Prefab in Unity : they can turn any existing glyph into a re-usable asset that self-updates  whenever modified.  
+>Generally speaking, components are kindda like layers, or Adobe© Illustrator Symbols, or Prefab in Unity : they can turn any existing glyph into a re-usable asset that self-updates  whenever modified.  
 >  
 >They can be used for many many things : easily make and maintained composite letters with modifiers such as `é`, `à` etc; but the logic also applies to creating flexible icon libraries. Check out the {% include lk id='Complex icon font' %} guide to get a grasp on the possibilities.
 {: .infos}
@@ -44,6 +44,14 @@ The first thing to setup in a component is choosing which glyph it will 'import'
 | {% include btn ico="hidden" %} | Toggle all layers to hidden |
 |: **Composite** :||
 | {% include btn ico="link" %} | Create component for each glyph part of the known decomposition of the host. *(See {% include lk id='Glyph details' %})* |
+
+### Flatten comps
+Whether or not to flatten the components.  
+This is a bit tricky to use, and (mostly) only useful when working with lots of components imported inside an empty glyph.  
+What it does is first compute component transformations as usual, them flatten them as if they were a single entity, and *then re-apply the global glyph transformations onto them*.  
+
+>This, among other things, effectively allows the glyph width to be controlled by its components.  
+
 
 ---
 
@@ -73,6 +81,8 @@ This is where you choose which glyph to import as a component. Accepted values a
 - A ligature, expressed as a combination of the above, with hex values terminated with a `-`, such as `abU+0041`, `abU+0041-i`, `abU+0041-iU+01f9`.
 
 Using the {% include btn ico="shortcut" %} button will inspect the glyph imported in the layer. You can quickly move back and forth between components and their glyphs using {% include shortcut keys="Mouse3" %} and {% include shortcut keys="Mouse4" %}.
+
+---
 
 ## Alignment & anchoring
 

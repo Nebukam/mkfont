@@ -19,6 +19,10 @@ const shouldHideWIDTH = (owner) => {
     if (!owner.data) { return true; }
     return !(owner.data._transformSettings.Get(mkfData.IDS.TR_AUTO_WIDTH) && owner.data._transformSettings.Get(mkfData.IDS.TR_SCALE_MODE) != mkfData.ENUMS.SCALE_NORMALIZE);
 };
+const shouldHideFLAT = (owner) => {
+    if (!owner.data) { return true; }
+    return owner.data.Get(mkfData.IDS.FLATTEN_LAYERS);
+};
 
 const base = nkm.datacontrols.ControlWidget;
 class GlyphVariantInspectorItem extends base {
@@ -34,7 +38,7 @@ class GlyphVariantInspectorItem extends base {
 
     static __glyphControls = [
         { cl: mkfWidgets.ControlHeader, options: { label: `Export` } },
-        { options: { propertyId: mkfData.IDS.DO_EXPORT }, css:`full` },
+        { options: { propertyId: mkfData.IDS.DO_EXPORT }, css: `full` },
     ];
 
     _Init() {
@@ -127,7 +131,7 @@ class GlyphVariantInspectorItem extends base {
                     group: `read`
                 },
                 {
-                    icon: `reset`, htitle: `Reset existing glyph or create an empty one if it doesn't exists.\n---\n+ [ Shift ] Also create components matching character decomposition.\n+ [ Alt ] Reset the glyph path while preserving everything else.`,
+                    icon: `reset`, htitle: `Reset existing glyph or create an empty one if it doesn't exists.\n---\n+ [ Shift ] Also create components matching character decomposition.\n+ [ Alt ] Reset the glyph path while preserving everything else.\n[ Shift + Alt ] Create components & missing glyphs recursively.`,
                     variant: ui.FLAGS.MINIMAL,
                     trigger: { fn: () => { this.editor.cmdGlyphClear.Execute(this._data); } },
                     group: `read`, member: { owner: this, id: `_glyphClearBtn` }
@@ -183,16 +187,14 @@ class GlyphVariantInspectorItem extends base {
                 title: LOC.labelLayers, icon: `component`, prefId: `layers`, expanded: true,
                 handles: [
                     {
-                        icon: 'clipboard-write', htitle: 'Copy components',
-                        trigger: { fn: () => { this.editor.cmdLayersCopy.Execute(this._data); } },
-                    },
-                    {
                         icon: 'clipboard-read', htitle: 'Paste components\n---\n+ [ Shift ] Add instead of replace\n+ [ Alt ] Only copy transforms',
                         trigger: { fn: () => { this.editor.cmdLayersPaste.Execute(this._data); } },
                     },
                 ]
             },
             [
+                { options: { propertyId: mkfData.IDS.FLATTEN_LAYERS } },
+                { options: { propertyId: mkfData.IDS.FLATTEN_MODE }, hideWhen: { fn: shouldHideFLAT } },
                 { cl: mkfWidgets.LayersView, member: { owner: this, id: `_layers` } },
             ]
         );
@@ -217,7 +219,7 @@ class GlyphVariantInspectorItem extends base {
 
     _Foldout(p_foldout, p_controls, p_css = ``, p_host = null) {
 
-        let foldout = this.Attach(nkm.uilib.widgets.Foldout, `item drawer${p_css ? ' '+p_css : ''}`, p_host || this);
+        let foldout = this.Attach(nkm.uilib.widgets.Foldout, `item drawer${p_css ? ' ' + p_css : ''}`, p_host || this);
         foldout.options = p_foldout;
 
         if (p_controls) {

@@ -41,4 +41,4 @@ Here are some of the features currently under development or planned to be, at s
 | Showcase Generator | Quickly generate a nice looking visual with your glyphs to showcase it, exports as a .png file. |
 | Glyph as components | Ability to combine existing glyph into another. This would be especially useful in order to re-user marks & modifier along with unmodified glyphs and not duplicate the work/amount of assets required to have a fully functional font |
 | Glyph layers | Similar to Glyph as components, working the ability to use existing glyphs as additional "layers" inside another Glyph. Glyph would either be used as-is, or with its path reversed in order to create "holes" -- hence making icon font much more flexible. |
-| Add existing glyph to illustrator automation | Currently the Illustrator automation only creates blank templates. Wouldn't it be nice if it could also import existing glyphs within the font? |
+| Add existing glyph to Adobe© Illustrator automation | Currently the Adobe© Illustrator automation only creates blank templates. Wouldn't it be nice if it could also import existing glyphs within the font? |

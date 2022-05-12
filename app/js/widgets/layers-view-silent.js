@@ -13,6 +13,11 @@ const LayerControlSilent = require(`./layer-control-silent`);
 const __nolayer = `nolayer`;
 const __limitReached = `limit-reached`;
 
+const shouldHideFLAT = (owner) => {
+    if (!owner.data) { return true; }
+    return owner.data.Get(mkfData.IDS.FLATTEN_LAYERS);
+};
+
 const base = LayersView;
 class LayersViewSilent extends base {
     constructor() { super(); }
@@ -20,6 +25,8 @@ class LayersViewSilent extends base {
     static __layerControlClass = LayerControlSilent;
 
     static __controls = [
+        { options: { propertyId: mkfData.IDS.FLATTEN_LAYERS } },
+        { options: { propertyId: mkfData.IDS.FLATTEN_MODE }, hideWhen: { fn: shouldHideFLAT } },
         { options: { propertyId: mkfData.IDS.SHOW_ALL_LAYERS, directSet: true }, requireData: true },
     ];
 
@@ -34,16 +41,16 @@ class LayersViewSilent extends base {
             ctrl.style.setProperty(`order`, i);
         });
 
-        if(this._layerCtrls.length >= mkfData.INFOS.LAYER_LIMIT){
+        if (this._layerCtrls.length >= mkfData.INFOS.LAYER_LIMIT) {
             this._flags.Set(__limitReached, true);
             this._limitLabel.Set(`<i>Only the first ${mkfData.INFOS.LAYER_LIMIT} most used components are shown.</i>`);
             this._createBtn.disabled = true;
-        }else{
+        } else {
             this._flags.Set(__limitReached, false);
             this._limitLabel.Set(null);
             this._createBtn.disabled = false;
         }
-        
+
     }
 
 

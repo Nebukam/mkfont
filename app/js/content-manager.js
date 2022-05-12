@@ -2,11 +2,14 @@
 
 const nkm = require(`@nkmjs/core`);
 const u = nkm.u;
+const IDS = require(`./data/ids`);
 
 const SIGNAL = require(`./signal`);
 
-class ContentUpdater extends nkm.com.helpers.SingletonEx {
+class ContentManager extends nkm.com.helpers.SingletonEx {
     constructor() { super(); }
+
+
 
     _Init() {
 
@@ -21,6 +24,8 @@ class ContentUpdater extends nkm.com.helpers.SingletonEx {
         this._delayedUpdate = nkm.com.DelayedCall(this._Bind(this._Update));
 
     }
+
+    //#region Update
 
     static Push(p_data, p_method) {
         this.instance._Push(p_data, p_method);
@@ -76,6 +81,9 @@ class ContentUpdater extends nkm.com.helpers.SingletonEx {
 
     }
 
+    //#endregion
+
+
 }
 
-module.exports = ContentUpdater;
+module.exports = ContentManager;

@@ -5,7 +5,7 @@ title: Asset preparation
 subtitle: How to prepare assets
 summary: Covers some basics yet important things regarding asset preparation
 splash: icons/icon_edit.svg
-preview_img: placeholder.jpg
+preview_img: previews/assets-prep.png
 nav_order: 1
 color: red
 ---
@@ -32,8 +32,8 @@ There are only two ways I can know about the relation of your path to the typogr
 1. The SVG `viewBox`
 2. A custom path that will be used as a reference
 
-Now you don't need to bother too much about the technicalities : the viewBox is usually automatically set by your editing software on import. i.e, in the case of Adobe Illustrator, artboards are the `viewBox`.  
-The one case where there isn't a `viewBox` is when you {% include shortcut keys="Ctrl C" %} in illustrator, and {% include shortcut keys="Ctrl V" %} in MkFont : the vector information is added to the clipboard without any `viewBox` : instead, it fits tight with your selection within Illustrator. While not a deal breaker, this will limit your ability to really take advantage of MkFont.
+Now you don't need to bother too much about the technicalities : the viewBox is usually automatically set by your editing software on import. i.e, in the case of Adobe© Illustrator, artboards are the `viewBox`.  
+The one case where there isn't a `viewBox` is when you {% include shortcut keys="Ctrl C" %} in Adobe© Illustrator, and {% include shortcut keys="Ctrl V" %} in MkFont : the vector information is added to the clipboard without any `viewBox` : instead, it fits tight with your selection within Illustrator. While not a deal breaker, this will limit your ability to really take advantage of MkFont.
 
 >**the bottom edge of the SVG viewBox (if it exists) represents the baseline of the (font) glyph, while the top edge is the height of the character within the font.**.  
 >This doesn't have to be true, but most of the scale & fit options rely on some consistent logic in the way you author your SVGs.

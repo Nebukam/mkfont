@@ -17,118 +17,78 @@ class CmdLayersPaste extends actions.Command {
 
     _Init() {
         super._Init();
-
+        this._Bind(this._PasteTransforms);
+        this._Bind(this._ReplaceLayers);
+        this._Bind(this._AddLayers);
     }
 
     _InternalExecute() {
 
-        let family = this._emitter.data;
-
-        if (!globalThis.__copySourceLayers) {
-            this._Cancel();
-            return;
-        }
-
-        let scaleFactor = globalThis.__copySourceEM ? family.Get(mkfData.IDS.EM_UNITS) / globalThis.__copySourceEM : 1;
-
-        if (u.isArray(this._context)) {
-
-            if (nkm.ui.INPUT.alt) {
-
-                this._emitter.StartActionGroup({
-                    icon: `clipboard-read`,
-                    name: `Copy comp. transforms`,
-                    title: `Replaced layers`
-                });
-
-                this._context.forEach(variant => {
-                    if (variant != globalThis.__copySourceLayers) {
-                        SHARED_OPS.PasteLayersTransforms(this._emitter, variant, globalThis.__copySourceLayers, scaleFactor, false);
-                    }
-                });
 
 
+        let
+            callback = null,
+            groupInfos = null;
 
-            } else if (!nkm.ui.INPUT.shift) {
+        if (nkm.ui.INPUT.alt) {
 
-                this._emitter.StartActionGroup({
-                    icon: `clipboard-read`,
-                    name: `Replace components`,
-                    title: `Replaced components`
-                });
+            groupInfos = {
+                icon: `clipboard-read`,
+                name: `Copy comp. transforms`,
+                title: `Replaced layers`
+            };
 
-                this._context.forEach(variant => {
-                    if (variant != globalThis.__copySourceLayers) {
-                        SHARED_OPS.RemoveLayers(this._emitter, variant);
-                        SHARED_OPS.AddLayers(this._emitter, variant, globalThis.__copySourceLayers, scaleFactor, false);
-                    }
-                });
+            callback = this._PasteTransforms;
 
-            } else {
+        } else if (!nkm.ui.INPUT.shift) {
 
-                this._emitter.StartActionGroup({
-                    icon: `clipboard-read`,
-                    name: `Paste components`,
-                    title: `Pasted components`
-                });
+            groupInfos = {
+                icon: `clipboard-read`,
+                name: `Replace components`,
+                title: `Replaced components`
+            };
 
-                this._context.forEach(variant => {
-                    if (variant != globalThis.__copySourceLayers) {
-                        SHARED_OPS.AddLayers(this._emitter, variant, globalThis.__copySourceLayers, scaleFactor, false);
-                    }
-                });
-
-            }
-
-            this._emitter.EndActionGroup();
+            callback = this._ReplaceLayers;
 
         } else {
 
-            //Solo !
-            if (this._context == globalThis.__copySourceLayers) {
-                this._Cancel();
-                return;
-            }
+            groupInfos = {
+                icon: `clipboard-read`,
+                name: `Paste components`,
+                title: `Pasted components`
+            };
 
-            if (nkm.ui.INPUT.alt) {
-
-                this._emitter.StartActionGroup({
-                    icon: `clipboard-read`,
-                    name: `Copy comp. transforms`,
-                    title: `Replaced layers`
-                });
-
-                SHARED_OPS.PasteLayersTransforms(this._emitter, this._context, globalThis.__copySourceLayers, scaleFactor, false);
-
-            } else {
-
-                if (!nkm.ui.INPUT.shift) {
-
-                    this._emitter.StartActionGroup({
-                        icon: `clipboard-read`,
-                        name: `Replace components`,
-                        title: `Replaced components`
-                    });
-
-                    SHARED_OPS.RemoveLayers(this._emitter, this._context);
-
-                } else {
-                    this._emitter.StartActionGroup({
-                        icon: `clipboard-read`,
-                        name: `Paste components`,
-                        title: `Pasted components`
-                    });
-                }
-
-                SHARED_OPS.AddLayers(this._emitter, this._context, globalThis.__copySourceLayers, scaleFactor);
-            }
-
-            this._emitter.EndActionGroup();
+            callback = this.AddLayers;
 
         }
 
-        this._Success();
+        this._emitter.StartActionGroup(groupInfos);
 
+        let success = SHARED_OPS.PasteTo(this._emitter, SHARED_OPS.MODE_CUSTOM, callback);
+
+        this._emitter.EndActionGroup();
+
+        return success ? this._Success() : this._Fail();
+
+    }
+
+    _PasteTransforms(p_editor, p_sourceGlyph, p_unicodeInfos, p_scaleFactor) {
+        let targetGlyph = p_editor.data.GetGlyph(p_unicodeInfos.u);
+        if (targetGlyph.isNull || targetGlyph == p_sourceGlyph) { return; }
+        SHARED_OPS.PasteLayersTransforms(p_editor, targetGlyph.activeVariant, p_sourceGlyph.activeVariant, p_scaleFactor, false);
+    }
+
+    _ReplaceLayers(p_editor, p_sourceGlyph, p_unicodeInfos, p_scaleFactor) {
+        let targetGlyph = p_editor.data.GetGlyph(p_unicodeInfos.u);
+        if (targetGlyph.isNull || targetGlyph == p_sourceGlyph) { return; }
+        SHARED_OPS.RemoveLayers(p_editor, targetGlyph.activeVariant);
+        SHARED_OPS.AddLayers(p_editor, targetGlyph.activeVariant, p_sourceGlyph.activeVariant, p_scaleFactor, false);
+    }
+
+    _AddLayers(p_editor, p_sourceGlyph, p_unicodeInfos, p_scaleFactor) {
+        let targetGlyph = p_editor.data.GetGlyph(p_unicodeInfos.u);
+        if (targetGlyph.isNull || targetGlyph == p_sourceGlyph) { return; }
+        SHARED_OPS.AddLayers(p_editor, targetGlyph.activeVariant, p_sourceGlyph.activeVariant, p_scaleFactor, false);
     }
 
 }

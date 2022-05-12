@@ -52,16 +52,14 @@ class CmdGlyphClear extends actions.Command {
 
     _Empty(p_variant, p_infos, p_inGroup) {
 
-        let
-            glyph = p_variant.glyph,
-            svgStats = SVGOPS.EmptySVGStats();
+        let glyph = p_variant.glyph;
 
 
         let f = this._emitter.data;
 
         if (glyph.isNull) {
 
-            if (!p_inGroup && nkm.ui.INPUT.alt) {
+            if (!p_inGroup && (nkm.ui.INPUT.alt || nkm.ui.INPUT.shift)) {
                 this._emitter.StartActionGroup({
                     icon: `reset`,
                     name: `Reset glyph`,
@@ -69,22 +67,13 @@ class CmdGlyphClear extends actions.Command {
                 });
             }
 
-            // Need to create a new glyph!
-            this._emitter.Do(mkfActions.GlyphCreate, {
-                family: f,
-                unicode: p_infos,
-                path: svgStats,
-                transforms: {
-                    [mkfData.IDS.WIDTH]: f.Get(mkfData.IDS.WIDTH),
-                    [mkfData.IDS.TR_AUTO_WIDTH]: false
-                }
-            });
+            SHARED_OPS.CreateEmptyGlyph(this._emitter, f, p_infos);
 
             if (nkm.ui.INPUT.shift) {
-                SHARED_OPS.BoostrapComp(this._emitter, f.GetGlyph(p_infos.u).activeVariant, p_infos);
+                SHARED_OPS.BoostrapComp(this._emitter, f.GetGlyph(p_infos.u).activeVariant, p_infos, true, nkm.ui.INPUT.alt);
             }
 
-            if (!p_inGroup && nkm.ui.INPUT.alt) { this._emitter.EndActionGroup(); }
+            if (!p_inGroup && (nkm.ui.INPUT.alt || nkm.ui.INPUT.shift)) { this._emitter.EndActionGroup(); }
 
         } else {
 
@@ -100,7 +89,7 @@ class CmdGlyphClear extends actions.Command {
                 target: p_variant,
                 values: {
                     [mkfData.IDS.WIDTH]: f.Get(mkfData.IDS.WIDTH),
-                    [mkfData.IDS.PATH_DATA]: svgStats
+                    [mkfData.IDS.PATH_DATA]: SVGOPS.EmptySVGStats()
                 }
             });
 
@@ -110,13 +99,9 @@ class CmdGlyphClear extends actions.Command {
                 value: false
             });
 
-            if (!nkm.ui.INPUT.alt) {
-                
-                SHARED_OPS.RemoveLayers(this._emitter, p_variant);
+            if (!nkm.ui.INPUT.alt) { SHARED_OPS.RemoveLayers(this._emitter, p_variant); }
 
-                if (nkm.ui.INPUT.shift) { this._emitter.cmdLayerAddComp.Execute(p_variant); }
-                
-            }
+            if (nkm.ui.INPUT.shift) { SHARED_OPS.BoostrapComp(this._emitter, p_variant, p_infos, true, nkm.ui.INPUT.alt); }
 
             if (!p_inGroup) { this._emitter.EndActionGroup(); }
 

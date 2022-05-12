@@ -17,7 +17,7 @@ const ImportSettings = require(`./settings-import-data-block`);
 const SearchSettings = require(`./settings-search-data-block`);
 const LigaImportSettings = require(`./settings-liga-import-data-block`);
 
-const ContentUpdater = require(`../content-updater`);
+const ContentManager = require(`../content-manager`);
 const FamilyFontCache = require(`./family-font-cache`);
 const GlyphVariantRef = require(`./glyph-variant-data-block-reference`);
 
@@ -203,7 +203,7 @@ class FamilyDataBlock extends SimpleDataEx {
 
         this.Broadcast(SIGNAL.GLYPH_ADDED, this, p_glyph);
         p_glyph._OnGlyphAddedToFamily(this);
-        //ContentUpdater.instance.Broadcast(SIGNAL.GLYPH_ADDED, p_glyph);
+        //ContentManager.instance.Broadcast(SIGNAL.GLYPH_ADDED, p_glyph);
 
         //Need a way to find which layer might be referencing this glyph
         this._delayedUpdateReferences.Schedule();
@@ -235,7 +235,7 @@ class FamilyDataBlock extends SimpleDataEx {
 
         this.Broadcast(SIGNAL.GLYPH_REMOVED, this, g);
         g._OnGlyphRemovedFromFamily(this);
-        //ContentUpdater.instance.Broadcast(SIGNAL.GLYPH_REMOVED, g);
+        //ContentManager.instance.Broadcast(SIGNAL.GLYPH_REMOVED, g);
 
         this._delayedUpdateReferences.Schedule();
 

@@ -12,6 +12,7 @@ const CmdListProcessor = require(`./cmd-list-processor`);
 const UNICODE = require(`../../unicode`);
 const mkfData = require(`../../data`);
 const mkfActions = require(`../actions`);
+const SHARED_OPS = require('./shared-ops');
 
 class CmdImportListMissingGlyphs extends CmdListProcessor {
     constructor() { super(); }
@@ -80,17 +81,7 @@ class CmdImportListMissingGlyphs extends CmdListProcessor {
             title: `Created new glyphs from viewport selection`
         });
 
-        for (let i = 0; i < list.length; i++) {
-            this._emitter.Do(mkfActions.GlyphCreate, {
-                family: this._family,
-                unicode: list[i],
-                path: SVGOPS.EmptySVGStats(),
-                transforms: {
-                    [mkfData.IDS.WIDTH]: this._family.Get(mkfData.IDS.WIDTH),
-                    [mkfData.IDS.TR_AUTO_WIDTH]: false
-                }
-            });
-        }
+        list.forEach(uinfos =>{ SHARED_OPS.CreateEmptyGlyph(this._emitter, this._family, uinfos); });
 
         this._emitter.EndActionGroup();
 

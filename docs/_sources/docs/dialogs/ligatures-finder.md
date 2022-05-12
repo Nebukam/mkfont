@@ -34,6 +34,8 @@ The results can be narrowed down & limited by a few parameters :
 | Max length | Maximum ligature length to look for. The higher the value, the more low-quality results/occurences you're going to get.  |
 | Min occurrences | The minimum number of times a ligature must be present in order to show up in the results. |
 
+---
+
 ## One ligature per line
 
 {% include img a='dialogs/ligatures-line-break.png' %}

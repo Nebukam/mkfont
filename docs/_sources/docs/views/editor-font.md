@@ -36,6 +36,8 @@ The Font Editor is broken down into three main areas, covered in length in their
 {% include card_single reference="Glyph inspector" %}
 </div>
 
+---
+
 ## Header actions
 
 {% include img a='views/editor-header.png' %}
@@ -55,6 +57,8 @@ The Font Editor is broken down into three main areas, covered in length in their
 | {% include btn ico="text-liga" label="Ligatures" %} | Brings up the {% include lk id='Ligatures finder' %} dialog. |
 | {% include btn ico="directory-download-small" label="SVGs" %} | Brings up the {% include lk id='List import' %} dialog. |
 | {% include btn ico="directory-download-small" label="TTF" %} | You will be prompted to select a .ttf file, and its glyphs will be imported (and resampled to match the current Family metrics) |
+
+---
 
 ## Shortcuts
 

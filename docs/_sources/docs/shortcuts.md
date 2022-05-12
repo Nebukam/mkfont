@@ -38,15 +38,20 @@ color: red
 | {% include shortcut keys="0··9" %}           | Restore the selection previously stored |
 | {% include shortcut keys="Shift 0··9" %}           | Appends the selection previously stored to the current selection |
 
+> Keep in mind that glyphs are copied and pasted *in the order in which they have been selected*.
+{: .warning }
+
+> Pasting a group selection on top of another group selection will 'wrap' the content available in the clipboard.  
+> For example, if you copied `1`,`2`, and paste it over a selection that has more than 2 glyphs, the result will be `1`,`2`,`1`,`2`,`1`,...
+
 ---
 
 ## In the {% include lk id='Font viewport' %}
 
 | Shortcut       | Action          |
 |:-------------|:------------------|
-| {% include shortcut keys="Ctrl C" %}           | Copy a single glyph to the clipboard* |
-| {% include shortcut keys="Ctrl V" %}           | Paste the content of the clipboard in the selected glyph slot.<br>Supports pasting directly from Adobe Illustrator! |
-| {% include shortcut keys="Ctrl Shift C" %}           | Copy the selected glyphs & their unicode position in memory* |
+| {% include shortcut keys="Ctrl C" %}           | Copy a single glyph to the app clipboard |
+| {% include shortcut keys="Ctrl V" %}           | Paste the content of the clipboard in the selected glyph slot.<br>Supports pasting directly from Adobe© Illustrator! |
 | {% include shortcut keys="Ctrl Shift V" %}           | Paste the glyphs copied using {% include shortcut keys="Ctrl Shift C" %} to their matching unicode slots. This is especially *(if not only)* useful to paste glyphs from an .mkfont to another in batch, while retaining their unicode positions. |
 | {% include shortcut keys="Ctrl Alt V" %}           | Applies the transform of the glyph stored in memory using {% include shortcut keys="Ctrl C" %} to all glyphs in the active selection. Does **not** affect the path. |
 | {% include shortcut keys="DEL" %}           | Deletes the selected glyphs |
@@ -75,16 +80,19 @@ Modifiers are applied when a key is pressed along with a specific button.
 
 | Modifier       | Action          |
 |:-------------|:------------------|
-|: **Single selection** :||
-| {% include shortcut keys="Shift" %} + {% include btn ico="reset" %} | Resets the glyph contents & create components matching the glyph composition, if any. |
+|: **When multiple glyph are selected, action is applied to every one of them** :||
+| {% include shortcut keys="Shift" %} + {% include btn ico="reset" %} | Resets the glyph contents & create components matching the glyph composition, if any, as well as associated glyphs if they are missing. |
 | {% include shortcut keys="Alt" %} + {% include btn ico="reset" %} | Resets the glyph contents but keeps existing components. |
-|: **Single selection** :||
-| {% include shortcut keys="Shift" %} + {% include btn ico="reset" %} | Resets the all the glyphs in the selection & create components matching the glyph composition, if any. |
-| {% include shortcut keys="Alt" %} + {% include btn ico="reset" %} | Resets all the glyphs in the selection but keeps their existing components. |
+| {% include shortcut keys="Alt Shift" %} + {% include btn ico="reset" %} | Resets the glyph contents, and recursively creates missing glyphs along with their decomposition.  |
 
 ### Components
 
 | Modifier       | Action          |
 |:-------------|:------------------|
+|: **Copy/paste** :||
 | {% include shortcut keys="Shift" %} + {% include btn ico="clipboard-read" %} | Add components from the clipboard, instead of replacing the existing ones |
 | {% include shortcut keys="Alt" %} + {% include btn ico="clipboard-read" %} | Only paste transform settings from matching components within the clipboard |
+|: **Decomposition** :||
+| {% include shortcut keys="Shift" %} + {% include btn ico="link" %} | Create components recursively. |
+| {% include shortcut keys="Alt" %} + {% include btn ico="link" %} | Does not create missing components' glyphs. |
+| {% include shortcut keys="Alt Shift" %} + {% include btn ico="link" %} | Create components & missing glyphs recursively. |

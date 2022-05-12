@@ -25,6 +25,7 @@ toc_img: dialogs/list-import-a.png
 
 It is also important to highlight that the preview on the right show what the glyph will look like *after* being imported; hence it's very easy to check whether or not you want to keep or overwrite existing transforms. See {% include lk id='Glyph transformations' %} for a detailed overview of the transformation options.
 
+---
 
 ## Overlap 
 
@@ -38,6 +39,8 @@ The following resolutions options are available :
 | Overwrite transforms | The new path will overwrite the existing one, as well as its transformations settings, effectively using the one displayed on the left of the dialog. |
 | Preserve existing transforms | The new path will overwrite the existing one, however the existing transformations settings will be preserved.<br>When relying on resources-binding to work, this is a great way to restore bindings to existing glyphs and only update the graphics. |
 | Don't import | The importer will skip any item that correspond to an existing glyph.<br>Select this is you only want to fill the slots that are currently empty in your font. |
+
+---
 
 ## Assignation
 

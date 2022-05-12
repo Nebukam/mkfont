@@ -57,7 +57,7 @@ class CmdExportListArtboartTemplate extends CmdListProcessor {
             // Default path is either not set or invalid
             nkm.actions.RELAY.ShowOpenDialog({
                 properties: ['openFile'],
-                title: `Select Adobe Illustrator executable`
+                title: `Select Adobe© Illustrator executable`
             }, this._OnPicked);
             return;
         }

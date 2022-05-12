@@ -72,6 +72,8 @@ class TransformSettingsDataBlock extends SimpleDataEx {
         if (!pathData || !this._variant._family) { return; }
 
         let
+            flattenLayers = this._variant.Get(IDS.FLATTEN_LAYERS),
+            autoW = this.Get(IDS.TR_AUTO_WIDTH),
             rw = this._variant.Resolve(IDS.WIDTH),
             path = SVGOPS.FitPath(this, this._variant.family._contextInfos, pathData),
             w = 0,
@@ -88,11 +90,16 @@ class TransformSettingsDataBlock extends SimpleDataEx {
             w = controlVariant.Get(IDS.EXPORTED_WIDTH);
             h = controlVariant.Resolve(IDS.HEIGHT);
         } else {
-            if (this.Get(IDS.TR_AUTO_WIDTH)) {
-                w = path.width;
-            } else {
+            if (flattenLayers) {
                 w = rw;
+            } else {
+                if (autoW) {
+                    w = path.width;
+                } else {
+                    w = rw;
+                }
             }
+
         }
 
         this._variant._computedPath = path;
@@ -145,16 +152,23 @@ class TransformSettingsDataBlock extends SimpleDataEx {
             });
         }
 
-        let
-            pathConcat = this._variant._ConcatPaths(path.path),
-            oob = (bbmin < -24000 || bbmax < -24000 || bbmin > 24000 || bbmax > 24000);
+        let pathConcat = this._variant._ConcatPaths(path.path);
+        if (flattenLayers) {
+            let flatStats = SVGOPS.FlatSVGStats(pathConcat, this._variant._computedPath, this._variant, w, h);
+            let flatFit = SVGOPS.FitPath(this, this._variant.family._contextInfos, flatStats);
+            pathConcat = flatFit.path;
+            w = autoW ? flatFit.width : rw;
+            this._variant._computedPath = flatFit;
+        }
+
+        let oob = (bbmin < -24000 || bbmax < -24000 || bbmin > 24000 || bbmax > 24000);
 
         this._variant.BatchSet({
             //[IDS.WIDTH]: rw,
             [IDS.EXPORTED_WIDTH]: w,
             [IDS.PATH]: pathConcat, //path.pathReversed || path.path,
             [IDS.OUT_OF_BOUNDS]: oob,
-            [IDS.EMPTY]: pathConcat === IDS.EMPTY_PATH_CONTENT,
+            [IDS.EMPTY]: IDS.isEmptyPathContent(pathConcat),
         });
 
     }

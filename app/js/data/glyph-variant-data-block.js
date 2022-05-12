@@ -10,9 +10,10 @@ const IDS = require(`./ids`);
 const TransformSettings = require(`./settings-transforms-data-block`);
 
 const svgpath = require('svgpath');
-const ContentUpdater = require(`../content-updater`);
+const ContentManager = require(`../content-manager`);
 const SIGNAL = require('../signal');
 const INFOS = require('./infos');
+const ENUMS = require(`./enums`);
 
 const domparser = new DOMParser();
 const svgString = `<glyph ${IDS.GLYPH_NAME}="" ${IDS.UNICODE}="" d="" ${IDS.WIDTH}="" ${IDS.HEIGHT}="" ></glyph>`;
@@ -72,6 +73,7 @@ class GlyphVariantDataBlock extends SimpleDataEx {
         //p_values[IDS.H_ORIGIN_Y] = { value: null };
         p_values[IDS.WIDTH] = { value: null, nullable: true };
         p_values[IDS.EXPORTED_WIDTH] = { value: 0 };
+
         //p_values[IDS.V_ORIGIN_X] = { value: null };
         //p_values[IDS.V_ORIGIN_Y] = { value: null };
         p_values[IDS.HEIGHT] = { value: null, nullable: true }; //
@@ -80,6 +82,8 @@ class GlyphVariantDataBlock extends SimpleDataEx {
         p_values[IDS.OUT_OF_BOUNDS] = { value: false };
         p_values[IDS.EMPTY] = { value: false };
         p_values[IDS.DO_EXPORT] = { value: true };
+        p_values[IDS.FLATTEN_LAYERS] = { value: false };
+        p_values[IDS.FLATTEN_MODE] = { value: ENUMS.FLATTEN_SMART };
     }
 
     get layers() { return this._layers; }
@@ -147,10 +151,10 @@ class GlyphVariantDataBlock extends SimpleDataEx {
 
     _ConcatPaths(p_rootPath) {
         if (this._layers.isEmpty) { return p_rootPath; }
-        if (p_rootPath == IDS.EMPTY_PATH_CONTENT) { p_rootPath = ``; }
+        if (IDS.isEmptyPathContent(p_rootPath)) { p_rootPath = ``; }
         this._layers.ForEach((item) => {
             let pathData = item.Get(IDS.PATH);
-            if (pathData && pathData.path != IDS.EMPTY_PATH_CONTENT) { p_rootPath += ` ` + pathData.path; };
+            if (pathData && !IDS.isEmptyPathContent(pathData.path)) { p_rootPath += ` ` + pathData.path; };
         });
         if (p_rootPath.trim() == ``) { p_rootPath = IDS.EMPTY_PATH_CONTENT; }
         return p_rootPath;
@@ -206,7 +210,7 @@ class GlyphVariantDataBlock extends SimpleDataEx {
 
         if (!this._applyScheduled) {
             this._applyScheduled = true;
-            ContentUpdater.Push(this, this._ApplyUpdate);
+            ContentManager.Push(this, this._ApplyUpdate);
         }
 
         //When pushing update, make sure to notify layers that
@@ -244,13 +248,24 @@ class GlyphVariantDataBlock extends SimpleDataEx {
     HasLayer(p_char, p_uni = null) {
 
         if (this._layers.isEmpty) { return false; }
+        return this.TryGetLayer(p_char, p_uni) == null ? false : true;
+
+    }
+
+    TryGetLayer(p_char, p_uni = null) {
+
+        if (this._layers.isEmpty) { return null; }
 
         for (let i = 0, n = this._layers.count; i < n; i++) {
-            let cval = this._layers.At(i).Get(IDS.LYR_CHARACTER_NAME);
-            if (cval == p_char || cval == p_uni) { return true; }
+            let
+                lyr = this._layers.At(i),
+                cval = lyr.Get(IDS.LYR_CHARACTER_NAME);
+
+            if (cval == p_char || cval == p_uni) { return lyr; }
+
         }
 
-        return false;
+        return null;
 
     }
 

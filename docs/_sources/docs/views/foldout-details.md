@@ -23,15 +23,21 @@ Content within the details are only shown if they exist; here is what you can ex
 
 {% include img a='views/foldout-details.png' f='<' %} 
 
+---
+
 ## Usage as a component
 
 Shows how many glyphs are currently using the selected one as a component, and allow you to batch select them using the {% include btn ico="shortcut" label="Select all" %} button.
+
+---
 
 ## Decomposition
 
 The glyph decomposition is documented for a subset of glyphs within Unicode. If they exist for the selected character, you will be able to browse through them from here.  
 > Note that you can use the {% include btn ico="link" %} of the {% include lk id='Glyph components' %} to quickly create a composite glyph from its known decomposition.
 {: .infos }
+
+---
 
 ## Relatives
 

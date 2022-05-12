@@ -7,7 +7,7 @@ const u = nkm.u;
 const svg2ttf = require('svg2ttf');
 
 const IDS_PREFS = require(`./ids-prefs`);
-const ContentUpdater = require(`../content-updater`);
+const ContentManager = require(`../content-manager`);
 
 class FamilyFontCache {
     constructor(p_data) {
@@ -20,7 +20,7 @@ class FamilyFontCache {
 
         this._scheduledRebuild = nkm.com.DelayedCall(this._RebuildCache.bind(this), 500);
 
-        ContentUpdater.Watch(nkm.com.SIGNAL.READY, this._OnContentReady, this);
+        ContentManager.Watch(nkm.com.SIGNAL.READY, this._OnContentReady, this);
 
     }
 
@@ -41,7 +41,7 @@ class FamilyFontCache {
 
     _RebuildCache() {
 
-        if (!ContentUpdater.ready) {
+        if (!ContentManager.ready) {
             this._scheduledRebuild.Bump();
             return;
         }

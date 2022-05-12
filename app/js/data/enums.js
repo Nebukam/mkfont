@@ -228,6 +228,15 @@ class ENUMS {
         { name: `Y, X, R`, [nkm.com.IDS.VALUE]: this.SKR_ORDER_Y_X_R},
     ]);
 
+    static FLATTEN_FIT = 0;
+    static FLATTEN_SMART = 1; //Will vertical fit mode as a reference
+
+    static FLATTEN_MODE = nkm.data.catalogs.CreateFrom({ name: `Transform reference`, autoSort: false }, [
+        { name: `Fit`, [nkm.com.IDS.VALUE]: this.FLATTEN_FIT, icon: 'bounds-outside' },
+        { name: `Smart`, [nkm.com.IDS.VALUE]: this.FLATTEN_SMART, icon: 'bounds-mixed' },
+    ]);
+
+    
 }
 
 module.exports = ENUMS;

@@ -12,103 +12,24 @@ const mkfData = require(`../../data`);
 const mkfActions = require(`../actions`);
 const SHARED_OPS = require('./shared-ops');
 
+const __groupInfos = {
+    icon: `clipboard-read`,
+    name: `Paste in place`,
+    title: `Pasted glyphs from an mkfont to another`
+};
+
 class CmdGlyphPasteInPlace extends actions.Command {
     constructor() { super(); }
 
     _InternalExecute() {
 
-        let family = this._emitter.data;
+        this._emitter.StartActionGroup(__groupInfos);
 
-        if (!globalThis.__copySourceGlyphs ||
-            globalThis.__copySourceGlyphs.length == 0 ||
-            globalThis.__copySourceFamily == family) {
-            this._Cancel();
-            return;
-        }
-
-        this._scaleFactor = globalThis.__copySourceEM ? family.Get(mkfData.IDS.EM_UNITS) / globalThis.__copySourceEM : 1;
-
-        let
-            resample = (this._scaleFactor != 1),
-            nullCount = 0;
-
-        globalThis.__copySourceGlyphs.forEach(g => { nullCount += g.isNull ? 1 : 0; });
-
-        if (nullCount == globalThis.__copySourceGlyphs.length) {
-            this._Cancel();
-            return;
-        }
-
-        this._emitter.StartActionGroup({
-            icon: `clipboard-read`,
-            name: `Paste in place`,
-            title: `Pasted glyphs from an mkfont to another`
-        });
-
-        // Create missing layer dependencies to make the paste the most complete possible
-        let layerDependencies = SHARED_OPS.GetGlyphListDependencies(globalThis.__copySourceGlyphs, family);
-        layerDependencies.forEach(dep =>{ this.PasteInPlace(family, dep, resample); });
-
-        for (let i = 0; i < globalThis.__copySourceGlyphs.length; i++) {
-            let g = globalThis.__copySourceGlyphs[i];
-            if (g.isNull) { continue; }
-            this.PasteInPlace(family, g, resample);
-        }
+        let success = SHARED_OPS.PasteTo(this._emitter, SHARED_OPS.MODE_MATCH_SLOT);
 
         this._emitter.EndActionGroup();
 
-        this._Success();
-
-    }
-
-    PasteInPlace(p_family, p_sourceGlyph, p_resample = false) {
-
-        let
-            unicodeInfos = p_sourceGlyph.unicodeInfos,
-            targetGlyph = p_family.GetGlyph(unicodeInfos.u),
-            targetVariant = targetGlyph.activeVariant,
-            sourceVariant = p_sourceGlyph.activeVariant,
-            variantValues = sourceVariant.Values(),
-            transforms = sourceVariant._transformSettings.Values();
-
-        if (p_resample) {
-            variantValues = mkfData.UTILS.Resample(variantValues, mkfData.IDS.GLYPH_RESAMPLE_IDS, this._scaleFactor, true);
-            transforms = mkfData.UTILS.Resample(transforms, mkfData.IDS.TR_RESAMPLE_IDS, this._scaleFactor, true);
-        }
-
-        if (targetGlyph.isNull) {
-
-            this._emitter.Do(mkfActions.GlyphCreate, {
-                family: p_family,
-                unicode: unicodeInfos,
-                variantValues: variantValues,
-                transforms: transforms
-            });
-
-            targetVariant = p_family.GetGlyph(unicodeInfos.u).activeVariant;
-
-            SHARED_OPS.PasteLayers(targetVariant, sourceVariant);
-
-        } else {
-            /*
-            this._emitter.Do(mkfActions.SetPropertyMultiple, {
-                target: glyph,
-                values: p_data.glyphValues
-            });
-            */
-            this._emitter.Do(mkfActions.SetPropertyMultiple, {
-                target: targetVariant,
-                values: variantValues
-            });
-            this._emitter.Do(mkfActions.SetPropertyMultiple, {
-                target: targetVariant.transformSettings,
-                values: transforms
-            });
-
-            SHARED_OPS.RemoveLayers(this._emitter, targetVariant);
-            SHARED_OPS.AddLayers(this._emitter, targetVariant, sourceVariant, this._scaleFactor, false);
-
-        }
+        return success ? this._Success() : this._Fail();
 
     }
 

@@ -138,7 +138,7 @@ class LayersView extends base {
                     group: `edit`, member: { owner: this, id: `_hideAllBtn` }
                 },
                 {
-                    icon: `link`, htitle: `Create composition components.`,
+                    icon: `link`, htitle: `Create composition components and their glyphs, if missing.\n---\n+ [ Shift ] Create components recursively.\n+ [ Alt ] Does not create missing components' glyphs.\n+ [ Shift + Alt ] Create components & missing glyphs recursively.`,
                     variant: ui.FLAGS.MINIMAL,
                     trigger: { fn: () => { this.editor.cmdLayerAddComp.Execute(this._data); } },
                     group: `automate`, member: { owner: this, id: `_addCompBtn` }

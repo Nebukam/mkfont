@@ -8,7 +8,7 @@ const fs = require('fs');
 const svg2ttf = require('svg2ttf');
 
 const IDS = require(`../../data/ids`);
-const ContentUpdater = require(`../../content-updater`);
+const ContentManager = require(`../../content-manager`);
 
 class CmdExportTTF extends actions.Command {
     constructor() { super(); }
@@ -25,7 +25,7 @@ class CmdExportTTF extends actions.Command {
             return;
         }
 
-        if (!ContentUpdater.ready) {
+        if (!ContentManager.ready) {
 
             this._blockingDialog = nkm.dialog.Push({
                 title: `Processing`,
@@ -34,7 +34,7 @@ class CmdExportTTF extends actions.Command {
                 origin: this,
             });
 
-            ContentUpdater.Watch(nkm.com.SIGNAL.READY, this._OnContentReady);
+            ContentManager.Watch(nkm.com.SIGNAL.READY, this._OnContentReady);
         } else {
             this._OnContentReady();
             this._Success();
@@ -43,7 +43,7 @@ class CmdExportTTF extends actions.Command {
     }
 
     _OnContentReady() {
-        ContentUpdater.Unwatch(nkm.com.SIGNAL.READY, this._OnContentReady);
+        ContentManager.Unwatch(nkm.com.SIGNAL.READY, this._OnContentReady);
         try {
 
             let

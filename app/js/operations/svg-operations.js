@@ -334,6 +334,39 @@ class SVGOperations {
 
     }
 
+    static FlatSVGStats(p_path, p_computedPath, p_context, p_w, p_h) {
+
+        if (IDS.isEmptyPathContent(p_path)) { return this.EmptySVGStats(); }
+
+        let
+            bbox = this.GetBBox(p_path),
+            path = p_path,
+            fit = p_computedPath.fit,
+            fMode = fit ? p_context.Get(IDS.FLATTEN_MODE) : ENUMS.FLATTEN_FIT,
+            outW = bbox.width,
+            outH = bbox.height;
+
+        switch (fMode) {
+            case ENUMS.FLATTEN_SMART:
+                outH = fit.height;
+                path = svgpath(p_path).translate(-bbox.x, fit.y).toString();
+                this.TranslateBBox(bbox, -bbox.x, fit.y);
+                break;
+            default:
+            case ENUMS.FLATTEN_FIT:
+                path = svgpath(p_path).translate(-bbox.x, -bbox.y).toString();
+                this.TranslateBBox(bbox, -bbox.x, -bbox.y);
+                break;
+        }
+
+        return {
+            width: outW,
+            height: outH,
+            path: path,
+            bbox: this.GetBBox(path)
+        };
+    }
+
     //#endregion
 
     //#region transforms
@@ -893,7 +926,7 @@ class SVGOperations {
             markedPath = `<path style="stroke:#${p_markCol};fill:none" d="M 0 0 L ${p.width} 0 L ${p.width} ${p.height} L 0 ${p.height} z"></path>`;
         }
 
-        return `<svg viewBox="0 0 ${p.width} ${p.height}" ${inlined}><path d="${p.path}"></path>${markedPath}</svg>`;
+        return `<!-- Generator : MkFont --><svg viewBox="0 0 ${p.width} ${p.height}" ${inlined}><path d="${p.path}"></path>${markedPath}</svg>`;
 
     }
 

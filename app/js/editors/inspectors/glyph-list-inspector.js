@@ -136,6 +136,7 @@ class GlyphListInspector extends base {
                 { cl: mkfWidgets.ControlHeader, options: { label: `Metrics` } },
                 { options: { propertyId: mkfData.IDS.WIDTH }, disableWhen: { fn: shouldHideWIDTH } },
                 { options: { propertyId: mkfData.IDS.HEIGHT } },
+                { cl: mkfWidgets.ControlHeader, options: { label: `Extras` } },
             ]
         );
 
@@ -146,7 +147,7 @@ class GlyphListInspector extends base {
                 title: LOC.labelLayers, icon: `component`, prefId: `layers`, expanded: true,
                 handles: [
                     {
-                        icon: 'clipboard-read', htitle: 'Paste layers (hold Alt to add instead of replace)',
+                        icon: 'clipboard-read', htitle: 'Paste components\n---\n+ [ Shift ] Add instead of replace\n+ [ Alt ] Only copy transforms',
                         trigger: {
                             fn: () => {
                                 if (!this._surveyor._cachedVariants || this._surveyor._cachedVariants.length == 0) { return; }
@@ -156,7 +157,7 @@ class GlyphListInspector extends base {
                     },
                 ]
             },
-            [
+            [                
                 { cl: mkfWidgets.LayersViewSilent, member: `_layersView`, css: `foldout-item` },
             ]
         );

@@ -54,6 +54,7 @@ EM Size is ultimately responsible for how much precision you can squeeze out of 
 >Note that the viewport won't show the distortion, only the exported font will, as well as the {% include lk id='Preview explorer' %}.
 {: .warning }
 
+---
 
 ## Metrics
 
@@ -67,6 +68,8 @@ They also act as fallback values for matching glyph parameters, such as `Height`
 | Scale X+Cap | Similar to EM Resample, this toggle controls whether the `X height` & `CAP height` values should be rescaled according to updates made to the ascender.<br>X & Cap height are commonly encapsulated by the Ascender value. |
 | Descender |{% include img a='dialogs/metrics-dsc.png' f='<' %} The ascender is an horizontal axis, offset downward from the baseline. |
 
+---
+
 ## Control Metrics
 
 | Property       | Comment          |
@@ -76,6 +79,8 @@ They also act as fallback values for matching glyph parameters, such as `Height`
 | Height | Default glyph height. This is only useful for specific {% include lk id='Glyph transformations' t='scaling modes' a='#scaling' %}, and does not represent the height of your font. That would be the EM Size. |
 | Width | Default glyph width. This is used by various {% include lk id='Glyph transformations' %}, acts as a default value when a glyph's `width` is empty. |
 | Monospace | When set to true, the width of *every single glyph* within your font will have the width set in the Control Metrics. |
+
+---
 
 ## Default Transformations
 >These define the base & default values used by any glyph that doesn't have a value set for these properties.  

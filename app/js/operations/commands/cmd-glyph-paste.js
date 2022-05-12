@@ -23,92 +23,66 @@ class CmdGlyphPaste extends actions.Command {
 
     _InternalExecute() {
 
+        let svgString = clipboard.readText();
+
+        if (svgString == SHARED_OPS.copiedString) {
+
+            // Clipboard still have the same reference string : pasting from inside MkFont
+
+            this._emitter.StartActionGroup(__groupInfos);
+
+            let success = SHARED_OPS.PasteTo(this._emitter, SHARED_OPS.MODE_DEFAULT);
+
+            this._emitter.EndActionGroup();
+
+            return success ? this._Success() : this._Fail();
+
+        }
+
         let
             family = this._emitter.data,
             variant = family.GetGlyph(this._context?.u || this._emitter.inspectedData.lastItem?.u).activeVariant,
-            svgStats = { exists: false },
-            svgString = clipboard.readText();
+            svgStats = { exists: false };
 
-        try {
-            svgStats = SVGOPS.SVGStats(svgString, mkfData.INFOS.MARK_COLOR);
-        } catch (e) { console.log(e); }
+        try { svgStats = SVGOPS.SVGStats(svgString, mkfData.INFOS.MARK_COLOR); }
+        catch (e) { console.log(e); }
 
-        //console.log(svgStats);
-
-        if (!svgStats.exists) {
-            /*
-            nkm.dialog.Push({
-                title: `Invalid content`,
-                message: `Couldn't find how to use the selected file :()`,
-                actions: [{ label: `Okay` }],
-                origin: this, flavor: nkm.com.FLAGS.WARNING
-            });
-            */
-            this._Cancel();
-            return;
-        }
+        if (!svgStats.exists) { return this._Fail(); }
 
         let
             glyph = variant.glyph,
-            mkfValues = SVGOPS.TryGetMKFValues(svgString, variant),
-            cachedTextMatch = globalThis.__copySourceString && globalThis.__copySourceString == svgString ? true : false,
-            scaleFactor = globalThis.__copySourceEM ? family.Get(mkfData.IDS.EM_UNITS) / globalThis.__copySourceEM : 1,
-            layers = null,
-            unicodeInfos;
-
-        if (!cachedTextMatch) {
-            globalThis.__copySourceString = null;
-            globalThis.__copySourceVariant = null;
-        } else if (globalThis.__copySourceVariant) {
-
-            if (globalThis.__copySourceVariant == variant) {
-                //pasting glyph onto itself
-                this._Cancel();
-                return;
-            }
-
-            if (globalThis.__copySourceVariant.glyph.isNull) {
-                globalThis.__copySourceVariant = null;
-            } else if (!globalThis.__copySourceVariant._layers.isEmpty) {
-                layers = globalThis.__copySourceVariant._layers._array;
-            }
-        }
-
-
+            mkfValues = SVGOPS.TryGetMKFValues(svgString, variant);
 
         delete mkfValues.variantValues[mkfData.IDS.PATH];
 
-        mkfData.UTILS.Resample(mkfValues.transforms, mkfData.IDS.TR_RESAMPLE_IDS, scaleFactor, true);
-        mkfData.UTILS.Resample(mkfValues.variantValues, mkfData.IDS.GLYPH_RESAMPLE_IDS, scaleFactor, true);
+        this._emitter.StartActionGroup(__groupInfos);
 
         if (glyph.isNull) {
-            // Need to create a new glyph!
 
-            unicodeInfos = glyph.unicodeInfos;
-            this._emitter.Do(mkfActions.GlyphCreate, {
+            // Need to create a new glyph
+
+            let createOp = {
                 family: family,
-                unicode: unicodeInfos,
+                unicode: glyph.unicodeInfos,
                 path: svgStats,
-                transforms: mkfValues.hasTransforms ? mkfValues.transforms : null,
-                variantValues: mkfValues.hasVariantValues ? mkfValues.variantValues : null
-            });
+            };
 
-            if (layers) {
-                let variant = family.GetGlyph(unicodeInfos.u).activeVariant;
-                SHARED_OPS.PasteLayers(variant, globalThis.__copySourceVariant, scaleFactor);
+            if (mkfValues.hasTransforms) { createOp.transforms = mkfValues.transforms; }
+            if (mkfValues.hasVariantValues) { createOp.variantValues = mkfValues.variantValues; }
+
+            this._emitter.Do(mkfActions.GlyphCreate, createOp);
+
+            if (svgStats.layers) {
+                SHARED_OPS.AddLayersFromNameList(this._emitter, variant, svgStats.layers);
             }
 
         } else {
 
-            this._emitter.StartActionGroup(__groupInfos);
-
-            this._emitter.Do(mkfActions.SetProperty,
-                { target: variant, id: mkfData.IDS.PATH_DATA, value: svgStats }
-            );
+            // Modify existing glyph
 
             if (mkfValues.hasTransforms) {
                 this._emitter.Do(mkfActions.SetPropertyMultiple,
-                    { target: variant.transformSettings, values: mkfValues.transforms }
+                    { target: variant._transformSettings, values: mkfValues.transforms }
                 );
             }
 
@@ -120,16 +94,13 @@ class CmdGlyphPaste extends actions.Command {
                 }
             });
 
-            if (layers) {
-                SHARED_OPS.RemoveLayers(this._emitter, variant);
-                SHARED_OPS.AddLayers(this._emitter, variant, globalThis.__copySourceVariant, this._scaleFactor);
+            if (svgStats.layers) {
+                SHARED_OPS.AddLayersFromNameList(this._emitter, variant, svgStats.layers);
             }
 
-            //SHARED_OPS.AddLayersFromNameList(this._emitter, variant, svgStats.layers);
-
-            this._emitter.EndActionGroup();
-
         }
+
+        this._emitter.EndActionGroup();
 
         glyph.CommitUpdate();
         this._Success();

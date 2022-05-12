@@ -29,6 +29,8 @@ This is not where you edit the text -- **it is however, where you can select gly
 >At the time of writing, this won't select ligatures, but instead the individual glyphs they encapsulate.
 {: .comment }
 
+---
+
 ## Controls
 
 There a few basic controls & modifier you can apply to the previewed blurb :

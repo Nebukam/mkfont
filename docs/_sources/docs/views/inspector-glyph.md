@@ -20,8 +20,6 @@ nav_order: 6
 
 {% include img_toc %}
 
----
-
 ## Glyph preview
 
 The glyph preview is non-interactive, and shows the all the metrics & guides that currently define the typographic space.

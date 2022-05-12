@@ -46,7 +46,7 @@ class FontEditor extends base {
 
         this._pangramInspector = null;
 
-        //const ContentUpdater = require(`../content-updater`);
+        //const ContentManager = require(`../content-manager`);
         this._dataObserver
             .Hook(nkm.com.SIGNAL.VALUE_CHANGED, this._OnDataValueChanged, this)
             .Hook(SIGNAL.GLYPH_ADDED, this._OnGlyphAdded, this)
@@ -83,7 +83,6 @@ class FontEditor extends base {
         this.cmdGlyphDelete = this._commands.Create(mkfCmds.GlyphDelete, { shortcut: this.shortcuts.Create("Delete").Strict() });
         this.cmdGlyphCopy = this._commands.Create(mkfCmds.GlyphCopy, { shortcut: this.shortcuts.Create("Ctrl C").Strict() });
         this.cmdGlyphPaste = this._commands.Create(mkfCmds.GlyphPaste, { shortcut: this.shortcuts.Create("Ctrl V").Strict() });
-        this.cmdGlyphCopyInPlace = this._commands.Create(mkfCmds.GlyphCopyInPlace, { shortcut: this.shortcuts.Create("Ctrl Shift C").Strict() });
         this.cmdGlyphPasteInPlace = this._commands.Create(mkfCmds.GlyphPasteInPlace, { shortcut: this.shortcuts.Create("Ctrl Shift V").Strict() });
         this.cmdGlyphPasteTransform = this._commands.Create(mkfCmds.GlyphPasteTransform, { shortcut: this.shortcuts.Create("Ctrl Alt V").Strict() });
 
@@ -93,11 +92,9 @@ class FontEditor extends base {
         this.cmdLayerDown = this._commands.Create(mkfCmds.LayerDown);
         this.cmdLayersOn = this._commands.Create(mkfCmds.LayerAllOn);
         this.cmdLayersOff = this._commands.Create(mkfCmds.LayerAllOff);
-        this.cmdLayersCopy = this._commands.Create(mkfCmds.LayersCopy);
         this.cmdLayersPaste = this._commands.Create(mkfCmds.LayersPaste);
         this.cmdLayerAddComp = this._commands.Create(mkfCmds.LayerAddComp);
         this.cmdLayerControl = this._commands.Create(mkfCmds.LayerSetControlBatch);
-
 
         this.cmdListImportMissing = this._commands.Create(mkfCmds.ImportListMissingGlyphs);
         this.cmdListExportUni = this._commands.Create(mkfCmds.ExportListUni);

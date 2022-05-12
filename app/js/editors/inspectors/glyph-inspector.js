@@ -36,6 +36,8 @@ class GlyphInspector extends base {
         this._builder.defaultCSS = `control`;
         this._builder.preProcessDataFn = { fn: this._GetGlyph, thisArg: this };
 
+        this._delayedStatsUpdate = nkm.com.DelayedCall(this._Bind(this._RefreshStats));
+
         this._contextObserver
             .Hook(SIGNAL.GLYPH_ADDED, this._OnGlyphAdded, this)
             .Hook(SIGNAL.GLYPH_REMOVED, this._OnGlyphRemoved, this);
@@ -132,12 +134,19 @@ class GlyphInspector extends base {
         if (p_glyph.unicodeInfos == this._data) {
             this._variantCtrl.data = this._GetActiveVariant();
         }
+        this._delayedStatsUpdate.Bump();
     }
 
     _OnGlyphRemoved(p_family, p_glyph) {
         if (p_glyph.unicodeInfos == this._data) {
             this._variantCtrl.data = this._GetActiveVariant();
         }
+        this._delayedStatsUpdate.Bump();
+    }
+
+    _RefreshStats(){
+        this._glyphStats.glyphInfos = null;
+        this._glyphStats.glyphInfos = this._data;
     }
 
 }

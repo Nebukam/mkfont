@@ -28,7 +28,6 @@ module.exports = {
     GlyphClear: require(`./cmd-glyph-clear`),
     GlyphCopy: require(`./cmd-glyph-copy`),
     GlyphPaste: require(`./cmd-glyph-paste`),
-    GlyphCopyInPlace: require(`./cmd-glyph-copy-in-place`),
     GlyphPasteInPlace: require(`./cmd-glyph-paste-in-place`),
     GlyphPasteTransform: require(`./cmd-glyph-paste-transform`),
 
@@ -39,7 +38,6 @@ module.exports = {
     LayerAllOn: require(`./cmd-layers-all-on`),
     LayerUp: require(`./cmd-layer-move-up`),
     LayerDown: require(`./cmd-layer-move-down`),
-    LayersCopy: require(`./cmd-layers-copy`),
     LayersPaste: require(`./cmd-layers-paste`),
     LayerAddComp: require(`./cmd-layer-add-comp`),
 

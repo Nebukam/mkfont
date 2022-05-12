@@ -4,7 +4,7 @@ const nkm = require(`@nkmjs/core`);
 const u = nkm.u;
 const ui = nkm.ui;
 
-const ContentUpdater = require(`../content-updater`);
+const ContentManager = require(`../content-manager`);
 const SIGNAL = require(`../signal`);
 const mkfData = require(`../data`);
 const mkfWidgets = require(`../widgets`);
@@ -15,7 +15,7 @@ class FontEditorFooter extends base {
 
     _Init() {
         super._Init();
-        ContentUpdater.instance
+        ContentManager.instance
             .Watch(nkm.com.SIGNAL.UPDATED, this._OnContentUpdate, this)
             .Watch(nkm.com.SIGNAL.READY, this._OnContentUpdateComplete, this);
 

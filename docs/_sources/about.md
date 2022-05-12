@@ -40,3 +40,6 @@ If you submit a bug, depending on its nature I may ask for the faulty .mkfont fi
 ### Built with NKMjs
 **MkFont** is built using my own multi-platform framework, [**NKMjs**](https://github.com/Nebukam/nkmjs).  
 It runs with [**Electron**](https://www.electronjs.org/).
+
+### Footnotes
+I am *not* affiliated with Adobe©!
