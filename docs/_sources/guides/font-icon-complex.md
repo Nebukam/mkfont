@@ -1,10 +1,10 @@
 ---
 layout: page
 parent: Guides
-title: Complex icon font
+title: Composite icon font
 subtitle: How to make an icon font
 summary: A font with complex component interactions.
-splash: icons/icon_checkbox-radio.svg
+splash: icons/icon_component.svg
 preview_img: placeholder.jpg
 color: white
 nav_order: 3
@@ -242,6 +242,35 @@ What we want to do now is rebuild our initial icons using the re-usable pieces w
 
 ### Start with the easy ones
 
+{% include img a='guides/cfont/comp-hl-arr-1.png' %} 
+
+We're going to start with the obvious, easy ones : arrows with basic transformations.
+
+{% include webm a='guides/cfont/add-c-arrow-big.webm' %} 
+
+#### What's going on here :
+{: .no_toc}
+- First, we'll turn the search ON, and look for ligatures with `arr-big` in their names. *These will be the 8 arrows icon pointing at cardinal directions.*
+- We then select the 8 glyphs in the viewport.
+- With the group selection active *(which, since everything is empty, doesn't look like much)*, we move to the {% include lk id='Glyph components' %} and open the glyph picker ({% include btn ico="component-new" %}).
+- From there, we select which glyphs we want to create components from : there's just one in our case.
+- Confirm the component creation with {% include btn ico="new" label="Add selected" %}.
+- Change the boundary mode of the component so it fits the component itself -- this way it's perfectly centered
+- Up the scale a bit, since the initial arrow felt a bit too small. We can change it later anyway.
+
+Then, we will individually edit each component to give it the right orientation.
+
+{% include img a='guides/cfont/comp-arrow-orient.png' %} 
+
+We do so by selecting each ligature individually, and edit the `Rotation` value in the {% include lk id='Glyph component' a='#advanced-properties' %}'s Advanced properties. And that's it, we're all set with the first batch of big arrows.  
+
+Rince & repeat for the other arrows
+
+---
+
+>## WORK IN PROGRESS.
+>Come back later (～￣▽￣)～ 
+{: .error}
 
 ---
 

@@ -22,3 +22,7 @@ This guide is about creating a simple icon font using MkFont from scratch. It on
 
 #### Credits
 This example is using [Kenney's Game Icons](https://www.kenney.nl/assets/game-icons), which you will find packaged along with this guide' files, downloadable [here](https://nebukam.github.io/mkfont/assets/guides/simple-icon-font.zip).
+
+>## WORK IN PROGRESS.
+>Come back later (～￣▽￣)～ 
+{: .error}

@@ -32,12 +32,19 @@ class GlyphPreviewGroup extends base {
             ':host': {
                 '@': ['fade-in'],
                 'position': 'relative',
-                'grid-gap': `10px`,
+                'width': '320px',
+                'grid-gap': `5px`,
                 'display': 'grid',
                 'grid-template-columns': 'auto auto',
                 'grid-template-rows': 'auto auto',
                 'justify-content': `center`,
                 'align-content': `space-between`, //center
+            },
+            ':host(.floating)':{
+                'margin': `5px`,
+            },
+            ':host(.floating) .box':{
+                'border-radius': '3px',
             },
             '.box': {
                 'position': 'relative',
@@ -118,6 +125,7 @@ class GlyphPreviewGroup extends base {
 
     _CleanUp() {
         this.glyphLayer = null;
+        this.classList.remove(`floating`);
         super._CleanUp();
     }
 

@@ -23,7 +23,7 @@ nav_order: 8
 
 >Generally speaking, components are kindda like layers, or Adobe© Illustrator Symbols, or Prefab in Unity : they can turn any existing glyph into a re-usable asset that self-updates  whenever modified.  
 >  
->They can be used for many many things : easily make and maintained composite letters with modifiers such as `é`, `à` etc; but the logic also applies to creating flexible icon libraries. Check out the {% include lk id='Complex icon font' %} guide to get a grasp on the possibilities.
+>They can be used for many many things : easily make and maintained composite letters with modifiers such as `é`, `à` etc; but the logic also applies to creating flexible icon libraries. Check out the {% include lk id='Composite icon font' %} guide to get a grasp on the possibilities.
 {: .infos}
 
 Using component is rather straightforward, yet there is a few not-so-obvious subtleties that make them really flexible.  

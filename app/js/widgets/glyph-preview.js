@@ -40,6 +40,10 @@ class GlyphPreview extends base {
                 'background-color': 'rgba(0,0,0,0.5)',
                 'border-radius': '5px',
             },
+            ':host(.floating)':{
+                'margin': `5px`,
+                'border-radius': '3px',
+            },
             ':host(:not(.null-glyph)) .placeholder, :host(.null-glyph) .renderer': { 'display': 'none' },
             '.renderer': {
                 'position': 'relative',
@@ -138,6 +142,7 @@ class GlyphPreview extends base {
 
     _CleanUp(){
         this.glyphLayer = null;
+        this.classList.remove(`floating`);
         super._CleanUp();
     }
 

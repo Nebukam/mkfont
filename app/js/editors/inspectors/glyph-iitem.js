@@ -274,6 +274,7 @@ class GlyphVariantInspectorItem extends base {
                 static: true,
                 content: mkfWidgets.GlyphPreview
             });
+            this._popoutPreview.content.classList.add(`floating`);
             this._popoutPreview.content.data = this._data;
             this._popoutPreview.content.glyphInfos = this._glyphInfos;
             this._UpdatePreviewLayer();

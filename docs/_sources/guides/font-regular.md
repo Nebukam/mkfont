@@ -21,3 +21,7 @@ This guide is about creating a font using MkFont from scratch. It only assumes t
 {: .fs-6 .fw-300 }
 
 You can find all the assets used in this example in the following package.
+
+>## WORK IN PROGRESS.
+>Come back later (～￣▽￣)～ 
+{: .error}

@@ -157,7 +157,7 @@ class GlyphListInspector extends base {
                     },
                 ]
             },
-            [                
+            [
                 { cl: mkfWidgets.LayersViewSilent, member: `_layersView`, css: `foldout-item` },
             ]
         );
@@ -286,7 +286,9 @@ class GlyphListInspector extends base {
 
     _UpdatePreviews() {
         this._groupPreview.data = this._data ? this._data.analytics.existing : null;
-        //Would need to update popout there, too
+        if (this._popoutPreview) {
+            this._popoutPreview.content.data = this._data ? this._data.analytics.existing : null;
+        }
     }
 
     _OnGlyphBumped(p_data, p_infos) { this._UpdatePreviews(); }
@@ -343,6 +345,7 @@ class GlyphListInspector extends base {
                 content: mkfWidgets.GlyphPreviewGroup
             });
 
+            this._popoutPreview.content.classList.add(`floating`);
             this._popoutPreview.content.data = this._data ? this._data.analytics.existing : null;
             //this._popoutPreview.content.glyphInfos = atop ? atop.glyph.unicodeInfos : null;
             //this._UpdatePreviewLayer();
