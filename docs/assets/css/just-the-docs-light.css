@@ -112,11 +112,15 @@ template { display: none; }
 
 ::selection { color: #fff; background: #7253ed; }
 
+code::selection { background: gray; }
+
 html { font-size: 14px !important; scroll-behavior: smooth; }
 
 @media (min-width: 37.5rem) { html { font-size: 16px !important; } }
 
 body { font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; font-size: inherit; line-height: 1.4; color: #5c5962; background-color: #fff; background-image: linear-gradient(124deg, #302d36 0%, #27262b 45%); background-attachment: fixed; }
+
+video { width: 100%; }
 
 ol, ul, dl, pre, address, blockquote, table, div, hr, form, fieldset, noscript .table-wrapper { margin-top: 0; }
 

@@ -37,7 +37,8 @@ The first thing to setup in a component is choosing which glyph it will 'import'
 | Action       | Effect          |
 |:-------------|:------------------|
 |: **Create** :||
-| {% include btn ico="component-new" %} | Creates a new component on top of the existing ones |
+| {% include btn ico="new" %} | Creates a new empty component on top of the existing ones |
+| {% include btn ico="component-new" %} | Open the glyph picker and let you pick one or more components and add them as components |
 |: **Manipulate** :||
 | {% include btn ico="minus" %} | Collapse all open component foldouts |
 | {% include btn ico="visible" %} | Toggle all layers to visible |
@@ -73,6 +74,10 @@ The first thing to setup, as mentionned above, will be which glyph the component
 
 ### Import glyph
 
+>The {% include btn ico="search-small" %} button open the Glyph picker and easily pick an existing glyph from your font.  
+>It's generally faster than the raw method below.
+{: .infos}
+
 This is where you choose which glyph to import as a component. Accepted values are :
 - A character, such as `a`, `b`, `0`
 - A ligature, expressed as `ab`, `bc`, `0g1`, `verbose-ligature-name` *(or what-have-you)*
@@ -81,6 +86,7 @@ This is where you choose which glyph to import as a component. Accepted values a
 - A ligature, expressed as a combination of the above, with hex values terminated with a `-`, such as `abU+0041`, `abU+0041-i`, `abU+0041-iU+01f9`.
 
 Using the {% include btn ico="shortcut" %} button will inspect the glyph imported in the layer. You can quickly move back and forth between components and their glyphs using {% include shortcut keys="Mouse3" %} and {% include shortcut keys="Mouse4" %}.
+
 
 ---
 
