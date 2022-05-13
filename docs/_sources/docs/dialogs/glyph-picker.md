@@ -13,7 +13,7 @@ toc_img: dialogs/glyph-picker.png
 
 {% include header_card %}
 
-{% include img a='dialogs/family-infos.png' %}
+{% include img a='dialogs/glyph-picker.png' %}
 
 >## WORK IN PROGRESS.
 >Come back later (～￣▽￣)～ 
