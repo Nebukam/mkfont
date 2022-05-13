@@ -595,862 +595,868 @@
   },"99": {
     "doc": "Glyph picker",
     "title": "Glyph picker",
-    "content": "A simple glyph picker . There’s not much to expand on here – Family infos are metadata that will be embedded into the exported .ttf file. The final family name is a concatenation of the Family Name and the Sub Family. It is shown at all times on the top right corner of the Font editor. | State | Meaning | . | Family Name | The name of your font. | . | Sub Family | The sub family. | . | Weight class | The weight class of your font, as per CSS specs. This is not used right now, but will be once export for web is implemented :) | . | Copyright | Your copyright notice | . | Description | A description of your font. Keep it short ( &lt; 255 characters ), as some export format may limit the allowed character count. | . | URL | The url of your website, font family, showcase page… | . | Version | The version of the font. Only accepts values formatted as x.x. | . ",
+    "content": "A simple glyph picker . ",
     "url": "https://nebukam.github.io/mkfont/docs/dialogs/glyph-picker.html#glyph-picker",
     "relUrl": "/docs/dialogs/glyph-picker.html#glyph-picker"
   },"100": {
+    "doc": "Glyph picker",
+    "title": "WORK IN PROGRESS.",
+    "content": "Come back later (～￣▽￣)～ . ",
+    "url": "https://nebukam.github.io/mkfont/docs/dialogs/glyph-picker.html#work-in-progress",
+    "relUrl": "/docs/dialogs/glyph-picker.html#work-in-progress"
+  },"101": {
     "doc": "Glyph picker",
     "title": "Glyph picker",
     "content": " ",
     "url": "https://nebukam.github.io/mkfont/docs/dialogs/glyph-picker.html",
     "relUrl": "/docs/dialogs/glyph-picker.html"
-  },"101": {
+  },"102": {
     "doc": "Home",
     "title": "Home",
     "content": "The landing screen. Table of content . | Primary actions | Action | . | : **MkFont** :| |   | . | New .mkfont | Creates a new .mkfont in memory. You will need to save it on disk for the autosave to work.*If you don’t, you will be assaulted by a modal when the timer runs out.* | . | Load .mkfont | Loads an existing .mkfont file. | . | : **Import** :| |   | . | Load TTF | Creates a new .mkfont from an existing TTF file. | . | Secondary actions | Action | . | About | Open the very same documentation you’re reading right now, but on the About page. | . | Help | Open the very same documentation you’re reading right now. | . | App Settings | Open the App settings panel. | . ",
     "url": "https://nebukam.github.io/mkfont/docs/views/home-view.html#home",
     "relUrl": "/docs/views/home-view.html#home"
-  },"102": {
+  },"103": {
     "doc": "Home",
     "title": "Home",
     "content": " ",
     "url": "https://nebukam.github.io/mkfont/docs/views/home-view.html",
     "relUrl": "/docs/views/home-view.html"
-  },"103": {
+  },"104": {
     "doc": "Adobe© Illustrator",
     "title": "Adobe© Illustrator",
     "content": "··· . ··· . ",
     "url": "https://nebukam.github.io/mkfont/guides/third-party/illustrator.html#adobe-illustrator",
     "relUrl": "/guides/third-party/illustrator.html#adobe-illustrator"
-  },"104": {
+  },"105": {
     "doc": "Adobe© Illustrator",
     "title": "WORK IN PROGRESS.",
     "content": "Come back later (～￣▽￣)～ . ",
     "url": "https://nebukam.github.io/mkfont/guides/third-party/illustrator.html#work-in-progress",
     "relUrl": "/guides/third-party/illustrator.html#work-in-progress"
-  },"105": {
+  },"106": {
     "doc": "Adobe© Illustrator",
     "title": "Adobe© Illustrator",
     "content": " ",
     "url": "https://nebukam.github.io/mkfont/guides/third-party/illustrator.html",
     "relUrl": "/guides/third-party/illustrator.html"
-  },"106": {
+  },"107": {
     "doc": "Documentation",
     "title": "Documentation",
     "content": "All the things. Everything you need to find your way around the MkFont editors. ",
     "url": "https://nebukam.github.io/mkfont/docs/#documentation",
     "relUrl": "/docs/#documentation"
-  },"107": {
+  },"108": {
     "doc": "Documentation",
     "title": "Shortcuts",
     "content": "MkFont shortcuts, what do they do, do they do things, let’s find out! . ",
     "url": "https://nebukam.github.io/mkfont/docs/#shortcuts",
     "relUrl": "/docs/#shortcuts"
-  },"108": {
+  },"109": {
     "doc": "Documentation",
     "title": "General interface",
     "content": "An inventory of the most important views . ",
     "url": "https://nebukam.github.io/mkfont/docs/#general-interface",
     "relUrl": "/docs/#general-interface"
-  },"109": {
+  },"110": {
     "doc": "Documentation",
     "title": "Dialogs",
     "content": "An inventory of the most important dialogs . ",
     "url": "https://nebukam.github.io/mkfont/docs/#dialogs",
     "relUrl": "/docs/#dialogs"
-  },"110": {
+  },"111": {
     "doc": "Documentation",
     "title": "Documentation",
     "content": " ",
     "url": "https://nebukam.github.io/mkfont/docs/",
     "relUrl": "/docs/"
-  },"111": {
+  },"112": {
     "doc": "Features",
     "title": "Features",
     "content": "MkFont got you covered . Disclaimer . MkFont is under active development, as such you may encounter issues. In the unlikely event that you would, please report an issue on github! Same place if you would like to suggest enhancements &amp; features that would make MkFont even more useful for you :) . ",
     "url": "https://nebukam.github.io/mkfont/features/#features",
     "relUrl": "/features/#features"
-  },"112": {
+  },"113": {
     "doc": "Features",
     "title": "Components",
     "content": "Make more with less! . A powerful component &amp; compositing system, allowing for clever automation and infinite possibilities. ",
     "url": "https://nebukam.github.io/mkfont/features/#components",
     "relUrl": "/features/#components"
-  },"113": {
+  },"114": {
     "doc": "Features",
     "title": "Unicode Browser",
     "content": "MkFont is Unicode compliant. Code points are organized by categories &amp; blocks, immediately accessible and search-able. ",
     "url": "https://nebukam.github.io/mkfont/features/#unicode-browser",
     "relUrl": "/features/#unicode-browser"
-  },"114": {
+  },"115": {
     "doc": "Features",
     "title": "Live Reload",
     "content": "Watch your glyph self-update as you focus on designing them. Bind your imported files to glyphs, or edit them on the fly. Use your time where it matters. ",
     "url": "https://nebukam.github.io/mkfont/features/#live-reload",
     "relUrl": "/features/#live-reload"
-  },"115": {
+  },"116": {
     "doc": "Features",
     "title": "Smart Search",
     "content": "A discovery tool that offer more than meet the eye. You can search for specific characters, but also names &amp; attributes. The search can look for known character association &amp; relationships, too! . ",
     "url": "https://nebukam.github.io/mkfont/features/#smart-search",
     "relUrl": "/features/#smart-search"
-  },"116": {
+  },"117": {
     "doc": "Features",
     "title": "Non-destructive",
     "content": "Manipulates your data, doesn’t alter it. MkFont respect your assets and allows for experimenting safely with different settings, until you find the one that suits your needs. ",
     "url": "https://nebukam.github.io/mkfont/features/#non-destructive",
     "relUrl": "/features/#non-destructive"
-  },"117": {
+  },"118": {
     "doc": "Features",
     "title": "Ligatures made easy",
     "content": "Analyze text to find &amp; add most common combinations . MkFont comes with a small tool that takes a text blurb to show you which group of letters are recurring – and create ligatures out of them. ",
     "url": "https://nebukam.github.io/mkfont/features/#ligatures-made-easy",
     "relUrl": "/features/#ligatures-made-easy"
-  },"118": {
+  },"119": {
     "doc": "Features",
     "title": "Batch import",
     "content": "Quick &amp; easy . Import loads of SVG at once, with multiple ways to assign them to glyphs/code-point.Import directly to your current selection, or to specific Unicode blocks. ",
     "url": "https://nebukam.github.io/mkfont/features/#batch-import",
     "relUrl": "/features/#batch-import"
-  },"119": {
+  },"120": {
     "doc": "Features",
     "title": "TTF import &amp; editing",
     "content": "Start to work from, and explore existing fonts. Import TTFs files in a single click, tweak them and re-export them in just a few clicks. ",
     "url": "https://nebukam.github.io/mkfont/features/#ttf-import--editing",
     "relUrl": "/features/#ttf-import--editing"
-  },"120": {
+  },"121": {
     "doc": "Features",
     "title": "Live preview",
     "content": "Preview your font at any time, all the time. (ok that one was a must have anyway) . ",
     "url": "https://nebukam.github.io/mkfont/features/#live-preview",
     "relUrl": "/features/#live-preview"
-  },"121": {
+  },"122": {
     "doc": "Features",
     "title": "3rd party automation",
     "content": "One-click documents &amp; artboards setup, ready to export. MkFont comes with built-in automation tools for Adobe© Illustrator, for an even smoother workflow. Finger crossed more tools gets that kind of support soon! . ",
     "url": "https://nebukam.github.io/mkfont/features/#rd-party-automation",
     "relUrl": "/features/#rd-party-automation"
-  },"122": {
+  },"123": {
     "doc": "Features",
     "title": "And more!",
     "content": "A bunch of discreet QoL features. Lots of small options &amp; features to make it easy to work with your glyphs with third parties such as Unity’ TextMeshPro. ",
     "url": "https://nebukam.github.io/mkfont/features/#and-more",
     "relUrl": "/features/#and-more"
-  },"123": {
+  },"124": {
     "doc": "Features",
     "title": "Current limitation",
     "content": "MkFont does not support kerning pairs yet. And it may not ever. Something that will be implemented in the future to circumvent that limitation is creating special ligatures that combine existing glyphs within the font, but it does come with other caveats such as issues arising when tweaking the letter spacing in the final rendering context. （＞人＜；） . Planned features . Here are some of the features currently under development or planned to be, at some point, soon, maybe. In no particular order. | Working title | Use | . | Showcase Generator | Quickly generate a nice looking visual with your glyphs to showcase it, exports as a .png file. | . | Glyph as components | Ability to combine existing glyph into another. This would be especially useful in order to re-user marks &amp; modifier along with unmodified glyphs and not duplicate the work/amount of assets required to have a fully functional font | . | Glyph layers | Similar to Glyph as components, working the ability to use existing glyphs as additional \"layers\" inside another Glyph. Glyph would either be used as-is, or with its path reversed in order to create \"holes\" – hence making icon font much more flexible. | . | Add existing glyph to Adobe© Illustrator automation | Currently the Adobe© Illustrator automation only creates blank templates. Wouldn’t it be nice if it could also import existing glyphs within the font? | . ",
     "url": "https://nebukam.github.io/mkfont/features/#current-limitation",
     "relUrl": "/features/#current-limitation"
-  },"124": {
+  },"125": {
     "doc": "Features",
     "title": "Features",
     "content": " ",
     "url": "https://nebukam.github.io/mkfont/features/",
     "relUrl": "/features/"
-  },"125": {
+  },"126": {
     "doc": "General interface",
     "title": "General interface",
     "content": "An inventory of the most important views . ",
     "url": "https://nebukam.github.io/mkfont/docs/views/#general-interface",
     "relUrl": "/docs/views/#general-interface"
-  },"126": {
+  },"127": {
     "doc": "General interface",
     "title": "Editors",
     "content": ". ",
     "url": "https://nebukam.github.io/mkfont/docs/views/#editors",
     "relUrl": "/docs/views/#editors"
-  },"127": {
+  },"128": {
     "doc": "General interface",
     "title": "Font editor",
     "content": "Where you spend 100% of your time within MkFont. ",
     "url": "https://nebukam.github.io/mkfont/docs/views/#font-editor",
     "relUrl": "/docs/views/#font-editor"
-  },"128": {
+  },"129": {
     "doc": "General interface",
     "title": "Font viewport",
     "content": "Navigate &amp; search through Unicode slots. ",
     "url": "https://nebukam.github.io/mkfont/docs/views/#font-viewport",
     "relUrl": "/docs/views/#font-viewport"
-  },"129": {
+  },"130": {
     "doc": "General interface",
     "title": "Glyph inspector",
     "content": "Edit individual &amp; multiples glyphs here. ",
     "url": "https://nebukam.github.io/mkfont/docs/views/#glyph-inspector",
     "relUrl": "/docs/views/#glyph-inspector"
-  },"130": {
+  },"131": {
     "doc": "General interface",
     "title": "Foldouts",
     "content": ". ",
     "url": "https://nebukam.github.io/mkfont/docs/views/#foldouts",
     "relUrl": "/docs/views/#foldouts"
-  },"131": {
+  },"132": {
     "doc": "General interface",
     "title": "Glyph transformations",
     "content": "An inventory of the transformation options. ",
     "url": "https://nebukam.github.io/mkfont/docs/views/#glyph-transformations",
     "relUrl": "/docs/views/#glyph-transformations"
-  },"132": {
+  },"133": {
     "doc": "General interface",
     "title": "Glyph components",
     "content": "Make more with less! . ",
     "url": "https://nebukam.github.io/mkfont/docs/views/#glyph-components",
     "relUrl": "/docs/views/#glyph-components"
-  },"133": {
+  },"134": {
     "doc": "General interface",
     "title": "Glyph details",
     "content": "Decomposition, relatives, etc. ",
     "url": "https://nebukam.github.io/mkfont/docs/views/#glyph-details",
     "relUrl": "/docs/views/#glyph-details"
-  },"134": {
+  },"135": {
     "doc": "General interface",
     "title": "Explorers",
     "content": ". ",
     "url": "https://nebukam.github.io/mkfont/docs/views/#explorers",
     "relUrl": "/docs/views/#explorers"
-  },"135": {
+  },"136": {
     "doc": "General interface",
     "title": "Content explorer",
     "content": "Unicode. All of it. ",
     "url": "https://nebukam.github.io/mkfont/docs/views/#content-explorer",
     "relUrl": "/docs/views/#content-explorer"
-  },"136": {
+  },"137": {
     "doc": "General interface",
     "title": "Preview explorer",
     "content": "An handy interactive preview. ",
     "url": "https://nebukam.github.io/mkfont/docs/views/#preview-explorer",
     "relUrl": "/docs/views/#preview-explorer"
-  },"137": {
+  },"138": {
     "doc": "General interface",
     "title": "History explorer",
     "content": "Your friendly time machine. ",
     "url": "https://nebukam.github.io/mkfont/docs/views/#history-explorer",
     "relUrl": "/docs/views/#history-explorer"
-  },"138": {
+  },"139": {
     "doc": "General interface",
     "title": "General interface",
     "content": " ",
     "url": "https://nebukam.github.io/mkfont/docs/views/",
     "relUrl": "/docs/views/"
-  },"139": {
+  },"140": {
     "doc": "Showcase",
     "title": "Showcase",
     "content": "A few fonts made with MkFont – feel free to use them, they’re licensed under MIT :) . ",
     "url": "https://nebukam.github.io/mkfont/showcase/",
     "relUrl": "/showcase/"
-  },"140": {
+  },"141": {
     "doc": "Dialogs",
     "title": "Dialogs",
     "content": "An inventory of the most important dialogs . ",
     "url": "https://nebukam.github.io/mkfont/docs/dialogs/#dialogs",
     "relUrl": "/docs/dialogs/#dialogs"
-  },"141": {
+  },"142": {
     "doc": "Dialogs",
     "title": "Family Infos",
     "content": "Metadata, etcetera. ",
     "url": "https://nebukam.github.io/mkfont/docs/dialogs/#family-infos",
     "relUrl": "/docs/dialogs/#family-infos"
-  },"142": {
+  },"143": {
     "doc": "Dialogs",
     "title": "Family metrics",
     "content": "Primary &amp; reference properties for your font and its glyphs. ",
     "url": "https://nebukam.github.io/mkfont/docs/dialogs/#family-metrics",
     "relUrl": "/docs/dialogs/#family-metrics"
-  },"143": {
+  },"144": {
     "doc": "Dialogs",
     "title": "Glyph picker",
     "content": "A simple glyph picker . ",
     "url": "https://nebukam.github.io/mkfont/docs/dialogs/#glyph-picker",
     "relUrl": "/docs/dialogs/#glyph-picker"
-  },"144": {
+  },"145": {
     "doc": "Dialogs",
     "title": "Ligatures finder",
     "content": "Where ligatures happen. ",
     "url": "https://nebukam.github.io/mkfont/docs/dialogs/#ligatures-finder",
     "relUrl": "/docs/dialogs/#ligatures-finder"
-  },"145": {
+  },"146": {
     "doc": "Dialogs",
     "title": "Batch import",
     "content": "Speeds things up, import in lots. ",
     "url": "https://nebukam.github.io/mkfont/docs/dialogs/#batch-import",
     "relUrl": "/docs/dialogs/#batch-import"
-  },"146": {
+  },"147": {
     "doc": "Dialogs",
     "title": "App settings",
     "content": "Application-level settings, affects all the things. ",
     "url": "https://nebukam.github.io/mkfont/docs/dialogs/#app-settings",
     "relUrl": "/docs/dialogs/#app-settings"
-  },"147": {
+  },"148": {
     "doc": "Dialogs",
     "title": "Dialogs",
     "content": " ",
     "url": "https://nebukam.github.io/mkfont/docs/dialogs/",
     "relUrl": "/docs/dialogs/"
-  },"148": {
+  },"149": {
     "doc": "Third parties",
     "title": "Third parties",
     "content": "Interaction with external apps . How to make the most out of MkFont using supported third party applications . ",
     "url": "https://nebukam.github.io/mkfont/guides/third-party/#third-parties",
     "relUrl": "/guides/third-party/#third-parties"
-  },"149": {
+  },"150": {
     "doc": "Third parties",
     "title": "Third-party doc is mostly WIP.",
     "content": "Come back later (～￣▽￣)～ . ",
     "url": "https://nebukam.github.io/mkfont/guides/third-party/#third-party-doc-is-mostly-wip",
     "relUrl": "/guides/third-party/#third-party-doc-is-mostly-wip"
-  },"150": {
+  },"151": {
     "doc": "Third parties",
     "title": "Third parties",
     "content": " ",
     "url": "https://nebukam.github.io/mkfont/guides/third-party/",
     "relUrl": "/guides/third-party/"
-  },"151": {
+  },"152": {
     "doc": "Guides",
     "title": "Guides",
     "content": "How to use MkFont for various scenarios . Small examples &amp; step-by-step guides to get a grasp on how to get things done with MkFont. ",
     "url": "https://nebukam.github.io/mkfont/guides/#guides",
     "relUrl": "/guides/#guides"
-  },"152": {
+  },"153": {
     "doc": "Guides",
     "title": "Asset preparation",
     "content": "How to prepare assets . Covers some basics yet important things regarding asset preparation . ",
     "url": "https://nebukam.github.io/mkfont/guides/#asset-preparation",
     "relUrl": "/guides/#asset-preparation"
-  },"153": {
+  },"154": {
     "doc": "Guides",
     "title": "Simple font",
     "content": "How to make a simple font . A regular font with mixed types of glyphs &amp; settings. ",
     "url": "https://nebukam.github.io/mkfont/guides/#simple-font",
     "relUrl": "/guides/#simple-font"
-  },"154": {
+  },"155": {
     "doc": "Guides",
     "title": "Simple icon font",
     "content": "How to make an icon font . A simple monospace icon font with normalized glyphs. ",
     "url": "https://nebukam.github.io/mkfont/guides/#simple-icon-font",
     "relUrl": "/guides/#simple-icon-font"
-  },"155": {
+  },"156": {
     "doc": "Guides",
     "title": "Composite icon font",
     "content": "How to make an icon font . A font with complex component interactions. ",
     "url": "https://nebukam.github.io/mkfont/guides/#composite-icon-font",
     "relUrl": "/guides/#composite-icon-font"
-  },"156": {
+  },"157": {
     "doc": "Guides",
     "title": "Third parties",
     "content": "Interaction with external apps . How to make the most out of MkFont using supported third party applications . ",
     "url": "https://nebukam.github.io/mkfont/guides/#third-parties",
     "relUrl": "/guides/#third-parties"
-  },"157": {
+  },"158": {
     "doc": "Guides",
     "title": "Tips and tricks",
     "content": "Squeeze the most out of MkFont . A few tips and tricks to optimize the place of MkFont within your workflow. ",
     "url": "https://nebukam.github.io/mkfont/guides/#tips-and-tricks",
     "relUrl": "/guides/#tips-and-tricks"
-  },"158": {
+  },"159": {
     "doc": "Guides",
     "title": "Guides",
     "content": " ",
     "url": "https://nebukam.github.io/mkfont/guides/",
     "relUrl": "/guides/"
-  },"159": {
+  },"160": {
     "doc": "Downloads",
     "title": "Downloads",
     "content": "Download the app . MkFont is currently only availble on windows. ",
     "url": "https://nebukam.github.io/mkfont/downloads/#downloads",
     "relUrl": "/downloads/#downloads"
-  },"160": {
+  },"161": {
     "doc": "Downloads",
     "title": "Windows",
     "content": "  MkFont Setup (.exe) Unpacked (.zip) . Releases history . ",
     "url": "https://nebukam.github.io/mkfont/downloads/#windows",
     "relUrl": "/downloads/#windows"
-  },"161": {
+  },"162": {
     "doc": "Downloads",
     "title": "Mac OS",
     "content": "  MkFont is currently only available for windows. ",
     "url": "https://nebukam.github.io/mkfont/downloads/#mac-os",
     "relUrl": "/downloads/#mac-os"
-  },"162": {
+  },"163": {
     "doc": "Downloads",
     "title": "Linux",
     "content": "  MkFont is currently only available for windows. ",
     "url": "https://nebukam.github.io/mkfont/downloads/#linux",
     "relUrl": "/downloads/#linux"
-  },"163": {
+  },"164": {
     "doc": "Downloads",
     "title": "Sources available on Github.",
     "content": " ",
     "url": "https://nebukam.github.io/mkfont/downloads/#sources-available-on-github",
     "relUrl": "/downloads/#sources-available-on-github"
-  },"164": {
+  },"165": {
     "doc": "Downloads",
     "title": "Downloads",
     "content": " ",
     "url": "https://nebukam.github.io/mkfont/downloads/",
     "relUrl": "/downloads/"
-  },"165": {
+  },"166": {
     "doc": "MkFont",
     "title": "MkFont mkfont",
     "content": "Export fonts. With a twist. Component-based workflow, with advanced features to nit-pick &amp; tweak metrics in a non-destructive way.   Download Guides Documentation . ",
     "url": "https://nebukam.github.io/mkfont/#mkfont-mkfont",
     "relUrl": "/#mkfont-mkfont"
-  },"166": {
+  },"167": {
     "doc": "MkFont",
     "title": "Components",
     "content": "Make more with less! . A powerful component &amp; compositing system, allowing for clever automation and infinite possibilities. ",
     "url": "https://nebukam.github.io/mkfont/#components",
     "relUrl": "/#components"
-  },"167": {
+  },"168": {
     "doc": "MkFont",
     "title": "Unicode Browser",
     "content": "MkFont is Unicode compliant. Code points are organized by categories &amp; blocks, immediately accessible and search-able. ",
     "url": "https://nebukam.github.io/mkfont/#unicode-browser",
     "relUrl": "/#unicode-browser"
-  },"168": {
+  },"169": {
     "doc": "MkFont",
     "title": "Live Reload",
     "content": "Watch your glyph self-update as you focus on designing them. Bind your imported files to glyphs, or edit them on the fly. Use your time where it matters. ",
     "url": "https://nebukam.github.io/mkfont/#live-reload",
     "relUrl": "/#live-reload"
-  },"169": {
+  },"170": {
     "doc": "MkFont",
     "title": "Smart Search",
     "content": "A discovery tool that offer more than meet the eye. You can search for specific characters, but also names &amp; attributes. The search can look for known character association &amp; relationships, too! . ",
     "url": "https://nebukam.github.io/mkfont/#smart-search",
     "relUrl": "/#smart-search"
-  },"170": {
+  },"171": {
     "doc": "MkFont",
     "title": "Non-destructive",
     "content": "Manipulates your data, doesn’t alter it. MkFont respect your assets and allows for experimenting safely with different settings, until you find the one that suits your needs. ",
     "url": "https://nebukam.github.io/mkfont/#non-destructive",
     "relUrl": "/#non-destructive"
-  },"171": {
+  },"172": {
     "doc": "MkFont",
     "title": "Ligatures made easy",
     "content": "Analyze text to find &amp; add most common combinations . MkFont comes with a small tool that takes a text blurb to show you which group of letters are recurring – and create ligatures out of them. ",
     "url": "https://nebukam.github.io/mkfont/#ligatures-made-easy",
     "relUrl": "/#ligatures-made-easy"
-  },"172": {
+  },"173": {
     "doc": "MkFont",
     "title": "Batch import",
     "content": "Quick &amp; easy . Import loads of SVG at once, with multiple ways to assign them to glyphs/code-point.Import directly to your current selection, or to specific Unicode blocks. ",
     "url": "https://nebukam.github.io/mkfont/#batch-import",
     "relUrl": "/#batch-import"
-  },"173": {
+  },"174": {
     "doc": "MkFont",
     "title": "TTF import &amp; editing",
     "content": "Start to work from, and explore existing fonts. Import TTFs files in a single click, tweak them and re-export them in just a few clicks. ",
     "url": "https://nebukam.github.io/mkfont/#ttf-import--editing",
     "relUrl": "/#ttf-import--editing"
-  },"174": {
+  },"175": {
     "doc": "MkFont",
     "title": "Live preview",
     "content": "Preview your font at any time, all the time. (ok that one was a must have anyway) . ",
     "url": "https://nebukam.github.io/mkfont/#live-preview",
     "relUrl": "/#live-preview"
-  },"175": {
+  },"176": {
     "doc": "MkFont",
     "title": "3rd party automation",
     "content": "One-click documents &amp; artboards setup, ready to export. MkFont comes with built-in automation tools for Adobe© Illustrator, for an even smoother workflow. Finger crossed more tools gets that kind of support soon! . ",
     "url": "https://nebukam.github.io/mkfont/#rd-party-automation",
     "relUrl": "/#rd-party-automation"
-  },"176": {
+  },"177": {
     "doc": "MkFont",
     "title": "And more!",
     "content": "A bunch of discreet QoL features. Lots of small options &amp; features to make it easy to work with your glyphs with third parties such as Unity’ TextMeshPro. ",
     "url": "https://nebukam.github.io/mkfont/#and-more",
     "relUrl": "/#and-more"
-  },"177": {
+  },"178": {
     "doc": "MkFont",
     "title": "MkFont",
     "content": " ",
     "url": "https://nebukam.github.io/mkfont/",
     "relUrl": "/"
-  },"178": {
+  },"179": {
     "doc": "Glyph inspector",
     "title": "Glyph inspector",
     "content": "Edit individual &amp; multiples glyphs here. For the various foldouts in full details, see . | Glyph transformations | . Table of content . | Glyph preview | Empty slot inspection . | Header actions | . | Single glyph inspection . | Header actions | Inspector blocks | Glyph transformations | Glyph components | Glyph details . | Shortcut &amp; actions | . | Settings . | Export | Resource binding | . | . | Multiple glyph inspection . | Header actions | . | Empty glyph inspection | . ",
     "url": "https://nebukam.github.io/mkfont/docs/views/inspector-glyph.html#glyph-inspector",
     "relUrl": "/docs/views/inspector-glyph.html#glyph-inspector"
-  },"179": {
+  },"180": {
     "doc": "Glyph inspector",
     "title": "Glyph preview",
     "content": "The glyph preview is non-interactive, and shows the all the metrics &amp; guides that currently define the typographic space. The blue boundary box shows the glyph boundaries as currently seen by the transformation algorithm, according to the active transformation settings. If this is not what you were expecting, either play around with the selected boundary options, or check your source file. ",
     "url": "https://nebukam.github.io/mkfont/docs/views/inspector-glyph.html#glyph-preview",
     "relUrl": "/docs/views/inspector-glyph.html#glyph-preview"
-  },"180": {
+  },"181": {
     "doc": "Glyph inspector",
     "title": "Empty slot inspection",
     "content": "An empty slot is a that “does not exists”. It’s neither empty nor has a path, it’s simply not part of the font. Unless you started your doc by importing a .ttf, this is likely the first thing you’ll interact with. ",
     "url": "https://nebukam.github.io/mkfont/docs/views/inspector-glyph.html#empty-slot-inspection",
     "relUrl": "/docs/views/inspector-glyph.html#empty-slot-inspection"
-  },"181": {
+  },"182": {
     "doc": "Glyph inspector",
     "title": "Header actions",
     "content": "Actions are limited to the following when editing an empty slot : . | Action | Effect | . | : **Glyph identity** :| |   | . | | Copy the unicode address of the glyph to the clipboard. Ligatures will show as ‘_‘-joint Unicode hex values. | . | : **Glyph actions** :| |   | . | | Create new glyph by importing an SVG from an external file. *File will become bound for the session according to the app settings* | . | | Create new glyph by importing clipboard content. Same as using . | . | | Create a new empty glyph. It becomes an customizable void. | . | + | Create a new glyph along with components matching the glyph composition, if any. | . ",
     "url": "https://nebukam.github.io/mkfont/docs/views/inspector-glyph.html#header-actions",
     "relUrl": "/docs/views/inspector-glyph.html#header-actions"
-  },"182": {
+  },"183": {
     "doc": "Glyph inspector",
     "title": "Single glyph inspection",
     "content": ". ",
     "url": "https://nebukam.github.io/mkfont/docs/views/inspector-glyph.html#single-glyph-inspection",
     "relUrl": "/docs/views/inspector-glyph.html#single-glyph-inspection"
-  },"183": {
+  },"184": {
     "doc": "Glyph inspector",
     "title": "Header actions",
     "content": "Action available in the inspector’s header are the following . | Action | Effect | . | : **Glyph identity** :| |   | . | | Copy the unicode address of the glyph to the clipboard. Ligatures will show as ‘_‘-joint Unicode hex values. | . | : **Glyph actions** :| |   | . | | Import an SVG from an external file. *File will become bound for the session according to the app settings* | . | | Import clipboard content. Same as using . | . | | Resets the glyph’s contents to empty, but does not delete the glyph. It becomes an customizable void. | . | + | Resets the glyph contents &amp; create components matching the glyph composition, if any. | . | + | Resets the glyph contents but keeps existing components. | . | | Edit in place : create a temp SVG file with the glyph’s contents, and open the default SVG editor on your system. Saving the SVG from said editor will update the asset within MkFont. *Note that if the glyph is currently bound to a file, this option is disabled. In order to make it available again, simply unlink the glyph from its file resource.* | . | | Export glyph to clipboard. Same as using . | . | | Delete the glyph and its content. It won’t be part of the font anymore. | . ",
     "url": "https://nebukam.github.io/mkfont/docs/views/inspector-glyph.html#header-actions-1",
     "relUrl": "/docs/views/inspector-glyph.html#header-actions-1"
-  },"184": {
+  },"185": {
     "doc": "Glyph inspector",
     "title": "Inspector blocks",
     "content": "Each foldout has its own dedicated page. ",
     "url": "https://nebukam.github.io/mkfont/docs/views/inspector-glyph.html#inspector-blocks",
     "relUrl": "/docs/views/inspector-glyph.html#inspector-blocks"
-  },"185": {
+  },"186": {
     "doc": "Glyph inspector",
     "title": "Glyph transformations",
     "content": "An inventory of the transformation options. ",
     "url": "https://nebukam.github.io/mkfont/docs/views/inspector-glyph.html#glyph-transformations",
     "relUrl": "/docs/views/inspector-glyph.html#glyph-transformations"
-  },"186": {
+  },"187": {
     "doc": "Glyph inspector",
     "title": "Glyph components",
     "content": "Make more with less! . ",
     "url": "https://nebukam.github.io/mkfont/docs/views/inspector-glyph.html#glyph-components",
     "relUrl": "/docs/views/inspector-glyph.html#glyph-components"
-  },"187": {
+  },"188": {
     "doc": "Glyph inspector",
     "title": "Glyph details",
     "content": "Decomposition, relatives, etc. Shortcut &amp; actions . When displayed in the glyph inspector, the Glyph transformations has some additional actions available : . | Modifier | Action | . | | Paste transforms from clipboard | . | | Paste transforms from clipboard | . ",
     "url": "https://nebukam.github.io/mkfont/docs/views/inspector-glyph.html#glyph-details",
     "relUrl": "/docs/views/inspector-glyph.html#glyph-details"
-  },"188": {
+  },"189": {
     "doc": "Glyph inspector",
     "title": "Settings",
     "content": "Export . | Property | Effect | . | Export | Whether or not to include the glyph in the exported font. | . Resource binding . If the glyph is currently bound to a file, the binding and the ability to break it ( ) will show under the preview. Bindings are created during external file imports, either individually using , or during batch import. A glyph bound to a resource will re-import itself whenever the file is updated. | Empty path will be ignored (i.e, if the file previously had content but not anymore) and won’t ‘reset’ the glyph. | Deleted resources will be automatically unbound without affecting the glyph. i.e, it’s generally safe to bind resources, and it should never have destructive consequences (unless you mess with your own art) | . ",
     "url": "https://nebukam.github.io/mkfont/docs/views/inspector-glyph.html#settings",
     "relUrl": "/docs/views/inspector-glyph.html#settings"
-  },"189": {
+  },"190": {
     "doc": "Glyph inspector",
     "title": "Multiple glyph inspection",
     "content": "Note that multi-glyph editing only affect the glyph that exists. If you have empty slot within your selection, they will be ignored. When multiple glyphs are selected, changing parameters will apply to all the selected glyphs. You can click on any selected glyph within the viewport in order to “bump” it so it shows first within the first four previews. ",
     "url": "https://nebukam.github.io/mkfont/docs/views/inspector-glyph.html#multiple-glyph-inspection",
     "relUrl": "/docs/views/inspector-glyph.html#multiple-glyph-inspection"
-  },"190": {
+  },"191": {
     "doc": "Glyph inspector",
     "title": "Header actions",
     "content": "Actions are limited to the following when editing groups : . | Action | Effect | . | : **Glyph identity** :| |   | . | | Copy the unicode address of all the selected glyph to the clipboard, separated by , .i.e : U+006B, U+006C, U+006D | . | : **Glyph actions** :| |   | . | | Resets the glyphs’ contents to empty, but does not delete them. | . | + | Resets the all the glyphs in the selection &amp; create components matching the glyph composition, if any. | . | + | Resets all the glyphs in the selection but keeps their existing components. | . | | Delete the glyphs and their content. | . If any glyph within the selection is bound to a file, a button will show at the very bottom of the inspector. When clicked, every bound item within the active selection will be disconnected from its resource on disk. ",
     "url": "https://nebukam.github.io/mkfont/docs/views/inspector-glyph.html#header-actions-2",
     "relUrl": "/docs/views/inspector-glyph.html#header-actions-2"
-  },"191": {
+  },"192": {
     "doc": "Glyph inspector",
     "title": "Empty glyph inspection",
     "content": "An empty glyph is a glyph that exists and takes space within a sentence. The actual space it will take is represented by an orange placeholder box. Not much to see here. Empty glyph width can be changed by either tweaking the glyph’ Width, Shift or Push . ",
     "url": "https://nebukam.github.io/mkfont/docs/views/inspector-glyph.html#empty-glyph-inspection",
     "relUrl": "/docs/views/inspector-glyph.html#empty-glyph-inspection"
-  },"192": {
+  },"193": {
     "doc": "Glyph inspector",
     "title": "Glyph inspector",
     "content": " ",
     "url": "https://nebukam.github.io/mkfont/docs/views/inspector-glyph.html",
     "relUrl": "/docs/views/inspector-glyph.html"
-  },"193": {
+  },"194": {
     "doc": "Ligatures finder",
     "title": "Ligatures finder",
     "content": "Where ligatures happen. The ligature finder has two main input modes : text analysis, and manual input. You can switch between the two simply by toggling the Each line is a ligature on or off. Table of content . | Text analysis . | Thresholds | . | One ligature per line | . ",
     "url": "https://nebukam.github.io/mkfont/docs/dialogs/ligatures-finder.html#ligatures-finder",
     "relUrl": "/docs/dialogs/ligatures-finder.html#ligatures-finder"
-  },"194": {
+  },"195": {
     "doc": "Ligatures finder",
     "title": "Text analysis",
     "content": "Ok, analysis is a big word, there’s no real analysis going on here, just brute force statistical extraction. Simply paste a blurb of text in the input field, hit enter, and the ligatures options will start showing! . Note that only the first 500 results (after thresholds are applied) will show up. Thresholds . The results can be narrowed down &amp; limited by a few parameters : . | Property | Effect | . | Min length | Minimum ligature length to look for. For obvious reasons, cannot be lower than 2. | . | Max length | Maximum ligature length to look for. The higher the value, the more low-quality results/occurences you’re going to get. | . | Min occurrences | The minimum number of times a ligature must be present in order to show up in the results. | . ",
     "url": "https://nebukam.github.io/mkfont/docs/dialogs/ligatures-finder.html#text-analysis",
     "relUrl": "/docs/dialogs/ligatures-finder.html#text-analysis"
-  },"195": {
+  },"196": {
     "doc": "Ligatures finder",
     "title": "One ligature per line",
     "content": ". In this mode, simply input the target ligature on each line to manually produce results. Other parameters will be ignored. Use to do a line break . ",
     "url": "https://nebukam.github.io/mkfont/docs/dialogs/ligatures-finder.html#one-ligature-per-line",
     "relUrl": "/docs/dialogs/ligatures-finder.html#one-ligature-per-line"
-  },"196": {
+  },"197": {
     "doc": "Ligatures finder",
     "title": "Ligatures finder",
     "content": " ",
     "url": "https://nebukam.github.io/mkfont/docs/dialogs/ligatures-finder.html",
     "relUrl": "/docs/dialogs/ligatures-finder.html"
-  },"197": {
+  },"198": {
     "doc": "Ligatures made easy",
     "title": "Ligatures made easy",
     "content": "Analyze text to find &amp; add most common combinations . MkFont comes with a small tool that takes a text blurb to show you which group of letters are recurring – and create ligatures out of them. ",
     "url": "https://nebukam.github.io/mkfont/features/ligatures.html#ligatures-made-easy",
     "relUrl": "/features/ligatures.html#ligatures-made-easy"
-  },"198": {
+  },"199": {
     "doc": "Ligatures made easy",
     "title": "Ligatures made easy",
     "content": " ",
     "url": "https://nebukam.github.io/mkfont/features/ligatures.html",
     "relUrl": "/features/ligatures.html"
-  },"199": {
+  },"200": {
     "doc": "Batch import",
     "title": "Batch import",
     "content": "Speeds things up, import in lots. This is the dialog for importing a list of SVG files and assigning them to specific glyph slots. Table of content . | Glyph Transformation | Overlap | Assignation . | From filename | To block | To block (constrained) | To selection | . | Import list . | Manually assign a slot | . | . ",
     "url": "https://nebukam.github.io/mkfont/docs/dialogs/list-import.html#batch-import",
     "relUrl": "/docs/dialogs/list-import.html#batch-import"
-  },"200": {
+  },"201": {
     "doc": "Batch import",
     "title": "Glyph Transformation",
     "content": "Important note : when batch-importing, the Glyph transformations are on a one-for-all basis. Per-glyph tweaks can be done after import. It is also important to highlight that the preview on the right show what the glyph will look like after being imported; hence it’s very easy to check whether or not you want to keep or overwrite existing transforms. See Glyph transformations for a detailed overview of the transformation options. ",
     "url": "https://nebukam.github.io/mkfont/docs/dialogs/list-import.html#glyph-transformation",
     "relUrl": "/docs/dialogs/list-import.html#glyph-transformation"
-  },"201": {
+  },"202": {
     "doc": "Batch import",
     "title": "Overlap",
     "content": "Overlap is the first setting. It manages how importation is handled when there is an overlap. An overlap is when you’re trying to import a glyph into a slot that already contains a glyph. The following resolutions options are available : . | Selection | Resolution | . | Overwrite transforms | The new path will overwrite the existing one, as well as its transformations settings, effectively using the one displayed on the left of the dialog. | . | Preserve existing transforms | The new path will overwrite the existing one, however the existing transformations settings will be preserved.When relying on resources-binding to work, this is a great way to restore bindings to existing glyphs and only update the graphics. | . | Don’t import | The importer will skip any item that correspond to an existing glyph.Select this is you only want to fill the slots that are currently empty in your font. | . ",
     "url": "https://nebukam.github.io/mkfont/docs/dialogs/list-import.html#overlap",
     "relUrl": "/docs/dialogs/list-import.html#overlap"
-  },"202": {
+  },"203": {
     "doc": "Batch import",
     "title": "Assignation",
     "content": "Assignation determines how an imported SVG will be assigned to a unicode slot. i.e, what seats it’s supposed to take. Which option to choose from is highly specific to how you like to work, and the type of font you’re working on. File list is internally sorted on import to ensure consistent &amp; predictable behavior. When working with regular font, I highly recommend using From filename and maintain strict naming conventions to avoid wondering whether a glyph should be here or there. However, when working with icon font, it can be preferable to select To block. No matter which assignation mode you choose, you can always set the target slot manually :) Also, the character &amp; slot address (hex value) where the glyph will be imported is visible and updated at all times. At the time of writing, there are four options to choose from: . | From filename | To block | To block (constrained) | To selection | . From filename . As stated in the name, this option will extract the target slot from the filename structure. By default, the importer will try to extract the largest chain of character shared by every single file. If you’re using a default prefix, it should be already set. However, if not, or if incorrect, you’ll have to define it manually. Here are the two things required to extract info from the filename. | Parameter | Expected content | . | Name prefix | A chain of character that indicates the point in the filname where MkFont should start looking for infos.*If all your filenames are completely different, it’s very likely you’ll have to manually set each glyph.* | . | Separator | A custom character that is used to separate the different unicode that compose your glyph.*This is only useful if you work with ligatures.* | . Now, there are two ways to include the slot address in the filename : . | If you’re working with simple letters that are acceptable in a filename, you can use that. | Otherwise, you’ll need to explicitly describe the character address in the form U+0000. | . Examples Name Prefix : char Separator : _ . | Filename | Character/Addresses found | Slot | . | foo-char_A.svg | A | A (LATIN CAPITAL LETTER A) | . | bar-char_U+0041.svg | U+0041 | A (LATIN CAPITAL LETTER A) | . | poet-char_A_U+0041.svg | A, U+0041 | AA (custom ligature) | . | char_U+0041_U+0041.svg | U+0041, U+0041 | AA (custom ligature) | . | nay-char_0.svg | 0 | 0 (DIGIT ZERO) | . | nay-char_test.svg | t, e, s, t | test (custom ligature) | . …And so on. Everything before char will be ignored, and everything after is extracted at each ‘_’ . The U+0000 can be added to your clipboard from multiple places in the app. Look for . To block . This option will start importing glyphs into a specific Unicode block of your choosing (from the Reference block list). You can then select where to start importing within that block : . | Selection | Behavior | . | Block start | The import will start at the first index of the selected block. | . | First empty slot | The import will look for the first empty slot within the selected block, and start import from there. | . | Manual offset | *not implemented yet* | . Now, if you import a massive number of glyphs, or simply if you selected first empty slot and there isn’t any, glyphs will still be imported but they will overflow to the next block. If that’s something you want to avoid, have a look at the next option. To block (constrained) . Identical to To block, this mode won’t import glyphs that would fall outside of the selected block’s range. To selection . This is the tricksiest of the gang, probably the less useful too. It requires an active selection within the viewport prior to importation. This selection will be used as target default slot in the order in which the selection has been made. ",
     "url": "https://nebukam.github.io/mkfont/docs/dialogs/list-import.html#assignation",
     "relUrl": "/docs/dialogs/list-import.html#assignation"
-  },"203": {
+  },"204": {
     "doc": "Batch import",
     "title": "Import list",
     "content": "The import list lets you browse to the file that are going to be imported and check out their state. Each item offer the ability for manual assignation. | State | Meaning | . | New glyph | *Glyph will be imported in the U+0048 slot, a.k.a F, a.k.a LATIN CAPITAL LETTER K* | . | Overwrite glyph | *Glyph will be imported in the U+003F slot, a.k.a ?, a.k.a QUESTION MARK* | . | Overwrite custom glyph | *Glyph will be imported in the U+0041 slot, a.k.a A, a.k.a LATIN CAPITAL LETTER A* | . | Not imported | *Glyph will not be imported.* | . Manually assign a slot . What to input in the field to get what you want is very similar to the way assignation by filename works : content of the field will be parsed to find the slot that matches your input. The main difference is that here, each character is looked at. If you input more than one character, it automatically becomes a ligature; unless you’re using the U+0000 format. No matter what happens, the item will preview the final destination slot right below the input field. Examples | Input | Character/Addresses found | Slot | . | A | A | A (LATIN CAPITAL LETTER A) | . | U+0041 | U+0041 | A (LATIN CAPITAL LETTER A) | . | AU+0041 | A, U+0041 | AA (custom ligature) | . | U+0041U+0041 | U+0041, U+0041 | AA (custom ligature) | . | 0 | 0 | 0 (DIGIT ZERO) | . | test | t, e, s, t | test (custom ligature) | . …And so on. When overwriting an existing glyph, preview will show a faint version of the currently existing glyph behind the new one, so you get a better sense of the update you’re about to apply. ",
     "url": "https://nebukam.github.io/mkfont/docs/dialogs/list-import.html#import-list",
     "relUrl": "/docs/dialogs/list-import.html#import-list"
-  },"204": {
+  },"205": {
     "doc": "Batch import",
     "title": "Batch import",
     "content": " ",
     "url": "https://nebukam.github.io/mkfont/docs/dialogs/list-import.html",
     "relUrl": "/docs/dialogs/list-import.html"
-  },"205": {
+  },"206": {
     "doc": "Live Reload",
     "title": "Live Reload",
     "content": "Watch your glyph self-update as you focus on designing them. Bind your imported files to glyphs, or edit them on the fly. Use your time where it matters. ",
     "url": "https://nebukam.github.io/mkfont/features/live-reload.html#live-reload",
     "relUrl": "/features/live-reload.html#live-reload"
-  },"206": {
+  },"207": {
     "doc": "Live Reload",
     "title": "Live Reload",
     "content": " ",
     "url": "https://nebukam.github.io/mkfont/features/live-reload.html",
     "relUrl": "/features/live-reload.html"
-  },"207": {
+  },"208": {
     "doc": "Miscellaneous",
     "title": "Miscellaneous",
     "content": "Notable features, but that didn’t deserve an individual page. ",
     "url": "https://nebukam.github.io/mkfont/features/misc.html#miscellaneous",
     "relUrl": "/features/misc.html#miscellaneous"
-  },"208": {
+  },"209": {
     "doc": "Miscellaneous",
     "title": "Non-destructive workflow",
     "content": " ",
     "url": "https://nebukam.github.io/mkfont/features/misc.html#non-destructive-workflow",
     "relUrl": "/features/misc.html#non-destructive-workflow"
-  },"209": {
+  },"210": {
     "doc": "Miscellaneous",
     "title": "TTF import &amp; editing",
     "content": " ",
     "url": "https://nebukam.github.io/mkfont/features/misc.html#ttf-import--editing",
     "relUrl": "/features/misc.html#ttf-import--editing"
-  },"210": {
+  },"211": {
     "doc": "Miscellaneous",
     "title": "Live preview",
     "content": " ",
     "url": "https://nebukam.github.io/mkfont/features/misc.html#live-preview",
     "relUrl": "/features/misc.html#live-preview"
-  },"211": {
+  },"212": {
     "doc": "Miscellaneous",
     "title": "Miscellaneous",
     "content": " ",
     "url": "https://nebukam.github.io/mkfont/features/misc.html",
     "relUrl": "/features/misc.html"
-  },"212": {
+  },"213": {
     "doc": "Resources",
     "title": "Resources",
     "content": "Some useful resources &amp; example files. ",
     "url": "https://nebukam.github.io/mkfont/downloads/resources.html#resources",
     "relUrl": "/downloads/resources.html#resources"
-  },"213": {
+  },"214": {
     "doc": "Resources",
     "title": "WORK IN PROGRESS.",
     "content": "Come back later (～￣▽￣)～ . ",
     "url": "https://nebukam.github.io/mkfont/downloads/resources.html#work-in-progress",
     "relUrl": "/downloads/resources.html#work-in-progress"
-  },"214": {
+  },"215": {
     "doc": "Resources",
     "title": "Resources",
     "content": " ",
     "url": "https://nebukam.github.io/mkfont/downloads/resources.html",
     "relUrl": "/downloads/resources.html"
-  },"215": {
+  },"216": {
     "doc": "Shortcuts",
     "title": "Shortcuts",
     "content": "MkFont shortcuts, what do they do, do they do things, let’s find out! . All numeric inputs &amp; sliders in MkFont can be modified using the mouse wheel on hover. Holding while scrolling or dragging will multiply the default increment by 10. Rule of thumb : most actions have an alternative behavior whether you’re holding or while activating them. Usually, has the most “dangerous” effect, and reaches further than the original behavior. On the contrary, has a lesser effect, and often means the action will only execute a subset of its normal instructions. ",
     "url": "https://nebukam.github.io/mkfont/docs/shortcuts.html#shortcuts",
     "relUrl": "/docs/shortcuts.html#shortcuts"
-  },"216": {
+  },"217": {
     "doc": "Shortcuts",
     "title": "In the Font editor",
     "content": "| Shortcut | Action | . | : **Actions** :| |   | . | | Saves the currently edited mkfont file. Prompts a dialog if the file has never been saved before. | . | | Undo last action | . | | Redo last action | . | : **Navigation** :| |   | . | | Previous nav state *(should be the same as in a regular browser)* | . | | Next nav state *(should be the same as in a regular browser)* | . | : **Selection** :| |   | . | | Selects all glyphs currently displayed in the viewport. | . | | Clears the current selection | . | | Store the current selection as a shortcut. | . | | Restore the selection previously stored | . | | Appends the selection previously stored to the current selection | . Keep in mind that glyphs are copied and pasted in the order in which they have been selected. Pasting a group selection on top of another group selection will ‘wrap’ the content available in the clipboard. For example, if you copied 1,2, and paste it over a selection that has more than 2 glyphs, the result will be 1,2,1,2,1,… . ",
     "url": "https://nebukam.github.io/mkfont/docs/shortcuts.html#in-the-font-editor",
     "relUrl": "/docs/shortcuts.html#in-the-font-editor"
-  },"217": {
+  },"218": {
     "doc": "Shortcuts",
     "title": "In the Font viewport",
     "content": "| Shortcut | Action | . | | Copy a single glyph to the app clipboard | . | | Paste the content of the clipboard in the selected glyph slot.Supports pasting directly from Adobe© Illustrator! | . | | Paste the glyphs copied using to their matching unicode slots. This is especially *(if not only)* useful to paste glyphs from an .mkfont to another in batch, while retaining their unicode positions. | . | | Applies the transform of the glyph stored in memory using to all glyphs in the active selection. Does **not** affect the path. | . | | Deletes the selected glyphs | . Note on copy/pasting glyphs : glyphs are copied into SVG format, with transform information embedded as SVG attributes. This means that you can safely use the clipboard’s content in any SVG-friendly app, and that casually pasting within MkFont will retain transform settings. Action modifiers . Modifiers are applied when a key is pressed along with a specific button. TL;DR : When clicking on an action while is pressed will execute the action for all glyphs within the range, not just limited to your active selection. | Modifier | Action | . | + | Create empty glyphs in Unicode slots that have no glyph yet. Does **not** overwrite existing ones. | . | + | Copy the unicode characters to the clipboard, with each value separated by a newline character : \\n. *(see [note](#note-on-unicode-lists))* | . | + | Copy the unicode hex values to the clipboard, with each value separated by a newline character : \\n. *(see [note](#note-on-unicode-lists))* | . | + | Create &amp; execute a JSX script that will prompt Adobe© Illustrator to create a new document with artboard set-up for each glyph within the range (up to 1000), properly named in order to be exported easily. *(see Third parties )* | . | + | Delete all glyphs within the range. | . ",
     "url": "https://nebukam.github.io/mkfont/docs/shortcuts.html#in-the-font-viewport",
     "relUrl": "/docs/shortcuts.html#in-the-font-viewport"
-  },"218": {
+  },"219": {
     "doc": "Shortcuts",
     "title": "In the Glyph inspector",
     "content": "Header actions . | Modifier | Action | . | : **When multiple glyph are selected, action is applied to every one of them** :| |   | . | + | Resets the glyph contents &amp; create components matching the glyph composition, if any, as well as associated glyphs if they are missing. | . | + | Resets the glyph contents but keeps existing components. | . | + | Resets the glyph contents, and recursively creates missing glyphs along with their decomposition. | . Components . | Modifier | Action | . | : **Copy/paste** :| |   | . | + | Add components from the clipboard, instead of replacing the existing ones | . | + | Only paste transform settings from matching components within the clipboard | . | : **Decomposition** :| |   | . | + | Create components recursively. | . | + | Does not create missing components’ glyphs. | . | + | Create components &amp; missing glyphs recursively. | . ",
     "url": "https://nebukam.github.io/mkfont/docs/shortcuts.html#in-the-glyph-inspector",
     "relUrl": "/docs/shortcuts.html#in-the-glyph-inspector"
-  },"219": {
+  },"220": {
     "doc": "Shortcuts",
     "title": "Shortcuts",
     "content": " ",
     "url": "https://nebukam.github.io/mkfont/docs/shortcuts.html",
     "relUrl": "/docs/shortcuts.html"
-  },"220": {
+  },"221": {
     "doc": "Smart Search",
     "title": "Smart Search",
     "content": "A discovery tool that offer more than meet the eye. You can search for specific characters, but also names &amp; attributes. The search can look for known character association &amp; relationships, too! . ",
     "url": "https://nebukam.github.io/mkfont/features/smart-search.html#smart-search",
     "relUrl": "/features/smart-search.html#smart-search"
-  },"221": {
+  },"222": {
     "doc": "Smart Search",
     "title": "Smart Search",
     "content": " ",
     "url": "https://nebukam.github.io/mkfont/features/smart-search.html",
     "relUrl": "/features/smart-search.html"
-  },"222": {
+  },"223": {
     "doc": "3rd party automation",
     "title": "3rd party automation",
     "content": "One-click documents &amp; artboards setup, ready to export. MkFont comes with built-in automation tools for Adobe© Illustrator, for an even smoother workflow. Finger crossed more tools gets that kind of support soon! . ",
     "url": "https://nebukam.github.io/mkfont/features/third-party.html#rd-party-automation",
     "relUrl": "/features/third-party.html#rd-party-automation"
-  },"223": {
+  },"224": {
     "doc": "3rd party automation",
     "title": "3rd party automation",
     "content": " ",
     "url": "https://nebukam.github.io/mkfont/features/third-party.html",
     "relUrl": "/features/third-party.html"
-  },"224": {
+  },"225": {
     "doc": "Tips and tricks",
     "title": "Tips and tricks",
     "content": "Squeeze the most out of MkFont . A few tips and tricks to optimize the place of MkFont within your workflow. ",
     "url": "https://nebukam.github.io/mkfont/guides/tips-and-tricks.html#tips-and-tricks",
     "relUrl": "/guides/tips-and-tricks.html#tips-and-tricks"
-  },"225": {
+  },"226": {
     "doc": "Tips and tricks",
     "title": "Using separate .mkfont files as re-usable libraries",
     "content": "There is currently no way to import an MkFont file into another, by design : you can copy/paste-in-place glyphs from an open document to another. What I tend to do is keep sets of glyphs in separate .mkfont files that I use as kind-of ‘external libraries’, pasting what I need from them to another .mkfont file using the / manipulation. This is especially useful if, for example, you have a set of recurring characters that you end up including in different fonts; i.e controller icons and the like. ",
     "url": "https://nebukam.github.io/mkfont/guides/tips-and-tricks.html#using-separate-mkfont-files-as-re-usable-libraries",
     "relUrl": "/guides/tips-and-tricks.html#using-separate-mkfont-files-as-re-usable-libraries"
-  },"226": {
+  },"227": {
     "doc": "Tips and tricks",
     "title": "Using non-exported ligatures as re-usable named components",
     "content": "Since components work by importing existing glyphs, it comes in handy to create ligatures with human-readable names (like you would with layers in a tidy photoshop document), set them to not be exported along with the font, and voila, you got yourself a component library! . This is especially useful when working with complex icon sets, or when naming artboards as Unicode value isn’t an option. The Composite icon font guide is a good demonstration of that. ",
     "url": "https://nebukam.github.io/mkfont/guides/tips-and-tricks.html#using-non-exported-ligatures-as-re-usable-named-components",
     "relUrl": "/guides/tips-and-tricks.html#using-non-exported-ligatures-as-re-usable-named-components"
-  },"227": {
+  },"228": {
     "doc": "Tips and tricks",
     "title": "WORK IN PROGRESS.",
     "content": "Come back later (～￣▽￣)～ . ",
     "url": "https://nebukam.github.io/mkfont/guides/tips-and-tricks.html#work-in-progress",
     "relUrl": "/guides/tips-and-tricks.html#work-in-progress"
-  },"228": {
+  },"229": {
     "doc": "Tips and tricks",
     "title": "Tips and tricks",
     "content": " ",
     "url": "https://nebukam.github.io/mkfont/guides/tips-and-tricks.html",
     "relUrl": "/guides/tips-and-tricks.html"
-  },"229": {
+  },"230": {
     "doc": "Unity TextMeshPro",
     "title": "Unity TextMeshPro",
     "content": "··· . ··· . ",
     "url": "https://nebukam.github.io/mkfont/guides/third-party/tmpro.html#unity-textmeshpro",
     "relUrl": "/guides/third-party/tmpro.html#unity-textmeshpro"
-  },"230": {
+  },"231": {
     "doc": "Unity TextMeshPro",
     "title": "WORK IN PROGRESS.",
     "content": "Come back later (～￣▽￣)～ . ",
     "url": "https://nebukam.github.io/mkfont/guides/third-party/tmpro.html#work-in-progress",
     "relUrl": "/guides/third-party/tmpro.html#work-in-progress"
-  },"231": {
+  },"232": {
     "doc": "Unity TextMeshPro",
     "title": "Unity TextMeshPro",
     "content": " ",
     "url": "https://nebukam.github.io/mkfont/guides/third-party/tmpro.html",
     "relUrl": "/guides/third-party/tmpro.html"
-  },"232": {
+  },"233": {
     "doc": "Unicode Browser",
     "title": "Unicode Browser",
     "content": "MkFont is Unicode compliant. Code points are organized by categories &amp; blocks, immediately accessible and search-able. ",
     "url": "https://nebukam.github.io/mkfont/features/unicode-browser.html#unicode-browser",
     "relUrl": "/features/unicode-browser.html#unicode-browser"
-  },"233": {
+  },"234": {
     "doc": "Unicode Browser",
     "title": "Unicode Browser",
     "content": " ",
     "url": "https://nebukam.github.io/mkfont/features/unicode-browser.html",
     "relUrl": "/features/unicode-browser.html"
-  },"234": {
+  },"235": {
     "doc": "Font viewport",
     "title": "Font viewport",
     "content": "Navigate &amp; search through Unicode slots. ",
     "url": "https://nebukam.github.io/mkfont/docs/views/viewport-unicode.html#font-viewport",
     "relUrl": "/docs/views/viewport-unicode.html#font-viewport"
-  },"235": {
+  },"236": {
     "doc": "Font viewport",
     "title": "Bound the the Content explorer",
     "content": "The contents of the viewport is determined by the items selected within the Content explorer. Actions &amp; search are applied within the limits of the selected range. Note that some ranges represent all glyphs within your font, or even all known Unicode points, so be careful! . Table of content . | Header . | Actions | . | Search . | Search terms | Search modifier | . | Selection | Slots . | States | Quick menu | . | Notes . | Display options | Note on unicode lists | . | Shortcuts | . ",
     "url": "https://nebukam.github.io/mkfont/docs/views/viewport-unicode.html#bound-the-the-content-explorer",
     "relUrl": "/docs/views/viewport-unicode.html#bound-the-the-content-explorer"
-  },"236": {
+  },"237": {
     "doc": "Font viewport",
     "title": "Header",
     "content": "The header is rather straightfoward : the name displayed is the one of the range currently displayed; as well as it’s type and number of glyphs it covers. If the type is a named Unicode range, the first tag will show the start &amp; end address of the block in hexadecimal form. For example, Basic Latin goes from U+0020 to U+007F. (control characters are omitted) The second tag shows how many glyphs are contained within the viewport. Actions . The Font Viewport has a few available actions, displayed on the bottom right of the header. By default, these actions are applied to the active selection of glyph within the viewport. | Modifier | Action | . | : **Create glyphs** :| |   | . | | Create empty glyphs in Unicode slots that have no glyph yet. Does **not** overwrite existing ones. | . | + | Same as above, applied to the entire viewport content. | . | : **Text references** :| |   | . | | Copy the unicode characters to the clipboard, with each value separated by a newline character : \\n. *(see [note](#note-on-unicode-lists))* | . | + | Same as above, applied to the entire viewport content. | . | | Copy the unicode hex values to the clipboard, with each value separated by a newline character : \\n. *(see [note](#note-on-unicode-lists))* | . | + | Same as above, applied to the entire viewport content. | . | : **Third parties** :| |   | . | | Create &amp; execute a JSX script that will prompt Adobe© Illustrator to create a new document with artboard set-up for each selected glyph, properly named in order to be exported easily. *(see Third parties)* | . | + | Same as above, applied to the entire viewport content. | . | : **Deletion** :| |   | . | | Delete selected glyphs. | . | + | Same as above, applied to the entire viewport content. | . ",
     "url": "https://nebukam.github.io/mkfont/docs/views/viewport-unicode.html#header",
     "relUrl": "/docs/views/viewport-unicode.html#header"
-  },"237": {
+  },"238": {
     "doc": "Font viewport",
     "title": "Search",
     "content": ". The search feature is rather simple in its form, yet quite powerful. It’s important to note that the search results are constrained by the currently selected range. Hence, if you want your search to be as broad as it can possibly be, select the All Unicode range. The search needs to be enabled to produce results. Search is inclusive, not exclusive. That means that the more terms you search for, the more results you’ll get – not the other way around. If you want to search through all known &amp; referenced Unicode, select the All Unicodes range within the Content explorer. Search terms . | Search | Result | . | unique character : a, 0 | Will find any glyph that match in either its character representation, or isolated in its name.*In the case of ligatures, each linked character is looked at individually.* | . | space-separated individual characters : a b c, 0 a N | Same as unique search, but will combine the results | . | Chain of characters : circle, letter, lowercase | These are compared against a glyph *identity*, as shown at the very top of the Glyph inspector. | . | Any combination | Will work. | . Search modifier . | Modifier | Result | . | **Relatives** | Search will include all related glyphs to the initial result of your search.*Relatives search looks outside the current viewport range.* | . | **Exists** | Limit the results to glyphs that actually exists within your font.*If the search terms are empty but this is enabled, the search will show all existing glyphs within the current viewport range.* | . ",
     "url": "https://nebukam.github.io/mkfont/docs/views/viewport-unicode.html#search",
     "relUrl": "/docs/views/viewport-unicode.html#search"
-  },"238": {
+  },"239": {
     "doc": "Font viewport",
     "title": "Selection",
     "content": "Selecting slots within the viewport is done using the mouse. Expected selection behaviors apply : . | Holding toggle a slot selection state. i.e, if it’s selected it will be unselected, and vice-versa. | Holding while selecting another slot will select all the slot between the last selected slot and the new one. | will select everything available within the range. | See Shortcuts for more infos. | . Note that selection isn’t lost if you click on an already selected item : this is by design. Instead, it will “bump” that item so it becomes the first item in the active selection. This is especially useful when editing large selection, as it allow you to change which glyphs are previewed in the Glyph inspector. ",
     "url": "https://nebukam.github.io/mkfont/docs/views/viewport-unicode.html#selection",
     "relUrl": "/docs/views/viewport-unicode.html#selection"
-  },"239": {
+  },"240": {
     "doc": "Font viewport",
     "title": "Slots",
     "content": "States . | State | Meaning | . | | Glyph does not exists; default character preview is shown. | . | | Glyph exists and is empty. | . | | Glyph exists and has a path. | . | | Glyph exists and has a path, but is flagged to be ignored during export. | . | | Glyph exists and has a path, but it is out-of-bounds.As such, it won’t be exported. | . An out-of-bound glyph highlights a path that is so big in size it can’t fit : glyph path must be kept within -16,000 &amp; 16,000 after transformation. Some reasons your glyph is OoB : . | Your EM value in the font metrics is too large | There’s an artifact somewhere in the path, maybe a single point lost somewhere, far away. | You’re using manual scale that makes things go boom. | You’re using “no scaling” with an asset that is gigantic (who makes 64k pt SVGs ?!). | . Quick menu . When a slot is selected, a quick menu shows up on hover, with the following options (depending on whether the glyph exists or not) : . | Icon | Action | . | | Creates an empty glyph. | . | | Removes the glyph. | . | | Copy that glyph unicode hex value to the clipboard, in the form U+0000. *This is mostly useful to quickly find a glyph hex ID for automation &amp; artboards* | . ",
     "url": "https://nebukam.github.io/mkfont/docs/views/viewport-unicode.html#slots",
     "relUrl": "/docs/views/viewport-unicode.html#slots"
-  },"240": {
+  },"241": {
     "doc": "Font viewport",
     "title": "Notes",
     "content": "Display options . Display options are located at the bottom of the viewport. For now there is only one preview option : preview size. Yes, that small lonely slider! . Note on unicode lists . Copying glyph characters is especially useful when you need to generate narrowed down atlases for your font, or simply need a quick wait to generate a parse-able list of glyphs. The action will generate this kind of results : . A B C D . The action will generate this kind of results : . U+0041 U+0042 U+0043 U+0044 . ",
     "url": "https://nebukam.github.io/mkfont/docs/views/viewport-unicode.html#notes",
     "relUrl": "/docs/views/viewport-unicode.html#notes"
-  },"241": {
+  },"242": {
     "doc": "Font viewport",
     "title": "Shortcuts",
     "content": "| Shortcut | Action | . | | Copy a single glyph to the clipboard* | . | | Paste the content of the clipboard in the selected glyph slot.Supports pasting directly from Adobe© Illustrator! | . | | Copy the selected glyphs &amp; their unicode position in memory* | . | | Paste the glyphs copied using to their matching unicode slots. This is especially *(if not only)* useful to paste glyphs from an .mkfont to another in batch, while retaining their unicode positions. | . | | Applies the transform of the glyph stored in memory using to all glyphs in the active selection. Does **not** affect the path. | . | | Deletes the selected glyphs | . Note on copy/pasting glyphs : glyphs are copied into SVG format, with transform information embedded as SVG attributes. This means that you can safely use the clipboard’s content in any SVG-friendly app, and that casually pasting within MkFont will retain transform settings. ",
     "url": "https://nebukam.github.io/mkfont/docs/views/viewport-unicode.html#shortcuts",
     "relUrl": "/docs/views/viewport-unicode.html#shortcuts"
-  },"242": {
+  },"243": {
     "doc": "Font viewport",
     "title": "Font viewport",
     "content": " ",
