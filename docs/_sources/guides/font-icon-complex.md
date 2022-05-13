@@ -262,9 +262,25 @@ Then, we will individually edit each component to give it the right orientation.
 
 {% include img a='guides/cfont/comp-arrow-orient.png' %} 
 
-We do so by selecting each ligature individually, and edit the `Rotation` value in the {% include lk id='Glyph component' a='#advanced-properties' %}'s Advanced properties. And that's it, we're all set with the first batch of big arrows.  
+We do so by selecting each ligature individually, and edit the `Rotation` value in the {% include lk id='Glyph components' a='#advanced-properties' %}'s Advanced properties. And that's it, we're all set with the first batch of big arrows.  
 
-Rince & repeat for the other arrows
+Rince & repeat for the other arrows -- although with a twist.  
+The first four as easy ones, like the previous arrows above
+
+{% include img a='guides/cfont/comp-arrow-orient.png' %} 
+
+The remaining two will combine two components :
+
+{% include webm a='guides/cfont/add-c-arrow-reut.webm' %} 
+
+#### What's going on here :
+{: .no_toc}
+- First, select the `i-arr-ew` (or whatever name you used)
+- We will, again, use {% include btn ico="component-new" %} to add components to the glyph. Only this time, we'll add both `i-arr-e` & `i-arr-w`. 
+- The components have their default transform, which is not what we're looking for. We will change the `anchoring` & `boundaries`, and add an `horizontal offset` so they are still aligned toward the center, but fit more snugly toward each other.
+
+We'll repeat the same process for the vertical versions.
+
 
 ---
 

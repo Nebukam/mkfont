@@ -473,6 +473,8 @@ class FamilyDataBlock extends SimpleDataEx {
         this._refGlyph._defaultGlyph.Reset(false, true);
         this._refGlyph._defaultGlyph._ClearLayers();
 
+        this._searchSettings.Reset(false, true);
+
         /////
         this._glyphs.Clear();
         this._glyphsMap = {};

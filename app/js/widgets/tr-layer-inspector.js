@@ -36,10 +36,10 @@ class LayerTransformSettingsInspector extends base {
         },
         
         { cl: ControlHeader, options: { label: `Context`, label2: `Layer` }, css: 'hdr' },
-        { options: { propertyId: mkfData.IDS.TR_ANCHOR, inputOnly: true }, css: 'vsmall' },
+        { options: { propertyId: mkfData.IDS.TR_ANCHOR, inputOnly: true }, css: 'vvsmall' },
         { options: { propertyId: mkfData.IDS.TR_LYR_BOUNDS_MODE, inputOnly: true }, css: 'small' },
 
-        { options: { propertyId: mkfData.IDS.TR_LYR_SELF_ANCHOR, inputOnly: true }, css: 'vsmall' },
+        { options: { propertyId: mkfData.IDS.TR_LYR_SELF_ANCHOR, inputOnly: true }, css: 'vvsmall' },
         { options: { propertyId: mkfData.IDS.TR_BOUNDS_MODE, inputOnly: true }, css: 'small' },
 
         //{ options: { propertyId: mkfData.IDS.TR_LYR_SCALE_MODE, inputOnly: true }, css: 'small' },
@@ -101,6 +101,7 @@ class LayerTransformSettingsInspector extends base {
             },
             '.small': { 'flex': '1 1 25%' },
             '.vsmall': { 'flex': '1 1 15%' },
+            '.vvsmall': { 'flex': '1 1 3%' },
             '.large': { 'flex': '1 1 75%' },
             '.btn': {
                 'flex': '0 0 32px',

@@ -72,7 +72,14 @@ There a few basic controls & modifier you can apply to the previewed blurb :
 ### Preview text
 This is where you type whatever text you want to preview.
 
-### Refresh preview
+### Actions
+
+| Option       | Comment          |
+|:-------------|:------------------|
+| {% include btn ico="refresh" label="Reload" %} | Force re-rendering of the ttf and reload the preview. |
+| {% include btn ico="reset" %} | Reset the preview text to the lorem ipsum. |
+| {% include btn ico="plus" %} | Appends the active viewport selection to the text preview. |
+| {% include btn ico="text" %} | Replace the current text preview with the active viewport selection. |
 
 >If your font has more glyph than the threshold set in the {% include lk id='App settings' %}, you will need to click that button in order to recompute the preview.
 {: .warning}

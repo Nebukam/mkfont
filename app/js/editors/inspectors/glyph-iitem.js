@@ -131,7 +131,7 @@ class GlyphVariantInspectorItem extends base {
                     group: `read`
                 },
                 {
-                    icon: `reset`, htitle: `Reset existing glyph or create an empty one if it doesn't exists.\n---\n+ [ Shift ] Also create components matching character decomposition.\n+ [ Alt ] Reset the glyph path while preserving everything else.\n[ Shift + Alt ] Create components & missing glyphs recursively.`,
+                    icon: `reset`, htitle: `Reset existing glyph or create an empty one if it doesn't exists.\n---\n+ [ Shift ] Also create components matching character decomposition.\n+ [ Alt ] Reset the glyph path while preserving everything else.\n+ [ Shift + Alt ] Create components & missing glyphs recursively.`,
                     variant: ui.FLAGS.MINIMAL,
                     trigger: { fn: () => { this.editor.cmdGlyphClear.Execute(this._data); } },
                     group: `read`, member: { owner: this, id: `_glyphClearBtn` }

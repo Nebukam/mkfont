@@ -173,7 +173,7 @@ class MKFont extends nkm.app.AppBase {
 
     _FamilyFromTTF() {
 
-        let family = mkfData.TTF.FamilyFromTTF(fs.readFileSync(`./assets-dev/${__fontName}.ttf`));
+        let family = mkfData.TTF.FamilyFromTTF(fs.readFileSync(`./assets-dev/ttfs/${__fontName}.ttf`));
 
         let gCount = family._glyphs.count;
         family._glyphs.ForEach(glyph => {

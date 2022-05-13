@@ -445,40 +445,42 @@ class SVGOperations {
                 case ENUMS.SKR_ORDER_Y_X_R: this._SkewY(tr, sky); this._SkewX(tr, skx); this._Rot(tr, rot, ranchor, widthRef, heightRef); break;
             }
 
-            if (refMode == ENUMS.BOUNDS_INSIDE || refMode == ENUMS.BOUNDS_MIXED) {
+            if (refMode == ENUMS.BOUNDS_INSIDE || refMode == ENUMS.BOUNDS_MIXED_VER) {
                 // This alone, super expensive ;_;
                 bbox = this.GetBBox(pathTransform.toString());
             }
 
         }
 
-
-        if (refMode == ENUMS.BOUNDS_INSIDE) {
-            fitH = heightRef = bbox.height;
-            fitW = widthRef = bbox.width;
-            pathTransform
-                .translate(-bbox.x, -bbox.y)
-                .toString();
-        } else if (refMode == ENUMS.BOUNDS_MIXED) {
-            fitW = widthRef = bbox.width;
-            pathTransform
-                .translate(-bbox.x, 0)
-                .toString();
+        switch (refMode) {
+            case ENUMS.BOUNDS_INSIDE:
+                fitH = heightRef = bbox.height;
+                fitW = widthRef = bbox.width;
+                pathTransform.translate(-bbox.x, -bbox.y);
+                break;
+            case ENUMS.BOUNDS_MIXED_VER:
+                fitW = widthRef = bbox.width;
+                pathTransform.translate(-bbox.x, 0);
+                break;
+            case ENUMS.BOUNDS_MIXED_HOR:
+                fitH = heightRef = bbox.height;
+                pathTransform.translate(0, -bbox.y);
+                break;
         }
 
         if (mirror != ENUMS.MIRROR_NONE) {
 
             switch (mirror) {
                 case ENUMS.MIRROR_H:
-                    pathTransform.scale(-1, 1).translate(fitW, 0).toString();
+                    pathTransform.scale(-1, 1).translate(fitW, 0);
                     doReverse = true;
                     break;
                 case ENUMS.MIRROR_V:
-                    pathTransform.scale(1, -1).translate(0, fitH).toString();
+                    pathTransform.scale(1, -1).translate(0, fitH);
                     doReverse = true;
                     break;
                 case ENUMS.MIRROR_H_AND_V:
-                    pathTransform.scale(-1, -1).translate(fitW, fitH).toString();
+                    pathTransform.scale(-1, -1).translate(fitW, fitH);
                     break;
             }
         }
@@ -678,16 +680,18 @@ class SVGOperations {
         }
 
         switch (p_settings.Get(IDS.TR_LYR_BOUNDS_MODE)) {
-            case ENUMS.LYR_BOUNDS_OUTSIDE:
-                break;
-            case ENUMS.LYR_BOUNDS_MIXED:
-                offsetX = p_context.bbox.x;
-                ctxW = p_context.bbox.width;
-                break;
-            case ENUMS.LYR_BOUNDS_INSIDE:
+            case ENUMS.BOUNDS_INSIDE:
                 offsetX = p_context.bbox.x;
                 offsetY = p_context.bbox.y;
                 ctxW = p_context.bbox.width;
+                ctxH = p_context.bbox.height;
+                break;
+            case ENUMS.BOUNDS_MIXED_VER:
+                offsetX = p_context.bbox.x;
+                ctxW = p_context.bbox.width;
+                break;
+            case ENUMS.BOUNDS_MIXED_HOR:
+                offsetY = p_context.bbox.y;
                 ctxH = p_context.bbox.height;
                 break;
         }
@@ -695,13 +699,17 @@ class SVGOperations {
         if (boundMode != ENUMS.BOUNDS_OUTSIDE) {
             if (!vbbox) { vbbox = this.GetBBox(path); }
             switch (boundMode) {
-                case ENUMS.BOUNDS_MIXED:
-                    pathTransform.translate(-vbbox.x, 0);
-                    pWidth = vbbox.width;
-                    break;
                 case ENUMS.BOUNDS_INSIDE:
                     pathTransform.translate(-vbbox.x, -vbbox.y);
                     pWidth = vbbox.width;
+                    pHeight = vbbox.height;
+                    break;
+                case ENUMS.BOUNDS_MIXED_VER:
+                    pathTransform.translate(-vbbox.x, 0);
+                    pWidth = vbbox.width;
+                    break;
+                case ENUMS.BOUNDS_MIXED_HOR:
+                    pathTransform.translate(0, -vbbox.y);
                     pHeight = vbbox.height;
                     break;
             }

@@ -47,7 +47,7 @@ class GlyphLayerDataBlock extends SimpleDataEx {
 
         // Transform settings
         p_values[IDS.LYR_USE_PREV_LAYER] = { value: false };
-        p_values[IDS.TR_LYR_BOUNDS_MODE] = { value: ENUMS.LYR_BOUNDS_OUTSIDE };
+        p_values[IDS.TR_LYR_BOUNDS_MODE] = { value: ENUMS.BOUNDS_OUTSIDE };
         p_values[IDS.TR_BOUNDS_MODE] = { value: ENUMS.BOUNDS_OUTSIDE };
         p_values[IDS.TR_LYR_SCALE_MODE] = { value: ENUMS.SCALE_MANUAL };
         p_values[IDS.TR_LYR_SCALE_FACTOR] = { value: 1 };

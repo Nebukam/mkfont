@@ -32,7 +32,8 @@ Which boundaries to use to compute glyph transformations & anchoring.
 | Selection       | Effect          |
 |:-------------|:------------------|
 | {% include btn ico="bounds-outside" %} | Use the imported bounds (either svg viewBox, or marked path) |
-| {% include btn ico="bounds-mixed" %} | Uses mixed bounds : height from the imported bounds, width from the glyph. |
+| {% include btn ico="bounds-mixed" %} | Uses vertical mixed bounds : height from the imported bounds, width from the glyph. |
+| {% include btn ico="bounds-mixed-hor" %} | Uses horizontal mixed bounds : width from the imported bounds, height from the glyph. |
 | {% include btn ico="bounds-inside" %} | Ignore imported bounds & uses the glyph tight bounding box. |
 
 >Check out {% include lk id='Asset preparation' a='#glyph-boundaries' %} to get a better understanding of what is considered 'boundaries'.

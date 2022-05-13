@@ -191,7 +191,7 @@ class TTFImport {
                 [IDS.HEIGHT]:gH,
                 transforms: {
                     // Make sure to push defaults
-                    [IDS.TR_BOUNDS_MODE]: ENUMS.BOUNDS_MIXED,
+                    [IDS.TR_BOUNDS_MODE]: ENUMS.BOUNDS_MIXED_VER,
                     [IDS.TR_SCALE_MODE]: ENUMS.SCALE_ASCENDER,
                     [IDS.TR_SCALE_FACTOR]: 1,
                     [IDS.TR_VER_ALIGN]: ENUMS.VALIGN_BASELINE,

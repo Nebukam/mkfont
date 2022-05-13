@@ -39,12 +39,14 @@ class ENUMS {
     ]);
 
     static BOUNDS_OUTSIDE = 0;
-    static BOUNDS_MIXED = 1;
+    static BOUNDS_MIXED_VER = 1;
     static BOUNDS_INSIDE = 2;
+    static BOUNDS_MIXED_HOR = 3;
 
     static BOUNDS = nkm.data.catalogs.CreateFrom({ name: `Transform reference`, autoSort: false }, [
         { name: `Imported bounds`, [nkm.com.IDS.VALUE]: this.BOUNDS_OUTSIDE, icon: 'bounds-outside' },
-        { name: `Mixed bounds`, [nkm.com.IDS.VALUE]: this.BOUNDS_MIXED, icon: 'bounds-mixed' },
+        { name: `Mixed bounds vertical`, [nkm.com.IDS.VALUE]: this.BOUNDS_MIXED_VER, icon: 'bounds-mixed' },
+        { name: `Mixed bounds horizontal`, [nkm.com.IDS.VALUE]: this.BOUNDS_MIXED_HOR, icon: 'bounds-mixed-hor' },
         { name: `Glyph bounds`, [nkm.com.IDS.VALUE]: this.BOUNDS_INSIDE, icon: 'bounds-inside' },
     ]);
 
@@ -196,14 +198,11 @@ class ENUMS {
 
     //
 
-    static LYR_BOUNDS_OUTSIDE = 0;
-    static LYR_BOUNDS_MIXED = 1;
-    static LYR_BOUNDS_INSIDE = 2;
-
     static LYR_BOUNDS = nkm.data.catalogs.CreateFrom({ name: `Transform reference`, autoSort: false }, [
-        { name: `Imported bounds`, [nkm.com.IDS.VALUE]: this.LYR_BOUNDS_OUTSIDE, icon: 'bounds-outside' },
-        { name: `Mixed bounds`, [nkm.com.IDS.VALUE]: this.LYR_BOUNDS_MIXED, icon: 'bounds-mixed' },
-        { name: `Glyph bounds`, [nkm.com.IDS.VALUE]: this.LYR_BOUNDS_INSIDE, icon: 'bounds-inside' },
+        { name: `Imported bounds`, [nkm.com.IDS.VALUE]: this.BOUNDS_OUTSIDE, icon: 'bounds-outside' },
+        { name: `Mixed bounds vertical`, [nkm.com.IDS.VALUE]: this.BOUNDS_MIXED_VER, icon: 'bounds-mixed' },
+        { name: `Mixed bounds horizontal`, [nkm.com.IDS.VALUE]: this.BOUNDS_MIXED_HOR, icon: 'bounds-mixed-hor' },
+        { name: `Glyph bounds`, [nkm.com.IDS.VALUE]: this.BOUNDS_INSIDE, icon: 'bounds-inside' },
     ]);
 
     static LYR_SCALE = nkm.data.catalogs.CreateFrom({ name: `Scale`, autoSort: false }, [

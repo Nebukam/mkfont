@@ -109,7 +109,8 @@ The component glyph's bounds (as set in `Layer`) are processed the same way, and
 | Selection       | Effect          |
 |:-------------|:------------------|
 | {% include btn ico="bounds-outside" %} | Use the glyph exported bounds (as seen in the inspector) |
-| {% include btn ico="bounds-mixed" %} | Uses mixed bounds : height from the exported bounds, width from the glyph. |
+| {% include btn ico="bounds-mixed" %} | Uses vertical mixed bounds : height from the exported bounds, width from the glyph. |
+| {% include btn ico="bounds-mixed-hor" %} | Uses horizontal mixed bounds : width from the imported bounds, height from the glyph. |
 | {% include btn ico="bounds-inside" %} | Ignore exported bounds & uses the glyph tight bounding box. |
 
 <details markdown="1">

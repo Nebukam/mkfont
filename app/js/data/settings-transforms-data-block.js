@@ -24,7 +24,7 @@ class TransformSettingsDataBlock extends SimpleDataEx {
 
     _ResetValues(p_values) {
 
-        p_values[IDS.TR_BOUNDS_MODE] = { value: ENUMS.BOUNDS_MIXED };
+        p_values[IDS.TR_BOUNDS_MODE] = { value: ENUMS.BOUNDS_MIXED_VER };
         p_values[IDS.TR_SCALE_MODE] = { value: ENUMS.SCALE_ASCENDER };
         p_values[IDS.TR_SCALE_FACTOR] = { value: 1 };
         p_values[IDS.TR_NRM_FACTOR] = { value: 0 };

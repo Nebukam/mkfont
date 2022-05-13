@@ -37,7 +37,7 @@
             "platform": "windows",
             "arch": "x64",
             "asar": true,
-            "files":[
+            "files": [
                 "!docs*"
             ],
             "build": {
@@ -54,7 +54,7 @@
             "platform": "mac",
             "arch": "x64",
             "asar": true,
-            "files":[
+            "files": [
                 "!docs*"
             ],
             "build": {
@@ -69,7 +69,7 @@
             "platform": "linux",
             "arch": "x64",
             "asar": true,
-            "files":[
+            "files": [
                 "!docs*"
             ]
         }

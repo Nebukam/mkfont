@@ -18,6 +18,12 @@ const GlyphGroupHeader = require(`./glyph-group-header`);
 const GlyphGroupFooter = require(`./glyph-group-footer`);
 const GlyphGroupSearch = require(`./glyph-group-search`);
 
+const __norange = {
+    name: 'No range', typeTag: `Custom`, count: 0,
+    icon: 'text-style', isDynamic: true,
+    fetchList: () => { return []; }
+};
+
 const base = nkm.datacontrols.ControlView; //ui.views.View
 class GlyphGroupViewport extends base {
     constructor() { super(); }
@@ -170,7 +176,7 @@ class GlyphGroupViewport extends base {
         this._searchSettings = p_value;
         this._searchObserver.ObserveOnly(p_value);
         this._search.data = p_value;
-        //this._OnSearchToggled();
+        this._OnSearchToggled();
     }
 
     set displayRange(p_value) {
@@ -318,7 +324,7 @@ class GlyphGroupViewport extends base {
 
     _ReloadList() {
         let range = this._displayRange;
-        this._displayRange = null;
+        this.displayRange = __norange;
         this.displayRange = range;
     }
 
