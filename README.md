@@ -1,38 +1,27 @@
-# mkfont ![version](https://img.shields.io/badge/dynamic/json?color=ed1e79&label=version&query=version&url=https://github.com/Nebukam/mkfont/raw/main//package.json) ![release](https://img.shields.io/badge/license-MIT-black.svg)
+# MkFont ![version](https://img.shields.io/badge/dynamic/json?color=ed1e79&label=version&query=version&url=https://github.com/Nebukam/mkfont/raw/main//package.json) ![release](https://img.shields.io/badge/license-MIT-black.svg)
 
-![Splash](/assets-dev/Splash-beta.png)
+![Logo](https://nebukam.github.io/mkfont/assets/images/logo-small-sqr.png)
 
-MKFont is a free tool to make font out of vector graphics. Works for Windows, Mac OS X and Linux.  
+MkFont is a free (libre) tool to create & export fonts from existing assets.  
+Component-based workflow, with advanced features to nit-pick & tweak metrics in a non-destructive way!  
+<br>
+[MkFont](https://nebukam.github.io/mkfont/) — Homepage  
+[Documentation](https://nebukam.github.io/mkfont/docs/) — Documentation  
+[Guides](https://nebukam.github.io/mkfont/guides/) — Guides & tutorials  
 
-## **Downloads** ![beta](https://img.shields.io/badge/-beta-ffa600)
-
-- [**Windows**](https://github.com/Nebukam/mkfont/releases)
-- **Linux** & **macOS** TBD *(code ready, missing hardware to compile on)*
-
-## **Getting started** & doc
-- [Documentation wiki](https://github.com/Nebukam/mkfont/wiki)
-- [Quick start](https://github.com/Nebukam/mkfont/wiki/Step-by-step)
+---
 
 ## Screenshots  
 
+![A](https://nebukam.github.io/mkfont/assets/images/screenshots/A.png)  
 
-![preview](https://raw.githubusercontent.com/Nebukam/mkfont/main/assets-dev/docs/screenshots/mkfont-preview.gif)  
+![B](https://nebukam.github.io/mkfont/assets/images/screenshots/B.png)   
 
-<br>
-<br>
+![C](https://nebukam.github.io/mkfont/assets/images/screenshots/C.png)   
 
----  
-<br>
-<br>
-
-![grid](https://raw.githubusercontent.com/Nebukam/mkfont/main/assets-dev/docs/screenshots/grid.png)   
-![search](https://raw.githubusercontent.com/Nebukam/mkfont/main/assets-dev/docs/screenshots/search.png)  
-![batch-import](https://raw.githubusercontent.com/Nebukam/mkfont/main/assets-dev/docs/screenshots/batch-import.png)  
-![ligatures](https://raw.githubusercontent.com/Nebukam/mkfont/main/assets-dev/docs/screenshots/ligatures.png)  
 
 ## Roadmap
 MKFont is under active development, have a look to the repo [issues](https://github.com/Nebukam/mkfont/issues) to see knowns bug and upcoming improvements/features!  
-*The app has only been extensively tested in a windows environment so far.*
 
 ## Tech
 MKFont is built with [NKMjs](https://github.com/Nebukam/nkmjs) and runs with [Electron](https://github.com/electron/electron).
@@ -40,4 +29,4 @@ MKFont is built with [NKMjs](https://github.com/Nebukam/nkmjs) and runs with [El
 ## Kudos
 MKFont wouldn't be possible if not for [@fontello](https://github.com/fontello) folks sharing their magic : the app is primarily built around [svg2ttf](https://github.com/fontello/svg2ttf) & [svgpath](https://github.com/fontello/svgpath).  
 MKFont uses the [Unicode](https://home.unicode.org/) database.  
-Screenshots are showcasing the font [Basement-Medium](https://freetypography.com/2020/05/02/free-font-basement/).
+Screenshots are showcasing the font [Meticula](https://freetypography.com/2019/05/16/free-font-meticula/).
