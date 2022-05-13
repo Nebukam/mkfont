@@ -28,6 +28,8 @@ class LayersView extends base {
         super._Init();
         ui.helpers.HostSelStack(this, false, false);
 
+        this._Bind(this._OpenPicker)
+
         this._builder.defaultControlClass = PropertyControl;
         this._builder.defaultCSS = `control`;
 
@@ -121,10 +123,15 @@ class LayersView extends base {
             defaultWidgetClass: nkm.uilib.buttons.Tool,
             handles: [
                 {
-                    icon: `component-new`, htitle: `Create new component`,
+                    icon: `new`, htitle: `Create new component`,
                     flavor: nkm.ui.FLAGS.CTA, variant: ui.FLAGS.MINIMAL,
                     trigger: { fn: () => { this.editor.cmdLayerAdd.Execute(this._data); } },
                     group: `create`, member: { owner: this, id: `_createBtn` }
+                },
+                {
+                    icon: `component-new`, htitle: `Search & create components`,
+                    trigger: { fn: this._OpenPicker },
+                    group: `create`, variant: ui.FLAGS.MINIMAL,
                 },
                 {
                     icon: `minus`, htitle: `Collapse all`,
@@ -149,11 +156,6 @@ class LayersView extends base {
                     variant: ui.FLAGS.MINIMAL,
                     trigger: { fn: () => { this.editor.cmdLayerAddComp.Execute(this._data); } },
                     group: `automate`, member: { owner: this, id: `_addCompBtn` }
-                },
-                {
-                    icon: `search-small`, htitle: `Search & add components`,
-                    trigger: { fn: this._Bind(this._OpenPicker) },
-                    variant: ui.FLAGS.MINIMAL,
                 },
             ]
         };
@@ -301,7 +303,7 @@ class LayersView extends base {
             this._glyphPicker.content.allowMultiple = true;
             this._glyphPicker.content.selectionFn = null;
             this._glyphPicker.content.handles = [{
-                icon: `component-new`, label: `Add selected`, htitle: `Crate components from selection`,
+                icon: `new`, label: `Add selected`, htitle: `Crate components from selection`,
                 variant: ui.FLAGS.FRAME, flavor: ui.FLAGS.CTA,
                 trigger: {
                     fn: () => {
@@ -325,18 +327,9 @@ class LayersView extends base {
     }
 
     _CreateLayersFromSelection(p_selection) {
-
         let editor = this.editor;
-        editor.StartActionGroup({
-            icon: `component-new`,
-            name: `Composite`,
-            title: `Creates components from picker selection`
-        });
-
-        SHARED_OPS.AddLayersFromList(editor, this._data, p_selection);
-
-        editor.EndActionGroup();
-
+        editor.cmdLayersAddUInfos.unicodes = p_selection;
+        editor.cmdLayersAddUInfos.Execute(this._data);
     }
 
 

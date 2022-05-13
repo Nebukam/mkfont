@@ -20,10 +20,11 @@ class LayerTransformSettingsInspector extends base {
     constructor() { super(); }
 
     static __controls = [
+        
         { options: { propertyId: mkfData.IDS.LYR_CHARACTER_NAME }, css: 'small' },
         {
             cl: nkm.uilib.buttons.Tool, options: {
-                icon: `search-small`, htitle: `Glyph picker`, variant: ui.FLAGS.MINIMAL, size: ui.FLAGS.SIZE_S,
+                icon: `search-small`, htitle: `Glyph picker`, variant: ui.FLAGS.FRAME, size: ui.FLAGS.SIZE_S,
                 trigger: {
                     fn: (p_self) => {
                         let layerView = ui.FindFirstParent(p_self, `mkf-layer-view`) || ui.FindFirstParent(p_self, `mkf-layer-view-silent`);
@@ -33,7 +34,7 @@ class LayerTransformSettingsInspector extends base {
                 }
             }, css: 'btn'
         },
-
+        
         { cl: ControlHeader, options: { label: `Context`, label2: `Layer` }, css: 'hdr' },
         { options: { propertyId: mkfData.IDS.TR_ANCHOR, inputOnly: true }, css: 'vsmall' },
         { options: { propertyId: mkfData.IDS.TR_LYR_BOUNDS_MODE, inputOnly: true }, css: 'small' },

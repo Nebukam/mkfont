@@ -32,6 +32,7 @@ module.exports = {
     GlyphPasteTransform: require(`./cmd-glyph-paste-transform`),
 
     LayerAdd: require(`./cmd-layer-add`),
+    LayersAddUInfos: require(`./cmd-layers-add-uinfos`),
     LayerRemove: require(`./cmd-layer-remove`),
     LayerSetControlBatch: require(`./cmd-action-set-control-batch`),
     LayerAllOff: require(`./cmd-layers-all-off`),

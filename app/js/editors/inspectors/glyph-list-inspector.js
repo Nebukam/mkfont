@@ -164,10 +164,15 @@ class GlyphListInspector extends base {
 
         this._layersView._toolbar.CreateHandles(
             {
-                icon: `component-new`, htitle: `Create new component`,
+                icon: `new`, htitle: `Create new component`,
                 flavor: nkm.ui.FLAGS.CTA, variant: ui.FLAGS.MINIMAL,
                 trigger: { fn: () => { this.editor.cmdLayerAdd.Execute(this._data.analytics.existing); } },
                 group: `create`
+            },
+            {
+                icon: `component-new`, htitle: `Search & create components`,
+                trigger: { fn: this._layersView._OpenPicker },
+                group: `create`, variant: ui.FLAGS.MINIMAL,
             },
             {
                 icon: `minus`, htitle: `Collapse all`,

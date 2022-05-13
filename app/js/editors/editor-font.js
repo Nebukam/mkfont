@@ -87,6 +87,7 @@ class FontEditor extends base {
         this.cmdGlyphPasteTransform = this._commands.Create(mkfCmds.GlyphPasteTransform, { shortcut: this.shortcuts.Create("Ctrl Alt V").Strict() });
 
         this.cmdLayerAdd = this._commands.Create(mkfCmds.LayerAdd);
+        this.cmdLayersAddUInfos = this._commands.Create(mkfCmds.LayersAddUInfos);
         this.cmdLayerRemove = this._commands.Create(mkfCmds.LayerRemove);
         this.cmdLayerUp = this._commands.Create(mkfCmds.LayerUp);
         this.cmdLayerDown = this._commands.Create(mkfCmds.LayerDown);

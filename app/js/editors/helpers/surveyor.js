@@ -393,7 +393,7 @@ class Surveyor extends base {
 
         let layerList = p_layer.surveyedList;
 
-        if (layerList.length == 0) { return; }
+        if (!layerList || layerList.length == 0) { return; }
 
         if (p_id == mkfData.IDS.LYR_IS_CONTROL_LAYER) {
             this._editor.cmdLayerControl.toggle = p_valueObj.value;

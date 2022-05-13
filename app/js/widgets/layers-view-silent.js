@@ -53,6 +53,16 @@ class LayersViewSilent extends base {
 
     }
 
+    _ChangeCurrentLayer(p_layer, p_selection) {
+        p_layer.Set(mkfData.IDS.LYR_CHARACTER_NAME, p_selection.char);
+    }
+
+    _CreateLayersFromSelection(p_selection) {
+        let editor = this.editor;
+        editor.cmdLayersAddUInfos.unicodes = p_selection;
+        editor.cmdLayersAddUInfos.Execute(editor.inspectedData.analytics.existing);
+    }
+
 
 }
 
