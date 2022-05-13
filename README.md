@@ -21,12 +21,12 @@ Component-based workflow, with advanced features to nit-pick & tweak metrics in 
 
 
 ## Roadmap
-MKFont is under active development, have a look to the repo [issues](https://github.com/Nebukam/mkfont/issues) to see knowns bug and upcoming improvements/features!  
+MkFont is under active development, have a look to the repo [issues](https://github.com/Nebukam/mkfont/issues) to see knowns bug and upcoming improvements/features!  
 
 ## Tech
-MKFont is built with [NKMjs](https://github.com/Nebukam/nkmjs) and runs with [Electron](https://github.com/electron/electron).
+MkFont is built with [NKMjs](https://github.com/Nebukam/nkmjs) and runs with [Electron](https://github.com/electron/electron).
 
 ## Kudos
-MKFont wouldn't be possible if not for [@fontello](https://github.com/fontello) folks sharing their magic : the app is primarily built around [svg2ttf](https://github.com/fontello/svg2ttf) & [svgpath](https://github.com/fontello/svgpath).  
-MKFont uses the [Unicode](https://home.unicode.org/) database.  
+MkFont wouldn't be possible if not for [@fontello](https://github.com/fontello) folks sharing their magic : the app is primarily built around [svg2ttf](https://github.com/fontello/svg2ttf) & [svgpath](https://github.com/fontello/svgpath).  
+MkFont uses the [Unicode](https://home.unicode.org/) database.  
 Screenshots are showcasing the font [Meticula](https://freetypography.com/2019/05/16/free-font-meticula/).
