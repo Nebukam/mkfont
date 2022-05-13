@@ -37,6 +37,9 @@
             "platform": "windows",
             "arch": "x64",
             "asar": true,
+            "files":[
+                "!docs*"
+            ],
             "build": {
                 "target": "nsis",
                 "nsis": {
@@ -51,6 +54,9 @@
             "platform": "mac",
             "arch": "x64",
             "asar": true,
+            "files":[
+                "!docs*"
+            ],
             "build": {
                 "target": "deb",
                 "mac": {
@@ -62,7 +68,10 @@
             "enabled": false,
             "platform": "linux",
             "arch": "x64",
-            "asar": true
+            "asar": true,
+            "files":[
+                "!docs*"
+            ]
         }
     ]
 }

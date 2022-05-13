@@ -11,6 +11,7 @@ module.exports = {
     GlyphPreviewGroup: require(`./glyph-preview-group`),
     GlyphIdentity: require(`./glyph-identity`),
     GlyphStats: require(`./glyph-stats`),
+    GlyphPicker: require(`./glyph-picker`),
     PropertyControl: require(`./property-control`),
     PangramRenderer: require(`./pangram-renderer`),
     ControlHeader: require(`./control-header`),

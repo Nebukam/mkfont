@@ -79,6 +79,9 @@ class PangramInspector extends base {
             },
             '.slider': {
                 //'margin': '10px 0px 10px 0px'
+            },
+            '.toolbar':{
+                'margin-top':`10px`
             }
         }, base._Style());
     }
@@ -146,7 +149,12 @@ class PangramInspector extends base {
         this._text = this.Attach(nkm.uilib.inputs.Textarea, `item text`, this._footer);
         this._text.options = {
             currentValue: longPangram,
-            onSubmit: { fn: (p_i, p_t) => { this._pangramRenderer.text = p_t; } },
+            onSubmit: {
+                fn: (p_i, p_t) => {
+                    if (p_t == ``) { p_t = longPangram; }
+                    this._pangramRenderer.text = p_t;
+                }
+            },
             rows: 6
         }
 
@@ -162,12 +170,52 @@ class PangramInspector extends base {
             defaultWidgetClass: nkm.uilib.buttons.Button,
             handles: [
                 {
-                    label: `Refresh preview`, icon: `refresh`,
+                    label: `Reload`, icon: `refresh`,
                     trigger: {
                         fn: () => { this._data._fontCache._RebuildCache(); },
                         thisArg: this
                     }
+                },
+                {
+                    icon: `reset`,
+                    htitle: `Set the text to be the default lorem ipsum.`,
+                    trigger: {
+                        fn: () => {
+                            this._text.handler.changedValue = longPangram;
+                            this._text.handler.SubmitValue();
+                        },
+                        thisArg: this
+                    }, group: `a`
+                },
+                {
+                    icon: `plus`,
+                    htitle: `Append the current selection at the end of the current text`,
+                    trigger: {
+                        fn: () => {
+                            let txt = ``;
+                            this.editor.inspectedData.stack.ForEach(i => { txt += `${i.char} ` }, true);
+                            txt = this._text.handler.currentValue + txt;
+                            this._text.handler.changedValue = txt == `` ? longPangram : txt;
+                            this._text.handler.SubmitValue();
+                        },
+                        thisArg: this
+                    }, group: `b`
+                },
+                {
+                    icon: `text`,
+                    htitle: `Set the text to be the current viewport selection.`,
+                    trigger: {
+                        fn: () => {
+                            let txt = ``;
+                            this.editor.inspectedData.stack.ForEach(i => { txt += `${i.char} ` }, true);
+                            this._text.handler.changedValue = txt == `` ? longPangram : txt;
+                            this._text.handler.SubmitValue();
+                        },
+                        thisArg: this
+                    }, group: `b`
+
                 }
+                
             ]
         }
 

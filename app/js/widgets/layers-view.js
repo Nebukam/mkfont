@@ -5,11 +5,18 @@ const SIGNAL = require("../signal");
 const ui = nkm.ui;
 
 const mkfData = require(`../data`);
+const mkfOperations = require(`../operations`);
+const mkfActions = mkfOperations.actions;
+
 const PropertyControl = require(`./property-control`);
 const LayerControl = require(`./layer-control`);
+const GlyphPicker = require(`./glyph-picker`);
+const SHARED_OPS = require("../operations/commands/shared-ops");
 
 const __nolayer = `nolayer`;
 const __limitReached = `limit-reached`;
+
+
 
 const base = nkm.datacontrols.ControlView;
 class LayersView extends base {
@@ -143,6 +150,11 @@ class LayersView extends base {
                     trigger: { fn: () => { this.editor.cmdLayerAddComp.Execute(this._data); } },
                     group: `automate`, member: { owner: this, id: `_addCompBtn` }
                 },
+                {
+                    icon: `search-small`, htitle: `Search & add components`,
+                    trigger: { fn: this._Bind(this._OpenPicker) },
+                    variant: ui.FLAGS.MINIMAL,
+                },
             ]
         };
 
@@ -264,6 +276,69 @@ class LayersView extends base {
         this.style.setProperty(`--limit`, 0.5 + (this._layerCtrls.length / mkfData.INFOS.LAYER_LIMIT) * 0.5);
 
     }
+
+    _OpenPicker(p_layerControl = null) {
+
+        this._glyphPicker = nkm.uilib.modals.Simple.Pop({
+            anchor: p_layerControl || this,
+            placement: ui.ANCHORING.LEFT,
+            origin: ui.ANCHORING.RIGHT,
+            margins: { x: -150, y: 0 },
+            keepWithinScreen: true,
+            content: GlyphPicker
+        });
+
+        this._glyphPicker.content.data = this.editor.data;
+
+        if (p_layerControl) {
+            // Only allow a single selection
+            this._glyphPicker.content.allowMultiple = false;
+            this._glyphPicker.content.selectionFn = (p_data) => {
+                this._ChangeCurrentLayer(p_layerControl.data, p_data);
+            };
+            this._glyphPicker.content.handles = null;
+        } else {
+            this._glyphPicker.content.allowMultiple = true;
+            this._glyphPicker.content.selectionFn = null;
+            this._glyphPicker.content.handles = [{
+                icon: `component-new`, label: `Add selected`, htitle: `Crate components from selection`,
+                variant: ui.FLAGS.FRAME, flavor: ui.FLAGS.CTA,
+                trigger: {
+                    fn: () => {
+                        let datas = [...this._glyphPicker.content.selectionStack.data.stack._array];
+                        if (datas.length > 0) { this._CreateLayersFromSelection(datas); }
+                        this._glyphPicker.Close();
+                    }
+                }
+            }];
+        }
+
+    }
+
+    _ChangeCurrentLayer(p_layer, p_selection) {
+        if (p_layer.Get(mkfData.IDS.LYR_CHARACTER_NAME) == p_selection.char) { return; }
+        this.editor.Do(mkfActions.SetProperty, {
+            target: p_layer,
+            id: mkfData.IDS.LYR_CHARACTER_NAME,
+            value: p_selection.char
+        });
+    }
+
+    _CreateLayersFromSelection(p_selection) {
+
+        let editor = this.editor;
+        editor.StartActionGroup({
+            icon: `component-new`,
+            name: `Composite`,
+            title: `Creates components from picker selection`
+        });
+
+        SHARED_OPS.AddLayersFromList(editor, this._data, p_selection);
+
+        editor.EndActionGroup();
+
+    }
+
 
     _CleanUp() {
         this._flags.Set(__limitReached, false);

@@ -20,6 +20,7 @@ module.exports = {
     TransformSettings: require(`./settings-transforms-data-block`),
     ImportSettings: require(`./settings-import-data-block`),
     LigaImportSettings: require(`./settings-liga-import-data-block`),
+    SearchSettings : require(`./settings-search-data-block`),
     Prefs: require(`./settings-preferences`),
 
     RangeContent : require(`./range-content`),

@@ -75,6 +75,21 @@ class SHARED_OPS {
 
     }
 
+    static AddLayersFromList(p_editor, p_target, p_unicodeInfos) {
+
+        if (!p_unicodeInfos) { return; }
+
+        p_unicodeInfos.forEach(infos => {
+            if (p_target.availSlots <= 0) { return; }
+            p_editor.Do(mkfActions.LayerAdd, {
+                target: p_target,
+                layerValues: { [mkfData.IDS.LYR_CHARACTER_NAME]: infos.char },
+                expanded: false
+            });
+        });
+
+    }
+
     static PasteLayers(p_target, p_source, p_scaleFactor = 1) {
 
         let resample = p_scaleFactor != 1;

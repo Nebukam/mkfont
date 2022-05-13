@@ -15,12 +15,11 @@ const __rscBound = `rsc-bound`;
 const __ligature = `ligature`;
 
 const base = nkm.datacontrols.ControlWidget;
-class GlyphSlot extends base {
+class GlyphMiniSlot extends base {
     constructor() { super(); }
 
     static __usePaintCallback = true;
     static __defaultSelectOnActivation = true;
-    static __quickMenu = null;
 
     _Init() {
 
@@ -53,18 +52,15 @@ class GlyphSlot extends base {
                 'box-shadow': `none`,
                 'transform': 'scale(1)',
                 'position': 'relative',
-                '--col-cat': 'var(--col-active)',
-                //'min-height': 'var(--preview-size)',
-                //'border':'1px solid gray',
                 'display': 'flex',
                 'flex-flow': 'column nowrap',
-                //'margin-bottom': '4px',
                 'box-sizing': 'border-box',
-                'padding': '10px',
-                'border-radius': '5px',
+                'padding': '2px',
+                'border-radius': '3px',
                 'background-color': '#161616',
                 'align-items': 'center',
-                //'overflow': 'clip',
+                'overflow': 'clip',
+                'border':`1px solid rgba(0,0,0,0)`
             },
             ':host(:hover)': {
                 'box-shadow': `0 12px 20px -10px #131313`,
@@ -72,7 +68,8 @@ class GlyphSlot extends base {
                 'transform': 'scale(1.1)',
             },
             ':host(.selected)': {
-                'background-color': '#353535 !important'
+                'background-color': '#353535 !important',
+                'border-color':`var(--col-active)`
             },
             ':host(.exists)': {
                 'background-color': '#1e1e1e'
@@ -107,23 +104,6 @@ class GlyphSlot extends base {
                 //'aspect-ratio': 'var(--preview-ratio)',
                 'position': 'absolute',
             },
-            '.label': {
-                'margin': '0',
-                'text-align': `center`,
-                'padding': '5px',
-                'font-size': 'large !important',
-                'user-select': 'text',
-                'font-family': `monospace`,
-            },
-            ':host(.ligature) .label':{
-                'white-space': `nowrap`,
-                'max-width': `100%`,
-                'direction':`rtl`,
-                'font-size': 'small !important',
-                'overflow':'hidden',
-                'text-overflow':'ellipsis',
-                'user-select': `none`,
-            },
             '.placeholder': {
                 'display': `grid`,
                 'place-items': `center`,
@@ -139,18 +119,11 @@ class GlyphSlot extends base {
                 '@': ['absolute-center'],
                 'width': '50%'
             },
-            ':host(.empty) .preview': {
-                //'border':`1px rgba(var(--col-warning-dark-rgb),0.5) solid`
-            },
             ':host(.out-of-bounds) .oob': {
                 'display': 'block !important'
             },
             ':host(.out-of-bounds)': {
                 'background-color': 'rgba(var(--col-error-rgb), 0.5) !important'
-            },
-            '.quick-menu': {
-                '@': ['absolute-top-left'],
-                'margin': '5px'
             },
             ':host(.exists:not(.do-export)) .preview:before': {
                 'content': `""`,
@@ -160,8 +133,8 @@ class GlyphSlot extends base {
                 'width': `1px`, 'height': `120%`,
                 'background-color': `var(--col-error)`
             },
-            ':host(.rsc-bound)':{
-                
+            ':host(.rsc-bound)': {
+
             }
         }, base._Style());
     }
@@ -175,12 +148,6 @@ class GlyphSlot extends base {
         this._glyphPlaceholder = new ui.manipulators.Text(ui.dom.El(`div`, { class: `box placeholder` }, this._previewBox), false, false);
         this._glyphRenderer = this.Attach(GlyphCanvasRenderer, `box renderer`, this._previewBox);
 
-        this._label = new ui.manipulators.Text(ui.dom.El(`span`, { class: `item label` }, this._host), false, false);
-        //this._oobIcon = new ui.manipulators.Icon(ui.dom.El(`div`, {class:`oob` }, this._previewBox), false, false);
-        //this._oobIcon.Set(`remove`);
-
-        ui.dom.El(`div`, { class: `cat-hint` }, this._host);
-
     }
 
     _OnDataChanged(p_oldData) {
@@ -191,26 +158,10 @@ class GlyphSlot extends base {
     _OnDataUpdated(p_data) {
         super._OnDataUpdated(p_data);
 
-        let
-            unicodeCharacter = p_data.char,
-            colCat = null;
-
-            this._flags.Set(__ligature, p_data.ligature);
-
-        if (!unicodeCharacter) {
-            unicodeCharacter = ` `;
-            colCat = `var(--col-error)`;
-        } else if (unicodeCharacter.length > 1) {
-            colCat = `var(--col-ligature)`;
-        }
-
-        if (`cat` in p_data) { colCat = `var(--col-${p_data.cat.col})`; }
-
-        if (colCat) { this.style.setProperty(`--col-cat`, colCat); }
-        else { this.style.removeProperty(`--col-cat`); }
-
-        this._label.Set(`${unicodeCharacter}`, true);
+        let unicodeCharacter = p_data.char;
+        this._flags.Set(__ligature, p_data.ligature);
         this._glyphPlaceholder.Set(unicodeCharacter, true);
+        this.htitle = p_data.name;
 
     }
 
@@ -240,14 +191,6 @@ class GlyphSlot extends base {
 
     _UpdateGlyphPreview() {
 
-        let qMenu = this.constructor.__quickMenu;
-        if (qMenu) {
-            if (qMenu.parent == this) {
-                qMenu.editor = this.editor;
-                qMenu.data = this._glyhpVariant;
-            }
-        }
-
         if (!this._glyhpVariant || this._glyhpVariant.glyph.isNull) {
             this._glyphRenderer.Set(null);
             this._glyphPlaceholder._element.style.removeProperty(`display`);
@@ -271,40 +214,6 @@ class GlyphSlot extends base {
 
     }
 
-    _Highlight(p_toggle) {
-
-        super._Highlight(p_toggle);
-
-        if (this._isSelected && this._isFocused) {
-
-            let qMenu = this.constructor.__quickMenu;
-            if (!qMenu) {
-                qMenu = this.Attach(require(`./glyph-slot-quick-menu`), `quick-menu`, this._host);
-                this.constructor.__quickMenu = qMenu;
-            }
-
-            qMenu.editor = this.editor;
-            qMenu.data = this._glyhpVariant;
-            qMenu.glyphInfos = this._data;
-
-            this.Attach(qMenu, `quick-menu`, this._host);
-
-        }
-
-    }
-
-    /**
-     * @access protected
-     * @description TODO
-     * @customtag override-me
-     * @group Interactivity.Focus
-     */
-    _FocusLost() {
-        let qMenu = this.constructor.__quickMenu;
-        if (!qMenu) { return; }
-        if (qMenu.parent == this) { this.Detach(qMenu); }
-    }
-
     _CleanUp() {
         this._flags.Set(mkfData.IDS.OUT_OF_BOUNDS, false);
         this._flags.Set(mkfData.IDS.EMPTY, false);
@@ -314,5 +223,5 @@ class GlyphSlot extends base {
 
 }
 
-module.exports = GlyphSlot;
-ui.Register(`mkf-glyph-slot`, GlyphSlot);
+module.exports = GlyphMiniSlot;
+ui.Register(`mkf-glyph-mini-slot`, GlyphMiniSlot);

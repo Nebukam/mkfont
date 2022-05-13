@@ -12,6 +12,10 @@
   background: $link-color;
 }
 
+code::selection {
+  background: gray;
+}
+
 html {
   @include fs-4;
   scroll-behavior: smooth;
@@ -29,6 +33,10 @@ body {
         $grey-dk-300 45%
       );
   background-attachment: fixed;
+}
+
+video {
+  width: 100%;
 }
 
 ol,
