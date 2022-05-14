@@ -199,7 +199,7 @@ class GlyphGroupViewport extends base {
         if (this._searchActive) { this._SetContentSource(null); }
         else { this._SetContentSource(this._contentRange._content); }
 
-        this._searchSettings._UpdateSearchData(p_range);
+        this._searchSettings?._UpdateSearchData(p_range);
 
     }
 
