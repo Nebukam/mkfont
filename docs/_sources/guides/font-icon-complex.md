@@ -220,7 +220,7 @@ We're going to batch-import our components, it's pretty straightforward :
     - Tweak the alignment & anchoring of the glyph so it is centered within our family metrics with ({% include btn ico="center-ver" %} & {% include btn ico="center-hor" %}) as opposed to the default {% include btn ico="font-baseline" %} that make the imported bounds sit on the baseline.
 - We then select the {% include btn ico="text-liga" label="Ligatures" %}, and here they are, correctly named and imported.
 
->**Any transformation tweaks made during import can be changed afterward** -- it is available at import time for convenience only!
+>Reminder that **any transformation tweaks made during import can be changed afterward** -- it is available at import time for convenience only! In-depth infos : {% include lk id='Glyph transformations' %} & {% include lk id='Batch import' %}
 {: .infos}
 
 >Colors are ignored and stripped down on import.
@@ -270,10 +270,10 @@ Then, we will individually edit each component to give it the right orientation.
 
 We do so by selecting each ligature individually, and edit the `Rotation` value in the {% include lk id='Glyph components' a='#advanced-properties' %}'s Advanced properties. And that's it, we're all set with the first batch of big arrows.  
 
-Rince & repeat for the other arrows -- although with a twist.  
+**Rince & repeat for the other arrows -- although with a twist.**  
 The first four as easy ones, like the previous arrows above
 
-{% include img a='guides/cfont/comp-arrow-orient.png' %} 
+{% include img a='guides/cfont/comp-arrow-orient-basic.png' %} 
 
 The remaining two will combine two components :
 
@@ -281,7 +281,7 @@ The remaining two will combine two components :
 
 #### What's going on here :
 {: .no_toc}
-- First, select the `i-arr-ew` (or whatever name you used)
+- First, select the `i-arr-ew` *(or whatever name you used)*
 - We will, again, use {% include btn ico="component-new" %} to add components to the glyph. Only this time, we'll add both `i-arr-e` & `i-arr-w`. 
 - The components have their default transform, which is not what we're looking for. We will change the `anchoring` & `boundaries`, and add an `horizontal offset` so they are still aligned toward the center, but fit more snugly toward each other.
 

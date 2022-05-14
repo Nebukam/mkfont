@@ -481,6 +481,8 @@ class FamilyDataBlock extends SimpleDataEx {
         this._ligatureSet.clear();
         this._glyphUnicodeCache.length = 0;
 
+        this._fontCache.Clear();
+
         super._CleanUp();
     }
 

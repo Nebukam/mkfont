@@ -67,6 +67,10 @@ class FamilyFontCache {
 
     }
 
+    Clear(){
+        if (this._tempFont) { document.fonts.delete(this._tempFont); }
+    }
+
 }
 
 module.exports = FamilyFontCache;

@@ -2,7 +2,7 @@
 layout: page
 parent: Dialogs
 grand_parent: Documentation
-title: Batch import
+title: Batch import files
 subtitle: Speeds things up, import in lots.
 #summary: summary_goes_here
 splash: icons/icon_directory-download-small.svg
