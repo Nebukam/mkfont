@@ -117,7 +117,7 @@ class FontEditor extends base {
             }
         }).Strict();
 
-        this.shortcuts.Create("escape", ()=>{ this._inspectedData.Clear(); });
+        this.shortcuts.Create("escape", () => { this._inspectedData.Clear(); });
 
         for (let i = 0; i < 10; i++) {
             this.shortcuts.Create(`Ctrl ${i}`, () => { this._StoreSelectionPreset(i); });
@@ -329,15 +329,17 @@ class FontEditor extends base {
         super._OnDataChanged(p_oldData);
         let ar = UNICODE.instance._blockCatalog.At(0);
         if (this._data) {
+            
             this._OnDataValueChanged(this._data, mkfData.IDS.PREVIEW_SIZE, null);
+            
             if (this._data._glyphs.count > 0) {
                 ar = this._contentInspector._specialCatalog.At(0); //My Glyphs
             }
+
+            this.SetActiveRange(ar);
+            this._viewport._RefreshItems();
+            
         }
-
-        this.SetActiveRange(ar);
-
-        this._viewport._RefreshItems();
     }
 
     _OnDataValueChanged(p_data, p_id, p_valueObj) {

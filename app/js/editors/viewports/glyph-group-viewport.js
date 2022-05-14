@@ -282,6 +282,11 @@ class GlyphGroupViewport extends base {
 
     //#region Catalog Management
 
+    _OnDataChanged(p_oldData) {
+        super._OnDataChanged(p_oldData);
+        if (!this._data) { this.displayRange = __norange; }
+    }
+
     _OnDataUpdated(p_data) {
         super._OnDataUpdated(p_data);
         //this._RefreshItems();
@@ -322,8 +327,8 @@ class GlyphGroupViewport extends base {
 
     }
 
-    _ReloadList() {
-        let range = this._displayRange;
+    _ReloadList(p_range = null) {
+        let range = p_range || this._displayRange;
         this.displayRange = __norange;
         this.displayRange = range;
     }

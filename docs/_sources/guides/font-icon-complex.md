@@ -215,7 +215,13 @@ We're going to batch-import our components, it's pretty straightforward :
 - If you have a strict naming convention, MkFont will be smart enough to isolate all common characters within the list of filenames, and strip them down. We just edit the automatically found prefix to make sure it doesn't strip down our `c-`, which will come in handy for the search.
 > In our case, SVGs have been batch-exported from Illustrator, and are all named as icons_`artboard_name`.svg. Since we're not importing anything else, the `c-` is flagged as common to all imported filenames.
 - Since we're importing icons and not tight characters, We changed the boundary mode to `imported` as opposed the default, `mixed` *(more suitable for characters)*.
+- These are square artboards, we will tweak a few additional settings in order to have them best-fitted within the font :
+    - Scaling is set to {% include btn ico="spread-ver" %} so that they match the Family height metric
+    - Tweak the alignment & anchoring of the glyph so it is centered within our family metrics with ({% include btn ico="center-ver" %} & {% include btn ico="center-hor" %}) as opposed to the default {% include btn ico="font-baseline" %} that make the imported bounds sit on the baseline.
 - We then select the {% include btn ico="text-liga" label="Ligatures" %}, and here they are, correctly named and imported.
+
+>**Any transformation tweaks made during import can be changed afterward** -- it is available at import time for convenience only!
+{: .infos}
 
 >Colors are ignored and stripped down on import.
 {: .warning}
