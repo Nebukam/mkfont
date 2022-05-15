@@ -193,13 +193,16 @@ class CmdImportFileList extends actions.Command {
 
                 variant = existingGlyph.activeVariant;
 
+                let isEmpty = variant.Get(mkfData.IDS.EMPTY);
+
                 this._emitter.Do(mkfActions.SetProperty, {
                     target: variant,
                     id: mkfData.IDS.PATH_DATA,
                     value: svgStats
                 });
 
-                if (overlapMode == mkfData.ENUMS.OVERLAP_OVERWRITE) {
+                if (overlapMode == mkfData.ENUMS.OVERLAP_OVERWRITE
+                    || (isEmpty && overlapMode == mkfData.ENUMS.OVERLAP_OVERWRITE_EMPTY)) {
                     this._emitter.Do(mkfActions.SetPropertyMultiple, {
                         target: variant.transformSettings,
                         values: trValues

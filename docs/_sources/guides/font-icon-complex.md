@@ -28,7 +28,7 @@ This example is using [Kenney's Game Icons](https://www.kenney.nl/assets/game-ic
 
 We want a font with the following characters in it :
 
-{% include img a='guides/cfont/comp-ref.png' %}  
+{% include img a='guides/cfont/final-output.png' %}  
 
 #### Process
 {: .no_toc }

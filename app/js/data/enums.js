@@ -164,11 +164,13 @@ class ENUMS {
     ]);
 
     static OVERLAP_OVERWRITE = 0;
-    static OVERLAP_PRESERVE = 1;
-    static OVERLAP_IGNORE = 2;
+    static OVERLAP_OVERWRITE_EMPTY = 1;
+    static OVERLAP_PRESERVE = 2;
+    static OVERLAP_IGNORE = 3;
 
     static OVERLAP = nkm.data.catalogs.CreateFrom({ name: `Transform reference`, autoSort: false }, [
         { name: `Overwrite transforms`, [nkm.com.IDS.VALUE]: this.OVERLAP_OVERWRITE },
+        { name: `Overwrite empty, otherwise preserve`, [nkm.com.IDS.VALUE]: this.OVERLAP_OVERWRITE_EMPTY },
         { name: `Preserve existing transforms`, [nkm.com.IDS.VALUE]: this.OVERLAP_PRESERVE },
         { name: `Don't import`, [nkm.com.IDS.VALUE]: this.OVERLAP_IGNORE },
     ]);

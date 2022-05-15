@@ -38,7 +38,10 @@ class CmdLayersAddUInfos extends actions.Command {
                     if (variant.availSlots <= 0) { return; }
                     this._emitter.Do(mkfActions.LayerAdd, {
                         target: variant,
-                        layerValues: { [mkfData.IDS.LYR_CHARACTER_NAME]: infos.char },
+                        layerValues: {
+                            [mkfData.IDS.LYR_CHARACTER_NAME]: infos.char,
+                            [mkfData.IDS.TR_LYR_BOUNDS_MODE]: variant._transformSettings.Get(mkfData.IDS.TR_BOUNDS_MODE),
+                        },
                         expanded: false
                     });
                 });
@@ -51,7 +54,10 @@ class CmdLayersAddUInfos extends actions.Command {
                 if (variant.availSlots <= 0) { return; }
                 this._emitter.Do(mkfActions.LayerAdd, {
                     target: variant,
-                    layerValues: { [mkfData.IDS.LYR_CHARACTER_NAME]: infos.char },
+                    layerValues: {
+                        [mkfData.IDS.LYR_CHARACTER_NAME]: infos.char,
+                        [mkfData.IDS.TR_LYR_BOUNDS_MODE]: variant._transformSettings.Get(mkfData.IDS.TR_BOUNDS_MODE),
+                    },
                     expanded: false
                 });
             });

@@ -114,7 +114,13 @@ class AssignBaseControl extends base {
                 p_item.preserved = false;
                 p_item.outOfRange = true;
             } else {
-                p_item.preserved = overlapMode == mkfData.ENUMS.OVERLAP_PRESERVE;
+                if (overlapMode == mkfData.ENUMS.OVERLAP_PRESERVE) {
+                    p_item.preserved = true;
+                } else if (overlapMode == mkfData.ENUMS.OVERLAP_OVERWRITE_EMPTY) {
+                    p_item.preserved = !variant.Get(mkfData.IDS.EMPTY);
+                } else {
+                    p_item.preserved = false;
+                }
             }
         } else {
             p_item.preserved = false;

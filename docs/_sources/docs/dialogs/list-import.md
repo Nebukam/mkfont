@@ -37,6 +37,7 @@ The following resolutions options are available :
 | Selection       | Resolution          |
 |:-------------|:------------------|
 | Overwrite transforms | The new path will overwrite the existing one, as well as its transformations settings, effectively using the one displayed on the left of the dialog. |
+| Overwrite empty, otherwise preserve | The new path will will be overwrite the existing one, but transformations will be preserved if the path wasn't an empty one. *(useful if you manually create empty glyphs to 'bookmark' them)* |
 | Preserve existing transforms | The new path will overwrite the existing one, however the existing transformations settings will be preserved.<br>When relying on resources-binding to work, this is a great way to restore bindings to existing glyphs and only update the graphics. |
 | Don't import | The importer will skip any item that correspond to an existing glyph.<br>Select this is you only want to fill the slots that are currently empty in your font. |
 

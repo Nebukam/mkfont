@@ -35,23 +35,31 @@ class CmdLayerAdd extends actions.Command {
                 if (variant.availSlots <= 0) { return; }
                 this._emitter.Do(mkfActions.LayerAdd, {
                     target: variant,
-                    index: -1
+                    index: -1,
+                    layerValues:{
+                        [mkfData.IDS.TR_LYR_BOUNDS_MODE]:variant._transformSettings.Get(mkfData.IDS.TR_BOUNDS_MODE),
+                    }
                 });
             });
 
             this._emitter.EndActionGroup();
 
         } else {
+
             let variant = this._context;
             if (variant.availSlots <= 0) {
                 this._Cancel();
                 return;
             }
-            if (this._context)
-                this._emitter.Do(mkfActions.LayerAdd, {
-                    target: variant,
-                    index: -1
-                });
+
+            this._emitter.Do(mkfActions.LayerAdd, {
+                target: variant,
+                index: -1,
+                layerValues:{
+                    [mkfData.IDS.TR_LYR_BOUNDS_MODE]:variant._transformSettings.Get(mkfData.IDS.TR_BOUNDS_MODE),
+                }
+            });
+
         }
 
 

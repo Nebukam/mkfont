@@ -17,10 +17,40 @@ nav_order: 2
 
 # What to expect
 
-This guide is about creating a font using MkFont from scratch. It only assumes that you have some assets to work with, and that you are using Adobe© Illustrator, because that's what you'll see in the screenshots -- but any SVG editor will work. 
+This guide is about creating a font using MkFont from scratch.  
 {: .fs-6 .fw-300 }
 
-You can find all the assets used in this example in the following package.
+#### Assumptions :
+- You're using Illustrator. *(because we're going to use advanced third party integration)*
+- You already have a bunch of glyphs designed, laying around somewhere.
+- You really don't want to bother with finding what's the unicode point fits what glyph, boring. *(but you'll need Illustrator, otherwise you need to do the association by hand and it's tedious af)*
+
+You can find all the assets used in this example in the [following package](https://nebukam.github.io/mkfont/assets/guides/simple-font.zip).
+
+## Final output
+{: .no_toc}
+
+We're going to make the following font :
+
+{% include img a='guides/sfont/final-output.png' %}  
+
+#### Process
+{: .no_toc }
+- TOC
+{:toc} 
+
+---
+
+# First steps
+The first step will be organizing our messed up glyph into a more structured document, with properly-named artboard : this way we have an export template that we can easily import into MkFont, and make updates a breeze.  
+*The idea is to ensure whatever files we export, we can easily import them to a designated unicode slot without any manual correction.*
+
+## Choosing supported characters  
+
+
+## Step 2
+
+# Next step
 
 >## WORK IN PROGRESS.
 >Come back later (～￣▽￣)～ 
