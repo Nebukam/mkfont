@@ -24,8 +24,8 @@ Component-based workflow, with advanced features to nit-pick & tweak metrics in 
 MkFont is under active development, have a look to the repo [issues](https://github.com/Nebukam/mkfont/issues) to see knowns bug and upcoming improvements/features!  
 
 ## Tech
-MkFont is built with [NKMjs](https://github.com/Nebukam/nkmjs) and runs with [Electron](https://github.com/electron/electron).
-[`INSTALL.md`] — how to build the app on your machine
+MkFont is built with [NKMjs](https://github.com/Nebukam/nkmjs) and runs with [Electron](https://github.com/electron/electron).  
+[`INSTALL.md`](https://github.com/Nebukam/mkfont/blob/main/INSTALL.md) — how to build the app on your machine
 
 ## Kudos
 MkFont wouldn't be possible if not for [@fontello](https://github.com/fontello) folks sharing their magic : the app is primarily built around [svg2ttf](https://github.com/fontello/svg2ttf) & [svgpath](https://github.com/fontello/svgpath).  
