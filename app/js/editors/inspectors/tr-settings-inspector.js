@@ -103,7 +103,7 @@ class TransformSettingsInspector extends base {
         super._Render();
 
         this._advancedFoldout = this.Attach(nkm.uilib.widgets.Foldout, `control drawer foldout-item`, this._body);
-        this._advancedFoldout.options = { title: `Advanced`, icon: `gear`, prefId: `advanced-tr`, expanded: false };
+        this._advancedFoldout.options = { title: LOC.labelTrAdvanced, icon: `gear`, prefId: `advanced-tr`, expanded: false };
         this._trBuilder.host = this._advancedFoldout;
         this._trBuilder.Build(this.constructor.__trControls);
 

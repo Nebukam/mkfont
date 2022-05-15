@@ -48,7 +48,8 @@ class PangramRenderer extends base {
                 'line-height': 'var(--line-height)',
                 'font-size': 'var(--font-size)',
                 'color': 'var(--glyph-color)',
-                'text-transform': 'var(--case)'
+                'text-transform': 'var(--case)',
+                'word-break': `break-word`,
             },
             '.paninput': {
                 '-webkit-appearance': `none`,

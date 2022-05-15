@@ -81,6 +81,7 @@ class PangramInspector extends base {
             '.pangram': {
                 'flex': '1 1 auto',
                 'width': '100%',
+                'overflow-y': 'auto'
             },
             '.slider': {
                 //'margin': '10px 0px 10px 0px'
@@ -200,11 +201,11 @@ class PangramInspector extends base {
                 },
                 {
                     icon: `plus`,
-                    htitle: `Append the current selection at the end of the current text`,
+                    htitle: `Append the current selection at the end of the current text\n---\n+ [ Shift ] Separate each characters by an space.`,
                     trigger: {
                         fn: () => {
-                            let txt = ``;
-                            this.editor.inspectedData.stack.ForEach(i => { txt += `${i.char} ` }, true);
+                            let txt = ``, space = ui.INPUT.shift ? ` ` : ``;
+                            this.editor.inspectedData.stack.ForEach(i => { txt += `${i.char}${space}` }, true);
                             txt = this._text.handler.currentValue + txt;
                             this._text.handler.changedValue = txt == `` ? longPangram : txt;
                             this._text.handler.SubmitValue();
@@ -214,11 +215,11 @@ class PangramInspector extends base {
                 },
                 {
                     icon: `text`,
-                    htitle: `Set the text to be the current viewport selection.`,
+                    htitle: `Set the text to be the current viewport selection.\n---\n+ [ Shift ] Separate each characters by an space.`,
                     trigger: {
                         fn: () => {
-                            let txt = ``;
-                            this.editor.inspectedData.stack.ForEach(i => { txt += `${i.char} ` }, true);
+                            let txt = ``, space = ui.INPUT.shift ? ` ` : ``;
+                            this.editor.inspectedData.stack.ForEach(i => { txt += `${i.char}${space}` }, true);
                             this._text.handler.changedValue = txt == `` ? longPangram : txt;
                             this._text.handler.SubmitValue();
                         },

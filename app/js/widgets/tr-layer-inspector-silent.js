@@ -11,10 +11,12 @@ class LayerTransformSettingsInspectorSilent extends base {
 
     static __controls = [...base.__controls];
     static __trControls = [...base.__trControls];
+    static __exControls = [...base.__exControls];
 
     static {
         this.__DirectSet(this.__controls);
         this.__DirectSet(this.__trControls);
+        this.__DirectSet(this.__exControls);
     }
 
     static __DirectSet(p_array) {

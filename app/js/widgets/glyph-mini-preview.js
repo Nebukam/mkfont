@@ -32,7 +32,7 @@ class GlyphMiniPreview extends base {
                 '@': ['fade-in'],
                 'transition': `opacity 0.25s ease`,
                 'padding': `3px`,
-                'cursor':'pointer',
+                'cursor': 'pointer',
 
                 'position': 'relative',
                 'display': 'flex',
@@ -41,7 +41,7 @@ class GlyphMiniPreview extends base {
                 'background-color': 'rgba(0,0,0,0.5)',
                 'border-radius': '5px',
             },
-            ':host(.null-glyph)':{
+            ':host(.null-glyph)': {
                 'background-color': 'rgba(0,0,0,0.25)',
             },
             ':host(:not(.null-glyph)) .placeholder, :host(.null-glyph) .renderer': { 'display': 'none' },
@@ -58,7 +58,7 @@ class GlyphMiniPreview extends base {
                 'text-align': `center`,
                 'font-size': '2em',
                 'user-select': 'none',
-                'color': 'rgba(255,255,255,0.25)',
+                'color': 'rgba(255,255,255,0.25) !important',
                 'font-family': 'monospace',
                 'line-height': '100%'
             }
@@ -82,8 +82,21 @@ class GlyphMiniPreview extends base {
 
     get glyphInfos() { return this._glyphInfos; }
     set glyphInfos(p_value) {
-        if (this._glyphInfos == p_value) { return; }
+        
+        
 
+        if (!p_value) {
+            this.classList.add(`disabled`);
+            this._svgPlaceholder.Set(`?`, true);
+            this.htitle = `UNKNOWN`;
+            return;
+        }else{
+            this.classList.remove(`disabled`);
+        }
+
+        if (this._glyphInfos == p_value) { return; }  
+        
+        
         this._glyphInfos = p_value;
 
         let unicodeCharacter = ``;
@@ -97,11 +110,12 @@ class GlyphMiniPreview extends base {
         }
 
         this._svgPlaceholder.Set(unicodeCharacter, true);
-        this.htitle = this._glyphInfos.name;
+        this.htitle = `Go to : ${this._glyphInfos.name}`;
     }
 
     Activate(p_evt) {
         if (!super.Activate(p_evt)) { return false; }
+        if (!this._glyphInfos) { return false; }
         nkm.datacontrols.FindEditor(this).inspectedData.Set(this._glyphInfos);
         return false;
     }
@@ -112,6 +126,9 @@ class GlyphMiniPreview extends base {
         if (this._data) {
             let isNullGlyph = this._data.glyph.isNull;
             this._flags.Set(__nullGlyph, isNullGlyph);
+        }else{
+            this._glyphRenderer.Set(null);
+            this._flags.Set(__nullGlyph, true);
         }
     }
 
@@ -120,7 +137,7 @@ class GlyphMiniPreview extends base {
         this._glyphRenderer.Set(p_data);
     }
 
-    _CleanUp(){
+    _CleanUp() {
         super._CleanUp();
     }
 

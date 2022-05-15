@@ -38,7 +38,9 @@ class TTFImport {
             ascend = this.numeric(fontFace, SVGOPS.ATT_ASCENT, em * 0.7),
             descend = this.numeric(fontFace, SVGOPS.ATT_DESCENT, em * -0.25),
             baseline = ascend,
-            max_adv_x = 0;
+            max_adv_x = 0,
+            xheight = height * 0.65,
+            capheight = height * 0.8;
 
         family.Set(IDS.FAMILY, font.getAttribute(`id`));
 
@@ -78,9 +80,11 @@ class TTFImport {
                 .translate(0, baseline)
                 .toString();
 
+            let ltr = null;
             if (gU.length != 1) {
                 //assume ligature, handle it.
             } else {
+                ltr = gU;
                 gU = UNICODE.GetAddress(gU);
             }
 
@@ -91,6 +95,9 @@ class TTFImport {
 
             // Reconstruct SVG Stats
             let bbox = SVGOPS.GetBBox(path);
+
+            if (ltr == `x`) { xheight = bbox.height; console.log(bbox) }
+            else if (ltr == `M`) { capheight = bbox.height; }
 
             let
                 svgStats = {
@@ -121,8 +128,13 @@ class TTFImport {
 
         }
 
-        family.Set(IDS.WIDTH, Math.min(max_adv_x, em));
+        family.BatchSet({
+            [IDS.WIDTH]: Math.min(max_adv_x, em),
+            [IDS.X_HEIGHT]: xheight,
+            [IDS.CAP_HEIGHT]: capheight
+        });
 
+        console.log(xheight, capheight);
         return family;
 
     }
@@ -187,8 +199,8 @@ class TTFImport {
                 [IDS.GLYPH_NAME]: gName,
                 [IDS.UNICODE]: gU,
                 [IDS.PATH_DATA]: svgStats,
-                [IDS.WIDTH]:gW,
-                [IDS.HEIGHT]:gH,
+                [IDS.WIDTH]: gW,
+                [IDS.HEIGHT]: gH,
                 transforms: {
                     // Make sure to push defaults
                     [IDS.TR_BOUNDS_MODE]: ENUMS.BOUNDS_MIXED_VER,

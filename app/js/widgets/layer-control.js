@@ -10,6 +10,7 @@ const mkfCmds = mkfOperations.commands;
 
 const PropertyControl = require(`./property-control`);
 const LayerTransformSettings = require(`./tr-layer-inspector`);
+const GlyphMiniPreview = require(`./glyph-mini-preview`);
 
 const isMANUAL = (owner) => { return owner.data.Get(mkfData.IDS.TR_LYR_SCALE_MODE) == mkfData.ENUMS.LYR_SCALE_MANUAL; };
 const isNRM = (owner) => { return owner.data.Get(mkfData.IDS.TR_LYR_SCALE_MODE) == mkfData.ENUMS.LYR_SCALE_NORMALIZE; };
@@ -58,11 +59,14 @@ class LayerControl extends base {
             ':host(.circular)': {
                 'background-color': `rgba(var(--col-error-dark-rgb),0.25)`,
             },
-            ':host(:not(.circular).control-layer)':{
+            ':host(:not(.circular).control-layer)': {
                 'background-color': `rgba(var(--col-infos-dark-rgb),0.25)`,
             },
             ':host(.false) .label': {
                 'text-decoration': 'line-through var(--col-error-dark)',
+            },
+            ':host(.false)': {
+                'background-color': `rgba(127,127,127,0.1)`
             },
             '.body': {
                 'display': 'flex',
@@ -76,6 +80,12 @@ class LayerControl extends base {
             },
             '.hdr': {
                 'margin': '5px 2px 5px 2px'
+            },
+            '.preview': {
+                'width': '22px',
+                'height': '22px',
+                'border-radius':`3px`,
+                'margin-right':`5px`
             },
             '.small': {
                 'flex': '1 1 45%'
@@ -99,6 +109,10 @@ class LayerControl extends base {
 
         super._Render();
 
+        this._glyphPreview = this.Attach(GlyphMiniPreview, `preview`, this._header);
+        ui.dom.AttachBefore(this._glyphPreview, this._label._element);
+        this._glyphPreview._svgPlaceholder._element.style.setProperty(`font-size`, `1em`);
+
         this._toolbar.options = {
             inline: true,
             size: nkm.ui.FLAGS.SIZE_XS,
@@ -116,12 +130,12 @@ class LayerControl extends base {
                     trigger: { fn: () => { this._MoveLayerDown(); } },
                     group: `move`, member: { owner: this, id: `_moveDownBtn` }
                 },
-                {
+                /*{
                     icon: `shortcut`, htitle: `Go to glyph`, variant: ui.FLAGS.MINIMAL, size: ui.FLAGS.SIZE_S, trigger: {
                         fn: () => { if (this._data._glyphInfos) { this.editor.inspectedData.Set(this._data._glyphInfos); } },
                         arg: ui.FLAGS.SELF
                     }, member: { owner: this, id: `_shortcutBtn` }
-                },
+                },*/
                 {
                     htitle: `Toggle visibility`,
                     cl: nkm.uilib.inputs.Checkbox,
@@ -138,6 +152,7 @@ class LayerControl extends base {
                 },
             ]
         };
+        this._toolbar.visible = false;
 
         this._label.ellipsis = true;
 
@@ -161,27 +176,36 @@ class LayerControl extends base {
 
         super._OnDataUpdated(p_data);
 
-        let char = p_data.Get(mkfData.IDS.LYR_CHARACTER_NAME);
-        if (p_data._useCount <= 0) { this._label.Set(char && char != `` ? `${char} ` : `(empty component)`); }
-        else { this._label.Set(char && char != `` ? `${char} (×${p_data._useCount})` : `(empty component ×${p_data._useCount})`); }
+        let char = p_data.Get(mkfData.IDS.LYR_CHARACTER_NAME),
+            customID = p_data.Get(mkfData.IDS.LYR_CUSTOM_ID);
+
+        if (customID) { char = `<b>${customID}</b>`; }
+
+        if (p_data._useCount <= 0) { this._label.Set(char && char != `` ? `${char} ` : `<i>(empty)</i>`); }
+        else { this._label.Set(char && char != `` ? `${char} (×${p_data._useCount})` : `<i>(empty ×${p_data._useCount})</i>`); }
 
         this._flags.Set(__circular, p_data.Get(mkfData.IDS.CIRCULAR_REFERENCE));
         let viz = p_data.Get(mkfData.IDS.DO_EXPORT);
         this._btnVisible.currentValue = viz;
         this._flags.Set(__false, !viz);
 
-        this._shortcutBtn.disabled = !(this._data._glyphInfos != null);
+        //this._shortcutBtn.disabled = !(this._data._glyphInfos != null);
         this._flags.Set(__controlLayer, p_data.Get(mkfData.IDS.LYR_IS_CONTROL_LAYER));
+
+        this._glyphPreview.glyphInfos = p_data._glyphInfos;
+        this._glyphPreview.data = p_data.importedVariant;
 
     }
 
     _FocusGain() {
         super._FocusGain();
+        this._toolbar.visible = true;
         if (this._data) { this._data._variant.selectedLayer = this._data; }
     }
 
     _FocusLost() {
         super._FocusLost();
+        this._toolbar.visible = false;
         if (this._data && this._data._variant.selectedLayer == this._data) { this._data._variant.selectedLayer = null; }
     }
 

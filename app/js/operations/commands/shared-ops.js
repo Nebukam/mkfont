@@ -177,7 +177,11 @@ class SHARED_OPS {
                     target: p_target,
                     layerValues: {
                         [mkfData.IDS.LYR_CHARACTER_NAME]: ch,
-                        [mkfData.IDS.LYR_IS_CONTROL_LAYER]: hasLayersAlready ? false : (i == 0) ? true : false
+                        [mkfData.IDS.LYR_IS_CONTROL_LAYER]: hasLayersAlready ? false : (i == 0) ? true : false,
+                        [mkfData.IDS.TR_LYR_BOUNDS_MODE]: mkfData.ENUMS.BOUNDS_MIXED_VER,
+                        [mkfData.IDS.TR_ANCHOR]: mkfData.ENUMS.ANCHOR_BOTTOM,
+                        [mkfData.IDS.TR_BOUNDS_MODE]: mkfData.ENUMS.BOUNDS_OUTSIDE,
+                        [mkfData.IDS.TR_LYR_SELF_ANCHOR]: mkfData.ENUMS.ANCHOR_BOTTOM,
                     },
                     index: -1,
                     expanded: false,

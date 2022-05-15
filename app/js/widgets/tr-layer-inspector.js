@@ -60,7 +60,10 @@ class LayerTransformSettingsInspector extends base {
         { options: { propertyId: mkfData.IDS.TR_ROTATION }, css: `large` },
         { options: { propertyId: mkfData.IDS.TR_SKEW_X } },
         { options: { propertyId: mkfData.IDS.TR_SKEW_Y } },
-        { cl: ControlHeader, options: { label: `Tweaks` }, css: 'full' },
+    ];
+
+    static __exControls = [
+        { options: { propertyId: mkfData.IDS.LYR_CUSTOM_ID } },
         { options: { propertyId: mkfData.IDS.INVERTED } },
         { options: { propertyId: mkfData.IDS.LYR_USE_PREV_LAYER } },
         { options: { propertyId: mkfData.IDS.LYR_IS_CONTROL_LAYER, command: mkfCmds.SetLayerControl, } },//directHidden: true 
@@ -77,6 +80,12 @@ class LayerTransformSettingsInspector extends base {
         this.forwardData.To(this._trBuilder);
         this.forwardContext.To(this._trBuilder);
         this.forwardEditor.To(this._trBuilder);
+
+        this._exBuilder = new nkm.datacontrols.helpers.ControlBuilder(this);
+        this._exBuilder.options = { cl: PropertyControl, css: `foldout-item` };
+        this.forwardData.To(this._exBuilder);
+        this.forwardContext.To(this._exBuilder);
+        this.forwardEditor.To(this._exBuilder);
 
     }
 
@@ -114,6 +123,7 @@ class LayerTransformSettingsInspector extends base {
                 'flex': '1 1 100%',
                 'background-color': `rgba(19, 19, 19, 0.25)`,
                 'border-radius': '4px',
+                'margin-top':`4px`
             }
         }, base._Style());
     }
@@ -126,6 +136,11 @@ class LayerTransformSettingsInspector extends base {
         foldout.options = { title: LOC.labelTrAdvanced, icon: `gear`, prefId: `lyr-advanced-tr`, expanded: false };
         this._trBuilder.host = foldout;
         this._trBuilder.Build(this.constructor.__trControls);
+
+        foldout = this.Attach(nkm.uilib.widgets.Foldout, `control drawer foldout-item`, this._body);
+        foldout.options = { title: LOC.labelSpecial, icon: `edit`, prefId: `lyr-advanced-ex`, expanded: false };
+        this._exBuilder.host = foldout;
+        this._exBuilder.Build(this.constructor.__exControls);
 
     }
 

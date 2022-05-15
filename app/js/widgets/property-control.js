@@ -243,6 +243,10 @@ class PropertyControl extends base {
             this._nullifyBtn.disabled = false;
         }
 
+        if(this.localValueObj.value == null && (this._valueInfos.inputOptions && this._valueInfos.inputOptions.nullPlaceholder)){
+            this._input.placeholderValue = this._valueInfos.inputOptions.nullPlaceholder;
+        }
+
         // Red strikethrough on boolean input
         this.classList.remove(`false`);
         if (nkm.u.isInstanceOf(this._input, uilib.inputs.Boolean) || nkm.u.isInstanceOf(this._input, uilib.inputs.Checkbox)) {

@@ -4,6 +4,7 @@ class LOC {
     constructor() { }
 
     static labelStats = `Stats`;
+    static labelSpecial = `Special`;
     static labelDetails = `Details`;
 
     static labelSettings = `Settings`;
@@ -12,7 +13,7 @@ class LOC {
 
     static labelTr = `Transformations`;
     static labelTrDefaults = `Default ${this.labelTr}`;
-    static labelTrAdvanced = `Advanced ${this.labelTr}`;
+    static labelTrAdvanced = `Advanced`;
 
     static labelOffsets = `Translate`;
 

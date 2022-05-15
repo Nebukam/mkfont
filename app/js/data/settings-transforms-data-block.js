@@ -73,6 +73,7 @@ class TransformSettingsDataBlock extends SimpleDataEx {
 
         let
             path = SVGOPS.FitPath(this, this._variant.family._contextInfos, pathData),
+            refPath = path,
             flattenLayers = this._variant.Get(IDS.FLATTEN_LAYERS),
             autoW = this.Get(IDS.TR_AUTO_WIDTH),
             rw = this._variant.Resolve(IDS.WIDTH),
@@ -89,6 +90,7 @@ class TransformSettingsDataBlock extends SimpleDataEx {
         if (controlVariant) {
             w = controlVariant.Get(IDS.EXPORTED_WIDTH);
             h = controlVariant.Resolve(IDS.HEIGHT);
+            refPath = controlVariant._computedPath;
         } else {
             if (flattenLayers) {
                 w = rw;
@@ -112,7 +114,7 @@ class TransformSettingsDataBlock extends SimpleDataEx {
         if (!this._variant.layers.isEmpty) {
             let
                 prevLayer = null,
-                prevLayerData = null;
+                lastLayerPath = null;
 
             this._variant.layers.ForEach((layer, index) => {
                 let ref = layer.importedVariant;
@@ -124,17 +126,17 @@ class TransformSettingsDataBlock extends SimpleDataEx {
 
                     if (layer.Get(IDS.INVERTED)) { layerPath = svgpr.reverse(layerPath); }
 
-                    if (layer.Get(IDS.LYR_USE_PREV_LAYER) && prevLayerData) {
-                        layerCP = SVGOPS.FitLayerPath(layer, prevLayerData, ref, layerPath);
+                    if (layer.Get(IDS.LYR_USE_PREV_LAYER) && lastLayerPath) {
+                        layerCP = SVGOPS.FitLayerPath(layer, lastLayerPath, ref, layerPath);
                     } else {
-                        layerCP = SVGOPS.FitLayerPath(layer, path, ref, layerPath);
+                        layerCP = SVGOPS.FitLayerPath(layer, refPath, ref, layerPath);
                     }
 
                     layer._values[IDS.PATH].value = layerCP;
                     layer._CleanLayer();
 
                     let bb = layerCP.bbox;
-                    prevLayerData = layerCP;
+                    lastLayerPath = layerCP;
 
                     bbmin = Math.min(bbmin, bb.left, bb.right, bb.top, bb.bottom);
                     bbmax = Math.max(bbmax, bb.left, bb.right, bb.top, bb.bottom);

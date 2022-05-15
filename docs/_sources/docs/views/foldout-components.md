@@ -58,17 +58,20 @@ What it does is first compute component transformations as usual, them flatten t
 
 ## Layer controls
 
+*The glyph preview is an inspection shortcut.*
+
+#### Visible on hover.
+
 | Action       | Effect          |
 |:-------------|:------------------|
 | {% include btn ico="up-short" %} | Move the component up in the list |
 | {% include btn ico="down-short" %} | Move the component down in the list |
-| {% include btn ico="shortcut" %} | Select the glyph currently imported by the component |
 | {% include btn ico="visible" %} / {% include btn ico="hidden" %} | Toggle layers visibility |
 | {% include btn ico="remove" %} | Delete the layer |
 
 ## Basic properties
 
-The first thing to setup, as mentionned above, will be which glyph the component will be using. Not unlike a regular glyph, a component has then alignment & anchoring options, scale, and translation.  
+The first thing to setup, as mentioned above, will be which glyph the component will be using. Not unlike a regular glyph, a component has then alignment & anchoring options, scale, and translation.  
 >The main difference with a regular glyph is that the typographic space of a component is not the family. **Instead, it is constrained by the glyph it is appended to.**
 {: .warning}
 
@@ -152,14 +155,45 @@ Scale & translation are applied *after* the component has been anchored
 | Horizontal Offset | Translates the component along the horizontal axis. |
 | Vertical Offset | Translates the component along the vertical axis. |
 
+---
+
+## Advanced
+
+Transform options are exactly the same one you can find in the {% include lk id='Glyph transformations' %}.
+
+### Mirror
+
+| Property       | Effect          |
+|:-------------|:------------------|
+| {% include btn ico="mirror-hor" %} | Flips the glyph horizontally |
+| {% include btn ico="mirror-ver" %}  | Flips the glyph vertically |
+| {% include btn ico="mirror-both" %}  | Flips the glyph both horizontally & vertically. *Same as doing a 180deg rotation* |
+| {% include btn ico="close-small" %} | No scaling will be applied. *(rarely useful)* |
+
+### Rotation & Skew
+
+{% include img a='dialogs/bounds-rotate.png' %}
+
+First, you can choose between the order in which these transformations are applied. Rotation happening after skewing is applied won't yield the same visual results as if the rotation is applied before.  
+Shorthand in the drop-down menu are :
+- R = Rotation
+- X = Skew on X axis
+- Y = Skew on Y axis
+
+You may also control which anchor point within the glyph will be used to apply the rotation. Effects might not be much visible depending on which parameters are set before -- specifically when using the glyph drawing bounds ({% include btn ico="bounds-inside" %}), which anchor is selected makes no visual difference.
 
 ---
 
-## Advanced properties
+## Special properties
 
-Those three options don't look like much, but they drastically affect how a component behave, and even how every other components will be transformed.
+Those few options don't look like much, but they drastically affect how a component behave, and even how every other components will be transformed.
 
-{% include img a='views/comp-advanced.png' %}
+{% include img a='views/comp-special.png' %}
+
+### Custom ID
+
+Setting a custom ID allows you to group layers during group editing. Components are first merged for edit using their custom ID, if it exists, and then by their imported glyph.  
+**This is a discreet yet important distinction, as it allow you to easily batch-edit properties on layers importing completely unrelated glyphs.**
 
 ### Path reversing
 
@@ -199,33 +233,6 @@ When enabled, this option override the host bound for every layers, and instead 
 | Normal | A very normal component. Boring. |
 | Blue | Indicates the component is currently flagged as 'control layer'. |
 | Red | Indicates the current reference within the component creates a circular reference *(i.e, import a glyph within itself, or any chain or relationship that would result in a glyph importing itself)*, and cannot be displayed until the circular reference is fixed. |
-
----
-
-## Transforms
-
-Transform options are exactly the same one you can find in the {% include lk id='Glyph transformations' %}.
-
-### Mirror
-
-| Property       | Effect          |
-|:-------------|:------------------|
-| {% include btn ico="mirror-hor" %} | Flips the glyph horizontally |
-| {% include btn ico="mirror-ver" %}  | Flips the glyph vertically |
-| {% include btn ico="mirror-both" %}  | Flips the glyph both horizontally & vertically. *Same as doing a 180deg rotation* |
-| {% include btn ico="close-small" %} | No scaling will be applied. *(rarely useful)* |
-
-### Rotation & Skew
-
-{% include img a='dialogs/bounds-rotate.png' %}
-
-First, you can choose between the order in which these transformations are applied. Rotation happening after skewing is applied won't yield the same visual results as if the rotation is applied before.  
-Shorthand in the drop-down menu are :
-- R = Rotation
-- X = Skew on X axis
-- Y = Skew on Y axis
-
-You may also control which anchor point within the glyph will be used to apply the rotation. Effects might not be much visible depending on which parameters are set before -- specifically when using the glyph drawing bounds ({% include btn ico="bounds-inside" %}), which anchor is selected makes no visual difference.
 
 ---
 

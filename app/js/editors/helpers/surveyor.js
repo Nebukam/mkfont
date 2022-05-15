@@ -244,7 +244,7 @@ class Surveyor extends base {
             variant._layers.ForEach(layer => {
 
                 let
-                    id = layer.Get(mkfData.IDS.LYR_CHARACTER_NAME) || `____null___`,
+                    id = this._LyrID(layer),
                     obj = layerIds[id];
 
                 if (!obj) {
@@ -271,11 +271,7 @@ class Surveyor extends base {
             needRebuild = false;
 
             for (let m = 0, mn = refLayerList.length; m < mn; m++) {
-                let
-                    layer = refLayerList[m],
-                    id = layer.Get(mkfData.IDS.LYR_CHARACTER_NAME) || `____null___`;
-
-                if (!(id in layerIds)) {
+                if (!(this._LyrID(refLayerList[m]) in layerIds)) {
                     // Some ID couldn't be found.
                     needRebuild = true; break;
                 }
@@ -287,7 +283,7 @@ class Surveyor extends base {
                 // Refresh common values, since we don't need to rebuild everything (great)
                 refLayerList.forEach(ref => {
                     let
-                        id = ref.Get(mkfData.IDS.LYR_CHARACTER_NAME) || `____null___`,
+                        id = this._LyrID(ref),
                         layerInfos = layerIds[id],
                         newArray = layerInfos.layers,
                         sameContent = true;
@@ -355,6 +351,8 @@ class Surveyor extends base {
         this._rebuildingLayers = false;
 
     }
+
+    _LyrID(p_lyr) { return p_lyr.Get(mkfData.IDS.LYR_CUSTOM_ID) || p_lyr.Get(mkfData.IDS.LYR_CHARACTER_NAME) || `____null___`; }
 
     _ClearRscBindings() {
         this._cachedVariants.forEach(variant => {

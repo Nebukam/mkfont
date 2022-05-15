@@ -41,7 +41,8 @@ class GlyphLayerDataBlock extends SimpleDataEx {
         p_values[IDS.INVERTED] = { value: false };
         p_values[IDS.LYR_IS_CONTROL_LAYER] = { value: false };
         p_values[IDS.CIRCULAR_REFERENCE] = { value: false };
-        p_values[IDS.LYR_CHARACTER_NAME] = { value: null };
+        p_values[IDS.LYR_CHARACTER_NAME] = { value: `` };
+        p_values[IDS.LYR_CUSTOM_ID] = { value: null };
         p_values[IDS.DO_EXPORT] = { value: true };
         p_values[IDS.LYR_INDEX] = { value: 0 };
 

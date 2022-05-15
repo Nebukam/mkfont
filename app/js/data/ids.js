@@ -598,14 +598,22 @@ class IDS {
     static LYR_USE_PREV_LAYER = 'lyr-bounds-lyr';
     static LYR_PREV_LAYER_NAME = 'lyr-ref-lyr';
     static LYR_IS_CONTROL_LAYER = 'lyr-control';
+    static LYR_CUSTOM_ID = 'lyr-id';
 
     static {
 
         this.infos[this.LYR_CHARACTER_NAME] = {
             inputType: inputs.Text,
-            inputOptions: { placeholder: `A, U+0041, ...` },
+            inputOptions: { placeholder: `A, U+0041, ...`, nullPlaceholder:`Mixed...` },
             label: `Import glyph`,
             desc: `Single character, ligature, or U+0000 formatted name`
+        };
+
+        this.infos[this.LYR_CUSTOM_ID] = {
+            inputType: inputs.Text,
+            inputOptions: { placeholder: `Custom ID` },
+            label: `Custom ID`,
+            desc: `A name used in place of the imported character to 'merge' layers when doing group editing.`
         };
 
         this.infos[this.LYR_INDEX] = {

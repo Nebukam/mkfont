@@ -340,6 +340,8 @@ class GlyphCanvasRenderer extends __BASE__ {
             ctx.lineTo(gw, maxy);
             ctx.stroke();
 
+            if (this._drawLabels) { ctx.fillText('x-adv', (gw + 10 * iscale) - txoff, tyoff); }
+
             // family values            
             ctx.strokeStyle = `rgba(255,255,255,0.1)`;
 

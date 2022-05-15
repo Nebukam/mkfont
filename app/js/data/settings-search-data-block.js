@@ -9,6 +9,7 @@ const UNICODE = require(`../unicode`);
 const SIGNAL = require(`../signal`);
 const SimpleDataEx = require(`./simple-data-ex`);
 const IDS_EXT = require(`./ids-ext`);
+const IDS = require(`./ids`);
 const ENUMS = require(`./enums`);
 
 class SettingsSearchDataBlock extends SimpleDataEx {
@@ -155,9 +156,13 @@ class SettingsSearchDataBlock extends SimpleDataEx {
         if (this._resultSet.has(p_unicodeInfos)) { return; }
 
         let exists = (p_unicodeInfos.u in this._family._glyphsMap);
-        if (this._mustExists && !exists) { return; }
+        if (this._mustExists && !exists) { return; } //TODO : Tweak. This prevents us from looking into layers.
 
         if (this._terms.length != 0) {
+
+            //TODO : look for layer given names
+
+
             let
                 char = p_unicodeInfos.char,
                 name = p_unicodeInfos.name;
@@ -189,6 +194,46 @@ class SettingsSearchDataBlock extends SimpleDataEx {
                 let indexed = p_unicodeInfos.indexed;
                 indexedLoop: for (let i = 0; i < this._upperIndexed.length; i++) {
                     if (indexed.includes(this._upperIndexed[i])) { pass = true; break indexedLoop; }
+                }
+            }
+
+            if (exists) {
+                //Look through layers and check if they have custom IDs that would match
+                let glyph = this._family.GetGlyph(p_unicodeInfos.u);
+                if (!glyph.isNull) {
+                    let layers = glyph.activeVariant._layers._array;
+                    for (let l = 0, ln = layers.length; l < ln; l++) {
+                        let
+                            layer = layers[l],
+                            id = layer.Get(IDS.LYR_CUSTOM_ID),
+                            localPass = false;
+
+                        if (!layer.importedVariant || !layer._glyphInfos) { continue; }
+
+                        if (id) {
+
+                            if (!this._caseSensitive) { id = id.toUpperCase(); }
+
+                            if (id.length == 1) {
+                                charLoop: for (let i = 0; i < this._terms.length; i++) {
+                                    if (char == this._terms[i]) { localPass = true; break charLoop; }
+                                }
+                            } else {
+                                charLoop: for (let i = 0; i < this._terms.length; i++) {
+                                    if (id.includes(this._terms[i])) { localPass = true; break charLoop; }
+                                }
+                            }
+
+                        }
+
+                        if(localPass){
+                            let infos = layer._glyphInfos;
+                            if (this._mustExists) { if (!(infos.u in this._family._glyphsMap)) { continue; } }
+                            this._results.push(infos);
+                            this._resultSet.add(infos);
+                        }
+
+                    }
                 }
             }
 
