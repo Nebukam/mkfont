@@ -64,7 +64,7 @@ class GlyphListInspector extends base {
                 'justify-content': `center`,
                 'margin-bottom': '5px',
                 'margin-top': '5px',
-                'padding': '4px',
+                'padding': '4px 0px',
                 'border-radius': '4px',
                 'background-color': `rgba(19, 19, 19, 0.25)`
             },
@@ -106,9 +106,13 @@ class GlyphListInspector extends base {
             handles: [
                 {
                     icon: `reset`, htitle: `Reset existing glyphs & create missing ones.\n+ [ Shift ] Also create components matching character decomposition.\n+ [ Alt ] Reset the glyphs path while preserving everything else.`,
-                    variant: ui.FLAGS.MINIMAL,
                     trigger: { fn: () => { this.editor.cmdGlyphClear.Execute(this._data.stack._array); } },
                     group: `read`
+                },
+                {
+                    icon: `text-liga-new`, htitle: `Create ligature from selection\n---\n+ [ Shift ] Create components from ligature decomposition.`,
+                    trigger: { fn: () => { this.editor.cmdLigaFromSelection.Execute(); } },
+                    group: `read`, member: { owner: this, id: `_createLigaBtn` }
                 },
                 {
                     icon: `remove`, htitle: `Delete selection from font`,
@@ -119,6 +123,8 @@ class GlyphListInspector extends base {
                 },
             ]
         };
+
+
 
         // Previews
 
@@ -272,6 +278,7 @@ class GlyphListInspector extends base {
 
         this._glyphIdentity.Multi(`MULTIPLE SELECTION<br><b>${an.total} Glyphs</b>`, an.uuni);
         this._deleteGlyphBtn.disabled = !(an.existingGlyphs > 0);
+        this._UpdateTexts();
 
     }
 
@@ -291,7 +298,14 @@ class GlyphListInspector extends base {
         }
     }
 
-    _OnGlyphBumped(p_data, p_infos) { this._UpdatePreviews(); }
+    _UpdateTexts(){
+        this._createLigaBtn.htitle = `Create ligature : ${this.editor.cmdLigaFromSelection._GetLigaName()}\n---\n+ [ Shift ] Create components from ligature decomposition.`;
+    }
+
+    _OnGlyphBumped(p_data, p_infos) { 
+        this._UpdatePreviews(); 
+        this._UpdateTexts();
+    }
 
     //#region popout
 

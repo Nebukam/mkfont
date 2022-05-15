@@ -15,9 +15,9 @@ const mkfOperations = require(`../../operations`);
 const GlyphVariantInspector = require(`./glyph-iitem`);
 
 const longPangram =
-    `Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.
+    `Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt.
 
-Ut wisi enim ad minim veniam, quis nostrud exercitation ulliam corper suscipit lobortis nisl ut aliquip ex ea commodo consequat.`;
+    Ut laoreet dolore magna aliquam erat volutpat.`;
 
 const base = nkm.datacontrols.InspectorView;
 class PangramInspector extends base {
@@ -36,6 +36,11 @@ class PangramInspector extends base {
         this._inspectionHandler = new nkm.datacontrols.helpers.InspectionDataHandler(this);
         this._inspectionHandler
             .Watch(nkm.com.SIGNAL.UPDATED, this._OnSelectionUpdated, this);
+    }
+
+    _PostInit() {
+        super._PostInit();
+        this.ligaText = null;
     }
 
     static _Style() {
@@ -80,8 +85,8 @@ class PangramInspector extends base {
             '.slider': {
                 //'margin': '10px 0px 10px 0px'
             },
-            '.toolbar':{
-                'margin-top':`10px`
+            '.toolbar': {
+                'margin-top': `10px`
             }
         }, base._Style());
     }
@@ -99,6 +104,12 @@ class PangramInspector extends base {
 
         this._pangramRenderer = this.Attach(mkfWidgets.PangramRenderer, 'pangram', this._body);
         this.forwardData.To(this._pangramRenderer);
+
+        this._createLigaBtn = this.Attach(nkm.uilib.buttons.Button, `item`, this._footer);
+        this._createLigaBtn.options = {
+            icon:`text-liga-new`, htitle: `Create a ligature from the selected text.\n---\n+ [ Shift ] Create components from ligature decomposition.`,
+            trigger: { fn: () => { this.editor.cmdLigaFromSelection.Execute(this._selText); } }
+        };
 
         this._toolbar = this.Attach(ui.WidgetBar, `item toolbar`, this._footer);
         this._toolbar.options = {
@@ -155,7 +166,7 @@ class PangramInspector extends base {
                     this._pangramRenderer.text = p_t;
                 }
             },
-            rows: 6
+            rows: 4
         }
 
         this._pangramRenderer.fontSize = 20;
@@ -215,13 +226,30 @@ class PangramInspector extends base {
                     }, group: `b`
 
                 }
-                
             ]
         }
 
     }
 
     _OnEditorChanged(p_oldEditor) { this._inspectionHandler.editor = this._editor; }
+    _OnDataChanged(p_oldData) {
+        super._OnDataChanged(p_oldData);
+        this.ligaText = null;
+    }
+
+    set ligaText(p_value) {
+        if (!p_value) { p_value = ``; }
+
+        this._selText = p_value;
+
+        if (p_value.length < 2) {
+            this._createLigaBtn.disabled = true;
+            this._createLigaBtn.label = `Select at least 2 characters`;
+            return;
+        }
+        this._createLigaBtn.disabled = false;
+        this._createLigaBtn.label = `${this._selText}`;
+    }
 
     _OnSelectionUpdated(p_sel) {
         if (p_sel.stack.count == 0) {
@@ -242,6 +270,7 @@ class PangramInspector extends base {
 
         ui.dom.ClearHighlightedText();
 
+        this.ligaText = p_text;
 
         let addresses = UNICODE.GetAddressesFromText(p_text);
 
@@ -262,7 +291,7 @@ class PangramInspector extends base {
         if (data.length == 0) { return; }
 
         this.editor.viewport.selectionStack.Clear();
-        this.editor.inspectedData.SetList(data.reverse());
+        this.editor.inspectedData.SetList(data); //.reverse()
 
     }
 

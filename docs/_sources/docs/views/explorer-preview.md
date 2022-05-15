@@ -29,6 +29,14 @@ This is not where you edit the text -- **it is however, where you can select gly
 >At the time of writing, this won't select ligatures, but instead the individual glyphs they encapsulate.
 {: .comment }
 
+## Ligature express
+If you selected text within the preview box, a {% include btn ico="text-liga-new" %} button will toggle on, with its label showing the selected text.
+
+| Action       | Comment          |
+|:-------------|:------------------|
+| {% include btn ico="text-liga-new" label="*text*" %} | Create & select a ligature based on the selected text. (displayed as label) |
+| {% include shortcut keys="Shift" %} + {% include btn ico="text-liga-new" label="*text*" %} | Same as above, but will also bootstrap the ligature by adding all of the individual glyphs it contains, chained together. |
+
 ---
 
 ## Controls
@@ -88,3 +96,7 @@ Or simply if you doubt the preview has updated automatically.
 
 This is because in order to be previewed, the font needs to be exported in full in memory; it is not possible to simply append a single character.  
 That also mean that the preview is a real one : what you see in here is an exact copy in memory of the font that will be exported as `.ttf`.
+
+>For now, the preview doesn't support selection of ligatures. Instead, it will select the glyphs that makes up the ligature.  
+>i.e, if you have a `test` ligature, selecting it in the preview will effectively select `t`, `e` and `s`.
+{: .error }

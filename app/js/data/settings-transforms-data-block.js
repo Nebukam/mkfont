@@ -72,10 +72,10 @@ class TransformSettingsDataBlock extends SimpleDataEx {
         if (!pathData || !this._variant._family) { return; }
 
         let
+            path = SVGOPS.FitPath(this, this._variant.family._contextInfos, pathData),
             flattenLayers = this._variant.Get(IDS.FLATTEN_LAYERS),
             autoW = this.Get(IDS.TR_AUTO_WIDTH),
             rw = this._variant.Resolve(IDS.WIDTH),
-            path = SVGOPS.FitPath(this, this._variant.family._contextInfos, pathData),
             w = 0,
             h = this._variant.Resolve(IDS.HEIGHT),
             controlVariant = null;
@@ -114,28 +114,24 @@ class TransformSettingsDataBlock extends SimpleDataEx {
                 prevLayer = null,
                 prevLayerData = null;
 
-            this._variant.layers.ForEach(item => {
-                let ref = item.importedVariant;
-                if (ref && !item._isCircular && item.Get(IDS.DO_EXPORT)) {
+            this._variant.layers.ForEach((layer, index) => {
+                let ref = layer.importedVariant;
+                if (ref && !layer._isCircular && layer.Get(IDS.DO_EXPORT)) {
 
                     let
-                        layerCP = item.Get(IDS.PATH),
+                        layerCP,
                         layerPath = ref.Get(IDS.PATH);
 
-                    if (item.Get(IDS.INVERTED)) { layerPath = svgpr.reverse(layerPath); }
+                    if (layer.Get(IDS.INVERTED)) { layerPath = svgpr.reverse(layerPath); }
 
-                    if (item.Get(IDS.LYR_USE_PREV_LAYER) && prevLayerData) {
-                        layerCP = SVGOPS.FitLayerPath(
-                            item, prevLayerData, prevLayerData.width, prevLayerData.HEIGHT,
-                            layerPath, ref.Get(IDS.EXPORTED_WIDTH), ref.Resolve(IDS.HEIGHT));
+                    if (layer.Get(IDS.LYR_USE_PREV_LAYER) && prevLayerData) {
+                        layerCP = SVGOPS.FitLayerPath(layer, prevLayerData, ref, layerPath);
                     } else {
-                        layerCP = SVGOPS.FitLayerPath(
-                            item, path, w, h,
-                            layerPath, ref.Get(IDS.EXPORTED_WIDTH), ref.Resolve(IDS.HEIGHT));
+                        layerCP = SVGOPS.FitLayerPath(layer, path, ref, layerPath);
                     }
 
-                    item._values[IDS.PATH].value = layerCP;
-                    item._CleanLayer();
+                    layer._values[IDS.PATH].value = layerCP;
+                    layer._CleanLayer();
 
                     let bb = layerCP.bbox;
                     prevLayerData = layerCP;
@@ -145,10 +141,10 @@ class TransformSettingsDataBlock extends SimpleDataEx {
 
                 } else {
                     //prevLayerData = null; //So 'prev layer' is actually "closest valid layer"
-                    item._values[IDS.PATH].value = null;
+                    layer._values[IDS.PATH].value = null;
                 }
 
-                prevLayer = item;
+                prevLayer = layer;
             });
         }
 

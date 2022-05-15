@@ -15,9 +15,10 @@ has_children: true
 ## Windows  
    
 {% include link_btn title="MkFont Setup (.exe)" color="red" link="https://github.com/Nebukam/mkfont/releases/latest/download/mkfont-Setup.exe" icon="load-arrow" %}
-{% include link_btn title="Unpacked (.zip)" color="white" link="https://github.com/Nebukam/mkfont/releases/latest/download/mkfont-win-unpacked.zip" icon="load-arrow" %}
+{% include link_btn title="MkFont Unpacked (.zip)" color="white" link="https://github.com/Nebukam/mkfont/releases/latest/download/mkfont-win-unpacked.zip" icon="load-arrow" %}
 
->Note: You might get a warning using the .exe -- you can still install the app safely, but in case that doesn't cut it for you, I recommend using the unpackaged version instead, which doesn't require installation. *You will loose some benefits such as file associations, but that's it*.
+>You might get a warning using the .exe -- you can still install the app safely, but in case that doesn't cut it for you, I recommend using the unpackaged version instead, which doesn't require installation. *You will loose some benefits such as file associations, but that's it*.
+{: .comment}
 
 [Releases history](https://github.com/Nebukam/mkfont/releases)
 

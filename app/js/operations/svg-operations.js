@@ -408,12 +408,22 @@ class SVGOperations {
         if (sPush == null) { sPush = p_context.xpush; }
 
         if (p_svgStats.emptyPath) {
-            return {
-                height: 0,
-                width: Math.max(sShift + sPush, 0),
+
+            let eSVG = {
+                height: ctxH,
+                width: 0,
                 path: p_svgStats.path,
-                bbox: p_svgStats.bbox
+                bbox: p_svgStats.bbox,
+                fit: { x: 0, y: 0, width: ctxW, height: ctxH },
             };
+
+            if (autoWidth) { eSVG.width = Math.max(sShift + sPush, 0); }
+            else { eSVG.width = ctxW; }
+
+            if (mono) { eSVG.width = p_context.w; }
+
+            return eSVG;
+
         }
 
         let
@@ -634,16 +644,18 @@ class SVGOperations {
 
     }
 
-    static FitLayerPath(p_settings, p_context, p_w, p_h, p_variantPath, p_cw, p_ch) {
+    static FitLayerPath(p_settings, p_context, p_variant, p_layerPath) {
 
         let
-            path = p_variantPath,
-            ctxW = p_w,
-            ctxH = p_h,
-            pWidth = p_cw,
-            pHeight = p_ch,
-            offsetX = 0,
-            offsetY = 0,
+            path = p_layerPath, //may be inverted prior to fitting
+            layerCP = p_variant._computedPath,
+            fit = p_context.fit,
+            ctxW = p_context.width,
+            ctxH = p_context.height,
+            lyrWidth = layerCP.width,
+            lyrHeight = layerCP.height,
+            offsetX = fit.x,
+            offsetY = fit.y,
             scale = 1,
             mirror = p_settings.Get(IDS.TR_MIRROR),
             rot = p_settings.Get(IDS.TR_ROTATION),
@@ -651,8 +663,7 @@ class SVGOperations {
             sky = p_settings.Get(IDS.TR_SKEW_Y),
             boundMode = p_settings.Get(IDS.TR_BOUNDS_MODE),
             pathTransform = svgpath(path),
-            doReverse = false,
-            vbbox = null;
+            doReverse = false;
 
         if (rot != 0 || skx != 0 || sky != 0) {
             //rotate incoming SVG Path & update bbox
@@ -663,54 +674,48 @@ class SVGOperations {
                 tr = pathTransform;
 
             switch (rotorder) {
-                case ENUMS.SKR_ORDER_R_X_Y: this._Rot(tr, rot, ranchor, pWidth, pHeight); this._SkewX(tr, skx); this._SkewY(tr, sky); break;
-                case ENUMS.SKR_ORDER_R_Y_X: this._Rot(tr, rot, ranchor, pWidth, pHeight); this._SkewY(tr, sky); this._SkewX(tr, skx); break;
-                case ENUMS.SKR_ORDER_X_R_Y: this._SkewX(tr, skx); this._Rot(tr, rot, ranchor, pWidth, pHeight); this._SkewY(tr, sky); break;
-                case ENUMS.SKR_ORDER_Y_R_X: this._SkewY(tr, sky); this._Rot(tr, rot, ranchor, pWidth, pHeight); this._SkewX(tr, skx); break;
-                case ENUMS.SKR_ORDER_X_Y_R: this._SkewX(tr, skx); this._SkewY(tr, sky); this._Rot(tr, rot, ranchor, pWidth, pHeight); break;
-                case ENUMS.SKR_ORDER_Y_X_R: this._SkewY(tr, sky); this._SkewX(tr, skx); this._Rot(tr, rot, ranchor, pWidth, pHeight); break;
-            }
-
-            if (boundMode != ENUMS.BOUNDS_OUTSIDE) {
-                // This alone, super expensive ;_;
-                vbbox = this.GetBBox(pathTransform.toString());
-
+                case ENUMS.SKR_ORDER_R_X_Y: this._Rot(tr, rot, ranchor, lyrWidth, lyrHeight); this._SkewX(tr, skx); this._SkewY(tr, sky); break;
+                case ENUMS.SKR_ORDER_R_Y_X: this._Rot(tr, rot, ranchor, lyrWidth, lyrHeight); this._SkewY(tr, sky); this._SkewX(tr, skx); break;
+                case ENUMS.SKR_ORDER_X_R_Y: this._SkewX(tr, skx); this._Rot(tr, rot, ranchor, lyrWidth, lyrHeight); this._SkewY(tr, sky); break;
+                case ENUMS.SKR_ORDER_Y_R_X: this._SkewY(tr, sky); this._Rot(tr, rot, ranchor, lyrWidth, lyrHeight); this._SkewX(tr, skx); break;
+                case ENUMS.SKR_ORDER_X_Y_R: this._SkewX(tr, skx); this._SkewY(tr, sky); this._Rot(tr, rot, ranchor, lyrWidth, lyrHeight); break;
+                case ENUMS.SKR_ORDER_Y_X_R: this._SkewY(tr, sky); this._SkewX(tr, skx); this._Rot(tr, rot, ranchor, lyrWidth, lyrHeight); break;
             }
 
         }
 
         switch (p_settings.Get(IDS.TR_LYR_BOUNDS_MODE)) {
             case ENUMS.BOUNDS_INSIDE:
-                offsetX = p_context.bbox.x;
-                offsetY = p_context.bbox.y;
+                offsetX += p_context.bbox.x-fit.x;
+                offsetY += p_context.bbox.y-fit.y;
                 ctxW = p_context.bbox.width;
                 ctxH = p_context.bbox.height;
                 break;
             case ENUMS.BOUNDS_MIXED_VER:
-                offsetX = p_context.bbox.x;
+                offsetX += p_context.bbox.x-fit.x;
                 ctxW = p_context.bbox.width;
                 break;
             case ENUMS.BOUNDS_MIXED_HOR:
-                offsetY = p_context.bbox.y;
+                offsetY += p_context.bbox.y-fit.y;
                 ctxH = p_context.bbox.height;
                 break;
         }
 
         if (boundMode != ENUMS.BOUNDS_OUTSIDE) {
-            if (!vbbox) { vbbox = this.GetBBox(path); }
+            let vbbox = this.GetBBox(pathTransform.toString());
             switch (boundMode) {
                 case ENUMS.BOUNDS_INSIDE:
                     pathTransform.translate(-vbbox.x, -vbbox.y);
-                    pWidth = vbbox.width;
-                    pHeight = vbbox.height;
+                    lyrWidth = vbbox.width;
+                    lyrHeight = vbbox.height;
                     break;
                 case ENUMS.BOUNDS_MIXED_VER:
                     pathTransform.translate(-vbbox.x, 0);
-                    pWidth = vbbox.width;
+                    lyrWidth = vbbox.width;
                     break;
                 case ENUMS.BOUNDS_MIXED_HOR:
                     pathTransform.translate(0, -vbbox.y);
-                    pHeight = vbbox.height;
+                    lyrHeight = vbbox.height;
                     break;
             }
         }
@@ -718,15 +723,15 @@ class SVGOperations {
         if (mirror != ENUMS.MIRROR_NONE) {
             switch (mirror) {
                 case ENUMS.MIRROR_H:
-                    pathTransform.scale(-1, 1).translate(pWidth, 0);
+                    pathTransform.scale(-1, 1).translate(lyrWidth, 0);
                     doReverse = true;
                     break;
                 case ENUMS.MIRROR_V:
-                    pathTransform.scale(1, -1).translate(0, pHeight);
+                    pathTransform.scale(1, -1).translate(0, lyrHeight);
                     doReverse = true;
                     break;
                 case ENUMS.MIRROR_H_AND_V:
-                    pathTransform.scale(-1, -1).translate(pWidth, pHeight);
+                    pathTransform.scale(-1, -1).translate(lyrWidth, lyrHeight);
                     break;
             }
         }
@@ -736,8 +741,8 @@ class SVGOperations {
         switch (p_settings.Get(IDS.TR_LYR_SCALE_MODE)) {
             case ENUMS.SCALE_MANUAL:
                 scale = p_settings.Get(IDS.TR_LYR_SCALE_FACTOR);
-                pWidth *= scale;
-                pHeight *= scale;
+                lyrWidth *= scale;
+                lyrHeight *= scale;
                 break;
             case ENUMS.SCALE_NORMALIZE:
                 break;
@@ -773,12 +778,12 @@ class SVGOperations {
             case ENUMS.ANCHOR_TOP:
             case ENUMS.ANCHOR_CENTER:
             case ENUMS.ANCHOR_BOTTOM:
-                offsetX -= pWidth * 0.5;
+                offsetX -= lyrWidth * 0.5;
                 break;
             case ENUMS.ANCHOR_TOP_RIGHT:
             case ENUMS.ANCHOR_RIGHT:
             case ENUMS.ANCHOR_BOTTOM_RIGHT:
-                offsetX -= pWidth;
+                offsetX -= lyrWidth;
                 break;
         }
 
@@ -809,12 +814,12 @@ class SVGOperations {
             case ENUMS.ANCHOR_LEFT:
             case ENUMS.ANCHOR_CENTER:
             case ENUMS.ANCHOR_RIGHT:
-                offsetY -= pHeight * 0.5;
+                offsetY -= lyrHeight * 0.5;
                 break;
             case ENUMS.ANCHOR_BOTTOM_LEFT:
             case ENUMS.ANCHOR_BOTTOM:
             case ENUMS.ANCHOR_BOTTOM_RIGHT:
-                offsetY -= pHeight;
+                offsetY -= lyrHeight;
                 break;
         }
 
@@ -830,9 +835,9 @@ class SVGOperations {
         if (doReverse) { path = svgpathreverse.reverse(path); }
 
         return {
-            height: Math.max(pHeight, 0),
-            width: Math.max(pWidth, 0),
-            fit: { width: pWidth, height: pHeight, x: offsetX, y: offsetY, yoff: yUserOffset },
+            height: Math.max(lyrHeight, 0),
+            width: Math.max(lyrWidth, 0),
+            fit: { width: lyrWidth, height: lyrHeight, x: offsetX, y: offsetY, yoff: yUserOffset },
             path: path,
             bbox: this.GetBBox(path)
         };

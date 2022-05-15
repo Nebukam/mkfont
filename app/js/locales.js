@@ -14,6 +14,8 @@ class LOC {
     static labelTrDefaults = `Default ${this.labelTr}`;
     static labelTrAdvanced = `Advanced ${this.labelTr}`;
 
+    static labelOffsets = `Translate`;
+
 }
 
 module.exports = LOC;

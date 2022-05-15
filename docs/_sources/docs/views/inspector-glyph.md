@@ -138,9 +138,13 @@ Actions are limited to the following when editing groups :
 |: **Glyph actions** :||
 | {% include btn ico="reset" %} | Resets the glyphs' contents to `empty`, but does not delete them. |
 | {% include shortcut keys="Shift" %} + {% include btn ico="reset" %}  | Resets the all the glyphs in the selection & create components matching the glyph composition, if any. |
+| {% include btn ico="text-liga-new" %} | Create a ligature based on the current selection. *The tooltip shows the ligature created.* |
+| {% include shortcut keys="Shift" %} + {% include btn ico="text-liga-new" %} | Same as above, but will also bootstrap the ligature by adding all of the individual glyphs it contains, chained together. |
 | {% include shortcut keys="Alt" %} + {% include btn ico="reset" %}  | Resets all the glyphs in the selection but keeps their existing components. |
 | {% include btn ico="remove" %} | Delete the glyphs and their content. |
 
+> Creating a ligature from the active glyph selection is **not** the same thing as creating it from the {% include lk id='Preview explorer' %}! The glyph selection contains unique glyphs.
+{: .warning}
 
 > If any glyph within the selection is bound to a file, a button will show at the very bottom of the inspector. When clicked, every bound item within the active selection will be disconnected from its resource on disk.
 

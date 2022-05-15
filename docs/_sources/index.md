@@ -17,6 +17,14 @@ Component-based workflow, with advanced features to nit-pick & tweak metrics in 
 
 ---
 
+{% include webm a='landingvid.webm' %}  
+#### *Import to export in just a few seconds. Tweak forever.*
+
+---
+
+# Exciting features
+<br>
+
 {% include card_childs reference="Features" %}
 
 ## And more!

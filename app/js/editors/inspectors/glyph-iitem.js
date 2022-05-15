@@ -90,7 +90,7 @@ class GlyphVariantInspectorItem extends base {
                 'flex': `1 1 auto`,
                 'justify-content': `center`,
                 'margin-top': '5px',
-                'padding': '4px',
+                'padding': '4px 0px',
                 'border-radius': '4px',
                 'background-color': `rgba(19, 19, 19, 0.25)`
             },
@@ -119,6 +119,11 @@ class GlyphVariantInspectorItem extends base {
             defaultWidgetClass: nkm.uilib.buttons.Tool,
             handles: [
                 {
+                    icon: `reset`, htitle: `Reset existing glyph or create an empty one if it doesn't exists.\n---\n+ [ Shift ] Also create components matching character decomposition.\n+ [ Alt ] Reset the glyph path while preserving everything else.\n+ [ Shift + Alt ] Create components & missing glyphs recursively.`,
+                    trigger: { fn: () => { this.editor.cmdGlyphClear.Execute(this._data); } },
+                    group: `edit`, member: { owner: this, id: `_glyphClearBtn` }
+                },
+                {
                     icon: `document-download-small`, htitle: `Import SVG`,
                     flavor: nkm.com.FLAGS.LOADING, variant: ui.FLAGS.MINIMAL,
                     trigger: { fn: () => { this.editor.cmdImportFileSingle.Execute(this._data); } },
@@ -129,12 +134,6 @@ class GlyphVariantInspectorItem extends base {
                     flavor: nkm.com.FLAGS.LOADING, variant: ui.FLAGS.MINIMAL,
                     trigger: { fn: () => { this.editor.cmdGlyphPaste.Execute(this._glyphInfos); } },
                     group: `read`
-                },
-                {
-                    icon: `reset`, htitle: `Reset existing glyph or create an empty one if it doesn't exists.\n---\n+ [ Shift ] Also create components matching character decomposition.\n+ [ Alt ] Reset the glyph path while preserving everything else.\n+ [ Shift + Alt ] Create components & missing glyphs recursively.`,
-                    variant: ui.FLAGS.MINIMAL,
-                    trigger: { fn: () => { this.editor.cmdGlyphClear.Execute(this._data); } },
-                    group: `read`, member: { owner: this, id: `_glyphClearBtn` }
                 },
                 {
                     icon: `document-edit`, htitle: `Edit using default SVG editor`,

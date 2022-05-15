@@ -6,6 +6,7 @@ const ui = nkm.ui;
 const mkfOperations = require(`../operations`);
 const mkfCmds = mkfOperations.commands;
 const mkfData = require(`../data`);
+const LOC = require(`../locales`);
 
 // Manages what is shown & selectable in the viewport.
 
@@ -43,8 +44,8 @@ class LayerTransformSettingsInspector extends base {
         { options: { propertyId: mkfData.IDS.TR_BOUNDS_MODE, inputOnly: true }, css: 'small' },
 
         //{ options: { propertyId: mkfData.IDS.TR_LYR_SCALE_MODE, inputOnly: true }, css: 'small' },
-        { cl: ControlHeader, options: { label: `Offsets` }, css: 'hdr', requireData: true },
         { options: { propertyId: mkfData.IDS.TR_LYR_SCALE_FACTOR }, css: 'full', requireData: true }, //, hideWhen: { fn: isMANUAL }
+        { cl: ControlHeader, options: { label: LOC.labelOffsets }, css: 'hdr', requireData: true },
         { options: { propertyId: mkfData.IDS.TR_X_OFFSET }, requireData: true },
         { options: { propertyId: mkfData.IDS.TR_Y_OFFSET }, requireData: true },
 
@@ -52,16 +53,17 @@ class LayerTransformSettingsInspector extends base {
     ];
 
     static __trControls = [
-        { options: { propertyId: mkfData.IDS.INVERTED } },
-        { options: { propertyId: mkfData.IDS.LYR_USE_PREV_LAYER } },
-        { options: { propertyId: mkfData.IDS.LYR_IS_CONTROL_LAYER, command: mkfCmds.SetLayerControl, } },//directHidden: true 
-        { cl: ControlHeader, options: { label: `Transforms` }, css: 'full' },
+        { cl: ControlHeader, options: { label: LOC.labelTr }, css: 'full' },
         { options: { propertyId: mkfData.IDS.TR_MIRROR, inputOnly: true }, css: 'full' },
         { options: { propertyId: mkfData.IDS.TR_SKEW_ROT_ORDER }, css: `full` },
         { options: { propertyId: mkfData.IDS.TR_ROTATION_ANCHOR, inputOnly: true }, css: `vsmall` },
         { options: { propertyId: mkfData.IDS.TR_ROTATION }, css: `large` },
         { options: { propertyId: mkfData.IDS.TR_SKEW_X } },
         { options: { propertyId: mkfData.IDS.TR_SKEW_Y } },
+        { cl: ControlHeader, options: { label: `Tweaks` }, css: 'full' },
+        { options: { propertyId: mkfData.IDS.INVERTED } },
+        { options: { propertyId: mkfData.IDS.LYR_USE_PREV_LAYER } },
+        { options: { propertyId: mkfData.IDS.LYR_IS_CONTROL_LAYER, command: mkfCmds.SetLayerControl, } },//directHidden: true 
     ];
 
     _Init() {
@@ -121,7 +123,7 @@ class LayerTransformSettingsInspector extends base {
         super._Render();
 
         let foldout = this.Attach(nkm.uilib.widgets.Foldout, `control drawer foldout-item`, this._body);
-        foldout.options = { title: `Advanced`, icon: `gear`, prefId: `lyr-advanced-tr`, expanded: false };
+        foldout.options = { title: LOC.labelTrAdvanced, icon: `gear`, prefId: `lyr-advanced-tr`, expanded: false };
         this._trBuilder.host = foldout;
         this._trBuilder.Build(this.constructor.__trControls);
 

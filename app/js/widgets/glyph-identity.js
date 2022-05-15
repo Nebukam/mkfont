@@ -35,6 +35,7 @@ class GlyphIdentity extends base {
                 'border-bottom': '1px solid rgba(127, 127, 127, 0.1)',
                 'height': '2.2em',
                 'word-break': 'break-all',
+                'font-family':'monospace'
             },
             '.tagbar': {
                 'max-height': '16px',
@@ -51,7 +52,7 @@ class GlyphIdentity extends base {
 
         super._Render();
 
-        this._title = new ui.manipulators.Text(ui.dom.El("code", { class: "long-name" }, this), false);
+        this._title = new ui.manipulators.Text(ui.dom.El("div", { class: "long-name" }, this), false);
         this._title.Set("---");
 
         this._tagBar = this.Attach(ui.WidgetBar, `tagbar`);
@@ -84,7 +85,7 @@ class GlyphIdentity extends base {
     }
 
     _DisplayNull(p_title = `UNKNOWN`) {
-        this._title.Set(p_title);
+        this._title.Set(p_title.substring(0, 76));
         this._blockTag.label = `---`; this._blockTag.htitle = null;
         this._catTag.label = `---`;
         this._hexTag.label = `-`;
@@ -103,7 +104,7 @@ class GlyphIdentity extends base {
             return;
         }
 
-        this._title.Set((p_data.name || `U+${p_data.u}`).substr(0, 80));
+        this._title.Set((p_data.name || `U+${p_data.u}`).substr(0, 76));
 
         this._hexTag.label = UNICODE.UUni(p_data);
 

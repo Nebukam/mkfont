@@ -3,7 +3,7 @@ layout: page
 parent: Guides
 title: Composite icon font
 subtitle: How to make an icon font
-summary: A font with complex component interactions.
+summary: A font with complex component interactions. Lengthiest guide by far.
 splash: icons/icon_component.svg
 preview_img: placeholder.jpg
 color: white
@@ -15,7 +15,7 @@ nav_order: 3
 > **While not required**, this guide assume that you have made yourself familiar with the {% include lk id='Asset preparation' %}.
 {: .comment}
 
-This guide is about creating a simple yet highly customizable icon font; by making heavy use of MkFont compositing capabilities. It only assumes that you have some assets to work with, and that you are using Adobe© Illustrator, because that's what you'll see in the screenshots -- but any SVG editor will work.  
+This guide is about creating a simple yet highly customizable icon font; and showcasing MkFont advanced component interactions. It only assumes that you have some assets to work with, and that you are using Adobe© Illustrator, because that's what you'll see in the screenshots -- but any SVG editor will work.  
 {: .fs-6 .fw-300 }
 We will be making roughly the same font icon as the one made through the {% include lk id='Simple icon font' %} guide.
 
@@ -36,6 +36,8 @@ We want a font with the following characters in it :
 {:toc} 
 
 ---
+
+# First steps
 
 ## Breaking the design into components  
 So, this one is a bit of a cheat because we know from the start what we want to icons to look like, which makes the process of breaking things into components much easier.  
@@ -80,7 +82,7 @@ Here's the names I'm using for the components (and thus artboards).
 
 ---
 
-## Loose artboard setup
+### Loose artboard setup
 
 We're looking to have one svg file per component; so let's do a basic artboard set-up.  
 Note that we don't care about alignment here, but **we do care about having a consistent scale to make our lives easier**.  
@@ -117,7 +119,7 @@ Then, in the {% include lk id='Content explorer' %}, naviguate to either {% incl
 
 ---
 
-## Naming icons
+### Naming icons
 
 We'll need some names for our icons, as well. We could skip that bit for the sake of going faster and adding icons to any existing characters BUT; having them as ligatures will allow for more flexibility down the line : this will allow us to choose where to put our icons.  
 >The "data structure" will look like : components (custom ligature) -> icon (custom ligature) -> unicode slot (know unicode slot).
@@ -196,7 +198,7 @@ Per color group, ignoring some of them, as well as the white ones :
 
 ---
 
-## Creating a new MkFont document
+### Creating a new MkFont document
 Launch the app, create a new .mkfont, and give your font a name.  
 That's the name that will be embedded into the exported `.ttf`.
 
@@ -218,7 +220,7 @@ We're going to batch-import our components, it's pretty straightforward :
 - These are square artboards, we will tweak a few additional settings in order to have them best-fitted within the font :
     - Scaling is set to {% include btn ico="spread-ver" %} so that they match the Family height metric
     - Tweak the alignment & anchoring of the glyph so it is centered within our family metrics with ({% include btn ico="center-ver" %} & {% include btn ico="center-hor" %}) as opposed to the default {% include btn ico="font-baseline" %} that make the imported bounds sit on the baseline.
-- We then select the {% include btn ico="text-liga" label="Ligatures" %}, and here they are, correctly named and imported.
+- Select the {% include btn ico="text-liga" label="Ligatures" %}, and here they are, correctly named and imported.
 
 >Reminder that **any transformation tweaks made during import can be changed afterward** -- it is available at import time for convenience only! In-depth infos : {% include lk id='Glyph transformations' %} & {% include lk id='Batch import' %}
 {: .infos}
@@ -228,7 +230,7 @@ We're going to batch-import our components, it's pretty straightforward :
 
 ---
 
-## Creating ligatures for the composite icons
+## Creating ligatures to host the composite icons
 Now that we have our components imported, we're going to need to create ligatures : **they will host & transform components**.  
 A sensible list of icon is available in the details of the [Naming icons](#naming-icons) bit above -- we'll be using the {% include lk id='Ligatures finder' a='#one-ligature-per-line' %}'s `one ligature per line` feature, and {% include btn ico="new" label="Create all" %} of them.  
 
@@ -236,19 +238,22 @@ A sensible list of icon is available in the details of the [Naming icons](#namin
 
 #### What's going on here :
 {: .no_toc}
-- We paste a list of names separated by a new line into the {% include lk id='Ligatures finder' a='#one-ligature-per-line' %}.
-- By enabling `one ligature per line`, each line is treated as a single ligature to be imported
-- Since we want them all, no point in selecting them one by one *(this is only useful while doing text analysis)*, so we use the {% include btn ico="new" label="Create all" %} action.
+- Paste a list of names separated by a new line into the {% include lk id='Ligatures finder' a='#one-ligature-per-line' %}.
+- Enabling `one ligature per line`, so each line is treated as a single ligature to be imported
+- Since we want them all, no point in selecting them one by one *(this is only useful while doing text analysis)*, use the {% include btn ico="new" label="Create all" %} action.
 
 ---
 
-## Compositing icons
+# Creating composite glyphs
+
 Ok! Let's get to the meat of it.  
 What we want to do now is rebuild our initial icons using the re-usable pieces we imported originally.  
 
-### Start with the easy ones
+## The easy ones
 
 {% include img a='guides/cfont/comp-hl-arr-1.png' %} 
+
+### Add, rotate
 
 We're going to start with the obvious, easy ones : arrows with basic transformations.
 
@@ -256,19 +261,23 @@ We're going to start with the obvious, easy ones : arrows with basic transformat
 
 #### What's going on here :
 {: .no_toc}
-- First, we'll turn the search ON, and look for ligatures with `arr-big` in their names. *These will be the 8 arrows icon pointing at cardinal directions.*
-- We then select the 8 glyphs in the viewport.
-- With the group selection active *(which, since everything is empty, doesn't look like much)*, we move to the {% include lk id='Glyph components' %} and open the glyph picker ({% include btn ico="component-new" %}).
-- From there, we select which glyphs we want to create components from : there's just one in our case.
+- First, turn the search ON, and look for ligatures with `arr-big` in their names. *These will be the 8 arrows icon pointing at cardinal directions.*
+- Select the 8 glyphs in the viewport.
+- With the group selection active *(which, since everything is empty, doesn't look like much)*, move to the {% include lk id='Glyph components' %} and open the glyph picker ({% include btn ico="component-new" %}).
+- From there, select which glyphs to create components from : there's just one in our case.
 - Confirm the component creation with {% include btn ico="new" label="Add selected" %}.
 - Change the boundary mode of the component so it fits the component itself -- this way it's perfectly centered
-- Up the scale a bit, since the initial arrow felt a bit too small. We can change it later anyway.
+- Up the scale a bit, since the initial arrow felt a bit too small. It can be changed it later anyway.
+<br><br><br>
+Then, individually edit each component to give it the right orientation.
 
-Then, we will individually edit each component to give it the right orientation.
+{% include webm a='guides/cfont/rotate-arrow-big.webm' %} 
 
-{% include img a='guides/cfont/comp-arrow-orient.png' %} 
+Do so by selecting each ligature individually, and edit the `Rotation` value in the {% include lk id='Glyph components' a='#advanced-properties' %}'s Advanced properties. And that's it, we're all set with the first batch of big arrows.  
 
-We do so by selecting each ligature individually, and edit the `Rotation` value in the {% include lk id='Glyph components' a='#advanced-properties' %}'s Advanced properties. And that's it, we're all set with the first batch of big arrows.  
+---
+
+### Add, rotate, anchor
 
 **Rince & repeat for the other arrows -- although with a twist.**  
 The first four as easy ones, like the previous arrows above
@@ -282,11 +291,60 @@ The remaining two will combine two components :
 #### What's going on here :
 {: .no_toc}
 - First, select the `i-arr-ew` *(or whatever name you used)*
-- We will, again, use {% include btn ico="component-new" %} to add components to the glyph. Only this time, we'll add both `i-arr-e` & `i-arr-w`. 
+- Again, use {% include btn ico="component-new" %} to add components to the glyph. Only this time, select and add `i-arr-e` & `i-arr-w`. 
 - The components have their default transform, which is not what we're looking for. We will change the `anchoring` & `boundaries`, and add an `horizontal offset` so they are still aligned toward the center, but fit more snugly toward each other.
+- {% include btn ico="bounds-mixed" %} is used in order to ignore the horizontal offset of the asset within the imported glyph.
+<br><br><br>
+Repeat the same process for the vertical versions; this time using {% include btn ico="bounds-mixed-hor" %}.
 
-We'll repeat the same process for the vertical versions.
+{% include webm a='guides/cfont/add-c-arrow-reut-ver.webm' %} 
 
+
+<details markdown="1">
+<summary>Change propagation</summary>
+
+By that point, you can already see how changes are propagated if you edit the original arrow component, `c-arrow-short` :  
+
+{% include webm a='guides/cfont/change-propagation.webm' %} 
+
+</details>
+
+Awesome, here's what it should look like:
+
+{% include img a='guides/cfont/comp-review-a.png' %} 
+
+---
+
+### Add, relative, flatten
+
+{% include img a='guides/cfont/comp-hl-arr-2.png' %} 
+
+Next up are these smaller arrows, which we'll use to demonstrate how to align a component toward another, and then flatten the result to ensure it stays centered within the glyph.  
+Namely, `i-ffw`, `i-fbw`, `i-next` & `i-prev`
+
+{% include webm a='guides/cfont/composite-relative.webm' %} 
+
+#### What's going on here :
+{: .no_toc}
+- Import `i-arr-w` as component into `i-fbw`, twice.
+- Change the top one `boundaries` & `anchoring` for both its context and itself to {% include btn ico="bounds-mixed" %}, to have a tight fit, aligned to the left. *Up to that point, this component is still aligned toward the host.*
+- Enable `Inherit prev. comp`. This effectively changes the typographic space of that component with the one from the first component below it. *Nice, but not quite aligned.*
+- In order to align the *entire composition* within the host, enable  `Flatten comp`. What this does is tell the host to use its components as if they were a unique path. *Althought it doesn't look quite right now : let's adjust the host transform.*
+- Change the scale to manual ({% include btn ico="edit" %}) with a value of `1` : this way we ensure component scale is driven only by the components.
+- Change `boundaries`, `anchoring` & `alignment` so the graphics are centered within the typographic space.  
+<br><br><br>
+Ok that was tedious, we still have 3 more to do? Nah.  
+**Simply copy-paste & simply swap components to the right one!**  
+
+{% include webm a='guides/cfont/composite-quick-swap.webm' %} 
+
+#### What's going on here :
+{: .no_toc}
+- First select `i-fbw`
+- Use {% include shortcut keys="Ctrl C" %} to store the selection in memory
+- Select the glyphs you want to paste to, and hit {% include shortcut keys="Ctrl V" %}.
+- Edit each glyph by expanding individual component, and pick another one using the {% include btn ico="search-small" %}.  
+<br><br><br>
 
 ---
 

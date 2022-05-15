@@ -42,6 +42,8 @@ module.exports = {
     LayersPaste: require(`./cmd-layers-paste`),
     LayerAddComp: require(`./cmd-layer-add-comp`),
 
+    LigatureFromSelection: require(`./cmd-ligature-from-selection`),
+
     ImportTTF: require(`./cmd-import-ttf`),
 
     ImportListMissingGlyphs: require(`./cmd-import-list-missing-glyphs`),

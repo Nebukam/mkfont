@@ -4,6 +4,7 @@ const nkm = require(`@nkmjs/core`);
 const ui = nkm.ui;
 const uilib = nkm.uilib;
 
+const LOC = require(`../../locales`);
 const UNICODE = require(`../../unicode`);
 const mkfData = require(`../../data`);
 const mkfWidgets = require(`../../widgets`);
@@ -31,7 +32,7 @@ class TransformSettingsInspector extends base {
         //{ cl: mkfWidgets.ControlHeader, options: { label: `Horizontal align` }, css: 'header' },
         { options: { propertyId: mkfData.IDS.TR_HOR_ALIGN, inputOnly: true }, css: 'small' },
 
-        { cl: mkfWidgets.ControlHeader, options: { label: `Translate` }, css: 'header', requireData: true }, //, disableWhen: { fn: isXMIN }
+        { cl: mkfWidgets.ControlHeader, options: { label: LOC.labelOffsets }, css: 'header', requireData: true }, //, disableWhen: { fn: isXMIN }
         { options: { propertyId: mkfData.IDS.TR_WIDTH_SHIFT }, requireData: true, disableWhen: { fn: isRNRM } }, //
         { options: { propertyId: mkfData.IDS.TR_WIDTH_PUSH }, requireData: true, disableWhen: { fn: isRNRM } }, //
         { options: { propertyId: mkfData.IDS.TR_AUTO_WIDTH }, requireData: true, disableWhen: { fn: isRNRM } }, //
