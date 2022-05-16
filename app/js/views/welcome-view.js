@@ -16,6 +16,16 @@ class WelcomeView extends base {
         super._Init();
         this.cmdNewFromTTF = this._commands.Create(mkfCmds.StartNewFromTTF);
         this.cmdNewFromSVGs = this._commands.Create(mkfCmds.StartNewFromSVGS);
+
+        nkm.io.Read(`https://api.github.com/repos/Nebukam/mkfont/tags`,
+            {
+                cl: nkm.io.resources.JSONResource,
+            },
+            {
+                io: nkm.io.IO_TYPE.REMOTE,
+                success: this._OnTagRead.bind(this),
+            }
+        );
     }
 
     static _Style() {
@@ -104,9 +114,19 @@ class WelcomeView extends base {
                     variant: ui.FLAGS.MINIMAL, flavor: nkm.com.FLAGS.LOADING
                 },
                 */
+                {
+                    label: `NEW VERSION : `, icon: `warning`,
+                    variant: ui.FLAGS.FRAME, flavor: nkm.com.FLAGS.WARNING,
+                    group: `mkfont`, member: { owner: this, id: `_newVersionBtn` },
+                    trigger: {
+                        fn: () => { shell.openExternal("https://nebukam.github.io/mkfont/downloads/") }
+                    },
+                    group: `update`
+                }
             ]
         };
-
+        
+        this._newVersionBtn.visible = false;
 
         console.log(nkm.env.CONF);
 
@@ -122,7 +142,7 @@ class WelcomeView extends base {
                 {
                     label: `${nkm.env.CONF.version}`,
                     cl: nkm.uilib.widgets.Tag,
-                    size: ui.FLAGS.SIZE_XS,
+                    size: ui.FLAGS.SIZE_L,
                     group: `Version`
                 },
                 {
@@ -149,6 +169,21 @@ class WelcomeView extends base {
                 }
             ]
         };
+    }
+
+    _OnTagRead(p_rsc) {
+        try {
+
+            let
+                latestTagName = p_rsc.content[0].name,
+                semVer = latestTagName.substring(1).split(`.`);
+
+            if(nkm.env.ENV.instance.VersionDiff(semVer) > 0){
+                this._newVersionBtn.label = `${semVer.join(`.`)} Available`;
+                this._newVersionBtn.visible = true;
+            }
+
+        } catch (e) { console.log(e);}
     }
 
 }
