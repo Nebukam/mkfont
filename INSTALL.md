@@ -11,3 +11,6 @@ You can use `npm` during your tests, but you can't build the app with it. Instea
 
 - Run `yarn run nkmjs build` to build the app.
     - Builds will be added to the `builds/dekstop/{plateform}` folder, created during the process.
+
+
+> Note : There is an issue on macOS with line-endings, looking into a fix 🪓
