@@ -26,7 +26,7 @@
 
 {
     "name": "mkfont",
-    "version": "1.2.1",
+    "version": "1.2.2",
     "author": {
         "name": "Timothé Lapetite",
         "email": "nebukam@gmail.com"

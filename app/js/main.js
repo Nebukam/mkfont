@@ -132,10 +132,10 @@ class MKFont extends nkm.app.AppBase {
             }
         }
 
+        this.mainLayout.workspace._cells.ForEach((cell) => { cell._nav._cellOptionsBtn.trigger = { fn: () => { mkfCmds.OpenPrefs.Execute(); } } });
+
         this._welcomeView._options.view.RequestDisplay();
         this._OnOpenPathRequest(openPath);
-
-        //nkm.actions.KeystrokeEx.CreateFromString(`Ctrl E`, { fn: this._Bind(this._WriteTTF) }).Enable();
 
         //this._EmptyFamily();
         //this._FamilyFromTTF();
