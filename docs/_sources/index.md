@@ -33,3 +33,5 @@ A bunch of discreet QoL features.
 {: .fs-5 .fw-300 }
 
 Lots of small options & features to make it easy to work with your glyphs with third parties such as Unity' TextMeshPro.
+
+{% include webm a='homepage-vid.webm' %}  
