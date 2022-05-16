@@ -246,7 +246,7 @@ blockquote {
     overflow: clip;
 
     &::before {
-        font-size: 5em;
+        font-size: 4em;
         transform: rotate(-15deg) translateX(-14%) translateY(-30%);
         position: absolute;
         opacity: 0.2;

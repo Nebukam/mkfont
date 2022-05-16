@@ -119,7 +119,11 @@ class FontEditor extends base {
             }
         }).Strict();
 
-        this.shortcuts.Create("escape", () => { this._inspectedData.Clear(); });
+        this.shortcuts.Create("escape", () => { 
+            this._registerEmptySelection = true;
+            this._inspectedData.Clear(); 
+            this._registerEmptySelection = false;
+        });
 
         for (let i = 0; i < 10; i++) {
             this.shortcuts.Create(`Ctrl ${i}`, () => { this._StoreSelectionPreset(i); });

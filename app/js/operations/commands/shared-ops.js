@@ -146,6 +146,7 @@ class SHARED_OPS {
         let
             maxw = 0,
             hasLayersAlready = !p_target._layers.isEmpty,
+            doControl = !hasLayersAlready,
             family = p_target.glyph.family;
 
         if (p_createMissingGlyph) {
@@ -172,17 +173,28 @@ class SHARED_OPS {
             if (p_target.availSlots <= 0) { return; }
 
             if (!lyr) {
-                // Layer is missing and will be created                
+                // Layer is missing and will be created   
+
+                let lyrValues = {
+                    [mkfData.IDS.LYR_CHARACTER_NAME]: ch,
+                    [mkfData.IDS.LYR_IS_CONTROL_LAYER]: false,
+                    [mkfData.IDS.TR_LYR_BOUNDS_MODE]: mkfData.ENUMS.BOUNDS_MIXED_VER,
+                    [mkfData.IDS.TR_ANCHOR]: mkfData.ENUMS.ANCHOR_BOTTOM,
+                    [mkfData.IDS.TR_BOUNDS_MODE]: mkfData.ENUMS.BOUNDS_OUTSIDE,
+                    [mkfData.IDS.TR_LYR_SELF_ANCHOR]: mkfData.ENUMS.ANCHOR_BOTTOM,
+                };
+
+                if (doControl) {
+                    lyrValues[mkfData.IDS.LYR_IS_CONTROL_LAYER] = (i == 0) ? true : false;
+                    lyrValues[mkfData.IDS.TR_BOUNDS_MODE] = mkfData.ENUMS.BOUNDS_MIXED_VER;
+                    lyrValues[mkfData.IDS.TR_ANCHOR] = mkfData.ENUMS.ANCHOR_BOTTOM_LEFT;
+                    lyrValues[mkfData.IDS.TR_LYR_SELF_ANCHOR] = mkfData.ENUMS.ANCHOR_BOTTOM_LEFT;
+                    doControl = false;
+                }
+
                 p_editor.Do(mkfActions.LayerAdd, {
                     target: p_target,
-                    layerValues: {
-                        [mkfData.IDS.LYR_CHARACTER_NAME]: ch,
-                        [mkfData.IDS.LYR_IS_CONTROL_LAYER]: hasLayersAlready ? false : (i == 0) ? true : false,
-                        [mkfData.IDS.TR_LYR_BOUNDS_MODE]: mkfData.ENUMS.BOUNDS_MIXED_VER,
-                        [mkfData.IDS.TR_ANCHOR]: mkfData.ENUMS.ANCHOR_BOTTOM,
-                        [mkfData.IDS.TR_BOUNDS_MODE]: mkfData.ENUMS.BOUNDS_OUTSIDE,
-                        [mkfData.IDS.TR_LYR_SELF_ANCHOR]: mkfData.ENUMS.ANCHOR_BOTTOM,
-                    },
+                    layerValues: lyrValues,
                     index: -1,
                     expanded: false,
                 });

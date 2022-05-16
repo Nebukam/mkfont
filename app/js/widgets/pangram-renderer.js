@@ -6,6 +6,7 @@ const u = nkm.u;
 const ui = nkm.ui;
 
 const defaultPangram = `By Jove, my quick study of lexicography won a prize!`;
+const __hasHigh = `has-high`;
 
 const base = ui.Widget;
 class PangramRenderer extends base {
@@ -19,6 +20,7 @@ class PangramRenderer extends base {
 
         this._ongoingSelection = false;
         this._highlightList = null;
+        this._flags.Add(this, __hasHigh);
     }
 
     _PostInit() {
@@ -51,6 +53,9 @@ class PangramRenderer extends base {
                 'text-transform': 'var(--case)',
                 'word-break': `break-word`,
             },
+            ':host(.has-high) .pangram': {
+                //'color': '#cdcdcd',
+            },
             '.paninput': {
                 '-webkit-appearance': `none`,
                 'appearance': `none`,
@@ -59,7 +64,7 @@ class PangramRenderer extends base {
             },
             '.high': {
                 'color': `white`,
-                'background-color': `rgba(var(--col-active-dark-rgb), 0.8)`,
+                'background-color': `rgba(var(--col-active-dark-rgb), 0.5)`,
                 'border-radius': `2px`,
             }
         }, base._Style());
@@ -113,15 +118,25 @@ class PangramRenderer extends base {
             valSpan = val;
 
         if (this._highlightList) {
+
             valSpan = ``;
             for (let i = 0, n = val.length; i < n; i++) {
                 let letter = val.substring(i, i + 1);
                 if (this._highlightList.includes(letter)) { valSpan += `<span class="high">${letter}</span>`; }
                 else { valSpan += letter; }
             }
+
+            this._flags.Set(__hasHigh, this._highlightList.length > 0);
+
+        } else {
+
+            this._flags.Set(__hasHigh, false);
+
         }
+
         val = '<p>' + valSpan.replace(/[^\S\n]+\n/g, '\n').replace(/\n\n+/g, '</p><p>').replace(/\n/g, '<br>') + '</p>';
         this._pangramText.Set(val);
+
     }
 
     //#region Interactive selection

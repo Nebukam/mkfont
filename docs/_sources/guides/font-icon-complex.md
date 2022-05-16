@@ -3,7 +3,7 @@ layout: page
 parent: Guides
 title: Composite icon font
 subtitle: How to make an icon font
-summary: A font with complex component interactions. Lengthiest guide by far.
+summary: A font with complex component interactions.<br>Acts as an exhaustive showcase of MkFont capabilities.
 splash: icons/icon_component.svg
 preview_img: placeholder.jpg
 color: white
@@ -15,6 +15,8 @@ nav_order: 3
 > **While not required**, this guide assume that you have made yourself familiar with the {% include lk id='Asset preparation' %}.
 {: .comment}
 
+# What to expect
+{: .no_toc }
 This guide is about creating a simple yet highly customizable icon font; and showcasing MkFont advanced component interactions. It only assumes that you have some assets to work with, and that you are using Adobe© Illustrator, because that's what you'll see in the screenshots -- but any SVG editor will work.  
 {: .fs-6 .fw-300 }
 We will be making roughly the same font icon as the one made through the {% include lk id='Simple icon font' %} guide.

@@ -80,7 +80,7 @@ class GlyphGroupHeader extends base {
                     group: `export`
                 },
                 {
-                    icon: `app-illustrator`, htitle: `Create a new Adobe© Illustrator template document with the active selection.`,
+                    icon: `app-illustrator`, htitle: `Create a new Adobe© Illustrator template document with the active selection.\n---s\n+ [ Shift ] Uses all viewport content instead of selection.`,
                     trigger: { fn: () => { this.editor.cmdListExportArtboardTemplate.Execute(this.cmdContent); } },
                     group: `export`
                 },
