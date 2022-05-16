@@ -1039,25 +1039,25 @@
   },"173": {
     "doc": "Downloads",
     "title": "Downloads",
-    "content": "Download the app . MkFont is currently only availble on windows. ",
+    "content": "Download the app . MkFont is currently availble for Windows and macOS. ",
     "url": "https://nebukam.github.io/mkfont/downloads/#downloads",
     "relUrl": "/downloads/#downloads"
   },"174": {
     "doc": "Downloads",
     "title": "Windows",
-    "content": "  MkFont Setup (.exe) MkFont Unpacked (.zip) . You might get a warning using the .exe – you can still install the app safely, but in case that doesn’t cut it for you, I recommend using the unpackaged version instead, which doesn’t require installation. You will loose some benefits such as file associations, but that’s it. Releases history . ",
+    "content": "  MkFont Setup (.exe) MkFont Unpacked (.zip) . You might get a warning using the .exe – you can still install the app safely, but in case that doesn’t cut it for you, I recommend using the unpacked version instead, which doesn’t require installation. You will loose some benefits such as file associations, but that’s it. Releases history . ",
     "url": "https://nebukam.github.io/mkfont/downloads/#windows",
     "relUrl": "/downloads/#windows"
   },"175": {
     "doc": "Downloads",
     "title": "Mac OS",
-    "content": "  MkFont is currently only available for windows. ",
+    "content": "  MkFont (.zip) . Due to logistical reasons, the latest macOS version may not be the real latest one and lag a few version behind – although I’ll do my best to make major bugfixes &amp; features available swiftly. ",
     "url": "https://nebukam.github.io/mkfont/downloads/#mac-os",
     "relUrl": "/downloads/#mac-os"
   },"176": {
     "doc": "Downloads",
     "title": "Linux",
-    "content": "  MkFont is currently only available for windows. ",
+    "content": "  MkFont is currently only available for Windows &amp; macOS. ",
     "url": "https://nebukam.github.io/mkfont/downloads/#linux",
     "relUrl": "/downloads/#linux"
   },"177": {

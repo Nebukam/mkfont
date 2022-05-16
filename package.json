@@ -19,7 +19,7 @@
         "processor": "node app/js-unicode/unicode-processor.js"
     },
     "devDependencies": {
-        "@nkmjs/core-dev": "^0.3.15",
+        "@nkmjs/core-dev": "^0.3.16",
         "electron": "^17.1.0"
     }
 }
