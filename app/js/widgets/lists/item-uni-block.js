@@ -27,7 +27,7 @@ class BlockItem extends base {
     static _Style() {
         return nkm.style.Extends({
             ':host': {
-
+                
             },
         }, base._Style());
     }

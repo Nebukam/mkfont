@@ -429,7 +429,7 @@ class IDS {
         this.infos[this.TR_BOUNDS_MODE] = {
             transform: true,
             enum: ENUMS.BOUNDS,
-            inputType: inputs.InlineSelect,
+            inputType: inputs.SelectInline,
             label: `Glyph bounds`,
             inputOptions: { catalog: ENUMS.BOUNDS, itemKey: nkm.com.IDS.VALUE, size: ui.FLAGS.SIZE_M },
             desc: `The reference bounds used to compute transformations.`
@@ -438,7 +438,7 @@ class IDS {
         this.infos[this.TR_SCALE_MODE] = {
             transform: true,
             enum: ENUMS.SCALE,
-            inputType: inputs.InlineSelect,
+            inputType: inputs.SelectInline,
             label: `Scale mode`,
             inputOptions: { catalog: ENUMS.SCALE, itemKey: nkm.com.IDS.VALUE, size: ui.FLAGS.SIZE_M },
             desc: `Scale`
@@ -505,7 +505,7 @@ class IDS {
         this.infos[this.TR_VER_ALIGN] = {
             transform: true,
             enum: ENUMS.VALIGN,
-            inputType: inputs.InlineSelect,
+            inputType: inputs.SelectInline,
             label: `Align`,
             inputOptions: { catalog: ENUMS.VALIGN, itemKey: nkm.com.IDS.VALUE, size: ui.FLAGS.SIZE_M },
             desc: `...`
@@ -514,7 +514,7 @@ class IDS {
         this.infos[this.TR_HOR_ALIGN] = {
             transform: true,
             enum: ENUMS.HALIGN,
-            inputType: inputs.InlineSelect,
+            inputType: inputs.SelectInline,
             label: `Align`,
             inputOptions: { catalog: ENUMS.HALIGN, itemKey: nkm.com.IDS.VALUE, size: ui.FLAGS.SIZE_M },
             desc: `...`
@@ -533,7 +533,7 @@ class IDS {
         this.infos[this.TR_MIRROR] = {
             transform: true,
             enum: ENUMS.MIRROR,
-            inputType: inputs.InlineSelect,
+            inputType: inputs.SelectInline,
             label: `Mirror`,
             inputOptions: { catalog: ENUMS.MIRROR, itemKey: nkm.com.IDS.VALUE, size: ui.FLAGS.SIZE_M },
             desc: `...`
@@ -638,7 +638,7 @@ class IDS {
         this.infos[this.TR_LYR_BOUNDS_MODE] = {
             transform: true,
             enum: ENUMS.BOUNDS,
-            inputType: inputs.InlineSelect,
+            inputType: inputs.SelectInline,
             label: `Glyph bounds`,
             inputOptions: { catalog: ENUMS.LYR_BOUNDS, itemKey: nkm.com.IDS.VALUE, size: ui.FLAGS.SIZE_M },
             desc: `The reference bounds used to compute transformations.`
@@ -647,7 +647,7 @@ class IDS {
         this.infos[this.TR_LYR_SCALE_MODE] = {
             transform: true,
             enum: ENUMS.LYR_SCALE,
-            inputType: inputs.InlineSelect,
+            inputType: inputs.SelectInline,
             label: `Scale mode`,
             inputOptions: { catalog: ENUMS.LYR_SCALE, itemKey: nkm.com.IDS.VALUE, size: ui.FLAGS.SIZE_M },
             desc: `Scale`

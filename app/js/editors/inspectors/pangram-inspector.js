@@ -114,7 +114,7 @@ class PangramInspector extends base {
 
         this._toolbar = this.Attach(ui.WidgetBar, `item toolbar`, this._footer);
         this._toolbar.options = {
-            defaultWidgetClass: nkm.uilib.inputs.InlineSelect,
+            defaultWidgetClass: nkm.uilib.inputs.SelectInline,
             size: ui.FLAGS.SIZE_S,
             stretch: ui.WidgetBar.FLAG_STRETCH_SQUEEZE,
             inline: true,
