@@ -3,6 +3,9 @@
 const nkm = require(`@nkmjs/core`);
 const ui = nkm.ui;
 
+const MiniHeader = nkm.datacontrols.widgets.MiniHeader;
+const ValueControl = nkm.datacontrols.widgets.ValueControl;
+
 const mkfData = require(`../../data`);
 const mkfWidgets = require(`../../widgets`);
 const mkfOperations = require(`../../operations`);
@@ -15,21 +18,21 @@ class FamilyMetricsInspector extends base {
     constructor() { super(); }
 
     static __controls = [
-        //{ cl:mkfWidgets.ControlHeader, options:{ label:`Definition` } },
+        //{ cl:MiniHeader, options:{ label:`Definition` } },
         //{ options:{ propertyId:mkfData.IDS.FONT_STYLE } },
         //{ options:{ propertyId:mkfData.IDS.WEIGHT_CLASS } },
 
-        { cl: mkfWidgets.ControlHeader, options: { label: `Resolution` } },
+        { cl: MiniHeader, options: { label: `Resolution` } },
         { options: { propertyId: mkfData.IDS.EM_UNITS, command: mkfCmds.SetEM } },
         { options: { propertyId: mkfData.IDS.EM_RESAMPLE, invertInputOrder:true } },
 
-        { cl: mkfWidgets.ControlHeader, options: { label: `Metrics` } },
+        { cl: MiniHeader, options: { label: `Metrics` } },
         { options: { propertyId: mkfData.IDS.BASELINE } },
         { options: { propertyId: mkfData.IDS.ASCENT, command: mkfCmds.SetAscent } },
         { options: { propertyId: mkfData.IDS.ASC_RESAMPLE, invertInputOrder:true } },
         { options: { propertyId: mkfData.IDS.DESCENT } },
 
-        { cl: mkfWidgets.ControlHeader, options: { label: `Control metrics` } },
+        { cl: MiniHeader, options: { label: `Control metrics` } },
         { options: { propertyId: mkfData.IDS.X_HEIGHT } },
         { options: { propertyId: mkfData.IDS.CAP_HEIGHT } },
         { options: { propertyId: mkfData.IDS.HEIGHT } },
@@ -44,12 +47,12 @@ class FamilyMetricsInspector extends base {
     ];
 
     static __trControls = [        
-        { cl: mkfWidgets.ControlHeader, options: { label: `Translations` }, css: 'full' },
+        { cl: MiniHeader, options: { label: `Translations` }, css: 'full' },
         { options: { propertyId: mkfData.IDS.TR_WIDTH_SHIFT }, css: 'full'  },
         { options: { propertyId: mkfData.IDS.TR_WIDTH_PUSH }, css: 'full'  },
         { options: { propertyId: mkfData.IDS.TR_Y_OFFSET }, css: 'full'  }, //
         
-        { cl: mkfWidgets.ControlHeader, options: { label: `Rotation & skews` }, css: 'full' },
+        { cl: MiniHeader, options: { label: `Rotation & skews` }, css: 'full' },
         { options: { propertyId: mkfData.IDS.TR_SKEW_ROT_ORDER }, css: 'full' },
         { options: { propertyId: mkfData.IDS.TR_ROTATION_ANCHOR, inputOnly:true }, css:`small` }, //
         { options: { propertyId: mkfData.IDS.TR_ROTATION }, css:`large` },
@@ -60,10 +63,10 @@ class FamilyMetricsInspector extends base {
     _Init() {
         super._Init();
 
-        this._builder.options = { cl: mkfWidgets.PropertyControl, css: `control` };
+        this._builder.options = { cl: ValueControl, css: `control` };
 
         this._trBuilder = new nkm.datacontrols.helpers.ControlBuilder(this);
-        this._trBuilder.options = { cl: mkfWidgets.PropertyControl, css: `foldout-item` };
+        this._trBuilder.options = { cl: ValueControl, css: `foldout-item` };
         this.forwardData.To(this._trBuilder, { dataMember: `_transformSettings` });
         this.forwardContext.To(this._trBuilder);
         this.forwardEditor.To(this._trBuilder);

@@ -5,6 +5,9 @@ const ui = nkm.ui;
 const inputs = nkm.uilib.inputs;
 const operations = require(`../../operations/index`);
 
+const MiniHeader = nkm.datacontrols.widgets.MiniHeader;
+const ValueControl = nkm.datacontrols.widgets.ValueControl;
+
 const mkfData = require(`../../data`);
 const mkfWidgets = require(`../../widgets`);
 
@@ -18,7 +21,7 @@ class GlyphInspectorPlaceholder extends base {
     constructor() { super(); }
 
     static __controls = [
-        //{ cl: mkfWidgets.ControlHeader, options: { label: `Export` } },
+        //{ cl: MiniHeader, options: { label: `Export` } },
         //{ options: { propertyId: mkfData.IDS.DO_EXPORT } },
         //{ options: { propertyId: mkfData.IDS.GLYPH_NAME } },//, css:'separator' 
     ];

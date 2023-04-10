@@ -29,7 +29,7 @@ class GlyphGroupFooter extends base {
 
     _Init() {
         super._Init();
-        this._builder.defaultControlClass = mkfWidgets.PropertyControl;
+        this._builder.defaultControlClass = nkm.datacontrols.widgets.ValueControl;
         this._builder.defaultCSS = `control`;
     }
 
@@ -51,10 +51,6 @@ class GlyphGroupFooter extends base {
                 'width': `100px`
             }
         }, base._Style());
-    }
-
-    _OnEditorChanged(p_oldEditor) {
-        this._displayInspector.editor = this._editor;
     }
 
     _OnDataUpdated(p_data) {

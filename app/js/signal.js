@@ -56,34 +56,6 @@ class SIGNAL {
    * @type {symbol}
    * @customtag read-only
    */
-  static SEARCH_TOGGLED = Symbol(`search-toggled`);
-
-  /**
-   * @description TODO
-   * @type {symbol}
-   * @customtag read-only
-   */
-  static SEARCH_STARTED = Symbol(`search-started`);
-
-  /**
-   * @description TODO
-   * @type {symbol}
-   * @customtag read-only
-   */
-  static SEARCH_COMPLETE = Symbol(`search-complete`);
-
-  /**
-   * @description TODO
-   * @type {symbol}
-   * @customtag read-only
-   */
-  static SEARCH_PROGRESS = Symbol(`search-progress`);
-
-  /**
-   * @description TODO
-   * @type {symbol}
-   * @customtag read-only
-   */
   static LAYER_ADDED = Symbol(`layer-added`);
 
   /**

@@ -3,6 +3,9 @@
 const nkm = require(`@nkmjs/core`);
 const ui = nkm.ui;
 
+const MiniHeader = nkm.datacontrols.widgets.MiniHeader;
+const ValueControl = nkm.datacontrols.widgets.ValueControl;
+
 const mkfData = require(`../../data`);
 const mkfWidgets = require(`../../widgets`);
 
@@ -16,7 +19,7 @@ class GlyphInspector extends base {
     constructor() { super(); }
 
     static __controls = [
-        //{ cl: mkfWidgets.ControlHeader, options: { label: `Export` } },
+        //{ cl: MiniHeader, options: { label: `Export` } },
         //{ options: { propertyId: mkfData.IDS.GLYPH_NAME } },//, css:'separator' 
     ];
 
@@ -32,7 +35,7 @@ class GlyphInspector extends base {
         this._variantCtrl = null;
         this._variantNoneCtrl = null;
 
-        this._builder.defaultControlClass = mkfWidgets.PropertyControl;
+        this._builder.defaultControlClass = ValueControl;
         this._builder.defaultCSS = `control`;
         this._builder.preProcessDataFn = { fn: this._GetGlyph, thisArg: this };
 
@@ -104,15 +107,26 @@ class GlyphInspector extends base {
 
             let glyph = this._GetGlyph(this._data);
 
-            if (glyph.isNull) {
-                glyph.unicodeInfos = this._data;
-                this._variantCtrl.data = null; // Ensure refresh
+            if (glyph) {
+
+                if (glyph.isNull) {
+                    glyph.unicodeInfos = this._data;
+                    this._variantCtrl.data = null; // Ensure refresh
+                }
+
+                this._variantCtrl.glyphInfos = this._data;
+                this._variantCtrl.data = glyph.activeVariant;
+
+                this._glyphStats.data = glyph.activeVariant;
+
+            } else {
+                
+                this._variantCtrl.glyphInfos = null;
+                this._variantCtrl.data = null;
+
+                this._glyphStats.data = null;
+
             }
-
-            this._variantCtrl.glyphInfos = this._data;
-            this._variantCtrl.data = glyph.activeVariant;
-
-            this._glyphStats.data = glyph.activeVariant
 
         }
 
@@ -144,7 +158,7 @@ class GlyphInspector extends base {
         this._delayedStatsUpdate.Bump();
     }
 
-    _RefreshStats(){
+    _RefreshStats() {
         this._glyphStats.glyphInfos = null;
         this._glyphStats.glyphInfos = this._data;
     }

@@ -4,6 +4,9 @@ const nkm = require(`@nkmjs/core`);
 const ui = nkm.ui;
 const uilib = nkm.uilib;
 
+const MiniHeader = nkm.datacontrols.widgets.MiniHeader;
+const ValueControl = nkm.datacontrols.widgets.ValueControl;
+
 const LOC = require(`../../locales`);
 const UNICODE = require(`../../unicode`);
 const mkfData = require(`../../data`);
@@ -22,17 +25,17 @@ class TransformSettingsInspector extends base {
 
     static __controls = [
         { options: { propertyId: mkfData.IDS.TR_BOUNDS_MODE, inputOnly: true }, css: 'full' },
-        { cl: mkfWidgets.ControlHeader, options: { label: `Scaling` }, css: 'header' },
+        { cl: MiniHeader, options: { label: `Scaling` }, css: 'header' },
         { options: { propertyId: mkfData.IDS.TR_SCALE_MODE, inputOnly: true }, css: 'large' },
         { options: { propertyId: mkfData.IDS.TR_SCALE_FACTOR }, requireData: true, hideWhen: { fn: isMANUAL } },
         { options: { propertyId: mkfData.IDS.TR_NRM_FACTOR }, requireData: true, hideWhen: { fn: isNRM } },
-        { cl: mkfWidgets.ControlHeader, options: { label: `Anchoring & Alignment` }, css: 'header' },
+        { cl: MiniHeader, options: { label: `Anchoring & Alignment` }, css: 'header' },
         { options: { propertyId: mkfData.IDS.TR_ANCHOR, inputOnly: true }, css: 'vsmall' },
         { options: { propertyId: mkfData.IDS.TR_VER_ALIGN, inputOnly: true }, css: 'small' },
-        //{ cl: mkfWidgets.ControlHeader, options: { label: `Horizontal align` }, css: 'header' },
+        //{ cl: MiniHeader, options: { label: `Horizontal align` }, css: 'header' },
         { options: { propertyId: mkfData.IDS.TR_HOR_ALIGN, inputOnly: true }, css: 'small' },
 
-        { cl: mkfWidgets.ControlHeader, options: { label: LOC.labelOffsets }, css: 'header', requireData: true }, //, disableWhen: { fn: isXMIN }
+        { cl: MiniHeader, options: { label: LOC.labelOffsets }, css: 'header', requireData: true }, //, disableWhen: { fn: isXMIN }
         { options: { propertyId: mkfData.IDS.TR_WIDTH_SHIFT }, requireData: true, disableWhen: { fn: isRNRM } }, //
         { options: { propertyId: mkfData.IDS.TR_WIDTH_PUSH }, requireData: true, disableWhen: { fn: isRNRM } }, //
         { options: { propertyId: mkfData.IDS.TR_AUTO_WIDTH }, requireData: true, disableWhen: { fn: isRNRM } }, //
@@ -51,10 +54,10 @@ class TransformSettingsInspector extends base {
     _Init() {
         super._Init();
 
-        this._builder.options = { cl: mkfWidgets.PropertyControl, css: `control` };
+        this._builder.options = { cl: ValueControl, css: `control` };
 
         this._trBuilder = new nkm.datacontrols.helpers.ControlBuilder(this);
-        this._trBuilder.options = { cl: mkfWidgets.PropertyControl, css: `foldout-item` };
+        this._trBuilder.options = { cl: ValueControl, css: `foldout-item` };
         this.forwardData.To(this._trBuilder);
         this.forwardContext.To(this._trBuilder);
         this.forwardEditor.To(this._trBuilder);
@@ -93,7 +96,7 @@ class TransformSettingsInspector extends base {
                 'flex': '1 1 100%',
                 'background-color': `rgba(19, 19, 19, 0.25)`,
                 'border-radius': '4px',
-                'order':`500`
+                'order': `500`
             }
         }, base._Style());
     }

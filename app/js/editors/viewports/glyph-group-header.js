@@ -106,10 +106,6 @@ class GlyphGroupHeader extends base {
 
     get cmdContent() { return ui.INPUT.shift ? this._parent._content : null; }
 
-    _OnEditorChanged(p_oldEditor) {
-        this._displayInspector.editor = this._editor;
-    }
-
     _OnDataUpdated(p_data) {
         super._OnDataUpdated(p_data);
         //this._title.Set(p_data.Resolve(mkfData.IDS.FAMILY));

@@ -4,10 +4,6 @@ const nkm = require(`@nkmjs/core`);
 const actions = nkm.actions;
 const u = nkm.u;
 
-const { clipboard } = require('electron');
-const fs = require('fs');
-
-const UNICODE = require(`../../unicode`);
 const mkfData = require(`../../data`);
 const mkfActions = require(`../actions`);
 const SHARED_OPS = require('./shared-ops');

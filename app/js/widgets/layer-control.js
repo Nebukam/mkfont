@@ -8,7 +8,6 @@ const mkfData = require(`../data`);
 const mkfOperations = require(`../operations`);
 const mkfCmds = mkfOperations.commands;
 
-const PropertyControl = require(`./property-control`);
 const LayerTransformSettings = require(`./tr-layer-inspector`);
 const GlyphMiniPreview = require(`./glyph-mini-preview`);
 
@@ -35,7 +34,7 @@ class LayerControl extends base {
 
         this._flags.Add(this, __circular, __false, __controlLayer);
 
-        this._builder.defaultControlClass = PropertyControl;
+        this._builder.defaultControlClass = nkm.datacontrols.widgets.ValueControl;
         this._builder.defaultCSS = `control`;
 
         this.focusArea = this;

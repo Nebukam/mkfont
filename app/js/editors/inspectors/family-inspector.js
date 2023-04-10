@@ -4,6 +4,8 @@ const nkm = require(`@nkmjs/core`);
 const ui = nkm.ui;
 const uilib = nkm.uilib;
 
+const MiniHeader = nkm.datacontrols.widgets.MiniHeader;
+
 const mkfData = require(`../../data`);
 const mkfWidgets = require(`../../widgets`);
 
@@ -12,11 +14,11 @@ class FamilyInspector extends base {
     constructor() { super(); }
 
     static __controls = [
-        { cl:mkfWidgets.ControlHeader, options:{ label:`Definition` } },
+        { cl:MiniHeader, options:{ label:`Definition` } },
         { options: { propertyId: mkfData.IDS.FAMILY } },
         { options:{ propertyId:mkfData.IDS.FONT_STYLE } },
         { options:{ propertyId:mkfData.IDS.WEIGHT_CLASS } },
-        { cl:mkfWidgets.ControlHeader, options:{ label:`Infos` } },
+        { cl:MiniHeader, options:{ label:`Infos` } },
         { options: { propertyId: mkfData.IDS.COPYRIGHT } },
         //{ options: { propertyId: mkfData.IDS.METADATA } },
         { options: { propertyId: mkfData.IDS.DESCRIPTION } },
@@ -27,7 +29,7 @@ class FamilyInspector extends base {
 
     _Init() {
         super._Init();
-        this._builder.defaultControlClass = mkfWidgets.PropertyControl;
+        this._builder.defaultControlClass = nkm.datacontrols.widgets.ValueControl;
         this._builder.defaultCSS = `control`;
     }
 

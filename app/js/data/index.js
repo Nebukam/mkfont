@@ -11,6 +11,8 @@ module.exports = {
     INFOS: require(`./infos`),
     UTILS: require(`./utils`),
 
+    AppSettings: require(`./app-settings`),
+
     Family: require(`./family-data-block`),
     
     GlyphLayer: require(`./glyph-layer-data-block`),
@@ -21,7 +23,6 @@ module.exports = {
     ImportSettings: require(`./settings-import-data-block`),
     LigaImportSettings: require(`./settings-liga-import-data-block`),
     SearchSettings : require(`./settings-search-data-block`),
-    Prefs: require(`./settings-preferences`),
 
     RangeContent : require(`./range-content`),
 

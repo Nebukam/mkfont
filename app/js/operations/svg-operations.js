@@ -926,12 +926,12 @@ class SVGOperations {
             p = p_variant.Get(IDS.PATH_DATA);
 
         for (let p in tr) {
-            let v = tr[p].value;
+            let v = tr[p];
             if (v == null || nkm.u.isNumber(v) || nkm.u.isString(v)) { inlined += `mkf-${p}="${v}" `; }
         }
 
         for (let p in vr) {
-            let v = vr[p].value;
+            let v = vr[p];
             if (v == null || nkm.u.isNumber(v) || nkm.u.isString(v)) { inlined += `mkf-${p}="${v}" `; }
         }
 

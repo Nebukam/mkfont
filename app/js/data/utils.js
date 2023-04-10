@@ -14,25 +14,6 @@ class UTILS {
 
     static __layerClass = null;
 
-    static Resolve(p_id, p_self, ...p_fallbacks) {
-
-        if (!p_self) { return null; }
-
-        //console.log(`Resolve ${p_id} in ${p_self} -> ${p_fallbacks}`);
-        let valueObj = p_self._values[p_id];
-        let result = valueObj ? valueObj.value : null;
-
-        if (result != null) { return result; }
-
-        if (p_fallbacks.length > 0) {
-            p_self = p_fallbacks.shift();
-            return this.Resolve(p_id, p_self, ...p_fallbacks);
-        }
-
-        return null;
-
-    }
-
     static FindCommonValues(p_reference, p_dataList, p_dataMember = null, backupList = null) {
 
         let
@@ -44,9 +25,9 @@ class UTILS {
             searchState = 0,
             backup = {};
 
-        if (backupList) { backupList.forEach(id => { backup[id] = refValues[id].value; }) }
+        if (backupList) { backupList.forEach(id => { backup[id] = refValues[id]; }) }
 
-        for (var v in refValues) { refValues[v].value = null; }
+        for (var v in refValues) { refValues[v] = null; }
 
         compareloop: for (let i = 0; i < dataCount; i++) {
 
@@ -84,14 +65,14 @@ class UTILS {
 
         if (backupList) {
             backupList.forEach(id => {
-                refValues[id].value = backup[id];
+                refValues[id] = backup[id];
                 delete commonValues[id];
             })
         }
 
         if (searchState == 2) {
             if (ignoreCount == valCount) { return false; }
-            for (var v in commonValues) { refValues[v].value = commonValues[v]; }
+            for (var v in commonValues) { refValues[v] = commonValues[v]; }
             return true;
         }
 
@@ -135,8 +116,8 @@ class UTILS {
         if (p_scale == 1) { return; }
         p_ids.forEach(id => {
             let obj = p_values[id];
-            if (!obj || obj.value == null) { return; }
-            obj.value *= p_scale;
+            if (!obj || obj == null) { return; }
+            obj *= p_scale;
         });
     }
 

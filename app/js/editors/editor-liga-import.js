@@ -4,6 +4,8 @@ const nkm = require(`@nkmjs/core`);
 const u = nkm.u;
 const ui = nkm.ui;
 
+const MiniHeader = nkm.datacontrols.widgets.MiniHeader;
+
 const svgpath = require('svgpath');
 
 const UNICODE = require(`../unicode`);
@@ -21,7 +23,7 @@ class EditorLigaImport extends base {
         super._Init();
 
         this._builder = new nkm.datacontrols.helpers.ControlBuilder(this);
-        this._builder.options = { cl:mkfWidgets.PropertyControl, css:`control` };
+        this._builder.options = { cl:nkm.datacontrols.widgets.ValueControl, css:`control` };
         
         this.forwardData.To(this._builder);
 
@@ -80,10 +82,10 @@ class EditorLigaImport extends base {
 
         this._inputs = ui.dom.El(`div`, { class: `inputs` }, this._host);
         this._builder.Build([
-            { cl: mkfWidgets.ControlHeader, options: { label: `Text` } },
+            { cl: MiniHeader, options: { label: `Text` } },
             { options: { propertyId: mkfData.IDS_EXT.LIGA_TEXT, inputOnly: true }, member: `_textBox` },
             { options: { propertyId: mkfData.IDS_EXT.LIGA_EACH_LINE } },
-            { cl: mkfWidgets.ControlHeader, options: { label: `Limits (first 500 results)` } },
+            { cl: MiniHeader, options: { label: `Limits (first 500 results)` } },
             { options: { propertyId: mkfData.IDS_EXT.LIGA_MIN }, disableWhen: { fn: isNEWLINE } },
             { options: { propertyId: mkfData.IDS_EXT.LIGA_MAX }, disableWhen: { fn: isNEWLINE } },
             { options: { propertyId: mkfData.IDS_EXT.LIGA_MIN_OCCURENCE }, disableWhen: { fn: isNEWLINE } },

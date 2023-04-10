@@ -30,7 +30,7 @@ class PangramInspector extends base {
 
     _Init() {
         super._Init();
-        this._builder.defaultControlClass = mkfWidgets.PropertyControl;
+        this._builder.defaultControlClass = nkm.datacontrols.widgets.ValueControl;
         this._builder.defaultCSS = `control`;
 
         this._inspectionHandler = new nkm.datacontrols.helpers.InspectionDataHandler(this);

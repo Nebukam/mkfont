@@ -46,9 +46,9 @@ class GlyphGroupViewport extends base {
 
         this._searchObserver = new nkm.com.signals.Observer();
         this._searchObserver
-            .Hook(SIGNAL.SEARCH_TOGGLED, this._OnSearchToggled, this)
-            .Hook(SIGNAL.SEARCH_STARTED, this._OnSearchStarted, this)
-            .Hook(SIGNAL.SEARCH_COMPLETE, this._OnSearchComplete, this);
+            .Hook(nkm.data.SIGNAL.SEARCH_TOGGLED, this._OnSearchToggled, this)
+            .Hook(nkm.data.SIGNAL.SEARCH_STARTED, this._OnSearchStarted, this)
+            .Hook(nkm.data.SIGNAL.SEARCH_COMPLETE, this._OnSearchComplete, this);
 
         this._searchActive = false;
 
@@ -171,12 +171,14 @@ class GlyphGroupViewport extends base {
     }
 
     set searchSettings(p_value) {
+
         if (this._searchSettings == p_value) { return; }
 
         this._searchSettings = p_value;
         this._searchObserver.ObserveOnly(p_value);
         this._search.data = p_value;
         this._OnSearchToggled();
+
     }
 
     set displayRange(p_value) {
@@ -240,7 +242,6 @@ class GlyphGroupViewport extends base {
         if (p_array != null) {
             let index = p_array.indexOf(this.editor.inspectedData.lastItem);
             if (index != -1) { this._domStreamer.SetFocusIndex(index); }
-
         }
     }
 

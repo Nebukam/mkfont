@@ -2,18 +2,13 @@
 
 // Set svg property of a given char in a given glyph
 const nkm = require(`@nkmjs/core`);
-const actions = nkm.actions;
 const mkfData = require(`../../data`);
-const svgpath = require('svgpath');
-
-const ActionSetPropertyValue = require(`./action-set-property-value`);
-
 const familyIDs = [
     mkfData.IDS.X_HEIGHT,
     mkfData.IDS.CAP_HEIGHT,
 ];
 
-class ActionSetAscent extends ActionSetPropertyValue {
+class ActionSetAscent extends nkm.data.ops.actions.SetPropertyValue {
     constructor() { super(); }
 
     // Expected operation format : { target:SimpleDataBlock, id:`ID`, value:*, resample:bool }

@@ -7,21 +7,23 @@ const io = nkm.io;
 
 const UNICODE = require(`../unicode`);
 
-const SimpleDataEx = require(`./simple-data-ex`);
+const FontObjectData = require(`./font-object-data`);
 const SIGNAL = require(`../signal`);
 const IDS = require(`./ids`);
 
 const GlyphVariant = require(`./glyph-variant-data-block`);
 
-class GlyphDataBlock extends SimpleDataEx {
+class GlyphDataBlock extends FontObjectData {
 
     constructor() { super(); }
 
     static __defaultVariantClass = GlyphVariant;
 
-    static __signalValueMap = {
-        [IDS.UNICODE]: SIGNAL.UNICODE_CHANGED
-    };
+    static __VALUES = {
+        [IDS.GLYPH_NAME]: { value: '' },
+        [IDS.UNICODE]: { value: null, signal: SIGNAL.UNICODE_CHANGED },
+        //[IDS.DO_EXPORT]:{ value: true },
+    }
 
     _Init() {
 
@@ -39,18 +41,12 @@ class GlyphDataBlock extends SimpleDataEx {
 
     }
 
-    _ResetValues(p_values) {
-        p_values[IDS.GLYPH_NAME] = { value: '' };
-        p_values[IDS.UNICODE] = { value: null };
-        //p_values[IDS.DO_EXPORT] = { value: true };
-    }
-
     get resolutionFallbacks() { return [this._family]; }
 
     get activeVariant() { return this._defaultGlyph; }
 
     get isLigature() {
-        let unc = this._values[IDS.UNICODE].value;
+        let unc = this._values[IDS.UNICODE];
         return unc ? unc.includes(`+`) ? true : false : false;
     }
 
@@ -150,7 +146,7 @@ class GlyphDataBlock extends SimpleDataEx {
 
         this._defaultGlyph.Reset(false, true); // will clear SVG stuff since family == null
         this._defaultGlyph._ClearLayers();
-        
+
         this._unicode = null;
         this._unicodeInfos = null;
 

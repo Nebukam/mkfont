@@ -12,7 +12,7 @@ class DisplayInspector extends base {
     constructor() { super(); }
 
     static __controls = [
-        { cl: mkfWidgets.ControlHeader, options: { label: `Display options` } },
+        { cl: nkm.datacontrols.widgets.MiniHeader, options: { label: `Display options` } },
         //{ options: { propertyId: mkfData.IDS.COLOR_PREVIEW } },
         {
             options: {
@@ -27,7 +27,7 @@ class DisplayInspector extends base {
 
     _Init() {
         super._Init();
-        this._builder.defaultControlClass = mkfWidgets.PropertyControl;
+        this._builder.defaultControlClass = nkm.datacontrols.widgets.ValueControl;
         this._builder.defaultCSS = `control`;
     }
 

@@ -39,9 +39,9 @@ class GlyphPicker extends base {
 
         this._searchSettings = new mkfData.SearchSettings();
         this._searchSettings
-            .Watch(SIGNAL.SEARCH_TOGGLED, this._OnSearchToggled, this)
-            .Watch(SIGNAL.SEARCH_STARTED, this._OnSearchStarted, this)
-            .Watch(SIGNAL.SEARCH_COMPLETE, this._OnSearchComplete, this);
+            .Watch(nkm.data.SIGNAL.SEARCH_TOGGLED, this._OnSearchToggled, this)
+            .Watch(nkm.data.SIGNAL.SEARCH_STARTED, this._OnSearchStarted, this)
+            .Watch(nkm.data.SIGNAL.SEARCH_COMPLETE, this._OnSearchComplete, this);
 
         this._dataObserver
             .Hook(SIGNAL.GLYPH_ADDED, this._OnGlyphAdded, this)
@@ -141,8 +141,8 @@ class GlyphPicker extends base {
                     let toggle = this._searchActive;
                     if (!p_value || p_value == ``) { toggle = false; }
                     else { toggle = true; }
-                    this._searchSettings.Set(mkfData.IDS_EXT.SEARCH_ENABLED, toggle);
-                    this._searchSettings.Set(mkfData.IDS_EXT.SEARCH_TERM, p_value);
+                    this._searchSettings.Set(nkm.data.IDS.SEARCH_ENABLED, toggle);
+                    this._searchSettings.Set(nkm.data.IDS.SEARCH_TERMS, p_value);
                 }
             }
         }
@@ -217,7 +217,7 @@ class GlyphPicker extends base {
     _OnSearchToggled() {
 
         let oldValue = this._searchActive;
-        this._searchActive = this._searchSettings ? this._searchSettings.Get(mkfData.IDS_EXT.SEARCH_ENABLED) : false;
+        this._searchActive = this._searchSettings ? this._searchSettings.Get(nkm.data.IDS.SEARCH_ENABLED) : false;
 
         if (oldValue == this._searchActive) { return; }
 

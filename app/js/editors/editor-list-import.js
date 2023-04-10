@@ -105,7 +105,7 @@ class EditorListImport extends base {
         this._header = ui.El(`div`, { class: `item header` }, column);
 
         let builder = new nkm.datacontrols.helpers.ControlBuilder(this);
-        builder.options = { host: this._header, cl: mkfWidgets.PropertyControl, css: `control` };
+        builder.options = { host: this._header, cl: nkm.datacontrols.widgets.ValueControl, css: `control` };
         this.forwardData.To(builder);
 
         builder.Build([
@@ -116,13 +116,13 @@ class EditorListImport extends base {
         this._builder = builder;
 
         builder = new nkm.datacontrols.helpers.ControlBuilder(this);
-        builder.options = { host: column, cl: mkfWidgets.PropertyControl, css: `control` };
+        builder.options = { host: column, cl: nkm.datacontrols.widgets.ValueControl, css: `control` };
         this.forwardData.To(builder);
 
         builder.Build([
-            { options: { propertyId: mkfData.IDS_EXT.IMPORT_BIND_RESOURCE, invertInputOrder:true } },
-            { options: { propertyId: mkfData.IDS_EXT.IMPORT_TEXT_AS_LAYERS, invertInputOrder:true } },
-            { cl: mkfWidgets.ControlHeader, options: { label: LOC.labelTr } },
+            { options: { propertyId: mkfData.IDS_EXT.IMPORT_BIND_RESOURCE, invertInputOrder: true } },
+            { options: { propertyId: mkfData.IDS_EXT.IMPORT_TEXT_AS_LAYERS, invertInputOrder: true } },
+            { cl: nkm.datacontrols.widgets.MiniHeader, options: { label: LOC.labelTr } },
         ]);
 
         this._settingsInspector = this.Attach(mkfInspectors.TransformSettings, `item settings`, column);
@@ -194,12 +194,12 @@ class EditorListImport extends base {
         }
     }
 
-    _OnDataValueChanged(p_data, p_id, p_valueObj, p_oldValue) {
+    _OnDataValueChanged(p_data, p_id, p_newValue, p_oldValue) {
 
         if (p_id == mkfData.IDS_EXT.IMPORT_ASSIGN_MODE) { this._RefreshAssignManager(); }
-        let infos = mkfData.IDS_EXT.GetInfos(p_id);
+        let descriptor = nkm.data.GetDescriptor(p_id);
 
-        if (!infos) { return; }
+        if (!descriptor) { return; }
 
         this._assignManager._UpdateList();
 

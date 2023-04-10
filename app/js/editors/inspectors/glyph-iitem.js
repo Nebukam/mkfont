@@ -4,6 +4,9 @@ const nkm = require(`@nkmjs/core`);
 const ui = nkm.ui;
 const uilib = nkm.uilib;
 
+const MiniHeader = nkm.datacontrols.widgets.MiniHeader;
+const ValueControl = nkm.datacontrols.widgets.ValueControl;
+
 const mkfData = require(`../../data`);
 const mkfWidgets = require(`../../widgets`);
 
@@ -29,22 +32,22 @@ class GlyphVariantInspectorItem extends base {
     constructor() { super(); }
 
     static __controls = [
-        { cl: mkfWidgets.ControlHeader, options: { label: `Metrics` } },
+        { cl: MiniHeader, options: { label: `Metrics` } },
         { options: { propertyId: mkfData.IDS.WIDTH }, disableWhen: { fn: shouldHideWIDTH } },
         { options: { propertyId: mkfData.IDS.HEIGHT } },
-        //{ cl: mkfWidgets.ControlHeader, options: { label: `Export` } },
+        //{ cl: MiniHeader, options: { label: `Export` } },
         //{ options: { propertyId: mkfData.IDS.DO_EXPORT } },
     ];
 
     static __glyphControls = [
-        { cl: mkfWidgets.ControlHeader, options: { label: `Export` } },
+        { cl: MiniHeader, options: { label: `Export` } },
         { options: { propertyId: mkfData.IDS.DO_EXPORT }, css: `full` },
     ];
 
     _Init() {
         super._Init();
 
-        this._builder.defaultControlClass = mkfWidgets.PropertyControl;
+        this._builder.defaultControlClass = ValueControl;
         this._builder.defaultCSS = `foldout-item`;
 
         this._flags.Add(this, __nullGlyph, __hasPopout);
@@ -203,7 +206,7 @@ class GlyphVariantInspectorItem extends base {
         foldout = this._Foldout(
             { title: LOC.labelSettings, icon: `gear`, prefId: `glyphSettings`, expanded: true },
             [
-                //{ cl: mkfWidgets.ControlHeader, options: { label: `Export` } },
+                //{ cl: MiniHeader, options: { label: `Export` } },
                 { options: { propertyId: mkfData.IDS.DO_EXPORT } },
             ]
         );
@@ -223,7 +226,7 @@ class GlyphVariantInspectorItem extends base {
 
         if (p_controls) {
             let builder = new nkm.datacontrols.helpers.ControlBuilder(this);
-            builder.options = { host: foldout, cl: mkfWidgets.PropertyControl, css: `foldout-item` };
+            builder.options = { host: foldout, cl: ValueControl, css: `foldout-item` };
             this.forwardData.To(builder);
             builder.Build(p_controls);
         }

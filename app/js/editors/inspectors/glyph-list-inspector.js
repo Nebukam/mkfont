@@ -3,6 +3,9 @@
 const nkm = require(`@nkmjs/core`);
 const ui = nkm.ui;
 
+const MiniHeader = nkm.datacontrols.widgets.MiniHeader;
+const ValueControl = nkm.datacontrols.widgets.ValueControl;
+
 const mkfData = require(`../../data`);
 const mkfWidgets = require(`../../widgets`);
 const mkfOperations = require(`../../operations`);
@@ -139,10 +142,10 @@ class GlyphListInspector extends base {
             { title: LOC.labelTr, icon: `font-bounds`, prefId: `transforms`, expanded: true },
             [
                 { cl: TransformSettingsSilent, dataMember: `_transformSettings` },
-                { cl: mkfWidgets.ControlHeader, options: { label: `Metrics` } },
+                { cl: MiniHeader, options: { label: `Metrics` } },
                 { options: { propertyId: mkfData.IDS.WIDTH }, disableWhen: { fn: shouldHideWIDTH } },
                 { options: { propertyId: mkfData.IDS.HEIGHT } },
-                { cl: mkfWidgets.ControlHeader, options: { label: `Extras` } },
+                { cl: MiniHeader, options: { label: `Extras` } },
             ]
         );
 
@@ -211,7 +214,7 @@ class GlyphListInspector extends base {
         foldout = this._Foldout(
             { title: LOC.labelSettings, icon: `gear`, prefId: `glyphSettings`, expanded: true },
             [
-                { cl: mkfWidgets.ControlHeader, options: { label: `Export` } },
+                { cl: MiniHeader, options: { label: `Export` } },
                 { options: { propertyId: mkfData.IDS.DO_EXPORT }, css: `full` },
             ]
         );
@@ -234,7 +237,7 @@ class GlyphListInspector extends base {
 
         if (p_controls) {
             let builder = new nkm.datacontrols.helpers.ControlBuilder(this);
-            builder.options = { host: foldout, cl: mkfWidgets.PropertyControl, css: `foldout-item` };
+            builder.options = { host: foldout, cl: ValueControl, css: `foldout-item` };
             builder.Build(p_controls);
             if (!this._builders) { this._builders = []; }
             this._builders.push(builder);

@@ -5,7 +5,7 @@ const dom = nkm.ui.dom;
 const u = nkm.u;
 const io = nkm.io;
 
-const SimpleDataEx = require(`./simple-data-ex`);
+const FontObjectData = require(`./font-object-data`);
 const IDS = require(`./ids`);
 const TransformSettings = require(`./settings-transforms-data-block`);
 
@@ -20,9 +20,26 @@ const svgString = `<glyph ${IDS.GLYPH_NAME}="" ${IDS.UNICODE}="" d="" ${IDS.WIDT
 
 const svgGlyphRef = domparser.parseFromString(svgString, `image/svg+xml`).getElementsByTagName(`glyph`)[0];
 
-class GlyphVariantDataBlock extends SimpleDataEx {
-
+class GlyphVariantDataBlock extends FontObjectData {
     constructor() { super(); }
+
+    static __VALUES = {
+        //[IDS.H_ORIGIN_X]:{ value: null },
+        //[IDS.H_ORIGIN_Y]:{ value: null },
+        [IDS.WIDTH]: { value: null, nullable: true },
+        [IDS.EXPORTED_WIDTH]: { value: 0 },
+
+        //[IDS.V_ORIGIN_X]:{ value: null },
+        //[IDS.V_ORIGIN_Y]:{ value: null },
+        [IDS.HEIGHT]: { value: null, nullable: true },
+        [IDS.PATH]: { value: '' },
+        [IDS.PATH_DATA]: { value: null },
+        [IDS.OUT_OF_BOUNDS]: { value: false },
+        [IDS.EMPTY]: { value: false },
+        [IDS.DO_EXPORT]: { value: true },
+        [IDS.FLATTEN_LAYERS]: { value: false },
+        [IDS.FLATTEN_MODE]: { value: ENUMS.FLATTEN_SMART },
+    }
 
     _Init() {
 
@@ -66,24 +83,6 @@ class GlyphVariantDataBlock extends SimpleDataEx {
         if (this._controlLayer == p_value) { return; }
         this._controlLayer = p_value;
         this._PushUpdate();
-    }
-
-    _ResetValues(p_values) {
-        //p_values[IDS.H_ORIGIN_X] = { value: null };
-        //p_values[IDS.H_ORIGIN_Y] = { value: null };
-        p_values[IDS.WIDTH] = { value: null, nullable: true };
-        p_values[IDS.EXPORTED_WIDTH] = { value: 0 };
-
-        //p_values[IDS.V_ORIGIN_X] = { value: null };
-        //p_values[IDS.V_ORIGIN_Y] = { value: null };
-        p_values[IDS.HEIGHT] = { value: null, nullable: true }; //
-        p_values[IDS.PATH] = { value: '' };
-        p_values[IDS.PATH_DATA] = { value: null };
-        p_values[IDS.OUT_OF_BOUNDS] = { value: false };
-        p_values[IDS.EMPTY] = { value: false };
-        p_values[IDS.DO_EXPORT] = { value: true };
-        p_values[IDS.FLATTEN_LAYERS] = { value: false };
-        p_values[IDS.FLATTEN_MODE] = { value: ENUMS.FLATTEN_SMART };
     }
 
     get layers() { return this._layers; }
@@ -194,15 +193,15 @@ class GlyphVariantDataBlock extends SimpleDataEx {
 
     }
 
-    CommitValueUpdate(p_id, p_valueObj, p_oldValue, p_silent = false) {
-        super.CommitValueUpdate(p_id, p_valueObj, p_oldValue, p_silent);
-        let infos = IDS.GetInfos(p_id);
-        if (!infos) { return; }
-        if (infos.recompute && this._family) { this._PushUpdate(); }
+    CommitValueUpdate(p_id, p_newValue, p_oldValue, p_silent = false) {
+        super.CommitValueUpdate(p_id, p_newValue, p_oldValue, p_silent);
+        let descriptor = nkm.data.GetDescriptor(p_id);
+        if (!descriptor) { return; }
+        if (descriptor.recompute && this._family) { this._PushUpdate(); }
     }
 
-    _OnLayerValueChanged(p_layer, p_id, p_valueObj, p_oldValue) {
-        this.Broadcast(SIGNAL.LAYER_VALUE_CHANGED, this, p_layer, p_id, p_valueObj, p_oldValue);
+    _OnLayerValueChanged(p_layer, p_id, p_newValue, p_oldValue) {
+        this.Broadcast(SIGNAL.LAYER_VALUE_CHANGED, this, p_layer, p_id, p_newValue, p_oldValue);
         this._PushUpdate();
     }
 

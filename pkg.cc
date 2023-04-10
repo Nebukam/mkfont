@@ -1,3 +1,5 @@
+//// LOCAL
+
 {
     "name": "mkfont",
     "version": "1.2.1",
@@ -23,6 +25,8 @@
         "electron": "^17.1.0"
     }
 }
+
+//// RELEASE
 
 {
     "name": "mkfont",

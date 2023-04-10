@@ -1,47 +1,39 @@
 'use strict';
 
-const nkm = require(`@nkmjs/core`);
-const dom = nkm.ui.dom;
-const u = nkm.u;
-const io = nkm.io;
-
 const svgpr = require('svg-path-reverse');
 
-const SimpleDataEx = require(`./simple-data-ex`);
+const FontObjectData = require(`./font-object-data`);
 const IDS = require(`./ids`);
 const ENUMS = require(`./enums`);
 
-class TransformSettingsDataBlock extends SimpleDataEx {
-
+class TransformSettingsDataBlock extends FontObjectData {
     constructor() { super(); }
 
-    _Init() {
+    static __VALUES = {
 
+        [IDS.TR_BOUNDS_MODE]: { value: ENUMS.BOUNDS_MIXED_VER },
+        [IDS.TR_SCALE_MODE]: { value: ENUMS.SCALE_ASCENDER },
+        [IDS.TR_SCALE_FACTOR]: { value: 1 },
+        [IDS.TR_NRM_FACTOR]: { value: 0 },
+        [IDS.TR_VER_ALIGN]: { value: ENUMS.VALIGN_BASELINE },
+        [IDS.TR_HOR_ALIGN]: { value: ENUMS.HALIGN_XMIN },
+        [IDS.TR_ANCHOR]: { value: ENUMS.ANCHOR_BOTTOM_LEFT },
+        [IDS.TR_WIDTH_SHIFT]: { value: 0, nullable: true, propagate: true },
+        [IDS.TR_WIDTH_PUSH]: { value: 0, nullable: true, propagate: true },
+        [IDS.TR_AUTO_WIDTH]: { value: true },
+        [IDS.TR_Y_OFFSET]: { value: 0, nullable: true, propagate: true },
+        [IDS.TR_MIRROR]: { value: ENUMS.MIRROR_NONE },
+        [IDS.TR_SKEW_ROT_ORDER]: { value: ENUMS.SKR_ORDER_R_X_Y, nullable: true, propagate: true },
+        [IDS.TR_ROTATION]: { value: 0, nullable: true, propagate: true },
+        [IDS.TR_ROTATION_ANCHOR]: { value: ENUMS.ANCHOR_CENTER, nullable: true, propagate: true },
+        [IDS.TR_SKEW_X]: { value: 0, nullable: true, propagate: true },
+        [IDS.TR_SKEW_Y]: { value: 0, nullable: true, propagate: true },
+
+    };
+
+    _Init() {
         super._Init();
         this._variant = null;
-
-    }
-
-    _ResetValues(p_values) {
-
-        p_values[IDS.TR_BOUNDS_MODE] = { value: ENUMS.BOUNDS_MIXED_VER };
-        p_values[IDS.TR_SCALE_MODE] = { value: ENUMS.SCALE_ASCENDER };
-        p_values[IDS.TR_SCALE_FACTOR] = { value: 1 };
-        p_values[IDS.TR_NRM_FACTOR] = { value: 0 };
-        p_values[IDS.TR_VER_ALIGN] = { value: ENUMS.VALIGN_BASELINE };
-        p_values[IDS.TR_HOR_ALIGN] = { value: ENUMS.HALIGN_XMIN };
-        p_values[IDS.TR_ANCHOR] = { value: ENUMS.ANCHOR_BOTTOM_LEFT };
-        p_values[IDS.TR_WIDTH_SHIFT] = { value: 0, nullable: true, propagate: true };
-        p_values[IDS.TR_WIDTH_PUSH] = { value: 0, nullable: true, propagate: true };
-        p_values[IDS.TR_AUTO_WIDTH] = { value: true };
-        p_values[IDS.TR_Y_OFFSET] = { value: 0, nullable: true, propagate: true };
-        p_values[IDS.TR_MIRROR] = { value: ENUMS.MIRROR_NONE };
-        p_values[IDS.TR_SKEW_ROT_ORDER] = { value: ENUMS.SKR_ORDER_R_X_Y, nullable: true, propagate: true };
-        p_values[IDS.TR_ROTATION] = { value: 0, nullable: true, propagate: true };
-        p_values[IDS.TR_ROTATION_ANCHOR] = { value: ENUMS.ANCHOR_CENTER, nullable: true, propagate: true };
-        p_values[IDS.TR_SKEW_X] = { value: 0, nullable: true, propagate: true };
-        p_values[IDS.TR_SKEW_Y] = { value: 0, nullable: true, propagate: true };
-
     }
 
     set variant(p_value) { this._variant = p_value; }
@@ -132,7 +124,7 @@ class TransformSettingsDataBlock extends SimpleDataEx {
                         layerCP = SVGOPS.FitLayerPath(layer, refPath, ref, layerPath);
                     }
 
-                    layer._values[IDS.PATH].value = layerCP;
+                    layer._values[IDS.PATH] = layerCP;
                     layer._CleanLayer();
 
                     let bb = layerCP.bbox;
@@ -143,7 +135,7 @@ class TransformSettingsDataBlock extends SimpleDataEx {
 
                 } else {
                     //prevLayerData = null; //So 'prev layer' is actually "closest valid layer"
-                    layer._values[IDS.PATH].value = null;
+                    layer._values[IDS.PATH] = null;
                 }
 
                 prevLayer = layer;

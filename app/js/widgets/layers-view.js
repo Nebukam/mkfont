@@ -8,7 +8,6 @@ const mkfData = require(`../data`);
 const mkfOperations = require(`../operations`);
 const mkfActions = mkfOperations.actions;
 
-const PropertyControl = require(`./property-control`);
 const LayerControl = require(`./layer-control`);
 const GlyphPicker = require(`./glyph-picker`);
 const SHARED_OPS = require("../operations/commands/shared-ops");
@@ -30,7 +29,7 @@ class LayersView extends base {
 
         this._Bind(this._OpenPicker)
 
-        this._builder.defaultControlClass = PropertyControl;
+        this._builder.defaultControlClass = nkm.datacontrols.widgets.ValueControl;
         this._builder.defaultCSS = `control`;
 
         this._layerCtrls = [];

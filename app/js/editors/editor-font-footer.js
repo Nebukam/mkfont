@@ -19,7 +19,7 @@ class FontEditorFooter extends base {
             .Watch(nkm.com.SIGNAL.UPDATED, this._OnContentUpdate, this)
             .Watch(nkm.com.SIGNAL.READY, this._OnContentUpdateComplete, this);
 
-            nkm.env.APP.Watch(nkm.env.APP.SIGNAL_MEM_MONITOR, (p_data)=>{
+            nkm.main.Watch(nkm.main.SIGNAL_MEM_MONITOR, (p_data)=>{
                 let pc = (p_data.private / 4000000);
                 this._memBar.progress = pc;
                 this._memBar.setAttribute(`title`, `Ram usage : ${(pc * 100).toFixed(2)}% (${p_data.private/1000}Mo / 4000Mo)`);

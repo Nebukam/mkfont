@@ -7,18 +7,24 @@ const io = nkm.io;
 
 const UNICODE = require(`../unicode`);
 const SIGNAL = require(`../signal`);
-const SimpleDataEx = require(`./simple-data-ex`);
+const FontObjectData = require(`./font-object-data`);
 const IDS_EXT = require(`./ids-ext`);
 const IDS = require(`./ids`);
 const ENUMS = require(`./enums`);
 
-class SettingsSearchDataBlock extends SimpleDataEx {
+const base = nkm.data.SimpleDataBlock;
+class SettingsSearchDataBlock extends base {
 
     constructor() { super(); }
 
-    static __signalValueMap = {
-        [IDS_EXT.SEARCH_ENABLED]: SIGNAL.SEARCH_TOGGLED
-    };
+    static __VALUES = this.Ext(base.__VALUES, {
+        [nkm.data.IDS.SEARCH_ENABLED]: { value: false, signal: nkm.data.SIGNAL.SEARCH_TOGGLED },
+        [nkm.data.IDS.SEARCH_RESULTS]: { value: null },
+        [nkm.data.IDS.SEARCH_TERMS]: { value: `` },
+        [nkm.data.IDS.SEARCH_CASE_SENSITIVE]: { value: false },
+        [IDS_EXT.ADD_COMPOSITION]: { value: false },
+        [IDS_EXT.MUST_EXISTS]: { value: false },
+    });
 
     _Init() {
 
@@ -45,37 +51,26 @@ class SettingsSearchDataBlock extends SimpleDataEx {
 
     }
 
-    _ResetValues(p_values) {
-
-        p_values[IDS_EXT.SEARCH_RESULTS] = { value: null };
-        p_values[IDS_EXT.SEARCH_ENABLED] = { value: false };
-        p_values[IDS_EXT.SEARCH_TERM] = { value: `` };
-        p_values[IDS_EXT.CASE_INSENSITIVE] = { value: false };
-        p_values[IDS_EXT.ADD_COMPOSITION] = { value: false };
-        p_values[IDS_EXT.MUST_EXISTS] = { value: false };
-
-    }
-
     set family(p_value) { this._family = p_value; }
     get family() { return this._family; }
 
     get ready() { return this._ready; }
     get running() { return this._running; }
-    get enabled() { return this.Get(IDS_EXT.SEARCH_ENABLED); }
+    get enabled() { return this.Get(nkm.data.IDS.SEARCH_ENABLED); }
 
-    CommitValueUpdate(p_id, p_valueObj, p_oldValue, p_silent = false) {
+    CommitValueUpdate(p_id, p_newValue, p_oldValue, p_silent = false) {
 
-        super.CommitValueUpdate(p_id, p_valueObj, p_oldValue, p_silent);
+        super.CommitValueUpdate(p_id, p_newValue, p_oldValue, p_silent);
 
         if (!this.enabled) { return; }
 
-        let infos = IDS_EXT.GetInfos(p_id);
+        let descriptor = nkm.data.GetDescriptor(p_id);
 
-        if (!infos ||
+        if (!descriptor ||
             !this._rangeContent)
             return;
 
-        if (!infos.recompute)
+        if (!descriptor.recompute)
             return;
 
         this._UpdateSearchData(this._rangeContent);
@@ -91,11 +86,11 @@ class SettingsSearchDataBlock extends SimpleDataEx {
         this._ready = false;
         this._searchCovered = 0;
 
-        this._caseSensitive = !this.Get(IDS_EXT.CASE_INSENSITIVE);
+        this._caseSensitive = !this.Get(nkm.data.IDS.SEARCH_CASE_SENSITIVE);
         this._addComps = this.Get(IDS_EXT.ADD_COMPOSITION);
         this._mustExists = this.Get(IDS_EXT.MUST_EXISTS);
 
-        this._terms = UNICODE.ResolveString(this.Get(IDS_EXT.SEARCH_TERM)).split(` `);
+        this._terms = UNICODE.ResolveString(this.Get(nkm.data.IDS.SEARCH_TERMS)).split(` `);
         this._upperTerms = [];
         this._upperIndexed = [];
         for (let i = 0; i < this._terms.length; i++) {
@@ -113,7 +108,7 @@ class SettingsSearchDataBlock extends SimpleDataEx {
 
         this._AdvanceSearch();
 
-        this.Broadcast(SIGNAL.SEARCH_STARTED, this);
+        this.Broadcast(nkm.data.SIGNAL.SEARCH_STARTED, this);
 
     }
 
@@ -130,10 +125,10 @@ class SettingsSearchDataBlock extends SimpleDataEx {
             this._running = false;
             this._ready = true;
 
-            this._values[IDS_EXT.SEARCH_RESULTS].value = null;
-            this.Set(IDS_EXT.SEARCH_RESULTS, this._results);
+            this._values[nkm.data.IDS.SEARCH_RESULTS] = null;
+            this.Set(nkm.data.IDS.SEARCH_RESULTS, this._results);
 
-            this.Broadcast(SIGNAL.SEARCH_COMPLETE, this);
+            this.Broadcast(nkm.data.SIGNAL.SEARCH_COMPLETE, this);
 
         } else {
 
@@ -143,7 +138,7 @@ class SettingsSearchDataBlock extends SimpleDataEx {
 
             this._searchCovered += length;
 
-            this.Broadcast(SIGNAL.SEARCH_PROGRESS, this._searchCovered / this._content.length);
+            this.Broadcast(nkm.data.SIGNAL.SEARCH_PROGRESS, this._searchCovered / this._content.length);
 
             this._delayedAdvance.Schedule();
 
@@ -226,7 +221,7 @@ class SettingsSearchDataBlock extends SimpleDataEx {
 
                         }
 
-                        if(localPass){
+                        if (localPass) {
                             let infos = layer._glyphInfos;
                             if (this._mustExists) { if (!(infos.u in this._family._glyphsMap)) { continue; } }
                             this._results.push(infos);

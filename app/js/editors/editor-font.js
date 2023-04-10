@@ -75,7 +75,7 @@ class FontEditor extends base {
         this._bindingManager = new helpers.BindingManager(this);
 
         // Commands
-        this.cmdSave = this._commands.Add(mkfCmds.SaveFamilyDoc, { shortcut: this.shortcuts.Create("Ctrl S") });
+        this.cmdSave = this._commands.Add(nkm.main._MKFontDocDefinition.SaveCmd, { shortcut: this.shortcuts.Create("Ctrl S") });
         this.cmdExport = this._commands.Create(mkfCmds.ExportTTF, { shortcut: this.shortcuts.Create("Ctrl E") });
         this.cmdEditInPlace = this._commands.Create(mkfCmds.EditInExternalEditor);
 
@@ -109,21 +109,6 @@ class FontEditor extends base {
         this.cmdImportFileList = this._commands.Create(mkfCmds.ImportFileList);
         this.cmdImportLigatures = this._commands.Create(mkfCmds.ImportLigatures);
         this.cmdImportMKFont = this._commands.Create(mkfCmds.ImportMKFont);
-
-        this.shortcuts.Create("Ctrl Z", this._actionStack.Undo);
-        this.shortcuts.Create("Ctrl Y", this._actionStack.Redo);
-        this.shortcuts.Create("Ctrl A", {
-            fn: () => {
-                this._viewport._selStack.data.RequestSelectAll();
-                nkm.ui.dom.ClearHighlightedText();
-            }
-        }).Strict();
-
-        this.shortcuts.Create("escape", () => { 
-            this._registerEmptySelection = true;
-            this._inspectedData.Clear(); 
-            this._registerEmptySelection = false;
-        });
 
         for (let i = 0; i < 10; i++) {
             this.shortcuts.Create(`Ctrl ${i}`, () => { this._StoreSelectionPreset(i); });
@@ -230,10 +215,11 @@ class FontEditor extends base {
 
             if (view) {
 
-                if (`forwardData` in conf && !conf.forwardData) { }
+                if (!conf.forwardData) { }
                 else { this.forwardData.To(view); }
 
                 this._forwardContext.To(view);
+                this._forwardEditor.To(view);
 
                 if (assign) { this[assign] = view; }
 
@@ -335,26 +321,26 @@ class FontEditor extends base {
         super._OnDataChanged(p_oldData);
         let ar = UNICODE.instance._blockCatalog.At(0);
         if (this._data) {
-            
+
             this._OnDataValueChanged(this._data, mkfData.IDS.PREVIEW_SIZE, null);
-            
+
             if (this._data._glyphs.count > 0) {
                 ar = this._contentInspector._specialCatalog.At(0); //My Glyphs
             }
 
             this.SetActiveRange(ar);
             this._viewport._RefreshItems();
-            
+
         }
     }
 
-    _OnDataValueChanged(p_data, p_id, p_valueObj) {
+    _OnDataValueChanged(p_data, p_id, p_newValue, p_oldValue) {
 
-        let infos = mkfData.IDS.GetInfos(p_id);
+        let descriptor = nkm.data.GetDescriptor(p_id);
 
-        if (!infos) { return; }
+        if (!descriptor) { return; }
 
-        if (infos.recompute) {
+        if (descriptor.recompute) {
 
             p_data._UpdateDisplayValues();
 

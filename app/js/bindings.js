@@ -39,12 +39,6 @@ class Bindings extends nkm.com.helpers.BindingKit {
                 ]
             },
             {
-                context: nkm.datacontrols.CONTEXT.DEFAULT_EDITOR,
-                kvps: [
-                    { key: mkfData.Family, binding: mkfEditors.FontEditor },
-                ]
-            },
-            {
                 context: nkm.datacontrols.CONTEXT.DEFAULT_INSPECTOR,
                 kvps: [
                     {
@@ -66,7 +60,7 @@ class Bindings extends nkm.com.helpers.BindingKit {
                 context: nkm.data.serialization.CONTEXT.JSON,
                 kvps: [
                     { key: mkfData.Family, binding: mkfData.serialization.json.Family },
-                    { key: mkfData.Prefs, binding: mkfData.serialization.json.SimpleDataEx }
+                    { key: mkfData.Prefs, binding: mkfData.serialization.json.FontObjectData }
                 ]
             },
             {

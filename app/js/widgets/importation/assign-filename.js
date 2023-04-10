@@ -11,7 +11,6 @@ const mkfOperations = require(`../../operations`);
 const mkfCmds = mkfOperations.commands;
 
 const AssignBaseControl = require("./assign-base");
-const ControlHeader = require(`../control-header`);
 
 const base = AssignBaseControl;
 class AssignSelectionFilenameControl extends base {
@@ -22,7 +21,7 @@ class AssignSelectionFilenameControl extends base {
         mkfData.IDS_EXT.IMPORT_SEPARATOR];
 
     static __controls = [
-        { cl: ControlHeader, options: { label: `Filename infos` } },
+        { cl: nkm.datacontrols.widgets.MiniHeader, options: { label: `Filename infos` } },
         { options: { propertyId: mkfData.IDS_EXT.IMPORT_PREFIX } },
         { options: { propertyId: mkfData.IDS_EXT.IMPORT_SEPARATOR } },
     ];

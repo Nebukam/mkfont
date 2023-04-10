@@ -29,7 +29,7 @@ class PangramFooter extends base {
 
     _Init() {
         super._Init();
-        this._builder.defaultControlClass = mkfWidgets.PropertyControl;
+        this._builder.defaultControlClass = nkm.datacontrols.widgets.ValueControl;
         this._builder.defaultCSS = `control`;
     }
 
@@ -54,10 +54,6 @@ class PangramFooter extends base {
 
     _Render() {
         super._Render();
-    }
-
-    _OnEditorChanged(p_oldEditor) {
-        this._displayInspector.editor = this._editor;
     }
 
     _OnDataUpdated(p_data) {

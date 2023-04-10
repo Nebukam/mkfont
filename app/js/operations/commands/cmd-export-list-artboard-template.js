@@ -48,7 +48,7 @@ class CmdExportListArtboartTemplate extends CmdListProcessor {
     _Kickstart() {
 
         let
-            illuAppPath = nkm.env.APP.PGet(mkfData.IDS_PREFS.ILLU_PATH);
+            illuAppPath = nkm.settings.Get(mkfData.IDS_PREFS.ILLU_PATH);
 
         try {
             let stats = fs.statSync(illuAppPath[0]);
@@ -123,7 +123,7 @@ class CmdExportListArtboartTemplate extends CmdListProcessor {
         }
 
         let filePath = p_response.filePaths[0];
-        nkm.env.APP.PSet(mkfData.IDS_PREFS.ILLU_PATH, [filePath]);
+        nkm.settings.Set(mkfData.IDS_PREFS.ILLU_PATH, [filePath]);
 
         this._Kickstart();
 
@@ -132,7 +132,7 @@ class CmdExportListArtboartTemplate extends CmdListProcessor {
     _Launch() {
 
         let
-            illuAppPath = nkm.env.APP.PGet(mkfData.IDS_PREFS.ILLU_PATH);
+            illuAppPath = nkm.settings.Get(mkfData.IDS_PREFS.ILLU_PATH);
 
         nkmElectron.io.LaunchExternalEditor(illuAppPath[0], this._tmpRsc.path);
         this._tmpRsc.Enable();

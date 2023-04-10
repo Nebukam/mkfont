@@ -1,11 +1,8 @@
 'use strict';
 
 const nkm = require(`@nkmjs/core`);
-const dom = nkm.ui.dom;
-const u = nkm.u;
-const io = nkm.io;
 
-const SimpleDataEx = require(`./simple-data-ex`);
+const FontObjectData = require(`./font-object-data`);
 const IDS = require(`./ids`);
 
 const UNICODE = require('../unicode');
@@ -13,9 +10,40 @@ const SIGNAL = require('../signal');
 
 const ENUMS = require(`./enums`);
 
-class GlyphLayerDataBlock extends SimpleDataEx {
-
+class GlyphLayerDataBlock extends FontObjectData {
     constructor() { super(); }
+
+    static __VALUES = {
+
+        [IDS.PATH]: { value: '' },
+        [IDS.INVERTED]: { value: false },
+        [IDS.LYR_IS_CONTROL_LAYER]: { value: false },
+        [IDS.CIRCULAR_REFERENCE]: { value: false },
+        [IDS.LYR_CHARACTER_NAME]: { value: `` },
+        [IDS.LYR_CUSTOM_ID]: { value: null },
+        [IDS.DO_EXPORT]: { value: true },
+        [IDS.LYR_INDEX]: { value: 0 },
+
+        // Transform settings
+        [IDS.LYR_USE_PREV_LAYER]: { value: false },
+        [IDS.TR_LYR_BOUNDS_MODE]: { value: ENUMS.BOUNDS_OUTSIDE },
+        [IDS.TR_BOUNDS_MODE]: { value: ENUMS.BOUNDS_OUTSIDE },
+        [IDS.TR_LYR_SCALE_MODE]: { value: ENUMS.SCALE_MANUAL },
+        [IDS.TR_LYR_SCALE_FACTOR]: { value: 1 },
+        [IDS.TR_NRM_FACTOR]: { value: 0 },
+        [IDS.TR_ANCHOR]: { value: ENUMS.ANCHOR_CENTER },
+        [IDS.TR_LYR_SELF_ANCHOR]: { value: ENUMS.ANCHOR_CENTER },
+        [IDS.TR_X_OFFSET]: { value: 0 },
+        [IDS.TR_Y_OFFSET]: { value: 0 },
+        [IDS.TR_MIRROR]: { value: ENUMS.MIRROR_NONE },
+
+        [IDS.TR_SKEW_ROT_ORDER]: { value: ENUMS.SKR_ORDER_R_X_Y },
+        [IDS.TR_ROTATION]: { value: 0 },
+        [IDS.TR_ROTATION_ANCHOR]: { value: ENUMS.ANCHOR_CENTER },
+        [IDS.TR_SKEW_X]: { value: 0 },
+        [IDS.TR_SKEW_Y]: { value: 0 },
+
+    };
 
     _Init() {
 
@@ -34,39 +62,6 @@ class GlyphLayerDataBlock extends SimpleDataEx {
 
     }
 
-    _ResetValues(p_values) {
-
-        // Base bs
-        p_values[IDS.PATH] = { value: '' };
-        p_values[IDS.INVERTED] = { value: false };
-        p_values[IDS.LYR_IS_CONTROL_LAYER] = { value: false };
-        p_values[IDS.CIRCULAR_REFERENCE] = { value: false };
-        p_values[IDS.LYR_CHARACTER_NAME] = { value: `` };
-        p_values[IDS.LYR_CUSTOM_ID] = { value: null };
-        p_values[IDS.DO_EXPORT] = { value: true };
-        p_values[IDS.LYR_INDEX] = { value: 0 };
-
-        // Transform settings
-        p_values[IDS.LYR_USE_PREV_LAYER] = { value: false };
-        p_values[IDS.TR_LYR_BOUNDS_MODE] = { value: ENUMS.BOUNDS_OUTSIDE };
-        p_values[IDS.TR_BOUNDS_MODE] = { value: ENUMS.BOUNDS_OUTSIDE };
-        p_values[IDS.TR_LYR_SCALE_MODE] = { value: ENUMS.SCALE_MANUAL };
-        p_values[IDS.TR_LYR_SCALE_FACTOR] = { value: 1 };
-        p_values[IDS.TR_NRM_FACTOR] = { value: 0 };
-        p_values[IDS.TR_ANCHOR] = { value: ENUMS.ANCHOR_CENTER };
-        p_values[IDS.TR_LYR_SELF_ANCHOR] = { value: ENUMS.ANCHOR_CENTER };
-        p_values[IDS.TR_X_OFFSET] = { value: 0 };
-        p_values[IDS.TR_Y_OFFSET] = { value: 0 };
-        p_values[IDS.TR_MIRROR] = { value: ENUMS.MIRROR_NONE };
-
-        p_values[IDS.TR_SKEW_ROT_ORDER] = { value: ENUMS.SKR_ORDER_R_X_Y };
-        p_values[IDS.TR_ROTATION] = { value: 0 };
-        p_values[IDS.TR_ROTATION_ANCHOR] = { value: ENUMS.ANCHOR_CENTER };
-        p_values[IDS.TR_SKEW_X] = { value: 0 };
-        p_values[IDS.TR_SKEW_Y] = { value: 0 };
-
-    }
-
     get glyphInfos() { return this._glyphInfos; }
     set glyphInfos(p_value) { this._glyphInfos = p_value; }
 
@@ -74,7 +69,7 @@ class GlyphLayerDataBlock extends SimpleDataEx {
     set index(p_value) {
         if (this._index == p_value) { return; }
         this._index = p_value;
-        this._values[IDS.LYR_INDEX].value = p_value;
+        this._values[IDS.LYR_INDEX] = p_value;
         if (this._variant) { this._DirtyLayer(); }
     }
 
@@ -128,7 +123,7 @@ class GlyphLayerDataBlock extends SimpleDataEx {
         if (glyph.isNull) {
 
             this.importedVariant = null;
-            this._values[IDS.CIRCULAR_REFERENCE].value = false;
+            this._values[IDS.CIRCULAR_REFERENCE] = false;
 
         } else {
 
@@ -142,13 +137,13 @@ class GlyphLayerDataBlock extends SimpleDataEx {
 
     }
 
-    CommitValueUpdate(p_id, p_valueObj, p_oldValue, p_silent = false) {
+    CommitValueUpdate(p_id, p_newValue, p_oldValue, p_silent = false) {
         if (p_id == IDS.LYR_CHARACTER_NAME) { this._RetrieveGlyphInfos(); }
         if (p_id == IDS.LYR_IS_CONTROL_LAYER) {
-            if (p_valueObj.value) { this._variant.controlLayer = this; }
+            if (p_newValue) { this._variant.controlLayer = this; }
             else if (this._variant.controlLayer == this) { this._variant.controlLayer = null; }
         }
-        super.CommitValueUpdate(p_id, p_valueObj, p_oldValue, p_silent);
+        super.CommitValueUpdate(p_id, p_newValue, p_oldValue, p_silent);
     }
 
     _DirtyLayer() {

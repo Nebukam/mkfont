@@ -5,12 +5,14 @@ const ui = nkm.ui;
 const uilib = nkm.uilib;
 const inputs = nkm.uilib.inputs;
 
+const MiniHeader = nkm.datacontrols.widgets.MiniHeader;
+const ValueControl = nkm.datacontrols.widgets.ValueControl;
+
 const mkfData = require(`../../data`);
 const mkfOperations = require(`../../operations`);
 const mkfCmds = mkfOperations.commands;
 
 const AssignBaseControl = require("./assign-base");
-const ControlHeader = require(`../control-header`);
 
 const base = AssignBaseControl;
 class AssignSelectionBlockRangeControl extends base {
@@ -19,7 +21,7 @@ class AssignSelectionBlockRangeControl extends base {
     static __valueIDs = [];
 
     static __controls = [
-        { cl: ControlHeader, options: { label: `Block infos` } },
+        { cl: MiniHeader, options: { label: `Block infos` } },
         { options: { propertyId: mkfData.IDS_EXT.IMPORT_BLOCK } },
         { options: { propertyId: mkfData.IDS_EXT.IMPORT_BLOCK_START } },
     ];

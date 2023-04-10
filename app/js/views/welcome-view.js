@@ -95,12 +95,12 @@ class WelcomeView extends base {
             defaultWidgetClass: nkm.uilib.buttons.Button,
             handles: [
                 {
-                    command: mkfCmds.CreateFamilyDoc,
+                    command: nkm.main._MKFontDocDefinition.CreateCmd,
                     variant: ui.FLAGS.MINIMAL, flavor: ui.FLAGS.CTA,
                     group: `mkfont`
                 },
                 {
-                    command: mkfCmds.LoadFamilyDoc,
+                    command: nkm.main._MKFontDocDefinition.LoadCmd,
                     variant: ui.FLAGS.MINIMAL, flavor: nkm.com.FLAGS.LOADING,
                     group: `mkfont`
                 },
@@ -165,7 +165,7 @@ class WelcomeView extends base {
                     label: `Settings`,
                     variant: ui.FLAGS.FRAME,
                     group: `settings`,
-                    command: mkfCmds.OpenPrefs
+                    command: nkm.app.ops.commands.OpenAppSettings
                 }
             ]
         };

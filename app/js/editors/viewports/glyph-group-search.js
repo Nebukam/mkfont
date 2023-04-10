@@ -4,6 +4,9 @@ const nkm = require(`@nkmjs/core`);
 const u = nkm.u;
 const ui = nkm.ui;
 
+const MiniHeader = nkm.datacontrols.widgets.MiniHeader;
+const ValueControl = nkm.datacontrols.widgets.ValueControl;
+
 const SIGNAL = require(`../../signal`);
 const mkfData = require(`../../data`);
 const mkfWidgets = require(`../../widgets`);
@@ -14,10 +17,10 @@ class GlyphGroupSearch extends base {
     constructor() { super(); }
 
     static __controls = [
-        //{ cl: mkfWidgets.ControlHeader, options: { label: `Boundaries` }, css: 'header' },
-        { options: { propertyId: mkfData.IDS_EXT.SEARCH_ENABLED, invertInputOrder:true }, css: `main-toggle` },
-        { options: { propertyId: mkfData.IDS_EXT.SEARCH_TERM, inputOnly: true }, css: `search` },
-        //{ options: { propertyId: mkfData.IDS_EXT.CASE_INSENSITIVE, invertInputOrder: true }, css: `large` },
+        //{ cl: MiniHeader, options: { label: `Boundaries` }, css: 'header' },
+        { options: { propertyId: nkm.data.IDS.SEARCH_ENABLED, invertInputOrder:true }, css: `main-toggle` },
+        { options: { propertyId: nkm.data.IDS.SEARCH_TERMS, inputOnly: true }, css: `search` },
+        //{ options: { propertyId: nkm.data.IDS.SEARCH_CASE_SENSITIVE, invertInputOrder: true }, css: `large` },
         { options: { propertyId: mkfData.IDS_EXT.ADD_COMPOSITION, invertInputOrder: true }, css: `large` },
         { options: { propertyId: mkfData.IDS_EXT.MUST_EXISTS, invertInputOrder: true }, css: `large` },
     ];
@@ -37,11 +40,11 @@ class GlyphGroupSearch extends base {
         this._flags.Add(this, `enabled`);
 
         this._dataObserver
-            .Hook(SIGNAL.SEARCH_COMPLETE, this._OnSearchComplete, this)
-            .Hook(SIGNAL.SEARCH_TOGGLED, this._OnSearchToggle, this)
-            .Hook(SIGNAL.SEARCH_PROGRESS, this._OnSearchProgress, this);
+            .Hook(nkm.data.SIGNAL.SEARCH_COMPLETE, this._OnSearchComplete, this)
+            .Hook(nkm.data.SIGNAL.SEARCH_TOGGLED, this._OnSearchToggle, this)
+            .Hook(nkm.data.SIGNAL.SEARCH_PROGRESS, this._OnSearchProgress, this);
 
-        this._builder.defaultControlClass = mkfWidgets.PropertyControl;
+        this._builder.defaultControlClass = ValueControl;
         this._builder.defaultCSS = `control`;
 
     }
@@ -100,7 +103,7 @@ class GlyphGroupSearch extends base {
         }
     }
 
-    get activeSearch() { return this._data ? this._data.Get(mkfData.IDS_EXT.SEARCH_ENABLED) : false; }
+    get activeSearch() { return this._data ? this._data.Get(nkm.data.IDS.SEARCH_ENABLED) : false; }
 
     set status(p_value) {
         this._status = p_value;
@@ -109,7 +112,7 @@ class GlyphGroupSearch extends base {
 
     _OnDataUpdated(p_data) {
         super._OnDataUpdated(p_data);
-        this._flags.Set(`enabled`, p_data.Get(mkfData.IDS_EXT.SEARCH_ENABLED));
+        this._flags.Set(`enabled`, p_data.Get(nkm.data.IDS.SEARCH_ENABLED));
     }
 
     _OnSearchProgress(p_progress) {

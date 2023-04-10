@@ -9,7 +9,7 @@ const SIGNAL = require(`../signal`);
 const IDS = require(`./ids`);
 const ENUMS = require(`./enums`);
 
-const SimpleDataEx = require(`./simple-data-ex`);
+const FontObjectData = require(`./font-object-data`);
 const Glyph = require(`./glyph-data-block`);
 const GlyphVariant = require(`./glyph-variant-data-block`);
 const GlyphVariantMissing = require(`./glyph-missing-data-block`);
@@ -20,6 +20,8 @@ const LigaImportSettings = require(`./settings-liga-import-data-block`);
 const ContentManager = require(`../content-manager`);
 const FamilyFontCache = require(`./family-font-cache`);
 const GlyphVariantRef = require(`./glyph-variant-data-block-reference`);
+
+const defaultEm = 1000;
 
 const domparser = new DOMParser();
 const svgFontString =
@@ -32,12 +34,53 @@ const svgFontString =
 const svgFontRef = domparser.parseFromString(svgFontString, `image/svg+xml`).getElementsByTagName(`font`)[0];
 
 
-class FamilyDataBlock extends SimpleDataEx {
+class FamilyDataBlock extends FontObjectData {
     constructor() { super(); }
 
     static __NFO__ = {
         [nkm.com.IDS.UID]: `@mkf:family-data-block`,
         [nkm.com.IDS.ICON]: `font`
+    };
+
+    static __VALUES = {
+
+        [IDS.FAMILY]: { getter: () => { return nkm.settings.Get(IDS.FAMILY) } },
+        [IDS.COPYRIGHT]: { getter: () => { return nkm.settings.Get(IDS.COPYRIGHT) } },
+        [IDS.DESCRIPTION]: { getter: () => { return nkm.settings.Get(IDS.DESCRIPTION) } },
+        [IDS.URL]: { getter: () => { return nkm.settings.Get(IDS.URL) } },
+        [IDS.VERSION]: { value: `1.0` },
+        [IDS.COLOR_PREVIEW]: { getter: () => { return nkm.settings.Get(IDS.COLOR_PREVIEW) } },
+
+        //[IDS.ALPHABETIC]:{ value: 0 },
+        //[IDS.MATHEMATICAL]:{ value: 350 },
+        //[IDS.IDEOGRAPHIC]:{ value: 400 },
+
+        [IDS.PREVIEW_SIZE]: { getter: () => { return nkm.settings.Get(IDS.PREVIEW_SIZE) } },
+
+        [IDS.WEIGHT_CLASS]: { value: ENUMS.WEIGHTS.At(3).value },
+        [IDS.FONT_STYLE]: { value: `Regular` },
+
+        [IDS.EM_UNITS]: { value: defaultEm, propagate: true },
+        [IDS.EM_RESAMPLE]: { value: true },
+        [IDS.BASELINE]: { value: defaultEm * 0.8, propagate: true },
+        [IDS.ASCENT]: { value: defaultEm * 0.8, propagate: true },
+        [IDS.ASC_RESAMPLE]: { value: false },
+        [IDS.DESCENT]: { value: defaultEm * -0.25, propagate: true },
+
+        [IDS.CAP_HEIGHT]: { value: defaultEm * 0.7, propagate: true },
+        [IDS.X_HEIGHT]: { value: defaultEm * 0.7 * 0.72, propagate: true },
+
+        //[IDS.H_ORIGIN_X]:{ value: 0 },
+        //[IDS.H_ORIGIN_Y]:{ value: 0 },
+        [IDS.WIDTH]: { value: 1000, propagate: true },
+        //[IDS.V_ORIGIN_X]:{ value: 0 },
+        //[IDS.V_ORIGIN_Y]:{ value: 0 },
+        [IDS.HEIGHT]: { value: 1000, propagate: true },
+        [IDS.MONOSPACE]: { value: false, propagate: true },
+        [IDS.UNDERLINE_POSITION]: { value: null },
+        [IDS.UNDERLINE_THICKNESS]: { value: null },
+        //[IDS.HANGING]:{ value: 500 },
+
     };
 
     _Init() {
@@ -113,53 +156,6 @@ class FamilyDataBlock extends SimpleDataEx {
         this._transformSettings.Watch(nkm.com.SIGNAL.VALUE_CHANGED, this._OnTransformValueChanged, this);
 
         this._delayedUpdateReferences = nkm.com.DelayedCall(this._Bind(this._UpdateLayerReferences));
-
-    }
-
-    _ResetValues(p_values) {
-
-        let defaults = nkm.env.APP._prefDataObject;
-
-        p_values[IDS.FAMILY] = { value: defaults.Get(IDS.FAMILY) };
-        p_values[IDS.COPYRIGHT] = { value: defaults.Get(IDS.COPYRIGHT) };
-        p_values[IDS.DESCRIPTION] = { value: defaults.Get(IDS.DESCRIPTION) };
-        p_values[IDS.URL] = { value: defaults.Get(IDS.URL) };
-        p_values[IDS.VERSION] = { value: `1.0` };
-        p_values[IDS.COLOR_PREVIEW] = { value: defaults.Get(IDS.COLOR_PREVIEW) };
-
-        //p_values[IDS.ALPHABETIC] = { value: 0 };
-        //p_values[IDS.MATHEMATICAL] = { value: 350 };
-        //p_values[IDS.IDEOGRAPHIC] = { value: 400 };
-
-        p_values[IDS.PREVIEW_SIZE] = { value: defaults.Get(IDS.PREVIEW_SIZE) };
-
-        ////
-
-        let defaultEm = 1000;
-
-        p_values[IDS.WEIGHT_CLASS] = { value: ENUMS.WEIGHTS.At(3).value };
-        p_values[IDS.FONT_STYLE] = { value: `Regular` };
-
-        p_values[IDS.EM_UNITS] = { value: defaultEm, propagate: true };
-        p_values[IDS.EM_RESAMPLE] = { value: true };
-        p_values[IDS.BASELINE] = { value: defaultEm * 0.8, propagate: true };
-        p_values[IDS.ASCENT] = { value: defaultEm * 0.8, propagate: true };
-        p_values[IDS.ASC_RESAMPLE] = { value: false };
-        p_values[IDS.DESCENT] = { value: defaultEm * -0.25, propagate: true };
-
-        p_values[IDS.CAP_HEIGHT] = { value: defaultEm * 0.7, propagate: true };
-        p_values[IDS.X_HEIGHT] = { value: defaultEm * 0.7 * 0.72, propagate: true };
-
-        //p_values[IDS.H_ORIGIN_X] = { value: 0 };
-        //p_values[IDS.H_ORIGIN_Y] = { value: 0 };
-        p_values[IDS.WIDTH] = { value: 1000, propagate: true };
-        //p_values[IDS.V_ORIGIN_X] = { value: 0 };
-        //p_values[IDS.V_ORIGIN_Y] = { value: 0 };
-        p_values[IDS.HEIGHT] = { value: 1000, propagate: true };
-        p_values[IDS.MONOSPACE] = { value: false, propagate: true };
-        p_values[IDS.UNDERLINE_POSITION] = { value: null };
-        p_values[IDS.UNDERLINE_THICKNESS] = { value: null };
-        //p_values[IDS.HANGING] = { value: 500 };
 
     }
 
@@ -262,7 +258,7 @@ class FamilyDataBlock extends SimpleDataEx {
 
     // Watch
 
-    _OnGlyphUnicodeChanged(p_glyph, p_valueObj, p_oldValue) {
+    _OnGlyphUnicodeChanged(p_glyph, p_newValue, p_oldValue) {
 
         let index = this._glyphUnicodeCache.indexOf(p_oldValue);
 
@@ -270,7 +266,7 @@ class FamilyDataBlock extends SimpleDataEx {
         else { this._glyphUnicodeCache.push(unicode); }
 
         delete this._glyphsMap[p_oldValue];
-        this._glyphsMap[p_valueObj.value] = p_glyph;
+        this._glyphsMap[p_newValue] = p_glyph;
         if (p_glyph.isLigature) { this._ligatureSet.add(p_glyph); }
         else { this._ligatureSet.delete(p_glyph); }
 
@@ -293,21 +289,29 @@ class FamilyDataBlock extends SimpleDataEx {
         super.CommitUpdate();
     }
 
-    CommitValueUpdate(p_id, p_valueObj, p_oldValue, p_silent = false) {
-        super.CommitValueUpdate(p_id, p_valueObj, p_oldValue, p_silent);
-        let infos = IDS.GetInfos(p_id);
-        if (!infos || !infos.recompute || !p_valueObj.propagate) { return; }
+    CommitValueUpdate(p_id, p_newValue, p_oldValue, p_silent = false) {
+        super.CommitValueUpdate(p_id, p_newValue, p_oldValue, p_silent);
+
+        let
+            descriptor = nkm.data.GetDescriptor(p_id),
+            definition = this.DEFINITIONS[p_id];
+
+        if (!descriptor || !descriptor.recompute || !definition.propagate) { return; }
         this._glyphs.ForEach((item, i) => { item._PushUpdate(); });
     }
 
-    _OnTransformValueChanged(p_data, p_id, p_valueObj, p_oldValue) {
-        let infos = IDS.GetInfos(p_id);
-        if (!infos || !infos.recompute || !p_valueObj.propagate) { return; }
+    _OnTransformValueChanged(p_data, p_id, p_newValue, p_oldValue) {
+
+        let
+            descriptor = nkm.data.GetDescriptor(p_id),
+            definition = this.DEFINITIONS[p_id];
+
+        if (!descriptor || !descriptor.recompute || !definition.propagate) { return; }
         this._UpdateDisplayValues();
         // TODO : This can be greatly optimized by only propagating to glyphs that have the associated property == null
         this._glyphs.ForEach((item, i) => {
             item._variants.ForEach((v) => {
-                if (v._transformSettings._values[p_id].value == null) { v._transformSettings.CommitUpdate(); }
+                if (v._transformSettings._values[p_id] == null) { v._transformSettings.CommitUpdate(); }
             })
         });
     }

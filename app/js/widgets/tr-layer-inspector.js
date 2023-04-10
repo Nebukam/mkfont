@@ -10,8 +10,7 @@ const LOC = require(`../locales`);
 
 // Manages what is shown & selectable in the viewport.
 
-const ControlHeader = require(`./control-header`);
-const PropertyControl = require(`./property-control`);
+const MiniHeader = nkm.datacontrols.widgets.MiniHeader;
 
 const isMANUAL = (owner) => { return owner.data.Get(mkfData.IDS.TR_LYR_SCALE_MODE) == mkfData.ENUMS.SCALE_MANUAL; };
 const isNRM = (owner) => { return owner.data.Get(mkfData.IDS.TR_LYR_SCALE_MODE) == mkfData.ENUMS.SCALE_NORMALIZE; };
@@ -36,7 +35,7 @@ class LayerTransformSettingsInspector extends base {
             }, css: 'btn'
         },
         
-        { cl: ControlHeader, options: { label: `Context`, label2: `Layer` }, css: 'hdr' },
+        { cl: MiniHeader, options: { label: `Context`, label2: `Layer` }, css: 'hdr' },
         { options: { propertyId: mkfData.IDS.TR_ANCHOR, inputOnly: true }, css: 'vvsmall' },
         { options: { propertyId: mkfData.IDS.TR_LYR_BOUNDS_MODE, inputOnly: true }, css: 'small' },
 
@@ -45,7 +44,7 @@ class LayerTransformSettingsInspector extends base {
 
         //{ options: { propertyId: mkfData.IDS.TR_LYR_SCALE_MODE, inputOnly: true }, css: 'small' },
         { options: { propertyId: mkfData.IDS.TR_LYR_SCALE_FACTOR }, css: 'full', requireData: true }, //, hideWhen: { fn: isMANUAL }
-        { cl: ControlHeader, options: { label: LOC.labelOffsets }, css: 'hdr', requireData: true },
+        { cl: MiniHeader, options: { label: LOC.labelOffsets }, css: 'hdr', requireData: true },
         { options: { propertyId: mkfData.IDS.TR_X_OFFSET }, requireData: true },
         { options: { propertyId: mkfData.IDS.TR_Y_OFFSET }, requireData: true },
 
@@ -53,7 +52,7 @@ class LayerTransformSettingsInspector extends base {
     ];
 
     static __trControls = [
-        { cl: ControlHeader, options: { label: LOC.labelTr }, css: 'full' },
+        { cl: MiniHeader, options: { label: LOC.labelTr }, css: 'full' },
         { options: { propertyId: mkfData.IDS.TR_MIRROR, inputOnly: true }, css: 'full' },
         { options: { propertyId: mkfData.IDS.TR_SKEW_ROT_ORDER }, css: `full` },
         { options: { propertyId: mkfData.IDS.TR_ROTATION_ANCHOR, inputOnly: true }, css: `vsmall` },
@@ -72,17 +71,17 @@ class LayerTransformSettingsInspector extends base {
     _Init() {
         super._Init();
 
-        this._builder.defaultControlClass = PropertyControl;
+        this._builder.defaultControlClass = nkm.datacontrols.widgets.ValueControl;
         this._builder.defaultCSS = `control`;
 
         this._trBuilder = new nkm.datacontrols.helpers.ControlBuilder(this);
-        this._trBuilder.options = { cl: PropertyControl, css: `foldout-item` };
+        this._trBuilder.options = { cl: nkm.datacontrols.widgets.ValueControl, css: `foldout-item` };
         this.forwardData.To(this._trBuilder);
         this.forwardContext.To(this._trBuilder);
         this.forwardEditor.To(this._trBuilder);
 
         this._exBuilder = new nkm.datacontrols.helpers.ControlBuilder(this);
-        this._exBuilder.options = { cl: PropertyControl, css: `foldout-item` };
+        this._exBuilder.options = { cl: nkm.datacontrols.widgets.ValueControl, css: `foldout-item` };
         this.forwardData.To(this._exBuilder);
         this.forwardContext.To(this._exBuilder);
         this.forwardEditor.To(this._exBuilder);
