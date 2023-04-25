@@ -22,7 +22,7 @@
     },
     "devDependencies": {
         "@nkmjs/core-dev": "^1.0.2",
-        "electron": "^17.1.0"
+        "electron": "^24.1.2"
     }
 }
 
@@ -50,6 +50,6 @@
     },
     "devDependencies": {
         "@nkmjs/core-dev": "../nkmjs/packages/nkmjs-core-dev",
-        "electron": "^17.1.0"
+        "electron": "^24.1.2"
     }
 }
