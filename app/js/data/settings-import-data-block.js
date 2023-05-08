@@ -22,7 +22,7 @@ class ImportSettingsDataBlock extends TransformSettingsDataBlock {
         [IDS_EXT.IMPORT_MARK_COL]: { value: `#ff00ff` },
 
         //Block
-        [IDS_EXT.IMPORT_BLOCK]: { value: UNICODE.instance._blockCatalog.At(0) },
+        [IDS_EXT.IMPORT_BLOCK]: { value: UNICODE._blockCatalog.At(0) },
         [IDS_EXT.IMPORT_BLOCK_START]: { value: ENUMS.BLOCK_START_BEGIN },
 
         [IDS_EXT.IMPORT_BIND_RESOURCE]: { value: true },

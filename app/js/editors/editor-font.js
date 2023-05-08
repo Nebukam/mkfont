@@ -319,7 +319,7 @@ class FontEditor extends base {
 
     _OnDataChanged(p_oldData) {
         super._OnDataChanged(p_oldData);
-        let ar = UNICODE.instance._blockCatalog.At(0);
+        let ar = UNICODE._blockCatalog.At(0);
         if (this._data) {
 
             this._OnDataValueChanged(this._data, mkfData.IDS.PREVIEW_SIZE, null);

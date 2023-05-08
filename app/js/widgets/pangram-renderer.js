@@ -15,8 +15,8 @@ class PangramRenderer extends base {
     _Init() {
         super._Init();
         this._pointer
-            .Hook(ui.POINTER.MOUSE_LEFT, ui.POINTER.DOWN, this._Bind(this._StartSelection))
-            .Hook(ui.POINTER.MOUSE_LEFT, ui.POINTER.RELEASE, this._Bind(this._EndSelection));
+            .Hook(ui.POINTER.KEYS.MOUSE_LEFT, ui.POINTER.KEYS.DOWN, this._Bind(this._StartSelection))
+            .Hook(ui.POINTER.KEYS.MOUSE_LEFT, ui.POINTER.KEYS.RELEASE, this._Bind(this._EndSelection));
 
         this._ongoingSelection = false;
         this._highlightList = null;

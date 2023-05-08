@@ -204,7 +204,7 @@ class PangramInspector extends base {
                     htitle: `Append the current selection at the end of the current text\n---\n+ [ Shift ] Separate each characters by an space.`,
                     trigger: {
                         fn: () => {
-                            let txt = ``, space = ui.INPUT.shift ? ` ` : ``;
+                            let txt = ``, space = ui.INPUT.shiftKey ? ` ` : ``;
                             this.editor.inspectedData.stack.ForEach(i => { txt += `${i.char}${space}` }, true);
                             txt = this._text.handler.currentValue + txt;
                             this._text.handler.changedValue = txt == `` ? longPangram : txt;
@@ -218,7 +218,7 @@ class PangramInspector extends base {
                     htitle: `Set the text to be the current viewport selection.\n---\n+ [ Shift ] Separate each characters by an space.`,
                     trigger: {
                         fn: () => {
-                            let txt = ``, space = ui.INPUT.shift ? ` ` : ``;
+                            let txt = ``, space = ui.INPUT.shiftKey ? ` ` : ``;
                             this.editor.inspectedData.stack.ForEach(i => { txt += `${i.char}${space}` }, true);
                             this._text.handler.changedValue = txt == `` ? longPangram : txt;
                             this._text.handler.SubmitValue();

@@ -178,7 +178,7 @@ class WelcomeView extends base {
                 latestTagName = p_rsc.content[0].name,
                 semVer = latestTagName.substring(1).split(`.`);
 
-            if(nkm.env.ENV.instance.VersionDiff(semVer) > 0){
+            if(nkm.env.ENV.VersionDiff(semVer) > 0){
                 this._newVersionBtn.label = `${semVer.join(`.`)} Available`;
                 this._newVersionBtn.visible = true;
             }

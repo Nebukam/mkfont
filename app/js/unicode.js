@@ -7,13 +7,14 @@ const UniBlock = require(`./catalogs/definition-uni-block`);
 const UniCategory = require(`./catalogs/definition-uni-cat`);
 const UniCategoryGroup = require(`./catalogs/definition-uni-cat-group`);
 
+const _setActivateRangeCMD = new CmdSetActiveRange();
 
-class UNICODE extends nkm.com.helpers.Singleton {
+class UNICODE extends nkm.com.Observable {
     constructor() { super(); }
 
-    static SetActiveRange = new CmdSetActiveRange();
+    get SetActiveRange() { return _setActivateRangeCMD; }
 
-    static get MAX_GLYPH_COUNT() { return 65534; }
+    get MAX_GLYPH_COUNT() { return 65534; }
 
     _Init() {
 
@@ -73,7 +74,7 @@ class UNICODE extends nkm.com.helpers.Singleton {
             for (let i = 0; i < subs.length; i++) {
                 let lcgc = subs[i];
                 lcgc.parent = lgc;
-                lcgc.primaryCommand = this.constructor.SetActiveRange;
+                lcgc.primaryCommand = this.SetActiveRange;
                 lcgc.itemClass = UniCategory;
                 cgc.content.push(lcgc);
             }
@@ -406,7 +407,7 @@ class UNICODE extends nkm.com.helpers.Singleton {
 
         b.forEach((obj) => {
             obj.itemClass = UniBlock;
-            obj.primaryCommand = this.constructor.SetActiveRange;
+            obj.primaryCommand = this.SetActiveRange;
         });
 
         this._blocks = b;
@@ -35022,14 +35023,14 @@ class UNICODE extends nkm.com.helpers.Singleton {
         for (let cid in cMap) {
             let char = cMap[cid];
             this._charList[char.i] = char;
-            char.char = this.constructor.GetUnicodeCharacter(parseInt(cid, 16));
+            char.char = this.GetUnicodeCharacter(parseInt(cid, 16));
         }
 
         //let relMap = UNI_REL_MAPPING;
 
     }
 
-    static GetInfos(p_unicode, p_createLigature = false) {
+    GetInfos(p_unicode, p_createLigature = false) {
 
         let data = null;
 
@@ -35038,18 +35039,18 @@ class UNICODE extends nkm.com.helpers.Singleton {
                 this.GetSingle(p_unicode[0]) :
                 this.GetLigature(p_unicode, p_createLigature);
         } else {
-            data = this.instance._charMap[p_unicode];
+            data = this._charMap[p_unicode];
         }
 
         return data || null;
 
     }
 
-    static GetSingle(p_lookup) {
+    GetSingle(p_lookup) {
 
         if (u.isNumber(p_lookup)) { p_lookup = p_lookup.toString(16).padStart(4, `0`); }
 
-        let result = this.instance._charMap[this.GetLookup(p_lookup)];
+        let result = this._charMap[this.GetLookup(p_lookup)];
         if (!result) {
             let isHex = u.isHex(p_lookup, 4);
             if (isHex) {
@@ -35057,7 +35058,7 @@ class UNICODE extends nkm.com.helpers.Singleton {
                 let
                     uid = `${p_lookup}`,
                     index = parseInt(uid, 16),
-                    list = this.instance._blocks,
+                    list = this._blocks,
                     ownerBlock = null;
 
                 result = {
@@ -35081,20 +35082,20 @@ class UNICODE extends nkm.com.helpers.Singleton {
                 if (ownerBlock) { result.block = ownerBlock; }
                 else { console.error(`p_lookup = ${p_lookup} / index : ${index}`); }
 
-                this.instance._charMap[uid] = result;
+                this._charMap[uid] = result;
 
             }
         }
         return result;
     }
 
-    static GetLigature(p_lookups, p_create = true) {
+    GetLigature(p_lookups, p_create = true) {
 
         let lps = [];
         p_lookups.forEach((item) => { lps.push(this.GetLookup(item)); });
         let
             ligatureLookup = lps.join(`+`),
-            ligature = this.instance._charMap[ligatureLookup];
+            ligature = this._charMap[ligatureLookup];
 
         if (!ligature) {
             if (!p_create) { return null; }
@@ -35103,19 +35104,19 @@ class UNICODE extends nkm.com.helpers.Singleton {
             lps.forEach((item) => { charPts.push(this.GetUnicodeCharacter(parseInt(item, 16))); });
             charPts = charPts.join('');
 
-            ligature = { u: ligatureLookup, name: `LIGATURE ${charPts}`, cat: this.instance._categories.Liga, ligature: true, char: charPts };
-            this.instance._charMap[ligatureLookup] = ligature;
+            ligature = { u: ligatureLookup, name: `LIGATURE ${charPts}`, cat: this._categories.Liga, ligature: true, char: charPts };
+            this._charMap[ligatureLookup] = ligature;
         }
 
         return ligature;
 
     }
 
-    static GetAddress(p_character) {
+    GetAddress(p_character) {
         return p_character.codePointAt(0).toString(16).padStart(4, '0');
     }
 
-    static GetUnicodeCharacter(p_codePoint) {
+    GetUnicodeCharacter(p_codePoint) {
 
         if (p_codePoint >= 0 && p_codePoint <= 0xD7FF || p_codePoint >= 0xE000 && p_codePoint <= 0xFFFF) {
             return String.fromCharCode(p_codePoint);
@@ -35141,7 +35142,7 @@ class UNICODE extends nkm.com.helpers.Singleton {
      * Attempts to find existing glyphs from UNICODE infos
      * @param {*} p_infos 
      */
-    static GetLookup(p_infos) {
+    GetLookup(p_infos) {
 
         let lookup = null;
 
@@ -35157,7 +35158,7 @@ class UNICODE extends nkm.com.helpers.Singleton {
         return lookup;
     }
 
-    static UUni(p_infos) {
+    UUni(p_infos) {
         if (p_infos.ligature) {
             let ulist = p_infos.u.split(`+`);
             for (let i = 0; i < ulist.length; i++) { ulist[i] = `U+${ulist[i]}`; }
@@ -35167,7 +35168,7 @@ class UNICODE extends nkm.com.helpers.Singleton {
         }
     }
 
-    static GetAddressesFromText(p_text, p_ignoreLigatures = true) {
+    GetAddressesFromText(p_text, p_ignoreLigatures = true) {
         let result = [];
         if (true) { //p_ignoreLigatures
             for (let i = 0; i < p_text.length; i++) {
@@ -35187,7 +35188,7 @@ class UNICODE extends nkm.com.helpers.Singleton {
      * @param {string} p_string accepts : 'a', 'abc', 'aU+0000', 'abcU+0000', 'U+0000U+0000U+0000', 'U+0000-abU+0000U+0000'
      * @returns 
      */
-    static TryGetInfosFromString(p_string, p_createLigature = false, p_sep = `-`) {
+    TryGetInfosFromString(p_string, p_createLigature = false, p_sep = `-`) {
 
         if (!p_string || p_string == ``) { return null; }
 
@@ -35216,7 +35217,7 @@ class UNICODE extends nkm.com.helpers.Singleton {
      * @param {string} p_string accepts : 'a', 'abc', 'aU+0000', 'abcU+0000', 'U+0000U+0000U+0000', 'U+0000-abU+0000U+0000'
      * @returns 
      */
-    static ResolveString(p_string, p_sep = `-`) {
+    ResolveString(p_string, p_sep = `-`) {
 
         if (!p_string || p_string == ``) { return ``; }
 
@@ -35243,7 +35244,7 @@ class UNICODE extends nkm.com.helpers.Singleton {
                     cPt = Number.parseInt(uHex, 16);
 
                 if (!Number.isNaN(cPt)) { result += String.fromCodePoint(cPt); }
-                else{ result += `U+${uHex}`; }
+                else { result += `U+${uHex}`; }
 
                 if (cSplit.length == 0) { continue; }
                 if (cSplit.length == 1 && cSplit[0] == ``) { continue; } // Trailing separator : U+0000-
@@ -35261,4 +35262,4 @@ class UNICODE extends nkm.com.helpers.Singleton {
 
 }
 
-module.exports = UNICODE;
+module.exports = new UNICODE();

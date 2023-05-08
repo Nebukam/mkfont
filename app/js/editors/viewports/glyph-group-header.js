@@ -104,7 +104,7 @@ class GlyphGroupHeader extends base {
 
     }
 
-    get cmdContent() { return ui.INPUT.shift ? this._parent._content : null; }
+    get cmdContent() { return ui.INPUT.shiftKey ? this._parent._content : null; }
 
     _OnDataUpdated(p_data) {
         super._OnDataUpdated(p_data);

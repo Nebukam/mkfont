@@ -199,7 +199,7 @@ class FamilyDataBlock extends FontObjectData {
 
         this.Broadcast(SIGNAL.GLYPH_ADDED, this, p_glyph);
         p_glyph._OnGlyphAddedToFamily(this);
-        //ContentManager.instance.Broadcast(SIGNAL.GLYPH_ADDED, p_glyph);
+        //ContentManager.Broadcast(SIGNAL.GLYPH_ADDED, p_glyph);
 
         //Need a way to find which layer might be referencing this glyph
         this._delayedUpdateReferences.Schedule();
@@ -231,7 +231,7 @@ class FamilyDataBlock extends FontObjectData {
 
         this.Broadcast(SIGNAL.GLYPH_REMOVED, this, g);
         g._OnGlyphRemovedFromFamily(this);
-        //ContentManager.instance.Broadcast(SIGNAL.GLYPH_REMOVED, g);
+        //ContentManager.Broadcast(SIGNAL.GLYPH_REMOVED, g);
 
         this._delayedUpdateReferences.Schedule();
 

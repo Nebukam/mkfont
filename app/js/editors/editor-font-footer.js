@@ -15,7 +15,7 @@ class FontEditorFooter extends base {
 
     _Init() {
         super._Init();
-        ContentManager.instance
+        ContentManager
             .Watch(nkm.com.SIGNAL.UPDATED, this._OnContentUpdate, this)
             .Watch(nkm.com.SIGNAL.READY, this._OnContentUpdateComplete, this);
 

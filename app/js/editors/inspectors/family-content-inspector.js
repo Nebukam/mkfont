@@ -90,12 +90,12 @@ class FamilyContentInspector extends base {
 
         //this._categories = this.Attach(mkfWidgets.lists.FilterRoot, `asd`, this._body);
         this._categories = this.Attach(nkm.uilib.lists.FolderListRoot, `item`, this._body);
-        this._categories.data = UNICODE.instance._categoriesCatalog;
+        this._categories.data = UNICODE._categoriesCatalog;
         this._categories.selStackOverride = this._selStack;
 
         //this._blocks = this.Attach(mkfWidgets.lists.BlockRoot, `asd`, this._body);
         this._blocks = this.Attach(nkm.uilib.lists.FolderListRoot, `item`, this._body);
-        this._blocks.data = UNICODE.instance._blockCatalog;
+        this._blocks.data = UNICODE._blockCatalog;
         this._blocks.selStackOverride = this._selStack;
 
     }

@@ -89,11 +89,11 @@ class IDS_EXT {
 
             [this.IMPORT_BLOCK]: {
                 import: true,
-                enum: UNICODE.instance._blockCatalog,
+                enum: UNICODE._blockCatalog,
                 inputType: inputs.Select,
                 label: `Reference block`,
-                inputOptions: { catalog: UNICODE.instance._blockCatalog, size: ui.FLAGS.SIZE_S },
-                desc: `UNICODE Block to work with (there's ${UNICODE.instance._blockCatalog.count} of them!)`
+                inputOptions: { catalog: UNICODE._blockCatalog, size: ui.FLAGS.SIZE_S },
+                desc: `UNICODE Block to work with (there's ${UNICODE._blockCatalog.count} of them!)`
             },
 
             [this.IMPORT_BLOCK_START]: {

@@ -12,7 +12,7 @@ const IDS = require(`./ids`);
 const IDS_EXT = require(`./ids-ext`);
 const UTILS = require(`./utils`);
 
-class RangeContent extends nkm.com.pool.DisposableObjectEx {
+class RangeContent extends nkm.com.Observable {
     constructor() { super(); }
 
     //#region Static utils
@@ -30,7 +30,7 @@ class RangeContent extends nkm.com.pool.DisposableObjectEx {
     }
 
     static CountAll = (p_family) => {
-        return UNICODE.instance._charList.length;
+        return UNICODE._charList.length;
     }
 
     static FetchFamilyGlyphAll(p_family) {
@@ -57,7 +57,7 @@ class RangeContent extends nkm.com.pool.DisposableObjectEx {
     }
 
     static FetchAllKnowGlyphs(p_family) {
-        return UNICODE.instance._charList;
+        return UNICODE._charList;
     }
 
     //#endregion
@@ -196,7 +196,7 @@ class RangeContent extends nkm.com.pool.DisposableObjectEx {
 
             index = this._GetMixedIndex(i);
             if (index == -1) { continue; }
-            unicodeInfos = UNICODE.instance._charList[index];
+            unicodeInfos = UNICODE._charList[index];
             if (!unicodeInfos) { continue; }
             this._content.push(unicodeInfos);
 

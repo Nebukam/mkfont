@@ -30,7 +30,7 @@ class CmdLayersPaste extends actions.Command {
             callback = null,
             groupInfos = null;
 
-        if (nkm.ui.INPUT.alt) {
+        if (nkm.ui.INPUT.altKey) {
 
             groupInfos = {
                 icon: `clipboard-read`,
@@ -40,7 +40,7 @@ class CmdLayersPaste extends actions.Command {
 
             callback = this._PasteTransforms;
 
-        } else if (!nkm.ui.INPUT.shift) {
+        } else if (!nkm.ui.INPUT.shiftKey) {
 
             groupInfos = {
                 icon: `clipboard-read`,

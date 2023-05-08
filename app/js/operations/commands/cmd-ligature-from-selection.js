@@ -66,7 +66,7 @@ class CmdLigatureFromSelection extends actions.Command {
             return this._Cancel();
         }
 
-        let addComponents = nkm.ui.INPUT.shift;
+        let addComponents = nkm.ui.INPUT.shiftKey;
 
         if (addComponents) {
             this._emitter.StartActionGroup({

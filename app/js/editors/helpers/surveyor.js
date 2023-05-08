@@ -8,7 +8,7 @@ const mkfData = require(`../../data`);
 const SIGNAL = require(`../../signal`);
 
 
-const base = nkm.com.pool.DisposableObjectEx;
+const base = nkm.com.Observable;
 class Surveyor extends base {
     constructor() { super(); }
 
@@ -365,7 +365,7 @@ class Surveyor extends base {
     _OnTransformValueChanged(p_data, p_id, p_newValue, p_oldValue) {
 
         this._editor.Do(
-            mkfOperations.actions.SetProperty, {
+            nkm.data.ops.actions.SetPropertyValue, {
             target: this._cachedTransforms, id: p_id, value: p_newValue
         });
 

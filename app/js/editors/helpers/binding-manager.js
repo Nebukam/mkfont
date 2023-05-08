@@ -7,7 +7,7 @@ const nkmElectron = require('@nkmjs/core/electron');
 const mkfData = require(`../../data`);
 const mkfActions = require(`../../operations/actions`);
 
-const base = nkm.com.pool.DisposableObjectEx;
+const base = nkm.com.Observable;
 /**
  * @description TODO
  * @class
