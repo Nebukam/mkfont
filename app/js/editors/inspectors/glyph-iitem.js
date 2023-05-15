@@ -176,7 +176,7 @@ class GlyphVariantInspectorItem extends base {
                 ]
             },
             [
-                { cl: TransformSettingsInspector, dataMember: `_transformSettings` },
+                { cl: TransformSettingsInspector, get: `_transformSettings` },
             ],
         );
 

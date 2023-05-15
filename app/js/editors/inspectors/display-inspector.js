@@ -78,4 +78,3 @@ class DisplayInspector extends base {
 }
 
 module.exports = DisplayInspector;
-ui.Register(`mkf-display-inspector`, DisplayInspector);

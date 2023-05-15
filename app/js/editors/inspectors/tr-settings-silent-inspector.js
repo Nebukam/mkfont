@@ -29,4 +29,3 @@ class TransformSettingsSilentInspector extends base {
 }
 
 module.exports = TransformSettingsSilentInspector;
-ui.Register(`mkf-transform-settings-silent-inspector`, TransformSettingsSilentInspector);

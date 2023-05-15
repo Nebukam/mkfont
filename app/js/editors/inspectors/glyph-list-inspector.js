@@ -141,7 +141,7 @@ class GlyphListInspector extends base {
         let foldout = this._Foldout(
             { title: LOC.labelTr, icon: `font-bounds`, prefId: `transforms`, expanded: true },
             [
-                { cl: TransformSettingsSilent, dataMember: `_transformSettings` },
+                { cl: TransformSettingsSilent, get: `_transformSettings` },
                 { cl: MiniHeader, options: { label: `Metrics` } },
                 { options: { propertyId: mkfData.IDS.WIDTH }, disableWhen: { fn: shouldHideWIDTH } },
                 { options: { propertyId: mkfData.IDS.HEIGHT } },

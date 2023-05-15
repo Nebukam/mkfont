@@ -55,4 +55,3 @@ class FamilyActionsInspector extends base {
 }
 
 module.exports = FamilyActionsInspector;
-ui.Register(`mkf-family-actions-inspector`, FamilyActionsInspector);

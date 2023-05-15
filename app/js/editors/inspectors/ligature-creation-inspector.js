@@ -59,4 +59,3 @@ class LigatureCreationInspector extends base {
 }
 
 module.exports = LigatureCreationInspector;
-ui.Register(`mkf-ligature-inspector`, LigatureCreationInspector);

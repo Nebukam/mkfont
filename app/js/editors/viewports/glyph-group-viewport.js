@@ -85,8 +85,8 @@ class GlyphGroupViewport extends base {
         this._contentRange = new RangeContent();
         this._contentRange.Watch(nkm.com.SIGNAL.READY, this._OnRangeReady, this);
         this.forwardData
-            .To(this._contentRange, { mapping: `family` })
-            .To(this, { dataMember: `searchSettings`, mapping: `searchSettings` });
+            .To(this._contentRange, { set: `family` })
+            .To(this, { get: `searchSettings`, set: `searchSettings` });
 
         this._content = null;
 

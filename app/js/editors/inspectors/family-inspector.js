@@ -76,4 +76,3 @@ class FamilyInspector extends base {
 }
 
 module.exports = FamilyInspector;
-ui.Register(`mkf-family-explorer`, FamilyInspector);

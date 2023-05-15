@@ -116,4 +116,3 @@ class TransformSettingsInspector extends base {
 }
 
 module.exports = TransformSettingsInspector;
-ui.Register(`mkf-transform-settings-inspector`, TransformSettingsInspector);
