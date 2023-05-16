@@ -415,9 +415,7 @@ class FontEditor extends base {
         }
     }
 
-    _ConfirmClose() {
-        super.RequestClose();
-    }
+    _ConfirmClose() { super.RequestClose(); }
 
     _CleanUp() {
         this._bindingManager.Clear();
