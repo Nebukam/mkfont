@@ -210,8 +210,7 @@ class FontEditor extends base {
             let
                 conf = confs[i],
                 item = this._leftShelfCatalog.Register(conf),
-                view = item.GetOption('view', null),
-                assign = u.tils.Get(conf, `assign`, null);
+                view = item.GetOption('view', null);
 
             if (view) {
 
@@ -221,7 +220,7 @@ class FontEditor extends base {
                 this._forwardContext.To(view);
                 this._forwardEditor.To(view);
 
-                if (assign) { this[assign] = view; }
+                if (conf.assign) { this[conf.assign] = view; }
 
             }
 
