@@ -144,10 +144,10 @@ class MKFont extends nkm.app.AppBase {
         fontEditor.RequestDisplay();
         fontEditor.data = this._tempFontData;
 
-        let outputStr = JSON.stringify(nkm.data.serialization.JSONSerializer.Serialize(this._tempFontData));
+        let outputStr = JSON.stringify(nkm.data.s11n.JSONSerializer.Serialize(this._tempFontData));
         //console.log(JSON.parse(outputStr));
 
-        this._anotherFamily = nkm.data.serialization.JSONSerializer.Deserialize(JSON.parse(outputStr));
+        this._anotherFamily = nkm.data.s11n.JSONSerializer.Deserialize(JSON.parse(outputStr));
         //console.log(this._anotherFamily);
 
     }

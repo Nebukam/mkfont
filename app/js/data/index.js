@@ -2,7 +2,7 @@
 
 module.exports = {
 
-    serialization: require(`./serialization`),
+    s11n: require(`./s11n`),
 
     ENUMS: require(`./enums`),
     IDS: require(`./ids`),

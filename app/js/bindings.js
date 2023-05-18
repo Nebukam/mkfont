@@ -57,10 +57,10 @@ class Bindings extends nkm.com.helpers.BindingKit {
                 ]
             },
             {
-                ctx: nkm.data.serialization.CTX.JSON,
+                ctx: nkm.data.s11n.CTX.JSON,
                 kvps: [
-                    { key: mkfData.Family, binding: mkfData.serialization.json.Family },
-                    { key: mkfData.Prefs, binding: mkfData.serialization.json.FontObjectData }
+                    { key: mkfData.Family, binding: mkfData.s11n.json.Family },
+                    { key: mkfData.Prefs, binding: mkfData.s11n.json.FontObjectData }
                 ]
             },
             {

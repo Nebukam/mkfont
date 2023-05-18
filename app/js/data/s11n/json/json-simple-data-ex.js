@@ -4,10 +4,10 @@ const nkm = require(`@nkmjs/core`)
  * @description TODO
  * @class
  * @hideconstructor
- * @augments data.core.serialization.json.DataBlock
- * @memberof data.core.serialization
+ * @augments data.core.s11n.json.DataBlock
+ * @memberof data.core.s11n
  */
-class FamilyDataBlockJSONSerializer extends nkm.data.serialization.json.DataBlock {
+class FamilyDataBlockJSONSerializer extends nkm.data.s11n.json.DataBlock {
     constructor() { super(); }
 
 
@@ -20,7 +20,7 @@ class FamilyDataBlockJSONSerializer extends nkm.data.serialization.json.DataBloc
      * @returns 
      */
     static SerializeContent(p_serial, p_data, p_options = null) {
-        p_serial[nkm.data.serialization.CTX.JSON.DATA_KEY] = p_data.Values();
+        p_serial[nkm.data.s11n.CTX.JSON.DATA_KEY] = p_data.Values();
     }
 
     /**
