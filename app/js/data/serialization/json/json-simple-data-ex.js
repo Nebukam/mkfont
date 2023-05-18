@@ -20,7 +20,7 @@ class FamilyDataBlockJSONSerializer extends nkm.data.serialization.json.DataBloc
      * @returns 
      */
     static SerializeContent(p_serial, p_data, p_options = null) {
-        p_serial[nkm.data.serialization.CONTEXT.JSON.DATA_KEY] = p_data.Values();
+        p_serial[nkm.data.serialization.CTX.JSON.DATA_KEY] = p_data.Values();
     }
 
     /**

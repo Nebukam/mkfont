@@ -115,7 +115,7 @@ class FamilyDataBlockJSONSerializer extends nkm.data.serialization.json.DataBloc
 
         }
 
-        p_serial[nkm.data.serialization.CONTEXT.JSON.DATA_KEY] = fontObj;
+        p_serial[nkm.data.serialization.CTX.JSON.DATA_KEY] = fontObj;
 
     }
 
