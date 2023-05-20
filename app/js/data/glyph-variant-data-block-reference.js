@@ -15,4 +15,4 @@ class GlyphVariantRef extends base {
 
 }
 
-module.exports = GlyphVariantRef;
+module.exports = nkm.data.SIMPLEX.Export(GlyphVariantRef);

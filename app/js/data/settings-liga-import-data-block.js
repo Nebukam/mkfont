@@ -16,4 +16,4 @@ class LigaImportSettingsDataBlock extends FontObjectData {
 
 }
 
-module.exports = LigaImportSettingsDataBlock;
+module.exports = nkm.data.SIMPLEX.Export(LigaImportSettingsDataBlock);

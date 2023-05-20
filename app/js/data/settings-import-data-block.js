@@ -32,4 +32,4 @@ class ImportSettingsDataBlock extends TransformSettingsDataBlock {
 
 }
 
-module.exports = ImportSettingsDataBlock;
+module.exports = nkm.data.SIMPLEX.Export(ImportSettingsDataBlock);

@@ -18,4 +18,4 @@ class ImportSettingsDataBlock extends base {
 
 }
 
-module.exports = ImportSettingsDataBlock;
+module.exports = nkm.data.SIMPLEX.Export(ImportSettingsDataBlock);

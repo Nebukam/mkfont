@@ -280,4 +280,4 @@ class GlyphVariantDataBlock extends FontObjectData {
 
 }
 
-module.exports = GlyphVariantDataBlock;
+module.exports = nkm.data.SIMPLEX.Export(GlyphVariantDataBlock);

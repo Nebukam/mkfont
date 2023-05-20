@@ -38,4 +38,4 @@ class AppSettings extends base {
 
 }
 
-module.exports = AppSettings;
+module.exports = nkm.data.SIMPLEX.Export(AppSettings);

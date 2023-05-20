@@ -11,10 +11,6 @@ class Bindings extends nkm.com.helpers.BindingKit {
     _Init() {
         super._Init();
 
-        this.AddClasses(
-            mkfData.Family
-        );
-
         let unicodeInfos = { name: 1, u: 1, char: 1 };
 
         this.Add(

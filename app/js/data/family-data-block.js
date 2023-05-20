@@ -493,4 +493,4 @@ class FamilyDataBlock extends FontObjectData {
 
 }
 
-module.exports = FamilyDataBlock;
+module.exports = nkm.data.SIMPLEX.Export(FamilyDataBlock);

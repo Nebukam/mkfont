@@ -258,4 +258,4 @@ class SettingsSearchDataBlock extends base {
 
 }
 
-module.exports = SettingsSearchDataBlock;
+module.exports = nkm.data.SIMPLEX.Export(SettingsSearchDataBlock);

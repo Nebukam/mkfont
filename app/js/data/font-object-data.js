@@ -47,4 +47,4 @@ class FontObjectData extends nkm.data.SimpleDataBlock {
     }
 }
 
-module.exports = FontObjectData;
+module.exports = nkm.data.SIMPLEX.Export(FontObjectData);

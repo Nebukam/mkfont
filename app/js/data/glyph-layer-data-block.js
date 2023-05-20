@@ -176,4 +176,4 @@ class GlyphLayerDataBlock extends FontObjectData {
 
 }
 
-module.exports = GlyphLayerDataBlock;
+module.exports = nkm.data.SIMPLEX.Export(GlyphLayerDataBlock);
