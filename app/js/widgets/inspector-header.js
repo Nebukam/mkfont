@@ -18,8 +18,8 @@ class InspectorHeader extends base {
     static _Style() {
         return nkm.style.Extends({
             ':host': {
-                '@': ['fade-in'],
-                'position': 'relative',
+                ...nkm.style.rules.pos.rel,
+                ...nkm.style.rules.fadeIn,
                 'height': '20px',
                 'min-height': '20px',
                 'width': 'calc(100% - 20px)',
@@ -33,7 +33,7 @@ class InspectorHeader extends base {
                 'opacity': '0.5',
             },
             '.ico': {
-                'position': 'absolute',
+                ...nkm.style.rules.pos.abs,
                 'transform': 'scale(1.2) rotate(15deg) translateY(-10px)',
                 'width': '50px',
                 'right': `0`,

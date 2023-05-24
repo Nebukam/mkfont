@@ -30,17 +30,17 @@ class FontEditorFooter extends base {
     static _Style() {
         return nkm.style.Extends({
             ':host': {
-                'display': 'flex',
+                ...nkm.style.rules.pos.rel,
+                ...nkm.style.rules.flex.row.nowrap,
                 'min-height': '8px',
                 'height': '8px',
-                'position':'relative'
             },
             '.progress': {
-                'position':'absolute',
+                ...nkm.style.rules.pos.abs,
                 'width': '100%',
             },
             '.membar': {
-                '@': ['absolute-right'],
+                ...nkm.style.rules.absolute.right,
                 'width': `100px`,
                 'height': `4px`,
                 'min-height': `4px`,

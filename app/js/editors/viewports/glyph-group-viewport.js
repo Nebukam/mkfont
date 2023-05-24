@@ -99,25 +99,24 @@ class GlyphGroupViewport extends base {
     static _Style() {
         return nkm.style.Extends({
             ':host': {
-                'position': 'relative',
-                'display': 'flex',
-                'flex-flow': 'column nowrap',
+                ...nkm.style.rules.pos.rel,
+                ...nkm.style.rules.flex.column.nowrap,
                 '--streamer-gap': '10px',
                 'overflow': 'clip'
             },
             '.header, .search, .footer': {
-                'flex': '0 0 auto',
+                ...nkm.style.rules.item.fixed,
             },
             '.dom-stream': {
-                'position': 'relative',
-                'flex': '1 1 auto',
+                ...nkm.style.rules.pos.rel,
+                ...nkm.style.rules.item.fill,
                 'overflow': 'auto',
             },
             '.dom-stream.empty': {
                 'display': 'block !important'
             },
             '.search-status': {
-                '@': ['absolute-center']
+                ...nkm.style.rules.absolute.center,
             }
         }, base._Style());
     }

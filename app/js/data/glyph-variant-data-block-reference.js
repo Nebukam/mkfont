@@ -9,10 +9,11 @@ class GlyphVariantRef extends base {
 
     constructor() { super(); }
 
-    static __VALUES = this.Ext(base.__VALUES, {
+    static __VALUES = {
+        ...base.__VALUES,
         [IDS.SHOW_ALL_LAYERS]: { value: false }
-    });
+    };
 
 }
 
-module.exports = nkm.data.SIMPLEX.Export(GlyphVariantRef);
+module.exports = nkm.data.Register(GlyphVariantRef);

@@ -13,7 +13,9 @@ const base = nkm.app.AppSettings;
 class AppSettings extends base {
     constructor() { super(); }
 
-    static __VALUES = this.Ext(base.__VALUES, {
+    static __VALUES = {
+
+        ...base.__VALUES,
 
         [IDS_PREFS.SVG_EDITOR_PATH]: { value: ``, group: IDS_PREFS.GROUP_THIRD_PARTIES },
         [IDS_PREFS.ILLU_PATH]: { value: ``, group: IDS_PREFS.GROUP_THIRD_PARTIES },
@@ -30,7 +32,7 @@ class AppSettings extends base {
         [IDS.COLOR_PREVIEW]: { value: `#f5f5f5`, group: IDS_PREFS.GROUP_DEFAULTS },
         [IDS.PREVIEW_SIZE]: { value: 70, group: IDS_PREFS.GROUP_DEFAULTS },
 
-    });
+    };
 
     _Init() {
         super._Init();
@@ -38,4 +40,4 @@ class AppSettings extends base {
 
 }
 
-module.exports = nkm.data.SIMPLEX.Export(AppSettings);
+module.exports = nkm.data.Register(AppSettings);

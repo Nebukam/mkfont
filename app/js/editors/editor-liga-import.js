@@ -47,18 +47,17 @@ class EditorLigaImport extends base {
             ':host': {
                 'display': 'grid',
                 'flex-flow': 'column wrap',
-                'flex': '0 0 auto',
+                ...nkm.style.rules.item.fixed,
                 'grid-template-columns': 'max-content max-content',
                 'grid-template-rows': '400px',
                 'grid-gap': '10px'
             },
             '.list': {
-                'position': 'relative',
+                ...nkm.style.rules.pos.rel,
+                ...nkm.style.rules.flex.row.wrap,
                 'width': '500px',
                 //'padding': '10px',
                 'overflow': 'auto',
-                'display': 'flex',
-                'flex-flow': 'row wrap',
                 'align-content': 'flex-start'
             },
             '.inputs': {
@@ -71,7 +70,7 @@ class EditorLigaImport extends base {
                 'margin': `4px`
             },
             '.msg': {
-                '@': [`absolute-center`]
+                ...nkm.style.rules.absolute.center,
             }
         }, base._Style());
     }

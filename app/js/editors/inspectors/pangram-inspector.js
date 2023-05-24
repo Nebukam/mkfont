@@ -46,32 +46,27 @@ class PangramInspector extends base {
     static _Style() {
         return nkm.style.Extends({
             ':host': {
-                'position': 'relative',
-                'display': 'flex',
-                'flex-flow': 'column nowrap',
+                ...nkm.style.rules.pos.rel,
+                ...nkm.style.rules.flex.column.nowrap,
             },
             '.body': {
-                'display': 'flex',
-                'flex-flow': 'column nowrap',
-                'flex': '1 1 auto',
-                'min-height': '0',
+                ...nkm.style.rules.flex.column.nowrap,
+                ...nkm.style.rules.item.fill,
                 'overflow': 'auto',
                 'padding': '10px',
                 'justify-content': 'center'
             },
             '.footer': {
-                'flex': '0 0 auto',
+                ...nkm.style.rules.flex.column.nowrap,
+                ...nkm.style.rules.item.fixed,
                 'width': 'auto',
                 'padding': '10px',
-                'display': 'flex',
-                'flex-flow': 'column nowrap'
             },
             '.item': {
                 'margin-bottom': `4px`
             },
             '.sliders': {
-                'display': 'flex',
-                'flex-flow': 'row wrap',
+                ...nkm.style.rules.flex.row.wrap,
                 'align-items': 'center',
                 'margin': '10px 0px 10px 0px'
             },
@@ -79,7 +74,7 @@ class PangramInspector extends base {
                 'flex': '1 1 50%',
             },
             '.pangram': {
-                'flex': '1 1 auto',
+                ...nkm.style.rules.item.fill,
                 'width': '100%',
                 'overflow-y': 'auto'
             },
@@ -116,7 +111,7 @@ class PangramInspector extends base {
         this._toolbar.options = {
             defaultWidgetClass: nkm.uilib.inputs.SelectInline,
             size: ui.FLAGS.SIZE_S,
-            stretch: ui.WidgetBar.FLAG_STRETCH_SQUEEZE,
+            stretch: ui.FLAGS.STRETCH_SQUEEZE,
             inline: true,
             handles: [
                 {
@@ -144,7 +139,7 @@ class PangramInspector extends base {
         let slider = this.Attach(nkm.uilib.inputs.Slider, `item slider`, slidersCtnr);
         slider.options = {
             min: 8, max: 144, currentValue: 20,
-            size: ui.FLAGS.SIZE_XS,
+            /* size: ui.FLAGS.SIZE_XS */ //,
             onSubmit: { fn: (p_input, p_value) => { this._pangramRenderer.fontSize = p_value; } }
         }
 
@@ -154,7 +149,7 @@ class PangramInspector extends base {
         slider = this.Attach(nkm.uilib.inputs.Slider, `item slider`, slidersCtnr);
         slider.options = {
             min: 0.1, max: 10, step: 0.01, currentValue: 1,
-            size: ui.FLAGS.SIZE_XS,
+            /* size: ui.FLAGS.SIZE_XS */ //,
             onSubmit: { fn: (p_input, p_value) => { this._pangramRenderer.lineHeight = p_value; } }
         }
 

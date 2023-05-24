@@ -73,9 +73,9 @@ class TransformSettingsInspector extends base {
     static _Style() {
         return nkm.style.Extends({
             ':host': {
-                '@': ['fade-in'],
-                'display': 'flex',
-                'flex-flow': 'row wrap',
+                ...nkm.style.rules.fadeIn,
+                ...nkm.style.rules.flex.row.wrap,
+                ...nkm.style.rules.gap.small,
                 //'min-height': '0',
                 //'overflow': 'auto',
                 //'padding': '10px',
@@ -93,7 +93,7 @@ class TransformSettingsInspector extends base {
             '.large': { 'flex': '1 1 80%' },
             '.drawer': {
                 'padding': `10px`,
-                'flex': '1 1 100%',
+                //'flex': '1 1 100%',
                 'background-color': `rgba(19, 19, 19, 0.25)`,
                 'border-radius': '4px',
                 'order': `500`

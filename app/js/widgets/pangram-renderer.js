@@ -32,10 +32,9 @@ class PangramRenderer extends base {
     static _Style() {
         return nkm.style.Extends({
             ':host': {
-                'position': 'relative',
-                'display': 'flex',
+                ...nkm.style.rules.pos.rel,
+                ...nkm.style.rules.flex.column.nowrap,
                 'box-sizing': 'border-box',
-                'flex-flow': 'column nowrap',
                 //'align-items':'center',
                 'justify-content': 'center',
                 'padding': '20px',

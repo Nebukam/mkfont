@@ -9,7 +9,9 @@ const base = TransformSettingsDataBlock;
 class ImportSettingsDataBlock extends TransformSettingsDataBlock {
     constructor() { super(); }
 
-    static __VALUES = this.Ext(base.__VALUES, {
+    static __VALUES = {
+
+        ...base.__VALUES,
 
         [IDS_EXT.IMPORT_ASSIGN_MODE]: { value: ENUMS.ASSIGN_FILENAME },
         [IDS_EXT.IMPORT_OVERLAP_MODE]: { value: ENUMS.OVERLAP_PRESERVE },
@@ -28,8 +30,8 @@ class ImportSettingsDataBlock extends TransformSettingsDataBlock {
         [IDS_EXT.IMPORT_BIND_RESOURCE]: { value: true },
         [IDS_EXT.IMPORT_TEXT_AS_LAYERS]: { value: true },
 
-    });
+    };
 
 }
 
-module.exports = nkm.data.SIMPLEX.Export(ImportSettingsDataBlock);
+module.exports = nkm.data.Register(ImportSettingsDataBlock);

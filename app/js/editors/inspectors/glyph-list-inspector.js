@@ -56,14 +56,13 @@ class GlyphListInspector extends base {
     static _Style() {
         return nkm.style.Extends({
             ':host': {
+                ...nkm.style.rules.pos.rel,
+                ...nkm.style.rules.flex.column.nowrap,
                 'padding': '10px',
-                'display': 'flex',
-                'flex-flow': 'column nowrap',
-                'position': 'relative'
             },
             ':host(.sel-invalid) .infos': { 'display': `block` },
             '.toolbar': {
-                'flex': `0 0 auto`,
+                ...nkm.style.rules.item.fixed,
                 'justify-content': `center`,
                 'margin-bottom': '5px',
                 'margin-top': '5px',
@@ -72,16 +71,16 @@ class GlyphListInspector extends base {
                 'background-color': `rgba(19, 19, 19, 0.25)`
             },
             '.previews': {
-                'flex': `0 0 auto`,
+                ...nkm.style.rules.item.fixed,
                 'margin-bottom': '5px',
             },
             '.infos': {
                 'display': `none`,
-                '@': [`absolute-center`],
+                ...nkm.style.rules.absolute.center,
                 'text-align': `center`
             },
             '.control, .drawer, .item': {
-                'flex': '0 0 auto',
+                ...nkm.style.rules.item.fixed,
             },
             '.drawer': {
                 'padding': `10px`,

@@ -47,16 +47,15 @@ class EditorMKFontImport extends base {
     static _Style() {
         return nkm.style.Extends({
             ':host': {
-                'display': 'flex',
-                'flex-flow': 'column nowrap',
-                'flex': '1 1 auto',
+                ...nkm.style.rules.flex.column.nowrap,
+                ...nkm.style.rules.item.fill,
                 'grid-gap': '10px'
             },
             '.item': {
-                'flex': '1 1 auto',
+                ...nkm.style.rules.item.fill,
             },
             '.list': {
-                'position': 'relative',
+                ...nkm.style.rules.pos.rel,
                 'width': '800px',
                 'min-height': '100px',
                 //'padding': '10px',

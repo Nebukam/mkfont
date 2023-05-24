@@ -47,18 +47,16 @@ class GlyphMiniSlot extends base {
     static _Style() {
         return nkm.style.Extends({
             ':host': {
-                '@': ['fade-in'],
+                ...nkm.style.rules.fadeIn,
+                ...nkm.style.rules.pos.rel,
+                ...nkm.style.rules.flex.column.centerNowrap,
                 'transition': 'opacity 0.15s, transform 0.05s, box-shadow 0.05s',
                 'box-shadow': `none`,
                 'transform': 'scale(1)',
-                'position': 'relative',
-                'display': 'flex',
-                'flex-flow': 'column nowrap',
                 'box-sizing': 'border-box',
                 'padding': '2px',
                 'border-radius': '3px',
                 'background-color': '#161616',
-                'align-items': 'center',
                 'overflow': 'clip',
                 'border':`1px solid rgba(0,0,0,0)`
             },
@@ -75,7 +73,7 @@ class GlyphMiniSlot extends base {
                 'background-color': '#1e1e1e'
             },
             '.cat-hint': {
-                'position': 'absolute',
+                ...nkm.style.rules.pos.abs,
                 'width': '4px',
                 'height': '4px',
                 'border-radius': '10px',
@@ -86,23 +84,19 @@ class GlyphMiniSlot extends base {
             },
             ':host(.unpainted) .box': { 'display': 'none' },
             '.preview': {
-                'position': 'relative',
+                ...nkm.style.rules.pos.rel,
+                ...nkm.style.rules.flex.column.nowrap,
                 'border-radius': 'inherit',
                 //'aspect-ratio': 'var(--preview-ratio)',
-                'flex': '1 0 auto',
+                ...nkm.style.rules.item.grow,
                 'min-height': 'var(--preview-height)',
                 'min-width': 'var(--preview-width)',
                 'width': '100%',
-                'display': 'flex',
-                'flex-flow': 'row nowrap',
                 'justify-content': 'center',
                 'overflow-y': 'clip'
             },
             '.box': {
-                'width': '100%',
-                'height': '100%',
-                //'aspect-ratio': 'var(--preview-ratio)',
-                'position': 'absolute',
+                ...nkm.style.rules.absolute.fill,
             },
             '.placeholder': {
                 'display': `grid`,
@@ -116,7 +110,7 @@ class GlyphMiniSlot extends base {
             },
             '.oob': {
                 'display': 'none',
-                '@': ['absolute-center'],
+                ...nkm.style.rules.absolute.center,
                 'width': '50%'
             },
             ':host(.out-of-bounds) .oob': {
@@ -127,7 +121,7 @@ class GlyphMiniSlot extends base {
             },
             ':host(.exists:not(.do-export)) .preview:before': {
                 'content': `""`,
-                'position': `absolute`,
+                ...nkm.style.rules.pos.abs,
                 'top': '50%', 'left': '50%',
                 'transform': 'translate(-50%, -50%) rotate(45deg)',
                 'width': `1px`, 'height': `120%`,

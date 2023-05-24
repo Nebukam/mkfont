@@ -449,6 +449,7 @@ class FamilyDataBlock extends FontObjectData {
             delete this._transformSettings._values[p].nullable;
         }
 
+        console.log(`_OnReset global transforms data block`);
         super._OnReset();
     }
 
@@ -493,4 +494,4 @@ class FamilyDataBlock extends FontObjectData {
 
 }
 
-module.exports = nkm.data.SIMPLEX.Export(FamilyDataBlock);
+module.exports = nkm.data.Register(FamilyDataBlock);

@@ -11,14 +11,13 @@ class SearchStatus extends base {
     static _Style() {
         return nkm.style.Extends({
             ':host': {
-                'position': 'relative',
+                ...nkm.style.rules.pos.rel,
+                ...nkm.style.rules.flex.column.nowrap,
                 //'min-height': '250px',
                 //'height': '250px',
                 'min-width': '500px',
                 'width': '250px',
                 //'padding': '20px',
-                'display': 'flex',
-                'flex-flow': 'column nowrap',
                 'padding-bottom': '5px',
                 'margin-bottom': '5px',
                 //'border': '1px solid red',

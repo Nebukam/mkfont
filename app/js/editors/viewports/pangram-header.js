@@ -34,9 +34,7 @@ class PangramHeader extends base {
                 'margin-bottom': '10px'
             },
             '.toolbar': {
-                'display': 'flex',
-                'flex-flow': 'row nowrap',
-                'justify-content': 'space-between'
+                ...nkm.style.rules.flex.row.distributeNowrap,
             }
         }, base._Style());
     }
@@ -53,7 +51,7 @@ class PangramHeader extends base {
         this._tagBar = this.Attach(ui.WidgetBar, `tagbar left`, toolbar);
         this._tagBar.options = {
             defaultWidgetClass: nkm.uilib.widgets.Tag,
-            size: ui.FLAGS.SIZE_XS
+            /* size: ui.FLAGS.SIZE_XS */
         };
 
         this._optionsBar = this.Attach(ui.WidgetBar, `right`, toolbar);

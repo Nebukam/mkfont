@@ -72,17 +72,15 @@ class GlyphVariantInspectorItem extends base {
     static _Style() {
         return nkm.style.Extends({
             ':host': {
-                'display': 'flex',
-                'flex-flow': 'column nowrap',
-                'justify-content': `space-between`,
+                ...nkm.style.rules.flex.column.nowrap,
             },
             '.item': {
                 'margin-bottom': '5px',
             },
             '.preview': {
-                'position': 'relative',
+                ...nkm.style.rules.pos.rel,
                 'display': 'flex',
-                'flex': '1 1 auto',
+                ...nkm.style.rules.item.fill,
                 'width': 'calc(100% - 6px)',
                 'overflow': 'hidden',
                 'background-color': 'rgba(0,0,0,0.5)',
@@ -90,7 +88,7 @@ class GlyphVariantInspectorItem extends base {
             },
             ':host(.has-popout) .preview': { 'opacity': '0.25' },
             '.toolbar': {
-                'flex': `1 1 auto`,
+                ...nkm.style.rules.item.fill,
                 'justify-content': `center`,
                 'margin-top': '5px',
                 'padding': '4px 0px',
@@ -99,7 +97,7 @@ class GlyphVariantInspectorItem extends base {
             },
             ':host(.null-glyph) .drawer:not(.always-visible)': { 'display': 'none' },
             '.drawer': {
-                'flex': '1 1 auto',
+                ...nkm.style.rules.item.fill,
                 'padding': `10px`,
                 'background-color': `rgba(19, 19, 19, 0.25)`,
                 'border-radius': '4px',

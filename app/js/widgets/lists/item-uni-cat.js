@@ -25,7 +25,7 @@ class CatItem extends base {
 
             },
             '.cat-hint': {
-                'position': 'absolute',
+                ...nkm.style.rules.pos.abs,
                 'width': '4px',
                 'height': '4px',
                 'border-radius': '10px',

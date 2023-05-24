@@ -24,10 +24,9 @@ class GlyphStats extends base {
     static _Style() {
         return nkm.style.Extends({
             ':host': {
+                ...nkm.style.rules.flex.column.nowrap,
                 'min-height': 'auto',
                 //'padding': '20px',
-                'display': 'flex',
-                'flex-flow': 'column nowrap',
                 'padding-bottom': '5px',
                 'margin-bottom': '5px',
                 //'border-bottom': '1px solid rgba(0,0,0,0.25)',
@@ -53,7 +52,7 @@ class GlyphStats extends base {
                 'margin': `5px`,
             },
             '.shortcuts': {
-                'flex': `1 1 auto`,
+                ...nkm.style.rules.item.fill,
                 'display': 'grid',
                 'grid-template-columns': 'repeat(4, 1fr)',
                 'grid-gap': '10px'

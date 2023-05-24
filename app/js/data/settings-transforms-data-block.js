@@ -165,4 +165,4 @@ class TransformSettingsDataBlock extends FontObjectData {
 
 }
 
-module.exports = nkm.data.SIMPLEX.Export(TransformSettingsDataBlock);
+module.exports = nkm.data.Register(TransformSettingsDataBlock);

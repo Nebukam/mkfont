@@ -188,7 +188,7 @@ class SVGOperations {
                 let
                     markCol = p_markCol[0] == `#` ? p_markCol.substring(1) : p_markCol,
                     style = svg.getElementsByTagName(`style`)[0],
-                    styleObject = style ? css.ClassCSS(style.innerHTML) : {};
+                    styleObject = style ? nkm.style.helpers.RuleSetsFromString(style.innerHTML) : {}; 
 
                 for (let i = 0; i < pathArray.length; i++) {
 
@@ -314,13 +314,6 @@ class SVGOperations {
         if (!foundRef && inlineStyle) {
             let lwrc = inlineStyle.toLowerCase();
             if (lwrc.includes(A) || lwrc.includes(B) || lwrc.includes(C)) { foundRef = true; }
-            /*
-            let inlineObj = css.Rules(inlineStyle);
-            for (let c in inlineObj) {
-                let refValue = inlineObj[c];
-                if (refValue == A || refValue == B) { foundRef = true; break; }
-            }
-            */
         }
 
         if (!foundRef && (fillStyle == A || fillStyle == B || fillStyle == C)) { foundRef = true; }

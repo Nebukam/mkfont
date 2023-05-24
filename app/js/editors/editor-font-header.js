@@ -45,11 +45,8 @@ class FontEditorHeader extends base {
     static _Style() {
         return nkm.style.Extends({
             ':host': {
-                'position': 'relative',
-                'display': 'flex',
-                'flex-flow': 'row nowrap',
-                'align-items': 'center',
-                'justify-content': 'space-between',
+                ...nkm.style.rules.pos.rel,
+                ...nkm.style.rules.flex.row.distributeNowrap,
 
                 'min-height': 'auto',
                 'padding': '10px',
@@ -65,7 +62,7 @@ class FontEditorHeader extends base {
 
             },
             '.monitor': {
-                '@': [`absolute-right`],
+                ...nkm.style.rules.absolute.right,
                 'margin-right': '10px'
             }
         }, base._Style());

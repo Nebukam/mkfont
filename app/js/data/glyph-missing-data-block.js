@@ -20,4 +20,4 @@ class GlyphMissingDataBlock extends GlyphVariant {
 
 }
 
-module.exports = nkm.data.SIMPLEX.Export(GlyphMissingDataBlock);
+module.exports = nkm.data.Register(GlyphMissingDataBlock);

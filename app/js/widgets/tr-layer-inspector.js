@@ -91,14 +91,11 @@ class LayerTransformSettingsInspector extends base {
     static _Style() {
         return nkm.style.Extends({
             ':host': {
-                //'@': ['fade-in'],
-                'display': 'flex',
-                'flex-flow': 'row wrap',
-                //'min-height': '0',
+                //...nkm.style.rules.fadeIn,
+                ...nkm.style.rules.flex.row.inlineNowrap,
                 //'overflow': 'auto',
                 //'padding': '10px',
                 'align-content': 'flex-start',
-                'align-items': `center`,
             },
             '.control': {
                 'flex': '1 1 100%',

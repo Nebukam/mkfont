@@ -157,4 +157,4 @@ class GlyphDataBlock extends FontObjectData {
 
 }
 
-module.exports = nkm.data.SIMPLEX.Export(GlyphDataBlock);
+module.exports = nkm.data.Register(GlyphDataBlock);

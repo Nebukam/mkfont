@@ -38,15 +38,13 @@ class AssignBaseControl extends base {
     static _Style() {
         return nkm.style.Extends({
             ':host': {
-                'position': 'relative',
-                'display': 'flex',
-                'flex-flow': 'column nowrap',
-                'align-items': 'center',
-                'flex': '0 1 auto',
-                'align-items': `stretch`
+                ...nkm.style.rules.pos.rel,
+                ...nkm.style.rules.flex.column.nowrap,
+                'align-items': `stretch`,
+                ...nkm.style.rules.item.shrink,
             },
             '.control': {
-                'flex': '1 1 auto',
+                ...nkm.style.rules.item.fill,
                 'margin': '0 0 5px 0'
             },
         }, base._Style());

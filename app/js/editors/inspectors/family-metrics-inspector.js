@@ -67,6 +67,7 @@ class FamilyMetricsInspector extends base {
 
         this._trBuilder = new nkm.datacontrols.helpers.ControlBuilder(this);
         this._trBuilder.options = { cl: ValueControl, css: `foldout-item` };
+
         this.forwardData.To(this._trBuilder, { get: `_transformSettings` });
         this.forwardContext.To(this._trBuilder);
         this.forwardEditor.To(this._trBuilder);
@@ -76,30 +77,27 @@ class FamilyMetricsInspector extends base {
     static _Style() {
         return nkm.style.Extends({
             ':host': {
+                ...nkm.style.rules.flex.column.nowrap,
                 'width': '350px',
-                'display': 'flex',
-                'flex-flow': 'column nowrap',
                 'overflow':`auto`
             },
             '.body': {
-                'display': 'flex',
-                'flex-flow': 'column nowrap',
-                'flex': '1 1 auto',
-                'min-height': '0',
+                ...nkm.style.rules.flex.column.nowrap,
+                ...nkm.style.rules.gap.small,
+                ...nkm.style.rules.item.fill,
                 'overflow': 'auto',
                 'padding': '10px',
             },
             '.control': {
-                'flex': '0 0 auto',
+                ...nkm.style.rules.item.fixed,
                 'margin': '0',
-                'margin-bottom': '5px'
+                //'margin-bottom': '5px'
             },
             '.drawer': {
                 'padding': `10px`,
-                'flex': '1 1 100%',
+                //'flex': '1 1 100%',
                 'background-color': `rgba(19, 19, 19, 0.25)`,
                 'border-radius': '4px',
-                'margin-bottom': '0'
             }
         }, base._Style());
     }

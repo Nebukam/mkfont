@@ -37,18 +37,16 @@ class FamilyInspector extends base {
         return nkm.style.Extends({
             ':host': {
                 'min-width':'350px',
-                //'flex': '0 0 auto',
+                //...nkm.style.rules.item.fixed,
             },
             '.list': {
-                'display': 'flex',
-                'flex-flow': 'column nowrap',
-                'flex': '1 1 auto',
-                'min-height': '0',
+                ...nkm.style.rules.flex.column.nowrap,
+                ...nkm.style.rules.item.fill,
                 'overflow': 'auto',
                 'padding': '10px',
             },
             '.control': {
-                'flex': '0 1 auto',
+                ...nkm.style.rules.item.shrink,
                 'margin': '0',
                 'margin-bottom': '5px'
             }

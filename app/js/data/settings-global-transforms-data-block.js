@@ -12,10 +12,11 @@ const base = TransformSettingsDataBlock;
 class ImportSettingsDataBlock extends base {
     constructor() { super(); }
 
-    static __VALUES = this.Ext(base.__VALUES, {
+    static __VALUES = {
+        ...base.__VALUES,
         [IDS.MONOSPACE]: { value: false }
-    });
+    };
 
 }
 
-module.exports = nkm.data.SIMPLEX.Export(ImportSettingsDataBlock);
+module.exports = nkm.data.Register(ImportSettingsDataBlock);

@@ -96,17 +96,16 @@ class GlyphPicker extends base {
     static _Style() {
         return nkm.style.Extends({
             ':host': {
-                'position': 'relative',
+                ...nkm.style.rules.pos.rel,
+                ...nkm.style.rules.flex.column.nowrap,
                 'padding': `10px`,
                 'width': '300px',
                 'height': '350px',
-                'display': 'flex',
-                'flex-flow': 'column nowrap',
                 'overflow': 'clip',
                 'grid-gap': '5px'
             },
             '.search, .toolbar': {
-                'flex': '0 0 auto',
+                ...nkm.style.rules.item.fixed,
             },
             '.toolbar': {
                 'margin-top': `5px`
@@ -115,8 +114,8 @@ class GlyphPicker extends base {
                 'display': 'none'
             },
             '.dom-stream': {
-                'position': 'relative',
-                'flex': '1 1 auto',
+                ...nkm.style.rules.pos.rel,
+                ...nkm.style.rules.item.fill,
                 'margin-top': `5px`,
                 'overflow': 'auto',
             },
@@ -124,7 +123,7 @@ class GlyphPicker extends base {
                 'display': 'block !important'
             },
             '.search-status': {
-                '@': ['absolute-center']
+                ...nkm.style.rules.absolute.center,
             }
         }, base._Style());
     }

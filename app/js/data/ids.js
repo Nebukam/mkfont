@@ -460,7 +460,7 @@ class IDS {
                 transform: true,
                 inputType: inputs.NumberDrag,
                 label: `Scale factor`,
-                inputOptions: { min: 0.01, max: 100, step: 0.01, size: ui.FLAGS.SIZE_XS },
+                inputOptions: { min: 0.01, max: 100, step: 0.01, /* size: ui.FLAGS.SIZE_XS */ },
                 desc: `Factor by which the input vector will be scaled.`
             },
 
@@ -468,7 +468,7 @@ class IDS {
                 transform: true,
                 inputType: inputs.NumberDrag,
                 label: `Margin`,
-                inputOptions: { min: -1, max: 1, step: 0.01, size: ui.FLAGS.SIZE_XS },
+                inputOptions: { min: -1, max: 1, step: 0.01, /* size: ui.FLAGS.SIZE_XS */ },
                 desc: `Margin to apply to the glyph when normalizing it.`
             },
 
@@ -477,7 +477,7 @@ class IDS {
                 recompute: true,
                 inputType: inputs.NumberDrag,
                 label: `Shift`,
-                inputOptions: { step: 1, min: -16000, max: 16000, size: ui.FLAGS.SIZE_XXS, placeholder: `· · ·` },
+                inputOptions: { step: 1, min: -16000, max: 16000, placeholder: `· · ·` },
                 desc: `Append empty space before the glyph.`
             },
 
@@ -486,7 +486,7 @@ class IDS {
                 recompute: true,
                 inputType: inputs.NumberDrag,
                 label: `Push`,
-                inputOptions: { step: 1, min: -16000, max: 16000, size: ui.FLAGS.SIZE_XXS, placeholder: `· · ·` },
+                inputOptions: { step: 1, min: -16000, max: 16000, placeholder: `· · ·` },
                 desc: `Add empty space after the glyph.`
             },
 
@@ -494,7 +494,7 @@ class IDS {
                 transform: true,
                 inputType: inputs.Boolean,
                 label: `Automatic Width`,
-                inputOptions: { size: ui.FLAGS.SIZE_XS, placeholder: `· · ·` },
+                inputOptions: { placeholder: `· · ·`, size: ui.FLAGS.SIZE_XS },
                 desc: `If enabled, the glyph' width is equal to its asset width + shift + push.\nOtherwise the value is expected to be either manual, or inherited from the family Metrics.`
             },
 
@@ -503,7 +503,7 @@ class IDS {
                 recompute: true,
                 inputType: inputs.NumberDrag,
                 label: `Horizontal Offset`,
-                inputOptions: { step: 1, min: -16000, max: 16000, size: ui.FLAGS.SIZE_XXS, placeholder: `· · ·` },
+                inputOptions: { step: 1, min: -16000, max: 16000, placeholder: `· · ·` },
                 desc: `An horizontal offset applied to the glyph position after everything else is computed.`
             },
 
@@ -512,7 +512,7 @@ class IDS {
                 recompute: true,
                 inputType: inputs.NumberDrag,
                 label: `Vertical Offset`,
-                inputOptions: { step: 1, min: -16000, max: 16000, size: ui.FLAGS.SIZE_XXS, placeholder: `· · ·` },
+                inputOptions: { step: 1, min: -16000, max: 16000, placeholder: `· · ·` },
                 desc: `A vertical offset applied to the glyph position after everything else is computed.`
             },
 
@@ -557,7 +557,7 @@ class IDS {
                 recompute: true,
                 inputType: inputs.NumberDrag,
                 label: `Rotation`,
-                inputOptions: { step: 0.01, min: -180, max: 180, size: ui.FLAGS.SIZE_XS, placeholder: `· · ·` },
+                inputOptions: { step: 0.01, min: -180, max: 180, placeholder: `· · ·`, /* size: ui.FLAGS.SIZE_XS */ },
                 desc: `Rotate the glyph around its anchor point.`
             },
 
@@ -566,7 +566,7 @@ class IDS {
                 recompute: true,
                 inputType: inputs.Anchor,
                 label: `Rotation anchor`,
-                //inputOptions: { changeOnInput: true, step: 0.01, min: -180, max: 180, size: ui.FLAGS.SIZE_XS },
+                //inputOptions: { changeOnInput: true, step: 0.01, min: -180, max: 180, /* size: ui.FLAGS.SIZE_XS */ },
                 desc: `Defines the rotation anchor of the glyph`
             },
 
@@ -575,7 +575,7 @@ class IDS {
                 recompute: true,
                 inputType: inputs.NumberDrag,
                 label: `Skew X`,
-                inputOptions: { step: 0.1, min: -85, max: 85, size: ui.FLAGS.SIZE_XXS, placeholder: `· · ·` },
+                inputOptions: { step: 0.1, min: -85, max: 85, placeholder: `· · ·` },
                 desc: `Skews the glyph horizontally.`
             },
 
@@ -584,7 +584,7 @@ class IDS {
                 recompute: true,
                 inputType: inputs.NumberDrag,
                 label: `Skew Y`,
-                inputOptions: { step: 0.1, min: -85, max: 85, size: ui.FLAGS.SIZE_XXS, placeholder: `· · ·` },
+                inputOptions: { step: 0.1, min: -85, max: 85, placeholder: `· · ·` },
                 desc: `Skews the glyph vertically.`
             },
 
@@ -676,7 +676,7 @@ class IDS {
                 transform: true,
                 inputType: inputs.NumberDrag,
                 label: `Scale factor`,
-                inputOptions: { min: 0.01, max: 100, step: 0.01, size: ui.FLAGS.SIZE_XS },
+                inputOptions: { min: 0.01, max: 100, step: 0.01, /* size: ui.FLAGS.SIZE_XS */ },
                 desc: `Factor by which the component will be scaled.`
             },
 
@@ -684,7 +684,7 @@ class IDS {
                 transform: true,
                 inputType: inputs.Anchor,
                 label: `Self anchor`,
-                //inputOptions: { changeOnInput: true, min: 0.01, max: 2, step: 0.01, size: ui.FLAGS.SIZE_XS },
+                //inputOptions: { changeOnInput: true, min: 0.01, max: 2, step: 0.01, /* size: ui.FLAGS.SIZE_XS */ },
                 desc: `The component' anchor point reference for transformations.`
             },
 

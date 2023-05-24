@@ -52,10 +52,9 @@ class GlyphGroupSearch extends base {
     static _Style() {
         return nkm.style.Extends({
             ':host': {
-                'position': 'relative',
-                '@': ['fade-in'],
-                'display': 'flex',
-                'flex-flow': 'row wrap',
+                ...nkm.style.rules.pos.rel,
+                ...nkm.style.rules.flex.row.wrap,
+                ...nkm.style.rules.fadeIn,
                 //'min-height': '0',
                 //'overflow': 'auto',
                 //'padding': '10px',
@@ -67,12 +66,12 @@ class GlyphGroupSearch extends base {
                 //'margin':'0 10px'
             },
             '.control': {
-                'flex': '0 0 auto',
+                ...nkm.style.rules.item.fixed,
                 'margin-right': '10px',
                 //'margin-bottom': '0'',
             },
             '.main-toggle': { 'flex': '0 0 115px' },
-            '.search': { 'flex': '1 1 auto' },
+            '.search': { ...nkm.style.rules.item.fill, },
             '.large': { 'margin-right': '10px' },
 
             ':host(.enabled)': { 'background-color': 'rgba(var(--col-active-dark-rgb),0.5)', },
@@ -84,10 +83,7 @@ class GlyphGroupSearch extends base {
                 'margin': '5px 2px 5px 2px'
             },
             '.progress': {
-                'position': 'absolute',
-                'bottom': '0',
-                'left': '0',
-                'width': '100%'
+                ...nkm.style.rules.tape.bottom,
             }
         }, base._Style());
     }

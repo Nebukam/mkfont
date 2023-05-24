@@ -50,12 +50,11 @@ class GlyphInspector extends base {
     static _Style() {
         return nkm.style.Extends({
             ':host': {
+                ...nkm.style.rules.flex.column.nowrap,
                 'padding': '10px',
-                'display': 'flex',
-                'flex-flow': 'column nowrap'
             },
             '.variant': {
-                'flex': '0 0 auto',
+                ...nkm.style.rules.item.fixed,
                 'margin-bottom': '3px'
             },
             '.identity': {
@@ -68,7 +67,7 @@ class GlyphInspector extends base {
                 'margin-bottom': '5px',
             },
             '.drawer': {
-                'flex': '0 0 auto',
+                ...nkm.style.rules.item.fixed,
                 'padding': `10px`,
                 'background-color': `rgba(19, 19, 19, 0.25)`,
                 'border-radius': '4px',

@@ -17,14 +17,17 @@ class SettingsSearchDataBlock extends base {
 
     constructor() { super(); }
 
-    static __VALUES = this.Ext(base.__VALUES, {
+    static __VALUES = {
+        
+        ...base.__VALUES,
+
         [nkm.data.IDS.SEARCH_ENABLED]: { value: false, signal: nkm.data.SIGNAL.SEARCH_TOGGLED },
         [nkm.data.IDS.SEARCH_RESULTS]: { value: null },
         [nkm.data.IDS.SEARCH_TERMS]: { value: `` },
         [nkm.data.IDS.SEARCH_CASE_SENSITIVE]: { value: false },
         [IDS_EXT.ADD_COMPOSITION]: { value: false },
         [IDS_EXT.MUST_EXISTS]: { value: false },
-    });
+    };
 
     _Init() {
 
@@ -258,4 +261,4 @@ class SettingsSearchDataBlock extends base {
 
 }
 
-module.exports = nkm.data.SIMPLEX.Export(SettingsSearchDataBlock);
+module.exports = nkm.data.Register(SettingsSearchDataBlock);

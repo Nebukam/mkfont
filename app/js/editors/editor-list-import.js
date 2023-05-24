@@ -38,36 +38,34 @@ class EditorListImport extends base {
     static _Style() {
         return nkm.style.Extends({
             ':host': {
-                'display': 'flex',
-                'flex-flow': 'row nowrap',
-                'flex': '1 1 auto',
+                ...nkm.style.rules.flex.row.nowrap,
+                ...nkm.style.rules.item.fill,
                 'grid-gap': '10px'
             },
             '.item': {
-                'flex': '1 0 auto',
+                ...nkm.style.rules.item.grow,
             },
             '.column': {
                 'overflow-x': 'hidden',
                 'overflow-y': 'auto',
-                'flex': '1 1 auto',
-                'min-height': 0,
+                ...nkm.style.rules.item.fill,
             },
             '.frst': { 'width': `300px`, },
             '.list': {
-                'position': 'relative',
+                ...nkm.style.rules.pos.rel,
                 'width': '270px',
                 'background-color': 'rgba(0,0,0,0.2)',
                 'overflow': 'auto',
                 'min-height': '0',
             },
             '.preview': {
-                'position': 'relative',
+                ...nkm.style.rules.pos.rel,
                 'aspect-ratio': '1/1',
                 'width': '330px',
                 'border-radius': '3px',
             },
             '.renderer': {
-                'position': 'absolute',
+                ...nkm.style.rules.pos.abs,
                 'width': '100%',
                 'height': '100%',
             },
@@ -77,10 +75,8 @@ class EditorListImport extends base {
                 'max-width': `330px`
             },
             '.header': {
-                'display': 'flex',
-                'flex-flow': 'column nowrap',
-                'flex': '1 1 auto',
-                'min-height': '0',
+                ...nkm.style.rules.flex.column.nowrap,
+                ...nkm.style.rules.item.fill,
                 'width': `calc(100% - 22px)`,
                 'align-content': 'flex-start',
                 'border-radius': '4px',
@@ -89,7 +85,7 @@ class EditorListImport extends base {
                 'margin-bottom': `10px`
             },
             '.tagbar': {
-                '@': ['absolute-bottom'],
+                ...nkm.style.rules.absolute.bottom,
                 'margin-bottom': `10px`
             }
         }, base._Style());
@@ -171,7 +167,7 @@ class EditorListImport extends base {
         this._tagBar = this.Attach(ui.WidgetBar, `tagbar`, previewCtnr);
         this._tagBar.options = {
             defaultWidgetClass: nkm.uilib.widgets.Tag,
-            size: ui.FLAGS.SIZE_XS
+            /* size: ui.FLAGS.SIZE_XS */
         };
 
         this._preserved = this._tagBar.CreateHandle();

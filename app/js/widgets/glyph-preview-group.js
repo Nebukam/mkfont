@@ -30,8 +30,8 @@ class GlyphPreviewGroup extends base {
     static _Style() {
         return nkm.style.Extends({
             ':host': {
-                '@': ['fade-in'],
-                'position': 'relative',
+                ...nkm.style.rules.pos.rel,
+                ...nkm.style.rules.fadeIn,
                 'width': '320px',
                 'grid-gap': `5px`,
                 'display': 'grid',
@@ -47,17 +47,17 @@ class GlyphPreviewGroup extends base {
                 'border-radius': '3px',
             },
             '.box': {
-                'position': 'relative',
+                ...nkm.style.rules.pos.rel,
                 'display': 'flex',
                 'aspect-ratio': '1/1',// 'var(--preview-ratio)',
-                'flex': '1 1 auto',
+                ...nkm.style.rules.item.fill,
                 'width': '100%',
                 'overflow': 'hidden',
                 'background-color': 'rgba(0,0,0,0.5)',
                 'border-radius': '5px',
             },
             '.tag': {
-                '@': [`absolute-bottom-right`],
+                ...nkm.style.rules.absolute.center,
                 'margin': `10px`
             },
         }, base._Style());

@@ -53,18 +53,17 @@ class LayersView extends base {
     static _Style() {
         return nkm.style.Extends({
             ':host': {
-                //'@': ['fade-in'],
+                //...nkm.style.rules.fadeIn,
+                ...nkm.style.rules.flex.column.nowrap,
                 'min-height': 'auto',
                 'min-width': 'auto',
                 //'padding': '20px',
-                'display': 'flex',
-                'flex-flow': 'column nowrap',
                 //'padding': '5px',
                 'margin-bottom': '5px',
                 '--limit': `0.5`,
             },
             '.control': {
-                'flex': '1 1 auto',
+                ...nkm.style.rules.item.fill,
                 'margin': `3px`,
                 'user-select': 'none'
             },
@@ -75,7 +74,7 @@ class LayersView extends base {
                 'flex': '0 0 16px',
             },
             '.label': {
-                'flex': '1 1 auto',
+                ...nkm.style.rules.item.fill,
                 'text-align': 'center'
             },
             '.label.limit': { order: -1, 'margin-bottom': `3px`, opacity: `var(--limit)` },
@@ -88,13 +87,12 @@ class LayersView extends base {
                 'margin': '3px'
             },
             '.list': {
-                'flex': '0 1 auto',
+                ...nkm.style.rules.flex.column.nowrap,
+                ...nkm.style.rules.item.shrink,
                 'width': `100%`,
                 'padding': `10px 0px`,
                 'border-top': `1px solid rgba(127,127,127,0.25)`,
                 'border-bottom': `1px solid rgba(127,127,127,0.25)`,
-                'display': `flex`,
-                'flex-flow': `column nowrap`,
                 //'background-color':`rgba(19,19,19,0.25)`,
                 'border-radius': `3px`
             },
@@ -102,7 +100,7 @@ class LayersView extends base {
                 'height': '38px'
             },
             '.item': {
-                'flex': '0 1 auto',
+                ...nkm.style.rules.item.shrink,
                 'margin': `3px`,
                 'user-select': 'none',
                 'border-radius': '4px',

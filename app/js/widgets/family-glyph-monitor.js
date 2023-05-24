@@ -18,7 +18,7 @@ class FamilyGlyphMonitor extends base {
     static _Style() {
         return nkm.style.Extends({
             ':host': {
-                '@': ['fade-in'],
+                ...nkm.style.rules.fadeIn,
                 'height':'8px',
                 'width':'100px',
                 'display':'flex',
@@ -26,10 +26,10 @@ class FamilyGlyphMonitor extends base {
                 'background-color':'rgba(0,0,0,0.5)'
             },
             '.counter': {
-                '@':[`absolute-center`]
+                ...nkm.style.rules.absolute.center,
             },
             '.progress': {
-                'flex': '1 0 auto',
+                ...nkm.style.rules.item.grow,
                 'max-height':'2px'
             }
         }, base._Style());
