@@ -7,8 +7,28 @@
 $primary_dark: #393939;
 $primary_light: #e5e5e5;
 
-$bg_dark: #191919; 
+$bg_dark: #191919;
 $bg_light: #f0f0f0;
+
+$col_base_100_dark: rgb(10, 10, 10);
+$col_base_200_dark: rgb(40, 40, 40);
+$col_base_300_dark: rgb(50, 50, 50);
+$col_base_400_dark: rgb(70, 70, 70);
+$col_base_500_dark: rgb(110, 110, 110);
+$col_base_600_dark: rgb(150, 150, 150);
+$col_base_700_dark: rgb(170, 170, 170);
+$col_base_800_dark: rgb(200, 200, 200);
+$col_base_900_dark: rgb(230, 230, 230);
+
+$col_base_100_light: rgb(230, 230, 230);
+$col_base_200_light: rgb(200, 200, 200);
+$col_base_300_light: rgb(170, 170, 170);
+$col_base_400_light: rgb(150, 150, 150);
+$col_base_500_light: rgb(110, 110, 110);
+$col_base_600_light: rgb(70, 70, 70);
+$col_base_700_light: rgb(50, 50, 50);
+$col_base_800_light: rgb(40, 40, 40);
+$col_base_900_light: rgb(10, 10, 10);
 
 //$col_error: rgb(226, 53, 0);
 //$col_loading: rgb(102, 119, 204);
@@ -24,20 +44,30 @@ $col_waiting: rgb(102, 119, 204);
 $col_active: rgb(62, 193, 136);
 $col_input_bg: rgb(32, 32, 32);
 
-$varname_col_infos: '--col-infos';
-$varname_col_warning: '--col-warning';
-$varname_col_error: '--col-error';
-$varname_col_ready: '--col-ready';
-$varname_col_dirty: '--col-dirty';
-$varname_col_loading: '--col-loading';
-$varname_col_processing: '--col-processing';
-$varname_col_waiting: '--col-waiting';
-$varname_col_active: '--col-active';
-$varname_col_cta: '--col-cta';
+$id_col_infos: '--col-infos';
+$id_col_warning: '--col-warning';
+$id_col_error: '--col-error';
+$id_col_ready: '--col-ready';
+$id_col_dirty: '--col-dirty';
+$id_col_loading: '--col-loading';
+$id_col_processing: '--col-processing';
+$id_col_waiting: '--col-waiting';
+$id_col_active: '--col-active';
+$id_col_cta: '--col-cta';
 
-$varname_col_input_bg: '--col-input-bg';
+$id_col_input_bg: '--col-input-bg';
 
 $transition_opacity: opacity 0.1s ease;
+
+$id_col_base_100: '--col-base-100';
+$id_col_base_200: '--col-base-200';
+$id_col_base_300: '--col-base-300';
+$id_col_base_400: '--col-base-400';
+$id_col_base_500: '--col-base-500';
+$id_col_base_600: '--col-base-600';
+$id_col_base_700: '--col-base-700';
+$id_col_base_800: '--col-base-800';
+$id_col_base_900: '--col-base-900';
 
 ///////////
 /* Sizes */
@@ -52,14 +82,14 @@ $size_xl: 108px;
 $size_fill: 100%;
 $size_custom: var(--custom-size, $size_m);
 
-$varname_size_xxs: '--size-xxs';
-$varname_size_xs: '--size-xs';
-$varname_size_s: '--size-s';
-$varname_size_m: '--size-m';
-$varname_size_l: '--size-l';
-$varname_size_xl: '--size-xl';
-$varname_size_fill: '--size-fill';
-$varname_size_custom: '--size-custom';
+$id_size_xxs: '--size-xxs';
+$id_size_xs: '--size-xs';
+$id_size_s: '--size-s';
+$id_size_m: '--size-m';
+$id_size_l: '--size-l';
+$id_size_xl: '--size-xl';
+$id_size_fill: '--size-fill';
+$id_size_custom: '--size-custom';
 
 ////////////////
 /* Font sizes */
@@ -73,13 +103,13 @@ $font_size_l: 1.65rem;
 $font_size_xl: 1.95rem;
 $font_size_tag: $font_size_xs * 0.75;
 
-$varname_font_size_tag: '--font-size-tag';
-$varname_font_size_xxs: '--font-size-xxs';
-$varname_font_size_xs: '--font-size-xs';
-$varname_font_size_s: '--font-size-s';
-$varname_font_size_m: '--font-size-m';
-$varname_font_size_l: '--font-size-l';
-$varname_font_size_xl: '--font-size-xl';
+$id_font_size_tag: '--font-size-tag';
+$id_font_size_xxs: '--font-size-xxs';
+$id_font_size_xs: '--font-size-xs';
+$id_font_size_s: '--font-size-s';
+$id_font_size_m: '--font-size-m';
+$id_font_size_l: '--font-size-l';
+$id_font_size_xl: '--font-size-xl';
 
 
 /////////////////
@@ -88,95 +118,126 @@ $varname_font_size_xl: '--font-size-xl';
 /////////////////
 /////////////////
 
+$col_flavors_ids: 
+    $id_col_infos,
+    $id_col_warning,
+    $id_col_error;
+
+$col_base_dark: 
+    $col_base_100_dark,
+    $col_base_200_dark,
+    $col_base_300_dark,
+    $col_base_400_dark,
+    $col_base_500_dark,
+    $col_base_600_dark,
+    $col_base_700_dark,
+    $col_base_800_dark,
+    $col_base_900_dark;
+
+$col_base_light: 
+    $col_base_100_light,
+    $col_base_200_light,
+    $col_base_300_light,
+    $col_base_400_light,
+    $col_base_500_light,
+    $col_base_600_light,
+    $col_base_700_light,
+    $col_base_800_light,
+    $col_base_900_light;
+
+$col_base_ids: 
+    $id_col_base_100,
+    $id_col_base_200,
+    $id_col_base_300,
+    $id_col_base_400,
+    $id_col_base_500,
+    $id_col_base_600,
+    $id_col_base_700,
+    $id_col_base_800,
+    $id_col_base_900;
+
 // ----> Colors Presets
 
 //$FLAVORS: $INFOS, $WARNING, $ERROR;
-$col_flavors: 
-    $col_infos, 
-    $col_warning, 
+$col_flavors: $col_infos,
+    $col_warning,
     $col_error;
 
-$col_flavors_varnames: 
-    $varname_col_infos, 
-    $varname_col_warning, 
-    $varname_col_error;
-
 //$FLAVORS_EX: $INFOS, $WARNING, $ERROR, $READY, $DIRTY, $LOADING, $PROCESSING, $WAITING, $ACTIVE, $CTA;
-$col_flavors_ex: 
-    $col_infos, 
-    $col_warning, 
-    $col_error, 
-    $col_ready, 
-    $col_dirty, 
-    $col_loading, 
-    $col_processing, 
-    $col_waiting, 
-    $col_active, 
+$col_flavors_ex: $col_infos,
+    $col_warning,
+    $col_error,
+    $col_ready,
+    $col_dirty,
+    $col_loading,
+    $col_processing,
+    $col_waiting,
+    $col_active,
     $col_active;
 
-$col_flavors_ex_varnames: 
-    $varname_col_infos, 
-    $varname_col_warning, 
-    $varname_col_error, 
-    $varname_col_ready, 
-    $varname_col_dirty, 
-    $varname_col_loading, 
-    $varname_col_processing, 
-    $varname_col_waiting, 
-    $varname_col_active, 
-    $varname_col_cta;
+$col_flavors_ex_ids: $id_col_infos,
+    $id_col_warning,
+    $id_col_error,
+    $id_col_ready,
+    $id_col_dirty,
+    $id_col_loading,
+    $id_col_processing,
+    $id_col_waiting,
+    $id_col_active,
+    $id_col_cta;
 
-$col_flavors_ex_bw:
-    contrast-color($col_infos), 
-    contrast-color($col_warning), 
-    contrast-color($col_error), 
-    contrast-color($col_ready), 
-    contrast-color($col_dirty), 
-    contrast-color($col_loading), 
-    contrast-color($col_processing), 
-    contrast-color($col_waiting), 
-    contrast-color($col_active), 
+$col_flavors_ex_bw: contrast-color($col_infos),
+    contrast-color($col_warning),
+    contrast-color($col_error),
+    contrast-color($col_ready),
+    contrast-color($col_dirty),
+    contrast-color($col_loading),
+    contrast-color($col_processing),
+    contrast-color($col_waiting),
+    contrast-color($col_active),
     contrast-color($col_active);
 
 // ----> Font size Presets
 
-$font_size_values:
-    $font_size_tag, 
-    $font_size_xxs, 
-    $font_size_xs, 
-    $font_size_s, 
-    $font_size_m, 
-    $font_size_l, 
+$font_size_values: 
+    $font_size_tag,
+    $font_size_xxs,
+    $font_size_xs,
+    $font_size_s,
+    $font_size_m,
+    $font_size_l,
     $font_size_xl;
-$font_size_varnames: 
-    $varname_font_size_tag, 
-    $varname_font_size_xxs,
-    $varname_font_size_xs, 
-    $varname_font_size_s, 
-    $varname_font_size_m, 
-    $varname_font_size_l, 
-    $varname_font_size_xl;
+
+$font_size_ids: 
+    $id_font_size_tag,
+    $id_font_size_xxs,
+    $id_font_size_xs,
+    $id_font_size_s,
+    $id_font_size_m,
+    $id_font_size_l,
+    $id_font_size_xl;
 
 // ----> Sizes Presets
 
 $size_values: 
-    $size_xxs, 
-    $size_xs, 
-    $size_s, 
-    $size_m, 
-    $size_l, 
-    $size_xl, 
+    $size_xxs,
+    $size_xs,
+    $size_s,
+    $size_m,
+    $size_l,
+    $size_xl,
     $size_fill,
     $size_custom;
-$size_varnames: 
-    $varname_size_xxs, 
-    $varname_size_xs, 
-    $varname_size_s, 
-    $varname_size_m, 
-    $varname_size_l, 
-    $varname_size_xl, 
-    $varname_size_fill,
-    $varname_size_custom;
+
+$size_ids: 
+    $id_size_xxs,
+    $id_size_xs,
+    $id_size_s,
+    $id_size_m,
+    $id_size_l,
+    $id_size_xl,
+    $id_size_fill,
+    $id_size_custom;
 
 // Halves
 
@@ -190,33 +251,34 @@ $size_fill_half: _round($size_fill*0.5);
 $size_custom_half: calc(var(--custom-size) * 0.5);
 
 $suffix: '-half';
-$varname_size_xxs_half: $varname_size_xxs+$suffix;
-$varname_size_xs_half: $varname_size_xs+$suffix;
-$varname_size_s_half: $varname_size_s+$suffix;
-$varname_size_m_half: $varname_size_m+$suffix;
-$varname_size_l_half: $varname_size_l+$suffix;
-$varname_size_xl_half: $varname_size_xl+$suffix;
-$varname_size_fill_half: $varname_size_fill+$suffix;
-$varname_size_custom_half: $varname_size_custom+$suffix;
+$id_size_xxs_half: $id_size_xxs+$suffix;
+$id_size_xs_half: $id_size_xs+$suffix;
+$id_size_s_half: $id_size_s+$suffix;
+$id_size_m_half: $id_size_m+$suffix;
+$id_size_l_half: $id_size_l+$suffix;
+$id_size_xl_half: $id_size_xl+$suffix;
+$id_size_fill_half: $id_size_fill+$suffix;
+$id_size_custom_half: $id_size_custom+$suffix;
 
 $size_values_half: 
-    $size_xxs_half, 
-    $size_xs_half, 
-    $size_s_half, 
-    $size_m_half, 
-    $size_l_half, 
-    $size_xl_half, 
-    $size_fill_half, 
+    $size_xxs_half,
+    $size_xs_half,
+    $size_s_half,
+    $size_m_half,
+    $size_l_half,
+    $size_xl_half,
+    $size_fill_half,
     $size_custom_half;
-$size_varnames_half: 
-    $varname_size_xxs_half, 
-    $varname_size_xs_half, 
-    $varname_size_s_half, 
-    $varname_size_m_half, 
-    $varname_size_l_half, 
-    $varname_size_xl_half, 
-    $varname_size_fill_half, 
-    $varname_size_custom_half;
+
+$size_ids_half: 
+    $id_size_xxs_half,
+    $id_size_xs_half,
+    $id_size_s_half,
+    $id_size_m_half,
+    $id_size_l_half,
+    $id_size_xl_half,
+    $id_size_fill_half,
+    $id_size_custom_half;
 
 // Thirds
 
@@ -230,34 +292,34 @@ $size_fill_third: _round($size_fill*0.333);
 $size_custom_third: calc(var(--custom-size) * 0.333);
 
 $suffix: '-third';
-$varname_size_xxs_third: $varname_size_xxs+$suffix;
-$varname_size_xs_third: $varname_size_xs+$suffix;
-$varname_size_s_third: $varname_size_s+$suffix;
-$varname_size_m_third: $varname_size_m+$suffix;
-$varname_size_l_third: $varname_size_l+$suffix;
-$varname_size_xl_third: $varname_size_xl+$suffix;
-$varname_size_fill_third: $varname_size_fill+$suffix;
-$varname_size_custom_third: $varname_size_custom+$suffix;
+$id_size_xxs_third: $id_size_xxs+$suffix;
+$id_size_xs_third: $id_size_xs+$suffix;
+$id_size_s_third: $id_size_s+$suffix;
+$id_size_m_third: $id_size_m+$suffix;
+$id_size_l_third: $id_size_l+$suffix;
+$id_size_xl_third: $id_size_xl+$suffix;
+$id_size_fill_third: $id_size_fill+$suffix;
+$id_size_custom_third: $id_size_custom+$suffix;
 
 $size_values_third: 
-    $size_xxs_third, 
-    $size_xs_third, 
-    $size_s_third, 
-    $size_m_third, 
-    $size_l_third, 
-    $size_xl_third, 
-    $size_fill_third, 
+    $size_xxs_third,
+    $size_xs_third,
+    $size_s_third,
+    $size_m_third,
+    $size_l_third,
+    $size_xl_third,
+    $size_fill_third,
     $size_custom_third;
-$size_varnames_third: 
-    $varname_size_xxs_third, 
-    $varname_size_xs_third, 
-    $varname_size_s_third, 
-    $varname_size_m_third, 
-    $varname_size_l_third, 
-    $varname_size_xl_third, 
-    $varname_size_fill_third, 
-    $varname_size_custom_third;
 
+$size_ids_third: 
+    $id_size_xxs_third,
+    $id_size_xs_third,
+    $id_size_s_third,
+    $id_size_m_third,
+    $id_size_l_third,
+    $id_size_xl_third,
+    $id_size_fill_third,
+    $id_size_custom_third;
 
 /*----------------------------*/
 /*<!---- @nkmjs/ui-core ----!>*/
@@ -283,11 +345,11 @@ $short_states_ids:
 $tree_indent: 24px;
 $folder_indent: 24px;
 
-$varname_tree_indent: '--tree-indent';
-$varname_tree_size: '--tree-size';
+$id_tree_indent: '--tree-indent';
+$id_tree_size: '--tree-size';
 
-$varname_folder_indent: '--folder-indent';
-$varname_folder_size: '--folder-size';
+$id_folder_indent: '--folder-indent';
+$id_folder_size: '--folder-size';
 
 $overlay_bg_dark: rgba(#191919, 0.5);
 $overlay_bg_light: rgba(#f0f0f0, 0.5);
@@ -295,8 +357,8 @@ $overlay_bg_light: rgba(#f0f0f0, 0.5);
 $drawer_bg_dark: #3d3d3d;
 $drawer_bg_light: #f0f0f0;
 
-$varname_drawer_bg: '--col-drawer-bg';
-$varname_overlay_bg: '--col-overlay-bg';
+$id_drawer_bg: '--col-drawer-bg';
+$id_overlay_bg: '--col-overlay-bg';
 
 /*-------------------------------------*/
 /*<!---- @nkmjs/ui-data-controls ----!>*/
@@ -308,8 +370,8 @@ $workspace_nav_bg_dark: rgba(#4d4d4d, 0.2);
 $workspace_bg_light: #f0f0f0;
 $workspace_nav_bg_light: rgba(#d8d8d8, 0.2);
 
-$varname_workspace_bg: '--col-workspace-bg';
-$varname_workspace_nav_bg: '--col-workspace-nav-bg';
+$id_workspace_bg: '--col-workspace-bg';
+$id_workspace_nav_bg: '--col-workspace-nav-bg';
 
 
 
@@ -323,6 +385,6 @@ $workspace_nav_bg_dark: rgba(#4d4d4d, 0.2);
 $workspace_bg_light: #f0f0f0;
 $workspace_nav_bg_light: rgba(#d8d8d8, 0.2);
 
-$varname_workspace_bg: '--col-workspace-bg';
-$varname_workspace_nav_bg: '--col-workspace-nav-bg';
+$id_workspace_bg: '--col-workspace-bg';
+$id_workspace_nav_bg: '--col-workspace-nav-bg';
 

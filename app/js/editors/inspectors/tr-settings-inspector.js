@@ -76,9 +76,6 @@ class TransformSettingsInspector extends base {
                 ...nkm.style.rules.fadeIn,
                 ...nkm.style.rules.flex.row.wrap,
                 ...nkm.style.rules.gap.small,
-                //'min-height': '0',
-                //'overflow': 'auto',
-                //'padding': '10px',
                 'align-content': 'flex-start',
             },
             '.control': {
@@ -91,11 +88,7 @@ class TransformSettingsInspector extends base {
             '.small': { 'flex': '1 1 25%' },
             '.vsmall': { 'flex': '1 1 15%' },
             '.large': { 'flex': '1 1 80%' },
-            '.drawer': {
-                'padding': `10px`,
-                //'flex': '1 1 100%',
-                'background-color': `rgba(19, 19, 19, 0.25)`,
-                'border-radius': '4px',
+            '.foldout': {
                 'order': `500`
             }
         }, base._Style());
@@ -105,7 +98,7 @@ class TransformSettingsInspector extends base {
 
         super._Render();
 
-        this._advancedFoldout = this.Attach(nkm.uilib.widgets.Foldout, `control drawer foldout-item`, this._body);
+        this._advancedFoldout = this.Attach(nkm.uilib.widgets.Foldout, `control foldout foldout-item`, this._body);
         this._advancedFoldout.options = { title: LOC.labelTrAdvanced, icon: `gear`, prefId: `advanced-tr`, expanded: false };
         this._trBuilder.host = this._advancedFoldout;
         this._trBuilder.Build(this.constructor.__trControls);

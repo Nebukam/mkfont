@@ -8,5 +8,5 @@
 @import '../_mixins';
 
 :host{
-    background-color: var(#{$varname_workspace_bg});
+    background-color: var(#{$id_workspace_bg});
 }

@@ -8,11 +8,27 @@
 @import '../_mixins';
 
 :host{
-    --bg_color: rgba(0,0,0,0);
-    background-color: var(--bg_color);
-    transition: $transition_opacity, background-color 0.15s linear;
+    --bg_color: rgba(var(#{$id_col_base_200}-rgb), 0.5);    
 }
 
-:host(#{$SHOWN}){
-    --bg_color: var(#{$varname_overlay_bg});
+:host(.shown){
+
+    animation: blurIn 250ms ease-in-out forwards;
+
+    & .bg{
+        animation: bgColorIn 250ms ease-in-out forwards;
+    }
+
 }
+
+:host(:not(.shown)){
+    
+    animation: blurOut 250ms ease-in forwards;
+
+    & .bg{
+        animation: bgColorOut 250ms ease-in forwards;
+    }
+
+}
+
+

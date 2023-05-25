@@ -7,16 +7,16 @@
 @import '../_mixins';
 @import '../_functions';
 
-$padding: 2px;
-$bg: rgb(70, 70, 70);
-
 :host {
-    
+
     @include no-select;
 
+    padding: 10px;
+    border-radius: 4px;
+    margin-bottom: 5px;
+
+    background-color: rgba(var(#{$id_col_base_200}-rgb), 0.5);
 
 }
 
-:host .label{
-    
-}
+:host .label {}

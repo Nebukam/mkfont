@@ -8,43 +8,15 @@
 @import '../_mixins';
 
 :host{
-
-    backdrop-filter: blur(0);
-    transition: $transition_opacity, backdrop-filter 0.25s linear;
-
-    padding:var(#{$varname_size_l});
-
-    & .content{
-        @include box-shadow(20px, 0,50px,20px, rgba(0,0,0,0));
-        transform: perspective(800px) scale(1.2) rotateX(20deg);
-        opacity:0;
-    }
-
+    padding:var(#{$id_size_l});
 }
 
-:host(#{$SHOWN}){
-
-    animation: blurIn 150ms ease-in-out forwards;
-
-    & .content{
-        
+.content{
+    &.shown{
         animation: scaleIn 150ms ease-in-out forwards;
-
-        @keyframes scaleIn {
-            to {
-                @include box-shadow(5px, 0, 10px, -5px, rgba(0,0,0,1));
-                transform: perspective(800px) scale(1) rotateX(0deg);
-                opacity:1;
-            }
-        }
-
-    }
-
-    @keyframes blurIn {
-        to {
-            backdrop-filter: blur(10px);
-        }
-    }
-    
+    } 
+    &:not(.shown){
+        animation: scaleOut 150ms ease-in-out forwards;
+    }    
 }
 

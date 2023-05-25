@@ -1,0 +1,219 @@
+////////////
+/* Animations */
+////////////
+
+@-webkit-keyframes rotating {
+    from {
+        -webkit-transform: rotate(0deg);
+        -o-transform: rotate(0deg);
+        transform: rotate(0deg);
+    }
+
+    to {
+        -webkit-transform: rotate(360deg);
+        -o-transform: rotate(360deg);
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes rotating {
+    from {
+        -ms-transform: rotate(0deg);
+        -moz-transform: rotate(0deg);
+        -webkit-transform: rotate(0deg);
+        -o-transform: rotate(0deg);
+        transform: rotate(0deg);
+    }
+
+    to {
+        -ms-transform: rotate(360deg);
+        -moz-transform: rotate(360deg);
+        -webkit-transform: rotate(360deg);
+        -o-transform: rotate(360deg);
+        transform: rotate(360deg);
+    }
+}
+
+.rotating-slow {
+    -webkit-animation: rotating 2s linear infinite;
+    -moz-animation: rotating 2s linear infinite;
+    -ms-animation: rotating 2s linear infinite;
+    -o-animation: rotating 2s linear infinite;
+    animation: rotating 2s linear infinite;
+}
+
+.rotating-fast {
+    -webkit-animation: rotating 1s linear infinite;
+    -moz-animation: rotating 1s linear infinite;
+    -ms-animation: rotating 1s linear infinite;
+    -o-animation: rotating 1s linear infinite;
+    animation: rotating 1s linear infinite;
+}
+
+@-webkit-keyframes rotating {
+    from {
+        -webkit-transform: rotate(0deg);
+        -o-transform: rotate(0deg);
+        transform: rotate(0deg);
+    }
+
+    to {
+        -webkit-transform: rotate(360deg);
+        -o-transform: rotate(360deg);
+        transform: rotate(360deg);
+    }
+}
+
+
+@keyframes alphaPulse {
+    from {
+        opacity: 0.4;
+    }
+}
+
+:host(.alpha-pulse-slow),
+.alpha-pulse-slow {
+    -webkit-animation: alphaPulse 2s ease-in-out infinite alternate;
+    -moz-animation: alphaPulse 2s ease-in-out infinite alternate;
+    -ms-animation: alphaPulse 2s ease-in-out infinite alternate;
+    -o-animation: alphaPulse 2s ease-in-out infinite alternate;
+    animation: alphaPulse 2s ease-in-out infinite alternate;
+}
+
+:host(.alpha-pulse-fast),
+.alpha-pulse-fast {
+    -webkit-animation: alphaPulse 1s ease-in-out infinite alternate;
+    -moz-animation: alphaPulse 1s ease-in-out infinite alternate;
+    -ms-animation: alphaPulse 1s ease-in-out infinite alternate;
+    -o-animation: alphaPulse 1s ease-in-out infinite alternate;
+    animation: alphaPulse 1s ease-in-out infinite alternate;
+}
+
+.easeload {
+    opacity: 0;
+    -webkit-transition: all 0.3s ease-out;
+    -moz-transition: all 0.3s ease-out;
+    -ms-transition: all 0.3s ease-out;
+    -o-transition: all 0.3s ease-out;
+}
+
+@keyframes bgColorIn {
+    from {
+        background-color: rgba(var(#{$id_col_base_100}-rgb), 0);
+    }
+
+    to {
+        background-color: var(--bg_color);
+    }
+}
+
+@keyframes bgColorOut {
+    to {
+        background-color: rgba(var(#{$id_col_base_100}-rgb), 0);
+    }
+}
+
+
+@keyframes blurIn {
+    from {
+        backdrop-filter: blur(0);
+    }
+
+    to {
+        backdrop-filter: blur(10px);
+    }
+}
+
+@keyframes blurOut {
+    to {
+        backdrop-filter: blur(0);
+    }
+}
+
+@keyframes scaleIn {
+    from {
+        @include box-shadow(20px, 0, 50px, 20px, rgba(0, 0, 0, 0));
+        transform: translateY(-150%) perspective(800px) scale(1.1) rotateX(-50deg);
+        opacity: 0;
+    }
+
+    to {
+        @include box-shadow(5px, 0, 10px, -5px, rgba(0, 0, 0, 1));
+        transform: perspective(800px) scale(1) rotateX(0deg);
+        opacity: 1;
+    }
+}
+
+@keyframes scaleOut {
+    to {
+        @include box-shadow(20px, 0, 50px, 20px, rgba(0, 0, 0, 0));
+        transform: translateY(150%) perspective(800px) scale(1.1) rotateX(50deg);
+        opacity: 0;
+    }
+}
+
+// Slide Ins
+
+@keyframes slideInLeft {
+    from {
+        transform: translateX(-150%);
+    }
+
+    to {
+        transform: translateX(0%);
+    }
+}
+
+@keyframes slideInRight {
+    from {
+        transform: translateX(150%);
+    }
+
+    to {
+        transform: translateX(0%);
+    }
+}
+
+@keyframes slideInTop {
+    from {
+        transform: translateY(-150%);
+    }
+
+    to {
+        transform: translateY(0%);
+    }
+}
+
+@keyframes slideInBottom {
+    from {
+        transform: translateY(150%);
+    }
+
+    to {
+        transform: translateY(0%);
+    }
+}
+
+@keyframes slideOutLeft {
+    to {
+        transform: translateX(-150%);
+    }
+}
+
+@keyframes slideOutRight {
+    to {
+        transform: translateX(150%);
+    }
+}
+
+@keyframes slideOutTop {
+    to {
+        transform: translateY(-150%);
+    }
+}
+
+@keyframes slideOutBottom {
+    to {
+        transform: translateY(150%);
+    }
+}

@@ -45,5 +45,5 @@
 $suffix: '_third';
 
 :host(#{$SIZE_XS}) .label{
-    --font-size:var(#{$varname_font_size_xs});
+    --font-size:var(#{$id_font_size_xs});
 }

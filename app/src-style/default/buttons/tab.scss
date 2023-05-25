@@ -52,7 +52,7 @@ $hint_size: 4px;
 // [    ][    ][    ]
 
 :host(#{$TOP}), :host(#{$BOTTOM}){
-    border-right: 1px solid var(#{$varname_workspace_bg});
+    border-right: 1px solid var(#{$id_workspace_bg});
 }
 
 :host::before, :host(#{$TOP})::before, :host(#{$BOTTOM})::before{
@@ -77,7 +77,7 @@ $hint_size: 4px;
 // [    ]
 
 :host(#{$LEFT}), :host(#{$RIGHT}){
-    border-bottom: 1px solid var(#{$varname_workspace_bg});
+    border-bottom: 1px solid var(#{$id_workspace_bg});
 }
 
 :host(#{$LEFT})::before, :host(#{$RIGHT})::before{
@@ -107,7 +107,7 @@ $hint_size: 4px;
 }
 
 :host(#{$SELECTED}){
-    background-color: var(#{$varname_workspace_bg});
+    background-color: var(#{$id_workspace_bg});
 
     &::before{
         background-color: var(--flavor-secondary-selected);

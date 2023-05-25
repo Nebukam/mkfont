@@ -114,12 +114,8 @@ class LayerTransformSettingsInspector extends base {
                 'flex': '0 0 32px',
                 'margin': '0 2px 5px 2px',
             },
-            '.drawer': {
-                'padding': `10px`,
+            '.foldout': {
                 'flex': '1 1 100%',
-                'background-color': `rgba(19, 19, 19, 0.25)`,
-                'border-radius': '4px',
-                'margin-top':`4px`
             }
         }, base._Style());
     }
@@ -128,12 +124,12 @@ class LayerTransformSettingsInspector extends base {
 
         super._Render();
 
-        let foldout = this.Attach(nkm.uilib.widgets.Foldout, `control drawer foldout-item`, this._body);
+        let foldout = this.Attach(nkm.uilib.widgets.Foldout, `control foldout foldout-item`, this._body);
         foldout.options = { title: LOC.labelTrAdvanced, icon: `gear`, prefId: `lyr-advanced-tr`, expanded: false };
         this._trBuilder.host = foldout;
         this._trBuilder.Build(this.constructor.__trControls);
 
-        foldout = this.Attach(nkm.uilib.widgets.Foldout, `control drawer foldout-item`, this._body);
+        foldout = this.Attach(nkm.uilib.widgets.Foldout, `control foldout foldout-item`, this._body);
         foldout.options = { title: LOC.labelSpecial, icon: `edit`, prefId: `lyr-advanced-ex`, expanded: false };
         this._exBuilder.host = foldout;
         this._exBuilder.Build(this.constructor.__exControls);

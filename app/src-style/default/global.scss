@@ -6,6 +6,7 @@
 @import './_variables';
 @import './_typography';
 
+
 /*
 
 // smartphones, touchscreens
@@ -35,70 +36,98 @@
 :root{
 
     // Font sizes
-    @for $i from 0 to length($font_size_varnames) { 
-        #{nth($font_size_varnames, $i + 1)}: nth($font_size_values, $i + 1);
-        #{nth($font_size_varnames, $i + 1)+'-title'}: nth($font_size_values, $i + 1) * 1.4;
+    @for $i from 0 to length($font_size_ids) { 
+        #{nth($font_size_ids, $i + 1)}: nth($font_size_values, $i + 1);
+        #{nth($font_size_ids, $i + 1)+'-title'}: nth($font_size_values, $i + 1) * 1.4;
     }
 
     // Sizes
-    --size:var(#{$varname_size_m}); // Default size
+    --size:var(#{$id_size_m}); // Default size
 
-    @for $i from 0 to length($size_varnames) { 
-        #{nth($size_varnames, $i + 1)}: nth($size_values, $i + 1); 
-        #{nth($size_varnames_half, $i + 1)}: nth($size_values_half, $i + 1); 
-        #{nth($size_varnames_third, $i + 1)}: nth($size_values_third, $i + 1); 
+    @for $i from 0 to length($size_ids) { 
+        #{nth($size_ids, $i + 1)}: nth($size_values, $i + 1); 
+        #{nth($size_ids_half, $i + 1)}: nth($size_values_half, $i + 1); 
+        #{nth($size_ids_third, $i + 1)}: nth($size_values_third, $i + 1); 
     }
 
     $col: #1e1e1e;
     --default-level-0-color: #{$col};
-    --default-level-0-color-rgb: red(#{$col}), green(#{$col}), blue(#{$col});
+    --default-level-0-color-rgb: red($col), green($col), blue($col);
 
     $col: #3b3b3b;
     --default-level-1-color: #{$col};
-    --default-level-1-color-rgb: red(#{$col}), green(#{$col}), blue(#{$col});
+    --default-level-1-color-rgb: red($col), green($col), blue($col);
 
     $col: #505050;
     --default-level-2-color: #{$col};
-    --default-level-2-color-rgb: red(#{$col}), green(#{$col}), blue(#{$col});
+    --default-level-2-color-rgb: red($col), green($col), blue($col);
 
     $col: $col_input_bg;
-    #{$varname_col_input_bg}:#{$col};
-    #{$varname_col_input_bg+'-rgb'}: red($col), green($col), blue($col);
+    #{$id_col_input_bg}:#{$col};
+    #{$id_col_input_bg+'-rgb'}: red($col), green($col), blue($col);
 
 }
 
 @include prefers_dark{
     :root{
-        @for $i from 0 to length($col_flavors_ex_varnames) { 
-            $varname:nth($col_flavors_ex_varnames, $i + 1);
+        @for $i from 0 to length($col_flavors_ex_ids) { 
+            $id:nth($col_flavors_ex_ids, $i + 1);
             $col:nth($col_flavors_ex, $i + 1);
-            #{$varname+'-rgb'}: red($col), green($col), blue($col);
-            #{$varname}: $col;
-            #{$varname+'-contrast'}: nth($col_flavors_ex_bw, $i + 1);
+            #{$id+'-rgb'}: red($col), green($col), blue($col);
+            #{$id}: $col;
+            #{$id+'-contrast'}: nth($col_flavors_ex_bw, $i + 1);
             $_c:darkened($col);
-            #{$varname+'-dark-rgb'}: red($_c), green($_c), blue($_c);
-            #{$varname+'-dark'}: $_c;
+            #{$id+'-low-rgb'}: red($_c), green($_c), blue($_c);
+            #{$id+'-low'}: $_c;
             $_c:lightened($col);
-            #{$varname+'-bright-rgb'}: red($_c), green($_c), blue($_c);
-            #{$varname+'-bright'}: $_c;
+            #{$id+'-high-rgb'}: red($_c), green($_c), blue($_c);
+            #{$id+'-high'}: $_c;
+        }
+
+        @for $i from 0 to length($col_base_ids) { 
+            $id:nth($col_base_ids, $i + 1);
+            $col:nth($col_base_dark, $i + 1);
+            #{$id+'-rgb'}: red($col), green($col), blue($col);
+            #{$id}: $col;
+            #{$id+'-contrast'}: nth($col_flavors_ex_bw, $i + 1);
+            $_c:darkened($col);
+            #{$id+'-low-rgb'}: red($_c), green($_c), blue($_c);
+            #{$id+'-low'}: $_c;
+            $_c:lightened($col);
+            #{$id+'-high-rgb'}: red($_c), green($_c), blue($_c);
+            #{$id+'-high'}: $_c;
         }
     }
 }
 
 @include prefers_light{
     :root{
-        @for $i from 0 to length($col_flavors_ex_varnames) { 
-            $varname:nth($col_flavors_ex_varnames, $i + 1);
+        @for $i from 0 to length($col_flavors_ex_ids) { 
+            $id:nth($col_flavors_ex_ids, $i + 1);
             $col:nth($col_flavors_ex, $i + 1);
-            #{$varname+'-rgb'}: red($col), green($col), blue($col);
-            #{$varname}: $col;
-            #{$varname+'-contrast'}: nth($col_flavors_ex_bw, $i + 1);
+            #{$id+'-rgb'}: red($col), green($col), blue($col);
+            #{$id}: $col;
+            #{$id+'-contrast'}: nth($col_flavors_ex_bw, $i + 1);
             $_c:darkened($col);
-            #{$varname+'-dark-rgb'}: red($_c), green($_c), blue($_c);
-            #{$varname+'-dark'}: $_c;
+            #{$id+'-low-rgb'}: red($_c), green($_c), blue($_c);
+            #{$id+'-low'}: $_c;
             $_c:lightened($col);
-            #{$varname+'-bright-rgb'}: red($_c), green($_c), blue($_c);
-            #{$varname+'-bright'}: $_c;
+            #{$id+'-high-rgb'}: red($_c), green($_c), blue($_c);
+            #{$id+'-high'}: $_c;
+        }
+
+        @for $i from 0 to length($col_base_ids) { 
+            $id:nth($col_base_ids, $i + 1);
+            $col:nth($col_base_light, $i + 1);
+            #{$id+'-rgb'}: red($col), green($col), blue($col);
+            #{$id}: $col;
+            #{$id+'-contrast'}: nth($col_flavors_ex_bw, $i + 1);
+            $_c:darkened($col);
+            #{$id+'-low-rgb'}: red($_c), green($_c), blue($_c);
+            #{$id+'-low'}: $_c;
+            $_c:lightened($col);
+            #{$id+'-high-rgb'}: red($_c), green($_c), blue($_c);
+            #{$id+'-high'}: $_c;
         }
     }
 }
@@ -122,7 +151,7 @@
     @for $i from 0 to length($col_flavors_ex) { 
         
         $base_color: nth($col_flavors_ex, $i + 1);
-        $flavor_name: str-replace(nth($col_flavors_ex_varnames, $i + 1), '--col-');
+        $flavor_name: str-replace(nth($col_flavors_ex_ids, $i + 1), '--col-');
         $flavor_id: $i+1;
 
         // Create per-state variants
@@ -140,8 +169,8 @@
 
     }
 
-    #{$varname_drawer_bg}: $drawer_bg_dark;
-    #{$varname_overlay_bg}: $overlay_bg_dark;
+    #{$id_drawer_bg}: $drawer_bg_dark;
+    #{$id_overlay_bg}: $overlay_bg_dark;
     
 }
 
@@ -153,14 +182,14 @@
 @import './_variables';
 
 :host{
-    #{$varname_workspace_bg}: $workspace_bg_dark;
-    #{$varname_workspace_nav_bg}: $workspace_nav_bg_dark;
+    #{$id_workspace_bg}: $workspace_bg_dark;
+    #{$id_workspace_nav_bg}: $workspace_nav_bg_dark;
 
-    #{$varname_tree_indent}: $tree_indent;
-    #{$varname_tree_size}: var(--size-s);
+    #{$id_tree_indent}: $tree_indent;
+    #{$id_tree_size}: var(--size-s);
 
-    #{$varname_folder_indent}: $folder_indent;
-    #{$varname_folder_size}: var(--size-s);
+    #{$id_folder_indent}: $folder_indent;
+    #{$id_folder_size}: var(--size-s);
 }
 
 /*---------------------------------*/
@@ -171,9 +200,9 @@
 @import './_variables';
 
 :host{
-    #{$varname_workspace_bg}: $workspace_bg_dark;
-    #{$varname_workspace_nav_bg}: $workspace_nav_bg_dark;
+    #{$id_workspace_bg}: $workspace_bg_dark;
+    #{$id_workspace_nav_bg}: $workspace_nav_bg_dark;
 
-    #{$varname_tree_indent}: $tree_indent;
-    #{$varname_tree_size}: var(--size-s);
+    #{$id_tree_indent}: $tree_indent;
+    #{$id_tree_size}: var(--size-s);
 }

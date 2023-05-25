@@ -79,16 +79,13 @@ class GlyphListInspector extends base {
                 ...nkm.style.rules.absolute.center,
                 'text-align': `center`
             },
-            '.control, .drawer, .item': {
+            '.control, .foldout, .item': {
                 ...nkm.style.rules.item.fixed,
             },
-            '.drawer': {
-                'padding': `10px`,
-                'background-color': `rgba(19, 19, 19, 0.25)`,
-                'border-radius': '4px',
-                'margin-bottom': '5px',
+            '.foldout': {
+                
             },
-            ':host(.sel-invalid) .drawer:not(.always-visible), :host(.sel-invalid) .previews': { 'display': 'none' },
+            ':host(.sel-invalid) .foldout:not(.always-visible), :host(.sel-invalid) .previews': { 'display': 'none' },
         }, base._Style());
     }
 
@@ -231,7 +228,7 @@ class GlyphListInspector extends base {
 
     _Foldout(p_foldout, p_controls, p_css = ``, p_host = null) {
 
-        let foldout = this.Attach(nkm.uilib.widgets.Foldout, `item drawer${p_css ? ' ' + p_css : ''}`, p_host || this);
+        let foldout = this.Attach(nkm.uilib.widgets.Foldout, `item foldout${p_css ? ' ' + p_css : ''}`, p_host || this);
         foldout.options = p_foldout;
 
         if (p_controls) {

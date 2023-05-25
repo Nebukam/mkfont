@@ -95,12 +95,9 @@ class GlyphVariantInspectorItem extends base {
                 'border-radius': '4px',
                 'background-color': `rgba(19, 19, 19, 0.25)`
             },
-            ':host(.null-glyph) .drawer:not(.always-visible)': { 'display': 'none' },
-            '.drawer': {
+            ':host(.null-glyph) .foldout:not(.always-visible)': { 'display': 'none' },
+            '.foldout': {
                 ...nkm.style.rules.item.fill,
-                'padding': `10px`,
-                'background-color': `rgba(19, 19, 19, 0.25)`,
-                'border-radius': '4px',
             },
             '.binder': {
                 'width': '100%',
@@ -219,7 +216,7 @@ class GlyphVariantInspectorItem extends base {
 
     _Foldout(p_foldout, p_controls, p_css = ``, p_host = null) {
 
-        let foldout = this.Attach(nkm.uilib.widgets.Foldout, `item drawer${p_css ? ' ' + p_css : ''}`, p_host || this);
+        let foldout = this.Attach(nkm.uilib.widgets.Foldout, `item foldout${p_css ? ' ' + p_css : ''}`, p_host || this);
         foldout.options = p_foldout;
 
         if (p_controls) {
