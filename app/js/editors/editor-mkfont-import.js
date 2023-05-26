@@ -47,7 +47,7 @@ class EditorMKFontImport extends base {
     static _Style() {
         return nkm.style.Extends({
             ':host': {
-                ...nkm.style.flex.column.nowrap,
+                ...nkm.style.flex.column,
                 ...nkm.style.flexItem.fill,
                 'grid-gap': '10px'
             },
@@ -55,7 +55,6 @@ class EditorMKFontImport extends base {
                 ...nkm.style.flexItem.fill,
             },
             '.list': {
-                ...nkm.style.rules.pos.rel,
                 'width': '800px',
                 'min-height': '100px',
                 //'padding': '10px',

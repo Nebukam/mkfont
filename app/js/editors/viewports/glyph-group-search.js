@@ -52,8 +52,7 @@ class GlyphGroupSearch extends base {
     static _Style() {
         return nkm.style.Extends({
             ':host': {
-                ...nkm.style.rules.pos.rel,
-                ...nkm.style.flex.row.wrap,
+                ...nkm.style.flex.rows,
                 ...nkm.style.rules.fadeIn,
                 //'min-height': '0',
                 //'overflow': 'auto',

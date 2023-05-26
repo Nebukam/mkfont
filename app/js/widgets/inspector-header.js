@@ -18,7 +18,6 @@ class InspectorHeader extends base {
     static _Style() {
         return nkm.style.Extends({
             ':host': {
-                ...nkm.style.rules.pos.rel,
                 ...nkm.style.rules.fadeIn,
                 'height': '20px',
                 'min-height': '20px',

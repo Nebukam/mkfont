@@ -38,7 +38,7 @@ class EditorListImport extends base {
     static _Style() {
         return nkm.style.Extends({
             ':host': {
-                ...nkm.style.flex.row.nowrap,
+                ...nkm.style.flex.row,
                 ...nkm.style.flexItem.fill,
                 'grid-gap': '10px'
             },
@@ -52,14 +52,12 @@ class EditorListImport extends base {
             },
             '.frst': { 'width': `300px`, },
             '.list': {
-                ...nkm.style.rules.pos.rel,
                 'width': '270px',
                 'background-color': 'rgba(0,0,0,0.2)',
                 'overflow': 'auto',
                 'min-height': '0',
             },
             '.preview': {
-                ...nkm.style.rules.pos.rel,
                 'aspect-ratio': '1/1',
                 'width': '330px',
                 'border-radius': '3px',
@@ -75,7 +73,7 @@ class EditorListImport extends base {
                 'max-width': `330px`
             },
             '.header': {
-                ...nkm.style.flex.column.nowrap,
+                ...nkm.style.flex.column,
                 ...nkm.style.flexItem.fill,
                 'width': `calc(100% - 22px)`,
                 'align-content': 'flex-start',

@@ -23,7 +23,7 @@ class LigatureCreationInspector extends base {
                 //...nkm.style.flexItem.fixed,
             },
             '.list': {
-                ...nkm.style.flex.column.nowrap,
+                ...nkm.style.flex.column,
                 ...nkm.style.flexItem.fill,
                 'overflow': 'auto',
                 'padding': '10px',

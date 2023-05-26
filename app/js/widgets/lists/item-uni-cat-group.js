@@ -26,8 +26,7 @@ class CatGroupItem extends base {
 
             },
             '.hint-ctnr': {
-                ...nkm.style.rules.pos.rel,
-                ...nkm.style.flex.column.wrap,
+                ...nkm.style.flex.columns,
                 ...nkm.style.flexItem.fill,
                 'max-height': `8px`,
                 'grid-gap': `2px`,

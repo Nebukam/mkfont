@@ -30,8 +30,7 @@ class FontEditorFooter extends base {
     static _Style() {
         return nkm.style.Extends({
             ':host': {
-                ...nkm.style.rules.pos.rel,
-                ...nkm.style.flex.row.nowrap,
+                ...nkm.style.flex.row,
                 'min-height': '8px',
                 'height': '8px',
             },

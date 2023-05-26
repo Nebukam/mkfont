@@ -24,7 +24,7 @@ class GlyphStats extends base {
     static _Style() {
         return nkm.style.Extends({
             ':host': {
-                ...nkm.style.flex.column.nowrap,
+                ...nkm.style.flex.column,
                 'min-height': 'auto',
                 //'padding': '20px',
                 'padding-bottom': '5px',

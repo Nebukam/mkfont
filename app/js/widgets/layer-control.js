@@ -68,7 +68,7 @@ class LayerControl extends base {
                 'background-color': `rgba(127,127,127,0.1)`
             },
             '.body': {
-                ...nkm.style.flex.row.wrap,
+                ...nkm.style.flex.rows,
                 'width': `100%`,
                 'align-content': 'flex-start',
             },

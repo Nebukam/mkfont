@@ -67,7 +67,6 @@ class ImportListItem extends base {
                 'background-color': `var(--col-warning)`
             },
             '.renderer': {
-                ...nkm.style.rules.pos.rel,
                 'aspect-ratio': '1/1',
                 'width': '52px',
                 'border-radius': '3px',

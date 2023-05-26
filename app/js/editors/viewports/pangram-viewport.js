@@ -30,8 +30,7 @@ class PangramViewport extends base {
     static _Style() {
         return nkm.style.Extends({
             ':host': {
-                ...nkm.style.rules.pos.rel,
-                ...nkm.style.flex.column.nowrap,
+                ...nkm.style.flex.column,
                 '--streamer-gap': '10px',
                 'overflow': 'clip'
             },
@@ -39,7 +38,6 @@ class PangramViewport extends base {
                 ...nkm.style.flexItem.fixed,
             },
             '.dom-stream': {
-                ...nkm.style.rules.pos.rel,
                 ...nkm.style.flexItem.fill,
                 'overflow': 'auto',
             },

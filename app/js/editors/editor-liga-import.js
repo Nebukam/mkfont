@@ -53,8 +53,7 @@ class EditorLigaImport extends base {
                 'grid-gap': '10px'
             },
             '.list': {
-                ...nkm.style.rules.pos.rel,
-                ...nkm.style.flex.row.wrap,
+                ...nkm.style.flex.rows,
                 'width': '500px',
                 //'padding': '10px',
                 'overflow': 'auto',

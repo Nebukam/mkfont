@@ -46,18 +46,17 @@ class PangramInspector extends base {
     static _Style() {
         return nkm.style.Extends({
             ':host': {
-                ...nkm.style.rules.pos.rel,
-                ...nkm.style.flex.column.nowrap,
+                ...nkm.style.flex.column,
             },
             '.body': {
-                ...nkm.style.flex.column.nowrap,
+                ...nkm.style.flex.column,
                 ...nkm.style.flexItem.fill,
                 'overflow': 'auto',
                 'padding': '10px',
                 'justify-content': 'center'
             },
             '.footer': {
-                ...nkm.style.flex.column.nowrap,
+                ...nkm.style.flex.column,
                 ...nkm.style.flexItem.fixed,
                 'width': 'auto',
                 'padding': '10px',
@@ -66,7 +65,7 @@ class PangramInspector extends base {
                 'margin-bottom': `4px`
             },
             '.sliders': {
-                ...nkm.style.flex.row.wrap,
+                ...nkm.style.flex.rows,
                 'align-items': 'center',
                 'margin': '10px 0px 10px 0px'
             },

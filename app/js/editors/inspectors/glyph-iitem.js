@@ -71,13 +71,12 @@ class GlyphVariantInspectorItem extends base {
     static _Style() {
         return nkm.style.Extends({
             ':host': {
-                ...nkm.style.flex.column.nowrap,
+                ...nkm.style.flex.column,
             },
             '.item': {
                 'margin-bottom': '5px',
             },
             '.preview': {
-                ...nkm.style.rules.pos.rel,
                 'display': 'flex',
                 ...nkm.style.flexItem.fill,
                 'width': 'calc(100% - 6px)',

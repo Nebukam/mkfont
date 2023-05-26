@@ -36,7 +36,6 @@ class GlyphGroupFooter extends base {
     static _Style() {
         return nkm.style.Extends({
             ':host': {
-                ...nkm.style.rules.pos.rel,
                 'min-height': 'auto',
                 'padding': '10px 20px',
                 'overflow': 'clip',

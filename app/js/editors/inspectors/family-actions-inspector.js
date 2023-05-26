@@ -22,10 +22,10 @@ class FamilyActionsInspector extends base {
     static _Style() {
         return nkm.style.Extends({
             ':host': {
-                ...nkm.style.flex.column.nowrap,
+                ...nkm.style.flex.column,
             },
             '.body': {
-                ...nkm.style.flex.column.nowrap,
+                ...nkm.style.flex.column,
                 ...nkm.style.flexItem.fill,
                 'overflow': 'auto',
                 'padding': '10px',

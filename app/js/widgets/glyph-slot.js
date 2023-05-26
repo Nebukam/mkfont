@@ -48,8 +48,7 @@ class GlyphSlot extends base {
     static _Style() {
         return nkm.style.Extends({
             ':host': {
-                ...nkm.style.rules.pos.rel,
-                ...nkm.style.flex.column.nowrap,
+                ...nkm.style.flex.column,
                 ...nkm.style.rules.fadeIn,
                 'transition': 'opacity 0.15s, transform 0.05s, box-shadow 0.05s',
                 'box-shadow': `none`,
@@ -88,8 +87,7 @@ class GlyphSlot extends base {
             },
             ':host(.unpainted) .box': { 'display': 'none' },
             '.preview': {
-                ...nkm.style.rules.pos.rel,
-                ...nkm.style.flex.column.nowrap,
+                ...nkm.style.flex.column,
                 'border-radius': 'inherit',
                 //'aspect-ratio': 'var(--preview-ratio)',
                 ...nkm.style.flexItem.grow,

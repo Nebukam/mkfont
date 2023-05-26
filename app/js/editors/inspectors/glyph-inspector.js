@@ -50,7 +50,7 @@ class GlyphInspector extends base {
     static _Style() {
         return nkm.style.Extends({
             ':host': {
-                ...nkm.style.flex.column.nowrap,
+                ...nkm.style.flex.column,
                 'padding': '10px',
             },
             '.variant': {

@@ -73,7 +73,6 @@ class ImportMKFontItem extends base {
                 'background-color': `var(--col-warning)`
             },
             '.renderer': {
-                ...nkm.style.rules.pos.rel,
                 'aspect-ratio': '1/1',
                 'width': `${__s}px`,
                 'border-radius': '3px',

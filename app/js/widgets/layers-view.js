@@ -54,7 +54,7 @@ class LayersView extends base {
         return nkm.style.Extends({
             ':host': {
                 //...nkm.style.rules.fadeIn,
-                ...nkm.style.flex.column.nowrap,
+                ...nkm.style.flex.column,
                 'min-height': 'auto',
                 'min-width': 'auto',
                 //'padding': '20px',
@@ -87,7 +87,7 @@ class LayersView extends base {
                 'margin': '3px'
             },
             '.list': {
-                ...nkm.style.flex.column.nowrap,
+                ...nkm.style.flex.column,
                 ...nkm.style.flexItem.shrink,
                 'width': `100%`,
                 'padding': `10px 0px`,

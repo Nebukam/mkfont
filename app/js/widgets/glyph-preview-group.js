@@ -30,7 +30,6 @@ class GlyphPreviewGroup extends base {
     static _Style() {
         return nkm.style.Extends({
             ':host': {
-                ...nkm.style.rules.pos.rel,
                 ...nkm.style.rules.fadeIn,
                 'width': '320px',
                 'grid-gap': `5px`,
@@ -47,7 +46,6 @@ class GlyphPreviewGroup extends base {
                 'border-radius': '3px',
             },
             '.box': {
-                ...nkm.style.rules.pos.rel,
                 'display': 'flex',
                 'aspect-ratio': '1/1',// 'var(--preview-ratio)',
                 ...nkm.style.flexItem.fill,

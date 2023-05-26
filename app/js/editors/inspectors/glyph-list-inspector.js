@@ -57,8 +57,7 @@ class GlyphListInspector extends base {
     static _Style() {
         return nkm.style.Extends({
             ':host': {
-                ...nkm.style.rules.pos.rel,
-                ...nkm.style.flex.column.nowrap,
+                ...nkm.style.flex.column,
                 'padding': '10px',
             },
             ':host(.sel-invalid) .infos': { 'display': `block` },

@@ -20,7 +20,7 @@ class LigaButton extends base {
         return nkm.style.Extends({
             ':host': {
                 ...nkm.style.rules.fadeIn,
-                ...nkm.style.flex.row.nowrap,
+                ...nkm.style.flex.row,
                 ...nkm.style.flex.align.center.all,
                 'min-height': 'auto',
                 'min-width': 'auto',
