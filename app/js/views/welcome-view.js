@@ -31,7 +31,7 @@ class WelcomeView extends base {
     static _Style() {
         return nkm.style.Extends({
             ':host': {
-                ...nkm.style.rules.flex.center,
+                ...nkm.style.flex.center,
             },
             '.body': {
                 'width': `750px`,

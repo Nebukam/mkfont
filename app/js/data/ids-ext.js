@@ -26,7 +26,7 @@ nkm.data.RegisterDescriptors({
         recompute: true,
         inputType: inputs.Checkbox,
         label: `Relatives`,
-        inputOptions: { placeholder: `...`, /* size: ui.FLAGS.SIZE_XS */ },
+        inputOptions: { placeholder: `...`, size: ui.FLAGS.SIZE_XS },
         desc: `Whether to include glyph relatives & decompositions to initial results.\ni.e, "é" will add ' and e to the results.`
     },
 
@@ -34,7 +34,7 @@ nkm.data.RegisterDescriptors({
         recompute: true,
         inputType: inputs.Checkbox,
         label: `Exists`,
-        inputOptions: { placeholder: `...`, /* size: ui.FLAGS.SIZE_XS */ },
+        inputOptions: { placeholder: `...`, size: ui.FLAGS.SIZE_XS },
         desc: `Show only glyphs existing within the font.`
     },
 
@@ -102,14 +102,14 @@ nkm.data.RegisterDescriptors({
 
     [IDS_EXT.IMPORT_JUMP_OVER]: {
         import: true,
-        inputType: inputs.Boolean,
+        valueType:nkm.data.TYPES.BOOLEAN,
         label: `Search`,
         inputOptions: { placeholder: `...`, size: ui.FLAGS.SIZE_XS },
     },
 
     [IDS_EXT.IMPORT_BIND_RESOURCE]: {
         import: true,
-        inputType: inputs.Boolean,
+        valueType:nkm.data.TYPES.BOOLEAN,
         label: `Bind imported files`,
         inputOptions: { placeholder: `...`, size: ui.FLAGS.SIZE_XS },
         desc: `Imported files will become bound to their glyphs.\nIDS_EXT means that each time the files are updated outside the app, the glyph will be re-imported.\nNote that you remove that binding at any time.`,
@@ -117,7 +117,7 @@ nkm.data.RegisterDescriptors({
 
     [IDS_EXT.IMPORT_TEXT_AS_LAYERS]: {
         import: true,
-        inputType: inputs.Boolean,
+        valueType:nkm.data.TYPES.BOOLEAN,
         label: `Text as components`,
         inputOptions: { placeholder: `...`, size: ui.FLAGS.SIZE_XS },
         desc: `When enabled, text element within the SVG will create components named after that text' content.`,
@@ -210,7 +210,7 @@ nkm.data.RegisterDescriptors({
 
     [IDS_EXT.LIGA_EACH_LINE]: {
         recompute: true,
-        inputType: inputs.Boolean,
+        valueType:nkm.data.TYPES.BOOLEAN,
         label: `Each line is a ligature`,
         inputOptions: { size: ui.FLAGS.SIZE_XS },
         desc: `When enabled, each new line is considered as a valid ligature candidate.`

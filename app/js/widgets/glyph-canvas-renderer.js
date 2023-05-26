@@ -175,12 +175,12 @@ class GlyphCanvasRenderer extends __BASE__ {
                 if (this._computedPath && this._drawBBox) {
                     let cw = this._glyphWidth;
                     ctx.lineWidth = iscale;
-                    ctx.strokeStyle = `rgba(${nkm.style.Get(`--col-warning-dark-rgb`)},0.8)`;
+                    ctx.strokeStyle = `rgba(${nkm.style.Get(`--col-warning-low-rgb`)},0.8)`;
                     ctx.beginPath();
                     ctx.rect(0, 0, cw, f.em);
                     ctx.stroke();
 
-                    ctx.strokeStyle = `rgba(${nkm.style.Get(`--col-warning-dark-rgb`)},0.25)`;
+                    ctx.strokeStyle = `rgba(${nkm.style.Get(`--col-warning-low-rgb`)},0.25)`;
                     ctx.beginPath();
                     ctx.moveTo(0, 0); ctx.lineTo(cw, f.em);
                     ctx.moveTo(cw, 0); ctx.lineTo(0, f.em);
@@ -194,12 +194,12 @@ class GlyphCanvasRenderer extends __BASE__ {
                 if (this._computedPath) {
                     let cw = this._glyphWidth;
                     ctx.lineWidth = iscale;
-                    ctx.strokeStyle = `rgba(${nkm.style.Get(`--col-warning-dark-rgb`)},0.8)`;
+                    ctx.strokeStyle = `rgba(${nkm.style.Get(`--col-warning-low-rgb`)},0.8)`;
                     ctx.beginPath();
                     ctx.rect(0, 0, cw, f.em);
                     ctx.stroke();
 
-                    ctx.strokeStyle = `rgba(${nkm.style.Get(`--col-warning-dark-rgb`)},0.25)`;
+                    ctx.strokeStyle = `rgba(${nkm.style.Get(`--col-warning-low-rgb`)},0.25)`;
                     ctx.beginPath();
                     ctx.moveTo(0, 0); ctx.lineTo(cw, f.em);
                     ctx.moveTo(cw, 0); ctx.lineTo(0, f.em);

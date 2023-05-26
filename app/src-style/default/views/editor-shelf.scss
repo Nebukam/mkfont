@@ -8,10 +8,10 @@
 @import '../_mixins';
 
 :host{
-    background-color: rgba(0,0,0,0.1);
+    background-color: rgba(var(#{$id_col_base_200}-rgb), 1);
 }
 
-$shelflinecol: rgba(127,127,127,0.1);
+$shelflinecol: rgba(var(#{$id_col_base_400}-rgb), 1);
 
 .navigation{ 
 
@@ -30,4 +30,8 @@ $shelflinecol: rgba(127,127,127,0.1);
     &.right{
         border-left: 1px solid $shelflinecol;
     }
+}
+
+.controls{
+
 }

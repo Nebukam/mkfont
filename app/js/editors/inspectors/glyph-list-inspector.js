@@ -45,6 +45,7 @@ class GlyphListInspector extends base {
         this.forwardData.To(this._surveyor);
 
         this._previews = [];
+        this._foldouts = [];
 
         this._rectTracker = new ui.helpers.RectTracker(this._Bind(this._OnPreviewRectUpdate));
         this.focusArea = this;
@@ -57,12 +58,12 @@ class GlyphListInspector extends base {
         return nkm.style.Extends({
             ':host': {
                 ...nkm.style.rules.pos.rel,
-                ...nkm.style.rules.flex.column.nowrap,
+                ...nkm.style.flex.column.nowrap,
                 'padding': '10px',
             },
             ':host(.sel-invalid) .infos': { 'display': `block` },
             '.toolbar': {
-                ...nkm.style.rules.item.fixed,
+                ...nkm.style.flexItem.fixed,
                 'justify-content': `center`,
                 'margin-bottom': '5px',
                 'margin-top': '5px',
@@ -71,7 +72,7 @@ class GlyphListInspector extends base {
                 'background-color': `rgba(19, 19, 19, 0.25)`
             },
             '.previews': {
-                ...nkm.style.rules.item.fixed,
+                ...nkm.style.flexItem.fixed,
                 'margin-bottom': '5px',
             },
             '.infos': {
@@ -79,11 +80,11 @@ class GlyphListInspector extends base {
                 ...nkm.style.rules.absolute.center,
                 'text-align': `center`
             },
-            '.control, .foldout, .item': {
-                ...nkm.style.rules.item.fixed,
+            '.foldout, .item': {
+                ...nkm.style.flexItem.fixed,
             },
             '.foldout': {
-                
+
             },
             ':host(.sel-invalid) .foldout:not(.always-visible), :host(.sel-invalid) .previews': { 'display': 'none' },
         }, base._Style());
@@ -123,8 +124,6 @@ class GlyphListInspector extends base {
             ]
         };
 
-
-
         // Previews
 
         this._groupPreview = this.Attach(mkfWidgets.GlyphPreviewGroup, `previews`);
@@ -134,38 +133,46 @@ class GlyphListInspector extends base {
 
         // Transforms + local properties
 
-        let foldout = this._Foldout(
-            { title: LOC.labelTr, icon: `font-bounds`, prefId: `transforms`, expanded: true },
-            [
+        let foldout = nkm.uilib.views.ControlsFoldout.Build(this, {
+            title: LOC.labelTr,
+            icon: `font-bounds`,
+            prefId: `transforms`,
+            expanded: true,
+            controls: [
                 { cl: TransformSettingsSilent, get: `_transformSettings` },
                 { cl: MiniHeader, options: { label: `Metrics` } },
                 { options: { propertyId: mkfData.IDS.WIDTH }, disableWhen: { fn: shouldHideWIDTH } },
                 { options: { propertyId: mkfData.IDS.HEIGHT } },
                 { cl: MiniHeader, options: { label: `Extras` } },
-            ]
-        );
+            ],
+            forwardData: false
+        });
+        this._foldouts.push(foldout);
 
         // Layers
 
-        foldout = this._Foldout(
-            {
-                title: LOC.labelLayers, icon: `component`, prefId: `layers`, expanded: true,
-                handles: [
-                    {
-                        icon: 'clipboard-read', htitle: 'Paste components\n---\n+ [ Shift ] Add instead of replace\n+ [ Alt ] Only copy transforms',
-                        trigger: {
-                            fn: () => {
-                                if (!this._surveyor._cachedVariants || this._surveyor._cachedVariants.length == 0) { return; }
-                                this.editor.cmdLayersPaste.Execute(this._surveyor._cachedVariants);
-                            }
-                        },
+        foldout = nkm.uilib.views.ControlsFoldout.Build(this, {
+            title: LOC.labelLayers,
+            icon: `component`,
+            prefId: `layers`,
+            expanded: true,
+            handles: [
+                {
+                    icon: 'clipboard-read', htitle: 'Paste components\n---\n+ [ Shift ] Add instead of replace\n+ [ Alt ] Only copy transforms',
+                    trigger: {
+                        fn: () => {
+                            if (!this._surveyor._cachedVariants || this._surveyor._cachedVariants.length == 0) { return; }
+                            this.editor.cmdLayersPaste.Execute(this._surveyor._cachedVariants);
+                        }
                     },
-                ]
-            },
-            [
-                { cl: mkfWidgets.LayersViewSilent, member: `_layersView`, css: `foldout-item` },
-            ]
-        );
+                },
+            ],
+            controls: [
+                { cl: mkfWidgets.LayersViewSilent, member: `_layersView`, css: `full`, owner: this },
+            ],
+            forwardData: false
+        });
+        this._foldouts.push(foldout);
 
         this._layersView._toolbar.CreateHandles(
             {
@@ -207,46 +214,32 @@ class GlyphListInspector extends base {
 
         // Settings
 
-        foldout = this._Foldout(
-            { title: LOC.labelSettings, icon: `gear`, prefId: `glyphSettings`, expanded: true },
-            [
+        foldout = nkm.uilib.views.ControlsFoldout.Build(this, {
+            title: LOC.labelSettings,
+            icon: `gear`,
+            prefId: `glyphSettings`,
+            expanded: true,
+            controls: [
                 { cl: MiniHeader, options: { label: `Export` } },
                 { options: { propertyId: mkfData.IDS.DO_EXPORT }, css: `full` },
-            ]
-        );
+            ],
+            forwardData: false
+        });
+        this._foldouts.push(foldout);
 
         // Clear bindings
-        this._clearBindings = this.Attach(nkm.uilib.buttons.Button, `foldout-item full`, foldout);
+        this._clearBindings = this.Attach(nkm.uilib.buttons.Button, `full`, foldout);
         this._clearBindings.options = {
             label: `Clear resource bindings`, icon: `remove`,
             trigger: { fn: () => { this._surveyor._ClearRscBindings(); } }
         };
 
-
-
-    }
-
-    _Foldout(p_foldout, p_controls, p_css = ``, p_host = null) {
-
-        let foldout = this.Attach(nkm.uilib.widgets.Foldout, `item foldout${p_css ? ' ' + p_css : ''}`, p_host || this);
-        foldout.options = p_foldout;
-
-        if (p_controls) {
-            let builder = new nkm.datacontrols.helpers.ControlBuilder(this);
-            builder.options = { host: foldout, cl: ValueControl, css: `foldout-item` };
-            builder.Build(p_controls);
-            if (!this._builders) { this._builders = []; }
-            this._builders.push(builder);
-        }
-
-        return foldout;
-
     }
 
     //#endregion
 
-    _FlushData() { this._builders.forEach(builder => { builder.data = null; }); }
-    _ReassignData() { this._builders.forEach(builder => { builder.data = this._surveyor._refVariant; }); }
+    _FlushData() { for (const foldout of this._foldouts) { foldout.builder.data = null; } }
+    _ReassignData() { for (const foldout of this._foldouts) { foldout.builder.data = this._surveyor._refVariant; } }
 
     _OnSurveyorUpdate(p_hasContent = false) {
 
@@ -297,12 +290,12 @@ class GlyphListInspector extends base {
         }
     }
 
-    _UpdateTexts(){
+    _UpdateTexts() {
         this._createLigaBtn.htitle = `Create ligature : ${this.editor.cmdLigaFromSelection._GetLigaName()}\n---\n+ [ Shift ] Create components from ligature decomposition.`;
     }
 
-    _OnGlyphBumped(p_data, p_infos) { 
-        this._UpdatePreviews(); 
+    _OnGlyphBumped(p_data, p_infos) {
+        this._UpdatePreviews();
         this._UpdateTexts();
     }
 

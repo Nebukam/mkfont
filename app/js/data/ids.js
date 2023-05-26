@@ -202,14 +202,14 @@ class IDS {
             },
 
             [this.EM_RESAMPLE]: {
-                inputType: inputs.Boolean,
+                valueType:nkm.data.TYPES.BOOLEAN,
                 inputOptions: { size: ui.FLAGS.SIZE_XS },
                 label: `EM Resample`,
                 desc: `If enabled, changing the EM Size will scale other metrics & glyphs accordingly.\nDisable this if you want to affect rendering size only.`
             },
 
             [this.ASC_RESAMPLE]: {
-                inputType: inputs.Boolean,
+                valueType:nkm.data.TYPES.BOOLEAN,
                 inputOptions: { size: ui.FLAGS.SIZE_XS },
                 label: `Scale X+Cap`,
                 desc: `If enabled, changing the Ascender will scale x-height & cap-height accordingly.`
@@ -217,7 +217,7 @@ class IDS {
 
             [this.MONOSPACE]: {
                 recompute: true,
-                inputType: inputs.Boolean,
+                valueType:nkm.data.TYPES.BOOLEAN,
                 inputOptions: { size: ui.FLAGS.SIZE_XS },
                 label: `Monospace`,
                 desc: `If enabled, glyphs width will be overriden by the default font width value.\nOverride happen at export time and does not affect custom data.`
@@ -317,7 +317,7 @@ class IDS {
             [this.INVERTED]: {
                 recompute: true,
                 label: `Reverse path`,
-                inputType: inputs.Boolean,
+                valueType:nkm.data.TYPES.BOOLEAN,
                 inputOptions: { size: ui.FLAGS.SIZE_XS },
                 desc: `Whether or not to reverse the order of points withing the path. This effectively allows you to create "holes".`
             },
@@ -365,7 +365,7 @@ class IDS {
             [this.DO_EXPORT]: {
                 recompute: true,
                 label: `Export glyph`,
-                inputType: inputs.Boolean,
+                valueType:nkm.data.TYPES.BOOLEAN,
                 inputOptions: { size: ui.FLAGS.SIZE_XS },
                 desc: `Whether this glyph will be added to the exported font or not.`
             },
@@ -382,7 +382,7 @@ class IDS {
 
             [this.SHOW_ALL_LAYERS]: {
                 label: `Show partial matches`,
-                inputType: inputs.Boolean,
+                valueType:nkm.data.TYPES.BOOLEAN,
                 inputOptions: { size: ui.FLAGS.SIZE_XS },
                 desc: `Show all shared components (at least used twice), not just the ones shared by every glyph in the selection.`
             },
@@ -390,7 +390,7 @@ class IDS {
             [this.FLATTEN_LAYERS]: {
                 recompute: true,
                 label: `Flatten comps`,
-                inputType: inputs.Boolean,
+                valueType:nkm.data.TYPES.BOOLEAN,
                 inputOptions: { size: ui.FLAGS.SIZE_XS },
                 desc: `Will flatten layers as if they were a single block.\nUses EM Square as transform space.`
             },
@@ -492,7 +492,7 @@ class IDS {
 
             [this.TR_AUTO_WIDTH]: {
                 transform: true,
-                inputType: inputs.Boolean,
+                valueType:nkm.data.TYPES.BOOLEAN,
                 label: `Automatic Width`,
                 inputOptions: { placeholder: `· · ·`, size: ui.FLAGS.SIZE_XS },
                 desc: `If enabled, the glyph' width is equal to its asset width + shift + push.\nOtherwise the value is expected to be either manual, or inherited from the family Metrics.`
@@ -641,14 +641,14 @@ class IDS {
             },
 
             [this.LYR_USE_PREV_LAYER]: {
-                inputType: inputs.Boolean,
+                valueType:nkm.data.TYPES.BOOLEAN,
                 inputOptions: { size: ui.FLAGS.SIZE_XS },
                 label: `Inherit prev. comp`,
                 desc: `If enabled, This component use the first visible component before it as bound reference.`
             },
 
             [this.LYR_IS_CONTROL_LAYER]: {
-                inputType: inputs.Boolean,
+                valueType:nkm.data.TYPES.BOOLEAN,
                 inputOptions: { size: ui.FLAGS.SIZE_XS },
                 label: `Control layer`,
                 desc: `There can only be one control layer active at a time.\nIf enabled, the parent glyph will replicate the layer reference glyph settings before transformation.\nThis is only useful when working with glyphs that are empty except for layers.`

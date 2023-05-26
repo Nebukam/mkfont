@@ -20,7 +20,8 @@ class LigaButton extends base {
         return nkm.style.Extends({
             ':host': {
                 ...nkm.style.rules.fadeIn,
-                ...nkm.style.rules.flex.row.centerNowrap,
+                ...nkm.style.flex.row.nowrap,
+                ...nkm.style.flex.align.center.all,
                 'min-height': 'auto',
                 'min-width': 'auto',
                 //'padding': '20px',
@@ -30,7 +31,7 @@ class LigaButton extends base {
                 'padding-left': `15px`
             },
             '.item': {
-                ...nkm.style.rules.item.fixed,
+                ...nkm.style.flexItem.fixed,
                 'margin': `3px`
             },
             '.counter': {
@@ -40,7 +41,7 @@ class LigaButton extends base {
                 'flex': '0 0 16px',
             },
             '.long-name': {
-                ...nkm.style.rules.item.grow,
+                ...nkm.style.flexItem.grow,
                 'font-family': `monospace`
             }
         }, base._Style());

@@ -46,7 +46,8 @@ class FontEditorHeader extends base {
         return nkm.style.Extends({
             ':host': {
                 ...nkm.style.rules.pos.rel,
-                ...nkm.style.rules.flex.row.distributeNowrap,
+                ...nkm.style.flex.row.nowrap,
+                ...nkm.style.flex.align.center.cross,
 
                 'min-height': 'auto',
                 'padding': '10px',

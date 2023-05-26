@@ -48,7 +48,6 @@ class GlyphVariantInspectorItem extends base {
         super._Init();
 
         this._builder.defaultControlClass = ValueControl;
-        this._builder.defaultCSS = `foldout-item`;
 
         this._flags.Add(this, __nullGlyph, __hasPopout);
         this._obstructedPreview = false;
@@ -72,7 +71,7 @@ class GlyphVariantInspectorItem extends base {
     static _Style() {
         return nkm.style.Extends({
             ':host': {
-                ...nkm.style.rules.flex.column.nowrap,
+                ...nkm.style.flex.column.nowrap,
             },
             '.item': {
                 'margin-bottom': '5px',
@@ -80,7 +79,7 @@ class GlyphVariantInspectorItem extends base {
             '.preview': {
                 ...nkm.style.rules.pos.rel,
                 'display': 'flex',
-                ...nkm.style.rules.item.fill,
+                ...nkm.style.flexItem.fill,
                 'width': 'calc(100% - 6px)',
                 'overflow': 'hidden',
                 'background-color': 'rgba(0,0,0,0.5)',
@@ -88,7 +87,7 @@ class GlyphVariantInspectorItem extends base {
             },
             ':host(.has-popout) .preview': { 'opacity': '0.25' },
             '.toolbar': {
-                ...nkm.style.rules.item.fill,
+                ...nkm.style.flexItem.fill,
                 'justify-content': `center`,
                 'margin-top': '5px',
                 'padding': '4px 0px',
@@ -97,7 +96,7 @@ class GlyphVariantInspectorItem extends base {
             },
             ':host(.null-glyph) .foldout:not(.always-visible)': { 'display': 'none' },
             '.foldout': {
-                ...nkm.style.rules.item.fill,
+                ...nkm.style.flexItem.fill,
             },
             '.binder': {
                 'width': '100%',
@@ -160,74 +159,55 @@ class GlyphVariantInspectorItem extends base {
 
         //Transforms
 
-        let foldout = this._Foldout(
-            {
-                title: LOC.labelTr, icon: `font-bounds`, prefId: `transforms`, expanded: true, //TODO CHANGE BACK to true
-                handles: [
-                    {
-                        icon: 'clipboard-read', htitle: 'Paste transforms  [ Ctrl Alt V ]',
-                        trigger: { fn: () => { this.editor.cmdGlyphPasteTransform.Execute(this._data); } },
-                    }
-                ]
-            },
-            [
-                { cl: TransformSettingsInspector, get: `_transformSettings` },
+        let foldout = nkm.uilib.views.ControlsFoldout.Build(this, {
+            title: LOC.labelTr, icon: `font-bounds`, prefId: `transforms`, expanded: true,
+            handles: [
+                {
+                    icon: 'clipboard-read', htitle: 'Paste transforms  [ Ctrl Alt V ]',
+                    trigger: { fn: () => { this.editor.cmdGlyphPasteTransform.Execute(this._data); } },
+                }
             ],
-        );
+            controls: [
+                { cl: TransformSettingsInspector, get: `_transformSettings` },
+            ]
+        });
 
         this._builder.host = foldout.body;
 
         //Layers
 
-        foldout = this._Foldout(
-            {
-                title: LOC.labelLayers, icon: `component`, prefId: `layers`, expanded: true,
-                handles: [
-                    {
-                        icon: 'clipboard-read', htitle: 'Paste components\n---\n+ [ Shift ] Add instead of replace\n+ [ Alt ] Only copy transforms',
-                        trigger: { fn: () => { this.editor.cmdLayersPaste.Execute(this._data); } },
-                    },
-                ]
-            },
-            [
+        nkm.uilib.views.ControlsFoldout.Build(this, {
+            title: LOC.labelLayers, icon: `component`, prefId: `layers`, expanded: true,
+            handles: [
+                {
+                    icon: 'clipboard-read', htitle: 'Paste components\n---\n+ [ Shift ] Add instead of replace\n+ [ Alt ] Only copy transforms',
+                    trigger: { fn: () => { this.editor.cmdLayersPaste.Execute(this._data); } },
+                },
+            ],
+            controls: [
                 { options: { propertyId: mkfData.IDS.FLATTEN_LAYERS } },
                 { options: { propertyId: mkfData.IDS.FLATTEN_MODE }, hideWhen: { fn: shouldHideFLAT } },
                 { cl: mkfWidgets.LayersView, member: { owner: this, id: `_layers` } },
             ]
-        );
+        });
 
         // Settings
 
-        foldout = this._Foldout(
-            { title: LOC.labelSettings, icon: `gear`, prefId: `glyphSettings`, expanded: true },
-            [
+        nkm.uilib.views.ControlsFoldout.Build(this, {
+            title: LOC.labelSettings, icon: `gear`, prefId: `glyphSettings`, expanded: true,
+            controls: [
                 //{ cl: MiniHeader, options: { label: `Export` } },
                 { options: { propertyId: mkfData.IDS.DO_EXPORT } },
             ]
-        );
+        });
 
-        this._binder = this.Attach(mkfWidgets.ResourceBinding, `foldout-item full`, foldout);
+        this._binder = this.Attach(mkfWidgets.ResourceBinding, `full`, foldout);
         this._binder.visible = false;
 
         super._Render();
 
         this.focusArea = this;
-    }
-
-    _Foldout(p_foldout, p_controls, p_css = ``, p_host = null) {
-
-        let foldout = this.Attach(nkm.uilib.widgets.Foldout, `item foldout${p_css ? ' ' + p_css : ''}`, p_host || this);
-        foldout.options = p_foldout;
-
-        if (p_controls) {
-            let builder = new nkm.datacontrols.helpers.ControlBuilder(this);
-            builder.options = { host: foldout, cl: ValueControl, css: `foldout-item` };
-            this.forwardData.To(builder);
-            builder.Build(p_controls);
-        }
-
-        return foldout;
-
+        
     }
 
     get glyphInfos() { return this._glyphInfos; }

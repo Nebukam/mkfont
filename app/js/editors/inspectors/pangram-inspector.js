@@ -47,18 +47,18 @@ class PangramInspector extends base {
         return nkm.style.Extends({
             ':host': {
                 ...nkm.style.rules.pos.rel,
-                ...nkm.style.rules.flex.column.nowrap,
+                ...nkm.style.flex.column.nowrap,
             },
             '.body': {
-                ...nkm.style.rules.flex.column.nowrap,
-                ...nkm.style.rules.item.fill,
+                ...nkm.style.flex.column.nowrap,
+                ...nkm.style.flexItem.fill,
                 'overflow': 'auto',
                 'padding': '10px',
                 'justify-content': 'center'
             },
             '.footer': {
-                ...nkm.style.rules.flex.column.nowrap,
-                ...nkm.style.rules.item.fixed,
+                ...nkm.style.flex.column.nowrap,
+                ...nkm.style.flexItem.fixed,
                 'width': 'auto',
                 'padding': '10px',
             },
@@ -66,7 +66,7 @@ class PangramInspector extends base {
                 'margin-bottom': `4px`
             },
             '.sliders': {
-                ...nkm.style.rules.flex.row.wrap,
+                ...nkm.style.flex.row.wrap,
                 'align-items': 'center',
                 'margin': '10px 0px 10px 0px'
             },
@@ -74,7 +74,7 @@ class PangramInspector extends base {
                 'flex': '1 1 50%',
             },
             '.pangram': {
-                ...nkm.style.rules.item.fill,
+                ...nkm.style.flexItem.fill,
                 'width': '100%',
                 'overflow-y': 'auto'
             },

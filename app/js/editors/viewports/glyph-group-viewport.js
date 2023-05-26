@@ -100,16 +100,16 @@ class GlyphGroupViewport extends base {
         return nkm.style.Extends({
             ':host': {
                 ...nkm.style.rules.pos.rel,
-                ...nkm.style.rules.flex.column.nowrap,
+                ...nkm.style.flex.column.nowrap,
                 '--streamer-gap': '10px',
                 'overflow': 'clip'
             },
             '.header, .search, .footer': {
-                ...nkm.style.rules.item.fixed,
+                ...nkm.style.flexItem.fixed,
             },
             '.dom-stream': {
                 ...nkm.style.rules.pos.rel,
-                ...nkm.style.rules.item.fill,
+                ...nkm.style.flexItem.fill,
                 'overflow': 'auto',
             },
             '.dom-stream.empty': {

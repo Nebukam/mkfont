@@ -50,7 +50,7 @@ class GlyphPreviewGroup extends base {
                 ...nkm.style.rules.pos.rel,
                 'display': 'flex',
                 'aspect-ratio': '1/1',// 'var(--preview-ratio)',
-                ...nkm.style.rules.item.fill,
+                ...nkm.style.flexItem.fill,
                 'width': '100%',
                 'overflow': 'hidden',
                 'background-color': 'rgba(0,0,0,0.5)',
@@ -78,7 +78,7 @@ class GlyphPreviewGroup extends base {
 
         this._counter = this.Attach(nkm.uilib.widgets.Tag, `tag`);
         this._counter.label = `+50`;
-        this._counter.bgColor = `var(--col-cta-dark)`;
+        this._counter.bgColor = `var(--col-cta-low)`;
 
     }
 

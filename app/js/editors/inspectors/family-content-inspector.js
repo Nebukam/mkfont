@@ -55,17 +55,17 @@ class FamilyContentInspector extends base {
     static _Style() {
         return nkm.style.Extends({
             ':host': {
-                ...nkm.style.rules.flex.column.nowrap,
+                ...nkm.style.flex.column.nowrap,
             },
             '.body': {
-                ...nkm.style.rules.flex.column.nowrap,
-                ...nkm.style.rules.item.fill,
+                ...nkm.style.flex.column.nowrap,
+                ...nkm.style.flexItem.fill,
                 'overflow': 'auto',
                 'padding': '10px',
                 'justify-content': 'flex-start'
             },
             '.item': {
-                ...nkm.style.rules.item.fixed,
+                ...nkm.style.flexItem.fixed,
                 'margin-bottom': '5px'
             }
         }, base._Style());

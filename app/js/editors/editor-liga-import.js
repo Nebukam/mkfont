@@ -47,14 +47,14 @@ class EditorLigaImport extends base {
             ':host': {
                 'display': 'grid',
                 'flex-flow': 'column wrap',
-                ...nkm.style.rules.item.fixed,
+                ...nkm.style.flexItem.fixed,
                 'grid-template-columns': 'max-content max-content',
                 'grid-template-rows': '400px',
                 'grid-gap': '10px'
             },
             '.list': {
                 ...nkm.style.rules.pos.rel,
-                ...nkm.style.rules.flex.row.wrap,
+                ...nkm.style.flex.row.wrap,
                 'width': '500px',
                 //'padding': '10px',
                 'overflow': 'auto',

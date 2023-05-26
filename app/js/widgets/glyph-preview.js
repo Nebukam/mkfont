@@ -95,7 +95,7 @@ class GlyphPreview extends base {
         this._emptyTag = this.Attach(uilib.widgets.Tag, `emptyTag`);
         this._emptyTag.options = {
             label: `empty`,
-            bgColor: nkm.style.Get(`--col-warning-dark`),
+            bgColor: nkm.style.Get(`--col-warning-low`),
             htitle: `This glyph is void.`
         };
         this._emptyTag.visible = false;

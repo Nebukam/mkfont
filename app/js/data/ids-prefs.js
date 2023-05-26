@@ -34,7 +34,7 @@ nkm.data.RegisterDescriptors({
     [IDS_PREFS.MARK_COLOR]: {
         inputType: inputs.Color,
         label: `Mark Color`,
-        inputOptions: { size: ui.FLAGS.SIZE_XXS },
+        inputOptions: { /* size: ui.FLAGS.SIZE_XS */ },
         desc: `Color used to find custom glyph boundaries when importing SVGs`
     },
 

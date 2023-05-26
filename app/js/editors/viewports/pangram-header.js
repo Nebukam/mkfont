@@ -34,7 +34,8 @@ class PangramHeader extends base {
                 'margin-bottom': '10px'
             },
             '.toolbar': {
-                ...nkm.style.rules.flex.row.distributeNowrap,
+                ...nkm.style.flex.row.nowrap,
+                ...nkm.style.flex.align.center.spread,
             }
         }, base._Style());
     }

@@ -37,7 +37,8 @@ class GlyphGroupHeader extends base {
                 'height': `32px`,
             },
             '.toolbar': {
-                ...nkm.style.rules.flex.row.distributeWrap,
+                ...nkm.style.flex.row.wrap,
+                ...nkm.style.flex.align.center.spread,
             }
         }, base._Style());
     }

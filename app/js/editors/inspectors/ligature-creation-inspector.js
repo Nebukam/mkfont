@@ -20,16 +20,16 @@ class LigatureCreationInspector extends base {
         return nkm.style.Extends({
             ':host': {
                 'min-width': '350px',
-                //...nkm.style.rules.item.fixed,
+                //...nkm.style.flexItem.fixed,
             },
             '.list': {
-                ...nkm.style.rules.flex.column.nowrap,
-                ...nkm.style.rules.item.fill,
+                ...nkm.style.flex.column.nowrap,
+                ...nkm.style.flexItem.fill,
                 'overflow': 'auto',
                 'padding': '10px',
             },
             '.control': {
-                ...nkm.style.rules.item.shrink,
+                ...nkm.style.flexItem.shrink,
                 'margin-bottom': '5px'
             }
         }, base._Style());

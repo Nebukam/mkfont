@@ -7,9 +7,10 @@
 @import '../_functions';
 @import '../_constants';
 
-$br: 5px;
+$r : 5px;
 
 :host {
-    border-radius: $br;
-    background-color: var(--default-level-1-color);
+    padding: $r;
+    border-radius: $r;
+    background-color: rgba(var(#{$id_col_base_400}-rgb), 1);
 }

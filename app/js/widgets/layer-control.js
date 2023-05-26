@@ -56,19 +56,19 @@ class LayerControl extends base {
                 'background-color': `rgba(127,127,127,0.25)`,
             },
             ':host(.circular)': {
-                'background-color': `rgba(var(--col-error-dark-rgb),0.25)`,
+                'background-color': `rgba(var(--col-error-low-rgb),0.25)`,
             },
             ':host(:not(.circular).control-layer)': {
-                'background-color': `rgba(var(--col-infos-dark-rgb),0.25)`,
+                'background-color': `rgba(var(--col-infos-low-rgb),0.25)`,
             },
             ':host(.false) .label': {
-                'text-decoration': 'line-through var(--col-error-dark)',
+                'text-decoration': 'line-through var(--col-error-low)',
             },
             ':host(.false)': {
                 'background-color': `rgba(127,127,127,0.1)`
             },
             '.body': {
-                ...nkm.style.rules.flex.row.wrap,
+                ...nkm.style.flex.row.wrap,
                 'width': `100%`,
                 'align-content': 'flex-start',
             },

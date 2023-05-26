@@ -17,7 +17,7 @@ class GlyphGroupSearch extends base {
     constructor() { super(); }
 
     static __controls = [
-        //{ cl: MiniHeader, options: { label: `Boundaries` }, css: 'header' },
+        //{ cl: MiniHeader, options: { label: `Boundaries` } },
         { options: { propertyId: nkm.data.IDS.SEARCH_ENABLED, invertInputOrder:true }, css: `main-toggle` },
         { options: { propertyId: nkm.data.IDS.SEARCH_TERMS, inputOnly: true }, css: `search` },
         //{ options: { propertyId: nkm.data.IDS.SEARCH_CASE_SENSITIVE, invertInputOrder: true }, css: `large` },
@@ -53,28 +53,28 @@ class GlyphGroupSearch extends base {
         return nkm.style.Extends({
             ':host': {
                 ...nkm.style.rules.pos.rel,
-                ...nkm.style.rules.flex.row.wrap,
+                ...nkm.style.flex.row.wrap,
                 ...nkm.style.rules.fadeIn,
                 //'min-height': '0',
                 //'overflow': 'auto',
                 //'padding': '10px',
                 'align-content': 'flex-start',
                 'background-color': 'rgba(46,46,46,0.5)',
-                'padding': '10px 20px 5px 20px',
+                'padding': '10px 20px 10px 20px',
                 'min-height': '28px',
                 //'border-radius':'5px',
                 //'margin':'0 10px'
             },
             '.control': {
-                ...nkm.style.rules.item.fixed,
+                ...nkm.style.flexItem.fixed,
                 'margin-right': '10px',
                 //'margin-bottom': '0'',
             },
             '.main-toggle': { 'flex': '0 0 115px' },
-            '.search': { ...nkm.style.rules.item.fill, },
+            '.search': { ...nkm.style.flexItem.fill, },
             '.large': { 'margin-right': '10px' },
 
-            ':host(.enabled)': { 'background-color': 'rgba(var(--col-active-dark-rgb),0.5)', },
+            ':host(.enabled)': { 'background-color': 'rgba(var(--col-active-low-rgb),0.5)', },
             ':host(:not(.enabled)) .control:not(.main-toggle)': { opacity: 0.5, 'pointer-events': 'none' },
             '.small': {
                 'flex': '1 1 45%'

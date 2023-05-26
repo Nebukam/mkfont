@@ -46,21 +46,22 @@ class GlyphGroup extends base {
         return nkm.style.Extends({
             ':host': {
                 ...nkm.style.rules.pos.rel,
-                ...nkm.style.rules.flex.column.nowrap,
+                ...nkm.style.flex.column.nowrap,
             },
             '.header': {
                 ...nkm.style.rules.pos.rel,
-                ...nkm.style.rules.flex.row.centerNowrap,
+                ...nkm.style.flex.row.nowrap,
+                ...nkm.style.flex.align.center.all,
             },
             '.body': {
                 ...nkm.style.rules.pos.rel,
-                ...nkm.style.rules.flex.row.wrap,
+                ...nkm.style.flex.row.wrap,
             },
             '.group': {
-                ...nkm.style.rules.item.grow,
+                ...nkm.style.flexItem.grow,
             },
             '.item': {
-                ...nkm.style.rules.item.fixed,
+                ...nkm.style.flexItem.fixed,
                 'margin':'3px'
             }
         }, base._Style());

@@ -29,7 +29,7 @@ class FamilyGlyphMonitor extends base {
                 ...nkm.style.rules.absolute.center,
             },
             '.progress': {
-                ...nkm.style.rules.item.grow,
+                ...nkm.style.flexItem.grow,
                 'max-height':'2px'
             }
         }, base._Style());

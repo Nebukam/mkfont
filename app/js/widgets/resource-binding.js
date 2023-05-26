@@ -21,14 +21,15 @@ class ResourceBinding extends base {
         return nkm.style.Extends({
             ':host': {
                 ...nkm.style.rules.fadeIn,
-                ...nkm.style.rules.flex.row.inlineNowrap,
+                ...nkm.style.flex.row.nowrap,
+                ...nkm.style.flex.align.center.cross,
                 'min-height': 'auto',
                 //'padding': '20px',
                 'padding': '5px',
                 'margin-bottom': '5px',
             },
             '.item': {
-                ...nkm.style.rules.item.fixed,
+                ...nkm.style.flexItem.fixed,
                 'margin': `3px`,
                 'user-select': 'none'
             },
@@ -39,7 +40,7 @@ class ResourceBinding extends base {
                 'flex': '0 0 16px',
             },
             '.label': {
-                ...nkm.style.rules.item.fill,
+                ...nkm.style.flexItem.fill,
                 'direction': 'rtl'
             },
             '.btn': {

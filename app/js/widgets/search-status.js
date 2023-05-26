@@ -12,7 +12,7 @@ class SearchStatus extends base {
         return nkm.style.Extends({
             ':host': {
                 ...nkm.style.rules.pos.rel,
-                ...nkm.style.rules.flex.column.nowrap,
+                ...nkm.style.flex.column.nowrap,
                 //'min-height': '250px',
                 //'height': '250px',
                 'min-width': '500px',

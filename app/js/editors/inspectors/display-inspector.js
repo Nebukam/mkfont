@@ -7,7 +7,7 @@ const uilib = nkm.uilib;
 const mkfData = require(`../../data`);
 const mkfWidgets = require(`../../widgets`);
 
-const base = nkm.datacontrols.InspectorView;
+const base = nkm.uilib.inspectors.ValueList;
 class DisplayInspector extends base {
     constructor() { super(); }
 
@@ -24,54 +24,6 @@ class DisplayInspector extends base {
             }
         },
     ];
-
-    _Init() {
-        super._Init();
-        this._builder.defaultControlClass = nkm.datacontrols.widgets.ValueControl;
-        this._builder.defaultCSS = `control`;
-    }
-
-    static _Style() {
-        return nkm.style.Extends({
-            ':host': {
-                'min-width': '350px',
-                //...nkm.style.rules.item.fixed,
-            },
-            '.list': {
-                ...nkm.style.rules.flex.column.nowrap,
-                ...nkm.style.rules.item.fill,
-                'overflow': 'auto',
-                'padding': '10px',
-            },
-            '.control': {
-                ...nkm.style.rules.item.shrink,
-                'margin-bottom': '5px'
-            }
-        }, base._Style());
-    }
-
-    _Render() {
-
-        this._body = ui.dom.El(`div`, { class: `list` }, this._host);
-        this._builder.host = this._body;
-
-        super._Render();
-
-        this._controls = ui.dom.El("div", { class: 'controls' }, this._body);
-
-
-        // Preview align mode (left/center/right)
-
-        // ...
-
-    }
-
-
-
-    //#region Family properties
-
-    //#endregion
-
 
 }
 

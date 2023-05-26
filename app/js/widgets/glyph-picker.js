@@ -97,7 +97,7 @@ class GlyphPicker extends base {
         return nkm.style.Extends({
             ':host': {
                 ...nkm.style.rules.pos.rel,
-                ...nkm.style.rules.flex.column.nowrap,
+                ...nkm.style.flex.column.nowrap,
                 'padding': `10px`,
                 'width': '300px',
                 'height': '350px',
@@ -105,7 +105,7 @@ class GlyphPicker extends base {
                 'grid-gap': '5px'
             },
             '.search, .toolbar': {
-                ...nkm.style.rules.item.fixed,
+                ...nkm.style.flexItem.fixed,
             },
             '.toolbar': {
                 'margin-top': `5px`
@@ -115,7 +115,7 @@ class GlyphPicker extends base {
             },
             '.dom-stream': {
                 ...nkm.style.rules.pos.rel,
-                ...nkm.style.rules.item.fill,
+                ...nkm.style.flexItem.fill,
                 'margin-top': `5px`,
                 'overflow': 'auto',
             },

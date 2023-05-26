@@ -21,7 +21,7 @@ class GlyphIdentity extends base {
     static _Style() {
         return nkm.style.Extends({
             ':host': {
-                ...nkm.style.rules.flex.column.nowrap,
+                ...nkm.style.flex.column.nowrap,
                 'min-height': 'auto',
                 //'padding': '20px',
                 'padding-bottom': '5px',

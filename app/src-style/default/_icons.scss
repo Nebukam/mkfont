@@ -9,8 +9,34 @@ $icon-names: "<!nkm-- list-files ./assets/icons .svg,.png name-only rm=icon_ -->
 
 // Include prefers_dark / prefers_light
 
-@include for-each-in($icon-names) using ($i, $item){
-    [data-icon="#{$item}"]{
+@include for-each-in($icon-names) using ($i, $item) {
+    [data-icon="#{$item}"] {
         background-image: url("#{nth($icon-paths, $i)}");
     }
+}
+
+@include prefers_dark {
+
+    $icon-paths-dark: "<!nkm-- list-files ./assets/icons/prefers-dark .svg,.png -->";
+    $icon-names-dark: "<!nkm-- list-files ./assets/icons/prefers-dark .svg,.png name-only rm=icon_ -->";
+
+    @include for-each-in($icon-names-dark) using ($i, $item) {
+        [data-icon="#{$item}"] {
+            background-image: url("#{nth($icon-paths-dark, $i)}");
+        }
+    }
+
+}
+
+@include prefers_light {
+
+    $icon-paths-light: "<!nkm-- list-files ./assets/icons/prefers-light .svg,.png -->";
+    $icon-names-light: "<!nkm-- list-files ./assets/icons/prefers-light .svg,.png name-only rm=icon_ -->";
+
+    @include for-each-in($icon-names-light) using ($i, $item) {
+        [data-icon="#{$item}"] {
+            background-image: url("#{nth($icon-paths-light, $i)}");
+        }
+    }
+
 }

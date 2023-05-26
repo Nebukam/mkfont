@@ -5,12 +5,9 @@ const ui = nkm.ui;
 const uilib = nkm.uilib;
 
 const MiniHeader = nkm.datacontrols.widgets.MiniHeader;
-const ValueControl = nkm.datacontrols.widgets.ValueControl;
 
 const LOC = require(`../../locales`);
-const UNICODE = require(`../../unicode`);
 const mkfData = require(`../../data`);
-const mkfWidgets = require(`../../widgets`);
 
 // Manages what is shown & selectable in the viewport.
 
@@ -19,23 +16,23 @@ const isMANUAL = (owner) => { return owner.data.Get(mkfData.IDS.TR_SCALE_MODE) =
 const isNRM = (owner) => { return owner.data.Get(mkfData.IDS.TR_SCALE_MODE) == mkfData.ENUMS.SCALE_NORMALIZE; };
 const isRNRM = (owner) => { return owner.data.Get(mkfData.IDS.TR_SCALE_MODE) != mkfData.ENUMS.SCALE_NORMALIZE; };
 
-const base = nkm.datacontrols.InspectorView;
+const base = nkm.uilib.inspectors.ValueList;
 class TransformSettingsInspector extends base {
     constructor() { super(); }
 
     static __controls = [
-        { options: { propertyId: mkfData.IDS.TR_BOUNDS_MODE, inputOnly: true }, css: 'full' },
-        { cl: MiniHeader, options: { label: `Scaling` }, css: 'header' },
+        { options: { propertyId: mkfData.IDS.TR_BOUNDS_MODE, inputOnly: true } },
+        { cl: MiniHeader, options: { label: `Scaling` } },
         { options: { propertyId: mkfData.IDS.TR_SCALE_MODE, inputOnly: true }, css: 'large' },
         { options: { propertyId: mkfData.IDS.TR_SCALE_FACTOR }, requireData: true, hideWhen: { fn: isMANUAL } },
         { options: { propertyId: mkfData.IDS.TR_NRM_FACTOR }, requireData: true, hideWhen: { fn: isNRM } },
-        { cl: MiniHeader, options: { label: `Anchoring & Alignment` }, css: 'header' },
-        { options: { propertyId: mkfData.IDS.TR_ANCHOR, inputOnly: true }, css: 'vsmall' },
+        { cl: MiniHeader, options: { label: `Anchoring & Alignment` } },
+        { options: { propertyId: mkfData.IDS.TR_ANCHOR, inputOnly: true }, css: 'xsmall' },
         { options: { propertyId: mkfData.IDS.TR_VER_ALIGN, inputOnly: true }, css: 'small' },
-        //{ cl: MiniHeader, options: { label: `Horizontal align` }, css: 'header' },
+        //{ cl: MiniHeader, options: { label: `Horizontal align` } },
         { options: { propertyId: mkfData.IDS.TR_HOR_ALIGN, inputOnly: true }, css: 'small' },
 
-        { cl: MiniHeader, options: { label: LOC.labelOffsets }, css: 'header', requireData: true }, //, disableWhen: { fn: isXMIN }
+        { cl: MiniHeader, options: { label: LOC.labelOffsets }, requireData: true }, //, disableWhen: { fn: isXMIN }
         { options: { propertyId: mkfData.IDS.TR_WIDTH_SHIFT }, requireData: true, disableWhen: { fn: isRNRM } }, //
         { options: { propertyId: mkfData.IDS.TR_WIDTH_PUSH }, requireData: true, disableWhen: { fn: isRNRM } }, //
         { options: { propertyId: mkfData.IDS.TR_AUTO_WIDTH }, requireData: true, disableWhen: { fn: isRNRM } }, //
@@ -52,15 +49,8 @@ class TransformSettingsInspector extends base {
     ];
 
     _Init() {
+
         super._Init();
-
-        this._builder.options = { cl: ValueControl, css: `control` };
-
-        this._trBuilder = new nkm.datacontrols.helpers.ControlBuilder(this);
-        this._trBuilder.options = { cl: ValueControl, css: `foldout-item` };
-        this.forwardData.To(this._trBuilder);
-        this.forwardContext.To(this._trBuilder);
-        this.forwardEditor.To(this._trBuilder);
 
         this._dataPreProcessor = (p_owner, p_data) => {
             if (nkm.u.isInstanceOf(p_data, mkfData.Glyph)) { return p_data.family.transformSettings; }
@@ -68,40 +58,20 @@ class TransformSettingsInspector extends base {
             if (nkm.u.isInstanceOf(p_data, mkfData.Family)) { return p_data.transformSettings; }
             return p_data;
         };
-    }
 
-    static _Style() {
-        return nkm.style.Extends({
-            ':host': {
-                ...nkm.style.rules.fadeIn,
-                ...nkm.style.rules.flex.row.wrap,
-                ...nkm.style.rules.gap.small,
-                'align-content': 'flex-start',
-            },
-            '.control': {
-                'flex': '1 1 100%',
-            },
-            '.small': { 'flex': '1 1 45%' },
-            '.header': {
-                'margin': '5px 2px 5px 2px'
-            },
-            '.small': { 'flex': '1 1 25%' },
-            '.vsmall': { 'flex': '1 1 15%' },
-            '.large': { 'flex': '1 1 80%' },
-            '.foldout': {
-                'order': `500`
-            }
-        }, base._Style());
     }
 
     _Render() {
 
         super._Render();
 
-        this._advancedFoldout = this.Attach(nkm.uilib.widgets.Foldout, `control foldout foldout-item`, this._body);
-        this._advancedFoldout.options = { title: LOC.labelTrAdvanced, icon: `gear`, prefId: `advanced-tr`, expanded: false };
-        this._trBuilder.host = this._advancedFoldout;
-        this._trBuilder.Build(this.constructor.__trControls);
+        nkm.uilib.views.ControlsFoldout.Build(this, {
+            title: LOC.labelTrAdvanced,
+            icon: `gear`,
+            prefId: `advanced-tr`,
+            expanded: false,
+            controls: this.constructor.__trControls
+        });
 
     }
 

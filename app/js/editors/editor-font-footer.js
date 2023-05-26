@@ -31,7 +31,7 @@ class FontEditorFooter extends base {
         return nkm.style.Extends({
             ':host': {
                 ...nkm.style.rules.pos.rel,
-                ...nkm.style.rules.flex.row.nowrap,
+                ...nkm.style.flex.row.nowrap,
                 'min-height': '8px',
                 'height': '8px',
             },
@@ -59,7 +59,7 @@ class FontEditorFooter extends base {
         //this._progressLabel = new ui.manipulators.Text(ui.El(`div`, { class: `label` }, this._host));
         this._memBar = this.Attach(nkm.uilib.bars.ProgressBar, `membar`);
         this._memBar.style.setProperty(`--flavor-color`, `rgb(127,127,127)`);
-        this._memBar.style.setProperty(`--flavor-color-dark-rgb`, `127,127,127`);
+        this._memBar.style.setProperty(`--flavor-color-low-rgb`, `127,127,127`);
         this._memBar.setAttribute(`title`, `Ram usage : ---% (---mb/4000mb)`);
     }
 

@@ -33,7 +33,7 @@ class PangramRenderer extends base {
         return nkm.style.Extends({
             ':host': {
                 ...nkm.style.rules.pos.rel,
-                ...nkm.style.rules.flex.column.nowrap,
+                ...nkm.style.flex.column.nowrap,
                 'box-sizing': 'border-box',
                 //'align-items':'center',
                 'justify-content': 'center',
@@ -63,7 +63,7 @@ class PangramRenderer extends base {
             },
             '.high': {
                 'color': `white`,
-                'background-color': `rgba(var(--col-active-dark-rgb), 0.5)`,
+                'background-color': `rgba(var(--col-active-low-rgb), 0.5)`,
                 'border-radius': `2px`,
             }
         }, base._Style());

@@ -50,11 +50,11 @@ class GlyphInspector extends base {
     static _Style() {
         return nkm.style.Extends({
             ':host': {
-                ...nkm.style.rules.flex.column.nowrap,
+                ...nkm.style.flex.column.nowrap,
                 'padding': '10px',
             },
             '.variant': {
-                ...nkm.style.rules.item.fixed,
+                ...nkm.style.flexItem.fixed,
                 'margin-bottom': '3px'
             },
             '.identity': {
@@ -67,7 +67,7 @@ class GlyphInspector extends base {
                 'margin-bottom': '5px',
             },
             '.drawer': {
-                ...nkm.style.rules.item.fixed,
+                ...nkm.style.flexItem.fixed,
                 'padding': `10px`,
                 'background-color': `rgba(19, 19, 19, 0.25)`,
                 'border-radius': '4px',
@@ -86,10 +86,10 @@ class GlyphInspector extends base {
 
         // Stats
 
-        let foldout = this.Attach(nkm.uilib.widgets.Foldout, `item drawer`, this._host);
+        let foldout = this.Attach(nkm.uilib.views.Foldout, `item drawer`, this._host);
         foldout.options = { title: LOC.labelDetails, icon: `placement-center`, prefId: `glyph-infos`, expanded: true };
 
-        this._glyphStats = this.Attach(mkfWidgets.GlyphStats, `foldout-item`, foldout);
+        this._glyphStats = this.Attach(mkfWidgets.GlyphStats, `full`, foldout);
         this.forwardContext.To(this._glyphStats);
         this.forwardEditor.To(this._glyphStats);
 

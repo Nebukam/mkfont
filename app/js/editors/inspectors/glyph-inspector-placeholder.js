@@ -34,12 +34,12 @@ class GlyphInspectorPlaceholder extends base {
         return nkm.style.Extends({
             ':host': {
                 ...nkm.style.rules.pos.rel,
-                ...nkm.style.rules.flex.column.nowrap,
+                ...nkm.style.flex.column.nowrap,
                 'padding': '10px',
-                ...nkm.style.rules.item.fill,
+                ...nkm.style.flexItem.fill,
             },
             '.variant': {
-                ...nkm.style.rules.item.fixed,
+                ...nkm.style.flexItem.fixed,
                 'margin-bottom': '3px'
             },
             '.identity': {
@@ -49,7 +49,7 @@ class GlyphInspectorPlaceholder extends base {
 
             },
             '.settings': {
-                ...nkm.style.rules.item.grow,
+                ...nkm.style.flexItem.grow,
                 'margin-bottom': '10px'
             },
             '.control': {

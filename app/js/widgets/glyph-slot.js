@@ -49,7 +49,7 @@ class GlyphSlot extends base {
         return nkm.style.Extends({
             ':host': {
                 ...nkm.style.rules.pos.rel,
-                ...nkm.style.rules.flex.column.nowrap,
+                ...nkm.style.flex.column.nowrap,
                 ...nkm.style.rules.fadeIn,
                 'transition': 'opacity 0.15s, transform 0.05s, box-shadow 0.05s',
                 'box-shadow': `none`,
@@ -89,10 +89,10 @@ class GlyphSlot extends base {
             ':host(.unpainted) .box': { 'display': 'none' },
             '.preview': {
                 ...nkm.style.rules.pos.rel,
-                ...nkm.style.rules.flex.column.nowrap,
+                ...nkm.style.flex.column.nowrap,
                 'border-radius': 'inherit',
                 //'aspect-ratio': 'var(--preview-ratio)',
-                ...nkm.style.rules.item.grow,
+                ...nkm.style.flexItem.grow,
                 'min-height': 'var(--preview-height)',
                 'min-width': 'var(--preview-width)',
                 'width': '100%',
@@ -135,7 +135,7 @@ class GlyphSlot extends base {
                 'width': '50%'
             },
             ':host(.empty) .preview': {
-                //'border':`1px rgba(var(--col-warning-dark-rgb),0.5) solid`
+                //'border':`1px rgba(var(--col-warning-low-rgb),0.5) solid`
             },
             ':host(.out-of-bounds) .oob': {
                 'display': 'block !important'

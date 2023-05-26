@@ -54,7 +54,7 @@ class LayersView extends base {
         return nkm.style.Extends({
             ':host': {
                 //...nkm.style.rules.fadeIn,
-                ...nkm.style.rules.flex.column.nowrap,
+                ...nkm.style.flex.column.nowrap,
                 'min-height': 'auto',
                 'min-width': 'auto',
                 //'padding': '20px',
@@ -63,7 +63,7 @@ class LayersView extends base {
                 '--limit': `0.5`,
             },
             '.control': {
-                ...nkm.style.rules.item.fill,
+                ...nkm.style.flexItem.fill,
                 'margin': `3px`,
                 'user-select': 'none'
             },
@@ -74,7 +74,7 @@ class LayersView extends base {
                 'flex': '0 0 16px',
             },
             '.label': {
-                ...nkm.style.rules.item.fill,
+                ...nkm.style.flexItem.fill,
                 'text-align': 'center'
             },
             '.label.limit': { order: -1, 'margin-bottom': `3px`, opacity: `var(--limit)` },
@@ -87,8 +87,8 @@ class LayersView extends base {
                 'margin': '3px'
             },
             '.list': {
-                ...nkm.style.rules.flex.column.nowrap,
-                ...nkm.style.rules.item.shrink,
+                ...nkm.style.flex.column.nowrap,
+                ...nkm.style.flexItem.shrink,
                 'width': `100%`,
                 'padding': `10px 0px`,
                 'border-top': `1px solid rgba(127,127,127,0.25)`,
@@ -100,7 +100,7 @@ class LayersView extends base {
                 'height': '38px'
             },
             '.item': {
-                ...nkm.style.rules.item.shrink,
+                ...nkm.style.flexItem.shrink,
                 'margin': `3px`,
                 'user-select': 'none',
                 'border-radius': '4px',
