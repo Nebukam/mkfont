@@ -33,7 +33,7 @@ class MKFont extends nkm.app.AppBase {
         this._appSettingsType = mkfData.AppSettings; 
 
         this._layers = [
-            { id: `mainLayout`, cl: require(`./main-layout`) }
+            { id: `mainLayout`, cl: nkm.uiworkspace.WorkspaceRoot }
         ];
         
         this._MKFontDocDefinition = this._RegisterDocDefinition(
@@ -70,24 +70,7 @@ class MKFont extends nkm.app.AppBase {
 
         for (var p in cols) { nkm.style.Set(`--col-${p}`, cols[p]); }
 
-        this._mainCatalog = nkm.data.catalogs.CreateFrom({
-            [com.IDS.NAME]: `MKF`
-        }, [
-            {
-                [com.IDS.NAME]: `Main`,
-                [com.IDS.ICON]: `view-list`,
-                [ui.IDS.VIEW_CLASS]: mkfExplorers.MainExplorer
-            }
-        ]);
-
-
-        let mainShelf = this.mainLayout.shelf;
-        mainShelf.catalog = this._mainCatalog;
-        mainShelf.RequestView(0);
-
-        mainShelf.visible = false;
-
-        this._welcomeView = this.mainLayout.workspace.Host({
+        this._welcomeView = this.mainLayout.Host({
             [ui.IDS.VIEW_CLASS]: mkfViews.Welcome,
             [ui.IDS.NAME]: `Home`,
             [ui.IDS.ICON]: `gear`,
@@ -96,7 +79,7 @@ class MKFont extends nkm.app.AppBase {
 
         nkm.style.Set(`--glyph-color`, `#f5f5f5`);
 
-        this.mainLayout.workspace._cells.ForEach((cell) => { cell._nav._cellOptionsBtn.trigger = { fn: () => { mkfCmds.OpenPrefs.Execute(); } } });
+        this.mainLayout._cells.ForEach((cell) => { cell._nav._cellOptionsBtn.trigger = { fn: () => { mkfCmds.OpenPrefs.Execute(); } } });
 
         this._welcomeView._options.view.RequestDisplay();
 
