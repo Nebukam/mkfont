@@ -27,7 +27,7 @@ const shouldHideFLAT = (owner) => {
     return owner.data.Get(mkfData.IDS.FLATTEN_LAYERS);
 };
 
-const base = nkm.datacontrols.ControlWidget;
+const base = nkm.datacontrols.ControlView;
 class GlyphVariantInspectorItem extends base {
     constructor() { super(); }
 
@@ -158,7 +158,7 @@ class GlyphVariantInspectorItem extends base {
 
         //Transforms
 
-        let foldout = nkm.uilib.views.ControlsFoldout.Build(this, {
+        let foldout = nkm.uilib.views.Foldout(this, {
             title: LOC.labelTr, icon: `font-bounds`, prefId: `transforms`, expanded: true,
             handles: [
                 {
@@ -175,7 +175,7 @@ class GlyphVariantInspectorItem extends base {
 
         //Layers
 
-        nkm.uilib.views.ControlsFoldout.Build(this, {
+        nkm.uilib.views.Foldout(this, {
             title: LOC.labelLayers, icon: `component`, prefId: `layers`, expanded: true,
             handles: [
                 {
@@ -192,7 +192,7 @@ class GlyphVariantInspectorItem extends base {
 
         // Settings
 
-        nkm.uilib.views.ControlsFoldout.Build(this, {
+        nkm.uilib.views.Foldout(this, {
             title: LOC.labelSettings, icon: `gear`, prefId: `glyphSettings`, expanded: true,
             controls: [
                 //{ cl: MiniHeader, options: { label: `Export` } },

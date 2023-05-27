@@ -132,7 +132,7 @@ class GlyphListInspector extends base {
 
         // Transforms + local properties
 
-        let foldout = nkm.uilib.views.ControlsFoldout.Build(this, {
+        let foldout = nkm.uilib.views.Foldout(this, {
             title: LOC.labelTr,
             icon: `font-bounds`,
             prefId: `transforms`,
@@ -150,7 +150,7 @@ class GlyphListInspector extends base {
 
         // Layers
 
-        foldout = nkm.uilib.views.ControlsFoldout.Build(this, {
+        foldout = nkm.uilib.views.Foldout(this, {
             title: LOC.labelLayers,
             icon: `component`,
             prefId: `layers`,
@@ -213,7 +213,7 @@ class GlyphListInspector extends base {
 
         // Settings
 
-        foldout = nkm.uilib.views.ControlsFoldout.Build(this, {
+        foldout = nkm.uilib.views.Foldout(this, {
             title: LOC.labelSettings,
             icon: `gear`,
             prefId: `glyphSettings`,

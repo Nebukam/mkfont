@@ -36,10 +36,10 @@ class LayerTransformSettingsInspector extends base {
         },
 
         { cl: MiniHeader, options: { label: `Context`, label2: `Layer` }, css: 'hdr' },
-        { options: { propertyId: mkfData.IDS.TR_ANCHOR, inputOnly: true }, css: 'vxsmall' },
+        { options: { propertyId: mkfData.IDS.TR_ANCHOR, inputOnly: true }, css: 'xsmall' },
         { options: { propertyId: mkfData.IDS.TR_LYR_BOUNDS_MODE, inputOnly: true }, css: 'small' },
 
-        { options: { propertyId: mkfData.IDS.TR_LYR_SELF_ANCHOR, inputOnly: true }, css: 'vxsmall' },
+        { options: { propertyId: mkfData.IDS.TR_LYR_SELF_ANCHOR, inputOnly: true }, css: 'xsmall' },
         { options: { propertyId: mkfData.IDS.TR_BOUNDS_MODE, inputOnly: true }, css: 'small' },
 
         //{ options: { propertyId: mkfData.IDS.TR_LYR_SCALE_MODE, inputOnly: true }, css: 'small' },

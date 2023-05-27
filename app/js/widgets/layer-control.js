@@ -18,7 +18,7 @@ const __circular = `circular`;
 const __controlLayer = `control-layer`;
 const __false = `false`;
 
-const base = nkm.datacontrols.InspectorWidgetGroup;
+const base = nkm.datacontrols.ControlFoldout;
 class LayerControl extends base {
     constructor() { super(); }
 
@@ -33,18 +33,10 @@ class LayerControl extends base {
         super._Init();
 
         this._flags.Add(this, __circular, __false, __controlLayer);
-
-        this._builder.defaultControlClass = nkm.datacontrols.widgets.ValueControl;
-        this._builder.defaultCSS = `control`;
+        //this._builder.defaultControlClass = nkm.datacontrols.widgets.ValueControl;
 
         this.focusArea = this;
 
-    }
-
-    _PostInit() {
-        super._PostInit();
-        this._builder.host = this._body;
-        this._extExpand.Setup(this, this._body, this._expandIcon.element);
     }
 
     static _Style() {
@@ -66,15 +58,6 @@ class LayerControl extends base {
             },
             ':host(.false)': {
                 'background-color': `rgba(127,127,127,0.1)`
-            },
-            '.body': {
-                ...nkm.style.flex.rows,
-                'width': `100%`,
-                'align-content': 'flex-start',
-            },
-            '.control': {
-                'flex': '1 1 100%',
-                'min-height': 0
             },
             '.hdr': {
                 'margin': '5px 2px 5px 2px'
@@ -150,9 +133,8 @@ class LayerControl extends base {
                 },
             ]
         };
-        this._toolbar.visible = false;
 
-        this._label.ellipsis = true;
+        this._toolbar.visible = false;        
 
     }
 

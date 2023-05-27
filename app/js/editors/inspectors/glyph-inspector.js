@@ -86,7 +86,7 @@ class GlyphInspector extends base {
 
         // Stats
 
-        let foldout = this.Attach(nkm.uilib.views.Foldout, `item drawer`, this._host);
+        let foldout = this.Attach(nkm.datacontrols.ControlFoldout, `item drawer`, this._host);
         foldout.options = { title: LOC.labelDetails, icon: `placement-center`, prefId: `glyph-infos`, expanded: true };
 
         this._glyphStats = this.Attach(mkfWidgets.GlyphStats, `full`, foldout);

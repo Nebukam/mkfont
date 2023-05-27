@@ -15,8 +15,6 @@ const SHARED_OPS = require("../operations/commands/shared-ops");
 const __nolayer = `nolayer`;
 const __limitReached = `limit-reached`;
 
-
-
 const base = nkm.datacontrols.ControlView;
 class LayersView extends base {
     constructor() { super(); }

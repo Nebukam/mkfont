@@ -65,7 +65,7 @@ class TransformSettingsInspector extends base {
 
         super._Render();
 
-        nkm.uilib.views.ControlsFoldout.Build(this, {
+        nkm.uilib.views.Foldout(this, {
             title: LOC.labelTrAdvanced,
             icon: `gear`,
             prefId: `advanced-tr`,
