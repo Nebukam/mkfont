@@ -54,7 +54,6 @@ class FontEditorHeader extends base {
                 'padding': '10px',
                 'box-shadow': `0px -2px 5px black`,
                 'border-bottom': `1px solid #242424`,
-                'background-color': 'rgba(127,127,127,0.1)',
             },
             '.title': {
                 'opacity': '0.2',

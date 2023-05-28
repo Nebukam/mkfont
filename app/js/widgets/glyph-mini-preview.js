@@ -37,11 +37,11 @@ class GlyphMiniPreview extends base {
 
                 'aspect-ratio': '1/1',// 'var(--preview-ratio)',
                 'overflow': 'hidden',
-                'background-color': 'rgba(0,0,0,0.5)',
+                'background-color': `rgba(var(--col-base-200-rgb), 1)`,
                 'border-radius': '5px',
             },
             ':host(.null-glyph)': {
-                'background-color': 'rgba(0,0,0,0.25)',
+                'background-color': 'rgba(var(--col-base-100-rgb), 0.3)',
             },
             ':host(:not(.null-glyph)) .placeholder, :host(.null-glyph) .renderer': { 'display': 'none' },
             '.renderer': {

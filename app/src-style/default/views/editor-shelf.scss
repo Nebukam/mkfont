@@ -8,7 +8,7 @@
 @import '../_mixins';
 
 :host{
-    background-color: rgba(var(#{$id_col_base_200}-rgb), 1);
+    //background-color: rgba(var(#{$id_col_base_200}-rgb), 1);
 }
 
 $shelflinecol: rgba(var(#{$id_col_base_400}-rgb), 1);

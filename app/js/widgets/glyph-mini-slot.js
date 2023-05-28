@@ -56,7 +56,7 @@ class GlyphMiniSlot extends base {
                 'box-sizing': 'border-box',
                 'padding': '2px',
                 'border-radius': '3px',
-                'background-color': '#161616',
+                'background-color': `#161616`,
                 'overflow': 'clip',
                 'border':`1px solid rgba(0,0,0,0)`
             },
@@ -70,7 +70,7 @@ class GlyphMiniSlot extends base {
                 'border-color':`var(--col-active)`
             },
             ':host(.exists)': {
-                'background-color': '#1e1e1e'
+                'background-color': `rgba(var(--col-base-200-rgb), 1)`
             },
             '.cat-hint': {
                 ...nkm.style.rules.pos.abs,

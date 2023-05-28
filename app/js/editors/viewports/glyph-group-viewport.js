@@ -101,7 +101,8 @@ class GlyphGroupViewport extends base {
             ':host': {
                 ...nkm.style.flex.column,
                 '--streamer-gap': '10px',
-                'overflow': 'clip'
+                'overflow': 'clip',
+                'background-color': `rgba(var(--col-base-200-rgb), 0.5)`,
             },
             '.header, .search, .footer': {
                 ...nkm.style.flexItem.fixed,

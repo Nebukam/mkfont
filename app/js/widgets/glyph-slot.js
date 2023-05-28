@@ -54,15 +54,11 @@ class GlyphSlot extends base {
                 'box-shadow': `none`,
                 'transform': 'scale(1)',
                 '--col-cat': 'var(--col-active)',
-                //'min-height': 'var(--preview-size)',
-                //'border':'1px solid gray',
-                //'margin-bottom': '4px',
                 'box-sizing': 'border-box',
                 'padding': '10px',
                 'border-radius': '5px',
-                'background-color': '#161616',
+                'background-color': 'rgba(var(--col-base-100-rgb), 0.3)', //161616
                 'align-items': 'center',
-                //'overflow': 'clip',
             },
             ':host(:hover)': {
                 'box-shadow': `0 12px 20px -10px #131313`,
@@ -70,10 +66,10 @@ class GlyphSlot extends base {
                 'transform': 'scale(1.1)',
             },
             ':host(.selected)': {
-                'background-color': '#353535 !important'
+                'border': '2px solid rgba(var(--col-active-rgb), 1) !important' //353535
             },
             ':host(.exists)': {
-                'background-color': '#1e1e1e'
+                'background-color': `rgba(var(--col-base-200-rgb), 1)`
             },
             '.cat-hint': {
                 ...nkm.style.rules.pos.abs,
