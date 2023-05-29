@@ -199,7 +199,7 @@ class SettingsSearchDataBlock extends base {
                 //Look through layers and check if they have custom IDs that would match
                 let glyph = this._family.GetGlyph(p_unicodeInfos.u);
                 if (!glyph.isNull) {
-                    let layers = glyph.activeVariant._layers._array;
+                    let layers = glyph.activeVariant._layers;
                     for (let l = 0, ln = layers.length; l < ln; l++) {
                         let
                             layer = layers[l],

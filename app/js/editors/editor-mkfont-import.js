@@ -116,7 +116,7 @@ class EditorMKFontImport extends base {
                     label: `Toggle selected glyphs`,
                     trigger: {
                         fn: () => {
-                            this._selStack.data.stack.ForEach(item => { item.selected = true; });
+                            this._selStack.data.stack.forEach(item => { item.selected = true; });
                             this._OnImportListUpdated();
                         }
                     },

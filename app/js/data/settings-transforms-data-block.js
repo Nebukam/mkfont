@@ -108,7 +108,7 @@ class TransformSettingsDataBlock extends FontObjectData {
                 prevLayer = null,
                 lastLayerPath = null;
 
-            this._variant.layers.ForEach((layer, index) => {
+            this._variant.layers.forEach((layer, index) => {
                 let ref = layer.importedVariant;
                 if (ref && !layer._isCircular && layer.Get(IDS.DO_EXPORT)) {
 

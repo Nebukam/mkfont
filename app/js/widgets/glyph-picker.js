@@ -277,12 +277,6 @@ class GlyphPicker extends base {
 
     _RefreshItems() {
         this._domStreamer._Stream(null, null, true);
-        /*
-        for (let i = 0; i < this._displayList.count; i++) {
-            let item = this._displayList.At(i);
-            if (`_UpdateGlyphPreview` in item) { item._UpdateGlyphPreview(); }
-        }
-        */
     }
 
     //#endregion

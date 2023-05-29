@@ -21,6 +21,6 @@
     },
     "devDependencies": {
         "@nkmjs/core-dev": "^1.2.4",
-        "electron": "^24.1.2"
+        "electron": "^24.4.0"
     }
 }

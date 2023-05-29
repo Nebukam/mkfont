@@ -18,7 +18,7 @@ class RangeContent extends nkm.com.Observable {
     //#region Static utils
 
     static CountGlyphs = (p_family) => {
-        return p_family._glyphs.count;
+        return p_family._glyphs.length;
     };
 
     static CountLiga = (p_family) => {
@@ -42,7 +42,7 @@ class RangeContent extends nkm.com.Observable {
 
     static FetchFamilyGlyphLiga(p_family) {
         let result = [];
-        p_family._glyphs.ForEach(
+        p_family._glyphs.forEach(
             (item, index) => {
                 if (p_family._ligatureSet.has(item)) { result.push(item.Get(IDS.UNICODE)); }
             });

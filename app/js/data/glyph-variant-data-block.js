@@ -52,7 +52,7 @@ class GlyphVariantDataBlock extends FontObjectData {
         this._glyph = null;
         this._computedPath = null;
         this._index = 0;
-        this._layers = new nkm.collections.List();
+        this._layers = [];
 
         this._controlLayer = null;
         this._selectedLayer = null;
@@ -62,13 +62,13 @@ class GlyphVariantDataBlock extends FontObjectData {
             .Hook(nkm.com.SIGNAL.UPDATED, this._PushUpdate, this)
             .Hook(nkm.com.SIGNAL.VALUE_CHANGED, this._OnLayerValueChanged, this);
 
-        this._layerUsers = new nkm.collections.List();
+        this._layerUsers = [];
 
     }
 
     get layerUsers() { return this._layerUsers; }
 
-    get availSlots() { return INFOS.LAYER_LIMIT - this._layers.count; }
+    get availSlots() { return INFOS.LAYER_LIMIT - this._layers.length; }
 
     get index() { return this._index; }
     set index(p_value) {
@@ -90,9 +90,9 @@ class GlyphVariantDataBlock extends FontObjectData {
     //#region Layer management
 
     AddLayer(p_layer, p_index = -1) {
-        if (!this._layers.Add(p_layer)) { return p_layer; }
+        if (!this._layers.AddNew(p_layer)) { return p_layer; }
         p_layer._variant = this;
-        p_layer.index = this._layers.count - 1;
+        p_layer.index = this._layers.length - 1;
         p_layer._RetrieveImportedVariant();
         this._layerObserver.Observe(p_layer);
         this.Broadcast(SIGNAL.LAYER_ADDED, this, p_layer);
@@ -107,7 +107,7 @@ class GlyphVariantDataBlock extends FontObjectData {
         p_layer.importedVariant = null;
         p_layer._variant = null;
         if (this._controlLayer == p_layer) { this.controlLayer = null; }
-        this._layers.ForEach((item, i) => { item.index = i; });
+        this._layers.forEach((item, i) => { item.index = i; });
         this.Broadcast(SIGNAL.LAYER_REMOVED, this, p_layer);
         this.Broadcast(SIGNAL.LAYERS_UPDATED, this);
         this._PushUpdate();
@@ -115,9 +115,9 @@ class GlyphVariantDataBlock extends FontObjectData {
     }
 
     MoveLayer(p_layer, p_index) {
-        if (!this._layers.Contains(p_layer)) { return; }
-        this._layers.Move(p_layer, p_index);
-        this._layers.ForEach((item, i) => { item.index = i; });
+        if (!this._layers.includes(p_layer)) { return; }
+        this._layers.AddAt(p_layer, p_index);
+        this._layers.forEach((item, i) => { item.index = i; });
         this.Broadcast(SIGNAL.LAYERS_UPDATED, this);
         this._PushUpdate();
         return p_layer;
@@ -149,12 +149,12 @@ class GlyphVariantDataBlock extends FontObjectData {
     }
 
     _ConcatPaths(p_rootPath) {
-        if (this._layers.isEmpty) { return p_rootPath; }
+        if (!this._layers.length) { return p_rootPath; }
         if (IDS.isEmptyPathContent(p_rootPath)) { p_rootPath = ``; }
-        this._layers.ForEach((item) => {
-            let pathData = item.Get(IDS.PATH);
+        for (const lyr of this._layers) {
+            let pathData = lyr.Get(IDS.PATH);
             if (pathData && !IDS.isEmptyPathContent(pathData.path)) { p_rootPath += ` ` + pathData.path; };
-        });
+        }
         if (p_rootPath.trim() == ``) { p_rootPath = IDS.EMPTY_PATH_CONTENT; }
         return p_rootPath;
     }
@@ -215,9 +215,9 @@ class GlyphVariantDataBlock extends FontObjectData {
         //When pushing update, make sure to notify layers that
         //reference this variant, as they will need to be updated as well.
         //but only after this specific variant has been updated.
-        this._layerUsers.ForEach((item) => {
-            if (!item._isCircular) { item._variant._PushUpdate(true); }
-        });
+        for (const user of this._layerUsers) {
+            if (!user._isCircular) { user._variant._PushUpdate(true); }
+        }
 
     }
 
@@ -233,7 +233,7 @@ class GlyphVariantDataBlock extends FontObjectData {
 
     _ClearLayers() {
         this.selectedLayer = null;
-        while (!this._layers.isEmpty) { this.RemoveLayer(this._layers.last).Release(); }
+        while (this._layers.length) { this.RemoveLayer(this._layers.last).Release(); }
         this.controlLayer = null;
     }
 
@@ -246,18 +246,18 @@ class GlyphVariantDataBlock extends FontObjectData {
 
     HasLayer(p_char, p_uni = null) {
 
-        if (this._layers.isEmpty) { return false; }
+        if (!this._layers.length) { return false; }
         return this.TryGetLayer(p_char, p_uni) == null ? false : true;
 
     }
 
     TryGetLayer(p_char, p_uni = null) {
 
-        if (this._layers.isEmpty) { return null; }
+        if (!this._layers.length) { return null; }
 
-        for (let i = 0, n = this._layers.count; i < n; i++) {
+        for (let i = 0, n = this._layers.length; i < n; i++) {
             let
-                lyr = this._layers.At(i),
+                lyr = this._layers[i],
                 cval = lyr.Get(IDS.LYR_CHARACTER_NAME);
 
             if (cval == p_char || cval == p_uni) { return lyr; }

@@ -97,7 +97,7 @@ class FamilyDataBlock extends FontObjectData {
         this._searchSettings = nkm.com.Rent(SearchSettings);
         this._searchSettings.family = this;
 
-        this._glyphs = new nkm.collections.List();
+        this._glyphs = [];
         this._glyphsMap = {};
         this._ligatureSet = new Set();
         this._glyphUnicodeCache = [];
@@ -175,7 +175,7 @@ class FamilyDataBlock extends FontObjectData {
 
     AddGlyph(p_glyph) {
 
-        if (!this._glyphs.Add(p_glyph)) { return; }
+        if (!this._glyphs.AddNew(p_glyph)) { return; }
 
         let unicode = p_glyph.Get(IDS.UNICODE);
         if (unicode in this._glyphsMap) {
@@ -297,7 +297,7 @@ class FamilyDataBlock extends FontObjectData {
             definition = this.DEFINITIONS[p_id];
 
         if (!descriptor || !descriptor.recompute || !definition.propagate) { return; }
-        this._glyphs.ForEach((item, i) => { item._PushUpdate(); });
+        for (const g of this._glyphs) { g._PushUpdate(); }
     }
 
     _OnTransformValueChanged(p_data, p_id, p_newValue, p_oldValue) {
@@ -308,25 +308,24 @@ class FamilyDataBlock extends FontObjectData {
 
         if (!descriptor || !descriptor.recompute || !definition.propagate) { return; }
         this._UpdateDisplayValues();
+
         // TODO : This can be greatly optimized by only propagating to glyphs that have the associated property == null
-        this._glyphs.ForEach((item, i) => {
-            item._variants.ForEach((v) => {
+        for (const g of this._glyphs) {
+            for (const v of g._variants) {
                 if (v._transformSettings._values[p_id] == null) { v._transformSettings.CommitUpdate(); }
-            })
-        });
+            }
+        }
     }
 
     _UpdateLayerReferences() {
 
-        this._glyphs.ForEach(glyph => {
-            glyph._variants.ForEach(variant => {
-                if (!variant._layers.isEmpty) {
-                    variant._layers.ForEach(layer => {
-                        if (!layer.importedVariant) { layer._RetrieveGlyphInfos(); }
-                    });
-                }
-            });
-        });
+        for (const g of this._glyphs) {
+            for (const v of g._variants) {
+                for (const lyr of v._layers) {
+                    if (!lyr.importedVariant) { lyr._RetrieveGlyphInfos(); }
+                };
+            };
+        };
     }
 
     _UpdateFontObject() {
@@ -430,7 +429,7 @@ class FamilyDataBlock extends FontObjectData {
         if (p_target == p_candidate) { return true; }
         if (p_candidate._layers.isEmpty) { return false; }
 
-        let layers = p_candidate._layers._array;
+        let layers = p_candidate._layers;
 
         for (let i = 0, n = layers.length; i < n; i++) {
             let layer = layers[i];
@@ -464,7 +463,7 @@ class FamilyDataBlock extends FontObjectData {
 
         this._ResetSelectionPresets();
 
-        while (!this._glyphs.isEmpty) {
+        while (this._glyphs.length) {
             let g = this._glyphs.last;
             this.RemoveGlyph(g);
             g.Release();
@@ -481,7 +480,7 @@ class FamilyDataBlock extends FontObjectData {
         this._searchSettings.Reset(false, true);
 
         /////
-        this._glyphs.Clear();
+        this._glyphs.length = 0;
         this._glyphsMap = {};
         this._ligatureSet.clear();
         this._glyphUnicodeCache.length = 0;

@@ -20,7 +20,7 @@ class BindingManager extends base {
         this._editor = p_editor;
         this._map = new Map();
         this._reverseMap = new Map();
-        this._list = new nkm.collections.List();
+        this._list = [];
         this._rscOptions = { cl: nkm.io.resources.TextResource };
     }
 
@@ -88,7 +88,7 @@ class BindingManager extends base {
     Get(p_variant) { return this._map.get(p_variant); }
 
     UnbindVariants(p_glyph) {
-        p_glyph._variants.ForEach((item) => { this.Unbind(p_glyph); });
+        p_glyph._variants.forEach((item) => { this.Unbind(p_glyph); });
     }
 
     _OnBindingReleased(p_binding) {
@@ -123,7 +123,7 @@ class BindingManager extends base {
      * @description TODO
      */
     Clear() {
-        while (!this._list.isEmpty) { this.Unbind(this._reverseMap.get(this._list.last)); }
+        while (this._list.length) { this.Unbind(this._reverseMap.get(this._list.last)); }
     }
 
     _CleanUp() {

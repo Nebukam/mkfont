@@ -62,10 +62,10 @@ class FamilyDataBlockJSONSerializer extends nkm.data.s11n.json.DataBlock {
         fontObj[__ID_glyphs] = glyphs;
 
         // First, go through all glyphs
-        for (let i = 0; i < p_data._glyphs.count; i++) {
+        for (let i = 0; i < p_data._glyphs.length; i++) {
 
             let
-                glyph = p_data._glyphs.At(i),
+                glyph = p_data._glyphs[i],
                 variants = [],
                 glyphObj = {
                     [__ID_values]: glyph.Values(),
@@ -90,7 +90,7 @@ class FamilyDataBlockJSONSerializer extends nkm.data.s11n.json.DataBlock {
                 if (!variant._layers.isEmpty) {
                     let layers = [];
                     variantObj[__ID_lyrs] = layers;
-                    variant._layers.ForEach(lyr => {
+                    variant._layers.forEach(lyr => {
                         let lv = lyr.Values();
                         if (variant.controlLayer == lyr) { lv[IDS.LYR_IS_CONTROL_LAYER] = true; }
                         else { delete lv[IDS.LYR_IS_CONTROL_LAYER]; }

@@ -29,7 +29,7 @@ class FamilyFontCache {
     _OnContentReady() {
 
         let
-            glyphCount = this._fontData._glyphs.count,
+            glyphCount = this._fontData._glyphs.length,
             threshold = nkm.settings.Get(IDS_PREFS.MANUAL_PREVIEW_REFRESH_THRESHOLD);
 
         if (glyphCount > threshold) { return; }

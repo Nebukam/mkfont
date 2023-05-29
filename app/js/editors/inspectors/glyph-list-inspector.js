@@ -105,7 +105,7 @@ class GlyphListInspector extends base {
             handles: [
                 {
                     icon: `reset`, htitle: `Reset existing glyphs & create missing ones.\n+ [ Shift ] Also create components matching character decomposition.\n+ [ Alt ] Reset the glyphs path while preserving everything else.`,
-                    trigger: { fn: () => { this.editor.cmdGlyphClear.Execute(this._data.stack._array); } },
+                    trigger: { fn: () => { this.editor.cmdGlyphClear.Execute(this._data.stack); } },
                     group: `read`
                 },
                 {

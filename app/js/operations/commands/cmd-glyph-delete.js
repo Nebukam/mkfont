@@ -35,7 +35,7 @@ class CmdGlyphDelete extends actions.Command {
             let list;
 
             if (u.isArray(this._context)) { list = this._context; }
-            else { list = this._emitter.inspectedData.stack._array; }
+            else { list = this._emitter.inspectedData.stack; }
 
             // Delete a selection of glyphs
 

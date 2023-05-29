@@ -234,14 +234,14 @@ class Surveyor extends base {
             layerStack = [],
             validSet = new Set(),
             vCount = this._cachedVariants.length,
-            refLayerList = this._refVariant._layers._array,
+            refLayerList = this._refVariant._layers,
             needRebuild = true;
 
         // Organize layer by names & count
 
         this._cachedVariants.forEach(variant => {
 
-            variant._layers.ForEach(layer => {
+            variant._layers.forEach(layer => {
 
                 let
                     id = this._LyrID(layer),

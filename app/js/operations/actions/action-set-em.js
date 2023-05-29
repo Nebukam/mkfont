@@ -35,8 +35,8 @@ class ActionSetEM extends nkm.data.ops.actions.SetPropertyValue {
             //family.CommitUpdate();
             //family._transformSettings.CommitUpdate();
 
-            family._glyphs._array.forEach(glyph => {
-                glyph._variants.ForEach((variant) => {
+            family._glyphs.forEach(glyph => {
+                glyph._variants.forEach((variant) => {
 
                     // Glyph values
 
@@ -59,7 +59,7 @@ class ActionSetEM extends nkm.data.ops.actions.SetPropertyValue {
                     //mkfData.UTILS.ResampleValues(variant._transformSettings._values, mkfData.IDS.TR_RESAMPLE_IDS, scaleFactor, true);
 
                     // Layers transforms
-                    variant._layers.ForEach(layer => {
+                    variant._layers.forEach(layer => {
 
                         layer.BatchSet(mkfData.UTILS.Resample(
                             layer.Values(mkfData.IDS.LYR_RESAMPLE_IDS),

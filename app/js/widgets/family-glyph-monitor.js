@@ -51,9 +51,9 @@ class FamilyGlyphMonitor extends base {
 
     _OnDataUpdated(p_data){
         super._OnDataUpdated(p_data);
-        let p = p_data._glyphs.count / UNICODE.MAX_GLYPH_COUNT;
+        let p = p_data._glyphs.length / UNICODE.MAX_GLYPH_COUNT;
         this._progressBar.progress = p;
-        this._counter.Set(`${p_data._glyphs.count} / ${UNICODE.MAX_GLYPH_COUNT}`);
+        this._counter.Set(`${p_data._glyphs.length} / ${UNICODE.MAX_GLYPH_COUNT}`);
 
         this._progressBar.flavor = p < 0.5 ? nkm.com.FLAGS.READY : p < 0.8 ? nkm.com.FLAGS.WARNING : nkm.com.FLAGS.ERROR;        
     }

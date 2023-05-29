@@ -121,7 +121,7 @@ class FontEditor extends base {
     _StoreSelectionPreset(p_index) {
         if (!this._data) { return; }
         let preset = [];
-        for (let i = 0; i < this._inspectedData.stack.count; i++) { preset.push(this._inspectedData.stack.At(i).u); }
+        for (let i = 0; i < this._inspectedData.stack.length; i++) { preset.push(this._inspectedData.stack[i].u); }
         this._data._selectionPresets[p_index] = preset;
     }
 
@@ -130,7 +130,7 @@ class FontEditor extends base {
         let preset = this._data._selectionPresets[p_index];
         if (!preset || preset.length == 0) { return; }
         let restored;
-        if (p_append) { restored = [...this._inspectedData.stack._array]; }
+        if (p_append) { restored = [...this._inspectedData.stack]; }
         else { restored = []; }
         for (let i = 0; i < preset.length; i++) { restored.push(UNICODE.GetInfos(preset[i])); }
         if (restored.length == 0) { return; }
@@ -323,7 +323,7 @@ class FontEditor extends base {
 
             this._OnDataValueChanged(this._data, mkfData.IDS.PREVIEW_SIZE, null);
 
-            if (this._data._glyphs.count > 0) {
+            if (this._data._glyphs.length > 0) {
                 ar = this._contentInspector._specialCatalog.At(0); //My Glyphs
             }
 

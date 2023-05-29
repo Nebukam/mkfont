@@ -181,7 +181,7 @@ class LayersView extends base {
 
     _CollapseAll() {
         if (!this._data) { return; }
-        this._data._layers.ForEach(lyr => { lyr.expanded = false; });
+        this._data._layers.forEach(lyr => { lyr.expanded = false; });
         this._layerCtrls.forEach(item => { item.Collapse(); });
     }
 
@@ -197,7 +197,7 @@ class LayersView extends base {
             this._RefreshLayerOrder();
             return;
         }
-        this._data._layers.ForEach(lyr => { this._OnLayerAdded(this._data, lyr); });
+        this._data._layers.forEach(lyr => { this._OnLayerAdded(this._data, lyr); });
         this._AttachFragment();
         //this._RefreshLayerOrder();
     }
@@ -302,7 +302,7 @@ class LayersView extends base {
                 variant: ui.FLAGS.FRAME, flavor: ui.FLAGS.CTA,
                 trigger: {
                     fn: () => {
-                        let datas = [...this._glyphPicker.content.selectionStack.data.stack._array];
+                        let datas = [...this._glyphPicker.content.selectionStack.data.stack];
                         if (datas.length > 0) { this._CreateLayersFromSelection(datas); }
                         this._glyphPicker.Close();
                     }

@@ -88,7 +88,7 @@ nkm.data.RegisterDescriptors({
         inputType: inputs.Select,
         label: `Reference block`,
         inputOptions: { catalog: UNICODE._blockCatalog, size: ui.FLAGS.SIZE_S },
-        desc: `UNICODE Block to work with (there's ${UNICODE._blockCatalog.count} of them!)`
+        desc: `UNICODE Block to work with (there's ${UNICODE._blockCatalog.length} of them!)`
     },
 
     [IDS_EXT.IMPORT_BLOCK_START]: {

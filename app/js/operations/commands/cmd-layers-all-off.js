@@ -32,7 +32,7 @@ class CmdLayersOff extends actions.Command {
             this._context.forEach((variant) => {
 
                 let
-                    layerList = variant.layers._array,
+                    layerList = variant.layers,
                     ignore = true;
 
                 layerList.forEach(element => { if (element.Get(mkfData.IDS.DO_EXPORT)) { ignore = false; } });
@@ -53,7 +53,7 @@ class CmdLayersOff extends actions.Command {
 
             let
                 variant = this._context,
-                layerList = variant.layers._array,
+                layerList = variant.layers,
                 ignore = true;
 
             layerList.forEach(element => { if (element.Get(mkfData.IDS.DO_EXPORT)) { ignore = false; } });

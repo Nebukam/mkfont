@@ -35072,7 +35072,7 @@ class UNICODE extends nkm.com.Observable {
                 for (let i = 0, n = list.length; i < n; i++) {
                     let block = list[i],
                         start = block.start,
-                        end = start + block.count;
+                        end = start + block.length;
                     if (index >= start && index < end) {
                         ownerBlock = block;
                         break;

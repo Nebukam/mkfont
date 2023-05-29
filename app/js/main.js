@@ -79,7 +79,7 @@ class MKFont extends nkm.app.AppBase {
 
         nkm.style.Set(`--glyph-color`, `#f5f5f5`);
 
-        this.mainLayout._cells.ForEach((cell) => { cell._nav._cellOptionsBtn.trigger = { fn: () => { mkfCmds.OpenPrefs.Execute(); } } });
+        this.mainLayout._cells.forEach((cell) => { cell._nav._cellOptionsBtn.trigger = { fn: () => { mkfCmds.OpenPrefs.Execute(); } } });
 
         this._welcomeView._options.view.RequestDisplay();
 
@@ -99,15 +99,15 @@ class MKFont extends nkm.app.AppBase {
 
         let family = mkfData.TTF.FamilyFromTTF(fs.readFileSync(`./assets-dev/ttfs/${__fontName}.ttf`));
 
-        let gCount = family._glyphs.count;
-        family._glyphs.ForEach(glyph => {
+        let gCount = family._glyphs.length;
+        family._glyphs.forEach(glyph => {
             for (let i = 0; i < 5; i++) {
 
                 if (Math.random() > 0.2) { continue; }
 
                 let
                     newLayer = nkm.com.Rent(mkfData.GlyphLayer),
-                    g = family._glyphs.At(Math.round(Math.random() * (gCount - 1)));
+                    g = family._glyphs[Math.round(Math.random() * (gCount - 1))];
 
                 glyph.activeVariant.AddLayer(newLayer);
                 newLayer.expanded = false;

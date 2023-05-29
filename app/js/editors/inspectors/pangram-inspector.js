@@ -199,7 +199,7 @@ class PangramInspector extends base {
                     trigger: {
                         fn: () => {
                             let txt = ``, space = ui.INPUT.shiftKey ? ` ` : ``;
-                            this.editor.inspectedData.stack.ForEach(i => { txt += `${i.char}${space}` }, true);
+                            this.editor.inspectedData.stack.forEach(i => { txt += `${i.char}${space}` }, true);
                             txt = this._text.handler.currentValue + txt;
                             this._text.handler.changedValue = txt == `` ? longPangram : txt;
                             this._text.handler.SubmitValue();
@@ -213,7 +213,7 @@ class PangramInspector extends base {
                     trigger: {
                         fn: () => {
                             let txt = ``, space = ui.INPUT.shiftKey ? ` ` : ``;
-                            this.editor.inspectedData.stack.ForEach(i => { txt += `${i.char}${space}` }, true);
+                            this.editor.inspectedData.stack.forEach(i => { txt += `${i.char}${space}` }, true);
                             this._text.handler.changedValue = txt == `` ? longPangram : txt;
                             this._text.handler.SubmitValue();
                         },
@@ -247,13 +247,13 @@ class PangramInspector extends base {
     }
 
     _OnSelectionUpdated(p_sel) {
-        if (p_sel.stack.count == 0) {
+        if (!p_sel.stack.length) {
             this._pangramRenderer.highlightList = null;
             return;
         }
 
         let hlist = [];
-        p_sel.stack.ForEach((infos) => {
+        p_sel.stack.forEach((infos) => {
             hlist.push(infos.char);
         });
 

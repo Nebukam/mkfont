@@ -20,7 +20,7 @@ class CmdExportTTF extends actions.Command {
 
     _InternalExecute() {
 
-        if (this._context._glyphs.count == 0) {
+        if (this._context._glyphs.length == 0) {
             this._Fail(`There is no glyph to export.`);
             return;
         }
