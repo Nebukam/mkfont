@@ -40,4 +40,8 @@
     }
 }
 
+:host(:first-of-type:not(:first-child)){
+    margin-top:10px;
+}
+
 :host .label {}
