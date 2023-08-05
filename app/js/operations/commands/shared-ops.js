@@ -6,9 +6,6 @@ const UNICODE = require(`../../unicode`);
 const mkfData = require(`../../data`);
 const mkfActions = require(`../actions`);
 
-const SetPropertyMultiple = nkm.data.ops.actions.SetPropertyMultiple;
-const SetProperty = nkm.data.ops.actions.SetPropertyValue;
-
 /**
  * @description TODO
  * @class
@@ -131,7 +128,7 @@ class SHARED_OPS {
                 if (layerTarget.Get(mkfData.IDS.LYR_CHARACTER_NAME) == srcId) {
                     let lyrValues = layerSource.Values();
                     if (resample) { mkfData.UTILS.Resample(lyrValues, mkfData.IDS.LYR_RESAMPLE_IDS, p_scaleFactor, true); }
-                    p_editor.Do(SetPropertyMultiple, {
+                    p_editor.Do(mkfActions.SetPropertyMultiple, {
                         target: layerTarget,
                         values: lyrValues
                     });
@@ -209,7 +206,7 @@ class SHARED_OPS {
         });
 
         if (!hasLayersAlready && maxw) {
-            p_editor.Do(SetPropertyMultiple, {
+            p_editor.Do(mkfActions.SetPropertyMultiple, {
                 target: p_target,
                 values: {
                     [mkfData.IDS.TR_AUTO_WIDTH]: false,
@@ -462,18 +459,18 @@ class SHARED_OPS {
 
             if (sourceVariant == targetVariant) { return; }
 
-            p_editor.Do(SetProperty, {
+            p_editor.Do(mkfActions.SetProperty, {
                 target: targetVariant,
                 id: mkfData.IDS.PATH_DATA,
                 value: pathData
             });
 
-            p_editor.Do(SetPropertyMultiple, {
+            p_editor.Do(mkfActions.SetPropertyMultiple, {
                 target: targetVariant.transformSettings,
                 values: trValues
             });
 
-            p_editor.Do(SetPropertyMultiple, {
+            p_editor.Do(mkfActions.SetPropertyMultiple, {
                 target: targetVariant,
                 values: variantValues
             });
@@ -506,12 +503,12 @@ class SHARED_OPS {
         let srcValues = sourceVariant.Values();
         delete srcValues[mkfData.IDS.PATH_DATA];
 
-        p_editor.Do(SetPropertyMultiple, {
+        p_editor.Do(mkfActions.SetPropertyMultiple, {
             target: targetVariant,
             values: mkfData.UTILS.Resample(sourceVariant.Values(), mkfData.IDS.GLYPH_RESAMPLE_IDS, p_scaleFactor, true)
         });
 
-        p_editor.Do(SetPropertyMultiple, {
+        p_editor.Do(mkfActions.SetPropertyMultiple, {
             target: targetVariant.transformSettings,
             values: mkfData.UTILS.Resample(sourceVariant._transformSettings.Values(), mkfData.IDS.TR_RESAMPLE_IDS, p_scaleFactor, true)
         });

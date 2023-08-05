@@ -60,10 +60,13 @@ class EditorLigaImport extends base {
                 'align-content': 'flex-start'
             },
             '.inputs': {
+                ...nkm.style.flex.column,
+                ...nkm.style.rules.gap.small,
+                ...nkm.style.flexItem.fill,
                 'width': '300px'
             },
             '.control': {
-                'margin-bottom': '5px'
+                //'margin-bottom': '5px'
             },
             '.liga': {
                 'margin': `4px`

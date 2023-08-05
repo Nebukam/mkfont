@@ -13,5 +13,6 @@ module.exports = {
     LayerRemove: require(`./action-layer-remove`),
 
     SetProperty: nkm.data.ops.actions.SetPropertyValue,
+    SetPropertyMultiple: nkm.data.ops.actions.SetPropertyMultiple,
 
 }

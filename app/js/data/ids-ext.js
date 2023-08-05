@@ -181,7 +181,7 @@ nkm.data.RegisterDescriptors({
         recompute: true,
         inputType: inputs.Textarea,
         label: `Broad`,
-        inputOptions: { rows: 15 },
+        inputOptions: { rows: 12 },
     },
 
     [IDS_EXT.LIGA_MIN]: {
