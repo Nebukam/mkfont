@@ -15,14 +15,13 @@
     border-radius: 4px;
     margin-bottom: 5px;
 
-    background-color: rgba(var(#{$id_col_base_400}-rgb), 0.3);
+    background-color: rgba(var(#{$id_col_base_300}-rgb), 0.5);
+    border-left:1px solid rgba(var(#{$id_col_base_400}-rgb), 0.5);
 
 }
 
-
-
 :host(:hover) {
-    background-color: rgba(var(#{$id_col_base_400}-rgb), 0.5);
+    border-left:1px solid rgba(var(#{$id_col_base_400}-rgb), 1);
 }
 
 :host(.expanded) {

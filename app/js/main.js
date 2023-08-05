@@ -79,6 +79,7 @@ class MKFont extends nkm.app.AppBase {
 
         nkm.style.Set(`--glyph-color`, `#f5f5f5`);
 
+        console.log(this.mainLayout._cells);
         this.mainLayout._cells.forEach((cell) => { cell._nav._cellOptionsBtn.trigger = { fn: () => { mkfCmds.OpenPrefs.Execute(); } } });
 
         this._welcomeView._options.view.RequestDisplay();

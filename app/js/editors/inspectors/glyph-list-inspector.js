@@ -58,7 +58,8 @@ class GlyphListInspector extends base {
         return nkm.style.Extends({
             ':host': {
                 ...nkm.style.flex.column,
-                'background-color': `rgba(var(--col-base-300-rgb), 1)`,
+                'background-color': `rgba(var(--col-base-200-rgb), 1)`,
+                'border-left': `1px solid rgba(var(--col-base-400-rgb), 1)`,
             },
             ':host(.sel-invalid) .infos': { 'display': `block` },
             '.toolbar': {

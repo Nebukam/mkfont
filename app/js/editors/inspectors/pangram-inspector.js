@@ -51,6 +51,7 @@ class PangramInspector extends base {
             '.body': {
                 ...nkm.style.flex.column,
                 ...nkm.style.flexItem.fill,
+                ...nkm.style.rules.gap.small,
                 'overflow': 'auto',
                 'padding': '10px',
                 'justify-content': 'center'
@@ -66,6 +67,7 @@ class PangramInspector extends base {
             },
             '.sliders': {
                 ...nkm.style.flex.rows,
+                'gap':'8px 0',
                 'align-items': 'center',
                 'margin': '10px 0px 10px 0px'
             },
@@ -138,7 +140,7 @@ class PangramInspector extends base {
         let slider = this.Attach(nkm.uilib.inputs.Slider, `item slider`, slidersCtnr);
         slider.options = {
             min: 8, max: 144, currentValue: 20,
-            /* size: ui.FLAGS.SIZE_XS */ //,
+            size: ui.FLAGS.SIZE_XS,
             onSubmit: { fn: (p_input, p_value) => { this._pangramRenderer.fontSize = p_value; } }
         }
 
@@ -148,7 +150,7 @@ class PangramInspector extends base {
         slider = this.Attach(nkm.uilib.inputs.Slider, `item slider`, slidersCtnr);
         slider.options = {
             min: 0.1, max: 10, step: 0.01, currentValue: 1,
-            /* size: ui.FLAGS.SIZE_XS */ //,
+            size: ui.FLAGS.SIZE_XS,
             onSubmit: { fn: (p_input, p_value) => { this._pangramRenderer.lineHeight = p_value; } }
         }
 

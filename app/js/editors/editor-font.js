@@ -214,7 +214,7 @@ class FontEditor extends base {
 
             if (view) {
 
-                if (!conf.forwardData) { }
+                if ('forwardData' in conf && !conf.forwardData) { }
                 else { this.forwardData.To(view); }
 
                 this._forwardContext.To(view);

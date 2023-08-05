@@ -206,9 +206,9 @@ class GlyphGroupViewport extends base {
     //#region search
 
     _OnSearchToggled() {
-
+        
         let oldValue = this._searchActive;
-        this._searchActive = this._searchSettings ? this._searchSettings.Get(IDS_EXT.SEARCH_ENABLED) : false;
+        this._searchActive = this._searchSettings ? this._searchSettings.Get(nkm.data.IDS.SEARCH_ENABLED) : false;
 
         if (oldValue == this._searchActive) { return; }
 
