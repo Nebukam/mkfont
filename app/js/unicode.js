@@ -35201,7 +35201,7 @@ class UNICODE extends nkm.com.Observable {
         for (let i = 0; i < resolved.length; i++) {
             let uchar = resolved.substr(i, 1);
             if (uchar == ``) { continue; }
-            unicodes.push(UNICODE.GetAddress(uchar));
+            unicodes.push(this.GetAddress(uchar));
         }
 
         glyphInfos = this.GetInfos(unicodes, p_createLigature);

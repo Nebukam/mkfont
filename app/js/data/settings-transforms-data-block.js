@@ -93,7 +93,6 @@ class TransformSettingsDataBlock extends FontObjectData {
                     w = rw;
                 }
             }
-
         }
 
         this._variant._computedPath = path;
@@ -108,9 +107,12 @@ class TransformSettingsDataBlock extends FontObjectData {
                 prevLayer = null,
                 lastLayerPath = null;
 
-            this._variant.layers.forEach((layer, index) => {
+            for (const layer of this._variant.layers) {
+
                 let ref = layer.importedVariant;
-                if (ref && !layer._isCircular && layer.Get(IDS.DO_EXPORT)) {
+                if (ref && ref._computedPath && refPath // Make sure path data has been computed and is available
+                    && !layer._isCircular
+                    && layer.Get(IDS.DO_EXPORT)) {
 
                     let
                         layerCP,
@@ -139,7 +141,7 @@ class TransformSettingsDataBlock extends FontObjectData {
                 }
 
                 prevLayer = layer;
-            });
+            }
         }
 
         let pathConcat = this._variant._ConcatPaths(path.path);
