@@ -28,11 +28,9 @@ class GlyphPreview extends base {
     static _Style() {
         return nkm.style.Extends({
             ':host': {
-                '@': ['fade-in'],
+                ...nkm.style.rules.fadeIn,
                 'transition': `opacity 0.25s ease`,
                 'padding': `3px`,
-
-                'position': 'relative',
                 'display': 'flex',
                 'aspect-ratio': '1/1',// 'var(--preview-ratio)',
                 'width': '320px',
@@ -46,13 +44,11 @@ class GlyphPreview extends base {
             },
             ':host(:not(.null-glyph)) .placeholder, :host(.null-glyph) .renderer': { 'display': 'none' },
             '.renderer': {
-                'position': 'relative',
                 'width': '100%',
                 'aspect-ratio': '1/1',
             },
             '.placeholder': {
                 'flex': '1 0 100%',
-                'position': 'relative',
                 'display': `grid`,
                 'place-items': `center`,
                 'text-align': `center`,
@@ -63,10 +59,10 @@ class GlyphPreview extends base {
                 'line-height': '100%'
             },
             '.infoTag': {
-                '@': ['absolute-center']
+                ...nkm.style.rules.absolute.center,
             },
             '.emptyTag': {
-                '@': ['absolute-bottom'],
+                ...nkm.style.rules.absolute.bottom,
                 'margin': `5px`
             }
         }, base._Style());
@@ -96,7 +92,7 @@ class GlyphPreview extends base {
         this._emptyTag = this.Attach(uilib.widgets.Tag, `emptyTag`);
         this._emptyTag.options = {
             label: `empty`,
-            bgColor: nkm.style.Get(`--col-warning-dark`),
+            bgColor: nkm.style.Get(`--col-warning-low`),
             htitle: `This glyph is void.`
         };
         this._emptyTag.visible = false;

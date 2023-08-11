@@ -21,10 +21,9 @@ class GlyphIdentity extends base {
     static _Style() {
         return nkm.style.Extends({
             ':host': {
+                ...nkm.style.flex.column,
                 'min-height': 'auto',
                 //'padding': '20px',
-                'display': 'flex',
-                'flex-flow': 'column nowrap',
                 'padding-bottom': '5px',
                 'margin-bottom': '5px',
                 //'border-bottom': '1px solid rgba(0,0,0,0.25)',

@@ -117,7 +117,6 @@ SVGGraphicsElement.prototype.getBBox = function () {
 class SVGOperations {
     constructor() { }
 
-
     static ATT_PATH = `d`;
     static ATT_EM_UNITS = `units-per-em`;
     static ATT_CAP_HEIGHT = `cap-height`;
@@ -188,7 +187,7 @@ class SVGOperations {
                 let
                     markCol = p_markCol[0] == `#` ? p_markCol.substring(1) : p_markCol,
                     style = svg.getElementsByTagName(`style`)[0],
-                    styleObject = style ? css.ClassCSS(style.innerHTML) : {};
+                    styleObject = style ? nkm.style.helpers.RuleSetsFromString(style.innerHTML) : {}; 
 
                 for (let i = 0; i < pathArray.length; i++) {
 
@@ -314,13 +313,6 @@ class SVGOperations {
         if (!foundRef && inlineStyle) {
             let lwrc = inlineStyle.toLowerCase();
             if (lwrc.includes(A) || lwrc.includes(B) || lwrc.includes(C)) { foundRef = true; }
-            /*
-            let inlineObj = css.Rules(inlineStyle);
-            for (let c in inlineObj) {
-                let refValue = inlineObj[c];
-                if (refValue == A || refValue == B) { foundRef = true; break; }
-            }
-            */
         }
 
         if (!foundRef && (fillStyle == A || fillStyle == B || fillStyle == C)) { foundRef = true; }
@@ -644,7 +636,7 @@ class SVGOperations {
 
     }
 
-    static FitLayerPath(p_settings, p_context, p_variant, p_layerPath) {
+    static FitLayerPath(p_layer, p_context, p_variant, p_layerPath) {
 
         let
             path = p_layerPath, //may be inverted prior to fitting
@@ -657,11 +649,11 @@ class SVGOperations {
             offsetX = fit.x,
             offsetY = fit.y,
             scale = 1,
-            mirror = p_settings.Get(IDS.TR_MIRROR),
-            rot = p_settings.Get(IDS.TR_ROTATION),
-            skx = p_settings.Get(IDS.TR_SKEW_X),
-            sky = p_settings.Get(IDS.TR_SKEW_Y),
-            boundMode = p_settings.Get(IDS.TR_BOUNDS_MODE),
+            mirror = p_layer.Get(IDS.TR_MIRROR),
+            rot = p_layer.Get(IDS.TR_ROTATION),
+            skx = p_layer.Get(IDS.TR_SKEW_X),
+            sky = p_layer.Get(IDS.TR_SKEW_Y),
+            boundMode = p_layer.Get(IDS.TR_BOUNDS_MODE),
             pathTransform = svgpath(path),
             doReverse = false;
 
@@ -669,8 +661,8 @@ class SVGOperations {
             //rotate incoming SVG Path & update bbox
 
             let
-                rotorder = p_settings.Get(IDS.TR_SKEW_ROT_ORDER),
-                ranchor = p_settings.Get(IDS.TR_ROTATION_ANCHOR),
+                rotorder = p_layer.Get(IDS.TR_SKEW_ROT_ORDER),
+                ranchor = p_layer.Get(IDS.TR_ROTATION_ANCHOR),
                 tr = pathTransform;
 
             switch (rotorder) {
@@ -684,7 +676,7 @@ class SVGOperations {
 
         }
 
-        switch (p_settings.Get(IDS.TR_LYR_BOUNDS_MODE)) {
+        switch (p_layer.Get(IDS.TR_LYR_BOUNDS_MODE)) {
             case ENUMS.BOUNDS_INSIDE:
                 offsetX += p_context.bbox.x-fit.x;
                 offsetY += p_context.bbox.y-fit.y;
@@ -738,9 +730,9 @@ class SVGOperations {
 
         // Scale
 
-        switch (p_settings.Get(IDS.TR_LYR_SCALE_MODE)) {
+        switch (p_layer.Get(IDS.TR_LYR_SCALE_MODE)) {
             case ENUMS.SCALE_MANUAL:
-                scale = p_settings.Get(IDS.TR_LYR_SCALE_FACTOR);
+                scale = p_layer.Get(IDS.TR_LYR_SCALE_FACTOR);
                 lyrWidth *= scale;
                 lyrHeight *= scale;
                 break;
@@ -749,8 +741,8 @@ class SVGOperations {
         }
 
         let
-            ctxAnchor = p_settings.Get(IDS.TR_ANCHOR),
-            selfAnchor = p_settings.Get(IDS.TR_LYR_SELF_ANCHOR);
+            ctxAnchor = p_layer.Get(IDS.TR_ANCHOR),
+            selfAnchor = p_layer.Get(IDS.TR_LYR_SELF_ANCHOR);
         // Adjust offsetX based on context & input
         // context
         switch (ctxAnchor) {
@@ -823,9 +815,9 @@ class SVGOperations {
                 break;
         }
 
-        let yUserOffset = p_settings.Get(IDS.TR_Y_OFFSET);
+        let yUserOffset = p_layer.Get(IDS.TR_Y_OFFSET);
         offsetY += yUserOffset;
-        offsetX += p_settings.Get(IDS.TR_X_OFFSET);
+        offsetX += p_layer.Get(IDS.TR_X_OFFSET);
 
         path = pathTransform
             .scale(scale)
@@ -926,12 +918,12 @@ class SVGOperations {
             p = p_variant.Get(IDS.PATH_DATA);
 
         for (let p in tr) {
-            let v = tr[p].value;
+            let v = tr[p];
             if (v == null || nkm.u.isNumber(v) || nkm.u.isString(v)) { inlined += `mkf-${p}="${v}" `; }
         }
 
         for (let p in vr) {
-            let v = vr[p].value;
+            let v = vr[p];
             if (v == null || nkm.u.isNumber(v) || nkm.u.isString(v)) { inlined += `mkf-${p}="${v}" `; }
         }
 

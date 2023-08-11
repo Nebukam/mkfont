@@ -18,7 +18,7 @@ class FamilyGlyphMonitor extends base {
     static _Style() {
         return nkm.style.Extends({
             ':host': {
-                '@': ['fade-in'],
+                ...nkm.style.rules.fadeIn,
                 'height':'8px',
                 'width':'100px',
                 'display':'flex',
@@ -26,10 +26,10 @@ class FamilyGlyphMonitor extends base {
                 'background-color':'rgba(0,0,0,0.5)'
             },
             '.counter': {
-                '@':[`absolute-center`]
+                ...nkm.style.rules.absolute.center,
             },
             '.progress': {
-                'flex': '1 0 auto',
+                ...nkm.style.flexItem.grow,
                 'max-height':'2px'
             }
         }, base._Style());
@@ -51,9 +51,9 @@ class FamilyGlyphMonitor extends base {
 
     _OnDataUpdated(p_data){
         super._OnDataUpdated(p_data);
-        let p = p_data._glyphs.count / UNICODE.MAX_GLYPH_COUNT;
+        let p = p_data._glyphs.length / UNICODE.MAX_GLYPH_COUNT;
         this._progressBar.progress = p;
-        this._counter.Set(`${p_data._glyphs.count} / ${UNICODE.MAX_GLYPH_COUNT}`);
+        this._counter.Set(`${p_data._glyphs.length} / ${UNICODE.MAX_GLYPH_COUNT}`);
 
         this._progressBar.flavor = p < 0.5 ? nkm.com.FLAGS.READY : p < 0.8 ? nkm.com.FLAGS.WARNING : nkm.com.FLAGS.ERROR;        
     }

@@ -8,8 +8,10 @@
 @import '../_mixins';
 
 :host {
-    background-color: var(#{$varname_drawer_bg});
-    --size:var(#{$varname_size_m});
+    
+    --size:var(#{$id_size_m});
+
+    background-color:var(#{$id_col_base_200});
 
     min-width: 350px;
     min-height: 350px;
@@ -39,6 +41,6 @@
 
 .body{
     padding: 10px 20px;
-    border-top: 1px solid rgba(127,127,127,.2);
-    background-color: rgba(0,0,0,.2);
+    border-top: 1px solid var(#{$id_col_base_300}-high);
+    background-color: var(#{$id_col_base_300});
 }

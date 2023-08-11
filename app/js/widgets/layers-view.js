@@ -8,15 +8,12 @@ const mkfData = require(`../data`);
 const mkfOperations = require(`../operations`);
 const mkfActions = mkfOperations.actions;
 
-const PropertyControl = require(`./property-control`);
 const LayerControl = require(`./layer-control`);
 const GlyphPicker = require(`./glyph-picker`);
 const SHARED_OPS = require("../operations/commands/shared-ops");
 
 const __nolayer = `nolayer`;
 const __limitReached = `limit-reached`;
-
-
 
 const base = nkm.datacontrols.ControlView;
 class LayersView extends base {
@@ -30,7 +27,7 @@ class LayersView extends base {
 
         this._Bind(this._OpenPicker)
 
-        this._builder.defaultControlClass = PropertyControl;
+        this._builder.defaultControlClass = nkm.datacontrols.widgets.ValueControl;
         this._builder.defaultCSS = `control`;
 
         this._layerCtrls = [];
@@ -54,18 +51,17 @@ class LayersView extends base {
     static _Style() {
         return nkm.style.Extends({
             ':host': {
-                //'@': ['fade-in'],
+                //...nkm.style.rules.fadeIn,
+                ...nkm.style.flex.column,
                 'min-height': 'auto',
                 'min-width': 'auto',
                 //'padding': '20px',
-                'display': 'flex',
-                'flex-flow': 'column nowrap',
                 //'padding': '5px',
                 'margin-bottom': '5px',
                 '--limit': `0.5`,
             },
             '.control': {
-                'flex': '1 1 auto',
+                ...nkm.style.flexItem.fill,
                 'margin': `3px`,
                 'user-select': 'none'
             },
@@ -76,7 +72,7 @@ class LayersView extends base {
                 'flex': '0 0 16px',
             },
             '.label': {
-                'flex': '1 1 auto',
+                ...nkm.style.flexItem.fill,
                 'text-align': 'center'
             },
             '.label.limit': { order: -1, 'margin-bottom': `3px`, opacity: `var(--limit)` },
@@ -89,13 +85,12 @@ class LayersView extends base {
                 'margin': '3px'
             },
             '.list': {
-                'flex': '0 1 auto',
+                ...nkm.style.flex.column,
+                ...nkm.style.flexItem.shrink,
                 'width': `100%`,
                 'padding': `10px 0px`,
                 'border-top': `1px solid rgba(127,127,127,0.25)`,
                 'border-bottom': `1px solid rgba(127,127,127,0.25)`,
-                'display': `flex`,
-                'flex-flow': `column nowrap`,
                 //'background-color':`rgba(19,19,19,0.25)`,
                 'border-radius': `3px`
             },
@@ -103,7 +98,7 @@ class LayersView extends base {
                 'height': '38px'
             },
             '.item': {
-                'flex': '0 1 auto',
+                ...nkm.style.flexItem.shrink,
                 'margin': `3px`,
                 'user-select': 'none',
                 'border-radius': '4px',
@@ -186,7 +181,7 @@ class LayersView extends base {
 
     _CollapseAll() {
         if (!this._data) { return; }
-        this._data._layers.ForEach(lyr => { lyr.expanded = false; });
+        this._data._layers.forEach(lyr => { lyr.expanded = false; });
         this._layerCtrls.forEach(item => { item.Collapse(); });
     }
 
@@ -202,7 +197,7 @@ class LayersView extends base {
             this._RefreshLayerOrder();
             return;
         }
-        this._data._layers.ForEach(lyr => { this._OnLayerAdded(this._data, lyr); });
+        this._data._layers.forEach(lyr => { this._OnLayerAdded(this._data, lyr); });
         this._AttachFragment();
         //this._RefreshLayerOrder();
     }
@@ -307,7 +302,7 @@ class LayersView extends base {
                 variant: ui.FLAGS.FRAME, flavor: ui.FLAGS.CTA,
                 trigger: {
                     fn: () => {
-                        let datas = [...this._glyphPicker.content.selectionStack.data.stack._array];
+                        let datas = [...this._glyphPicker.content.selectionStack.data.stack];
                         if (datas.length > 0) { this._CreateLayersFromSelection(datas); }
                         this._glyphPicker.Close();
                     }

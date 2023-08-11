@@ -10,7 +10,6 @@ const mkfOperations = require(`../../operations`);
 const mkfCmds = mkfOperations.commands;
 
 const AssignBaseControl = require("./assign-base");
-const ControlHeader = require(`../control-header`);
 
 const base = AssignBaseControl;
 class AssignSelectionRangeControl extends base {
@@ -19,7 +18,7 @@ class AssignSelectionRangeControl extends base {
     static __valueIDs = [];
 
     static __controls = [
-        //{ cl: ControlHeader, options: { label: `Selection infos` } },
+        //{ cl: MiniHeader, options: { label: `Selection infos` } },
     ];
 
     _Init() {
@@ -45,7 +44,7 @@ class AssignSelectionRangeControl extends base {
 
     _UpdateList() {
         // preprocess required values...
-        this._block = this.editor._importSelection ? this.editor._importSelection.stack._array : [];
+        this._block = this.editor._importSelection ? this.editor._importSelection.stack : [];
         this._start = 0;
         this._count = this._block.length;
         this._end = this._start + this._count;

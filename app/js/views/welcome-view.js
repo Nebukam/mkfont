@@ -31,10 +31,7 @@ class WelcomeView extends base {
     static _Style() {
         return nkm.style.Extends({
             ':host': {
-                'display': 'flex',
-                'align-content': `center`,
-                'justify-content': `center`,
-                'align-items': `center`,
+                ...nkm.style.flex.center,
             },
             '.body': {
                 'width': `750px`,
@@ -95,12 +92,12 @@ class WelcomeView extends base {
             defaultWidgetClass: nkm.uilib.buttons.Button,
             handles: [
                 {
-                    command: mkfCmds.CreateFamilyDoc,
+                    command: nkm.main._MKFontDocDefinition.CreateCmd,
                     variant: ui.FLAGS.MINIMAL, flavor: ui.FLAGS.CTA,
                     group: `mkfont`
                 },
                 {
-                    command: mkfCmds.LoadFamilyDoc,
+                    command: nkm.main._MKFontDocDefinition.LoadCmd,
                     variant: ui.FLAGS.MINIMAL, flavor: nkm.com.FLAGS.LOADING,
                     group: `mkfont`
                 },
@@ -165,7 +162,7 @@ class WelcomeView extends base {
                     label: `Settings`,
                     variant: ui.FLAGS.FRAME,
                     group: `settings`,
-                    command: mkfCmds.OpenPrefs
+                    command: nkm.app.ops.commands.OpenAppSettings
                 }
             ]
         };
@@ -178,7 +175,7 @@ class WelcomeView extends base {
                 latestTagName = p_rsc.content[0].name,
                 semVer = latestTagName.substring(1).split(`.`);
 
-            if(nkm.env.ENV.instance.VersionDiff(semVer) > 0){
+            if(nkm.env.ENV.VersionDiff(semVer) > 0){
                 this._newVersionBtn.label = `${semVer.join(`.`)} Available`;
                 this._newVersionBtn.visible = true;
             }

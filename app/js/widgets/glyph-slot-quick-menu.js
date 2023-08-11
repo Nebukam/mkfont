@@ -54,7 +54,7 @@ class GlyphSlotQuickmenu extends base {
     static _Style() {
         return nkm.style.Extends({
             ':host': {
-                '@': ['fade-in'],
+                ...nkm.style.rules.fadeIn,
                 'transition': `opacity 0.25s ease`,
                 'background-color': 'rgba(19, 19, 19, 0.8)',
                 'border-radius': `4px`,

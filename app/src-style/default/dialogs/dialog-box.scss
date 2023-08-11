@@ -30,7 +30,7 @@ $br: 5px;
 
 }
 
-:host(#{$SHOWN}) {
+:host(.shown) {
     
     & .corner-icon {
 

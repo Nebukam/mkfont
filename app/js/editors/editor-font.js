@@ -75,7 +75,7 @@ class FontEditor extends base {
         this._bindingManager = new helpers.BindingManager(this);
 
         // Commands
-        this.cmdSave = this._commands.Add(mkfCmds.SaveFamilyDoc, { shortcut: this.shortcuts.Create("Ctrl S") });
+        this.cmdSave = this._commands.Add(nkm.main._MKFontDocDefinition.SaveCmd, { shortcut: this.shortcuts.Create("Ctrl S") });
         this.cmdExport = this._commands.Create(mkfCmds.ExportTTF, { shortcut: this.shortcuts.Create("Ctrl E") });
         this.cmdEditInPlace = this._commands.Create(mkfCmds.EditInExternalEditor);
 
@@ -110,21 +110,6 @@ class FontEditor extends base {
         this.cmdImportLigatures = this._commands.Create(mkfCmds.ImportLigatures);
         this.cmdImportMKFont = this._commands.Create(mkfCmds.ImportMKFont);
 
-        this.shortcuts.Create("Ctrl Z", this._actionStack.Undo);
-        this.shortcuts.Create("Ctrl Y", this._actionStack.Redo);
-        this.shortcuts.Create("Ctrl A", {
-            fn: () => {
-                this._viewport._selStack.data.RequestSelectAll();
-                nkm.ui.dom.ClearHighlightedText();
-            }
-        }).Strict();
-
-        this.shortcuts.Create("escape", () => { 
-            this._registerEmptySelection = true;
-            this._inspectedData.Clear(); 
-            this._registerEmptySelection = false;
-        });
-
         for (let i = 0; i < 10; i++) {
             this.shortcuts.Create(`Ctrl ${i}`, () => { this._StoreSelectionPreset(i); });
             this.shortcuts.Create(`Shift ${i}`, () => { this._RestoreSelectionPreset(i, true); });
@@ -136,7 +121,7 @@ class FontEditor extends base {
     _StoreSelectionPreset(p_index) {
         if (!this._data) { return; }
         let preset = [];
-        for (let i = 0; i < this._inspectedData.stack.count; i++) { preset.push(this._inspectedData.stack.At(i).u); }
+        for (let i = 0; i < this._inspectedData.stack.length; i++) { preset.push(this._inspectedData.stack[i].u); }
         this._data._selectionPresets[p_index] = preset;
     }
 
@@ -145,7 +130,7 @@ class FontEditor extends base {
         let preset = this._data._selectionPresets[p_index];
         if (!preset || preset.length == 0) { return; }
         let restored;
-        if (p_append) { restored = [...this._inspectedData.stack._array]; }
+        if (p_append) { restored = [...this._inspectedData.stack]; }
         else { restored = []; }
         for (let i = 0; i < preset.length; i++) { restored.push(UNICODE.GetInfos(preset[i])); }
         if (restored.length == 0) { return; }
@@ -225,17 +210,17 @@ class FontEditor extends base {
             let
                 conf = confs[i],
                 item = this._leftShelfCatalog.Register(conf),
-                view = item.GetOption('view', null),
-                assign = u.tils.Get(conf, `assign`, null);
+                view = item.GetOption('view', null);
 
             if (view) {
 
-                if (`forwardData` in conf && !conf.forwardData) { }
+                if ('forwardData' in conf && !conf.forwardData) { }
                 else { this.forwardData.To(view); }
 
                 this._forwardContext.To(view);
+                this._forwardEditor.To(view);
 
-                if (assign) { this[assign] = view; }
+                if (conf.assign) { this[conf.assign] = view; }
 
             }
 
@@ -332,29 +317,30 @@ class FontEditor extends base {
     }
 
     _OnDataChanged(p_oldData) {
+
         super._OnDataChanged(p_oldData);
-        let ar = UNICODE.instance._blockCatalog.At(0);
+        let ar = UNICODE._blockCatalog.At(0);
         if (this._data) {
-            
+
             this._OnDataValueChanged(this._data, mkfData.IDS.PREVIEW_SIZE, null);
-            
-            if (this._data._glyphs.count > 0) {
+
+            if (this._data._glyphs.length > 0) {
                 ar = this._contentInspector._specialCatalog.At(0); //My Glyphs
             }
 
             this.SetActiveRange(ar);
             this._viewport._RefreshItems();
-            
+
         }
     }
 
-    _OnDataValueChanged(p_data, p_id, p_valueObj) {
+    _OnDataValueChanged(p_data, p_id, p_newValue, p_oldValue) {
 
-        let infos = mkfData.IDS.GetInfos(p_id);
+        let descriptor = nkm.data.GetDescriptor(p_id);
 
-        if (!infos) { return; }
+        if (!descriptor) { return; }
 
-        if (infos.recompute) {
+        if (descriptor.recompute) {
 
             p_data._UpdateDisplayValues();
 
@@ -429,9 +415,7 @@ class FontEditor extends base {
         }
     }
 
-    _ConfirmClose() {
-        super.RequestClose();
-    }
+    _ConfirmClose() { super.RequestClose(); }
 
     _CleanUp() {
         this._bindingManager.Clear();

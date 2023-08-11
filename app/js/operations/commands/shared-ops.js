@@ -1,10 +1,10 @@
 'use strict';
+const nkm = require(`@nkmjs/core`);
 
 const UNICODE = require(`../../unicode`);
 
 const mkfData = require(`../../data`);
 const mkfActions = require(`../actions`);
-
 
 /**
  * @description TODO
@@ -33,7 +33,7 @@ class SHARED_OPS {
 
     static RemoveLayers(p_editor, p_target) {
 
-        let layers = [...p_target._layers._array];
+        let layers = [...p_target._layers];
         layers.forEach(layer => {
             if (layer._variant) {
                 p_editor.Do(mkfActions.LayerRemove, {
@@ -46,7 +46,7 @@ class SHARED_OPS {
 
     static AddLayers(p_editor, p_target, p_source, p_scaleFactor = 1, p_expanded = null) {
 
-        p_source._layers._array.forEach(layer => {
+        p_source._layers.forEach(layer => {
             if (p_target.availSlots <= 0) { return; }
             p_editor.Do(mkfActions.LayerAdd, {
                 target: p_target,
@@ -94,7 +94,7 @@ class SHARED_OPS {
 
         let resample = p_scaleFactor != 1;
 
-        p_source._layers._array.forEach(layerSource => {
+        p_source._layers.forEach(layerSource => {
 
             if (p_target.availSlots <= 0) { return; }
 
@@ -118,13 +118,13 @@ class SHARED_OPS {
 
         let resample = p_scaleFactor != 1;
 
-        p_source._layers._array.forEach(layerSource => {
+        p_source._layers.forEach(layerSource => {
 
             if (p_target.availSlots <= 0) { return; }
 
             let srcId = layerSource.Get(mkfData.IDS.LYR_CHARACTER_NAME);
 
-            p_target._layers.ForEach(layerTarget => {
+            p_target._layers.forEach(layerTarget => {
                 if (layerTarget.Get(mkfData.IDS.LYR_CHARACTER_NAME) == srcId) {
                     let lyrValues = layerSource.Values();
                     if (resample) { mkfData.UTILS.Resample(lyrValues, mkfData.IDS.LYR_RESAMPLE_IDS, p_scaleFactor, true); }
@@ -231,7 +231,7 @@ class SHARED_OPS {
 
         if (p_glyph.isNull) { return; }
 
-        p_glyph.activeVariant._layers.ForEach(layer => {
+        p_glyph.activeVariant._layers.forEach(layer => {
             if (layer._glyphInfos && layer.importedVariant) {
                 let g = layer.importedVariant.glyph;
                 if (!g.isNull && !p_exclude.includes(g)) {
@@ -296,8 +296,8 @@ class SHARED_OPS {
 
             this._copiedString = `<!-- Generator: MkFont -->`;
 
-            for (let i = 0, n = p_editor.inspectedData.stack.count; i < n; i++) {
-                let eg = p_editor.data.GetGlyph(p_editor.inspectedData.stack.At(i).u);
+            for (let i = 0, n = p_editor.inspectedData.stack.length; i < n; i++) {
+                let eg = p_editor.data.GetGlyph(p_editor.inspectedData.stack[i].u);
                 if (!eg.isNull) {
                     this._copiedString = SVGOPS.SVGFromGlyphVariant(eg.activeVariant, true);
                     break;
@@ -306,10 +306,10 @@ class SHARED_OPS {
 
             navigator.clipboard.writeText(this._copiedString);
 
-        } catch (e) { this._copiedString = null; }
+        } catch (e) { this._copiedString = null; console.warn(e); }
 
         let copyArray = [];
-        p_editor.inspectedData.stack.ForEach(infos => { copyArray.push(infos); });
+        p_editor.inspectedData.stack.forEach(infos => { copyArray.push(infos); });
 
         if (copyArray.length == 0) { this.Clear(); }
         this._sourceInfos = copyArray;
@@ -352,7 +352,7 @@ class SHARED_OPS {
         if (sourceList.length == 0) { return false; }
 
         let scaleFactor = p_editor.data.Get(mkfData.IDS.EM_UNITS) / this._sourceFamily.Get(mkfData.IDS.EM_UNITS),
-            selection = p_editor.inspectedData.stack._array,
+            selection = p_editor.inspectedData.stack,
             index = 0, maxIndex = sourceList.length;
 
         switch (p_pasteMode) {

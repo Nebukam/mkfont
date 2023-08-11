@@ -15,11 +15,11 @@ class FontEditorFooter extends base {
 
     _Init() {
         super._Init();
-        ContentManager.instance
+        ContentManager
             .Watch(nkm.com.SIGNAL.UPDATED, this._OnContentUpdate, this)
             .Watch(nkm.com.SIGNAL.READY, this._OnContentUpdateComplete, this);
 
-            nkm.env.APP.Watch(nkm.env.APP.SIGNAL_MEM_MONITOR, (p_data)=>{
+            nkm.main.Watch(nkm.main.SIGNAL_MEM_MONITOR, (p_data)=>{
                 let pc = (p_data.private / 4000000);
                 this._memBar.progress = pc;
                 this._memBar.setAttribute(`title`, `Ram usage : ${(pc * 100).toFixed(2)}% (${p_data.private/1000}Mo / 4000Mo)`);
@@ -30,17 +30,16 @@ class FontEditorFooter extends base {
     static _Style() {
         return nkm.style.Extends({
             ':host': {
-                'display': 'flex',
+                ...nkm.style.flex.row,
                 'min-height': '8px',
                 'height': '8px',
-                'position':'relative'
             },
             '.progress': {
-                'position':'absolute',
+                ...nkm.style.rules.pos.abs,
                 'width': '100%',
             },
             '.membar': {
-                '@': ['absolute-right'],
+                ...nkm.style.rules.absolute.right,
                 'width': `100px`,
                 'height': `4px`,
                 'min-height': `4px`,
@@ -59,7 +58,7 @@ class FontEditorFooter extends base {
         //this._progressLabel = new ui.manipulators.Text(ui.El(`div`, { class: `label` }, this._host));
         this._memBar = this.Attach(nkm.uilib.bars.ProgressBar, `membar`);
         this._memBar.style.setProperty(`--flavor-color`, `rgb(127,127,127)`);
-        this._memBar.style.setProperty(`--flavor-color-dark-rgb`, `127,127,127`);
+        this._memBar.style.setProperty(`--flavor-color-low-rgb`, `127,127,127`);
         this._memBar.setAttribute(`title`, `Ram usage : ---% (---mb/4000mb)`);
     }
 

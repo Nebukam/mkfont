@@ -24,8 +24,8 @@ class CmdLayerAddComp extends actions.Command {
 
         let
             unicodeInfos,
-            createMissing = !nkm.ui.INPUT.alt,
-            createRecursive = nkm.ui.INPUT.shift;
+            createMissing = !nkm.ui.INPUT.altKey,
+            createRecursive = nkm.ui.INPUT.shiftKey;
 
 
         if (u.isArray(this._context)) {

@@ -30,7 +30,7 @@ class PangramInspector extends base {
 
     _Init() {
         super._Init();
-        this._builder.defaultControlClass = mkfWidgets.PropertyControl;
+        this._builder.defaultControlClass = nkm.datacontrols.widgets.ValueControl;
         this._builder.defaultCSS = `control`;
 
         this._inspectionHandler = new nkm.datacontrols.helpers.InspectionDataHandler(this);
@@ -46,32 +46,28 @@ class PangramInspector extends base {
     static _Style() {
         return nkm.style.Extends({
             ':host': {
-                'position': 'relative',
-                'display': 'flex',
-                'flex-flow': 'column nowrap',
+                ...nkm.style.flex.column,
             },
             '.body': {
-                'display': 'flex',
-                'flex-flow': 'column nowrap',
-                'flex': '1 1 auto',
-                'min-height': '0',
+                ...nkm.style.flex.column,
+                ...nkm.style.flexItem.fill,
+                ...nkm.style.rules.gap.small,
                 'overflow': 'auto',
                 'padding': '10px',
                 'justify-content': 'center'
             },
             '.footer': {
-                'flex': '0 0 auto',
+                ...nkm.style.flex.column,
+                ...nkm.style.flexItem.fixed,
                 'width': 'auto',
                 'padding': '10px',
-                'display': 'flex',
-                'flex-flow': 'column nowrap'
             },
             '.item': {
                 'margin-bottom': `4px`
             },
             '.sliders': {
-                'display': 'flex',
-                'flex-flow': 'row wrap',
+                ...nkm.style.flex.rows,
+                'gap':'8px 0',
                 'align-items': 'center',
                 'margin': '10px 0px 10px 0px'
             },
@@ -79,7 +75,7 @@ class PangramInspector extends base {
                 'flex': '1 1 50%',
             },
             '.pangram': {
-                'flex': '1 1 auto',
+                ...nkm.style.flexItem.fill,
                 'width': '100%',
                 'overflow-y': 'auto'
             },
@@ -114,9 +110,9 @@ class PangramInspector extends base {
 
         this._toolbar = this.Attach(ui.WidgetBar, `item toolbar`, this._footer);
         this._toolbar.options = {
-            defaultWidgetClass: nkm.uilib.inputs.InlineSelect,
+            defaultWidgetClass: nkm.uilib.inputs.SelectInline,
             size: ui.FLAGS.SIZE_S,
-            stretch: ui.WidgetBar.FLAG_STRETCH_SQUEEZE,
+            stretch: ui.FLAGS.STRETCH_SQUEEZE,
             inline: true,
             handles: [
                 {
@@ -204,8 +200,8 @@ class PangramInspector extends base {
                     htitle: `Append the current selection at the end of the current text\n---\n+ [ Shift ] Separate each characters by an space.`,
                     trigger: {
                         fn: () => {
-                            let txt = ``, space = ui.INPUT.shift ? ` ` : ``;
-                            this.editor.inspectedData.stack.ForEach(i => { txt += `${i.char}${space}` }, true);
+                            let txt = ``, space = ui.INPUT.shiftKey ? ` ` : ``;
+                            this.editor.inspectedData.stack.forEach(i => { txt += `${i.char}${space}` }, true);
                             txt = this._text.handler.currentValue + txt;
                             this._text.handler.changedValue = txt == `` ? longPangram : txt;
                             this._text.handler.SubmitValue();
@@ -218,8 +214,8 @@ class PangramInspector extends base {
                     htitle: `Set the text to be the current viewport selection.\n---\n+ [ Shift ] Separate each characters by an space.`,
                     trigger: {
                         fn: () => {
-                            let txt = ``, space = ui.INPUT.shift ? ` ` : ``;
-                            this.editor.inspectedData.stack.ForEach(i => { txt += `${i.char}${space}` }, true);
+                            let txt = ``, space = ui.INPUT.shiftKey ? ` ` : ``;
+                            this.editor.inspectedData.stack.forEach(i => { txt += `${i.char}${space}` }, true);
                             this._text.handler.changedValue = txt == `` ? longPangram : txt;
                             this._text.handler.SubmitValue();
                         },
@@ -253,13 +249,13 @@ class PangramInspector extends base {
     }
 
     _OnSelectionUpdated(p_sel) {
-        if (p_sel.stack.count == 0) {
+        if (!p_sel.stack.length) {
             this._pangramRenderer.highlightList = null;
             return;
         }
 
         let hlist = [];
-        p_sel.stack.ForEach((infos) => {
+        p_sel.stack.forEach((infos) => {
             hlist.push(infos.char);
         });
 

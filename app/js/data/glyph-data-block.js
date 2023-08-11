@@ -7,21 +7,23 @@ const io = nkm.io;
 
 const UNICODE = require(`../unicode`);
 
-const SimpleDataEx = require(`./simple-data-ex`);
+const FontObjectData = require(`./font-object-data`);
 const SIGNAL = require(`../signal`);
 const IDS = require(`./ids`);
 
 const GlyphVariant = require(`./glyph-variant-data-block`);
 
-class GlyphDataBlock extends SimpleDataEx {
+class GlyphDataBlock extends FontObjectData {
 
     constructor() { super(); }
 
     static __defaultVariantClass = GlyphVariant;
 
-    static __signalValueMap = {
-        [IDS.UNICODE]: SIGNAL.UNICODE_CHANGED
-    };
+    static __VALUES = {
+        [IDS.GLYPH_NAME]: { value: '' },
+        [IDS.UNICODE]: { value: null, signal: SIGNAL.UNICODE_CHANGED },
+        //[IDS.DO_EXPORT]:{ value: true },
+    }
 
     _Init() {
 
@@ -31,7 +33,7 @@ class GlyphDataBlock extends SimpleDataEx {
         this._arabic_form = null;
         this._unicodeInfos = null;
 
-        this._variants = new nkm.collections.List();
+        this._variants = [];
 
         this._defaultGlyph = new this.constructor.__defaultVariantClass();
         this._defaultGlyph._isDefault = true;
@@ -39,18 +41,12 @@ class GlyphDataBlock extends SimpleDataEx {
 
     }
 
-    _ResetValues(p_values) {
-        p_values[IDS.GLYPH_NAME] = { value: '' };
-        p_values[IDS.UNICODE] = { value: null };
-        //p_values[IDS.DO_EXPORT] = { value: true };
-    }
-
     get resolutionFallbacks() { return [this._family]; }
 
     get activeVariant() { return this._defaultGlyph; }
 
     get isLigature() {
-        let unc = this._values[IDS.UNICODE].value;
+        let unc = this._values[IDS.UNICODE];
         return unc ? unc.includes(`+`) ? true : false : false;
     }
 
@@ -59,11 +55,10 @@ class GlyphDataBlock extends SimpleDataEx {
         if (this._family == p_value) { return; }
         let oldFamily = this._family;
         this._family = p_value;
-
-        for (let i = 0; i < this._variants.count; i++) { this._variants.At(i).family = p_value; }
+        for (const v of this._variants) { v.family = p_value; }
     }
 
-    get variantsCount() { return this._variants.count; }
+    get variantsCount() { return this._variants.length; }
 
     get unicodeInfos() {
         if (!this._unicodeInfos) { return UNICODE.GetInfos(this.Get(IDS.UNICODE), true); }
@@ -74,10 +69,10 @@ class GlyphDataBlock extends SimpleDataEx {
     // Variant management
 
     AddVariant(p_glyphVariant = null) {
-        if (p_glyphVariant != null) { if (this._variants.Contains(p_glyphVariant)) { return p_glyphVariant; } }
+        if (p_glyphVariant != null) { if (this._variants.includes(p_glyphVariant)) { return p_glyphVariant; } }
         else { p_glyphVariant = com.Rent(this.constructor.__defaultVariantClass); }
         this._variants.Add(p_glyphVariant);
-        p_glyphVariant.index = this._variants.count - 1;
+        p_glyphVariant.index = this._variants.length - 1;
         this._OnGlyphVariantAdded(p_glyphVariant);
         return p_glyphVariant;
     }
@@ -100,7 +95,7 @@ class GlyphDataBlock extends SimpleDataEx {
         p_glyphVariant.glyph = null;
         p_glyphVariant.family = null;
         p_glyphVariant.Unwatch(com.SIGNAL.UPDATED, this._OnGlyphVariantUpdated, this);
-        this._variants.ForEach((item, i) => { item.index = i; });
+        this._variants.forEach((item, i) => { item.index = i; });
         this.Broadcast(com.SIGNAL.ITEM_REMOVED, this, p_glyphVariant);
     }
 
@@ -109,7 +104,7 @@ class GlyphDataBlock extends SimpleDataEx {
     }
 
     GetVariant(p_index = 0) {
-        let variant = this._variants.At(p_index);
+        let variant = this._variants[p_index];
         if (!variant) { variant = this._defaultGlyph; }
         return variant;
     }
@@ -123,8 +118,8 @@ class GlyphDataBlock extends SimpleDataEx {
     _OnGlyphRemovedFromFamily(p_family) {
         this.Broadcast(SIGNAL.GLYPH_REMOVED, this);
         // Disconnect variant users
-        this._variants.ForEach((item, i) => {
-            for (let i = 0, n = item._layerUsers.count; i < n; i++) {
+        this._variants.forEach((item, i) => {
+            for (let i = 0, n = item._layerUsers.length; i < n; i++) {
                 let user = item._layerUsers.last;
                 user.importedVariant = null;
             }
@@ -134,7 +129,7 @@ class GlyphDataBlock extends SimpleDataEx {
     //
 
     _PushUpdate() {
-        this._variants.ForEach((item, i) => { item._PushUpdate(); });
+        this._variants.forEach((item, i) => { item._PushUpdate(); });
     }
 
     _CleanUp() {
@@ -150,7 +145,7 @@ class GlyphDataBlock extends SimpleDataEx {
 
         this._defaultGlyph.Reset(false, true); // will clear SVG stuff since family == null
         this._defaultGlyph._ClearLayers();
-        
+
         this._unicode = null;
         this._unicodeInfos = null;
 
@@ -161,4 +156,4 @@ class GlyphDataBlock extends SimpleDataEx {
 
 }
 
-module.exports = GlyphDataBlock;
+module.exports = nkm.data.Register(GlyphDataBlock);

@@ -5,7 +5,7 @@ const dom = nkm.ui.dom;
 const u = nkm.u;
 const io = nkm.io;
 
-const SimpleDataEx = require(`./simple-data-ex`);
+const FontObjectData = require(`./font-object-data`);
 const IDS = require(`./ids`);
 const TransformSettings = require(`./settings-transforms-data-block`);
 
@@ -20,9 +20,26 @@ const svgString = `<glyph ${IDS.GLYPH_NAME}="" ${IDS.UNICODE}="" d="" ${IDS.WIDT
 
 const svgGlyphRef = domparser.parseFromString(svgString, `image/svg+xml`).getElementsByTagName(`glyph`)[0];
 
-class GlyphVariantDataBlock extends SimpleDataEx {
-
+class GlyphVariantDataBlock extends FontObjectData {
     constructor() { super(); }
+
+    static __VALUES = {
+        //[IDS.H_ORIGIN_X]:{ value: null },
+        //[IDS.H_ORIGIN_Y]:{ value: null },
+        [IDS.WIDTH]: { value: null, nullable: true },
+        [IDS.EXPORTED_WIDTH]: { value: 0 },
+
+        //[IDS.V_ORIGIN_X]:{ value: null },
+        //[IDS.V_ORIGIN_Y]:{ value: null },
+        [IDS.HEIGHT]: { value: null, nullable: true },
+        [IDS.PATH]: { value: '' },
+        [IDS.PATH_DATA]: { value: null },
+        [IDS.OUT_OF_BOUNDS]: { value: false },
+        [IDS.EMPTY]: { value: false },
+        [IDS.DO_EXPORT]: { value: true },
+        [IDS.FLATTEN_LAYERS]: { value: false },
+        [IDS.FLATTEN_MODE]: { value: ENUMS.FLATTEN_SMART },
+    }
 
     _Init() {
 
@@ -35,7 +52,7 @@ class GlyphVariantDataBlock extends SimpleDataEx {
         this._glyph = null;
         this._computedPath = null;
         this._index = 0;
-        this._layers = new nkm.collections.List();
+        this._layers = [];
 
         this._controlLayer = null;
         this._selectedLayer = null;
@@ -45,13 +62,13 @@ class GlyphVariantDataBlock extends SimpleDataEx {
             .Hook(nkm.com.SIGNAL.UPDATED, this._PushUpdate, this)
             .Hook(nkm.com.SIGNAL.VALUE_CHANGED, this._OnLayerValueChanged, this);
 
-        this._layerUsers = new nkm.collections.List();
+        this._layerUsers = [];
 
     }
 
     get layerUsers() { return this._layerUsers; }
 
-    get availSlots() { return INFOS.LAYER_LIMIT - this._layers.count; }
+    get availSlots() { return INFOS.LAYER_LIMIT - this._layers.length; }
 
     get index() { return this._index; }
     set index(p_value) {
@@ -68,32 +85,14 @@ class GlyphVariantDataBlock extends SimpleDataEx {
         this._PushUpdate();
     }
 
-    _ResetValues(p_values) {
-        //p_values[IDS.H_ORIGIN_X] = { value: null };
-        //p_values[IDS.H_ORIGIN_Y] = { value: null };
-        p_values[IDS.WIDTH] = { value: null, nullable: true };
-        p_values[IDS.EXPORTED_WIDTH] = { value: 0 };
-
-        //p_values[IDS.V_ORIGIN_X] = { value: null };
-        //p_values[IDS.V_ORIGIN_Y] = { value: null };
-        p_values[IDS.HEIGHT] = { value: null, nullable: true }; //
-        p_values[IDS.PATH] = { value: '' };
-        p_values[IDS.PATH_DATA] = { value: null };
-        p_values[IDS.OUT_OF_BOUNDS] = { value: false };
-        p_values[IDS.EMPTY] = { value: false };
-        p_values[IDS.DO_EXPORT] = { value: true };
-        p_values[IDS.FLATTEN_LAYERS] = { value: false };
-        p_values[IDS.FLATTEN_MODE] = { value: ENUMS.FLATTEN_SMART };
-    }
-
     get layers() { return this._layers; }
 
     //#region Layer management
 
     AddLayer(p_layer, p_index = -1) {
-        if (!this._layers.Add(p_layer)) { return p_layer; }
+        if (!this._layers.AddNew(p_layer)) { return p_layer; }
         p_layer._variant = this;
-        p_layer.index = this._layers.count - 1;
+        p_layer.index = this._layers.length - 1;
         p_layer._RetrieveImportedVariant();
         this._layerObserver.Observe(p_layer);
         this.Broadcast(SIGNAL.LAYER_ADDED, this, p_layer);
@@ -108,7 +107,7 @@ class GlyphVariantDataBlock extends SimpleDataEx {
         p_layer.importedVariant = null;
         p_layer._variant = null;
         if (this._controlLayer == p_layer) { this.controlLayer = null; }
-        this._layers.ForEach((item, i) => { item.index = i; });
+        this._layers.forEach((item, i) => { item.index = i; });
         this.Broadcast(SIGNAL.LAYER_REMOVED, this, p_layer);
         this.Broadcast(SIGNAL.LAYERS_UPDATED, this);
         this._PushUpdate();
@@ -116,9 +115,9 @@ class GlyphVariantDataBlock extends SimpleDataEx {
     }
 
     MoveLayer(p_layer, p_index) {
-        if (!this._layers.Contains(p_layer)) { return; }
-        this._layers.Move(p_layer, p_index);
-        this._layers.ForEach((item, i) => { item.index = i; });
+        if (!this._layers.includes(p_layer)) { return; }
+        this._layers.AddAt(p_layer, p_index);
+        this._layers.forEach((item, i) => { item.index = i; });
         this.Broadcast(SIGNAL.LAYERS_UPDATED, this);
         this._PushUpdate();
         return p_layer;
@@ -150,12 +149,12 @@ class GlyphVariantDataBlock extends SimpleDataEx {
     }
 
     _ConcatPaths(p_rootPath) {
-        if (this._layers.isEmpty) { return p_rootPath; }
+        if (!this._layers.length) { return p_rootPath; }
         if (IDS.isEmptyPathContent(p_rootPath)) { p_rootPath = ``; }
-        this._layers.ForEach((item) => {
-            let pathData = item.Get(IDS.PATH);
+        for (const lyr of this._layers) {
+            let pathData = lyr.Get(IDS.PATH);
             if (pathData && !IDS.isEmptyPathContent(pathData.path)) { p_rootPath += ` ` + pathData.path; };
-        });
+        }
         if (p_rootPath.trim() == ``) { p_rootPath = IDS.EMPTY_PATH_CONTENT; }
         return p_rootPath;
     }
@@ -194,15 +193,15 @@ class GlyphVariantDataBlock extends SimpleDataEx {
 
     }
 
-    CommitValueUpdate(p_id, p_valueObj, p_oldValue, p_silent = false) {
-        super.CommitValueUpdate(p_id, p_valueObj, p_oldValue, p_silent);
-        let infos = IDS.GetInfos(p_id);
-        if (!infos) { return; }
-        if (infos.recompute && this._family) { this._PushUpdate(); }
+    CommitValueUpdate(p_id, p_newValue, p_oldValue, p_silent = false) {
+        super.CommitValueUpdate(p_id, p_newValue, p_oldValue, p_silent);
+        let descriptor = nkm.data.GetDescriptor(p_id);
+        if (!descriptor) { return; }
+        if (descriptor.recompute && this._family) { this._PushUpdate(); }
     }
 
-    _OnLayerValueChanged(p_layer, p_id, p_valueObj, p_oldValue) {
-        this.Broadcast(SIGNAL.LAYER_VALUE_CHANGED, this, p_layer, p_id, p_valueObj, p_oldValue);
+    _OnLayerValueChanged(p_layer, p_id, p_newValue, p_oldValue) {
+        this.Broadcast(SIGNAL.LAYER_VALUE_CHANGED, this, p_layer, p_id, p_newValue, p_oldValue);
         this._PushUpdate();
     }
 
@@ -216,9 +215,9 @@ class GlyphVariantDataBlock extends SimpleDataEx {
         //When pushing update, make sure to notify layers that
         //reference this variant, as they will need to be updated as well.
         //but only after this specific variant has been updated.
-        this._layerUsers.ForEach((item) => {
-            if (!item._isCircular) { item._variant._PushUpdate(true); }
-        });
+        for (const user of this._layerUsers) {
+            if (!user._isCircular) { user._variant._PushUpdate(true); }
+        }
 
     }
 
@@ -234,7 +233,7 @@ class GlyphVariantDataBlock extends SimpleDataEx {
 
     _ClearLayers() {
         this.selectedLayer = null;
-        while (!this._layers.isEmpty) { this.RemoveLayer(this._layers.last).Release(); }
+        while (this._layers.length) { this.RemoveLayer(this._layers.last).Release(); }
         this.controlLayer = null;
     }
 
@@ -247,18 +246,18 @@ class GlyphVariantDataBlock extends SimpleDataEx {
 
     HasLayer(p_char, p_uni = null) {
 
-        if (this._layers.isEmpty) { return false; }
+        if (!this._layers.length) { return false; }
         return this.TryGetLayer(p_char, p_uni) == null ? false : true;
 
     }
 
     TryGetLayer(p_char, p_uni = null) {
 
-        if (this._layers.isEmpty) { return null; }
+        if (!this._layers.length) { return null; }
 
-        for (let i = 0, n = this._layers.count; i < n; i++) {
+        for (let i = 0, n = this._layers.length; i < n; i++) {
             let
-                lyr = this._layers.At(i),
+                lyr = this._layers[i],
                 cval = lyr.Get(IDS.LYR_CHARACTER_NAME);
 
             if (cval == p_char || cval == p_uni) { return lyr; }
@@ -281,4 +280,4 @@ class GlyphVariantDataBlock extends SimpleDataEx {
 
 }
 
-module.exports = GlyphVariantDataBlock;
+module.exports = nkm.data.Register(GlyphVariantDataBlock);

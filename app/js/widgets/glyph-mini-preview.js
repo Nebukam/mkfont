@@ -29,30 +29,27 @@ class GlyphMiniPreview extends base {
     static _Style() {
         return nkm.style.Extends({
             ':host': {
-                '@': ['fade-in'],
+                ...nkm.style.rules.fadeIn,
+                ...nkm.style.rules.display.flex,
                 'transition': `opacity 0.25s ease`,
                 'padding': `3px`,
                 'cursor': 'pointer',
 
-                'position': 'relative',
-                'display': 'flex',
                 'aspect-ratio': '1/1',// 'var(--preview-ratio)',
                 'overflow': 'hidden',
-                'background-color': 'rgba(0,0,0,0.5)',
+                'background-color': `rgba(var(--col-base-200-rgb), 1)`,
                 'border-radius': '5px',
             },
             ':host(.null-glyph)': {
-                'background-color': 'rgba(0,0,0,0.25)',
+                'background-color': 'rgba(var(--col-base-100-rgb), 0.3)',
             },
             ':host(:not(.null-glyph)) .placeholder, :host(.null-glyph) .renderer': { 'display': 'none' },
             '.renderer': {
-                'position': 'relative',
                 'width': '100%',
                 'aspect-ratio': '1/1',
             },
             '.placeholder': {
                 'flex': '1 0 100%',
-                'position': 'relative',
                 'display': `grid`,
                 'place-items': `center`,
                 'text-align': `center`,

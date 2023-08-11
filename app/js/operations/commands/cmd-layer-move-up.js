@@ -27,7 +27,7 @@ class CmdLayerMoveUp extends actions.Command {
             let validMoves = [];
             this._context.forEach(layer => {
                 let targetIndex = layer.index + 1;
-                if (targetIndex >= layer._variant._layers.count) { return; }
+                if (targetIndex >= layer._variant._layers.length) { return; }
                 validMoves.push({ target: layer, id: IDS.LYR_INDEX, value: targetIndex });
             });
 
@@ -51,7 +51,7 @@ class CmdLayerMoveUp extends actions.Command {
         } else {
 
             let targetIndex = this._context.index + 1;
-            if (targetIndex >= this._context._variant._layers.count) {
+            if (targetIndex >= this._context._variant._layers.length) {
                 this._Cancel();
                 return;
             }

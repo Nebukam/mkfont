@@ -24,7 +24,7 @@ class CmdGlyphPaste extends actions.Command {
     _InternalExecute() {
 
         let svgString = clipboard.readText();
-
+        
         if (svgString == SHARED_OPS.copiedString) {
 
             // Clipboard still have the same reference string : pasting from inside MkFont

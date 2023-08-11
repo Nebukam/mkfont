@@ -10,7 +10,6 @@ const mkfOperations = require(`../../operations`);
 const mkfCmds = mkfOperations.commands;
 
 const AssignBaseControl = require("./assign-base");
-const ControlHeader = require(`../control-header`);
 
 const base = AssignBaseControl;
 class AssignSelectionBlockControl extends base {
@@ -22,7 +21,7 @@ class AssignSelectionBlockControl extends base {
     ];
 
     static __controls = [
-        { cl: ControlHeader, options: { label: `Block infos` } },
+        { cl: nkm.datacontrols.widgets.MiniHeader, options: { label: `Block infos` } },
         { options: { propertyId: mkfData.IDS_EXT.IMPORT_BLOCK } },
         { options: { propertyId: mkfData.IDS_EXT.IMPORT_BLOCK_START } },
     ];

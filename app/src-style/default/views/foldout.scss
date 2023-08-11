@@ -1,0 +1,47 @@
+/*-------------------------------*/
+/*<!---- @nkmjs/ui-library ----!>*/
+/*-------------------------------*/
+
+@import '../_constants';
+@import '../_variables';
+@import '../_mixins';
+@import '../_functions';
+
+:host {
+
+    @include no-select;
+
+    padding: 10px;
+    border-radius: 4px;
+    margin-bottom: 5px;
+
+    background-color: rgba(var(#{$id_col_base_300}-rgb), 0.5);
+    border-left:1px solid rgba(var(#{$id_col_base_400}-rgb), 0.5);
+
+}
+
+:host(:hover) {
+    border-left:1px solid rgba(var(#{$id_col_base_400}-rgb), 1);
+}
+
+:host(.expanded) {
+    & .header {
+        
+        padding-bottom: 10px;
+
+        & .label{
+            opacity: 0.7;
+        }
+
+        & .expand{
+            opacity: 0.4;
+        }
+
+    }
+}
+
+:host(:first-of-type:not(:first-child)){
+    margin-top:10px;
+}
+
+:host .label {}

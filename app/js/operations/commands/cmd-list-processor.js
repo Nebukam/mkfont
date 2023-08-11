@@ -19,7 +19,7 @@ class CmdListProcessor extends actions.Command {
 
         this._results.length = 0;
 
-        let content = u.isArray(this._context) ? this._context : this._emitter.inspectedData.stack._array;
+        let content = u.isArray(this._context) ? this._context : this._emitter.inspectedData.stack;
 
         for (let i = 0, n = content.length; i < n; i++) { this._PushInfos(content[i]); }
         return this._results;

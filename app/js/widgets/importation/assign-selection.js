@@ -10,7 +10,6 @@ const mkfOperations = require(`../../operations`);
 const mkfCmds = mkfOperations.commands;
 
 const AssignBaseControl = require("./assign-base");
-const ControlHeader = require(`../control-header`);
 
 const base = AssignBaseControl;
 class AssignSelectionControl extends base {
@@ -19,7 +18,7 @@ class AssignSelectionControl extends base {
     static __valueIDs = [];
 
     static __controls = [
-        { cl: ControlHeader, options: { label: `Selection infos` } },
+        { cl: nkm.datacontrols.widgets.MiniHeader, options: { label: `Selection infos` } },
     ];
 
     _Init() {
@@ -41,7 +40,7 @@ class AssignSelectionControl extends base {
 
     _UpdateList() {
         // preprocess required values...
-        this._block = this.editor._importSelection ? this.editor._importSelection.stack._array : [];
+        this._block = this.editor._importSelection ? this.editor._importSelection.stack : [];
         this._start = 0;
         this._count = this._block.length;
         this._end = this._start + this._count;

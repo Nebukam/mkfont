@@ -48,23 +48,17 @@ class GlyphSlot extends base {
     static _Style() {
         return nkm.style.Extends({
             ':host': {
-                '@': ['fade-in'],
+                ...nkm.style.flex.column,
+                ...nkm.style.rules.fadeIn,
                 'transition': 'opacity 0.15s, transform 0.05s, box-shadow 0.05s',
                 'box-shadow': `none`,
                 'transform': 'scale(1)',
-                'position': 'relative',
                 '--col-cat': 'var(--col-active)',
-                //'min-height': 'var(--preview-size)',
-                //'border':'1px solid gray',
-                'display': 'flex',
-                'flex-flow': 'column nowrap',
-                //'margin-bottom': '4px',
                 'box-sizing': 'border-box',
                 'padding': '10px',
                 'border-radius': '5px',
-                'background-color': '#161616',
+                'background-color': 'rgba(var(--col-base-100-rgb), 0.3)', //161616
                 'align-items': 'center',
-                //'overflow': 'clip',
             },
             ':host(:hover)': {
                 'box-shadow': `0 12px 20px -10px #131313`,
@@ -72,13 +66,13 @@ class GlyphSlot extends base {
                 'transform': 'scale(1.1)',
             },
             ':host(.selected)': {
-                'background-color': '#353535 !important'
+                'border': '2px solid rgba(var(--col-active-rgb), 1) !important' //353535
             },
             ':host(.exists)': {
-                'background-color': '#1e1e1e'
+                'background-color': `rgba(var(--col-base-200-rgb), 1)`
             },
             '.cat-hint': {
-                'position': 'absolute',
+                ...nkm.style.rules.pos.abs,
                 'width': '4px',
                 'height': '4px',
                 'border-radius': '10px',
@@ -89,23 +83,18 @@ class GlyphSlot extends base {
             },
             ':host(.unpainted) .box': { 'display': 'none' },
             '.preview': {
-                'position': 'relative',
+                ...nkm.style.flex.column,
                 'border-radius': 'inherit',
                 //'aspect-ratio': 'var(--preview-ratio)',
-                'flex': '1 0 auto',
+                ...nkm.style.flexItem.grow,
                 'min-height': 'var(--preview-height)',
                 'min-width': 'var(--preview-width)',
                 'width': '100%',
-                'display': 'flex',
-                'flex-flow': 'row nowrap',
                 'justify-content': 'center',
                 'overflow-y': 'clip'
             },
             '.box': {
-                'width': '100%',
-                'height': '100%',
-                //'aspect-ratio': 'var(--preview-ratio)',
-                'position': 'absolute',
+                ...nkm.style.rules.absolute.fill,
             },
             '.label': {
                 'margin': '0',
@@ -136,11 +125,11 @@ class GlyphSlot extends base {
             },
             '.oob': {
                 'display': 'none',
-                '@': ['absolute-center'],
+                ...nkm.style.rules.absolute.center,
                 'width': '50%'
             },
             ':host(.empty) .preview': {
-                //'border':`1px rgba(var(--col-warning-dark-rgb),0.5) solid`
+                //'border':`1px rgba(var(--col-warning-low-rgb),0.5) solid`
             },
             ':host(.out-of-bounds) .oob': {
                 'display': 'block !important'
@@ -149,12 +138,12 @@ class GlyphSlot extends base {
                 'background-color': 'rgba(var(--col-error-rgb), 0.5) !important'
             },
             '.quick-menu': {
-                '@': ['absolute-top-left'],
+                ...nkm.style.rules.absolute.topLeft,
                 'margin': '5px'
             },
             ':host(.exists:not(.do-export)) .preview:before': {
                 'content': `""`,
-                'position': `absolute`,
+                ...nkm.style.rules.pos.abs,
                 'top': '50%', 'left': '50%',
                 'transform': 'translate(-50%, -50%) rotate(45deg)',
                 'width': `1px`, 'height': `120%`,

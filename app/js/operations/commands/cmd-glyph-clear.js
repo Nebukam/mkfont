@@ -4,10 +4,6 @@ const nkm = require(`@nkmjs/core`);
 const actions = nkm.actions;
 const u = nkm.u;
 
-const { clipboard } = require('electron');
-const fs = require('fs');
-
-const UNICODE = require(`../../unicode`);
 const mkfData = require(`../../data`);
 const mkfActions = require(`../actions`);
 const SHARED_OPS = require('./shared-ops');
@@ -59,7 +55,7 @@ class CmdGlyphClear extends actions.Command {
 
         if (glyph.isNull) {
 
-            if (!p_inGroup && (nkm.ui.INPUT.alt || nkm.ui.INPUT.shift)) {
+            if (!p_inGroup && (nkm.ui.INPUT.altKey || nkm.ui.INPUT.shiftKey)) {
                 this._emitter.StartActionGroup({
                     icon: `reset`,
                     name: `Reset glyph`,
@@ -69,11 +65,11 @@ class CmdGlyphClear extends actions.Command {
 
             SHARED_OPS.CreateEmptyGlyph(this._emitter, f, p_infos);
 
-            if (nkm.ui.INPUT.shift) {
-                SHARED_OPS.BoostrapComp(this._emitter, f.GetGlyph(p_infos.u).activeVariant, p_infos, true, nkm.ui.INPUT.alt);
+            if (nkm.ui.INPUT.shiftKey) {
+                SHARED_OPS.BoostrapComp(this._emitter, f.GetGlyph(p_infos.u).activeVariant, p_infos, true, nkm.ui.INPUT.altKey);
             }
 
-            if (!p_inGroup && (nkm.ui.INPUT.alt || nkm.ui.INPUT.shift)) { this._emitter.EndActionGroup(); }
+            if (!p_inGroup && (nkm.ui.INPUT.altKey || nkm.ui.INPUT.shiftKey)) { this._emitter.EndActionGroup(); }
 
         } else {
 
@@ -99,9 +95,9 @@ class CmdGlyphClear extends actions.Command {
                 value: false
             });
 
-            if (!nkm.ui.INPUT.alt) { SHARED_OPS.RemoveLayers(this._emitter, p_variant); }
+            if (!nkm.ui.INPUT.altKey) { SHARED_OPS.RemoveLayers(this._emitter, p_variant); }
 
-            if (nkm.ui.INPUT.shift) { SHARED_OPS.BoostrapComp(this._emitter, p_variant, p_infos, true, nkm.ui.INPUT.alt); }
+            if (nkm.ui.INPUT.shiftKey) { SHARED_OPS.BoostrapComp(this._emitter, p_variant, p_infos, true, nkm.ui.INPUT.altKey); }
 
             if (!p_inGroup) { this._emitter.EndActionGroup(); }
 

@@ -8,7 +8,6 @@ const mkfData = require(`../data`);
 const mkfOperations = require(`../operations`);
 const mkfCmds = mkfOperations.commands;
 
-const PropertyControl = require(`./property-control`);
 const LayerTransformSettings = require(`./tr-layer-inspector`);
 const GlyphMiniPreview = require(`./glyph-mini-preview`);
 
@@ -19,7 +18,7 @@ const __circular = `circular`;
 const __controlLayer = `control-layer`;
 const __false = `false`;
 
-const base = nkm.datacontrols.InspectorWidgetGroup;
+const base = nkm.datacontrols.ControlFoldout;
 class LayerControl extends base {
     constructor() { super(); }
 
@@ -34,49 +33,31 @@ class LayerControl extends base {
         super._Init();
 
         this._flags.Add(this, __circular, __false, __controlLayer);
-
-        this._builder.defaultControlClass = PropertyControl;
-        this._builder.defaultCSS = `control`;
+        //this._builder.defaultControlClass = nkm.datacontrols.widgets.ValueControl;
 
         this.focusArea = this;
 
     }
 
-    _PostInit() {
-        super._PostInit();
-        this._builder.host = this._body;
-        this._extExpand.Setup(this, this._body, this._expandIcon.element);
-    }
-
     static _Style() {
         return nkm.style.Extends({
             ':host': {
-                //'@': [`fade-in`],
+                //...nkm.style.rules.fadeIn,
                 'padding': '5px',
                 'margin-bottom': '5px',
                 'background-color': `rgba(127,127,127,0.25)`,
             },
             ':host(.circular)': {
-                'background-color': `rgba(var(--col-error-dark-rgb),0.25)`,
+                'background-color': `rgba(var(--col-error-low-rgb),0.25)`,
             },
             ':host(:not(.circular).control-layer)': {
-                'background-color': `rgba(var(--col-infos-dark-rgb),0.25)`,
+                'background-color': `rgba(var(--col-infos-low-rgb),0.25)`,
             },
             ':host(.false) .label': {
-                'text-decoration': 'line-through var(--col-error-dark)',
+                'text-decoration': 'line-through var(--col-error-low)',
             },
             ':host(.false)': {
                 'background-color': `rgba(127,127,127,0.1)`
-            },
-            '.body': {
-                'display': 'flex',
-                'width': `100%`,
-                'flex-flow': 'row wrap',
-                'align-content': 'flex-start',
-            },
-            '.control': {
-                'flex': '1 1 100%',
-                'min-height': 0
             },
             '.hdr': {
                 'margin': '5px 2px 5px 2px'
@@ -152,9 +133,8 @@ class LayerControl extends base {
                 },
             ]
         };
-        this._toolbar.visible = false;
 
-        this._label.ellipsis = true;
+        this._toolbar.visible = false;        
 
     }
 

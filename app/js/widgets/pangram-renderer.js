@@ -15,8 +15,8 @@ class PangramRenderer extends base {
     _Init() {
         super._Init();
         this._pointer
-            .Hook(ui.POINTER.MOUSE_LEFT, ui.POINTER.DOWN, this._Bind(this._StartSelection))
-            .Hook(ui.POINTER.MOUSE_LEFT, ui.POINTER.RELEASE, this._Bind(this._EndSelection));
+            .Hook(ui.POINTER.KEYS.MOUSE_LEFT, ui.POINTER.KEYS.DOWN, this._Bind(this._StartSelection))
+            .Hook(ui.POINTER.KEYS.MOUSE_LEFT, ui.POINTER.KEYS.RELEASE, this._Bind(this._EndSelection));
 
         this._ongoingSelection = false;
         this._highlightList = null;
@@ -32,10 +32,8 @@ class PangramRenderer extends base {
     static _Style() {
         return nkm.style.Extends({
             ':host': {
-                'position': 'relative',
-                'display': 'flex',
+                ...nkm.style.flex.column,
                 'box-sizing': 'border-box',
-                'flex-flow': 'column nowrap',
                 //'align-items':'center',
                 'justify-content': 'center',
                 'padding': '20px',
@@ -64,7 +62,7 @@ class PangramRenderer extends base {
             },
             '.high': {
                 'color': `white`,
-                'background-color': `rgba(var(--col-active-dark-rgb), 0.5)`,
+                'background-color': `rgba(var(--col-active-low-rgb), 0.5)`,
                 'border-radius': `2px`,
             }
         }, base._Style());

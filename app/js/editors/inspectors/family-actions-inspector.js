@@ -22,20 +22,17 @@ class FamilyActionsInspector extends base {
     static _Style() {
         return nkm.style.Extends({
             ':host': {
-                'display': 'flex',
-                'flex-flow': 'column nowrap',
+                ...nkm.style.flex.column,
             },
             '.body': {
-                'display': 'flex',
-                'flex-flow': 'column nowrap',
-                'flex': '1 1 auto',
-                'min-height': '0',
+                ...nkm.style.flex.column,
+                ...nkm.style.flexItem.fill,
                 'overflow': 'auto',
                 'padding': '10px',
                 'justify-content': 'flex-start'
             },
             '.item': {
-                'flex': '0 0 auto',
+                ...nkm.style.flexItem.fixed,
                 'margin-bottom': '5px'
             }
         }, base._Style());
@@ -55,4 +52,3 @@ class FamilyActionsInspector extends base {
 }
 
 module.exports = FamilyActionsInspector;
-ui.Register(`mkf-family-actions-inspector`, FamilyActionsInspector);

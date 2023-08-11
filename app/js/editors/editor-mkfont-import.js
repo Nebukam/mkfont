@@ -47,16 +47,14 @@ class EditorMKFontImport extends base {
     static _Style() {
         return nkm.style.Extends({
             ':host': {
-                'display': 'flex',
-                'flex-flow': 'column nowrap',
-                'flex': '1 1 auto',
+                ...nkm.style.flex.column,
+                ...nkm.style.flexItem.fill,
                 'grid-gap': '10px'
             },
             '.item': {
-                'flex': '1 1 auto',
+                ...nkm.style.flexItem.fill,
             },
             '.list': {
-                'position': 'relative',
                 'width': '800px',
                 'min-height': '100px',
                 //'padding': '10px',
@@ -118,7 +116,7 @@ class EditorMKFontImport extends base {
                     label: `Toggle selected glyphs`,
                     trigger: {
                         fn: () => {
-                            this._selStack.data.stack.ForEach(item => { item.selected = true; });
+                            this._selStack.data.stack.forEach(item => { item.selected = true; });
                             this._OnImportListUpdated();
                         }
                     },

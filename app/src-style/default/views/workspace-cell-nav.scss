@@ -10,7 +10,7 @@
 $spacing: 0px;
 
 :host{
-    background-color: var(#{$varname_workspace_nav_bg});
+    background-color: var(#{$id_workspace_nav_bg});
 }
 
 :host(#{$HORIZONTAL}){ 

@@ -39,9 +39,9 @@ class GlyphPicker extends base {
 
         this._searchSettings = new mkfData.SearchSettings();
         this._searchSettings
-            .Watch(SIGNAL.SEARCH_TOGGLED, this._OnSearchToggled, this)
-            .Watch(SIGNAL.SEARCH_STARTED, this._OnSearchStarted, this)
-            .Watch(SIGNAL.SEARCH_COMPLETE, this._OnSearchComplete, this);
+            .Watch(nkm.data.SIGNAL.SEARCH_TOGGLED, this._OnSearchToggled, this)
+            .Watch(nkm.data.SIGNAL.SEARCH_STARTED, this._OnSearchStarted, this)
+            .Watch(nkm.data.SIGNAL.SEARCH_COMPLETE, this._OnSearchComplete, this);
 
         this._dataObserver
             .Hook(SIGNAL.GLYPH_ADDED, this._OnGlyphAdded, this)
@@ -79,8 +79,8 @@ class GlyphPicker extends base {
         this._contentRange = new RangeContent();
         this._contentRange.Watch(nkm.com.SIGNAL.READY, this._OnRangeReady, this);
         this.forwardData
-            .To(this._searchSettings, { mapping: `family` })
-            .To(this._contentRange, { mapping: `family` });
+            .To(this._searchSettings, { set: `family` })
+            .To(this._contentRange, { set: `family` });
 
         this._content = null;
         this._flags.Add(this, __noToolbar);
@@ -96,17 +96,15 @@ class GlyphPicker extends base {
     static _Style() {
         return nkm.style.Extends({
             ':host': {
-                'position': 'relative',
+                ...nkm.style.flex.column,
                 'padding': `10px`,
                 'width': '300px',
                 'height': '350px',
-                'display': 'flex',
-                'flex-flow': 'column nowrap',
                 'overflow': 'clip',
                 'grid-gap': '5px'
             },
             '.search, .toolbar': {
-                'flex': '0 0 auto',
+                ...nkm.style.flexItem.fixed,
             },
             '.toolbar': {
                 'margin-top': `5px`
@@ -115,8 +113,7 @@ class GlyphPicker extends base {
                 'display': 'none'
             },
             '.dom-stream': {
-                'position': 'relative',
-                'flex': '1 1 auto',
+                ...nkm.style.flexItem.fill,
                 'margin-top': `5px`,
                 'overflow': 'auto',
             },
@@ -124,7 +121,7 @@ class GlyphPicker extends base {
                 'display': 'block !important'
             },
             '.search-status': {
-                '@': ['absolute-center']
+                ...nkm.style.rules.absolute.center,
             }
         }, base._Style());
     }
@@ -141,8 +138,8 @@ class GlyphPicker extends base {
                     let toggle = this._searchActive;
                     if (!p_value || p_value == ``) { toggle = false; }
                     else { toggle = true; }
-                    this._searchSettings.Set(mkfData.IDS_EXT.SEARCH_ENABLED, toggle);
-                    this._searchSettings.Set(mkfData.IDS_EXT.SEARCH_TERM, p_value);
+                    this._searchSettings.Set(nkm.data.IDS.SEARCH_ENABLED, toggle);
+                    this._searchSettings.Set(nkm.data.IDS.SEARCH_TERMS, p_value);
                 }
             }
         }
@@ -217,7 +214,7 @@ class GlyphPicker extends base {
     _OnSearchToggled() {
 
         let oldValue = this._searchActive;
-        this._searchActive = this._searchSettings ? this._searchSettings.Get(mkfData.IDS_EXT.SEARCH_ENABLED) : false;
+        this._searchActive = this._searchSettings ? this._searchSettings.Get(nkm.data.IDS.SEARCH_ENABLED) : false;
 
         if (oldValue == this._searchActive) { return; }
 
@@ -280,12 +277,6 @@ class GlyphPicker extends base {
 
     _RefreshItems() {
         this._domStreamer._Stream(null, null, true);
-        /*
-        for (let i = 0; i < this._displayList.count; i++) {
-            let item = this._displayList.At(i);
-            if (`_UpdateGlyphPreview` in item) { item._UpdateGlyphPreview(); }
-        }
-        */
     }
 
     //#endregion

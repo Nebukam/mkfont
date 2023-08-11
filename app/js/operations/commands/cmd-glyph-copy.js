@@ -17,7 +17,6 @@ class CmdGlyphCopy extends actions.Command {
     constructor() { super(); }
 
     _InternalExecute() {
-
         SHARED_OPS.CopyFrom(this._emitter);
         this._Success();
 

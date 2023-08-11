@@ -24,10 +24,9 @@ class GlyphStats extends base {
     static _Style() {
         return nkm.style.Extends({
             ':host': {
+                ...nkm.style.flex.column,
                 'min-height': 'auto',
                 //'padding': '20px',
-                'display': 'flex',
-                'flex-flow': 'column nowrap',
                 'padding-bottom': '5px',
                 'margin-bottom': '5px',
                 //'border-bottom': '1px solid rgba(0,0,0,0.25)',
@@ -53,12 +52,13 @@ class GlyphStats extends base {
                 'margin': `5px`,
             },
             '.shortcuts': {
-                'flex': `1 1 auto`,
+                ...nkm.style.flexItem.fill,
                 'display': 'grid',
                 'grid-template-columns': 'repeat(4, 1fr)',
                 'grid-gap': '10px'
             },
             '.shortcut-item': {
+                ...nkm.style.flexItem.fill,
                 'aspect-ratio': `1/1`
             }
         }, base._Style());
@@ -77,7 +77,7 @@ class GlyphStats extends base {
             trigger: {
                 fn: () => {
                     let list = [];
-                    this._data.layerUsers.ForEach(user => {
+                    this._data.layerUsers.forEach(user => {
                         if (!user._variant || !user._variant.glyph) { return; }
                         list.push(user._variant.glyph.unicodeInfos);
                     });
@@ -178,11 +178,11 @@ class GlyphStats extends base {
     _OnDataUpdated(p_data) {
         super._OnDataUpdated(p_data);
         let users = p_data.layerUsers;
-        if (users.count == 0) {
+        if (users.length == 0) {
             this._refTitle.Set(null);
             this._selectAllUsers.visible = false;
         } else {
-            this._refTitle.Set(`Used as component  ×${users.count}`);
+            this._refTitle.Set(`Used as component  ×${users.length}`);
             this._selectAllUsers.visible = true;
         }
     }

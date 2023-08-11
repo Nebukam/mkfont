@@ -55,20 +55,17 @@ class FamilyContentInspector extends base {
     static _Style() {
         return nkm.style.Extends({
             ':host': {
-                'display': 'flex',
-                'flex-flow': 'column nowrap',
+                ...nkm.style.flex.column,
             },
             '.body': {
-                'display': 'flex',
-                'flex-flow': 'column nowrap',
-                'flex': '1 1 auto',
-                'min-height': '0',
+                ...nkm.style.flex.column,
+                ...nkm.style.flexItem.fill,
                 'overflow': 'auto',
                 'padding': '10px',
                 'justify-content': 'flex-start'
             },
             '.item': {
-                'flex': '0 0 auto',
+                ...nkm.style.flexItem.fixed,
                 'margin-bottom': '5px'
             }
         }, base._Style());
@@ -90,12 +87,12 @@ class FamilyContentInspector extends base {
 
         //this._categories = this.Attach(mkfWidgets.lists.FilterRoot, `asd`, this._body);
         this._categories = this.Attach(nkm.uilib.lists.FolderListRoot, `item`, this._body);
-        this._categories.data = UNICODE.instance._categoriesCatalog;
+        this._categories.data = UNICODE._categoriesCatalog;
         this._categories.selStackOverride = this._selStack;
 
         //this._blocks = this.Attach(mkfWidgets.lists.BlockRoot, `asd`, this._body);
         this._blocks = this.Attach(nkm.uilib.lists.FolderListRoot, `item`, this._body);
-        this._blocks.data = UNICODE.instance._blockCatalog;
+        this._blocks.data = UNICODE._blockCatalog;
         this._blocks.selStackOverride = this._selStack;
 
     }
@@ -103,4 +100,3 @@ class FamilyContentInspector extends base {
 }
 
 module.exports = FamilyContentInspector;
-ui.Register(`mkf-family-content-inspector`, FamilyContentInspector);

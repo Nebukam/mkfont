@@ -19,20 +19,19 @@ class LigaButton extends base {
     static _Style() {
         return nkm.style.Extends({
             ':host': {
-                '@': ['fade-in'],
+                ...nkm.style.rules.fadeIn,
+                ...nkm.style.flex.row,
+                ...nkm.style.flex.align.center.all,
                 'min-height': 'auto',
                 'min-width': 'auto',
                 //'padding': '20px',
-                'display': 'flex',
-                'flex-direction': 'row',
                 'padding': '5px',
                 'margin-bottom': '5px',
-                'align-items': `center`,
                 'padding-right': `15px`,
                 'padding-left': `15px`
             },
             '.item': {
-                'flex': '0 0 auto',
+                ...nkm.style.flexItem.fixed,
                 'margin': `3px`
             },
             '.counter': {
@@ -42,7 +41,7 @@ class LigaButton extends base {
                 'flex': '0 0 16px',
             },
             '.long-name': {
-                'flex': '1 0 auto',
+                ...nkm.style.flexItem.grow,
                 'font-family': `monospace`
             }
         }, base._Style());

@@ -48,7 +48,7 @@ class ImportListItem extends base {
             },
             ':host(.preserved):before': {
                 //'content': `""`,
-                '@': ['absolute-left'],
+                ...nkm.style.rules.absolute.left,
                 'width': `10px`, 'height': `10px`,
                 'margin-top': `-25px`,
                 'margin-left': `54px`,
@@ -59,7 +59,7 @@ class ImportListItem extends base {
             ':host(:not(.replace)) .replace-icon': { 'display': 'none', },
             ':host(.ignored):after': {
                 'content': `""`,
-                'position': `absolute`,
+                ...nkm.style.rules.pos.abs,
                 'width': `1px`, 'height': `120%`,
                 'transform': `rotate(45deg)`,
                 'margin-left': `36px`,
@@ -67,7 +67,6 @@ class ImportListItem extends base {
                 'background-color': `var(--col-warning)`
             },
             '.renderer': {
-                'position': 'relative',
                 'aspect-ratio': '1/1',
                 'width': '52px',
                 'border-radius': '3px',
@@ -96,7 +95,7 @@ class ImportListItem extends base {
                 'border-radius': '3px'
             },
             '.sic': {
-                'position': 'absolute',
+                ...nkm.style.rules.pos.abs,
                 'top': `4px`,
                 'left': `44px`,
                 'width': `20px`,

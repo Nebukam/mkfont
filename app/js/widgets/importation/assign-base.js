@@ -12,8 +12,6 @@ const mkfCmds = mkfOperations.commands;
 
 const __flag_inherited = `inherited`;
 
-const PropertyControl = require(`../property-control`);
-
 const base = nkm.datacontrols.ControlView;
 class AssignBaseControl extends base {
     constructor() { super(); }
@@ -29,7 +27,7 @@ class AssignBaseControl extends base {
         this._importList = null;
         this._dataObserver.Hook(nkm.com.SIGNAL.VALUE_CHANGED, this._OnDataValueChanged, this);
 
-        this._builder.defaultControlClass = PropertyControl;
+        this._builder.defaultControlClass = nkm.datacontrols.widgets.ValueControl;
         this._builder.defaultCSS = `control`;
     }
 
@@ -40,15 +38,12 @@ class AssignBaseControl extends base {
     static _Style() {
         return nkm.style.Extends({
             ':host': {
-                'position': 'relative',
-                'display': 'flex',
-                'flex-flow': 'column nowrap',
-                'align-items': 'center',
-                'flex': '0 1 auto',
-                'align-items': `stretch`
+                ...nkm.style.flex.column,
+                'align-items': `stretch`,
+                ...nkm.style.flexItem.shrink,
             },
             '.control': {
-                'flex': '1 1 auto',
+                ...nkm.style.flexItem.fill,
                 'margin': '0 0 5px 0'
             },
         }, base._Style());
@@ -68,7 +63,7 @@ class AssignBaseControl extends base {
         if (this._data && this._importList) { this._UpdateList(); }
     }
 
-    _OnDataValueChanged(p_data, p_id, p_valueObj, p_oldValue) {
+    _OnDataValueChanged(p_data, p_id, p_newValue, p_oldValue) {
         if (!this.constructor.__valueIDs.includes(p_id)) { return; }
         this._UpdateList();
     }

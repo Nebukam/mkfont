@@ -16,7 +16,7 @@ $bg: rgb(70, 70, 70);
 
     //width:auto !important;
 
-    --size:var(#{$varname_size_xs}); // Default size
+    --size:var(#{$id_size_xs}); // Default size
 
     --w-height: calc(var(--size) - #{$padding * 2});
     height:var(--w-height);
@@ -40,7 +40,7 @@ $bg: rgb(70, 70, 70);
 }
 
 :host .label{
-    flex: 0 0 auto;
+    flex: 1 1 auto;
 
     font-size:10px;
     text-transform: uppercase;    

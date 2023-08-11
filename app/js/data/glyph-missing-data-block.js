@@ -14,10 +14,10 @@ const svgString = `<missing-glyph ${IDS.GLYPH_NAME}="" ${IDS.UNICODE}="" d="" ${
 const missingGlyphRef = domparser.parseFromString(svgString, `image/svg+xml`).getElementsByTagName(`missing-glyph`)[0];
 
 class GlyphMissingDataBlock extends GlyphVariant {
-
     constructor() { super(); }
+    
     _BuildFontObject() { return missingGlyphRef.cloneNode(true); }
 
 }
 
-module.exports = GlyphMissingDataBlock;
+module.exports = nkm.data.Register(GlyphMissingDataBlock);

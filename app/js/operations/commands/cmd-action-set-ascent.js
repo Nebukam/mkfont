@@ -2,13 +2,11 @@
 
 // Read svg from clipboard and trigger "action-set-svg"
 const nkm = require(`@nkmjs/core`);
-const actions = nkm.actions;
 const IDS = require(`../../data/ids`);
 
-const CmdActionProperty = require(`./cmd-action-set-property`);
 const SetAscent = require(`../actions/action-set-ascent`);
 
-class CmdActionSetEM extends CmdActionProperty {
+class CmdActionSetEM extends nkm.data.ops.commands.CmdActionSetProperty {
     constructor() { super(); }
 
     _Init() {

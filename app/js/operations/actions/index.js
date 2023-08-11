@@ -1,9 +1,8 @@
 'use strict';
+const nkm = require(`@nkmjs/core`);
 
 module.exports = {
 
-    SetProperty: require(`./action-set-property-value`),
-    SetPropertyMultiple: require(`./action-set-property-value-multiple`),
     SetAscent: require(`./action-set-ascent`),
     SetEM: require(`./action-set-em`),
     SetLayerIndex: require(`./action-set-layer-index`),
@@ -12,5 +11,8 @@ module.exports = {
     GlyphDelete: require(`./action-glyph-delete`),
     LayerAdd: require(`./action-layer-add`),
     LayerRemove: require(`./action-layer-remove`),
+
+    SetProperty: nkm.data.ops.actions.SetPropertyValue,
+    SetPropertyMultiple: nkm.data.ops.actions.SetPropertyMultiple,
 
 }

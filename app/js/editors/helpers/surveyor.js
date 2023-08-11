@@ -8,7 +8,7 @@ const mkfData = require(`../../data`);
 const SIGNAL = require(`../../signal`);
 
 
-const base = nkm.com.pool.DisposableObjectEx;
+const base = nkm.com.Observable;
 class Surveyor extends base {
     constructor() { super(); }
 
@@ -234,14 +234,14 @@ class Surveyor extends base {
             layerStack = [],
             validSet = new Set(),
             vCount = this._cachedVariants.length,
-            refLayerList = this._refVariant._layers._array,
+            refLayerList = this._refVariant._layers,
             needRebuild = true;
 
         // Organize layer by names & count
 
         this._cachedVariants.forEach(variant => {
 
-            variant._layers.ForEach(layer => {
+            variant._layers.forEach(layer => {
 
                 let
                     id = this._LyrID(layer),
@@ -362,16 +362,16 @@ class Surveyor extends base {
 
     //#region Apply changes
 
-    _OnTransformValueChanged(p_data, p_id, p_valueObj, p_oldValue) {
+    _OnTransformValueChanged(p_data, p_id, p_newValue, p_oldValue) {
 
         this._editor.Do(
-            mkfOperations.actions.SetProperty, {
-            target: this._cachedTransforms, id: p_id, value: p_valueObj.value
+            nkm.data.ops.actions.SetPropertyValue, {
+            target: this._cachedTransforms, id: p_id, value: p_newValue
         });
 
     }
 
-    _OnRefGlyphValueChanged(p_data, p_id, p_valueObj, p_oldValue) {
+    _OnRefGlyphValueChanged(p_data, p_id, p_newValue, p_oldValue) {
 
         if (p_id == mkfData.IDS.SHOW_ALL_LAYERS) {
             this._RebuildLayerCache();
@@ -380,12 +380,12 @@ class Surveyor extends base {
 
         this._editor.Do(
             mkfOperations.actions.SetProperty, {
-            target: this._cachedVariants, id: p_id, value: p_valueObj.value
+            target: this._cachedVariants, id: p_id, value: p_newValue
         });
 
     }
 
-    _OnRefLayerValueChanged(p_variant, p_layer, p_id, p_valueObj, p_oldValue) {
+    _OnRefLayerValueChanged(p_variant, p_layer, p_id, p_newValue, p_oldValue) {
 
         if (p_id == mkfData.IDS.LYR_INDEX) { return; } //p_id == mkfData.IDS.LYR_IS_CONTROL_LAYER
 
@@ -394,7 +394,7 @@ class Surveyor extends base {
         if (!layerList || layerList.length == 0) { return; }
 
         if (p_id == mkfData.IDS.LYR_IS_CONTROL_LAYER) {
-            this._editor.cmdLayerControl.toggle = p_valueObj.value;
+            this._editor.cmdLayerControl.toggle = p_newValue;
             this._editor.cmdLayerControl.Execute(layerList);
             return;
         }
@@ -402,7 +402,7 @@ class Surveyor extends base {
 
         this._editor.Do(
             mkfOperations.actions.SetProperty, {
-            target: layerList, id: p_id, value: p_valueObj.value
+            target: layerList, id: p_id, value: p_newValue
         });
 
     }

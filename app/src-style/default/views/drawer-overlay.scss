@@ -7,34 +7,63 @@
 @import '../_functions';
 @import '../_mixins';
 
-:host .content{
-    @include drop-shadow(0,0,20px, rgba(0,0,0,0.5));
+$time : 250ms;
+$transition: ease-out forwards;
+
+:host(.content-left) .content {
+    //transform: translateX(-100%);
 }
 
-:host(.content-left) .content{
-    transform: translateX(-100%);
+:host(.content-right) .content {
+    //transform: translateX(100%);
 }
 
-:host(.content-right) .content{
-    transform: translateX(100%);
+:host(.content-top) .content {
+    //transform: translateY(-100%);
 }
 
-:host(.content-top) .content{
-    transform: translateY(-100%);
+:host(.content-bottom) .content {
+    //transform: translateY(100%);
 }
 
-:host(.content-bottom) .content{
-    transform: translateY(100%);
-}
 
-:host(#{$SHOWN}) .content{
-    animation: slideIn 150ms ease-out forwards;
+.content {
 
-    @keyframes slideIn {
-        to {
-            transform: translateX(0%) translateY(0%);
+    @include drop-shadow(0, 0, 20px, rgba(0, 0, 0, 0.5));
+
+    &.shown {
+        &.left {
+            animation: slideInLeft $time $transition;
+        }
+
+        &.right {
+            animation: slideInRight $time $transition;
+        }
+
+        &.top {
+            animation: slideInTop $time $transition;
+        }
+
+        &.bottom {
+            animation: slideInBottom $time $transition;
         }
     }
-    
-}
 
+    &:not(.shown) {
+        &.left {
+            animation: slideOutLeft $time $transition;
+        }
+
+        &.right {
+            animation: slideOutRight $time $transition;
+        }
+
+        &.top {
+            animation: slideOutTop $time $transition;
+        }
+
+        &.bottom {
+            animation: slideOutBottom $time $transition;
+        }
+    }
+}

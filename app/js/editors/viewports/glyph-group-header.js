@@ -37,9 +37,8 @@ class GlyphGroupHeader extends base {
                 'height': `32px`,
             },
             '.toolbar': {
-                'display': 'flex',
-                'flex-flow': 'row wrap',
-                'justify-content': 'space-between'
+                ...nkm.style.flex.rows,
+                ...nkm.style.flex.align.center.spread,
             }
         }, base._Style());
     }
@@ -104,11 +103,7 @@ class GlyphGroupHeader extends base {
 
     }
 
-    get cmdContent() { return ui.INPUT.shift ? this._parent._content : null; }
-
-    _OnEditorChanged(p_oldEditor) {
-        this._displayInspector.editor = this._editor;
-    }
+    get cmdContent() { return ui.INPUT.shiftKey ? this._parent._content : null; }
 
     _OnDataUpdated(p_data) {
         super._OnDataUpdated(p_data);

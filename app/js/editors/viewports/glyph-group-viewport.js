@@ -46,9 +46,9 @@ class GlyphGroupViewport extends base {
 
         this._searchObserver = new nkm.com.signals.Observer();
         this._searchObserver
-            .Hook(SIGNAL.SEARCH_TOGGLED, this._OnSearchToggled, this)
-            .Hook(SIGNAL.SEARCH_STARTED, this._OnSearchStarted, this)
-            .Hook(SIGNAL.SEARCH_COMPLETE, this._OnSearchComplete, this);
+            .Hook(nkm.data.SIGNAL.SEARCH_TOGGLED, this._OnSearchToggled, this)
+            .Hook(nkm.data.SIGNAL.SEARCH_STARTED, this._OnSearchStarted, this)
+            .Hook(nkm.data.SIGNAL.SEARCH_COMPLETE, this._OnSearchComplete, this);
 
         this._searchActive = false;
 
@@ -85,8 +85,8 @@ class GlyphGroupViewport extends base {
         this._contentRange = new RangeContent();
         this._contentRange.Watch(nkm.com.SIGNAL.READY, this._OnRangeReady, this);
         this.forwardData
-            .To(this._contentRange, { mapping: `family` })
-            .To(this, { dataMember: `searchSettings`, mapping: `searchSettings` });
+            .To(this._contentRange, { set: `family` })
+            .To(this, { get: `searchSettings`, set: `searchSettings` });
 
         this._content = null;
 
@@ -99,25 +99,23 @@ class GlyphGroupViewport extends base {
     static _Style() {
         return nkm.style.Extends({
             ':host': {
-                'position': 'relative',
-                'display': 'flex',
-                'flex-flow': 'column nowrap',
+                ...nkm.style.flex.column,
                 '--streamer-gap': '10px',
-                'overflow': 'clip'
+                'overflow': 'clip',
+                'background-color': `rgba(var(--col-base-200-rgb), 0.5)`,
             },
             '.header, .search, .footer': {
-                'flex': '0 0 auto',
+                ...nkm.style.flexItem.fixed,
             },
             '.dom-stream': {
-                'position': 'relative',
-                'flex': '1 1 auto',
+                ...nkm.style.flexItem.fill,
                 'overflow': 'auto',
             },
             '.dom-stream.empty': {
                 'display': 'block !important'
             },
             '.search-status': {
-                '@': ['absolute-center']
+                ...nkm.style.rules.absolute.center,
             }
         }, base._Style());
     }
@@ -171,12 +169,14 @@ class GlyphGroupViewport extends base {
     }
 
     set searchSettings(p_value) {
+
         if (this._searchSettings == p_value) { return; }
 
         this._searchSettings = p_value;
         this._searchObserver.ObserveOnly(p_value);
         this._search.data = p_value;
         this._OnSearchToggled();
+
     }
 
     set displayRange(p_value) {
@@ -206,9 +206,9 @@ class GlyphGroupViewport extends base {
     //#region search
 
     _OnSearchToggled() {
-
+        
         let oldValue = this._searchActive;
-        this._searchActive = this._searchSettings ? this._searchSettings.Get(IDS_EXT.SEARCH_ENABLED) : false;
+        this._searchActive = this._searchSettings ? this._searchSettings.Get(nkm.data.IDS.SEARCH_ENABLED) : false;
 
         if (oldValue == this._searchActive) { return; }
 
@@ -240,7 +240,6 @@ class GlyphGroupViewport extends base {
         if (p_array != null) {
             let index = p_array.indexOf(this.editor.inspectedData.lastItem);
             if (index != -1) { this._domStreamer.SetFocusIndex(index); }
-
         }
     }
 
@@ -295,12 +294,6 @@ class GlyphGroupViewport extends base {
 
     _RefreshItems() {
         this._domStreamer._Stream(null, null, true);
-        /*
-        for (let i = 0; i < this._displayList.count; i++) {
-            let item = this._displayList.At(i);
-            if (`_UpdateGlyphPreview` in item) { item._UpdateGlyphPreview(); }
-        }
-        */
     }
 
     //#endregion

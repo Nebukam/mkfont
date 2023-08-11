@@ -102,7 +102,7 @@ class CmdImportFileSingle extends actions.Command {
 
         let
             family = this._emitter.data,
-            doBinding = nkm.env.APP.PGet(mkfData.IDS_EXT.IMPORT_BIND_RESOURCE)
+            doBinding = nkm.settings.Get(mkfData.IDS_EXT.IMPORT_BIND_RESOURCE)
 
         // Check if glyph exists
         let

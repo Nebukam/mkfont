@@ -6,7 +6,7 @@ const IDS = require(`./data/ids`);
 
 const SIGNAL = require(`./signal`);
 
-class ContentManager extends nkm.com.helpers.SingletonEx {
+class ContentManager extends nkm.com.Observable {
     constructor() { super(); }
 
 
@@ -27,13 +27,9 @@ class ContentManager extends nkm.com.helpers.SingletonEx {
 
     //#region Update
 
-    static Push(p_data, p_method) {
-        this.instance._Push(p_data, p_method);
-    }
+    get ready() { return this._ready; }
 
-    static get ready() { return this.instance._ready; }
-
-    _Push(p_data, p_method) {
+    Push(p_data, p_method) {
 
         let array = this._dataMap.get(p_data);
 
@@ -86,4 +82,4 @@ class ContentManager extends nkm.com.helpers.SingletonEx {
 
 }
 
-module.exports = ContentManager;
+module.exports = new ContentManager();

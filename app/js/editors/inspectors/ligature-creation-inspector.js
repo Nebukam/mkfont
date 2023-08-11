@@ -20,18 +20,16 @@ class LigatureCreationInspector extends base {
         return nkm.style.Extends({
             ':host': {
                 'min-width': '350px',
-                //'flex': '0 0 auto',
+                //...nkm.style.flexItem.fixed,
             },
             '.list': {
-                'display': 'flex',
-                'flex-flow': 'column nowrap',
-                'flex': '1 1 auto',
-                'min-height': '0',
+                ...nkm.style.flex.column,
+                ...nkm.style.flexItem.fill,
                 'overflow': 'auto',
                 'padding': '10px',
             },
             '.control': {
-                'flex': '0 1 auto',
+                ...nkm.style.flexItem.shrink,
                 'margin-bottom': '5px'
             }
         }, base._Style());
@@ -59,4 +57,3 @@ class LigatureCreationInspector extends base {
 }
 
 module.exports = LigatureCreationInspector;
-ui.Register(`mkf-ligature-inspector`, LigatureCreationInspector);

@@ -4,22 +4,9 @@ const docCmds = nkm.documents.commands;
 
 const mkfData = require(`../../data`);
 
-const
-    fileInfos = { name: 'MKFont files', extensions: ['mkfont'] },
-    mkDocInfos = { docType: nkm.documents.bound.JSONDocument, dataType: mkfData.Family, fileInfos: fileInfos };
-
-// Register defaults commands (will be used by autosave)
-docCmds.DocumentCreate.Rent(mkDocInfos, true);
-docCmds.DocumentSave.Rent(mkDocInfos, true);
-docCmds.DocumentLoad.Rent(mkDocInfos, true);
-docCmds.DocumentRelease.Rent(mkDocInfos, true);
-
 module.exports = {
 
-    OpenPrefs: new (require(`./cmd-open-prefs`))(), 
-
-    //Single instances are to be used with PropertyControl
-    SetProperty: new (require(`./cmd-action-set-property`))(), //Single instance
+    //Single instances are to be used with ValueControl
     SetEM: new (require(`./cmd-action-set-em`))(), //Single instance
     SetAscent: new (require(`./cmd-action-set-ascent`))(), //Single instance
     SetLayerControl: new (require(`./cmd-action-set-control`))(), //Single instance
@@ -61,11 +48,6 @@ module.exports = {
 
     StartNewFromTTF: require(`./cmd-start-new-from-ttf`),
     StartNewFromSVGS: require(`./cmd-start-new-from-svgs`),
-
-    get CreateFamilyDoc() { return docCmds.DocumentCreate.Rent({ name: `New .mkfont`, ...mkDocInfos }) },
-    get SaveFamilyDoc() { return docCmds.DocumentSave.Rent({ name: `Save .mkfont`, ...mkDocInfos }) },
-    get LoadFamilyDoc() { return docCmds.DocumentLoad.Rent({ name: `Load .mkfont`, ...mkDocInfos }) },
-    get ReleaseFamilyDoc() { return docCmds.DocumentRelease.Rent({ ...mkDocInfos }) },
 
     EditInExternalEditor: require(`./cmd-edit-in-external-editor`),
 }

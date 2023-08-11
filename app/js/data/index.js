@@ -2,7 +2,7 @@
 
 module.exports = {
 
-    serialization: require(`./serialization`),
+    s11n: require(`./s11n`),
 
     ENUMS: require(`./enums`),
     IDS: require(`./ids`),
@@ -10,6 +10,8 @@ module.exports = {
     IDS_PREFS: require(`./ids-prefs`),
     INFOS: require(`./infos`),
     UTILS: require(`./utils`),
+
+    AppSettings: require(`./app-settings`),
 
     Family: require(`./family-data-block`),
     
@@ -21,7 +23,6 @@ module.exports = {
     ImportSettings: require(`./settings-import-data-block`),
     LigaImportSettings: require(`./settings-liga-import-data-block`),
     SearchSettings : require(`./settings-search-data-block`),
-    Prefs: require(`./settings-preferences`),
 
     RangeContent : require(`./range-content`),
 

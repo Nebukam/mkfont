@@ -34,9 +34,8 @@ class PangramHeader extends base {
                 'margin-bottom': '10px'
             },
             '.toolbar': {
-                'display': 'flex',
-                'flex-flow': 'row nowrap',
-                'justify-content': 'space-between'
+                ...nkm.style.flex.row,
+                ...nkm.style.flex.align.center.spread,
             }
         }, base._Style());
     }
@@ -53,7 +52,7 @@ class PangramHeader extends base {
         this._tagBar = this.Attach(ui.WidgetBar, `tagbar left`, toolbar);
         this._tagBar.options = {
             defaultWidgetClass: nkm.uilib.widgets.Tag,
-            size: ui.FLAGS.SIZE_XS
+            /* size: ui.FLAGS.SIZE_XS */
         };
 
         this._optionsBar = this.Attach(ui.WidgetBar, `right`, toolbar);
@@ -90,10 +89,6 @@ class PangramHeader extends base {
         this._subTags = this._tagBar.CreateHandle({ cl: ui.WidgetBar, group: `categories` });
         this._subTags._defaultWidgetClass = nkm.uilib.widgets.Tag;
 
-    }
-
-    _OnEditorChanged(p_oldEditor) {
-        this._displayInspector.editor = this._editor;
     }
 
     _OnDataUpdated(p_data) {

@@ -3,6 +3,9 @@
 const nkm = require(`@nkmjs/core`);
 const ui = nkm.ui;
 
+const MiniHeader = nkm.datacontrols.widgets.MiniHeader;
+const ValueControl = nkm.datacontrols.widgets.ValueControl;
+
 const mkfData = require(`../../data`);
 const mkfWidgets = require(`../../widgets`);
 
@@ -16,7 +19,7 @@ class GlyphInspector extends base {
     constructor() { super(); }
 
     static __controls = [
-        //{ cl: mkfWidgets.ControlHeader, options: { label: `Export` } },
+        //{ cl: MiniHeader, options: { label: `Export` } },
         //{ options: { propertyId: mkfData.IDS.GLYPH_NAME } },//, css:'separator' 
     ];
 
@@ -32,7 +35,7 @@ class GlyphInspector extends base {
         this._variantCtrl = null;
         this._variantNoneCtrl = null;
 
-        this._builder.defaultControlClass = mkfWidgets.PropertyControl;
+        this._builder.defaultControlClass = ValueControl;
         this._builder.defaultCSS = `control`;
         this._builder.preProcessDataFn = { fn: this._GetGlyph, thisArg: this };
 
@@ -47,12 +50,12 @@ class GlyphInspector extends base {
     static _Style() {
         return nkm.style.Extends({
             ':host': {
-                'padding': '10px',
-                'display': 'flex',
-                'flex-flow': 'column nowrap'
+                ...nkm.style.flex.column,
+                'background-color': `rgba(var(--col-base-200-rgb), 1)`,
+                'border-left': `1px solid rgba(var(--col-base-400-rgb), 1)`,
             },
             '.variant': {
-                'flex': '0 0 auto',
+                ...nkm.style.flexItem.fixed,
                 'margin-bottom': '3px'
             },
             '.identity': {
@@ -65,7 +68,7 @@ class GlyphInspector extends base {
                 'margin-bottom': '5px',
             },
             '.drawer': {
-                'flex': '0 0 auto',
+                ...nkm.style.flexItem.fixed,
                 'padding': `10px`,
                 'background-color': `rgba(19, 19, 19, 0.25)`,
                 'border-radius': '4px',
@@ -84,10 +87,10 @@ class GlyphInspector extends base {
 
         // Stats
 
-        let foldout = this.Attach(nkm.uilib.widgets.Foldout, `item drawer`, this._host);
+        let foldout = this.Attach(nkm.datacontrols.ControlFoldout, `item drawer`, this._host);
         foldout.options = { title: LOC.labelDetails, icon: `placement-center`, prefId: `glyph-infos`, expanded: true };
 
-        this._glyphStats = this.Attach(mkfWidgets.GlyphStats, `foldout-item`, foldout);
+        this._glyphStats = this.Attach(mkfWidgets.GlyphStats, `full`, foldout);
         this.forwardContext.To(this._glyphStats);
         this.forwardEditor.To(this._glyphStats);
 
@@ -104,15 +107,26 @@ class GlyphInspector extends base {
 
             let glyph = this._GetGlyph(this._data);
 
-            if (glyph.isNull) {
-                glyph.unicodeInfos = this._data;
-                this._variantCtrl.data = null; // Ensure refresh
+            if (glyph) {
+
+                if (glyph.isNull) {
+                    glyph.unicodeInfos = this._data;
+                    this._variantCtrl.data = null; // Ensure refresh
+                }
+
+                this._variantCtrl.glyphInfos = this._data;
+                this._variantCtrl.data = glyph.activeVariant;
+
+                this._glyphStats.data = glyph.activeVariant;
+
+            } else {
+                
+                this._variantCtrl.glyphInfos = null;
+                this._variantCtrl.data = null;
+
+                this._glyphStats.data = null;
+
             }
-
-            this._variantCtrl.glyphInfos = this._data;
-            this._variantCtrl.data = glyph.activeVariant;
-
-            this._glyphStats.data = glyph.activeVariant
 
         }
 
@@ -144,7 +158,7 @@ class GlyphInspector extends base {
         this._delayedStatsUpdate.Bump();
     }
 
-    _RefreshStats(){
+    _RefreshStats() {
         this._glyphStats.glyphInfos = null;
         this._glyphStats.glyphInfos = this._data;
     }

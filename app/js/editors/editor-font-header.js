@@ -45,17 +45,15 @@ class FontEditorHeader extends base {
     static _Style() {
         return nkm.style.Extends({
             ':host': {
-                'position': 'relative',
-                'display': 'flex',
-                'flex-flow': 'row nowrap',
-                'align-items': 'center',
-                'justify-content': 'space-between',
+                ...nkm.style.flex.row,
+                ...nkm.style.flex.align.center.cross,
+
+                'justify-content':'space-between',
 
                 'min-height': 'auto',
                 'padding': '10px',
                 'box-shadow': `0px -2px 5px black`,
                 'border-bottom': `1px solid #242424`,
-                'background-color': 'rgba(127,127,127,0.1)',
             },
             '.title': {
                 'opacity': '0.2',
@@ -65,7 +63,7 @@ class FontEditorHeader extends base {
 
             },
             '.monitor': {
-                '@': [`absolute-right`],
+                ...nkm.style.rules.absolute.right,
                 'margin-right': '10px'
             }
         }, base._Style());

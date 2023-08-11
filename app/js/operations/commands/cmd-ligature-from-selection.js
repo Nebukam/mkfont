@@ -20,7 +20,7 @@ class CmdLigatureFromSelection extends actions.Command {
     }
 
     _GetLigaName() {
-        let selection = this._emitter.inspectedData.stack._array,
+        let selection = this._emitter.inspectedData.stack,
             uniStruct = ``;
         selection.forEach(sel => { uniStruct += sel.char; });
         return uniStruct == `` ? null : uniStruct;
@@ -46,7 +46,7 @@ class CmdLigatureFromSelection extends actions.Command {
 
         } else {
 
-            selection = [...this._emitter.inspectedData.stack._array];
+            selection = [...this._emitter.inspectedData.stack];
 
             if (selection.length < 2) { return this._Cancel(); }
 
@@ -66,7 +66,7 @@ class CmdLigatureFromSelection extends actions.Command {
             return this._Cancel();
         }
 
-        let addComponents = nkm.ui.INPUT.shift;
+        let addComponents = nkm.ui.INPUT.shiftKey;
 
         if (addComponents) {
             this._emitter.StartActionGroup({
@@ -107,7 +107,7 @@ class CmdLigatureFromSelection extends actions.Command {
                 }
             });
 
-            glyph.activeVariant._layers.ForEach((lyr, i) => {
+            glyph.activeVariant._layers.forEach((lyr, i) => {
 
                 let params = {
                     [mkfData.IDS.TR_BOUNDS_MODE]: mkfData.ENUMS.BOUNDS_OUTSIDE,

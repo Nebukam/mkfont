@@ -1,0 +1,22 @@
+/*-------------------------------*/
+/*<!---- @nkmjs/ui-library ----!>*/
+/*-------------------------------*/
+
+@import '../_variables';
+@import '../_mixins';
+@import '../_constants';
+
+:host::before{
+
+    content:"";
+    position: absolute;
+    height: 2px;
+    width: 100%;
+    bottom: -1px;
+
+    @include dotted-line-horizontal(var(#{$id_col_base_500}-rgb), 10%, 2px, 6px);
+
+    pointer-events: none;
+
+}
+

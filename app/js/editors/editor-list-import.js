@@ -38,36 +38,32 @@ class EditorListImport extends base {
     static _Style() {
         return nkm.style.Extends({
             ':host': {
-                'display': 'flex',
-                'flex-flow': 'row nowrap',
-                'flex': '1 1 auto',
+                ...nkm.style.flex.row,
+                ...nkm.style.flexItem.fill,
                 'grid-gap': '10px'
             },
             '.item': {
-                'flex': '1 0 auto',
+                ...nkm.style.flexItem.grow,
             },
             '.column': {
                 'overflow-x': 'hidden',
                 'overflow-y': 'auto',
-                'flex': '1 1 auto',
-                'min-height': 0,
+                ...nkm.style.flexItem.fill,
             },
             '.frst': { 'width': `300px`, },
             '.list': {
-                'position': 'relative',
                 'width': '270px',
                 'background-color': 'rgba(0,0,0,0.2)',
                 'overflow': 'auto',
                 'min-height': '0',
             },
             '.preview': {
-                'position': 'relative',
                 'aspect-ratio': '1/1',
                 'width': '330px',
                 'border-radius': '3px',
             },
             '.renderer': {
-                'position': 'absolute',
+                ...nkm.style.rules.pos.abs,
                 'width': '100%',
                 'height': '100%',
             },
@@ -77,10 +73,8 @@ class EditorListImport extends base {
                 'max-width': `330px`
             },
             '.header': {
-                'display': 'flex',
-                'flex-flow': 'column nowrap',
-                'flex': '1 1 auto',
-                'min-height': '0',
+                ...nkm.style.flex.column,
+                ...nkm.style.flexItem.fill,
                 'width': `calc(100% - 22px)`,
                 'align-content': 'flex-start',
                 'border-radius': '4px',
@@ -89,7 +83,7 @@ class EditorListImport extends base {
                 'margin-bottom': `10px`
             },
             '.tagbar': {
-                '@': ['absolute-bottom'],
+                ...nkm.style.rules.absolute.bottom,
                 'margin-bottom': `10px`
             }
         }, base._Style());
@@ -105,7 +99,7 @@ class EditorListImport extends base {
         this._header = ui.El(`div`, { class: `item header` }, column);
 
         let builder = new nkm.datacontrols.helpers.ControlBuilder(this);
-        builder.options = { host: this._header, cl: mkfWidgets.PropertyControl, css: `control` };
+        builder.options = { host: this._header, cl: nkm.datacontrols.widgets.ValueControl, css: `control` };
         this.forwardData.To(builder);
 
         builder.Build([
@@ -116,13 +110,13 @@ class EditorListImport extends base {
         this._builder = builder;
 
         builder = new nkm.datacontrols.helpers.ControlBuilder(this);
-        builder.options = { host: column, cl: mkfWidgets.PropertyControl, css: `control` };
+        builder.options = { host: column, cl: nkm.datacontrols.widgets.ValueControl, css: `control` };
         this.forwardData.To(builder);
 
         builder.Build([
-            { options: { propertyId: mkfData.IDS_EXT.IMPORT_BIND_RESOURCE, invertInputOrder:true } },
-            { options: { propertyId: mkfData.IDS_EXT.IMPORT_TEXT_AS_LAYERS, invertInputOrder:true } },
-            { cl: mkfWidgets.ControlHeader, options: { label: LOC.labelTr } },
+            { options: { propertyId: mkfData.IDS_EXT.IMPORT_BIND_RESOURCE, invertInputOrder: true } },
+            { options: { propertyId: mkfData.IDS_EXT.IMPORT_TEXT_AS_LAYERS, invertInputOrder: true } },
+            { cl: nkm.datacontrols.widgets.MiniHeader, options: { label: LOC.labelTr } },
         ]);
 
         this._settingsInspector = this.Attach(mkfInspectors.TransformSettings, `item settings`, column);
@@ -171,7 +165,7 @@ class EditorListImport extends base {
         this._tagBar = this.Attach(ui.WidgetBar, `tagbar`, previewCtnr);
         this._tagBar.options = {
             defaultWidgetClass: nkm.uilib.widgets.Tag,
-            size: ui.FLAGS.SIZE_XS
+            /* size: ui.FLAGS.SIZE_XS */
         };
 
         this._preserved = this._tagBar.CreateHandle();
@@ -194,12 +188,12 @@ class EditorListImport extends base {
         }
     }
 
-    _OnDataValueChanged(p_data, p_id, p_valueObj, p_oldValue) {
+    _OnDataValueChanged(p_data, p_id, p_newValue, p_oldValue) {
 
         if (p_id == mkfData.IDS_EXT.IMPORT_ASSIGN_MODE) { this._RefreshAssignManager(); }
-        let infos = mkfData.IDS_EXT.GetInfos(p_id);
+        let descriptor = nkm.data.GetDescriptor(p_id);
 
-        if (!infos) { return; }
+        if (!descriptor) { return; }
 
         this._assignManager._UpdateList();
 

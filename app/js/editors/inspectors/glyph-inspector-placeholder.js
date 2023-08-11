@@ -5,6 +5,9 @@ const ui = nkm.ui;
 const inputs = nkm.uilib.inputs;
 const operations = require(`../../operations/index`);
 
+const MiniHeader = nkm.datacontrols.widgets.MiniHeader;
+const ValueControl = nkm.datacontrols.widgets.ValueControl;
+
 const mkfData = require(`../../data`);
 const mkfWidgets = require(`../../widgets`);
 
@@ -18,7 +21,7 @@ class GlyphInspectorPlaceholder extends base {
     constructor() { super(); }
 
     static __controls = [
-        //{ cl: mkfWidgets.ControlHeader, options: { label: `Export` } },
+        //{ cl: MiniHeader, options: { label: `Export` } },
         //{ options: { propertyId: mkfData.IDS.DO_EXPORT } },
         //{ options: { propertyId: mkfData.IDS.GLYPH_NAME } },//, css:'separator' 
     ];
@@ -30,14 +33,12 @@ class GlyphInspectorPlaceholder extends base {
     static _Style() {
         return nkm.style.Extends({
             ':host': {
+                ...nkm.style.flex.column,
                 'padding': '10px',
-                'display': 'flex',
-                'flex-flow': 'column nowrap',
-                'position': 'relative',
-                'flex':`1 1 auto`,
+                ...nkm.style.flexItem.fill,
             },
             '.variant': {
-                'flex': '0 0 auto',
+                ...nkm.style.flexItem.fixed,
                 'margin-bottom': '3px'
             },
             '.identity': {
@@ -47,14 +48,14 @@ class GlyphInspectorPlaceholder extends base {
 
             },
             '.settings': {
-                'flex': '1 0 auto',
+                ...nkm.style.flexItem.grow,
                 'margin-bottom': '10px'
             },
             '.control': {
                 'margin-bottom': '5px',
             },
             '.infos': {
-                '@': [`absolute-center`],
+                ...nkm.style.rules.absolute.center,
                 'text-align':'center',
                 'opacity':'0.5'
             }

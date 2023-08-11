@@ -30,25 +30,22 @@ class PangramViewport extends base {
     static _Style() {
         return nkm.style.Extends({
             ':host': {
-                'position': 'relative',
-                'display': 'flex',
-                'flex-flow': 'column nowrap',
+                ...nkm.style.flex.column,
                 '--streamer-gap': '10px',
                 'overflow': 'clip'
             },
             '.header, .search, .footer': {
-                'flex': '0 0 auto',
+                ...nkm.style.flexItem.fixed,
             },
             '.dom-stream': {
-                'position': 'relative',
-                'flex': '1 1 auto',
+                ...nkm.style.flexItem.fill,
                 'overflow': 'auto',
             },
             '.dom-stream.empty': {
                 'display': 'block !important'
             },
             '.search-status': {
-                '@': ['absolute-center']
+                ...nkm.style.rules.absolute.center,
             }
         }, base._Style());
     }

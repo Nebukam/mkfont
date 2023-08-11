@@ -122,7 +122,7 @@ class CmdImportFileList extends actions.Command {
         if (!this._importEditor) { this._importEditor = nkm.ui.UI.Rent(`mkf-list-import-editor`); }
 
         // TODO
-        // this._importTransformationSettings.Set(IDS_EXT.IMPORT_BLOCK, UNICODE.instance._blockCatalog.At(0) );
+        // this._importTransformationSettings.Set(IDS_EXT.IMPORT_BLOCK, UNICODE._blockCatalog.At(0) );
 
         this._importEditor.family = family;
         this._importEditor._importList = this._importList;
