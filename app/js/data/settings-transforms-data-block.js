@@ -111,8 +111,7 @@ class TransformSettingsDataBlock extends FontObjectData {
 
                 let ref = layer.importedVariant;
                 if (ref && ref._computedPath && refPath // Make sure path data has been computed and is available
-                    && !layer._isCircular
-                    && layer.Get(IDS.DO_EXPORT)) {
+                    && !layer._isCircular && layer.Get(IDS.DO_EXPORT)) {
 
                     let
                         layerCP,
