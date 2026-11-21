@@ -1,0 +1,104 @@
+name: Release
+
+# Builds the installers for Windows, macOS and Linux and attaches them to a draft
+# release.
+#
+# To release: set the version in package.json, commit, then push a tag with the same
+# number (v2.0.0 for version 2.0.0). When the run is done, review the draft on the
+# releases page and publish it.
+#
+# "Run workflow" on the Actions page builds the same installers without a release:
+# they are kept as artifacts of the run, to try a build before tagging.
+
+on:
+  push:
+    tags: ['v*']
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  build:
+    name: ${{ matrix.name }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - { name: Windows, os: windows-latest, target: --win }
+          - { name: macOS, os: macos-latest, target: --mac }
+          - { name: Linux, os: ubuntu-latest, target: --linux }
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: npm
+
+      - name: Check the tag against package.json
+        if: github.ref_type == 'tag'
+        shell: bash
+        run: |
+          version="v$(node -p "require('./package.json').version")"
+          if [ "$version" != "$GITHUB_REF_NAME" ]; then
+            echo "::error::The tag $GITHUB_REF_NAME does not match the version in package.json ($version)."
+            exit 1
+          fi
+
+      - run: npm ci
+      - run: npm run typecheck
+      - run: npm test
+      - run: npm run build
+
+      - name: Package
+        run: npx electron-builder ${{ matrix.target }} --publish never
+        env:
+          # No signing certificate: skip the search for one. On macOS the app gets an
+          # ad-hoc signature instead (scripts/adhoc-sign.cjs).
+          CSC_IDENTITY_AUTO_DISCOVERY: false
+
+      - uses: actions/upload-artifact@v7
+        with:
+          name: installers-${{ matrix.name }}
+          path: |
+            dist/*.exe
+            dist/*.dmg
+            dist/*.AppImage
+          if-no-files-found: error
+          retention-days: 14
+
+  release:
+    name: Draft release
+    if: github.ref_type == 'tag'
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/download-artifact@v8
+        with:
+          path: dist
+          pattern: installers-*
+          merge-multiple: true
+
+      - name: Create the draft release, or update its files
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+        run: |
+          ls -l dist
+          if gh release view "$GITHUB_REF_NAME" > /dev/null 2>&1; then
+            gh release upload "$GITHUB_REF_NAME" dist/* --clobber
+          else
+            gh release create "$GITHUB_REF_NAME" dist/* \
+              --draft \
+              --verify-tag \
+              --title "MkFont ${GITHUB_REF_NAME#v}" \
+              --generate-notes
+          fi

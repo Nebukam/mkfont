@@ -1,0 +1,36 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "dev",
+      "runtimeExecutable": "node",
+      "runtimeArgs": [
+        "node_modules/vite/bin/vite.js",
+        "--config",
+        "vite.preview.config.ts"
+      ],
+      "port": 5199
+    },
+    {
+      "name": "electron",
+      "runtimeExecutable": "node",
+      "runtimeArgs": [
+        "node_modules/electron-vite/bin/electron-vite.js",
+        "dev",
+        "--remoteDebuggingPort",
+        "9333"
+      ],
+      "port": 9333
+    },
+    {
+      "name": "electron-prod",
+      "runtimeExecutable": "node",
+      "runtimeArgs": [
+        "node_modules/electron/cli.js",
+        ".",
+        "--remote-debugging-port=9334"
+      ],
+      "port": 9334
+    }
+  ]
+}

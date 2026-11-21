@@ -1,0 +1,214 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ---- Theme tokens (RGB triplets, consumed by tailwind colors) ----
+   The colour chart:
+     accent    #3EC188  calls to action, focus, selection (and `ok`: the same green)
+     warn      #FE9A00  warning, attention
+     danger    #EB1D78  danger, error
+     emphasis  #708DCC  light emphasis, where the accent would be too strong
+   A token is the chart colour itself where that reads well, and otherwise the
+   nearest shade of the same hue (lighter in the dark theme, darker in the light one).
+   Text tokens keep at least 4.5:1 against the panel background. `accent` and
+   `danger` are for text, borders and focus; their `-solid` versions are fills:
+   `accent-solid` carries `accent-fg` text, `danger-solid` carries white text. */
+
+:root,
+:root[data-theme='dark'] {
+  color-scheme: dark;
+  --c-bg: 23 24 27;
+  --c-panel: 30 31 35;
+  --c-raised: 39 40 46;
+  --c-hover: 50 52 59;
+  --c-line: 49 51 57;
+  --c-line-strong: 72 75 83;
+  --c-fg: 230 231 234;
+  --c-muted: 158 162 171;
+  --c-subtle: 130 134 143;
+  --c-accent: 62 193 136;
+  --c-accent-solid: 62 193 136;
+  --c-accent-fg: 9 38 26;
+  --c-danger: 255 71 140;
+  --c-danger-solid: 229 17 116;
+  --c-warn: 254 154 0;
+  --c-ok: 62 193 136;
+  --c-emphasis: 112 141 204;
+  --c-glyph: 245 245 245;
+  --c-slot: 34 35 40;
+}
+
+:root[data-theme='light'] {
+  color-scheme: light;
+  --c-bg: 233 234 238;
+  --c-panel: 246 246 248;
+  --c-raised: 255 255 255;
+  --c-hover: 228 229 234;
+  --c-line: 216 218 224;
+  --c-line-strong: 186 190 198;
+  --c-fg: 26 27 31;
+  --c-muted: 88 92 102;
+  --c-subtle: 108 112 121;
+  --c-accent: 5 121 80;
+  --c-accent-solid: 1 135 89;
+  --c-accent-fg: 255 255 255;
+  --c-danger: 207 2 103;
+  --c-danger-solid: 229 17 116;
+  --c-warn: 153 91 0;
+  --c-ok: 5 121 80;
+  --c-emphasis: 77 104 164;
+  --c-glyph: 22 22 26;
+  --c-slot: 255 255 255;
+}
+
+/* ---- Base ---- */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+}
+
+body {
+  background: rgb(var(--c-bg));
+  color: rgb(var(--c-fg));
+  font-family: theme('fontFamily.sans');
+  font-size: 12px;
+  line-height: 18px;
+  -webkit-font-smoothing: antialiased;
+  user-select: none;
+}
+
+input,
+textarea,
+[contenteditable='true'] {
+  user-select: text;
+}
+
+button {
+  font: inherit;
+  color: inherit;
+}
+
+/* Zero specificity so `outline-none` utilities can opt out. */
+:where(:focus-visible) {
+  outline: 2px solid rgb(var(--c-accent) / 0.8);
+  outline-offset: 1px;
+}
+
+/* ---- Scrollbars ---- */
+
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: rgb(var(--c-line-strong) / 0.7);
+  border-radius: 6px;
+  border: 2px solid transparent;
+  background-clip: padding-box;
+}
+::-webkit-scrollbar-thumb:hover {
+  background-color: rgb(var(--c-subtle));
+}
+::-webkit-scrollbar-corner {
+  background: transparent;
+}
+
+/* ---- Utilities ---- */
+
+@layer components {
+  .input-base {
+    @apply h-6 w-full rounded border border-line bg-raised px-1.5 text-sm text-fg outline-none transition-colors placeholder:text-subtle hover:border-line-strong focus:border-accent;
+  }
+  .label-xs {
+    @apply text-2xs font-medium uppercase tracking-wider text-subtle;
+  }
+  .checker {
+    background-image: linear-gradient(45deg, rgb(var(--c-line) / 0.35) 25%, transparent 25%),
+      linear-gradient(-45deg, rgb(var(--c-line) / 0.35) 25%, transparent 25%),
+      linear-gradient(45deg, transparent 75%, rgb(var(--c-line) / 0.35) 75%),
+      linear-gradient(-45deg, transparent 75%, rgb(var(--c-line) / 0.35) 75%);
+    background-size: 12px 12px;
+    background-position: 0 0, 0 6px, 6px -6px, -6px 0;
+  }
+}
+
+/* ---- Sliders (components/ui/fields.tsx Slider): a bar up to a round thumb, then a thin line, both one grey (v1) ---- */
+
+.slider {
+  --h: 8px;
+  --line: 2px;
+  --c: rgb(var(--c-subtle) / 0.7);
+  /* 0–1, set by the component: how far the thumb is. */
+  --p: 0.5;
+  /* The fill ends under the thumb's centre, which travels half a thumb in from each end. */
+  --fill: calc(var(--h) / 2 + (100% - var(--h)) * var(--p));
+  -webkit-appearance: none;
+  appearance: none;
+  height: var(--h);
+  border-radius: calc(var(--h) / 2);
+  background: transparent;
+  cursor: pointer;
+}
+.slider::-webkit-slider-runnable-track {
+  height: var(--h);
+  border-radius: calc(var(--h) / 2);
+  background:
+    linear-gradient(var(--c), var(--c)) left / var(--fill) 100% no-repeat,
+    linear-gradient(var(--c), var(--c)) center / 100% var(--line) no-repeat;
+}
+.slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: var(--h);
+  height: var(--h);
+  border: none;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 0 0 1px rgb(0 0 0 / 0.12), 0 1px 2px rgb(0 0 0 / 0.35);
+}
+/* Keyboard focus rings the thumb, not the whole input. */
+.slider:focus-visible {
+  outline: none;
+}
+.slider:focus-visible::-webkit-slider-thumb {
+  box-shadow: 0 0 0 2px rgb(var(--c-accent) / 0.8), 0 1px 2px rgb(0 0 0 / 0.35);
+}
+.slider:disabled {
+  cursor: default;
+  opacity: 0.5;
+}
+.slider::-moz-range-track {
+  height: var(--line);
+  background: var(--c);
+}
+.slider::-moz-range-progress {
+  height: var(--h);
+  border-radius: calc(var(--h) / 2);
+  background: var(--c);
+}
+.slider::-moz-range-thumb {
+  width: var(--h);
+  height: var(--h);
+  border: none;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 0 0 1px rgb(0 0 0 / 0.12), 0 1px 2px rgb(0 0 0 / 0.35);
+}
+
+input[type='number']::-webkit-inner-spin-button,
+input[type='number']::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
