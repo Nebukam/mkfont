@@ -1,8 +1,9 @@
 import { describe, expect, it, vi } from 'vitest'
 import { COMMANDS, COMMAND_GROUPS, commandById, commandLabel, commandTip, formatShortcut, groupLabel } from '../commands'
 
-// The desktop-only commands (interface size) are listed too.
-vi.mock('../../platform', async (importOriginal) => ({ ...(await importOriginal<typeof import('../../platform')>()), isElectron: true }))
+// The desktop-only commands (interface size) are listed too. Shortcuts are read in the
+// Windows and Linux notation whatever runs the tests: on a Mac they would read ⌘Z.
+vi.mock('../../platform', async (importOriginal) => ({ ...(await importOriginal<typeof import('../../platform')>()), isElectron: true, isMac: false }))
 
 describe('command labels', () => {
   it('every command has a label in the catalog', () => {

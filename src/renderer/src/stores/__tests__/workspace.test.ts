@@ -1,5 +1,14 @@
 // @vitest-environment happy-dom
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
+
+// The fonts of these tests sit at Windows paths (C:/fonts/a.mkfont), and one test finds a
+// font under another spelling of its path. Paths are compared the way the system does
+// (src/renderer/src/platform, read once when it loads), so the tests name the system
+// before anything is imported: they then run the same on Linux and macOS.
+vi.hoisted(() => {
+  Object.defineProperty(navigator, 'platform', { value: 'Win32', configurable: true })
+})
+
 import { createDocStore, selectDirty, transact, useDocStore } from '../doc-store'
 import { useSelectionStore } from '../selection-store'
 import { useUIStore } from '../ui-store'
