@@ -1076,86 +1076,86 @@
     "doc": "MkFont",
     "title": "MkFont mkfont",
     "content": "Export fonts. With a twist. Component-based workflow, with advanced features to nit-pick &amp; tweak metrics in a non-destructive way.   Download Guides Documentation . Import to export in just a few seconds. Tweak forever. ",
-    "url": "https://nebukam.github.io/mkfont/#mkfont-mkfont",
-    "relUrl": "/#mkfont-mkfont"
+    "url": "https://nebukam.github.io/mkfont/v1/#mkfont-mkfont",
+    "relUrl": "/v1/#mkfont-mkfont"
   },"180": {
     "doc": "MkFont",
     "title": "Exciting features",
     "content": ". ",
-    "url": "https://nebukam.github.io/mkfont/#exciting-features",
-    "relUrl": "/#exciting-features"
+    "url": "https://nebukam.github.io/mkfont/v1/#exciting-features",
+    "relUrl": "/v1/#exciting-features"
   },"181": {
     "doc": "MkFont",
     "title": "Components",
     "content": "Make more with less! . A powerful component &amp; compositing system, allowing for clever automation and infinite possibilities. ",
-    "url": "https://nebukam.github.io/mkfont/#components",
-    "relUrl": "/#components"
+    "url": "https://nebukam.github.io/mkfont/v1/#components",
+    "relUrl": "/v1/#components"
   },"182": {
     "doc": "MkFont",
     "title": "Unicode Browser",
     "content": "MkFont is Unicode compliant. Code points are organized by categories &amp; blocks, immediately accessible and search-able. ",
-    "url": "https://nebukam.github.io/mkfont/#unicode-browser",
-    "relUrl": "/#unicode-browser"
+    "url": "https://nebukam.github.io/mkfont/v1/#unicode-browser",
+    "relUrl": "/v1/#unicode-browser"
   },"183": {
     "doc": "MkFont",
     "title": "Live Reload",
     "content": "Watch your glyph self-update as you focus on designing them. Bind your imported files to glyphs, or edit them on the fly. Use your time where it matters. ",
-    "url": "https://nebukam.github.io/mkfont/#live-reload",
-    "relUrl": "/#live-reload"
+    "url": "https://nebukam.github.io/mkfont/v1/#live-reload",
+    "relUrl": "/v1/#live-reload"
   },"184": {
     "doc": "MkFont",
     "title": "Smart Search",
     "content": "A discovery tool that offer more than meet the eye. You can search for specific characters, but also names &amp; attributes. The search can look for known character association &amp; relationships, too! . ",
-    "url": "https://nebukam.github.io/mkfont/#smart-search",
-    "relUrl": "/#smart-search"
+    "url": "https://nebukam.github.io/mkfont/v1/#smart-search",
+    "relUrl": "/v1/#smart-search"
   },"185": {
     "doc": "MkFont",
     "title": "Non-destructive",
     "content": "Manipulates your data, doesn’t alter it. MkFont respect your assets and allows for experimenting safely with different settings, until you find the one that suits your needs. ",
-    "url": "https://nebukam.github.io/mkfont/#non-destructive",
-    "relUrl": "/#non-destructive"
+    "url": "https://nebukam.github.io/mkfont/v1/#non-destructive",
+    "relUrl": "/v1/#non-destructive"
   },"186": {
     "doc": "MkFont",
     "title": "Ligatures made easy",
     "content": "Analyze text to find &amp; add most common combinations . MkFont comes with a small tool that takes a text blurb to show you which group of letters are recurring – and create ligatures out of them. ",
-    "url": "https://nebukam.github.io/mkfont/#ligatures-made-easy",
-    "relUrl": "/#ligatures-made-easy"
+    "url": "https://nebukam.github.io/mkfont/v1/#ligatures-made-easy",
+    "relUrl": "/v1/#ligatures-made-easy"
   },"187": {
     "doc": "MkFont",
     "title": "Batch import",
     "content": "Quick &amp; easy . Import loads of SVG at once, with multiple ways to assign them to glyphs/code-point.Import directly to your current selection, or to specific Unicode blocks. ",
-    "url": "https://nebukam.github.io/mkfont/#batch-import",
-    "relUrl": "/#batch-import"
+    "url": "https://nebukam.github.io/mkfont/v1/#batch-import",
+    "relUrl": "/v1/#batch-import"
   },"188": {
     "doc": "MkFont",
     "title": "TTF import &amp; editing",
     "content": "Start to work from, and explore existing fonts. Import TTFs files in a single click, tweak them and re-export them in just a few clicks. ",
-    "url": "https://nebukam.github.io/mkfont/#ttf-import--editing",
-    "relUrl": "/#ttf-import--editing"
+    "url": "https://nebukam.github.io/mkfont/v1/#ttf-import--editing",
+    "relUrl": "/v1/#ttf-import--editing"
   },"189": {
     "doc": "MkFont",
     "title": "Live preview",
     "content": "Preview your font at any time, all the time. (ok that one was a must have anyway) . ",
-    "url": "https://nebukam.github.io/mkfont/#live-preview",
-    "relUrl": "/#live-preview"
+    "url": "https://nebukam.github.io/mkfont/v1/#live-preview",
+    "relUrl": "/v1/#live-preview"
   },"190": {
     "doc": "MkFont",
     "title": "3rd party automation",
     "content": "One-click documents &amp; artboards setup, ready to export. MkFont comes with built-in automation tools for Adobe© Illustrator, for an even smoother workflow. Finger crossed more tools gets that kind of support soon! . ",
-    "url": "https://nebukam.github.io/mkfont/#rd-party-automation",
-    "relUrl": "/#rd-party-automation"
+    "url": "https://nebukam.github.io/mkfont/v1/#rd-party-automation",
+    "relUrl": "/v1/#rd-party-automation"
   },"191": {
     "doc": "MkFont",
     "title": "And more!",
     "content": "A bunch of discreet QoL features. Lots of small options &amp; features to make it easy to work with your glyphs with third parties such as Unity’ TextMeshPro. ",
-    "url": "https://nebukam.github.io/mkfont/#and-more",
-    "relUrl": "/#and-more"
+    "url": "https://nebukam.github.io/mkfont/v1/#and-more",
+    "relUrl": "/v1/#and-more"
   },"192": {
     "doc": "MkFont",
     "title": "MkFont",
     "content": " ",
-    "url": "https://nebukam.github.io/mkfont/",
-    "relUrl": "/"
+    "url": "https://nebukam.github.io/mkfont/v1/",
+    "relUrl": "/v1/"
   },"193": {
     "doc": "Glyph inspector",
     "title": "Glyph inspector",
