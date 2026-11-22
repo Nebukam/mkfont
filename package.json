@@ -1,6 +1,6 @@
 {
   "name": "mkfont2",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "Modular font editor: build fonts from SVG files and reusable components.",
   "author": {
     "name": "Timothé Lapetite",
