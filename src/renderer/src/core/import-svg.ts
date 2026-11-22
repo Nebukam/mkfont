@@ -50,8 +50,21 @@ export interface SvgImport {
   error?: Message
 }
 
+/** A color as the mark color is compared: lowercase, no "#", and rgb() notation (how Affinity writes colors) as rrggbb. */
 function normalizeColor(c: string): string {
-  return c.trim().toLowerCase().replace(/^#/, '')
+  const v = c.trim().toLowerCase()
+  const rgb = /^rgba?\(([^)]*)\)$/.exec(v)
+  if (rgb) {
+    const channels = rgb[1]
+      .split(/[\s,/]+/)
+      .filter(Boolean)
+      .slice(0, 3)
+      .map((p) => (p.endsWith('%') ? (parseFloat(p) / 100) * 255 : parseFloat(p)))
+    if (channels.length === 3 && channels.every(Number.isFinite)) {
+      return channels.map((n) => Math.round(Math.min(255, Math.max(0, n))).toString(16).padStart(2, '0')).join('')
+    }
+  }
+  return v.replace(/^#/, '')
 }
 
 /** Accepted spellings of the mark color (v1: #rrggbb, #rgb, CMYK magenta #b9529f). */
@@ -284,6 +297,21 @@ function isMarkShape(s: Shape, colors: string[], classRules: Map<string, string>
   })
 }
 
+/** Paint values that draw nothing. */
+const NO_PAINT = new Set(['none', 'transparent'])
+
+/**
+ * Draws nothing: its fill is none and so is its stroke (the default when nothing sets one).
+ * Affinity writes each artboard as such a rectangle, over the whole glyph.
+ */
+function isUnpainted(s: Shape, classRules: Map<string, string>): boolean {
+  const chain = [s.el, ...s.inherited]
+  const fill = keyword(inheritedValue(chain, 'fill', classRules))
+  if (fill === undefined || !NO_PAINT.has(fill)) return false
+  const stroke = keyword(inheritedValue(chain, 'stroke', classRules))
+  return stroke === undefined || NO_PAINT.has(stroke)
+}
+
 /**
  * Not drawn: under display:none (how Inkscape and Illustrator save hidden layers), or
  * visibility hidden from the nearest element that sets it. The root's own style is ignored.
@@ -320,6 +348,22 @@ function rectToPath(el: Element, viewport: Viewport): string | null {
     `M${left + rx} ${top}H${left + w - rx}${arc(left + w, top + ry)}V${top + h - ry}${arc(left + w - rx, top + h)}` +
     `H${left + rx}${arc(left, top + h - ry)}V${top + ry}${arc(left + rx, top)}Z`
   )
+}
+
+/**
+ * Path data that can be appended to other path data. A leading relative "m" is absolute only
+ * at the very start of a path: after another path it would move from where that one ended.
+ * SVGO writes one whenever a path goes on with a relative line.
+ */
+function withAbsoluteStart(d: string): string {
+  if (!/^\s*m/.test(d)) return d
+  try {
+    return svgpath(d)
+      .iterate((seg, index) => (index === 0 ? [['M', seg[1], seg[2]]] : undefined))
+      .toString()
+  } catch {
+    return d
+  }
 }
 
 function parseClassRules(doc: Document): Map<string, string> {
@@ -397,11 +441,13 @@ export function parseSvg(input: string, markColor = '#ff00ff'): SvgImport {
   // Paths, plus the rectangles SVGO kept (rounded ones), in document order.
   // Hidden shapes are left out, but a hidden mark box still sets the glyph box.
   for (const shape of shapes) {
+    if (isUnpainted(shape, classRules)) continue
     const hidden = isHidden(shape, classRules)
     if (hidden && mark) continue
     const { el, transform } = shape
     let d = el.tagName === 'rect' ? rectToPath(el, shape.viewport) : el.getAttribute('d')
     if (!d) continue
+    d = withAbsoluteStart(d)
     if (transform) {
       try {
         d = svgpath(d).transform(transform).toString()

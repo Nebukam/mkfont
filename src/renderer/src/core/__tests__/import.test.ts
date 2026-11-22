@@ -19,7 +19,12 @@ describe('SVG parsing', () => {
     for (const markup of [
       '<path d="M0 0H40V80H0Z" fill="#FF00FF"/>',
       '<path d="M0 0H40V80H0Z" style="fill:none;stroke:#f0f"/>',
-      '<path d="M0 0H40V80H0Z" class="m"/>'
+      '<path d="M0 0H40V80H0Z" class="m"/>',
+      // rgb() notation, as Affinity writes colors.
+      '<path d="M0 0H40V80H0Z" style="fill:rgb(255,0,255);"/>',
+      '<path d="M0 0H40V80H0Z" style="fill:none;stroke:rgb(255, 0, 255);stroke-width:1px;"/>',
+      '<path d="M0 0H40V80H0Z" fill="rgb(100% 0% 100%)"/>',
+      '<path d="M0 0H40V80H0Z" fill="rgba(185,82,159,1)"/>'
     ]) {
       const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 500"><style>.m{stroke:#ff00ff;fill:none}</style>${markup}<path d="M10 10H20V20H10Z"/></svg>`
       const r = parseSvg(svg)
@@ -216,6 +221,78 @@ describe('SVG parsing', () => {
     expect(mark.markedBBox).toBe(true)
     expect(mark.width).toBeCloseTo(40)
     expect(mark.bbox.width).toBeCloseTo(10)
+  })
+
+  it('keeps each path in place when a later one starts with a relative "m"', () => {
+    // An Affinity export: the same corner twice, the second one turned around and scaled down.
+    const corner = 'M302.853,3030.269L294.019,4660.253L1513.194,4673.505L1522.029,4165.516L793.174,4156.681L788.757,3003.765L302.853,3030.269'
+    const affinity = parseSvg(
+      '<svg width="100%" height="100%" viewBox="0 0 3508 4961" xmlns="http://www.w3.org/2000/svg" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">' +
+        `<path d="${corner}"/><g transform="matrix(-0.420761,-0,0,-0.420761,3346.401341,2196.12617)"><path d="${corner}"/></g></svg>`
+    )
+    expect(affinity.width).toBe(3508)
+    expect(affinity.height).toBe(4961)
+    expect(affinity.bbox.x).toBeCloseTo(294.019)
+    expect(affinity.bbox.y).toBeCloseTo(229.698)
+    expect(affinity.bbox.right).toBeCloseTo(3222.69)
+    expect(affinity.bbox.bottom).toBeCloseTo(4673.505)
+
+    const wrap = (body: string): string => `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 500">${body}</svg>`
+    for (const body of [
+      // Written that way in the file, closed or left open.
+      '<path d="M10 10H20V20H10Z"/><path d="m100 100 10 0 0 10-10 0z"/>',
+      '<path d="M10 10H20V20"/><path d="m100 100 10 0 0 10-10 0z"/>',
+      // Under a group transform that is applied here, not by SVGO.
+      '<g transform="translate(50 50)"><path d="M-40-40H-30V-30H-40Z"/><path d="m50 50 10 0 0 10-10 0z"/></g>'
+    ]) {
+      const r = parseSvg(wrap(body))
+      expect(r.bbox.x, body).toBeCloseTo(10)
+      expect(r.bbox.right, body).toBeCloseTo(110)
+      expect(r.bbox.bottom, body).toBeCloseTo(110)
+    }
+  })
+
+  it('leaves out shapes with neither fill nor stroke, such as the artboard rectangle Affinity exports', () => {
+    const affinity = (board: string): string =>
+      '<?xml version="1.0" encoding="UTF-8" standalone="no"?>\n' +
+      '<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">\n' +
+      '<svg width="100%" height="100%" viewBox="0 0 600 1000" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">' +
+      `<g transform="matrix(1,0,0,1,-700,0)"><g id="B" serif:id="B" transform="matrix(1,0,0,1,700,0)">${board}</g></g></svg>`
+    const glyph = '<g transform="matrix(1,0,0,1,-650,20)"><path d="M750,100L950,100L950,800L750,800Z"/></g>'
+    for (const board of [
+      `<rect x="0" y="0" width="600" height="1000" style="fill:none;"/>${glyph}`,
+      // A clipped artboard repeats the rectangle as a clip path.
+      `<rect x="0" y="0" width="600" height="1000" style="fill:none;"/><clipPath id="_clip1"><rect x="0" y="0" width="600" height="1000"/></clipPath><g clip-path="url(#_clip1)">${glyph}</g>`
+    ]) {
+      const r = parseSvg(affinity(board))
+      // The artboard still sizes the glyph box, through the viewBox.
+      expect(r.width, board).toBe(600)
+      expect(r.height, board).toBe(1000)
+      expect(r.bbox.x, board).toBeCloseTo(100)
+      expect(r.bbox.y, board).toBeCloseTo(120)
+      expect(r.bbox.right, board).toBeCloseTo(300)
+      expect(r.bbox.bottom, board).toBeCloseTo(820)
+    }
+    // An artboard with nothing on it is an empty glyph, not a box.
+    expect(parseSvg(affinity('<rect x="0" y="0" width="600" height="1000" style="fill:none;"/>')).exists).toBe(false)
+
+    const wrap = (body: string): string => `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 500">${body}<path d="M10 10H20V20H10Z"/></svg>`
+    for (const unpainted of [
+      '<path d="M100 100H400V400H100Z" fill="none"/>',
+      '<path d="M100 100H400V400H100Z" fill="transparent" stroke="none"/>',
+      '<g fill="none"><path d="M100 100H400V400H100Z"/></g>',
+      '<style>.n{fill:none}</style><path class="n" d="M100 100H400V400H100Z"/>'
+    ]) {
+      expect(parseSvg(wrap(unpainted)).bbox.right, unpainted).toBeCloseTo(20)
+    }
+    // An outline drawn with a stroke only is still imported, and so is a fill set over fill="none".
+    for (const painted of [
+      '<path d="M100 100H400V400H100Z" fill="none" stroke="#000"/>',
+      '<g stroke="#000"><path d="M100 100H400V400H100Z" style="fill:none"/></g>',
+      '<g fill="none"><path d="M100 100H400V400H100Z" fill="#000"/></g>'
+    ]) {
+      expect(parseSvg(wrap(painted)).bbox.right, painted).toBeCloseTo(400)
+    }
   })
 
   it('draws a <use> that refers to itself or to an element it is in like browsers do (not at all)', () => {
