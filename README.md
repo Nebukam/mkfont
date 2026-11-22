@@ -5,8 +5,10 @@ Glyphs are fitted between the font's metrics by settings that can change at any 
 
 **[Download](https://github.com/Nebukam/mkfont/releases/latest)** · **[Documentation](https://mkfont.gitbook.io/)** · **[Quick start](https://mkfont.gitbook.io/mkfont-docs/quick-start)**
 
-<img width="2304" height="1440" alt="image" src="https://github.com/user-attachments/assets/4f77af9e-b8ec-4714-9c0d-1f082718fe56" />
 
+<img width="1499" height="877" alt="image" src="https://github.com/user-attachments/assets/ca362486-6758-4966-bc30-d4841b456405" /><br>  
+<img width="1499" height="877" alt="image" src="https://github.com/user-attachments/assets/408f12d9-c755-41da-918a-86c517079d2a" /><br>  
+<img width="1499" height="877" alt="image" src="https://github.com/user-attachments/assets/c5f51cae-68db-459d-80c2-7bf1124c6e39" /><br>  
 
 ## Install
 
