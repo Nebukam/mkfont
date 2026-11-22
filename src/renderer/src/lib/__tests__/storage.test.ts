@@ -4,7 +4,12 @@ import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
 import { localJSONStorage } from '../storage'
 
-afterEach(() => vi.restoreAllMocks())
+afterEach(() => {
+  // The test environment's localStorage keeps the function it was first asked for, so
+  // putting Storage.prototype back is not enough: the spy itself has to stop throwing.
+  vi.resetAllMocks()
+  vi.restoreAllMocks()
+})
 
 describe('persisted stores', () => {
   it('keep working in memory when storage is full', () => {

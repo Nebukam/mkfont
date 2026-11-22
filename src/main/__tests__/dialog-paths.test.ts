@@ -2,7 +2,7 @@ import { afterEach, beforeEach, describe, expect, it } from 'vitest'
 import { mkdtemp, rm, writeFile } from 'fs/promises'
 import { tmpdir } from 'os'
 import { join } from 'path'
-import { dialogDefaultPath } from '../dialog-paths'
+import { dialogDefaultPath, sanitizeDialogDirs } from '../dialog-paths'
 
 let dir = ''
 beforeEach(async () => {
@@ -22,5 +22,15 @@ describe('save dialog folder', () => {
   it('falls back to the bare name (the system folder) when none exists', async () => {
     expect(await dialogDefaultPath('font.ttf', [join(dir, 'gone')])).toBe('font.ttf')
     expect(await dialogDefaultPath('font.ttf')).toBe('font.ttf')
+  })
+})
+
+describe('remembered dialog folders', () => {
+  it('keeps the paths of the kinds it knows, and nothing else', () => {
+    expect(sanitizeDialogDirs({ open: 'D:/fonts', save: '', folder: 3, other: 'x' })).toEqual({ open: 'D:/fonts' })
+  })
+
+  it('reads a damaged record as empty', () => {
+    for (const stored of [null, undefined, 'text', 12, []]) expect(sanitizeDialogDirs(stored)).toEqual({})
   })
 })

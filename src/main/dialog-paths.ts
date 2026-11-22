@@ -70,3 +70,20 @@ export async function dialogDefaultPath(
   const dir = await firstFolder(dirs, timeoutMs)
   return dir === null ? name : join(dir, name ?? '')
 }
+
+/** The kinds of dialog whose last folder the app remembers. */
+export const DIALOG_KINDS = ['open', 'save', 'executable', 'folder'] as const
+export type DialogKind = (typeof DIALOG_KINDS)[number]
+export type DialogDirs = Partial<Record<DialogKind, string>>
+
+/** What a stored record of last folders holds that can be used: a path for a known kind. */
+export function sanitizeDialogDirs(stored: unknown): DialogDirs {
+  const out: DialogDirs = {}
+  if (stored && typeof stored === 'object') {
+    for (const kind of DIALOG_KINDS) {
+      const dir = (stored as Record<string, unknown>)[kind]
+      if (typeof dir === 'string' && dir) out[kind] = dir
+    }
+  }
+  return out
+}

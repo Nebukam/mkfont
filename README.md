@@ -11,6 +11,7 @@ Glyphs are fitted between the font's metrics by settings that can change at any 
 ## Install
 
 Installers for Windows, macOS (Apple silicon and Intel) and Linux are attached to each [release](https://github.com/Nebukam/mkfont/releases).
+MkFont needs a 64-bit Windows, or macOS 13 (Ventura) or later.
 
 They are not code-signed, so the system asks before the first launch:
 
