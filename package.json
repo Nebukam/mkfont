@@ -33,17 +33,17 @@
     "gen:icon": "electron scripts/gen-icon.mjs",
     "check:i18n": "tsx scripts/i18n-literals.ts"
   },
-  "dependencies": {},
   "devDependencies": {
     "@electron-toolkit/preload": "^3.0.1",
     "@electron-toolkit/utils": "^4.0.0",
+    "@types/node": "^24.19.2",
     "@types/opentype.js": "^1.3.10",
     "@types/react": "^19.0.0",
     "@types/react-dom": "^19.0.0",
     "@vitejs/plugin-react": "^4.7.0",
     "autoprefixer": "^10.4.20",
-    "electron": "^33.3.1",
-    "electron-builder": "^25.1.8",
+    "electron": "^45.4.1",
+    "electron-builder": "^26.18.0",
     "electron-vite": "^3.0.0",
     "happy-dom": "^21.0.4",
     "i18next": "^26.4.7",
@@ -63,7 +63,7 @@
     "tsx": "^4.21.0",
     "typescript": "^5.7.0",
     "vite": "^6.0.0",
-    "vitest": "^3.0.0",
+    "vitest": "^5.1.1",
     "zustand": "^5.0.0"
   },
   "build": {

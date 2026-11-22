@@ -1,5 +1,5 @@
 import { app, shell, BrowserWindow, ipcMain, dialog, Menu, screen } from 'electron'
-import { join, basename } from 'path'
+import { join, basename, dirname } from 'path'
 import { tmpdir } from 'os'
 import { spawn } from 'child_process'
 import { watch, type FSWatcher } from 'fs'
@@ -9,7 +9,7 @@ import { electronApp, is } from '@electron-toolkit/utils'
 import icon from '../../build/icon.png?asset'
 import { CloseGuard, CloseWatch, FileRouter, fileFromArgv } from './lifecycle'
 import { writeFileAtomic } from './atomic-write'
-import { dialogDefaultPath, firstFolder } from './dialog-paths'
+import { dialogDefaultPath, firstFolder, sanitizeDialogDirs, type DialogDirs, type DialogKind } from './dialog-paths'
 import { setLanguage, t } from './i18n'
 
 // ---------------------------------------------------------------
@@ -41,6 +41,32 @@ async function fileExists(p: string): Promise<boolean> {
   } catch {
     return false
   }
+}
+
+// ---------------------------------------------------------------
+// Where dialogs open
+// ---------------------------------------------------------------
+
+// Since Electron 43 a dialog opened without a path starts in Downloads, and the system no
+// longer remembers the folder it was last used in. The app remembers it instead, for each
+// kind of dialog.
+let dialogDirs: DialogDirs | null = null
+
+async function loadDialogDirs(): Promise<DialogDirs> {
+  dialogDirs ??= sanitizeDialogDirs(await readJson<unknown>('dialog-dirs.json', {}))
+  return dialogDirs
+}
+
+/** The folder a kind of dialog was last used in, if it is still there. */
+async function lastDialogDir(kind: DialogKind): Promise<string | undefined> {
+  const dir = (await loadDialogDirs())[kind]
+  return dir ? ((await firstFolder([dir])) ?? undefined) : undefined
+}
+
+function rememberDialogDir(kind: DialogKind, dir: string): void {
+  if (dialogDirs?.[kind] === dir) return
+  dialogDirs = { ...dialogDirs, [kind]: dir }
+  void writeJson('dialog-dirs.json', dialogDirs)
 }
 
 // ---------------------------------------------------------------
@@ -303,12 +329,14 @@ function registerIpc(): void {
   ipcMain.handle('fs:openFiles', async (e, opts: { title?: string; filters: Electron.FileFilter[]; multi?: boolean; binary?: boolean }) => {
     const options: Electron.OpenDialogOptions = {
       title: opts.title,
+      defaultPath: await lastDialogDir('open'),
       filters: opts.filters,
       properties: opts.multi ? ['openFile', 'multiSelections'] : ['openFile']
     }
     const parent = senderWindow(e)
     const res = parent ? await dialog.showOpenDialog(parent, options) : await dialog.showOpenDialog(options)
     if (res.canceled) return []
+    if (res.filePaths.length) rememberDialogDir('open', dirname(res.filePaths[0]))
     const out = []
     for (const p of res.filePaths) {
       if (opts.binary) {
@@ -322,11 +350,15 @@ function registerIpc(): void {
   })
 
   ipcMain.handle('fs:saveDialog', async (e, opts: { title?: string; defaultName?: string; defaultDirs?: string[]; filters: Electron.FileFilter[] }) => {
-    const defaultPath = await dialogDefaultPath(opts.defaultName, opts.defaultDirs)
+    // The folders the caller prefers, then the one the last save went to.
+    const lastSave = (await loadDialogDirs()).save
+    const defaultPath = await dialogDefaultPath(opts.defaultName, [...(opts.defaultDirs ?? []), ...(lastSave ? [lastSave] : [])])
     const options: Electron.SaveDialogOptions = { title: opts.title, defaultPath, filters: opts.filters }
     const parent = senderWindow(e)
     const res = parent ? await dialog.showSaveDialog(parent, options) : await dialog.showSaveDialog(options)
-    return res.canceled || !res.filePath ? null : res.filePath
+    if (res.canceled || !res.filePath) return null
+    rememberDialogDir('save', dirname(res.filePath))
+    return res.filePath
   })
 
   ipcMain.handle('fs:readText', (_e, p: string) => readFile(p, 'utf-8'))
@@ -382,19 +414,28 @@ function registerIpc(): void {
   ipcMain.handle('dialog:pickExecutable', async (e, title?: string) => {
     const options: Electron.OpenDialogOptions = {
       title: title ?? t('dialogs.selectApplication'),
+      defaultPath: await lastDialogDir('executable'),
       properties: ['openFile'],
       filters: process.platform === 'win32' ? [{ name: t('dialogs.applications'), extensions: ['exe'] }] : []
     }
     const parent = senderWindow(e)
     const res = parent ? await dialog.showOpenDialog(parent, options) : await dialog.showOpenDialog(options)
-    return res.canceled ? null : res.filePaths[0]
+    if (res.canceled || !res.filePaths.length) return null
+    rememberDialogDir('executable', dirname(res.filePaths[0]))
+    return res.filePaths[0]
   })
 
   ipcMain.handle('dialog:pickFolder', async (e, title?: string, defaultPath?: string) => {
-    const options: Electron.OpenDialogOptions = { title: title ?? t('dialogs.selectFolder'), defaultPath, properties: ['openDirectory', 'createDirectory'] }
+    const options: Electron.OpenDialogOptions = {
+      title: title ?? t('dialogs.selectFolder'),
+      defaultPath: defaultPath ?? (await lastDialogDir('folder')),
+      properties: ['openDirectory', 'createDirectory']
+    }
     const parent = senderWindow(e)
     const res = parent ? await dialog.showOpenDialog(parent, options) : await dialog.showOpenDialog(options)
-    return res.canceled ? null : res.filePaths[0]
+    if (res.canceled || !res.filePaths.length) return null
+    rememberDialogDir('folder', res.filePaths[0])
+    return res.filePaths[0]
   })
 
   ipcMain.handle('shell:showItemInFolder', (_e, p: string) => shell.showItemInFolder(p))
